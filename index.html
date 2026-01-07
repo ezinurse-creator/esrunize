@@ -467,15 +467,57 @@
                 history.replaceState({ viewId: 'view-auth' }, 'Login', '#login');
                 this.renderView('view-auth');
             }
+            
+            // --- FIXED POPSTATE LISTENER FOR ROBUST BACK NAVIGATION ---
             window.addEventListener('popstate', (event) => {
                 if (event.state && event.state.viewId) {
-                    if (event.state.viewId === 'view-exit-guard') { this.showExitModal(); this.renderView('view-dashboard'); return; }
-                    if (event.state.viewId === 'view-submenu') { this.renderSubmenu(event.state.course); this.renderView('view-submenu'); }
-                    else if (event.state.viewId === 'view-subjects') { this.renderSubjectList(event.state.course, event.state.section); this.renderView('view-subjects'); }
-                    else if (event.state.viewId === 'view-iframe') { if(event.state.sourceUrl) this.openContent(event.state.sourceUrl, event.state.title, true); else this.renderView('view-dashboard'); }
-                    else this.renderView(event.state.viewId);
-                } else { if(this.currentUser) this.renderView('view-dashboard'); else this.renderView('view-auth'); }
+                    if (event.state.viewId === 'view-exit-guard') { 
+                        this.showExitModal(); 
+                        this.renderView('view-dashboard'); 
+                        return; 
+                    }
+                    if (event.state.viewId === 'view-submenu') { 
+                        const c = event.state.course || this.lockedCourseKey;
+                        if(c) {
+                             this.renderSubmenu(c); 
+                             this.renderView('view-submenu'); 
+                        } else {
+                             this.renderView('view-dashboard');
+                        }
+                    }
+                    else if (event.state.viewId === 'view-subjects') { 
+                        // FIX: Check for missing state data and use globals (Fixes GNM 2nd Year bug)
+                        const c = event.state.course || this.lockedCourseKey;
+                        const s = event.state.section || this.lockedCourseSection;
+                        
+                        if (c && s) {
+                            this.renderSubjectList(c, s); 
+                            this.renderView('view-subjects');
+                        } else {
+                            this.renderView('view-dashboard');
+                        }
+                    }
+                    else if (event.state.viewId === 'view-iframe') { 
+                        if(event.state.sourceUrl) this.openContent(event.state.sourceUrl, event.state.title, true); 
+                        else this.renderView('view-dashboard'); 
+                    }
+                    else {
+                        this.renderView(event.state.viewId);
+                    }
+                } else { 
+                    // FIX: Handle NULL state by checking hash and globals
+                    if (window.location.hash.includes('subjects') && this.lockedCourseKey && this.lockedCourseSection) {
+                        this.renderSubjectList(this.lockedCourseKey, this.lockedCourseSection);
+                        this.renderView('view-subjects');
+                    }
+                    else if(this.currentUser) {
+                        this.renderView('view-dashboard'); 
+                    } else {
+                        this.renderView('view-auth'); 
+                    }
+                }
             });
+            // -----------------------------------------------------------
         },
 
         checkSessionNow: async function() {
@@ -500,30 +542,23 @@
             }
         },
 
-        // --- NEW TOGGLE ZOOM FUNCTION ---
         toggleZoom: function() {
             const wrapper = document.getElementById('iframe-wrapper');
             if(!wrapper) return;
             
-            // Cycle Zoom: 1 -> 1.5 -> 2.0 -> 1
             if (this.zoomLevel === 1) this.zoomLevel = 1.5;
             else if (this.zoomLevel === 1.5) this.zoomLevel = 2.0;
             else this.zoomLevel = 1;
 
-            // Apply Scale
             wrapper.style.transform = `scale(${this.zoomLevel})`;
-            wrapper.style.width = `${100 / this.zoomLevel}%`; // Adjust width so it doesn't overflow container horizontally
+            wrapper.style.width = `${100 / this.zoomLevel}%`; 
             wrapper.style.height = `${100 / this.zoomLevel}%`; 
             
-            // Apply Width Override for true "Magnification" feel
             if (this.zoomLevel > 1) {
-                wrapper.style.width = "100%"; // Force full width to allow scrolling
+                wrapper.style.width = "100%"; 
                 wrapper.style.height = "auto";
-                // We physically scale the wrapper up
             }
             
-            // RESET for Simple Scaling
-            // Method 2: Simply set Width % (Best for PDF Reflow)
             wrapper.style.transform = 'none';
             if (this.zoomLevel === 1) wrapper.style.width = '100%';
             if (this.zoomLevel === 1.5) wrapper.style.width = '150%';
