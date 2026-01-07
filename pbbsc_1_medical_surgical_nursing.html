@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medical Surgical Nursing - Syllabus & Quizzes</title>
+    <meta name="description" content="Interactive syllabus with internal quizzes for Medical Surgical Nursing." />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --brand: #003B82; 
+            --accent: #00B9F2;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: white;
+            color: var(--gray-900);
+            line-height: 1.6;
+            padding: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .syllabus-btn, .unit-header {
+            display: block;
+            width: 100%;
+            padding: 18px 24px;
+            margin: 12px 0;
+            background: var(--brand);
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+        .syllabus-btn:hover, .unit-header:hover {
+            background: #002d63;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .syllabus-btn.secondary { background: var(--accent); }
+        .syllabus-btn.secondary:hover { background: #009yc0; }
+
+        .unit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+            margin: 16px 0;
+        }
+        .unit-header span:last-child {
+            transition: transform 0.3s ease;
+            color: #FFA500;
+        }
+        .unit-header[aria-expanded="true"] span:last-child {
+            transform: rotate(180deg);
+        }
+
+        .unit-content {
+            padding: 0 12px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+        }
+        .unit-content.active {
+            padding: 24px 12px;
+            max-height: none; 
+        }
+
+        .subsection {
+            margin: 16px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.2s ease;
+        }
+
+        .resource-btn {
+            display: flex;
+            align-items: flex-start;
+            width: 100%;
+            padding: 14px 18px;
+            margin: 8px 0;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            border: 1px solid var(--gray-200);
+            transition: all 0.2s ease;
+            gap: 12px;
+            cursor: pointer;
+        }
+        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
+        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
+        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
+        .resource-btn.disabled { opacity: 0.6; cursor: not-allowed; background: #f3f4f6; color: #9ca3af; border-color: #e5e7eb; }
+
+        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
+        .icon.video-icon { color: #8b5cf6; }
+        .icon.quiz-icon { color: #f59e0b; }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            height: 60px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+
+        .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; }
+        
+        .btn-close {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            flex: 1;
+            background: #f3f4f6;
+            position: relative;
+            overflow-y: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .iframe-res {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+            display: block;
+        }
+
+        /* --- QUIZ STYLES --- */
+        .quiz-container {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        .quiz-question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--gray-900);
+        }
+        .quiz-option {
+            padding: 15px;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
+        
+        .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; position: relative; }
+        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
+        
+        .quiz-nav { display: flex; justify-content: space-between; margin-top: 20px; }
+        .btn-quiz { background: var(--brand); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+
+        @media (max-width: 768px) {
+            body { padding: 16px; }
+            .unit-header, .resource-btn { font-size: 15px; }
+            .modal-body { padding: 0; }
+            .quiz-container { height: 100%; border-radius: 0; max-width: 100%; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/1N0K_hZstvxt_su8GQfB0xIboFe4DevB1/preview', 'Syllabus')">
+        📄 DOWNLOAD MEDICAL SURGICAL NURSING SYLLABUS
+    </div>
+    <div class="syllabus-btn secondary" onclick="openResource('notes', 'https://drive.google.com/file/d/1IPwtc3T3dFtFUoI-jkMO7poFBgYmWBB_/preview', 'Previous Year Q&A')">
+        ❓ PREVIOUS YEAR QUESTIONS & ANSWERS
+    </div>
+    
+    <div id="units">
+        
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 1 - INTRODUCTION <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ek-BRIh0s3pEjNzSlrRCH9UKlUyhAMXa/preview', 'Detailed Notes: Intro')">
+                        <span class="icon">📚</span><span>Detailed Notes: Introduction</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1HaH-IsetkrYi8dvI2XbwAPwyafM3U5JY/preview', 'Intro Video')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1l1KUGxEBQN9wz_9wYogFkNsKemId8jiN/preview', 'Nurse Functions')">
+                        <span class="icon video-icon">▶️</span><span>Functions of Nurse in OPD & ICU</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ZtcmLR0v2gmka401rtP4Cg-vLQtvy0eL/preview', 'Lecture Notes: Intro')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(1)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 2 - SPECIFIC PROBLEMS <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1MaA7PCQBzjaXaSiBFMqJ89ZWixZq9tLF/preview', 'Detailed Notes: Specific Problems')">
+                        <span class="icon">📚</span><span>Detailed Notes: Fluid & Unconsciousness</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1npxmf8z3W5OBvknzEx2L_4aT1Lj6h1mW/preview', 'Intro Video: Unit 2')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1rrZCzFvlHhF_ABXGLHUjqDoKgGHo_lPR/preview', 'Fluid Imbalance')">
+                        <span class="icon video-icon">▶️</span><span>Fluid Imbalance & Unconsciousness</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/19y7Vq4gJUujbUCR-JTeheQ0nc9d62Fvd/preview', 'Lecture Notes: Unit 2')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(2)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 3 - NEUROLOGICAL CONDITIONS <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of circle of Willis anatomy]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1x4OEX9m7yt1MwhFfBa7D7a5fh8FvUBgi/preview', 'Detailed Notes: Neuro')">
+                        <span class="icon">📚</span><span>Detailed Notes: Neurological</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1tAZaMU_ciPkNasy86tCNYp6N0AGULgVx/preview', 'Intro Video: Neuro')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1-JE1WJxASOp_QTy-7y0gduAuW54iVQJV/preview', 'Nervous System')">
+                        <span class="icon video-icon">▶️</span><span>Nervous System, CVA, Epilepsy</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1pzym-5MgKWsrp9Sl4ln4ti875uC-QRgF/preview', 'Lecture Notes: Neuro')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(3)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 4 - CARDIOVASCULAR PROBLEMS <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of coronary arteries of the heart]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1UpLduUj42SpEPoHmnhCsD5iV8szFq9sS/preview', 'Detailed Notes: Cardio')">
+                        <span class="icon">📚</span><span>Detailed Notes: Cardiovascular</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1zdsNHxw5bFNk-RNdbEGtX6YR0wqpQ3Eu/preview', 'Cardio Mgmt')">
+                        <span class="icon video-icon">▶️</span><span>Heart, IHD, CHF, RHD Management</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1w_xLMYW4TxWurBTmyCAPT1rYVin3RTIn/preview', 'Lecture Notes: Cardio')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(4)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 5 - RESPIRATORY SYSTEM <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of bronchial tree structure]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1y7zkTK4BuVLDTXPVPrXzbM0MiGqgFLJV/preview', 'Detailed Notes: Resp')">
+                        <span class="icon">📚</span><span>Detailed Notes: Respiratory</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1vGoljc4ixg-i18cJmQAXrQ8eRVNhy5JT/preview', 'Resp System')">
+                        <span class="icon video-icon">▶️</span><span>Respiratory System Disorders</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/19Hrx0wyTH18F_p8d1GYNkro3KyerLY6K/preview', 'Lecture Notes: Resp')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(5)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 6 - GENITOURINARY PROBLEMS <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of kidney nephron structure]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1NfLTy9akQJgNwXFzWUAb99VCjhVrb-N3/preview', 'Detailed Notes: GU')">
+                        <span class="icon">📚</span><span>Detailed Notes: Genitourinary</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1mNw7OvuT9Sf-KYEkqmyhk-FnYLVQPNkQ/preview', 'GU Problems')">
+                        <span class="icon video-icon">▶️</span><span>Genitourinary Problems</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1RozNe5DfQFJ8wimp7LZOvBikwwqCFTKn/preview', 'Lecture Notes: GU')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(6)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 7 - DIGESTIVE SYSTEM <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of human digestive system anatomy]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1aXt7pI917dH_pAmZPN0vemSLm-qJHpZP/preview', 'Detailed Notes: Digestive')">
+                        <span class="icon">📚</span><span>Detailed Notes: Digestive System</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1a-IWBqD1VMUEa8uG_JtGLLvhJuh6urEX/preview', 'Digestive Systems')">
+                        <span class="icon video-icon">▶️</span><span>Digestive Systems Problems</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Rbkgkcb_9aSrINzMEkDEUeYPJ9jDOmBA/preview', 'Lecture Notes: Digestive')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(7)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 8 - ENDOCRINE PROBLEMS <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of major endocrine glands]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Kx8iJE7nX_Yn2Gj987v7Tw-ulWGuRaJO/preview', 'Detailed Notes: Endocrine')">
+                        <span class="icon">📚</span><span>Detailed Notes: Endocrine</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1NOe39RI_vIOBDbjFVKsasBS1CTpXQSf7/preview', 'Endocrine Problems')">
+                        <span class="icon video-icon">▶️</span><span>Endocrine Problems</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1i4UXpWYjK1xWXaXBNclWzXKjqWBdDHXs/preview', 'Lecture Notes: Endocrine')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(8)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 8 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 9 - MUSCULOSKELETAL PROBLEMS <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of stages of bone fracture healing]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/10XkhshOxlm1vSc1HFMzPF2MXyHcRTp1E/preview', 'Detailed Notes: Musculo')">
+                        <span class="icon">📚</span><span>Detailed Notes: Musculoskeletal</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1IH42sgHRWjmyWQnE73F9Ava_EDN24--9/preview', 'Musculo Problems')">
+                        <span class="icon video-icon">▶️</span><span>Musculoskeletal Problems</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1wjqPm5DmEUAqEqj9iF7ERewMS22ncvo-/preview', 'Lecture Notes: Musculo')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(9)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 9 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 10 - FEMALE REPRODUCTIVE TRACT <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of female reproductive system anatomy]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1AvPYnsjxILaFSvzi4AaxHH0zgN9taYqs/preview', 'Detailed Notes: Repro')">
+                        <span class="icon">📚</span><span>Detailed Notes: Reproductive Tract</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1e4Eu548ZJoguJLYNrumWUDYmCWjuOt2x/preview', 'Repro Tract')">
+                        <span class="icon video-icon">▶️</span><span>Female Reproductive Tract Disorders</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/10MqWN_hOvy_q2QAGetqjztwjKxco8ybn/preview', 'Lecture Notes: Repro')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(10)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 10 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 11 - ONCOLOGICAL DISORDERS <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of TNM classification of cancer]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1pHvYBcei_PkoLS3usC8rdSF0ArhdYIAT/preview', 'Detailed Notes: Oncology')">
+                        <span class="icon">📚</span><span>Detailed Notes: Oncology</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1fh3igQaSqsJh13zkjkcCFtJ7a17qT8h_/preview', 'Oncology')">
+                        <span class="icon video-icon">▶️</span><span>Oncological Disorders</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1CVZEGjBMFtTucAZXBRZt2BNdusttlDQm/preview', 'Lecture Notes: Oncology')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(11)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 11 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 12 - BURNS & RECONSTRUCTIVE SURGERY <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1LrJf2j_9NfXvBpc21ROIaBZj3hH__V21/preview', 'Detailed Notes: Burns')">
+                        <span class="icon">📚</span><span>Detailed Notes: Burns</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Vn-ztlnhBhu3dq9V1fvLJaV1EdoV7AUI/preview', 'Burns Video')">
+                        <span class="icon video-icon">▶️</span><span>Burns and Reconstructive Surgeries</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1DFcyVDrTxiBS9xILWNJj5sdnuaW5KDt5/preview', 'Lecture Notes: Burns')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(12)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 12 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 13 - COMMUNICABLE DISEASES, STD & HIV <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of chain of infection]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Tzqng878Gwl7jt8pjFQcEHnEX8ZX43yw/preview', 'Detailed Notes: Communicable')">
+                        <span class="icon">📚</span><span>Detailed Notes: Communicable & STD</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1KpNSjfkhnQ5vtZxSDKf97zsxfFOi98RY/preview', 'Communicable Video')">
+                        <span class="icon video-icon">▶️</span><span>Common Communicable Diseases, STD's & HIV/AIDS</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_BXxxgvVCGlxvzeuM7zM_bBCYp7O6PI_/preview', 'Lecture Notes: Communicable')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(13)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 13 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 14 - EYE, EAR, NOSE, THROAT & SKIN <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of anatomy of the human eye]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1uSeuMcH_tP3ggwgSLv3S95kmKXGQ1WqI/preview', 'Detailed Notes: EENT')">
+                        <span class="icon">📚</span><span>Detailed Notes: EENT & Skin</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1F-4uPToKAKujpmZ5Sj1VPNM4FRDDdFJk/preview', 'EENT Video')">
+                        <span class="icon video-icon">▶️</span><span>Disease Of Eyes, Ear, Throat and Skin</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/11Mmuf0ld7hUD9prt9hSOZhbbE2pxntSQ/preview', 'Lecture Notes: EENT')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(14)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 14 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 15 - BLOOD DISORDERS <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of composition of blood]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/19uopZn-O42-UxOCfjixhT1roJWry2Fyt/preview', 'Detailed Notes: Blood')">
+                        <span class="icon">📚</span><span>Detailed Notes: Blood Disorders</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/18SHARG3PDEO6QlrfAEeSsHQjj5loPAnt/preview', 'Blood Video')">
+                        <span class="icon video-icon">▶️</span><span>Patients With Blood Disorder</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1gPpVrkMhTkLIrNA3SHPtnxtO9fOzAQV8/preview', 'Lecture Notes: Blood')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(15)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 15 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 16 - NURSING IN EMERGENCIES <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1k_AVlnktF84nLtp2s6DSnrKoiw9Pl6Q0/preview', 'Detailed Notes: Emergency')">
+                        <span class="icon">📚</span><span>Detailed Notes: Emergency Nursing</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1P7vCR1220jyhRZAzw8vxTB17bp-OXHe0/preview', 'Emergency Video')">
+                        <span class="icon video-icon">▶️</span><span>Nursing Emergencies</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1iWeEQfy99JY359HjD-KJvhWdPWbtNIGI/preview', 'Lecture Notes: Emergency')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(16)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 16 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="app-modal" class="modal-overlay">
+        <div class="modal-header">
+            <div id="modal-title" class="modal-title">Resource</div>
+            <button class="btn-close" onclick="closeModal()">Close X</button>
+        </div>
+        <div id="modal-body" class="modal-body"></div>
+    </div>
+
+    <script>
+        const QUIZ_DATA = {
+            1: [
+                { q: "The primary focus of medical-surgical nursing is to care for:", o: ["Infants only", "Adult patients with acute/chronic conditions", "Pregnant women only", "Community populations only"], a: 1 },
+                { q: "In the OPD, the role of the nurse includes:", o: ["Performing surgery", "Triage and health education", "Prescribing all medications", "Ignoring patient history"], a: 1 },
+                { q: "Which ethical principle refers to 'doing good' for the patient?", o: ["Autonomy", "Beneficence", "Non-maleficence", "Justice"], a: 1 },
+                { q: "A critical function of the ICU nurse is:", o: ["Continuous monitoring of vital parameters", "Discharging patients immediately", "Managing hospital finances", "Cleaning the entire ward"], a: 0 }
+            ],
+            2: [
+                { q: "A serum potassium level of 2.8 mEq/L indicates:", o: ["Hyperkalemia", "Hypokalemia", "Hyponatremia", "Hypernatremia"], a: 1 },
+                { q: "Which IV solution is isotonic?", o: ["0.45% NaCl", "0.9% NaCl (Normal Saline)", "3% NaCl", "50% Dextrose"], a: 1 },
+                { q: "Chvostek's sign is a clinical manifestation of:", o: ["Hypocalcemia", "Hypercalcemia", "Hyponatremia", "Hyperkalemia"], a: 0 },
+                { q: "The Glasgow Coma Scale (GCS) assesses:", o: ["Pain level", "Level of consciousness", "Muscle strength", "Respiratory rate"], a: 1 }
+            ],
+            3: [
+                { q: "A transient ischemic attack (TIA) is a warning sign for:", o: ["Myocardial Infarction", "Stroke (CVA)", "Pulmonary Embolism", "Kidney Failure"], a: 1 },
+                { q: "Which neurotransmitter is deficient in Parkinson's disease?", o: ["Serotonin", "Dopamine", "Acetylcholine", "GABA"], a: 1 },
+                { q: "The 'aura' phase in epilepsy refers to:", o: ["The post-ictal sleep", "The actual seizure", "A warning sensation before seizure", "Muscle rigidity"], a: 2 },
+                { q: "Increased Intracranial Pressure (ICP) is characterized by:", o: ["Hypotension", "Tachycardia", "Cushing's Triad", "Polyuria"], a: 2 }
+            ],
+            4: [
+                { q: "The most common symptom of Myocardial Infarction (MI) is:", o: ["Headache", "Chest pain radiating to left arm", "Leg cramps", "Urinary retention"], a: 1 },
+                { q: "Nitroglycerin is administered in angina to:", o: ["Increase heart rate", "Vasodilate coronary arteries", "Constrict blood vessels", "Increase blood pressure"], a: 1 },
+                { q: "Left-sided heart failure primarily causes:", o: ["Peripheral edema", "Pulmonary congestion", "Ascites", "Liver enlargement"], a: 1 },
+                { q: "Rheumatic Heart Disease often affects which valve?", o: ["Mitral valve", "Pulmonary valve", "Tricuspid valve", "None"], a: 0 }
+            ],
+            5: [
+                { q: "The primary cause of Chronic Obstructive Pulmonary Disease (COPD) is:", o: ["Infection", "Smoking", "Allergy", "Trauma"], a: 1 },
+                { q: "Which position helps relieve dyspnea in respiratory patients?", o: ["Supine", "High Fowler's", "Prone", "Trendelenburg"], a: 1 },
+                { q: "Mantoux test is used to screen for:", o: ["Pneumonia", "Tuberculosis", "Asthma", "Lung Cancer"], a: 1 },
+                { q: "Barrel chest is a characteristic finding in:", o: ["Asthma", "Emphysema", "Pneumonia", "Bronchitis"], a: 1 }
+            ],
+            6: [
+                { q: "The functional unit of the kidney is the:", o: ["Neuron", "Nephron", "Alveoli", "Villi"], a: 1 },
+                { q: "Oliguria is defined as urine output less than:", o: ["100 ml/day", "400 ml/day", "1000 ml/day", "2000 ml/day"], a: 1 },
+                { q: "The most common causative organism for UTI is:", o: ["Staphylococcus", "E. Coli", "Streptococcus", "Pseudomonas"], a: 1 },
+                { q: "Hemodialysis requires which type of vascular access?", o: ["IV Cannula", "AV Fistula", "Central Line", "Arterial Line"], a: 1 }
+            ],
+            7: [
+                { q: "Inflammation of the liver is called:", o: ["Gastritis", "Hepatitis", "Colitis", "Nephritis"], a: 1 },
+                { q: "The most common complication of Peptic Ulcer Disease is:", o: ["Perforation", "Hemorrhage", "Obstruction", "Cancer"], a: 1 },
+                { q: "McBurney's point tenderness is a sign of:", o: ["Cholecystitis", "Appendicitis", "Pancreatitis", "Diverticulitis"], a: 1 },
+                { q: "Jaundice is caused by elevated levels of:", o: ["Urea", "Bilirubin", "Glucose", "Creatinine"], a: 1 }
+            ],
+            8: [
+                { q: "Which hormone lowers blood glucose levels?", o: ["Glucagon", "Insulin", "Cortisol", "Adrenaline"], a: 1 },
+                { q: "Graves' disease is a form of:", o: ["Hypothyroidism", "Hyperthyroidism", "Adrenal insufficiency", "Diabetes"], a: 1 },
+                { q: "The '3 Ps' (Polyuria, Polydipsia, Polyphagia) are signs of:", o: ["Diabetes Mellitus", "Diabetes Insipidus", "Hypoglycemia", "Addison's Disease"], a: 0 },
+                { q: "Acromegaly is caused by excess secretion of:", o: ["Thyroid hormone", "Growth Hormone", "Insulin", "Parathyroid hormone"], a: 1 }
+            ],
+            9: [
+                { q: "Osteoporosis is characterized by:", o: ["Bone infection", "Decreased bone density", "Joint inflammation", "Muscle tear"], a: 1 },
+                { q: "The priority nursing action for a patient in traction is to:", o: ["Remove weights daily", "Ensure weights hang freely", "Massage the leg", "Keep patient prone"], a: 1 },
+                { q: "Compartment syndrome is a complication of:", o: ["Arthritis", "Fractures/Casts", "Osteoporosis", "Gout"], a: 1 },
+                { q: "Rheumatoid Arthritis is an:", o: ["Infectious disease", "Autoimmune disease", "Degenerative disease", "Allergic reaction"], a: 1 }
+            ],
+            10: [
+                { q: "Surgical removal of the uterus is called:", o: ["Oophorectomy", "Hysterectomy", "Mastectomy", "Salpingectomy"], a: 1 },
+                { q: "Endometriosis involves tissue growing:", o: ["Inside the uterus only", "Outside the uterus", "In the vagina", "In the bladder"], a: 1 },
+                { q: "A common symptom of uterine fibroids is:", o: ["Amenorrhea", "Menorrhagia (Heavy bleeding)", "Weight loss", "Headache"], a: 1 },
+                { q: "Pap smear is a screening test for:", o: ["Ovarian cancer", "Cervical cancer", "Breast cancer", "Uterine cancer"], a: 1 }
+            ],
+            11: [
+                { q: "TNM classification system is used for:", o: ["Staging cancer", "Grading infection", "Assessing burns", "Measuring pain"], a: 0 },
+                { q: "A side effect of chemotherapy affecting bone marrow is:", o: ["Alopecia", "Myelosuppression", "Nausea", "Stomatitis"], a: 1 },
+                { q: "The spread of cancer cells to distant organs is called:", o: ["Invasion", "Metastasis", "Hyperplasia", "Dysplasia"], a: 1 },
+                { q: "Benign tumors are characterized by:", o: ["Rapid growth", "Encapsulated and non-invasive", "Metastasis", "Poor differentiation"], a: 1 }
+            ],
+            12: [
+                { q: "The 'Rule of Nines' is used to assess:", o: ["Depth of burn", "Total Body Surface Area (TBSA) burned", "Pain level", "Fluid requirement"], a: 1 },
+                { q: "The Parkland formula is used to calculate:", o: ["Caloric needs", "Fluid resuscitation needs", "Antibiotic dosage", "Oxygen needs"], a: 1 },
+                { q: "A first-degree burn affects which layer of skin?", o: ["Epidermis only", "Dermis", "Subcutaneous tissue", "Muscle"], a: 0 },
+                { q: "Contractures are a common complication of:", o: ["Fractures", "Severe burns", "Stroke", "Diabetes"], a: 1 }
+            ],
+            13: [
+                { q: "HIV primarily attacks which cells?", o: ["Red blood cells", "CD4+ T cells", "Platelets", "B cells"], a: 1 },
+                { q: "The causative agent of Tuberculosis is:", o: ["Virus", "Mycobacterium tuberculosis", "Fungus", "Parasite"], a: 1 },
+                { q: "Which precaution is used for Measles and Chickenpox?", o: ["Contact", "Airborne", "Droplet", "Standard"], a: 1 },
+                { q: "Opportunistic infections are most common in:", o: ["Hypertension", "AIDS", "Diabetes", "Asthma"], a: 1 }
+            ],
+            14: [
+                { q: "Clouding of the lens of the eye is called:", o: ["Glaucoma", "Cataract", "Conjunctivitis", "Retinal detachment"], a: 1 },
+                { q: "Glaucoma is characterized by increased:", o: ["Blood pressure", "Intraocular pressure", "Intracranial pressure", "Retinal pressure"], a: 1 },
+                { q: "Meniere's disease affects the:", o: ["Middle ear", "Inner ear", "Outer ear", "Eustachian tube"], a: 1 },
+                { q: "Psoriasis is a chronic condition of the:", o: ["Lungs", "Skin", "Eyes", "Ears"], a: 1 }
+            ],
+            15: [
+                { q: "Iron deficiency anemia is characterized by:", o: ["Macrocytic cells", "Microcytic hypochromic cells", "Sickle cells", "Normal cells"], a: 1 },
+                { q: "Leukemia is a cancer of the:", o: ["Lymph nodes", "Blood-forming tissues", "Liver", "Spleen"], a: 1 },
+                { q: "Hemophilia is a deficiency of:", o: ["Red blood cells", "Clotting factors", "Platelets", "White blood cells"], a: 1 },
+                { q: "A universal donor has which blood type?", o: ["Type A", "Type B", "Type AB", "Type O Negative"], a: 3 }
+            ],
+            16: [
+                { q: "Triage in an emergency setting is used to:", o: ["Treat everyone equally", "Prioritize patients based on severity", "Send patients home", "Bill patients"], a: 1 },
+                { q: "The ratio of compressions to breaths in adult CPR is:", o: ["15:2", "30:2", "5:1", "10:1"], a: 1 },
+                { q: "Anaphylactic shock is caused by:", o: ["Blood loss", "Severe allergic reaction", "Heart failure", "Infection"], a: 1 },
+                { q: "The first priority in emergency assessment is:", o: ["Circulation", "Airway", "Breathing", "Disability"], a: 1 } // ABCDE approach usually puts Airway first
+            ]
+        };
+
+        let currentQuizUnit = 1;
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function toggleUnit(header) {
+            const content = header.nextElementSibling;
+            const isExpanded = header.getAttribute('aria-expanded') === 'true';
+            header.setAttribute('aria-expanded', !isExpanded);
+            content.classList.toggle('active');
+        }
+
+        function openResource(type, url, title) {
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+            document.getElementById('modal-title').textContent = title;
+            modal.style.display = 'flex';
+            let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
+            body.innerHTML = `<iframe class="iframe-res" src="${cleanUrl}"></iframe>`;
+        }
+
+        function startQuiz(unitId) {
+            currentQuizUnit = unitId;
+            currentQuestionIndex = 0;
+            score = 0;
+            const modal = document.getElementById('app-modal');
+            document.getElementById('modal-title').textContent = `Unit ${unitId} Quiz`;
+            modal.style.display = 'flex';
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const body = document.getElementById('modal-body');
+            const questions = QUIZ_DATA[currentQuizUnit];
+            
+            if (!questions || currentQuestionIndex >= questions.length) {
+                body.innerHTML = `
+                    <div class="quiz-container" style="text-align:center;">
+                        <h2>Quiz Complete! 🎉</h2>
+                        <p style="font-size:1.2rem; margin:20px 0;">You scored <strong>${score} / ${questions.length}</strong></p>
+                        <button class="btn-quiz" onclick="closeModal()">Close Quiz</button>
+                    </div>`;
+                return;
+            }
+
+            const q = questions[currentQuestionIndex];
+            body.innerHTML = `
+                <div class="quiz-container">
+                    <p class="quiz-question-text">Q${currentQuestionIndex + 1}: ${q.q}</p>
+                    <div>
+                        ${q.o.map((opt, i) => `
+                            <div class="quiz-option" onclick="checkAnswer(this, ${i}, ${q.a})">${opt}</div>
+                        `).join('')}
+                    </div>
+                    <div class="quiz-nav">
+                        <span>Question ${currentQuestionIndex + 1} of ${questions.length}</span>
+                        <button id="next-btn" class="btn-quiz" style="display:none;" onclick="nextQuestion()">Next ➡</button>
+                    </div>
+                </div>`;
+        }
+
+        function checkAnswer(element, selectedIndex, correctIndex) {
+            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+
+            if (selectedIndex === correctIndex) {
+                element.classList.add('correct');
+                score++;
+            } else {
+                element.classList.add('wrong');
+                element.parentElement.children[correctIndex].classList.add('correct');
+            }
+            document.getElementById('next-btn').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            renderQuizQuestion();
+        }
+
+        function closeModal() { 
+            document.getElementById('app-modal').style.display = 'none'; 
+            document.getElementById('modal-body').innerHTML = ""; 
+        }
+    </script>
+</body>
+</html>

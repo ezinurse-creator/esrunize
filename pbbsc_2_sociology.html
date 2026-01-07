@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sociology - Syllabus & Quizzes</title>
+    <meta name="description" content="Interactive syllabus with internal quizzes for Sociology." />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --brand: #003B82; 
+            --accent: #00B9F2;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: white;
+            color: var(--gray-900);
+            line-height: 1.6;
+            padding: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .syllabus-btn, .unit-header {
+            display: block;
+            width: 100%;
+            padding: 18px 24px;
+            margin: 12px 0;
+            background: var(--brand);
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+        .syllabus-btn:hover, .unit-header:hover {
+            background: #002d63;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .syllabus-btn.secondary { background: var(--accent); }
+        .syllabus-btn.secondary:hover { background: #009yc0; }
+
+        .unit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+            margin: 16px 0;
+        }
+        .unit-header span:last-child {
+            transition: transform 0.3s ease;
+            color: #FFA500;
+        }
+        .unit-header[aria-expanded="true"] span:last-child {
+            transform: rotate(180deg);
+        }
+
+        .unit-content {
+            padding: 0 12px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+        }
+        .unit-content.active {
+            padding: 24px 12px;
+            max-height: none; 
+        }
+
+        .subsection {
+            margin: 16px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.2s ease;
+        }
+
+        .resource-btn {
+            display: flex;
+            align-items: flex-start;
+            width: 100%;
+            padding: 14px 18px;
+            margin: 8px 0;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            border: 1px solid var(--gray-200);
+            transition: all 0.2s ease;
+            gap: 12px;
+            cursor: pointer;
+        }
+        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
+        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
+        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
+
+        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
+        .icon.video-icon { color: #8b5cf6; }
+        .icon.quiz-icon { color: #f59e0b; }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            height: 60px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+
+        .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; }
+        
+        .btn-close {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            flex: 1;
+            background: #f3f4f6;
+            position: relative;
+            overflow-y: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .iframe-res {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+            display: block;
+        }
+
+        /* --- QUIZ STYLES --- */
+        .quiz-container {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        .quiz-question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--gray-900);
+        }
+        .quiz-option {
+            padding: 15px;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
+        
+        .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; position: relative; }
+        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
+        
+        .quiz-nav { display: flex; justify-content: space-between; margin-top: 20px; }
+        .btn-quiz { background: var(--brand); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+
+        @media (max-width: 768px) {
+            body { padding: 16px; }
+            .unit-header, .resource-btn { font-size: 15px; }
+            .modal-body { padding: 0; }
+            .quiz-container { height: 100%; border-radius: 0; max-width: 100%; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/1n2LN7WXfB2aOu8QnBrTUOsV2TEFRiUZv/preview', 'Syllabus')">
+        📄 DOWNLOAD SOCIOLOGY SYLLABUS
+    </div>
+    <div class="syllabus-btn secondary" onclick="openResource('notes', 'https://drive.google.com/file/d/1bCheKk2CQS5FQngJjrswL4wzOl1cF3S-/preview', 'Previous Year Q&A')">
+        ❓ PREVIOUS YEAR QUESTIONS & ANSWERS
+    </div>
+    
+    <div id="units">
+        
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 1 - INTRODUCTION TO SOCIOLOGY <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1-HQCWpEI3wup8U6Tj78UPHXyM0ugj_jt/preview', 'Detailed Notes: Intro')">
+                        <span class="icon">📚</span><span>Detailed Notes: Introduction</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1He_S-hzTrc7XP3IDG9502OmaioRty_Hp/preview', 'Intro Video')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1J9FEU6bHTWvZwnJQNmbQp_nqYPF3JPRK/preview', 'Sociology Intro Video')">
+                        <span class="icon video-icon">▶️</span><span>Introduction and Importance of Sociology</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1w0KXJ-1_Fgozgx0KlLAkg9qWcwwhI0D_/preview', 'Lecture Notes: Intro')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(1)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 2 - INDIVIDUAL & SOCIETY <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1iSg8dvvAP0YoWJDH7VDt4hhR1VRKCuDo/preview', 'Detailed Notes: Society')">
+                        <span class="icon">📚</span><span>Detailed Notes: Individual and Society</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ACJeyou4y6NTDK34cpQONhTQCZyaoURJ/preview', 'Intro Video: Society')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ocBTZEBZP5-udjj8nfsx2dNtBDG2V1Pu/preview', 'Individual Society Video')">
+                        <span class="icon video-icon">▶️</span><span>Individual and Society Socialization</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1LNbP5u6HUtHFS4LF8fijuNH7l0D1H_hv/preview', 'Lecture Notes: Society')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(2)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 3 - CULTURE <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of elements of culture chart]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1vrg20nkWc-oXt7jmxTFz5su3_kOYTsO2/preview', 'Detailed Notes: Culture')">
+                        <span class="icon">📚</span><span>Detailed Notes: Culture</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1grcxi9_tcp--leb2AHQYGHJAVxiYJ9WE/preview', 'Intro Video: Culture')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1aP-5K717utZRjktOpdlQ2AfnvRj40Uh6/preview', 'Culture Video')">
+                        <span class="icon video-icon">▶️</span><span>Culture: Aspects, Factors & Nature</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1LA1KTtGT_DkVKt3DudqHbq3e1MSXwpeX/preview', 'Lecture Notes: Culture')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(3)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 4 - SOCIAL ORGANIZATION <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of social stratification pyramid]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/18EBGealAWyFlxV9EbVyZHUIy4rqgsLoI/preview', 'Detailed Notes: Org')">
+                        <span class="icon">📚</span><span>Detailed Notes: Social Organization</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1P4RR8PPd-clomMzefB76UzX-yrLXVCpY/preview', 'Intro Video: Org')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1OPzeJbI-GlONMbtpnOxmKG4jy2oLcHIu/preview', 'Org Video')">
+                        <span class="icon video-icon">▶️</span><span>Social Org, Nation, Race & Stratification</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1n7nvxWq2a0Ur24zgR4X95INcxSxu7RIw/preview', 'Lecture Notes: Org')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(4)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 5 - SOCIAL PROCESS <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1qULtUuQiGzGL8zPf3KycoeCYUuP9pCaN/preview', 'Detailed Notes: Process')">
+                        <span class="icon">📚</span><span>Detailed Notes: Social Process</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1oIxroyRsa4Bs4uEbdX8G6aC27-iSuuxn/preview', 'Intro Video: Process')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1kz42ZyFLExZTWKTRUd8O-TnQBtoXgdI-/preview', 'Process Video')">
+                        <span class="icon video-icon">▶️</span><span>Social Process Types, Accommodation, Competition</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/15upc1j2COt_Wfmif05TFPTn2ggwmJuz7/preview', 'Lecture Notes: Process')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(5)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 6 - SOCIAL CHANGE <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1nvGxysosbUTd-rG6tg073a3FxjXKyH2h/preview', 'Detailed Notes: Change')">
+                        <span class="icon">📚</span><span>Detailed Notes: Social Change</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/19sOUvCzg33DIDV8U2lJomxDjl76MKzqU/preview', 'Intro Video: Change')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1w08NlRzXe0DoQGAGsWbARFru4aT6w0Ie/preview', 'Change Video')">
+                        <span class="icon video-icon">▶️</span><span>Social Change & Cultural Lag</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/12IJZCHILzMqxQGfJZjGPN2xLTxyXvMPI/preview', 'Lecture Notes: Change')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(6)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 7 - SOCIAL PROBLEMS <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of cycle of poverty]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Zk1tMrTjyVfxkpm_-2k1pBZfTKhgpyI-/preview', 'Detailed Notes: Problems')">
+                        <span class="icon">📚</span><span>Detailed Notes: Social Problems</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ybFvf9aw0j_cK4hEEG0kQiWtN9SSCkmK/preview', 'Intro Video: Problems')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1zLfpwhVKgZWtHp_EXkTDsi-tT8kJjwtF/preview', 'Problems Video')">
+                        <span class="icon video-icon">▶️</span><span>Social Problems & Disorganization</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1fjM3gNOG1X7F8DaBquyt-nK569GGwZeQ/preview', 'Lecture Notes: Problems')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(7)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="app-modal" class="modal-overlay">
+        <div class="modal-header">
+            <div id="modal-title" class="modal-title">Resource</div>
+            <button class="btn-close" onclick="closeModal()">Close X</button>
+        </div>
+        <div id="modal-body" class="modal-body"></div>
+    </div>
+
+    <script>
+        const QUIZ_DATA = {
+            1: [
+                { q: "Who is known as the 'Father of Sociology'?", o: ["Karl Marx", "Auguste Comte", "Max Weber", "Emile Durkheim"], a: 1 },
+                { q: "Sociology is defined as the scientific study of:", o: ["Rocks", "Society and social behavior", "Human anatomy", "Chemicals"], a: 1 },
+                { q: "Why is sociology important for nurses?", o: ["To understand drug interactions", "To understand patient's social background", "To perform surgery", "To diagnose diseases"], a: 1 },
+                { q: "The term 'Sociology' was coined in the year:", o: ["1839", "1900", "1750", "1950"], a: 0 }
+            ],
+            2: [
+                { q: "The process by which an individual learns the norms of society is called:", o: ["Acculturation", "Socialization", "Stratification", "Modernization"], a: 1 },
+                { q: "Which is a primary agent of socialization?", o: ["Mass Media", "Family", "Workplace", "Political Party"], a: 1 },
+                { q: "Man is a _____ animal.", o: ["Solitary", "Social", "Isolated", "Asocial"], a: 1 },
+                { q: "The 'Looking Glass Self' theory was proposed by:", o: ["C.H. Cooley", "G.H. Mead", "Freud", "Piaget"], a: 0 }
+            ],
+            3: [
+                { q: "Culture includes:", o: ["Knowledge and beliefs", "Arts and morals", "Laws and customs", "All of the above"], a: 3 },
+                { q: "Material culture refers to:", o: ["Ideas and beliefs", "Tangible objects like tools and buildings", "Social norms", "Language"], a: 1 },
+                { q: "The gap between material and non-material culture is called:", o: ["Cultural Shock", "Cultural Lag", "Ethnocentrism", "Cultural Relativism"], a: 1 },
+                { q: "Ethnocentrism means:", o: ["Judging other cultures by own standards", "Respecting all cultures", "Mixing cultures", "Forgetting one's culture"], a: 0 }
+            ],
+            4: [
+                { q: "Social stratification is the division of society into:", o: ["Equal groups", "Hierarchical layers", "Random clusters", "Geographical zones"], a: 1 },
+                { q: "The Caste system is an example of:", o: ["Open stratification", "Closed stratification", "Class system", "Meritocracy"], a: 1 },
+                { q: "A 'Primary Group' is characterized by:", o: ["Face-to-face interaction and intimacy", "Formal rules", "Large size", "Short-term contact"], a: 0 },
+                { q: "Which is an informal means of social control?", o: ["Law", "Police", "Gossip and Ridicule", "Court"], a: 2 }
+            ],
+            5: [
+                { q: "Which is an associative social process?", o: ["Competition", "Conflict", "Cooperation", "War"], a: 2 },
+                { q: "Accommodation refers to:", o: ["Complete destruction of opponent", "Adjusting to conflicting situations", "Biologically inheriting traits", "Leaving society"], a: 1 },
+                { q: "The process where two cultures merge to form a common culture is:", o: ["Isolation", "Assimilation", "Segregation", "Competition"], a: 1 },
+                { q: "Conflict is:", o: ["A continuous process", "A conscious and personal struggle", "Always non-violent", "Helpful for stability"], a: 1 }
+            ],
+            6: [
+                { q: "Social change refers to alterations in:", o: ["Physical environment only", "Social structure and relationships", "Individual biology", "Weather patterns"], a: 1 },
+                { q: "Which is a technological factor of social change?", o: ["Religion", "Internet and Automation", "Climate", "Population growth"], a: 1 },
+                { q: "The theory of 'Cultural Lag' was introduced by:", o: ["Ogburn", "Marx", "Weber", "Comte"], a: 0 },
+                { q: "Modernization typically involves:", o: ["Moving to rural areas", "Industrialization and urbanization", "Rejecting technology", "Decreasing literacy"], a: 1 }
+            ],
+            7: [
+                { q: "A situation where social norms are weak or absent is called:", o: ["Anomie", "Harmony", "Solidarity", "Integration"], a: 0 },
+                { q: "Which is considered a social problem in India?", o: ["Dowry system", "Poverty", "Illiteracy", "All of the above"], a: 3 },
+                { q: "Juvenile delinquency refers to crimes committed by:", o: ["Elderly", "Minors/Children", "Politicians", "Soldiers"], a: 1 },
+                { q: "Social disorganization leads to:", o: ["Stability", "Breakdown of social control", "Economic growth", "Better health"], a: 1 }
+            ]
+        };
+
+        let currentQuizUnit = 1;
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function toggleUnit(header) {
+            const content = header.nextElementSibling;
+            const isExpanded = header.getAttribute('aria-expanded') === 'true';
+            header.setAttribute('aria-expanded', !isExpanded);
+            content.classList.toggle('active');
+        }
+
+        function openResource(type, url, title) {
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+            document.getElementById('modal-title').textContent = title;
+            modal.style.display = 'flex';
+            let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
+            body.innerHTML = `<iframe class="iframe-res" src="${cleanUrl}"></iframe>`;
+        }
+
+        function startQuiz(unitId) {
+            currentQuizUnit = unitId;
+            currentQuestionIndex = 0;
+            score = 0;
+            const modal = document.getElementById('app-modal');
+            document.getElementById('modal-title').textContent = `Unit ${unitId} Quiz`;
+            modal.style.display = 'flex';
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const body = document.getElementById('modal-body');
+            const questions = QUIZ_DATA[currentQuizUnit];
+            
+            if (!questions || currentQuestionIndex >= questions.length) {
+                body.innerHTML = `
+                    <div class="quiz-container" style="text-align:center;">
+                        <h2>Quiz Complete! 🎉</h2>
+                        <p style="font-size:1.2rem; margin:20px 0;">You scored <strong>${score} / ${questions.length}</strong></p>
+                        <button class="btn-quiz" onclick="closeModal()">Close Quiz</button>
+                    </div>`;
+                return;
+            }
+
+            const q = questions[currentQuestionIndex];
+            body.innerHTML = `
+                <div class="quiz-container">
+                    <p class="quiz-question-text">Q${currentQuestionIndex + 1}: ${q.q}</p>
+                    <div>
+                        ${q.o.map((opt, i) => `
+                            <div class="quiz-option" onclick="checkAnswer(this, ${i}, ${q.a})">${opt}</div>
+                        `).join('')}
+                    </div>
+                    <div class="quiz-nav">
+                        <span>Question ${currentQuestionIndex + 1} of ${questions.length}</span>
+                        <button id="next-btn" class="btn-quiz" style="display:none;" onclick="nextQuestion()">Next ➡</button>
+                    </div>
+                </div>`;
+        }
+
+        function checkAnswer(element, selectedIndex, correctIndex) {
+            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+
+            if (selectedIndex === correctIndex) {
+                element.classList.add('correct');
+                score++;
+            } else {
+                element.classList.add('wrong');
+                element.parentElement.children[correctIndex].classList.add('correct');
+            }
+            document.getElementById('next-btn').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            renderQuizQuestion();
+        }
+
+        function closeModal() { 
+            document.getElementById('app-modal').style.display = 'none'; 
+            document.getElementById('modal-body').innerHTML = ""; 
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Child Health Nursing - Syllabus & Quizzes</title>
+    <meta name="description" content="Interactive syllabus with internal quizzes for Child Health Nursing." />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --brand: #003B82; 
+            --accent: #00B9F2;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: white;
+            color: var(--gray-900);
+            line-height: 1.6;
+            padding: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .syllabus-btn, .unit-header {
+            display: block;
+            width: 100%;
+            padding: 18px 24px;
+            margin: 12px 0;
+            background: var(--brand);
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+        .syllabus-btn:hover, .unit-header:hover {
+            background: #002d63;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .syllabus-btn.secondary { background: var(--accent); }
+        .syllabus-btn.secondary:hover { background: #009yc0; }
+
+        .unit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+            margin: 16px 0;
+        }
+        .unit-header span:last-child {
+            transition: transform 0.3s ease;
+            color: #FFA500;
+        }
+        .unit-header[aria-expanded="true"] span:last-child {
+            transform: rotate(180deg);
+        }
+
+        .unit-content {
+            padding: 0 12px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+        }
+        .unit-content.active {
+            padding: 24px 12px;
+            max-height: none; 
+        }
+
+        .subsection {
+            margin: 16px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.2s ease;
+        }
+
+        .resource-btn {
+            display: flex;
+            align-items: flex-start;
+            width: 100%;
+            padding: 14px 18px;
+            margin: 8px 0;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            border: 1px solid var(--gray-200);
+            transition: all 0.2s ease;
+            gap: 12px;
+            cursor: pointer;
+        }
+        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
+        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
+        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
+
+        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
+        .icon.video-icon { color: #8b5cf6; }
+        .icon.quiz-icon { color: #f59e0b; }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            height: 60px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+
+        .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; }
+        
+        .btn-close {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            flex: 1;
+            background: #f3f4f6;
+            position: relative;
+            overflow-y: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .iframe-res {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+            display: block;
+        }
+
+        /* --- QUIZ STYLES --- */
+        .quiz-container {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        .quiz-question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--gray-900);
+        }
+        .quiz-option {
+            padding: 15px;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
+        
+        .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; position: relative; }
+        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
+        .quiz-option.correct::after { content: " ✓"; font-weight: bold; }
+        .quiz-option.wrong::after { content: " ✗"; font-weight: bold; }
+        
+        .quiz-nav { display: flex; justify-content: space-between; margin-top: 20px; }
+        .btn-quiz { background: var(--brand); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .btn-quiz:disabled { background: var(--gray-200); color: var(--gray-700); cursor: not-allowed; }
+
+        @media (max-width: 768px) {
+            body { padding: 16px; }
+            .unit-header, .resource-btn { font-size: 15px; }
+            .modal-body { padding: 0; }
+            .quiz-container { height: 100%; border-radius: 0; max-width: 100%; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/1gQ7_cHlFwIipmOIhw_QpGPQkwgWJaa_8/preview', 'Syllabus')">
+        📄 DOWNLOAD SYLLABUS
+    </div>
+    <div class="syllabus-btn secondary" onclick="openResource('notes', 'https://drive.google.com/file/d/1gGJ5uYktodD7GF73rUNSaK9FkUBytxz4/preview', 'Previous Year Q&A')">
+        ❓ PREVIOUS YEAR QUESTIONS & ANSWERS
+    </div>
+    
+    <div id="units">
+        
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 1 - INTRODUCTION <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1QEy_Wjs1D0Poa7PGOBp9UQLZTFKAEN2Z/preview', 'Detailed Notes: Intro')">
+                        <span class="icon">📚</span><span>Detailed Notes: Introduction</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1v79MG-s9JBKyCNADlFY6-jwP0-pQCrJq/preview', 'Intro Video')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/19UbZKpPwMQgCy0nT3YV1COTly6PeSKCZ/preview', 'Child Health & Welfare')">
+                        <span class="icon video-icon">▶️</span><span>Child Health Nursing & Welfare</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/16C5XJn_4ny02O2N13Pk-qlhSaXTQC7yC/preview', 'Lecture Notes: Intro')">
+                        <span class="icon">📄</span><span>Lecture Notes: Introduction</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(1)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 2 - THE HEALTHY CHILD <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1GTbxrcMuPZk6Mks9Ez628XD_x6zeog4v/preview', 'Detailed Notes: Healthy Child')">
+                        <span class="icon">📚</span><span>Detailed Notes: The Healthy Child</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1IKCXV5tg-Zb3I-TtQEXGZZSB_W7k1OzA/preview', 'Short Video: Unit 2')">
+                        <span class="icon video-icon">▶️</span><span>Short Video Overview</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1dHvR6EGg0y8GGZNc46rY-wZl9rBd7zro/preview', 'Growth & Nutrition')">
+                        <span class="icon video-icon">▶️</span><span>Growth, Nutrition, Play & Immunization</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1uKRu5IwlgkGOTJfWiNUFvazbSRljcJ1X/preview', 'Lecture Notes: Unit 2')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(2)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 3 - NURSING CARE OF NEONATE <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ga41fapJxy3ud39nGDkfDAi_uSLJvWr_/preview', 'Detailed Notes: Neonate')">
+                        <span class="icon">📚</span><span>Detailed Notes: Neonate Care</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1OhkgfAaQ1ig_fwLCGjDhDeqyWSEJxerM/preview', 'Short Video: Unit 3')">
+                        <span class="icon video-icon">▶️</span><span>Short Video Overview</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1lfQ9tPa7htYF0JQV9kOoHm96Fyp1iedi/preview', 'Newborn Assessment')">
+                        <span class="icon video-icon">▶️</span><span>Newborn Assessment & Resuscitation</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/188amKezdVy1RU4MUBQHqza7MzreKDtXC/preview', 'Lecture Notes: Neonate')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(3)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 4 - COMMON CHILDHOOD DISEASES <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1qetdYUfIQczkLYi3BpJ6RvY6lTAd5JhT/preview', 'Detailed Notes: Diseases')">
+                        <span class="icon">📚</span><span>Detailed Notes: Childhood Diseases</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1OuhcDVvZZwJMB_SbS_RLb7USDH4ZuNR5/preview', 'Short Video: Unit 4')">
+                        <span class="icon video-icon">▶️</span><span>Short Video Overview</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/15iZ12KtcmHgxTMowlsBS6yrQBMOdKagR/preview', 'Disease Conditions')">
+                        <span class="icon video-icon">▶️</span><span>Nutritional Deficiencies, Pneumonia, Asthma</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1dXwwyjSdWA5gw2VpwvxFAPOoksEDFtIj/preview', 'Lecture Notes: Diseases')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(4)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 5 - BEHAVIOUR DISORDERS <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1iaCXSCYlJ-QapgKU2fi_P1BVynn_VNiP/preview', 'Detailed Notes: Behaviour')">
+                        <span class="icon">📚</span><span>Detailed Notes: Behaviour Disorders</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/16adLI0OpNfA_DfiR-ZPJJUYv_-NwMNlb/preview', 'Short Video: Unit 5')">
+                        <span class="icon video-icon">▶️</span><span>Short Video Overview</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1QZfaS477p4kl6QJJzFlB-p_dfLg6vrpp/preview', 'Challenged Children')">
+                        <span class="icon video-icon">▶️</span><span>Management of Challenged Children</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1KVZNywUonikEZiH5cyDw8lQicmm7sQQd/preview', 'Lecture Notes: Behaviour')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(5)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="app-modal" class="modal-overlay">
+        <div class="modal-header">
+            <div id="modal-title" class="modal-title">Resource</div>
+            <button class="btn-close" onclick="closeModal()">Close X</button>
+        </div>
+        <div id="modal-body" class="modal-body"></div>
+    </div>
+
+    <script>
+        const QUIZ_DATA = {
+            1: [
+                { q: "Which of the following is a key indicator of child health status in a country?", o: ["Infant Mortality Rate (IMR)", "Adult Literacy Rate", "GDP", "Urbanization Rate"], a: 0 },
+                { q: "The 'Rights of the Child' were adopted by the UN General Assembly in which year?", o: ["1959", "1989", "1995", "2000"], a: 1 },
+                { q: "Which concept emphasizes 'anticipatory guidance' in pediatrics?", o: ["Curative Care", "Preventive Pediatrics", "Palliative Care", "Rehabilitative Care"], a: 1 },
+                { q: "A primary role of the pediatric nurse is to act as a?", o: ["Judge", "Advocate for the child/family", "Administrator only", "Pharmacist"], a: 1 }
+            ],
+            2: [
+                { q: "An infant typically doubles their birth weight by what age?", o: ["3 months", "5-6 months", "9 months", "12 months"], a: 1 },
+                { q: "Which type of play is most characteristic of toddlers?", o: ["Solitary play", "Parallel play", "Cooperative play", "Competitive play"], a: 1 },
+                { q: "The posterior fontanelle typically closes by?", o: ["2-3 months", "6-8 months", "12-18 months", "24 months"], a: 0 },
+                { q: "When should complementary feeding (weaning) ideally begin?", o: ["3 months", "4 months", "6 months", "9 months"], a: 2 }
+            ],
+            3: [
+                { q: "What is the normal heart rate range for a healthy newborn?", o: ["60-100 bpm", "80-120 bpm", "120-160 bpm", "160-180 bpm"], a: 2 },
+                { q: "Which APGAR score indicates a newborn is in good condition?", o: ["0-3", "4-6", "7-10", "None of above"], a: 2 },
+                { q: "The 'Moro Reflex' typically disappears by what age?", o: ["1 month", "3-4 months", "8-9 months", "1 year"], a: 1 },
+                { q: "Which vitamin is administered at birth to prevent hemorrhagic disease?", o: ["Vitamin A", "Vitamin C", "Vitamin D", "Vitamin K"], a: 3 }
+            ],
+            4: [
+                { q: "What is the 'Gold Standard' treatment for acute diarrhea and dehydration?", o: ["Antibiotics", "Antiemetics", "Oral Rehydration Solution (ORS)", "Fruit Juice"], a: 2 },
+                { q: "Koplik's spots are a pathognomonic sign of which disease?", o: ["Chickenpox", "Measles", "Mumps", "Rubella"], a: 1 },
+                { q: "In Hirchsprung's disease, the primary defect is?", o: ["Absence of ganglion cells", "Narrowing of pylorus", "Intestinal twisting", "Hernia"], a: 0 },
+                { q: "A characteristic sign of Pyloric Stenosis is?", o: ["Bile-stained vomiting", "Projectile vomiting", "Diarrhea", "Fever"], a: 1 }
+            ],
+            5: [
+                { q: "What is 'Pica' in children?", o: ["Fear of strangers", "Eating non-food substances", "Bed wetting", "Sleep walking"], a: 1 },
+                { q: "Involuntary urination during sleep after the age of 5 is called?", o: ["Encopresis", "Enuresis", "Nocturia", "Polyuria"], a: 1 },
+                { q: "Which is a core symptom of ADHD?", o: ["High intelligence", "Inattention and hyperactivity", "Social withdrawal", "Delayed speech"], a: 1 },
+                { q: "IQ level for 'Mild Mental Retardation' is approximately?", o: ["50-70", "35-50", "20-35", "Below 20"], a: 0 }
+            ]
+        };
+
+        let currentQuizUnit = 1;
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function toggleUnit(header) {
+            const content = header.nextElementSibling;
+            const isExpanded = header.getAttribute('aria-expanded') === 'true';
+            header.setAttribute('aria-expanded', !isExpanded);
+            content.classList.toggle('active');
+        }
+
+        function openResource(type, url, title) {
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+            document.getElementById('modal-title').textContent = title;
+            modal.style.display = 'flex';
+            // Ensure proper preview URL for Drive
+            let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
+            body.innerHTML = `<iframe class="iframe-res" src="${cleanUrl}"></iframe>`;
+        }
+
+        function startQuiz(unitId) {
+            currentQuizUnit = unitId;
+            currentQuestionIndex = 0;
+            score = 0;
+            const modal = document.getElementById('app-modal');
+            document.getElementById('modal-title').textContent = `Unit ${unitId} Quiz`;
+            modal.style.display = 'flex';
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const body = document.getElementById('modal-body');
+            const questions = QUIZ_DATA[currentQuizUnit];
+            
+            if (!questions || currentQuestionIndex >= questions.length) {
+                // Quiz Finished
+                body.innerHTML = `
+                    <div class="quiz-container" style="text-align:center;">
+                        <h2>Quiz Complete! 🎉</h2>
+                        <p style="font-size:1.2rem; margin:20px 0;">You scored <strong>${score} / ${questions.length}</strong></p>
+                        <button class="btn-quiz" onclick="closeModal()">Close Quiz</button>
+                    </div>`;
+                return;
+            }
+
+            const q = questions[currentQuestionIndex];
+            body.innerHTML = `
+                <div class="quiz-container">
+                    <p class="quiz-question-text">Q${currentQuestionIndex + 1}: ${q.q}</p>
+                    <div>
+                        ${q.o.map((opt, i) => `
+                            <div class="quiz-option" onclick="checkAnswer(this, ${i}, ${q.a})">${opt}</div>
+                        `).join('')}
+                    </div>
+                    <div class="quiz-nav">
+                        <span>Question ${currentQuestionIndex + 1} of ${questions.length}</span>
+                        <button id="next-btn" class="btn-quiz" style="display:none;" onclick="nextQuestion()">Next ➡</button>
+                    </div>
+                </div>`;
+        }
+
+        function checkAnswer(element, selectedIndex, correctIndex) {
+            // Prevent multiple clicks
+            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+
+            if (selectedIndex === correctIndex) {
+                element.classList.add('correct');
+                score++;
+            } else {
+                element.classList.add('wrong');
+                // Highlight correct answer
+                element.parentElement.children[correctIndex].classList.add('correct');
+            }
+            document.getElementById('next-btn').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            renderQuizQuestion();
+        }
+
+        function closeModal() { 
+            document.getElementById('app-modal').style.display = 'none'; 
+            document.getElementById('modal-body').innerHTML = ""; 
+        }
+    </script>
+</body>
+</html>

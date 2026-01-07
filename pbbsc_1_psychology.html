@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Psychology - Syllabus & Quizzes</title>
+    <meta name="description" content="Interactive syllabus with internal quizzes for Psychology." />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --brand: #003B82; 
+            --accent: #00B9F2;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: white;
+            color: var(--gray-900);
+            line-height: 1.6;
+            padding: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .syllabus-btn, .unit-header {
+            display: block;
+            width: 100%;
+            padding: 18px 24px;
+            margin: 12px 0;
+            background: var(--brand);
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+        .syllabus-btn:hover, .unit-header:hover {
+            background: #002d63;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .syllabus-btn.secondary { background: var(--accent); }
+        .syllabus-btn.secondary:hover { background: #009yc0; }
+
+        .unit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+            margin: 16px 0;
+        }
+        .unit-header span:last-child {
+            transition: transform 0.3s ease;
+            color: #FFA500;
+        }
+        .unit-header[aria-expanded="true"] span:last-child {
+            transform: rotate(180deg);
+        }
+
+        .unit-content {
+            padding: 0 12px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+        }
+        .unit-content.active {
+            padding: 24px 12px;
+            max-height: none; 
+        }
+
+        .subsection {
+            margin: 16px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.2s ease;
+        }
+
+        .resource-btn {
+            display: flex;
+            align-items: flex-start;
+            width: 100%;
+            padding: 14px 18px;
+            margin: 8px 0;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            border: 1px solid var(--gray-200);
+            transition: all 0.2s ease;
+            gap: 12px;
+            cursor: pointer;
+        }
+        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
+        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
+        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
+        .resource-btn.disabled { opacity: 0.6; cursor: not-allowed; background: #f3f4f6; color: #9ca3af; border-color: #e5e7eb; }
+
+        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
+        .icon.video-icon { color: #8b5cf6; }
+        .icon.quiz-icon { color: #f59e0b; }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            height: 60px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+
+        .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; }
+        
+        .btn-close {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            flex: 1;
+            background: #f3f4f6;
+            position: relative;
+            overflow-y: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .iframe-res {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+            display: block;
+        }
+
+        /* --- QUIZ STYLES --- */
+        .quiz-container {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        .quiz-question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--gray-900);
+        }
+        .quiz-option {
+            padding: 15px;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
+        
+        .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; position: relative; }
+        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
+        
+        .quiz-nav { display: flex; justify-content: space-between; margin-top: 20px; }
+        .btn-quiz { background: var(--brand); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+
+        @media (max-width: 768px) {
+            body { padding: 16px; }
+            .unit-header, .resource-btn { font-size: 15px; }
+            .modal-body { padding: 0; }
+            .quiz-container { height: 100%; border-radius: 0; max-width: 100%; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/1ELv0Q7OdYJns0py09CkRlU2Y1PEPOYT2/preview', 'Syllabus')">
+        📄 DOWNLOAD PSYCHOLOGY SYLLABUS
+    </div>
+    <div class="syllabus-btn secondary" onclick="openResource('notes', 'https://drive.google.com/file/d/1Hkdq_IEGE-iJzGn_XZg20DnqRqZIzsyS/preview', 'Previous Year Q&A')">
+        ❓ PREVIOUS YEAR QUESTIONS & ANSWERS
+    </div>
+    
+    <div id="units">
+        
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 1 - INTRODUCTION TO PSYCHOLOGY <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1uJcSnWVWUsfnUD3OK62v8zlMlopo_c7h/preview', 'Detailed Notes: Intro')">
+                        <span class="icon">📚</span><span>Detailed Notes: Introduction</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1JmDEA_S3iHA1dsJNNch1fc-jHuAs6_ny/preview', 'Intro Video')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1q1lyjHzXGHG7BKSnVaxfPkSVsFHs6sM3/preview', 'Psychology Intro')">
+                        <span class="icon video-icon">▶️</span><span>Introduction to Psychology</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1mOwa3hUStoObLf7SXoTqrCmqlTu_xFp2/preview', 'Lecture Notes: Intro')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(1)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 2 - SENSATION, ATTENTION & PERCEPTION <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1JsyR_GzeDUnM3-5cjQ-LnMOEzIUIfEq9/preview', 'Detailed Notes: Unit 2')">
+                        <span class="icon">📚</span><span>Detailed Notes: Sensation & Perception</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1PIRCy5Yl_gmLIgFaPzC0VRxh0ev48nwt/preview', 'Intro Video: Unit 2')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1lxK7gdc048z_2wWjgcRnu1JS8_n42AaV/preview', 'Definitions Video')">
+                        <span class="icon video-icon">▶️</span><span>Sensation, Attention and Perception</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1DZ1-4ifeBu1eR9o0KWP9R8mk6xcnl2dd/preview', 'Lecture Notes: Unit 2')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(2)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 3 - MOTIVATION <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of Maslow's hierarchy of needs]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1GpENbyDMC-rWt6LrdsBR2lVeSW86e2MV/preview', 'Detailed Notes: Motivation')">
+                        <span class="icon">📚</span><span>Detailed Notes: Motivation</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1rlC8CgEOTU8LOH1q6wTwyOKDCwEAaeap/preview', 'Intro Video: Motivation')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/17HPgwCgbQKiy8ewiGF702cmYHxjbeZ7j/preview', 'Motivation Nature')">
+                        <span class="icon video-icon">▶️</span><span>Definition & Nature of Motivation</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1iHI8Sv7qQVQCr4psKyWL4OLZTwn7hX6f/preview', 'Lecture Notes: Motivation')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(3)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 4 - EMOTIONS <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of Plutchik's wheel of emotions]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1pUOdRkPf6Yams4EbeRVfff4RwbhYPF8T/preview', 'Detailed Notes: Emotions')">
+                        <span class="icon">📚</span><span>Detailed Notes: Emotions</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1YRaRx-EhBUEknPlmfbW4O9t5qXwnG5Th/preview', 'Intro Video: Emotions')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn disabled" onclick="alert('Content Coming Soon')">
+                        <span class="icon video-icon">▶️</span><span>Emotions (Coming Soon)</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1XhrJheqZJrSUa_XA7cdSxJQyZJHNJ3fe/preview', 'Lecture Notes: Emotions')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(4)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 5 - PERSONALITY <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of Freud's id ego and superego diagram]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1VipZIlrdOAaK5DGwQWW_wthiERDTBL9X/preview', 'Detailed Notes: Personality')">
+                        <span class="icon">📚</span><span>Detailed Notes: Personality</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1vl3c0ebJ8yfWuh1kUirZ8VnCnA_dgL7r/preview', 'Intro Video: Personality')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/12rbIhQSvKEEpkuZAvelZmIdjlNDJlwBE/preview', 'Personality Sickness')">
+                        <span class="icon video-icon">▶️</span><span>Personality in Sickness & Nursing</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1lJ0ZXcYRr_M2kln1G0cut710PV90653L/preview', 'Lecture Notes: Personality')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(5)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 6 - PSYCHOLOGICAL ASPECTS OF NURSING <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1oec2YiS48QC0pxUkKzwqZqx6kkhhGYJQ/preview', 'Detailed Notes: Psych Aspects')">
+                        <span class="icon">📚</span><span>Detailed Notes: Psychological Aspects</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Ka_vD1978aRpoDzJyQCZSWjpy_hOh3wx/preview', 'Intro Video: Psych Aspects')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1I-6gdx1SnCPzFb5UvnA_3t6SwYJ7y4uV/preview', 'Psych Aspects')">
+                        <span class="icon video-icon">▶️</span><span>Psychological Aspects of Nursing</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1kWy2RDW819Kmj22LgkuJqvYCLkAeRGkj/preview', 'Lecture Notes: Psych Aspects')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(6)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 7 - INDIVIDUAL DIFFERENCES <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of normal distribution curve of intelligence]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/19XAoQc0yXITQKhJP8sxqVYFV4pC9dcJN/preview', 'Detailed Notes: Differences')">
+                        <span class="icon">📚</span><span>Detailed Notes: Individual Differences</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1GI0iBRrKvKCz-8s4WxELEcFXiavNstSp/preview', 'Intro Video: Differences')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1JGeBbpO-VkJTJwRqGyD6wgw4Qzv9wNZq/preview', 'Individual Differences')">
+                        <span class="icon video-icon">▶️</span><span>Individual Differences</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1lM--_7wSrPGOD9-4Ldio0GrhEUETxp5d/preview', 'Lecture Notes: Differences')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(7)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 8 - INTELLIGENCE AND ABILITIES <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of Gardner's multiple intelligences theory]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1KwjGjXmCl8grw0Gvxv1e75KgppCjJtzK/preview', 'Detailed Notes: Intelligence')">
+                        <span class="icon">📚</span><span>Detailed Notes: Intelligence</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1epf8Mwxp-WBkqRAolLEKlQ3Mea7GyVxf/preview', 'Intro Video: Intelligence')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1n_o1J1SJOPEpzer5i8cbnTAJ4Uc1QJHg/preview', 'Abilities')">
+                        <span class="icon video-icon">▶️</span><span>Intelligence & Abilities in Sickness</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1PawPhMHxycTe7dN-NdzxWqHvyxe_hJtV/preview', 'Lecture Notes: Intelligence')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(8)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 8 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 9 - LEARNING <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of classical conditioning Pavlov's dog]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/169XH-Gz-_7mYL7Gjn9OGmwPrucElLR_2/preview', 'Detailed Notes: Learning')">
+                        <span class="icon">📚</span><span>Detailed Notes: Learning</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1dNf_OzV7rdlt22T2Swb6VZEpBseNO-vD/preview', 'Intro Video: Learning')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1wArzxmatiHrE5JsAUM9Wr7mYoDGxkxMW/preview', 'Learning Def')">
+                        <span class="icon video-icon">▶️</span><span>Learning: Definition & Conditions</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1lZt4ofG9_JzkvMfacsOKsGlRKn1qQLGF/preview', 'Lecture Notes: Learning')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(9)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 9 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 10 - MEMORY AND FORGETTING <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1j0qrlQMm-dE6N6XVoyaUU5DBd7cJEjbS/preview', 'Detailed Notes: Memory')">
+                        <span class="icon">📚</span><span>Detailed Notes: Memory & Forgetting</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1JrwjGbM5lUxUK4e_Wa1t8ehre6iNMAgJ/preview', 'Intro Video: Memory')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1dpwX1rP9u5NPByyMMoEApfNSQBiez7SN/preview', 'Memory Nature')">
+                        <span class="icon video-icon">▶️</span><span>Definition & Nature of Memory</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1wCwoq7qT234Bo5Igwc50RW0yMo7f9LI2/preview', 'Lecture Notes: Memory')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(10)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 10 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 11 - ATTITUDES <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1rOC6hMfkoaTjCIwS0eUcIRXXNYqoqiEo/preview', 'Detailed Notes: Attitudes')">
+                        <span class="icon">📚</span><span>Detailed Notes: Attitudes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1SGm--lNbM-4x2MqpHvpq01Ubo_S1ePe9/preview', 'Intro Video: Attitudes')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1aIjC8lMTUrU9lln2BBiz9Vm1rh0NP7Jm/preview', 'Attitudes Def')">
+                        <span class="icon video-icon">▶️</span><span>Attitudes: Definition & Modification</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Z_auY6xc0p_PWeRSF0kXdVgJ7KOwaFfZ/preview', 'Lecture Notes: Attitudes')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(11)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 11 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 12 - MENTAL HYGIENE & HEALTH <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1C5qL2TuIjguZa0jjf2EfBmKHzdVCv0ng/preview', 'Detailed Notes: Mental Hygiene')">
+                        <span class="icon">📚</span><span>Detailed Notes: Mental Hygiene</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1fEyFNUu4icwSaQvpb20rGHZfi-OCbmR5/preview', 'Intro Video: Mental Hygiene')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1j6I9yxtUf3Ogf6poQpmORpm0F_vfge2k/preview', 'Mental Health Concept')">
+                        <span class="icon video-icon">▶️</span><span>Concept of Mental Hygiene & Health</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1sKQN1oA8O3K9mknBi3nw6bGhMfmQOal6/preview', 'Lecture Notes: Mental Hygiene')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(12)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 12 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="app-modal" class="modal-overlay">
+        <div class="modal-header">
+            <div id="modal-title" class="modal-title">Resource</div>
+            <button class="btn-close" onclick="closeModal()">Close X</button>
+        </div>
+        <div id="modal-body" class="modal-body"></div>
+    </div>
+
+    <script>
+        const QUIZ_DATA = {
+            1: [
+                { q: "Who is known as the 'Father of Experimental Psychology'?", o: ["Sigmund Freud", "Wilhelm Wundt", "William James", "Ivan Pavlov"], a: 1 },
+                { q: "Psychology is best defined as the scientific study of:", o: ["Mind and Soul", "Behavior and Mental Processes", "Brain Anatomy", "Mental Disorders only"], a: 1 },
+                { q: "Which method involves observing behavior in its natural setting?", o: ["Case Study", "Experiment", "Naturalistic Observation", "Survey"], a: 2 },
+                { q: "Which school of thought focuses on the unconscious mind?", o: ["Behaviorism", "Psychoanalysis", "Humanism", "Structuralism"], a: 1 }
+            ],
+            2: [
+                { q: "The minimum stimulation needed to detect a particular stimulus 50% of the time is:", o: ["Absolute Threshold", "Difference Threshold", "Sensory Adaptation", "Perceptual Set"], a: 0 },
+                { q: "Interpreting sensory information to make sense of the world is called:", o: ["Sensation", "Perception", "Adaptation", "Illusion"], a: 1 },
+                { q: "Which of the following is an error in perception?", o: ["Hallucination", "Illusion", "Both A and B", "Neither"], a: 2 },
+                { q: "The span of attention for a normal adult is typically:", o: ["3-4 digits", "7 ± 2 digits", "10-12 digits", "Unlimited"], a: 1 }
+            ],
+            3: [
+                { q: "According to Maslow, which need is at the top of the hierarchy?", o: ["Safety", "Love/Belonging", "Self-Actualization", "Esteem"], a: 2 },
+                { q: "Motivation arising from internal factors is called:", o: ["Extrinsic Motivation", "Intrinsic Motivation", "Social Motivation", "Biological Motivation"], a: 1 },
+                { q: "Which is a primary (biological) motive?", o: ["Achievement", "Hunger", "Affiliation", "Power"], a: 1 },
+                { q: "The drive-reduction theory suggests we are motivated to reduce:", o: ["Arousal", "Tension caused by biological needs", "Incentives", "Instincts"], a: 1 }
+            ],
+            4: [
+                { q: "Which theory states that physiological arousal comes before the emotion?", o: ["Cannon-Bard", "James-Lange", "Schachter-Singer", "Lazarus"], a: 1 },
+                { q: "The limbic system structure most associated with fear is the:", o: ["Hippocampus", "Amygdala", "Thalamus", "Cerebellum"], a: 1 },
+                { q: "Which is considered a basic universal emotion?", o: ["Guilt", "Happiness", "Pride", "Jealousy"], a: 1 },
+                { q: "Emotional intelligence involves the ability to:", o: ["Suppress emotions", "Perceive and manage emotions", "Ignore others' feelings", "React impulsively"], a: 1 }
+            ],
+            5: [
+                { q: "According to Freud, the part of personality operating on the 'Pleasure Principle' is:", o: ["Id", "Ego", "Superego", "Conscious"], a: 0 },
+                { q: "An introvert is someone who:", o: ["Seeks social stimulation", "Turns inward and is reserved", "Is hostile", "Is emotionally unstable"], a: 1 },
+                { q: "The 'Big Five' personality traits include:", o: ["Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism", "Id, Ego, Superego", "Endomorph, Mesomorph, Ectomorph", "Cardinal, Central, Secondary"], a: 0 },
+                { q: "Which defense mechanism involves refusing to accept reality?", o: ["Projection", "Denial", "Rationalization", "Sublimation"], a: 1 }
+            ],
+            6: [
+                { q: "The nurse-patient relationship is primarily:", o: ["Social", "Therapeutic", "Casual", "Financial"], a: 1 },
+                { q: "Understanding a patient's behavior during illness requires knowledge of:", o: ["Physics", "Psychology", "Mathematics", "History"], a: 1 },
+                { q: "Which is a common psychological reaction to terminal illness?", o: ["Joy", "Denial and Anger", "Indifference", "Excitement"], a: 1 },
+                { q: "Empathy in nursing means:", o: ["Feeling pity for the patient", "Understanding the patient's feelings", "Ignoring the patient's emotions", "Solving all patient problems"], a: 1 }
+            ],
+            7: [
+                { q: "Individual differences are caused by:", o: ["Heredity only", "Environment only", "Interaction of Heredity and Environment", "Luck"], a: 2 },
+                { q: "Which is an example of an individual difference?", o: ["Intelligence level", "Having two eyes", "Needing oxygen", "Having a heart"], a: 0 },
+                { q: "Differences in temperament are largely:", o: ["Learned", "Biological/Innate", "Cultural", "Environmental"], a: 1 },
+                { q: "Standardized tests are used to measure:", o: ["Height", "Individual differences in traits", "Blood pressure", "Fever"], a: 1 }
+            ],
+            8: [
+                { q: "The formula for IQ is:", o: ["CA/MA x 100", "MA/CA x 100", "MA x CA", "MA + CA"], a: 1 },
+                { q: "Who proposed the theory of Multiple Intelligences?", o: ["Spearman", "Howard Gardner", "Sternberg", "Binet"], a: 1 },
+                { q: "An IQ score of 100 is considered:", o: ["Gifted", "Average", "Intellectually Disabled", "Superior"], a: 1 },
+                { q: "Fluid intelligence refers to:", o: ["Accumulated knowledge", "Ability to solve new problems", "Vocabulary skills", "Learned facts"], a: 1 }
+            ],
+            9: [
+                { q: "Pavlov's experiment with dogs demonstrated:", o: ["Operant Conditioning", "Classical Conditioning", "Observational Learning", "Insight Learning"], a: 1 },
+                { q: "Learning by watching others is called:", o: ["Latent learning", "Observational learning", "Insight learning", "Associative learning"], a: 1 },
+                { q: "In Operant Conditioning, reinforcement:", o: ["Decreases behavior", "Increases behavior", "Stops behavior", "Has no effect"], a: 1 },
+                { q: "A permanent change in behavior due to experience is:", o: ["Maturation", "Learning", "Reflex", "Instinct"], a: 1 }
+            ],
+            10: [
+                { q: "The capacity of Short-Term Memory is approximately:", o: ["Unlimited", "7 ± 2 items", "20 items", "1 item"], a: 1 },
+                { q: "The process of getting information into memory is:", o: ["Encoding", "Storage", "Retrieval", "Forgetting"], a: 0 },
+                { q: "Forgetting due to old information interfering with new is:", o: ["Retroactive interference", "Proactive interference", "Decay", "Repression"], a: 1 },
+                { q: "Which memory type stores facts and general knowledge?", o: ["Episodic", "Semantic", "Procedural", "Implicit"], a: 1 }
+            ],
+            11: [
+                { q: "The three components of attitude are (ABC model):", o: ["Affective, Behavioral, Cognitive", "Action, Belief, Cause", "Affect, Brain, Control", "Awareness, Behavior, Change"], a: 0 },
+                { q: "Cognitive Dissonance refers to:", o: ["Mental harmony", "Discomfort from conflicting beliefs/behaviors", "Forgetting attitudes", "Forming new habits"], a: 1 },
+                { q: "Attitudes are primarily:", o: ["Innate", "Learned", "Genetic", "Unchangeable"], a: 1 },
+                { q: "Stereotypes are a form of:", o: ["Behavior", "Emotion", "Cognitive attitude/belief", "Discrimination"], a: 2 }
+            ],
+            12: [
+                { q: "Mental Hygiene deals with:", o: ["Curing insanity", "Preservation and promotion of mental health", "Physical cleanliness only", "Dental care"], a: 1 },
+                { q: "A characteristic of a mentally healthy person is:", o: ["Rigidity", "Emotional stability", "Social isolation", "Distorted reality"], a: 1 },
+                { q: "Primary prevention in mental health aims to:", o: ["Treat disorders", "Prevent occurrence of disorders", "Rehabilitate patients", "Reduce complications"], a: 1 },
+                { q: "Maladjustment typically leads to:", o: ["Happiness", "Stress and conflict", "Success", "Physical strength"], a: 1 }
+            ]
+        };
+
+        let currentQuizUnit = 1;
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function toggleUnit(header) {
+            const content = header.nextElementSibling;
+            const isExpanded = header.getAttribute('aria-expanded') === 'true';
+            header.setAttribute('aria-expanded', !isExpanded);
+            content.classList.toggle('active');
+        }
+
+        function openResource(type, url, title) {
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+            document.getElementById('modal-title').textContent = title;
+            modal.style.display = 'flex';
+            let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
+            body.innerHTML = `<iframe class="iframe-res" src="${cleanUrl}"></iframe>`;
+        }
+
+        function startQuiz(unitId) {
+            currentQuizUnit = unitId;
+            currentQuestionIndex = 0;
+            score = 0;
+            const modal = document.getElementById('app-modal');
+            document.getElementById('modal-title').textContent = `Unit ${unitId} Quiz`;
+            modal.style.display = 'flex';
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const body = document.getElementById('modal-body');
+            const questions = QUIZ_DATA[currentQuizUnit];
+            
+            if (!questions || currentQuestionIndex >= questions.length) {
+                body.innerHTML = `
+                    <div class="quiz-container" style="text-align:center;">
+                        <h2>Quiz Complete! 🎉</h2>
+                        <p style="font-size:1.2rem; margin:20px 0;">You scored <strong>${score} / ${questions.length}</strong></p>
+                        <button class="btn-quiz" onclick="closeModal()">Close Quiz</button>
+                    </div>`;
+                return;
+            }
+
+            const q = questions[currentQuestionIndex];
+            body.innerHTML = `
+                <div class="quiz-container">
+                    <p class="quiz-question-text">Q${currentQuestionIndex + 1}: ${q.q}</p>
+                    <div>
+                        ${q.o.map((opt, i) => `
+                            <div class="quiz-option" onclick="checkAnswer(this, ${i}, ${q.a})">${opt}</div>
+                        `).join('')}
+                    </div>
+                    <div class="quiz-nav">
+                        <span>Question ${currentQuestionIndex + 1} of ${questions.length}</span>
+                        <button id="next-btn" class="btn-quiz" style="display:none;" onclick="nextQuestion()">Next ➡</button>
+                    </div>
+                </div>`;
+        }
+
+        function checkAnswer(element, selectedIndex, correctIndex) {
+            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+
+            if (selectedIndex === correctIndex) {
+                element.classList.add('correct');
+                score++;
+            } else {
+                element.classList.add('wrong');
+                element.parentElement.children[correctIndex].classList.add('correct');
+            }
+            document.getElementById('next-btn').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            renderQuizQuestion();
+        }
+
+        function closeModal() { 
+            document.getElementById('app-modal').style.display = 'none'; 
+            document.getElementById('modal-body').innerHTML = ""; 
+        }
+    </script>
+</body>
+</html>

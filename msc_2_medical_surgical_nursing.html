@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medical Surgical Nursing II - Syllabus</title>
+    <meta name="description" content="Comprehensive syllabus with detailed notes and quizzes for Cardiovascular and Thoracic Nursing." />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --brand: #003B82; 
+            --accent: #00B9F2;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --danger: #ef4444;
+            --success: #10b981;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: white;
+            color: var(--gray-900);
+            line-height: 1.6;
+            padding: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .syllabus-btn, .unit-header {
+            display: block;
+            width: 100%;
+            padding: 18px 24px;
+            margin: 24px 0;
+            background: var(--brand);
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+        .syllabus-btn:hover, .unit-header:hover {
+            background: #002d63;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .unit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+            margin: 16px 0;
+        }
+        .unit-header span:last-child {
+            transition: transform 0.3s ease;
+            color: #FFA500;
+        }
+        .unit-header[aria-expanded="true"] span:last-child {
+            transform: rotate(180deg);
+        }
+
+        .unit-content {
+            padding: 0 12px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+        }
+        .unit-content.active {
+            padding: 24px 12px;
+            max-height: none; 
+        }
+
+        .subsection {
+            margin: 16px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.2s ease;
+        }
+        .subsection:hover { box-shadow: var(--shadow-md); }
+
+        .resource-btn {
+            display: flex;
+            align-items: flex-start;
+            width: 100%;
+            padding: 14px 18px;
+            margin: 8px 0;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            border: 1px solid var(--gray-200);
+            transition: all 0.2s ease;
+            gap: 12px;
+            flex-wrap: wrap;
+            min-height: 50px;
+            cursor: pointer;
+        }
+        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
+        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
+        .resource-btn.quiz { background: #fff5e8; border-color: #ffd8a8; color: #8c5e08; }
+        .resource-btn:hover { background: #f9fafb; transform: translateY(-1px); }
+        .resource-btn.notes:hover { background: #e0f2fe; }
+        .resource-btn.video:hover { background: #ede9fe; }
+        .resource-btn.quiz:hover { background: #ffead1; }
+
+        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
+        .icon.video-icon { color: #8b5cf6; }
+        .icon.quiz-icon { color: #FFA500; }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            height: 60px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+
+        .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        
+        .btn-close {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            flex: 1;
+            background: #000;
+            position: relative;
+            overflow-y: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- FIXED IFRAME STYLES --- */
+        .iframe-video {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16 / 9;
+            border: none;
+            background: #000;
+            display: block;
+        }
+
+        .iframe-doc {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+            display: block;
+        }
+
+        /* --- QUIZ STYLES --- */
+        .quiz-container {
+            background: white;
+            width: 100%;
+            min-height: 100%;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .quiz-question { margin-bottom: 20px; font-size: 1.1rem; font-weight: 600; }
+        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+        .quiz-option {
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .quiz-option:hover { background: #f0f9ff; border-color: var(--accent); }
+        .quiz-option.correct { background: var(--success); color: white; border-color: var(--success); }
+        .quiz-option.correct::after { content: '✓'; position: absolute; right: 15px; font-weight: bold; }
+        .quiz-option.wrong { background: var(--danger); color: white; border-color: var(--danger); }
+        .quiz-option.wrong::after { content: '✗'; position: absolute; right: 15px; font-weight: bold; }
+
+        @media (max-width: 768px) {
+            body { padding: 16px; }
+            .syllabus-btn, .unit-header, .resource-btn { font-size: 15px; padding: 14px 16px; }
+            .resource-btn { font-size: 14px; }
+            .subsection { padding: 16px; }
+            .unit-content.active { padding: 16px 8px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/16bpTHRee5Ufjdw2oBimFPOnUuxzEJdd1/preview', 'Medical Surgical Nursing II Syllabus')">
+        📄 DOWNLOAD SYLLABUS
+    </div>
+    
+    <div id="units">
+        
+        <div class="unit-container" id="unit1">
+            <div class="unit-header" role="button" tabindex="0" aria-expanded="true" onclick="toggleUnit(this)">
+                UNIT 1 - INTRODUCTION
+                <span>🔽</span>
+            </div>
+            <div class="unit-content active">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1QDAPFLlqfpHYmGsZsjOM-ozG2XovCtME/preview', 'Detailed Notes: Introduction')">
+                        <span class="icon">📚</span><span>Detailed Notes: Introduction to Cardio-Thoracic Nursing</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="openQuiz(1)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container" id="unit2">
+            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 2 - EPIDEMIOLOGY
+                <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/10LkOK_rKIqWVQb5hSqGjZ9i0Yj6uwUSL/preview', 'Detailed Notes: Epidemiology')">
+                        <span class="icon">📚</span><span>Detailed Notes: Epidemiology</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="openQuiz(2)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container" id="unit3">
+            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 3 - ANATOMY & PHYSIOLOGY REVIEW
+                <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of human heart anatomy with labeled chambers and valves]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1UEYCZIe6ovM_-cDUXjvvUT3UmWZij4uU/preview', 'Detailed Notes: Anatomy & Physiology')">
+                        <span class="icon">📚</span><span>Detailed Notes: Review of Anatomy & Physiology</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="openQuiz(3)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container" id="unit4">
+            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 4 - ASSESSMENT & DIAGNOSTIC MEASURES
+                <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1BhZUbwURw6u7dsgijcR4yUtpq1qoKgbi/preview', 'Detailed Notes: Diagnostics')">
+                        <span class="icon">📚</span><span>Detailed Notes: Assessment and Diagnostic Measures</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="openQuiz(4)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container" id="unit5">
+            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 5 - CARDIAC DISORDERS & MANAGEMENT
+                <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of electrocardiogram tracing showing normal sinus rhythm vs arrhythmia]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1-_TyHwkSv1fjngnw7Q2B_kOGjJhGibiB/preview', 'Detailed Notes: Cardiac Disorders')">
+                        <span class="icon">📚</span><span>Detailed Notes: Cardiac Disorders and Nursing Management</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="openQuiz(5)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container" id="unit6">
+            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 6 - ALTERED RESPIRATORY CONDITIONS
+                <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of human lungs anatomy showing bronchial tree]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1VGz5GOd_aDohCO5H1AEMdnUX2JComKlZ/preview', 'Detailed Notes: Respiratory Conditions')">
+                        <span class="icon">📚</span><span>Detailed Notes: Altered Respiratory Conditions</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="openQuiz(6)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container" id="unit7">
+            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 7 - VASCULAR DISORDERS & MANAGEMENT
+                <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/13_mLxTlARAjioObgCLp_PbfGho5lpKJH/preview', 'Detailed Notes: Vascular Disorders')">
+                        <span class="icon">📚</span><span>Detailed Notes: Vascular Disorders and Management</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="openQuiz(7)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container" id="unit8">
+            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 8 - EMERGENCY INTERVENTIONS
+                <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1EIcsrz-JqPDro20HOo1Bbc8oiMd8hjZw/preview', 'Detailed Notes: Emergency')">
+                        <span class="icon">📚</span><span>Detailed Notes: Cardio Thoracic Emergency Interventions</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="openQuiz(8)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 8 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container" id="unit9">
+            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 9 - OBSTRUCTIVE AIRWAY PATIENT CARE
+                <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1u20cgWOkc4n2rDjF6bLQGJ7AVmO4BE2Q/preview', 'Detailed Notes: Obstructive Airway')">
+                        <span class="icon">📚</span><span>Detailed Notes: Nursing Care - Obstructive Airway</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="openQuiz(9)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 9 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container" id="unit10">
+            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 10 - CONGENITAL HEART DISEASES
+                <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1L_iD4VgZgM3lasD4Ceicngk2kmyGz4SL/preview', 'Detailed Notes: Congenital Heart Diseases')">
+                        <span class="icon">📚</span><span>Detailed Notes: Congenital Heart Diseases</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="openQuiz(10)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 10 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container" id="unit11">
+            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 11 - PHARMACOLOGY
+                <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1o5eqpaxzkUkLfkVbXJW362H24vmTVaVj/preview', 'Detailed Notes: Pharmacology')">
+                        <span class="icon">📚</span><span>Detailed Notes: Pharmacology</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="openQuiz(11)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 11 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container" id="unit12">
+            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 12 - CARDIO THORACIC SURGERY CARE
+                <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Gi6Cz9Udl3vMWbFPo63IJr7QJ-QPAIL8/preview', 'Detailed Notes: Surgery Care')">
+                        <span class="icon">📚</span><span>Detailed Notes: Nursing Care - Cardio Thoracic Surgery</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="openQuiz(12)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 12 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container" id="unit13">
+            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 13 - CARDIAC REHABILITATION
+                <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1zsFOrx9x4AlxS8sJL0Q8UqBAdI-k1Ukc/preview', 'Detailed Notes: Cardiac Rehabilitation')">
+                        <span class="icon">📚</span><span>Detailed Notes: Cardiac Rehabilitation</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="openQuiz(13)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 13 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container" id="unit14">
+            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 14 - ICCU / ICTU
+                <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1n93AXJC6y404Ou4w-layctKJDdhzY2xH/preview', 'Detailed Notes: ICCU')">
+                        <span class="icon">📚</span><span>Detailed Notes: Intensive Coronary Care Unit</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="openQuiz(14)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 14 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container" id="pyq">
+            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
+                PREVIOUS YEAR QUESTIONS
+                <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1X4fyKY3qJmrPEYuOv5FOXDtIhvuw8Npr/preview', 'PYQ July 2021')">
+                        <span class="icon">📄</span><span>PYQ - July 2021</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1EYXmNQcM8Cv9u3L98NYrH0jwHTi9q6-0/preview', 'PYQ Jan 2024')">
+                        <span class="icon">📄</span><span>PYQ - January 2024</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ndjZtFabw2JTnBzfBmhEry8TobPt-GSn/preview', 'PYQ June 2023')">
+                        <span class="icon">📄</span><span>PYQ - June 2023</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1MuoMNLcblbeydH7O_a5W6RsiZGCxf_1a/preview', 'PYQ Feb 2023')">
+                        <span class="icon">📄</span><span>PYQ - February 2023</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1sD2CBO4LgDuI3U_5Y1XZx54DiL3sB9v1/preview', 'PYQ Nov 2020')">
+                        <span class="icon">📄</span><span>PYQ - November 2020</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ck5E9RFPIUiep4QCAlK5klF2Z6t7uc5U/preview', 'PYQ April 2018')">
+                        <span class="icon">📄</span><span>PYQ - April 2018</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1kiKNpYDxqTmiDE-pENpCttnf24qUR6Sy/preview', 'PYQ April 2017')">
+                        <span class="icon">📄</span><span>PYQ - April 2017</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1WSBrZkL5HbqH-c99r2G4mdKHbOSXTLfd/preview', 'PYQ April 2016')">
+                        <span class="icon">📄</span><span>PYQ - April 2016</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1P6Cdul_PBA4Cj--UNHJXhACzsyEoRdSI/preview', 'PYQ Sept 2020')">
+                        <span class="icon">📄</span><span>PYQ - September 2020</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1HbkrVaaf9BUNakamvCVWYHojkl4Jvmbg/preview', 'PYQ May 2022')">
+                        <span class="icon">📄</span><span>PYQ - May 2022</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/19AWzpPzRs1oKPw13QgONW_QmlVDnH-OX/preview', 'PYQ Nov 2021')">
+                        <span class="icon">📄</span><span>PYQ - November 2021</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1aInKvC1V3iVYWIjI4lFcd7JGkXJG6clc/preview', 'PYQ June 2024')">
+                        <span class="icon">📄</span><span>PYQ - June 2024</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="app-modal" class="modal-overlay">
+        <div class="modal-header">
+            <div id="modal-title" class="modal-title">Resource</div>
+            <button class="btn-close" onclick="closeModal()">Close X</button>
+        </div>
+        <div id="modal-body" class="modal-body"></div>
+    </div>
+
+    <script>
+        // --- 1. QUIZ DATA ---
+        const QUIZ_DATA = {
+            1: [
+                { q: "Cardiovascular nursing focuses on:", o: ["Bones and joints", "Heart and blood vessel diseases", "Brain disorders", "Kidney diseases"], a: 1 },
+                { q: "Which is a major risk factor for cardiovascular disease?", o: ["High fiber diet", "Regular exercise", "Hypertension", "Low stress"], a: 2 },
+                { q: "Thoracic nursing primarily deals with organs in the:", o: ["Abdomen", "Chest cavity (Heart & Lungs)", "Pelvis", "Cranium"], a: 1 },
+                { q: "Primary prevention of heart disease includes:", o: ["By-pass surgery", "Lifestyle modification", "Cardiac transplant", "Dialysis"], a: 1 },
+                { q: "The leading cause of death globally is:", o: ["Cancer", "Cardiovascular diseases", "Diabetes", "Respiratory infections"], a: 1 }
+            ],
+            2: [
+                { q: "Epidemiology studies the:", o: ["Structure of the heart", "Distribution and determinants of diseases", "Cost of surgery", "Types of medication"], a: 1 },
+                { q: "A modifiable risk factor for CAD is:", o: ["Age", "Gender", "Smoking", "Genetics"], a: 2 },
+                { q: "Rheumatic Heart Disease is most common in:", o: ["Infants", "School-age children", "Elderly", "Newborns"], a: 1 },
+                { q: "Which index measures obesity?", o: ["BP", "BMI", "ECG", "GCS"], a: 1 },
+                { q: "Framingham Heart Study is famous for identifying:", o: ["Antibiotics", "Risk factors for CVD", "Surgical techniques", "DNA structure"], a: 1 }
+            ],
+            3: [
+                { q: "The pacemaker of the heart is:", o: ["AV Node", "SA Node", "Bundle of His", "Purkinje Fibers"], a: 1 },
+                { q: "Gas exchange in lungs occurs in:", o: ["Bronchi", "Trachea", "Alveoli", "Pleura"], a: 2 },
+                { q: "The valve between left atrium and left ventricle is:", o: ["Tricuspid", "Mitral (Bicuspid)", "Pulmonary", "Aortic"], a: 1 },
+                { q: "Cardiac output is:", o: ["Stroke volume x Heart rate", "BP x Heart rate", "Stroke volume / Heart rate", "Heart rate + BP"], a: 0 },
+                { q: "The main artery supplying oxygenated blood to the body is:", o: ["Pulmonary artery", "Aorta", "Vena Cava", "Carotid"], a: 1 }
+            ],
+            4: [
+                { q: "Auscultation of the heart detects:", o: ["Size of heart", "Electrical activity", "Heart sounds/murmurs", "Oxygen level"], a: 2 },
+                { q: "ECG records:", o: ["Blood pressure", "Heart's electrical activity", "Lung volume", "Blood flow"], a: 1 },
+                { q: "Troponin I and T are markers for:", o: ["Liver failure", "Kidney stones", "Myocardial Infarction", "Stroke"], a: 2 },
+                { q: "Angiography is used to visualize:", o: ["Bones", "Blood vessels", "Brain tissue", "Stomach lining"], a: 1 },
+                { q: "Echocardiography uses:", o: ["X-rays", "Sound waves (Ultrasound)", "Magnetic fields", "Radiation"], a: 1 }
+            ],
+            5: [
+                { q: "Angina Pectoris is caused by:", o: ["Muscle strain", "Ischemia of heart muscle", "Acid reflux", "Lung infection"], a: 1 },
+                { q: "Myocardial Infarction (MI) is commonly known as:", o: ["Stroke", "Heart Attack", "Heart Failure", "Palpitation"], a: 1 },
+                { q: "Infective Endocarditis affects the:", o: ["Pericardium", "Myocardium", "Endocardium/Heart Valves", "Aorta"], a: 2 },
+                { q: "Pericarditis is inflammation of:", o: ["Heart muscle", "Outer sac of heart", "Inner lining", "Valves"], a: 1 },
+                { q: "Nitroglycerin is used to:", o: ["Increase BP", "Relieve chest pain (Vasodilation)", "Clot blood", "Slow heart rate"], a: 1 }
+            ],
+            6: [
+                { q: "COPD includes:", o: ["Asthma & Pneumonia", "Emphysema & Chronic Bronchitis", "TB & Cancer", "Flu & Cold"], a: 1 },
+                { q: "Pulmonary Embolism is blockage of:", o: ["Aorta", "Pulmonary Artery", "Coronary Artery", "Carotid Artery"], a: 1 },
+                { q: "Pneumothorax refers to:", o: ["Fluid in lungs", "Air in pleural space", "Blood in lungs", "Pus in chest"], a: 1 },
+                { q: "Bronchiectasis involves:", o: ["Constriction of bronchi", "Permanent dilation of bronchi", "Infection of alveoli", "Tumor in lung"], a: 1 },
+                { q: "Acute Respiratory Distress Syndrome (ARDS) causes:", o: ["High oxygen", "Severe hypoxemia", "Low CO2", "High BP"], a: 1 }
+            ],
+            7: [
+                { q: "Atherosclerosis is:", o: ["Hardening of veins", "Plaque buildup in arteries", "Weakening of heart", "Clot in lungs"], a: 1 },
+                { q: "DVT stands for:", o: ["Deep Vein Thrombosis", "Direct Vessel Therapy", "Daily Vitamin Therapy", "Double Valve Treatment"], a: 0 },
+                { q: "Varicose veins are:", o: ["Narrow arteries", "Dilated, tortuous veins", "Blocked capillaries", "Infected lymphatics"], a: 1 },
+                { q: "Raynaud's disease affects:", o: ["Heart valves", "Blood flow to fingers/toes", "Brain vessels", "Kidney arteries"], a: 1 },
+                { q: "Aneurysm is:", o: ["Blockage of artery", "Abnormal bulging of artery wall", "Infection of vein", "Narrowing of vessel"], a: 1 }
+            ],
+            8: [
+                { q: "CPR stands for:", o: ["Cardio Pulmonary Resuscitation", "Central Pulse Rate", "Cardiac Patient Rescue", "Critical Pulse Revival"], a: 0 },
+                { q: "Defibrillation is used to treat:", o: ["Flatline", "Ventricular Fibrillation/VT", "Normal rhythm", "Slow heart rate"], a: 1 },
+                { q: "Cardiac Tamponade is:", o: ["Heart failure", "Fluid accumulation in pericardium compressing heart", "Heart valve leak", "Artery blockage"], a: 1 },
+                { q: "Pneumothorax emergency treatment involves:", o: ["CPR", "Chest tube insertion", "Antibiotics", "Nebulization"], a: 1 },
+                { q: "Signs of cardiac arrest include:", o: ["Chest pain", "Unresponsiveness and no pulse", "Shortness of breath", "Dizziness"], a: 1 }
+            ],
+            9: [
+                { q: "A common cause of airway obstruction is:", o: ["Tongue fall back", "Running", "Eating slowly", "Sleeping on side"], a: 0 },
+                { q: "Heimlich maneuver is used for:", o: ["CPR", "Choking/Foreign body removal", "Drowning", "Fainting"], a: 1 },
+                { q: "Endotracheal Intubation is mainly for:", o: ["Feeding", "Securing airway/Ventilation", "Medication only", "Checking BP"], a: 1 },
+                { q: "Tracheostomy is performed on the:", o: ["Esophagus", "Trachea", "Bronchus", "Larynx"], a: 1 },
+                { q: "Suctioning is done to:", o: ["Give oxygen", "Remove secretions", "Hydrate patient", "Measure tidal volume"], a: 1 }
+            ],
+            10: [
+                { q: "Cyanotic heart disease typically causes:", o: ["Red skin", "Blue discoloration (Cyanosis)", "Pale skin", "Yellow eyes"], a: 1 },
+                { q: "Tetralogy of Fallot involves how many defects?", o: ["Two", "Three", "Four", "Five"], a: 2 },
+                { q: "PDA stands for:", o: ["Patent Ductus Arteriosus", "Pulmonary Defect Area", "Partial Duct Anomaly", "Primary Disease of Aorta"], a: 0 },
+                { q: "ASD is a hole in:", o: ["Ventricles", "Atrial Septum", "Aorta", "Valves"], a: 1 },
+                { q: "Coarctation of Aorta is:", o: ["Widening of aorta", "Narrowing of aorta", "Hole in aorta", "Absence of aorta"], a: 1 }
+            ],
+            11: [
+                { q: "Digoxin is used to:", o: ["Lower BP", "Increase force of myocardial contraction", "Treat infection", "Stop bleeding"], a: 1 },
+                { q: "Diuretics help in heart failure by:", o: ["Increasing heart rate", "Reducing fluid overload", "Constricting vessels", "Increasing appetite"], a: 1 },
+                { q: "Beta-blockers (e.g., Metoprolol) generally:", o: ["Increase heart rate", "Decrease heart rate and BP", "Cause arrhythmia", "Increase anxiety"], a: 1 },
+                { q: "Anticoagulants (e.g., Warfarin, Heparin) prevent:", o: ["Infection", "Blood clot formation", "Pain", "Fever"], a: 1 },
+                { q: "ACE Inhibitors are used for:", o: ["Hypertension and Heart Failure", "Infection", "Arrhythmia", "High cholesterol"], a: 0 }
+            ],
+            12: [
+                { q: "CABG stands for:", o: ["Coronary Artery Bypass Graft", "Cardiac Artery Blockage Guide", "Central Aortic Bypass Graft", "Common Artery Blood Graft"], a: 0 },
+                { q: "Post-op care after cardiac surgery prioritizes:", o: ["Early ambulation", "Hemodynamic monitoring and stability", "Heavy diet", "Isolation"], a: 1 },
+                { q: "A heart-lung machine is used during:", o: ["Open heart surgery", "ECG", "Echo", "Angioplasty"], a: 0 },
+                { q: "Chest physiotherapy helps to:", o: ["Prevent pneumonia/Clear secretions", "Increase heart rate", "Heal wounds", "Stop bleeding"], a: 0 },
+                { q: "Valve replacement surgery treats:", o: ["Valvular stenosis or regurgitation", "Blocked arteries", "Weak muscle", "High BP"], a: 0 }
+            ],
+            13: [
+                { q: "Cardiac Rehabilitation aims to:", o: ["Cure heart disease", "Restore optimal functioning", "Perform surgery", "Diagnose disease"], a: 1 },
+                { q: "Phase 1 of cardiac rehab begins:", o: ["In the hospital (Inpatient)", "After discharge", "Months later", "Before surgery"], a: 0 },
+                { q: "Lifestyle modification includes:", o: ["Smoking cessation", "Healthy diet", "Exercise", "All of the above"], a: 3 },
+                { q: "METs are units used to measure:", o: ["Blood pressure", "Energy cost of physical activity", "Heart rate", "Drug dosage"], a: 1 },
+                { q: "Psychological support is important for:", o: ["Anxiety and depression post-event", "Surgery", "Medication", "Physical strength"], a: 0 }
+            ],
+            14: [
+                { q: "ICCU stands for:", o: ["Intensive Cardiac Care Unit", "Intensive Coronary Care Unit", "Internal Care Unit", "Immediate Critical Care Unit"], a: 1 },
+                { q: "A critical equipment in ICCU is:", o: ["X-ray machine", "Defibrillator/Crash Cart", "MRI scanner", "Ultrasound"], a: 1 },
+                { q: "Nurse-patient ratio in ICCU is typically:", o: ["1:1 or 1:2", "1:10", "1:20", "1:6"], a: 0 },
+                { q: "Continuous monitoring in ICCU includes:", o: ["ECG, BP, SpO2", "Height", "Weight", "Hair growth"], a: 0 },
+                { q: "Infection control in ICCU is:", o: ["Optional", "Crucial to prevent nosocomial infections", "Not important", "Only for doctors"], a: 1 }
+            ]
+        };
+
+        // --- 2. LOGIC ---
+        function toggleUnit(header) {
+            const content = header.nextElementSibling;
+            const isExpanded = header.getAttribute('aria-expanded') === 'true';
+            header.setAttribute('aria-expanded', !isExpanded);
+            content.classList.toggle('active');
+        }
+
+        function openResource(type, url, title) {
+            if(type === 'coming-soon') {
+                alert('This resource is under development.');
+                return;
+            }
+
+            history.pushState({ modalOpen: true }, null, '#resource');
+
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+            const titleEl = document.getElementById('modal-title');
+            
+            titleEl.textContent = title;
+            modal.style.display = 'flex';
+            body.innerHTML = ''; 
+            body.style.display = 'flex'; 
+
+            if (type === 'quiz') {
+                // Handled by openQuiz
+            }
+            else {
+                let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
+                let className = (type === 'video') ? 'iframe-video' : 'iframe-doc';
+
+                body.innerHTML = `<iframe 
+                    class="${className}" 
+                    src="${cleanUrl}" 
+                    sandbox="allow-scripts allow-same-origin allow-presentation"
+                    allow="autoplay; encrypted-media; fullscreen">
+                </iframe>`;
+            }
+        }
+
+        function openQuiz(unitId) {
+            history.pushState({ modalOpen: true }, null, '#quiz');
+
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+            const titleEl = document.getElementById('modal-title');
+            
+            titleEl.textContent = `Quiz: Unit ${unitId}`;
+            modal.style.display = 'flex';
+            
+            body.style.display = 'block';
+            body.scrollTop = 0; 
+            
+            const questions = QUIZ_DATA[unitId] || [];
+            
+            let quizHtml = `<div class="quiz-container">`;
+            questions.forEach((q, idx) => {
+                quizHtml += `
+                    <div class="quiz-question">${idx + 1}. ${q.q}</div>
+                    <div class="quiz-options" id="q-${idx}">
+                        ${q.o.map((opt, oIdx) => `
+                            <div class="quiz-option" onclick="checkAnswer(this, ${idx}, ${oIdx}, ${q.a})">${opt}</div>
+                        `).join('')}
+                    </div>
+                `;
+            });
+            
+            if(questions.length === 0) quizHtml += `<p>Quiz coming soon!</p>`;
+            
+            quizHtml += `</div>`;
+            body.innerHTML = quizHtml;
+        }
+
+        function checkAnswer(el, qIdx, oIdx, correctIdx) {
+            const parent = document.getElementById(`q-${qIdx}`);
+            const opts = parent.children;
+            for(let opt of opts) opt.style.pointerEvents = 'none';
+
+            if(oIdx === correctIdx) {
+                el.classList.add('correct');
+            } else {
+                el.classList.add('wrong');
+                opts[correctIdx].classList.add('correct');
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+            modal.style.display = 'none';
+            body.innerHTML = ''; 
+            
+            if (history.state && history.state.modalOpen) {
+                history.back();
+            }
+        }
+
+        window.onpopstate = function(event) {
+            const modal = document.getElementById('app-modal');
+            if (modal.style.display === 'flex') {
+                modal.style.display = 'none';
+                document.getElementById('modal-body').innerHTML = '';
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const firstUnitHeader = document.querySelector('.unit-header');
+            if(firstUnitHeader) {
+                // toggleUnit(firstUnitHeader);
+            }
+        });
+    </script>
+</body>
+</html>

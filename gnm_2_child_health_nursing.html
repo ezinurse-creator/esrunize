@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Child Health Nursing - Syllabus</title>
+    <meta name="description" content="Interactive syllabus for Child Health Nursing." />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --brand: #003B82; 
+            --accent: #00B9F2;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --danger: #ef4444;
+            --success: #10b981;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: white;
+            color: var(--gray-900);
+            line-height: 1.6;
+            padding: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .syllabus-btn, .unit-header {
+            display: block;
+            width: 100%;
+            padding: 18px 24px;
+            margin: 24px 0;
+            background: var(--brand);
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+        .syllabus-btn:hover, .unit-header:hover {
+            background: #002d63;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .unit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+            margin: 16px 0;
+        }
+        .unit-header span:last-child {
+            transition: transform 0.3s ease;
+            color: #FFA500;
+        }
+        .unit-header[aria-expanded="true"] span:last-child {
+            transform: rotate(180deg);
+        }
+
+        .unit-content {
+            padding: 0 12px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+        }
+        .unit-content.active {
+            padding: 24px 12px;
+            max-height: none; 
+        }
+
+        .subsection {
+            margin: 16px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.2s ease;
+        }
+        .subsection:hover { box-shadow: var(--shadow-md); }
+
+        .resource-btn {
+            display: flex;
+            align-items: flex-start;
+            width: 100%;
+            padding: 14px 18px;
+            margin: 8px 0;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            border: 1px solid var(--gray-200);
+            transition: all 0.2s ease;
+            gap: 12px;
+            flex-wrap: wrap;
+            min-height: 50px;
+            cursor: pointer;
+        }
+        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
+        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
+        .resource-btn.quiz { background: #fff5e8; border-color: #ffd8a8; color: #8c5e08; }
+        .resource-btn:hover { background: #f9fafb; transform: translateY(-1px); }
+
+        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
+        .icon.video-icon { color: #8b5cf6; }
+        .icon.quiz-icon { color: #FFA500; }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            height: 60px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+
+        .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        
+        .btn-close {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            flex: 1;
+            background: #000;
+            position: relative;
+            overflow-y: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .iframe-res {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 16px; }
+            .unit-header, .resource-btn { font-size: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/1HjpaRuwhe1C2T8vfhKoacjE1I7peBqoT/preview', 'Syllabus')">
+        📄 DOWNLOAD CHILD HEALTH NURSING SYLLABUS
+    </div>
+    
+    <div id="units">
+        
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 1 - INTRODUCTION <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1KE1xm3RyicScKaHlfHHGU0A2k3hG5TOk/preview', 'Detailed Notes: Intro')">
+                        <span class="icon">📚</span><span>Detailed Notes: Introduction</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1NovK1uYNUdqJbh6dwqlGi-Qv5ePebmk5/preview', 'Modern Concept')">
+                        <span class="icon video-icon">▶️</span><span>Modern Concept in Child Health Care</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1iagPH4T8e8zkZS98eOS7IqoMBegOY5Ox/preview', 'Role of Nurse')">
+                        <span class="icon video-icon">▶️</span><span>Role of Pediatric Nurses</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1wLG6tT0iFSpFZkuNx0Na-a77tJgVL38Z/preview', 'Lecture Notes: Role')">
+                        <span class="icon">📄</span><span>Lecture Notes: Role & Concept</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1QY7UhKm84OxVYZ84BOJ8t0JIQYqndAFe/preview', 'Preventive/Trends')">
+                        <span class="icon video-icon">▶️</span><span>Preventive Pediatrics & Trends</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1vqiyQXBDww4xOJ0PdrVQ87D9uBDqEyUY/preview', 'Stats/Process')">
+                        <span class="icon video-icon">▶️</span><span>Vital Statistics & Nursing Process</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Cu_yb3QhvTK8RDTVfE9U-biAz3QW2XXo/preview', 'Lecture Notes: Stats')">
+                        <span class="icon">📄</span><span>Lecture Notes: Statistics & Process</span>
+                    </div>
+
+                    <div class="resource-btn quiz" onclick="openResource('quiz', 'https://drive.google.com/file/d/1IR-_m0ux7nP5IqkV-4cqRk9-HBiNNLpn/preview', 'Unit 1 Quiz')">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 2 - GROWTH & DEVELOPMENT <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    
+
+[Image of stages of child growth and development]
+
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1GBY0bCpNP-y4exQrgCRoa_SmAnQTHb1f/preview', 'Detailed Notes: Growth')">
+                        <span class="icon">📚</span><span>Detailed Notes: Growth & Development</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1a3g4WmallrpvX_pun_XaAHvsV7Y1_O_G/preview', 'Growth Definition')">
+                        <span class="icon video-icon">▶️</span><span>Definition & Patterns of Growth</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1QhbRymEdpeSIdkpp8el7s6pq1U4Xxso1/preview', 'Lecture Notes: Definition')">
+                        <span class="icon">📄</span><span>Lecture Notes: Definition</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/192h5h07dNXvKcvS7wZQYwcSEHV5r6UEJ/preview', 'Growth Principles')">
+                        <span class="icon video-icon">▶️</span><span>Principles & Stages of Growth</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/136vAu1HXR0YVqPh_HcklyrK8mQKfq8lp/preview', 'Lecture Notes: Principles')">
+                        <span class="icon">📄</span><span>Lecture Notes: Principles</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1AE826ouDw7rZLTMbIKVFE1wyw2BuZ-RN/preview', 'Infant Growth')">
+                        <span class="icon video-icon">▶️</span><span>Infant: Growth & Development</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Pp6SKX8ySgoka7lhNOEKwXBLDAd9gKHw/preview', 'Lecture Notes: Infant')">
+                        <span class="icon">📄</span><span>Lecture Notes: Infant</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1UTPHZpSDszwB2TMtHvRPMtO7IIxQaeox/preview', 'Weaning')">
+                        <span class="icon video-icon">▶️</span><span>Weaning, BFHI & Breast Feeding</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_BX-B_Evp0y8MgXAHRAZIl7mZLdtLczo/preview', 'Lecture Notes: Weaning')">
+                        <span class="icon">📄</span><span>Lecture Notes: Weaning</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ItdIeYaUqZSnvIH2jgElGBQ_1TntqAxk/preview', 'Toddler Growth')">
+                        <span class="icon video-icon">▶️</span><span>Toddler: Growth & Development</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1XtNDz3vOtiaQwFwYGnz36AQI7ACMZiVM/preview', 'Toddler Needs')">
+                        <span class="icon video-icon">▶️</span><span>Developmental Needs of Toddlers</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1eGU5GryDdtmZMa9l1mAuxMCMou9U2vlj/preview', 'Lecture Notes: Toddler')">
+                        <span class="icon">📄</span><span>Lecture Notes: Toddler</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1-xnxAqCDQUNlBYfDVDn4cupTFsXBFaq8/preview', 'Play')">
+                        <span class="icon video-icon">▶️</span><span>Play Therapy</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Gj6swQ71Hloy4t6mh7zX738Fim2-ZrpM/preview', 'Accidents')">
+                        <span class="icon video-icon">▶️</span><span>Prevention of Accidents</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_3j_vtIlnO4n6M2a6j8whTJrxNDdOsFS/preview', 'Lecture Notes: Play/Accidents')">
+                        <span class="icon">📄</span><span>Lecture Notes: Play & Safety</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1F3rLgcrOpJCQ_OME49BcxUErdGSz19tO/preview', 'Preschooler')">
+                        <span class="icon video-icon">▶️</span><span>Preschooler Growth & Development</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1WA32HUs5oNf6F9L7vHmiBVcpCmJfpigD/preview', 'School Ager')">
+                        <span class="icon video-icon">▶️</span><span>School Ager Growth & Development</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1MiM-u6qUCe8KwBBLdloTxe_7rznBJ3CT/preview', 'Lecture Notes: School Age')">
+                        <span class="icon">📄</span><span>Lecture Notes: School Age</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1p97n0NwwGG89oVeMffPtsKGAiSBSGH1C/preview', 'Adolescent')">
+                        <span class="icon video-icon">▶️</span><span>Adolescent Growth & Development</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1faK3GedQ5s6vVYEqCi5vOX_rlZ6MYMYn/preview', 'Lecture Notes: Adolescent')">
+                        <span class="icon">📄</span><span>Lecture Notes: Adolescent</span>
+                    </div>
+
+                    <div class="resource-btn quiz" onclick="openResource('quiz', 'https://drive.google.com/file/d/1R8OIurSaDmr5y5Tf9i05IcUVVje7vYGl/preview', 'Unit 2 Quiz')">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 3 - THE SICK CHILD <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_eHEy8mSMSaUmGJ-cw1jBwSjzNRv-Aym/preview', 'Detailed Notes: Sick Child')">
+                        <span class="icon">📚</span><span>Detailed Notes: The Sick Child</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ZgDyvwww7TlBn-KyA5s6ld-irIg33ztb/preview', 'Hospitalization')">
+                        <span class="icon video-icon">▶️</span><span>Child’s Reaction to Hospitalization</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1EXAB7iT3WXE_tWTvWAdpPdb_GpjW_9bL/preview', 'Minimizing Impact')">
+                        <span class="icon video-icon">▶️</span><span>Measures to Minimize Impact</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1rs00KM44nJf52pHRPgc0mOmO-sbbPOKF/preview', 'Lecture Notes: Hospitalization')">
+                        <span class="icon">📄</span><span>Lecture Notes: Hospitalization</span>
+                    </div>
+
+                    <div class="resource-btn quiz" onclick="openResource('quiz', 'https://drive.google.com/file/d/1PouUa9DKp_bl58v1JqzzOaI409NMgRqW/preview', 'Unit 3 Quiz')">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 4 - DISORDERS & HEALTH PROBLEMS <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1okjJfB67k0jdWqy9GD_mC-JVSIbht904/preview', 'Detailed Notes: Health Problems')">
+                        <span class="icon">📚</span><span>Detailed Notes: Disorders & Problems</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/13_Fs2dgJga5y3yc6GFcIIkHpn6N0whqe/preview', 'Communicable')">
+                        <span class="icon video-icon">▶️</span><span>Communicable Diseases</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1cz76DV1XTG4_RpwAtq47xBDcF_3uu-RF/preview', 'Lecture Notes: Communicable')">
+                        <span class="icon">📄</span><span>Lecture Notes: Communicable</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/18PIaumyIUeCpF8WTvPGjkshe0IB20dQc/preview', 'Behavioral')">
+                        <span class="icon video-icon">▶️</span><span>Behavioral Disorders (PICA, TICS, BHS)</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1mSN3svukrjgUJLrBxLB3TP2QTOCY8LDN/preview', 'Lecture Notes: Behavioral')">
+                        <span class="icon">📄</span><span>Lecture Notes: Behavioral</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1f3B7EdDCDIzBjeyEPt20g7yfdulBGCpL/preview', 'Enuresis')">
+                        <span class="icon video-icon">▶️</span><span>Enuresis</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1TDp-WI6Ii2__HQAD7KpRUtZfnwVk93aD/preview', 'Lecture Notes: Enuresis')">
+                        <span class="icon">📄</span><span>Lecture Notes: Enuresis</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1q0YMzsX1eD5jJy1FlYiyIqYPyUUFO1ft/preview', 'Diarrhea')">
+                        <span class="icon video-icon">▶️</span><span>Diarrhea Management</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1n2beMjfeU-reNGsKCT8piqzbKQLMjlvZ/preview', 'Blood in Stool')">
+                        <span class="icon video-icon">▶️</span><span>Treatment: Blood in Stools</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1zN5FrShr9aLwpJfsNhnNBpp7jR7QeVc8/preview', 'Lecture Notes: Diarrhea')">
+                        <span class="icon">📄</span><span>Lecture Notes: Diarrhea</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1xkiEhw1kJCvYT_Fw2srAypQB0k_MT7dE/preview', 'Helminthic')">
+                        <span class="icon video-icon">▶️</span><span>Helminthic Infections</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/14MakrfHluOMe-l7LqAWgREHoznI-LYQ_/preview', 'Lecture Notes: Helminthic')">
+                        <span class="icon">📄</span><span>Lecture Notes: Helminthic</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1IEX4GtaKt4B4B6k5rj9WuEURMtwYBbMN/preview', 'PEM')">
+                        <span class="icon video-icon">▶️</span><span>Protein Energy Malnutrition & Child Abuse</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/12WejO1upIiwzwjgelKfGaMaWl9T04M88/preview', 'Lecture Notes: PEM')">
+                        <span class="icon">📄</span><span>Lecture Notes: PEM & Abuse</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1HZwRgeH5HTq7ecFUOOT-j0w8VjzLAYqb/preview', 'Adolescent Problems')">
+                        <span class="icon video-icon">▶️</span><span>Adolescent Problems, Bites & Stings</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1BuppRAqhwNCqYHtUnswZMmwxYqw4ighb/preview', 'Lecture Notes: Adolescent Problems')">
+                        <span class="icon">📄</span><span>Lecture Notes: Adolescent Problems</span>
+                    </div>
+
+                    <div class="resource-btn quiz" onclick="openResource('quiz', 'https://drive.google.com/file/d/1olr_bfPLgV-0KKNn41oUTve1sQnMLqyL/preview', 'Unit 4 Quiz')">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 5 - CONGENITAL DISORDERS <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    
+
+[Image of cleft lip and cleft palate classification]
+
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ydl3LBXPWXnQxBjlJCLPV-oRhGQYgQ7A/preview', 'Detailed Notes: Congenital')">
+                        <span class="icon">📚</span><span>Detailed Notes: Congenital Disorders</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1KCj4im1mk-9cic1qP-nsvxhEeH5Gtn_J/preview', 'Cleft Lip')">
+                        <span class="icon video-icon">▶️</span><span>Cleft Lip/Palate & TEF</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1d8a2q3QFtJB8B0wYiDSKVQBbw6Fz5W5A/preview', 'Lecture Notes: Cleft Lip')">
+                        <span class="icon">📄</span><span>Lecture Notes: Cleft Lip</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1o3-a2YbymIhBUTnbdnwrX7D1j7_yIZGr/preview', 'Anorectal')">
+                        <span class="icon video-icon">▶️</span><span>Anorectal Malformations & Hernia</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1yNlSOaJoCUKOtE80sONtgSgqqn8EB-Ff/preview', 'Lecture Notes: Anorectal')">
+                        <span class="icon">📄</span><span>Lecture Notes: Anorectal</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1JPniDbemZt971bVBFHt4Dzw9UUMcIbo5/preview', 'GU Defects')">
+                        <span class="icon video-icon">▶️</span><span>Defects of Genito-Urinary Tract</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Ko3bTjjB17KFTNPwrrybT3hT7FWdPyGr/preview', 'Lecture Notes: GU Defects')">
+                        <span class="icon">📄</span><span>Lecture Notes: GU Defects</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/12Jhjn03A8wDFmtifzDTkOHsjFnaFdzwv/preview', 'Turner')">
+                        <span class="icon video-icon">▶️</span><span>Turner’s, Phimosis, Polycystic Kidney</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1up21vspzjJN5w7c9lx_NUKGNkWUqf5Z7/preview', 'Lecture Notes: Turner')">
+                        <span class="icon">📄</span><span>Lecture Notes: Turner/Phimosis</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1G5IA27ZxrcIh1_Utto-tY8PVysiOW5i6/preview', 'CV Defects')">
+                        <span class="icon video-icon">▶️</span><span>Defects of Cardiovascular System</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/13nPGiFeaiYjMG5pOtymZlS0RY21zmgAN/preview', 'Lecture Notes: CV Defects')">
+                        <span class="icon">📄</span><span>Lecture Notes: CV Defects</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ovV7_yXjOm_Mi-xOxCi1zM7kIfpdKblr/preview', 'TOF/PDA')">
+                        <span class="icon video-icon">▶️</span><span>TOF, TGV, PDA & Coarctation of Aorta</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1KMp7TYnHRstxn4uWfd3Ezelq_84bPw7o/preview', 'Lecture Notes: TOF')">
+                        <span class="icon">📄</span><span>Lecture Notes: Heart Defects</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/14cZlqQ63pcz7o5cyrhnBbXcFOY-tcN4i/preview', 'Hip/Downs')">
+                        <span class="icon video-icon">▶️</span><span>Congenital Hip Dislocation & Down’s</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1v0AQxwIAUjFn5bTY9Dbmr4qL5ioHJ95k/preview', 'Lecture Notes: Hip')">
+                        <span class="icon">📄</span><span>Lecture Notes: Hip/Downs</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1JbTzHtTJovy8V4C9DraowIML8rBpTukK/preview', 'Spina Bifida')">
+                        <span class="icon video-icon">▶️</span><span>Spina Bifida & Hydrocephalus</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1BAPe97GJexWk0mQKhoTofUGKKLQ81OCI/preview', 'Lecture Notes: Spina Bifida')">
+                        <span class="icon">📄</span><span>Lecture Notes: CNS Malformations</span>
+                    </div>
+                    
+                    
+
+[Image of spina bifida types]
+
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1kYzwH_9_lwVxHcwdFL3-LwcUJGf3QRU-/preview', 'Cerebral Palsy')">
+                        <span class="icon video-icon">▶️</span><span>Cerebral Palsy</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Nca179aophUuMJ1PadYkM3UpjNWkLPo0/preview', 'Lecture Notes: CP')">
+                        <span class="icon">📄</span><span>Lecture Notes: Cerebral Palsy</span>
+                    </div>
+
+                    <div class="resource-btn quiz" onclick="openResource('quiz', 'https://drive.google.com/file/d/1A7zMz8h8mj-AkZi2mRd12mDLGX9W7lZb/preview', 'Unit 5 Quiz')">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 6 - CHILDREN WITH VARIOUS DISORDERS <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1SKSCnrZr0BMEtJV_zYcz4VMuv1KLA4-S/preview', 'Detailed Notes: Various Disorders')">
+                        <span class="icon">📚</span><span>Detailed Notes: Various Disorders</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1S3IWpntJNBNewuACW2hpgsWWkIi_VNjr/preview', 'URI/Asthma')">
+                        <span class="icon video-icon">▶️</span><span>Upper Respiratory Infections & Asthma</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_ZX0vlO4TlQ94t-CdajC3f1JIbt6IK7X/preview', 'Lecture Notes: URI')">
+                        <span class="icon">📄</span><span>Lecture Notes: URI</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1qU6l2Y0bFSrgeKKy5CWMkWUoIOy1nBJF/preview', 'LRI/Pneumonia')">
+                        <span class="icon video-icon">▶️</span><span>Lower RI: Bronchitis & Pneumonia</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1CwkaEWzQ2guI5eglFldODD0yUqF2X1Dz/preview', 'Lecture Notes: LRI')">
+                        <span class="icon">📄</span><span>Lecture Notes: LRI</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1CUcokcNIg3cjFp-oAWa-XkLjn-Zygx1w/preview', 'Nephrotic')">
+                        <span class="icon video-icon">▶️</span><span>Nephrotic Syndrome, ARF & CRF</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1aYou7f_1HFzlnVeuTeKXVo8D81f_UWuG/preview', 'Lecture Notes: Renal')">
+                        <span class="icon">📄</span><span>Lecture Notes: Renal</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1iD3XFXb7H-vobaT8evMc3X8BniI-Tdqd/preview', 'Meningitis')">
+                        <span class="icon video-icon">▶️</span><span>Meningitis & Convulsive Disorders</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1TzRRn43H4opYGTTADYBIL3lAcUwnaqZO/preview', 'Lecture Notes: Neuro')">
+                        <span class="icon">📄</span><span>Lecture Notes: Neuro</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1diaqHbeQHd9rrY5pg_UFC8dzB5bi_ztv/preview', 'Epilepsy/Trauma')">
+                        <span class="icon video-icon">▶️</span><span>Epilepsy & Cranio-cerebral Trauma</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1kfeQZd0qTPKAg2vFS_FiNJ4muQBbdjQQ/preview', 'Lecture Notes: Epilepsy')">
+                        <span class="icon">📄</span><span>Lecture Notes: Epilepsy</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1o4maScDJocxip1Z4YoDcSxvoNhmMfwjR/preview', 'Intestinal')">
+                        <span class="icon video-icon">▶️</span><span>Intestinal Obstruction & Hirschsprung’s</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_Kls80sk3M7u2A4PrIL-ZexdxYcsgOGC/preview', 'Lecture Notes: Intestinal')">
+                        <span class="icon">📄</span><span>Lecture Notes: Intestinal</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1YOXJvcVxQJe3KLHphOAAnB3Bii5yNkMX/preview', 'Malabsorption')">
+                        <span class="icon video-icon">▶️</span><span>Malabsorption Syndrome</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1cbort4JjYG2oe7c-DP71x5-NVZdpwsmd/preview', 'Lecture Notes: Malabsorption')">
+                        <span class="icon">📄</span><span>Lecture Notes: Malabsorption</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1xF_pSItEhLxq37MhCkgBUhLxWlyNDJlX/preview', 'Rheumatic')">
+                        <span class="icon video-icon">▶️</span><span>Rheumatic Fever & CCF</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1yH1DTdQVkJhyqK3yFX8Taai5lRZ_ezKE/preview', 'Lecture Notes: Rheumatic')">
+                        <span class="icon">📄</span><span>Lecture Notes: Rheumatic</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/10tZ_R11Zs3HHEMJmbE7PG9Ywu2ffLnj3/preview', 'Anemia/Leukemia')">
+                        <span class="icon video-icon">▶️</span><span>Anemia & Leukemia</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1r4LtJ-4Ncv5LZR690gyYvyhmgf7NvScK/preview', 'Lecture Notes: Anemia')">
+                        <span class="icon">📄</span><span>Lecture Notes: Anemia/Leukemia</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1emgrtGm5loENj1SjxRIZndxj2mHyixd3/preview', 'Thalassemia')">
+                        <span class="icon video-icon">▶️</span><span>Thalassemia, Hemophilia & Sickle Cell</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1rhhvFTaKD4sgb2qyLiCCqu7RnnF6qHNV/preview', 'Lecture Notes: Thalassemia')">
+                        <span class="icon">📄</span><span>Lecture Notes: Thalassemia</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1sBS6i29GwylcL0wIxVIPWlFQhM6mmiQl/preview', 'Handicapped')">
+                        <span class="icon video-icon">▶️</span><span>Handicapped Children & Mental Retardation</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/17lJxoNXqYJXMcJF0cqw-W3tYd6lKHIZa/preview', 'Lecture Notes: Handicapped')">
+                        <span class="icon">📄</span><span>Lecture Notes: Handicapped</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1OM8_VSS-FqqU-4-8qmNXhPhBVrEMdV55/preview', 'Hearing/Vision')">
+                        <span class="icon video-icon">▶️</span><span>Hearing & Vision Impairment</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/11flc7FEvGS68NxRj2Ky2rtIS5x4S1BSJ/preview', 'Lecture Notes: Impairment')">
+                        <span class="icon">📄</span><span>Lecture Notes: Impairment</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1_Fd8hTgyhJzbIEs9beJJIwKRp-f41IaD/preview', 'Locomotion')">
+                        <span class="icon video-icon">▶️</span><span>Problems with Locomotion & GHD</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/11rQr9o_Sgs9R-vb5lLdvfUVK54Dog-EH/preview', 'Lecture Notes: Locomotion')">
+                        <span class="icon">📄</span><span>Lecture Notes: Locomotion</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1aLAp8cI4zu1cXt1MKGalqULElf6KCRrT/preview', 'Thyroid')">
+                        <span class="icon video-icon">▶️</span><span>Diabetes Insipidus & Thyroid Disorders</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1l2zh26Escq-krLKgh6tlF3BWrxKmQesm/preview', 'Lecture Notes: Thyroid')">
+                        <span class="icon">📄</span><span>Lecture Notes: Thyroid</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1VvKu2cJ3nN9YuwFhPSg_oi94xEXrHPbm/preview', 'Juvenile Diabetes')">
+                        <span class="icon video-icon">▶️</span><span>Juvenile Diabetes & Adrenal Disorders</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1rjcSKN85PVLHdGxooeQg3YACV83VmvPC/preview', 'Lecture Notes: Diabetes')">
+                        <span class="icon">📄</span><span>Lecture Notes: Diabetes</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1js9SPfpSel4siEeJd_ZSOjIt_imVHHU_/preview', 'Surgery')">
+                        <span class="icon video-icon">▶️</span><span>Pre and Post Operative Care</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/19Ln-zCUMYQIzxuNLXL1p5uFM96D3d-7m/preview', 'Lecture Notes: Surgery')">
+                        <span class="icon">📄</span><span>Lecture Notes: Surgery</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1RUpcvbkPdyyfHm3531a1EzcyvxXclKCh/preview', 'Burns')">
+                        <span class="icon video-icon">▶️</span><span>Burns</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1xiXzCBIgk4tQh5u5pUF5lttacKzWBsDm/preview', 'Lecture Notes: Burns')">
+                        <span class="icon">📄</span><span>Lecture Notes: Burns</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1EdulX7DCH_DtCOD2tFqFTKlpe50cy1FO/preview', 'Fluid')">
+                        <span class="icon video-icon">▶️</span><span>Fluid and Electrolyte Imbalance</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1F6nznFdBL07oCTz4pJJzt4D1E-ZruCGB/preview', 'Lecture Notes: Fluid')">
+                        <span class="icon">📄</span><span>Lecture Notes: Fluid</span>
+                    </div>
+
+                    <div class="resource-btn quiz" onclick="openResource('quiz', 'https://drive.google.com/file/d/1c3XF9F-4IQaU2MtcxL9e8Of3838ADeqt/preview', 'Unit 6 Quiz')">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 7 - CHILD WELFARE SERVICES <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1dsMcUDg3orYOCHg_KJZFUdiKNzhK_xSJ/preview', 'Detailed Notes: Welfare')">
+                        <span class="icon">📚</span><span>Detailed Notes: Child Welfare</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1yZ_bd-hmeeCuisiLpNdZJb7iqbJsdlTP/preview', 'Services')">
+                        <span class="icon video-icon">▶️</span><span>Child Welfare Services & Agencies</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1WXdQvGdiZXyk7TRrqAGksnci9Tz0s5ZX/preview', 'Lecture Notes: Services')">
+                        <span class="icon">📄</span><span>Lecture Notes: Services</span>
+                    </div>
+
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1UjqTOfRH1F3x7wlyvOQyEMfxPTrvo6cl/preview', 'Laws')">
+                        <span class="icon video-icon">▶️</span><span>Laws Pertaining to Pediatrics</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1UJYfkmyn35WLaDc7aKsAA3RTyE3yy3Sh/preview', 'Lecture Notes: Laws')">
+                        <span class="icon">📄</span><span>Lecture Notes: Laws</span>
+                    </div>
+
+                    <div class="resource-btn quiz" onclick="openResource('quiz', 'https://drive.google.com/file/d/1Y3zQVMUh3HwrRX41vnCKYFlgxCRMZVUj/preview', 'Unit 7 Quiz')">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="app-modal" class="modal-overlay">
+        <div class="modal-header">
+            <div id="modal-title" class="modal-title">Resource</div>
+            <button class="btn-close" onclick="closeModal()">Close X</button>
+        </div>
+        <div id="modal-body" class="modal-body"></div>
+    </div>
+
+    <script>
+        function toggleUnit(header) {
+            const content = header.nextElementSibling;
+            const isExpanded = header.getAttribute('aria-expanded') === 'true';
+            header.setAttribute('aria-expanded', !isExpanded);
+            content.classList.toggle('active');
+        }
+
+        function openResource(type, url, title) {
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+            document.getElementById('modal-title').textContent = title;
+            modal.style.display = 'flex';
+            // Ensure proper preview URL
+            let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
+            body.innerHTML = `<iframe class="iframe-res" src="${cleanUrl}"></iframe>`;
+        }
+
+        function closeModal() { 
+            document.getElementById('app-modal').style.display = 'none'; 
+            document.getElementById('modal-body').innerHTML = ""; 
+        }
+    </script>
+</body>
+</html>

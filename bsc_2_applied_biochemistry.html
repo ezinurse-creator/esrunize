@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Applied Biochemistry Syllabus</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        /* --- MODERN THEME --- */
+        :root {
+            --primary: #00B9F2;       /* Light Blue */
+            --primary-dark: #003B82;  /* Navy */
+            --bg-card: #ffffff;
+            --bg-body: #f3f4f6;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --accent: #f59e0b;        /* Quiz Gold */
+            --danger: #ef4444;
+            --success: #10b981;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --radius-md: 12px;
+        }
+
+        * { box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding-bottom: 80px;
+        }
+
+        /* --- HEADER & SYLLABUS --- */
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+
+        .syllabus-card {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 20px;
+            border-radius: var(--radius-md);
+            text-align: center;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 30px;
+            display: block;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+        .syllabus-card:active { transform: scale(0.98); }
+
+        /* --- UNITS (ACCORDION STYLE) --- */
+        .unit-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+        }
+
+        .unit-header {
+            padding: 20px;
+            background: var(--bg-card);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 700;
+            color: var(--primary-dark);
+            border-bottom: 1px solid transparent;
+            transition: background 0.2s;
+        }
+        
+        .unit-header:hover { background: #f9fafb; }
+        
+        .unit-header.active {
+            border-bottom-color: #e5e7eb;
+            background: #f0f9ff;
+            color: var(--primary-dark);
+        }
+
+        .unit-content {
+            display: none;
+            padding: 20px;
+            background: #fdfdfd;
+        }
+        .unit-content.show { display: block; }
+
+        /* --- RESOURCES LIST --- */
+        .resource-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .resource-btn {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .resource-btn:hover {
+            border-color: var(--primary);
+            transform: translateX(4px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Color coding by type */
+        .type-notes { border-left: 4px solid #0ea5e9; background: #f0f9ff; }
+        .type-video { border-left: 4px solid #8b5cf6; background: #f5f3ff; }
+        .type-quiz  { border-left: 4px solid #f59e0b; background: #fffbeb; }
+
+        .icon {
+            margin-right: 12px;
+            font-size: 1.2rem;
+            width: 30px;
+            text-align: center;
+        }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            height: 60px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+
+        .modal-title { font-weight: 700; color: var(--primary-dark); font-size: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        
+        .btn-close {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            flex: 1;
+            background: #000;
+            position: relative;
+            overflow-y: auto;
+            /* Default display is flexible to center videos */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- FIXED IFRAME STYLES --- */
+        
+        /* 1. For Videos (Keeps 16:9 Aspect Ratio) */
+        .iframe-video {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16 / 9;
+            border: none;
+            background: #000;
+            display: block;
+        }
+
+        /* 2. For Notes (Fills the screen vertically) */
+        .iframe-doc {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+            display: block;
+        }
+
+        /* --- QUIZ STYLES --- */
+        .quiz-container {
+            background: white;
+            width: 100%;
+            min-height: 100%;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .quiz-question { margin-bottom: 20px; font-size: 1.1rem; font-weight: 600; }
+        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+        .quiz-option {
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .quiz-option:hover { background: #f0f9ff; border-color: var(--primary); }
+        .quiz-option.correct { background: var(--success); color: white; border-color: var(--success); }
+        .quiz-option.correct::after { content: '✓'; position: absolute; right: 15px; font-weight: bold; }
+        .quiz-option.wrong { background: var(--danger); color: white; border-color: var(--danger); }
+        .quiz-option.wrong::after { content: '✗'; position: absolute; right: 15px; font-weight: bold; }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="page-header">
+            <div class="page-title">Applied Biochemistry</div>
+            <p style="color: var(--text-muted);">BSc Nursing Semester 1</p>
+        </div>
+
+        <div class="syllabus-card" onclick="openResource('Syllabus', 'https://drive.google.com/file/d/1TPEoZdbtAGXWzOGr2o9teP0TAgfbKRsr/preview')">
+            📄 View Full Syllabus
+        </div>
+
+        <div id="units-container">
+            </div>
+    </div>
+
+    <div id="app-modal" class="modal-overlay">
+        <div class="modal-header">
+            <div id="modal-title" class="modal-title">Resource</div>
+            <button class="btn-close" onclick="closeModal()">Close X</button>
+        </div>
+        <div id="modal-body" class="modal-body"></div>
+    </div>
+
+    <script>
+        // --- 1. BIOCHEMISTRY QUIZ DATA ---
+        const QUIZ_DATA = {
+            1: [ // Carbohydrates
+                { q: "Which is the end product of Glycolysis in aerobic conditions?", o: ["Lactate", "Pyruvate", "Acetyl CoA", "Citrate"], a: 1 },
+                { q: "The 'Powerhouse' cycle of the cell is:", o: ["Glycolysis", "TCA/Krebs Cycle", "HMP Shunt", "Urea Cycle"], a: 1 },
+                { q: "Gluconeogenesis is the formation of glucose from:", o: ["Glycogen", "Non-carbohydrate sources", "Galactose", "Fructose"], a: 1 },
+                { q: "Normal Fasting Blood Glucose level is:", o: ["70-110 mg/dL", "120-160 mg/dL", "40-60 mg/dL", "200+ mg/dL"], a: 0 },
+                { q: "Which hormone lowers blood glucose?", o: ["Glucagon", "Insulin", "Cortisol", "Adrenaline"], a: 1 }
+            ],
+            2: [ // Lipids
+                { q: "Which is known as 'Bad Cholesterol'?", o: ["HDL", "LDL", "VLDL", "Chylomicrons"], a: 1 },
+                { q: "Ketone bodies are produced in the:", o: ["Kidney", "Liver", "Brain", "Heart"], a: 1 },
+                { q: "Beta-oxidation is the metabolism of:", o: ["Proteins", "Carbohydrates", "Fatty Acids", "Nucleic Acids"], a: 2 },
+                { q: "Atherosclerosis is caused by accumulation of:", o: ["Calcium", "Cholesterol/Lipids", "Iron", "Protein"], a: 1 },
+                { q: "Essential fatty acids cannot be synthesized by:", o: ["Plants", "The human body", "Bacteria", "Fungi"], a: 1 }
+            ],
+            3: [ // Proteins
+                { q: "The building blocks of proteins are:", o: ["Monosaccharides", "Amino Acids", "Fatty Acids", "Nucleotides"], a: 1 },
+                { q: "The Urea Cycle takes place primarily in the:", o: ["Kidney", "Liver", "Intestine", "Muscle"], a: 1 },
+                { q: "Albumin helps in maintaining:", o: ["Blood clotting", "Osmotic Pressure", "Immunity", "Digestion"], a: 1 },
+                { q: "Denaturation involves the disruption of:", o: ["Primary structure", "Peptide bonds", "Secondary/Tertiary structure", "Amino acid sequence"], a: 2 },
+                { q: "Phenylketonuria (PKU) is a disorder of:", o: ["Carbohydrate metabolism", "Amino acid metabolism", "Lipid metabolism", "Mineral metabolism"], a: 1 }
+            ],
+            4: [ // Enzymes
+                { q: "Enzymes are biocatalysts made of:", o: ["Lipids", "Proteins", "Carbohydrates", "Vitamins"], a: 1 },
+                { q: "Which enzyme is specific for liver damage (SGPT)?", o: ["AST", "ALT", "ALP", "CK-MB"], a: 1 },
+                { q: "Cardiac marker enzyme elevated in myocardial infarction:", o: ["Amylase", "CK-MB", "Lipase", "Acid Phosphatase"], a: 1 },
+                { q: "Factors affecting enzyme activity include:", o: ["pH only", "Temperature only", "pH, Temperature & Substrate concentration", "None"], a: 2 },
+                { q: "Isoenzymes are:", o: ["Different forms of same enzyme", "Different enzymes", "Inactive enzymes", "Co-enzymes"], a: 0 }
+            ],
+            5: [ // Acid Base
+                { q: "Normal pH of arterial blood is:", o: ["7.0 - 7.1", "7.35 - 7.45", "6.8 - 7.0", "7.5 - 7.6"], a: 1 },
+                { q: "The major buffer system in blood is:", o: ["Phosphate buffer", "Bicarbonate buffer", "Protein buffer", "Hemoglobin buffer"], a: 1 },
+                { q: "Metabolic Acidosis is characterized by:", o: ["High pH, High HCO3", "Low pH, Low HCO3", "High pH, Low CO2", "Low pH, High CO2"], a: 1 },
+                { q: "Which organ regulates pH by excreting H+ ions?", o: ["Lung", "Kidney", "Liver", "Heart"], a: 1 },
+                { q: "Respiratory Alkalosis is caused by:", o: ["Hyperventilation", "Hypoventilation", "Vomiting", "Diarrhea"], a: 0 }
+            ],
+            6: [ // Heme Catabolism
+                { q: "The end product of Heme catabolism is:", o: ["Urea", "Bilirubin", "Creatinine", "Uric Acid"], a: 1 },
+                { q: "Jaundice is caused by elevated levels of:", o: ["Glucose", "Bilirubin", "Cholesterol", "Calcium"], a: 1 },
+                { q: "Direct Bilirubin is:", o: ["Unconjugated", "Conjugated", "Bound to Albumin", "Insoluble"], a: 1 },
+                { q: "Which test detects bilirubin types?", o: ["Benedict's Test", "Van den Bergh Reaction", "Biuret Test", "Rothera's Test"], a: 1 },
+                { q: "Hemoglobin consists of:", o: ["Heme + Globin", "Iron + Albumin", "Heme + Albumin", "Iron + Globulin"], a: 0 }
+            ],
+            7: [ // Organ Function Tests
+                { q: "Serum Creatinine is a marker for:", o: ["Liver function", "Kidney function", "Heart function", "Thyroid function"], a: 1 },
+                { q: "Which is a Liver Function Test (LFT)?", o: ["Serum Bilirubin", "Serum TSH", "Serum Urea", "Serum Amylase"], a: 0 },
+                { q: "Elevated TSH usually indicates:", o: ["Hyperthyroidism", "Hypothyroidism", "Normal function", "Liver failure"], a: 1 },
+                { q: "Clearance tests (like Inulin/Creatinine) measure:", o: ["GFR", "Liver detox", "Lung volume", "Heart rate"], a: 0 },
+                { q: "Urea is the end product of:", o: ["Purine metabolism", "Protein metabolism", "Heme metabolism", "Glucose metabolism"], a: 1 }
+            ],
+            8: [ // Immunochemistry
+                { q: "Immunoglobulins (Antibodies) are produced by:", o: ["T-cells", "B-cells/Plasma cells", "RBCs", "Platelets"], a: 1 },
+                { q: "Which antibody crosses the placenta?", o: ["IgM", "IgG", "IgA", "IgE"], a: 1 },
+                { q: "The antibody involved in allergic reactions is:", o: ["IgG", "IgE", "IgM", "IgD"], a: 1 },
+                { q: "ELISA stands for:", o: ["Enzyme Linked Immuno Sorbent Assay", "Enzyme Linked Immuno Solvent Action", "Energy Level Immuno System Assay", "None"], a: 0 },
+                { q: "The first antibody produced in infection is:", o: ["IgG", "IgM", "IgA", "IgD"], a: 1 }
+            ]
+        };
+
+        // --- 2. COURSE DATA ---
+        const UNITS = [
+            {
+                id: 1, title: "CARBOHYDRATES",
+                resources: [
+                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1xlkza4-lyyM3YulSxxdJ02hAkDWS-Ewv/preview' },
+                    { type: 'video', title: 'Metabolism Cycles', url: 'https://drive.google.com/file/d/1w3PhNhiobk-U86d-MyGIIg_U_lRE4fGt/preview' },
+                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1d7IDKBnCYJcmz8K8sQryVnCR_jjnkmtq/preview' },
+                    { type: 'video', title: 'Glycolysis & Krebs Cycle', url: 'https://drive.google.com/file/d/1gl6N5LU8BsYkX6hJmIJhyh6h5ibqxf72/preview' },
+                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/19x2k3JL1vyckxFm-HkKeQ0yvJDmO-ZpC/preview' },
+                    { type: 'video', title: 'ETC & Gluconeogenesis', url: 'https://drive.google.com/file/d/1iQfZJQEx1Yf_SSr2qu1h8ZiBSgz35jKN/preview' },
+                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1QFtxNhSNSqQ_lll0BUmZ-8bujBaXChZd/preview' },
+                    { type: 'video', title: 'Cori Cycle & HMP Shunt', url: 'https://drive.google.com/file/d/1ZAJV8BA5SWHnuNRCnnHoFSYkyKDWfsgO/preview' },
+                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/18-2fvg_szO8PJHdSw7zqj97S1ZAFCO_x/preview' },
+                    { type: 'video', title: 'Glycogen Metabolism', url: 'https://drive.google.com/file/d/1U1h2A8F6kpdaIAZ2SpEKoctOR6bGgZWB/preview' },
+                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1sSKFSm3nmC64_O-75iAHrFzN6grz-rai/preview' },
+                    { type: 'video', title: 'Metabolic Disorders', url: 'https://drive.google.com/file/d/1RGNqBTG4jIuH7oioOaPr1LdOGvgvLiVQ/preview' },
+                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/11BcPbIrdVZ65wxSd5-RHlUkcoaNJRKJZ/preview' },
+                    { type: 'video', title: 'Diabetes & Investigations', url: 'https://drive.google.com/file/d/1Mx4UWAq4uAESQf3xwS-Oy5jDzgumNd0C/preview' },
+                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1D4QNGYg2GDGNzLyoqfL9HsSXpyHVRyNY/preview' }
+                ]
+            },
+            {
+                id: 2, title: "LIPIDS",
+                resources: [
+                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1-1hp1OYQU50Gr4zx0Axuh98GZFXfj66p/preview' },
+                    { type: 'video', title: 'Classification of Fatty Acids', url: 'https://drive.google.com/file/d/11bhC9TghqQD0O9IiUOjqGmmwxH8moZL-/preview' },
+                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1OKuW6hhZw8WqBIl7f1MmiRJQGs609svt/preview' },
+                    { type: 'video', title: 'Digestion & Metabolism', url: 'https://drive.google.com/file/d/1IhD3WzBcEz1fPM1QPbDFLkXuHl-kKgeg/preview' },
+                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1Li5ho3wqb1ONgZYY75ljeY2skMT5p_7Y/preview' },
+                    { type: 'video', title: 'Cholesterol & Lipoproteins', url: 'https://drive.google.com/file/d/1E2ATQ72gi5KEQDLtWbKK7aYXhMcoHbdb/preview' },
+                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1dTlWcQaAL_JByTBr2ILO1Snhk4urwe8p/preview' },
+                    { type: 'video', title: 'Disorders & Atherosclerosis', url: 'https://drive.google.com/file/d/1_E9QgJwae86HuhefAWI1sWjeqYlxmPSA/preview' },
+                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1LqvL6jv84rC80XNKUr3y4JjdenZrqf9s/preview' }
+                ]
+            },
+            {
+                id: 3, title: "PROTEINS",
+                resources: [
+                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1RE8hFpycOZ7wQeiHrP5PvMkFoJRF-Utd/preview' },
+                    { type: 'video', title: 'Amino Acids & Digestion', url: 'https://drive.google.com/file/d/1Kbei5ICXJrCG0SUasIxu8-SC2fagXb6y/preview' },
+                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1ILHN1XmMJN8z825EWx_vfpQd-ZYgacVr/preview' },
+                    { type: 'video', title: 'Metabolism & Disorders', url: 'https://drive.google.com/file/d/11mvh2qurr-dETEglvV-EoV0-uIAMFClo/preview' },
+                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1RXxTe_Wt30-_fj9AHy8TsdlRFNhoYqQE/preview' },
+                    { type: 'video', title: 'Plasma Proteins', url: 'https://drive.google.com/file/d/1cflgWY9UKYLes28x752Edy0BrmiWhBmz/preview' },
+                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1HqOpw7BQOJv80mqWA-3MAp2cwouT5c24/preview' }
+                ]
+            },
+            {
+                id: 4, title: "CLINICAL ENZYMOLOGY",
+                resources: [
+                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1lH1KGjaTbGM6FQ54dKwHvTxJqydF1YWI/preview' },
+                    { type: 'video', title: 'Mechanism of Action', url: 'https://drive.google.com/file/d/1skZZrpMrC9JZsNHOvTbLITdfNtjVV2Go/preview' },
+                    { type: 'video', title: 'Enzyme Patterns in Disease', url: 'https://drive.google.com/file/d/1G0JZQLL7nafp0mg4RGaWUFge7mQbgqNi/preview' },
+                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1rb-0D-ST3vf2vsd4u-IFw-FJ_iDkrCLv/preview' }
+                ]
+            },
+            {
+                id: 5, title: "ACID BASE MAINTENANCE",
+                resources: [
+                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1PUxQGVwOFXsuQSKiXwvWB0nbdByn0NM-/preview' },
+                    { type: 'video', title: 'Homeostasis & Buffers', url: 'https://drive.google.com/file/d/10IlUAGnn4PpjjUJqK2pKjwdoZm3qVLFt/preview' },
+                    { type: 'video', title: 'Resp & Renal Buffers', url: 'https://drive.google.com/file/d/1GiE0OYOMUcnXAdW8j56VmZUa7hp6zm8s/preview' },
+                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/12arc7wREhx12mxdm3_S7_L8tkVgDoozv/preview' },
+                    { type: 'video', title: 'Acid Base Disorders', url: 'https://drive.google.com/file/d/1PimQ2P3GBSYFhND5jGamjbMo_xrs4WJz/preview' },
+                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1oN7WTZWyGzz2CNu5kPsPz7MoEZbC7aZ-/preview' }
+                ]
+            },
+            {
+                id: 6, title: "HEME CATABOLISM",
+                resources: [
+                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1dxqpQ2DSFu8H7x8buCRG1jDLBVL55iuH/preview' },
+                    { type: 'video', title: 'Hemoglobin & Jaundice', url: 'https://drive.google.com/file/d/1X0xsgUCTiCH4VkKjvGhf737hNUHYDI-n/preview' },
+                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1IYs-xBudtYsQXlKFboPskTg9-BdjDEKV/preview' }
+                ]
+            },
+            {
+                id: 7, title: "ORGAN FUNCTION TESTS",
+                resources: [
+                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1eUU_m7ki6EjX-IVecK0MATYKTqYKuVlu/preview' },
+                    { type: 'video', title: 'Liver Function Tests (LFT)', url: 'https://drive.google.com/file/d/1UQvpaQ4xac_zstE9i9WFmStmne8pjd9P/preview' },
+                    { type: 'video', title: 'RFT & TFT', url: 'https://drive.google.com/file/d/1AH1WzHeCHnqzgIErYRUGrroJprhk6pv4/preview' },
+                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1MfXTBGi5xueFKcAme0HeKwGDpOMr8R84/preview' }
+                ]
+            },
+            {
+                id: 8, title: "IMMUNOCHEMISTRY",
+                resources: [
+                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1kYZtAlTVwh1WQKPi0Xpf3JtxNRve_749/preview' },
+                    { type: 'video', title: 'Antibodies', url: 'https://drive.google.com/file/d/1R6Sq07cMH2UZUCOMtp1D6j2G7LdwF1Ps/preview' },
+                    { type: 'video', title: 'Types of Antibodies', url: 'https://drive.google.com/file/d/1G_UtEL_7yFOmtj_e62-A4xGwF5DXBBNS/preview' },
+                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1dKVVOkvUKdOz-y_MsKrB7B2vQwB43fWt/preview' },
+                    { type: 'video', title: 'Antigen-Antibody Reactions', url: 'https://drive.google.com/file/d/1PjfZXCq4beI9xdi_W42XVFQ_ILoyD_nn/preview' },
+                    { type: 'video', title: 'ELISA & Immunofluorescence', url: 'https://drive.google.com/file/d/1nqEhRV7pV23xjdsoN8mYTcms5IbtQOB9/preview' },
+                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1Zuio_SFdCyN2xpSCvDy6iExI38iIoJIc/preview' }
+                ]
+            }
+        ];
+
+        // --- 3. RENDER LOGIC ---
+        function renderPage() {
+            const container = document.getElementById('units-container');
+            
+            UNITS.forEach(unit => {
+                const unitHtml = `
+                    <div class="unit-card">
+                        <div class="unit-header" onclick="toggleUnit(this)">
+                            UNIT ${unit.id} - ${unit.title}
+                            <span>🔽</span>
+                        </div>
+                        <div class="unit-content">
+                            <div class="resource-list">
+                                ${unit.resources.map(res => `
+                                    <div class="resource-btn type-${res.type}" onclick="openResource('${res.type}', '${res.url || ''}', '${res.title}')">
+                                        <div class="icon">${getIcon(res.type)}</div>
+                                        <div>${res.title}</div>
+                                    </div>
+                                `).join('')}
+                                <div class="resource-btn type-quiz" onclick="openQuiz(${unit.id})">
+                                    <div class="icon">✍️</div>
+                                    <div>Take Unit ${unit.id} Quiz</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += unitHtml;
+            });
+        }
+
+        function getIcon(type) {
+            if(type === 'notes') return '📚';
+            if(type === 'video') return '▶️';
+            return '📄';
+        }
+
+        function toggleUnit(header) {
+            header.classList.toggle('active');
+            const content = header.nextElementSibling;
+            content.classList.toggle('show');
+            const arrow = header.querySelector('span');
+            arrow.innerText = content.classList.contains('show') ? '🔼' : '🔽';
+        }
+
+        // --- 4. MODAL LOGIC & NAVIGATION CONTROL ---
+        
+        function openResource(type, url, title) {
+            // PUSH STATE: Create a history entry so Back button closes modal
+            history.pushState({ modalOpen: true }, null, '#resource');
+
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+            const titleEl = document.getElementById('modal-title');
+            
+            titleEl.textContent = title;
+            modal.style.display = 'flex';
+            body.innerHTML = ''; 
+            
+            // FIX: Restore flex centering for Video (looks better centered)
+            body.style.display = 'flex';
+
+            if (type === 'quiz') {
+                openQuiz(url); 
+            }
+            else {
+                let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
+                
+                // FIX: Apply correct class based on type
+                // Videos get 16:9, Notes get full height
+                let className = (type === 'video') ? 'iframe-video' : 'iframe-doc';
+
+                body.innerHTML = `<iframe 
+                    class="${className}" 
+                    src="${cleanUrl}" 
+                    sandbox="allow-scripts allow-same-origin allow-presentation"
+                    allow="autoplay; encrypted-media; fullscreen">
+                </iframe>`;
+            }
+        }
+
+        function openQuiz(unitId) {
+            history.pushState({ modalOpen: true }, null, '#quiz');
+
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+            const titleEl = document.getElementById('modal-title');
+            
+            titleEl.textContent = `Quiz: Unit ${unitId}`;
+            modal.style.display = 'flex';
+            
+            // FIX: Remove flex centering for Quiz so it starts at the top
+            body.style.display = 'block';
+            body.scrollTop = 0; 
+            
+            const questions = QUIZ_DATA[unitId] || [];
+            
+            let quizHtml = `<div class="quiz-container">`;
+            questions.forEach((q, idx) => {
+                quizHtml += `
+                    <div class="quiz-question">${idx + 1}. ${q.q}</div>
+                    <div class="quiz-options" id="q-${idx}">
+                        ${q.o.map((opt, oIdx) => `
+                            <div class="quiz-option" onclick="checkAnswer(this, ${idx}, ${oIdx}, ${q.a})">${opt}</div>
+                        `).join('')}
+                    </div>
+                `;
+            });
+            
+            if(questions.length === 0) quizHtml += `<p>Quiz coming soon!</p>`;
+            
+            quizHtml += `</div>`;
+            body.innerHTML = quizHtml;
+        }
+
+        function checkAnswer(el, qIdx, oIdx, correctIdx) {
+            const parent = document.getElementById(`q-${qIdx}`);
+            const opts = parent.children;
+            for(let opt of opts) opt.style.pointerEvents = 'none';
+
+            if(oIdx === correctIdx) {
+                el.classList.add('correct');
+            } else {
+                el.classList.add('wrong');
+                opts[correctIdx].classList.add('correct');
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+            modal.style.display = 'none';
+            body.innerHTML = ''; 
+            
+            if (history.state && history.state.modalOpen) {
+                history.back();
+            }
+        }
+
+        // --- 5. HANDLE BACK BUTTON ---
+        window.onpopstate = function(event) {
+            const modal = document.getElementById('app-modal');
+            if (modal.style.display === 'flex') {
+                modal.style.display = 'none';
+                document.getElementById('modal-body').innerHTML = '';
+            }
+        };
+
+        // Initialize
+        renderPage();
+
+    </script>
+</body>
+</html>

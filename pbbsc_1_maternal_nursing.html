@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maternal Nursing - Syllabus & Quizzes</title>
+    <meta name="description" content="Interactive syllabus with internal quizzes for Maternal Nursing." />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --brand: #003B82; 
+            --accent: #00B9F2;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: white;
+            color: var(--gray-900);
+            line-height: 1.6;
+            padding: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .syllabus-btn, .unit-header {
+            display: block;
+            width: 100%;
+            padding: 18px 24px;
+            margin: 12px 0;
+            background: var(--brand);
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+        .syllabus-btn:hover, .unit-header:hover {
+            background: #002d63;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .syllabus-btn.secondary { background: var(--accent); }
+        .syllabus-btn.secondary:hover { background: #009yc0; }
+
+        .unit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+            margin: 16px 0;
+        }
+        .unit-header span:last-child {
+            transition: transform 0.3s ease;
+            color: #FFA500;
+        }
+        .unit-header[aria-expanded="true"] span:last-child {
+            transform: rotate(180deg);
+        }
+
+        .unit-content {
+            padding: 0 12px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+        }
+        .unit-content.active {
+            padding: 24px 12px;
+            max-height: none; 
+        }
+
+        .subsection {
+            margin: 16px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.2s ease;
+        }
+
+        .resource-btn {
+            display: flex;
+            align-items: flex-start;
+            width: 100%;
+            padding: 14px 18px;
+            margin: 8px 0;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            border: 1px solid var(--gray-200);
+            transition: all 0.2s ease;
+            gap: 12px;
+            cursor: pointer;
+        }
+        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
+        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
+        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
+
+        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
+        .icon.video-icon { color: #8b5cf6; }
+        .icon.quiz-icon { color: #f59e0b; }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            height: 60px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+
+        .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; }
+        
+        .btn-close {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            flex: 1;
+            background: #f3f4f6;
+            position: relative;
+            overflow-y: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .iframe-res {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+            display: block;
+        }
+
+        /* --- QUIZ STYLES --- */
+        .quiz-container {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        .quiz-question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--gray-900);
+        }
+        .quiz-option {
+            padding: 15px;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
+        
+        .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; position: relative; }
+        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
+        .quiz-option.correct::after { content: " ✓"; font-weight: bold; }
+        .quiz-option.wrong::after { content: " ✗"; font-weight: bold; }
+        
+        .quiz-nav { display: flex; justify-content: space-between; margin-top: 20px; }
+        .btn-quiz { background: var(--brand); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .btn-quiz:disabled { background: var(--gray-200); color: var(--gray-700); cursor: not-allowed; }
+
+        @media (max-width: 768px) {
+            body { padding: 16px; }
+            .unit-header, .resource-btn { font-size: 15px; }
+            .modal-body { padding: 0; }
+            .quiz-container { height: 100%; border-radius: 0; max-width: 100%; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/1CcNDEy8I44crsOQpGUtEMonfy4yj0DBN/preview', 'Syllabus')">
+        📄 DOWNLOAD MATERNAL NURSING SYLLABUS
+    </div>
+    <div class="syllabus-btn secondary" onclick="openResource('notes', 'https://drive.google.com/file/d/14sg2bD_sHf37i2sqaikjJ8PE8-x4QVyp/preview', 'Previous Year Q&A')">
+        ❓ PREVIOUS YEAR QUESTIONS & ANSWERS
+    </div>
+    
+    <div id="units">
+        
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 1 - INTRODUCTION <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1wGn_DWeT1VhpEyH0tgcgrQUnvVjFMVnB/preview', 'Detailed Notes: Intro')">
+                        <span class="icon">📚</span><span>Detailed Notes: Introduction</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1tpul4Ym88kHKnKL6FvkKcbi_t77eQo7y/preview', 'Intro Video')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/15Y8-7bsUkZW7XHzjSv0spTwc3epyfFH5/preview', 'Historical Review')">
+                        <span class="icon video-icon">▶️</span><span>Introduction and Historical Review</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ZK5yrHBKO1w27B8RIsTYAn4BxIdy_nho/preview', 'Lecture Notes: Intro')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(1)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 2 - ANATOMY & PHYSIOLOGY <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    
+
+[Image of female reproductive system anatomy]
+
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1jaxDSa3UeKWqV64pEwT-X1Exghm2R10s/preview', 'Detailed Notes: Anatomy')">
+                        <span class="icon">📚</span><span>Detailed Notes: Anatomy & Physiology</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1rzjdea9zg64-VwVnMQbHsC1RK92p_rdU/preview', 'Intro Video: Anatomy')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1YVPb1iF8HY6GPq7ZfGD_X5_d9TdbakJ3/preview', 'Reproductive System')">
+                        <span class="icon video-icon">▶️</span><span>Review of Female Reproductive System</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1nWFVkm8Z9K9o9iGZa1_MlQsmm3DwMnc3/preview', 'Lecture Notes: Anatomy')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(2)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 3 - PHYSIOLOGY OF PREGNANCY <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    
+
+[Image of fetal development stages]
+
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/135vvLdYtKUofmfJsxeMKkb-o8m4Dl7e0/preview', 'Detailed Notes: Pregnancy')">
+                        <span class="icon">📚</span><span>Detailed Notes: Physiology of Pregnancy</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1WLsHfEUmEG8yOLiihyLm5xFksikn0gIb/preview', 'Intro Video: Pregnancy')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1DbFgTaiNpaKAB6BttPAJ9YdRLadFsWfb/preview', 'Physiology Pregnancy')">
+                        <span class="icon video-icon">▶️</span><span>Physiology of Pregnancy</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1JpnN5Y6NQLtsjT_xOgCvwkov4oKJLdiF/preview', 'Lecture Notes: Pregnancy')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(3)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 4 - THE NEWBORN BABY <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1K6TZ9xOkAGjrzVXNBtAOmHfK39XA38q6/preview', 'Detailed Notes: Newborn')">
+                        <span class="icon">📚</span><span>Detailed Notes: The Newborn Baby</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1iu93Qj3W-oeHb_66oQwk1UL-Ba8qMEkm/preview', 'Intro Video: Newborn')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/101_mR5gP4YZzAbaYcbmmQCqTekvIlKxJ/preview', 'Newborn Assessment')">
+                        <span class="icon video-icon">▶️</span><span>Assessment, Sepsis & Hemorrhage</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1OJ36GCKR9ptc5-2SeabYxoju7Ky-zQyS/preview', 'Lecture Notes: Newborn')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(4)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 5 - ABNORMAL PREGNANCY & LABOR <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    
+
+[Image of stages of labor]
+
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1dHfDFW60yzBfylKsLhvzvG4BoiUoI3g7/preview', 'Detailed Notes: Abnormal')">
+                        <span class="icon">📚</span><span>Detailed Notes: Abnormal Management</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/15R42mYPUqalv0PYOjBF2td0YNRp1hf_M/preview', 'Intro Video: Abnormal')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/103wLj9VzWs7i7A7afS0b0t68NW71BHBY/preview', 'Abnormal Mgmt')">
+                        <span class="icon video-icon">▶️</span><span>Management of Abnormal Labor & Puerperium</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1iPUL9Whx6d47sT6HBWkBNu2f99FdnKrW/preview', 'Lecture Notes: Abnormal')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(5)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 6 - DRUGS IN OBSTETRICS <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1xEpOTmBb0fhZP_IgVrJAtKxzZhLL-yBT/preview', 'Detailed Notes: Drugs')">
+                        <span class="icon">📚</span><span>Detailed Notes: Drugs in Obstetrics</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1DCxGjUPNEfkU24G59pIcWLhV4ttPrzhf/preview', 'Intro Video: Drugs')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/137nsucfPkgrdT2fKS3zpliDfBBDZBGDe/preview', 'Drugs Overview')">
+                        <span class="icon video-icon">▶️</span><span>Drugs in Obstetrics</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1pjE1PFCKybJXXmCMsU5tvvPg_Xof9u_5/preview', 'Lecture Notes: Drugs')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(6)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 7 - WELFARE PROGRAMMES <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1CSTQq5kW6aTJaXx0_Evw340dGFTcm2nL/preview', 'Detailed Notes: Welfare')">
+                        <span class="icon">📚</span><span>Detailed Notes: Welfare Programmes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Q8Frxx4oywu2TcFEDWM611i4Fqjj1FHS/preview', 'Intro Video: Welfare')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1UlXbsTdRQbCjrQajf52MMeGX-ckkqTsX/preview', 'National Programmes')">
+                        <span class="icon video-icon">▶️</span><span>National Welfare Programmes for Women</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1MYB2Hh1DJTYbKr3-t0QfWwqUEh0qh6pe/preview', 'Lecture Notes: Welfare')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(7)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="app-modal" class="modal-overlay">
+        <div class="modal-header">
+            <div id="modal-title" class="modal-title">Resource</div>
+            <button class="btn-close" onclick="closeModal()">Close X</button>
+        </div>
+        <div id="modal-body" class="modal-body"></div>
+    </div>
+
+    <script>
+        const QUIZ_DATA = {
+            1: [
+                { q: "Who is considered the 'Father of Medicine' but also contributed to early obstetrics?", o: ["Hippocrates", "Soranus", "Louis Pasteur", "Semmelweis"], a: 0 },
+                { q: "The term 'Midwife' literally means?", o: ["With woman", "To deliver", "Nursing mother", "Child helper"], a: 0 },
+                { q: "Maternal Mortality Rate is expressed per how many live births?", o: ["1,000", "10,000", "100,000", "1,000,000"], a: 2 },
+                { q: "Which organization sets global standards for midwifery practice?", o: ["WHO", "ICM", "UNICEF", "Red Cross"], a: 1 }
+            ],
+            2: [
+                { q: "Which hormone is primarily responsible for the proliferative phase of the menstrual cycle?", o: ["Progesterone", "Estrogen", "LH", "FSH"], a: 1 },
+                { q: "Fertilization of the ovum typically occurs in which part of the fallopian tube?", o: ["Isthmus", "Ampulla", "Infundibulum", "Interstitial"], a: 1 },
+                { q: "The muscular layer of the uterus is called the?", o: ["Endometrium", "Perimetrium", "Myometrium", "Parametrium"], a: 2 },
+                { q: "Which pelvic shape is considered most favorable for vaginal delivery?", o: ["Android", "Anthropoid", "Gynecoid", "Platypelloid"], a: 2 }
+            ],
+            3: [
+                { q: "Which of the following is a 'Probable' sign of pregnancy?", o: ["Morning sickness", "Fetal heart sounds", "Chadwick's sign", "Quickening"], a: 2 },
+                { q: "The hormone detected in home pregnancy tests is?", o: ["Estrogen", "Progesterone", "hCG", "Prolactin"], a: 2 },
+                { q: "Physiological anemia in pregnancy is caused by?", o: ["Iron deficiency", "Hemodilution", "Blood loss", "Vitamin B12 deficiency"], a: 1 },
+                { q: "Quickening (fetal movement) is usually felt by a primigravida at?", o: ["12-14 weeks", "16-18 weeks", "20-22 weeks", "24-26 weeks"], a: 2 }
+            ],
+            4: [
+                { q: "The normal respiratory rate for a newborn is?", o: ["20-30 bpm", "30-60 bpm", "60-80 bpm", "12-20 bpm"], a: 1 },
+                { q: "Which reflex is elicited by stroking the cheek of the newborn?", o: ["Moro", "Rooting", "Babinski", "Grasp"], a: 1 },
+                { q: "What is the primary cause of physiological jaundice in newborns?", o: ["Infection", "Immature liver function", "Blood incompatibility", "Breastfeeding"], a: 1 },
+                { q: "A newborn is considered 'Small for Gestational Age' (SGA) if weight is below the?", o: ["5th percentile", "10th percentile", "25th percentile", "50th percentile"], a: 1 }
+            ],
+            5: [
+                { q: "Postpartum Hemorrhage (PPH) is defined as blood loss greater than?", o: ["200 ml", "300 ml", "500 ml", "1000 ml"], a: 2 },
+                { q: "Which is the classic sign of Pre-eclampsia?", o: ["Hypotension", "Proteinuria & Hypertension", "Glycosuria", "Fever"], a: 1 },
+                { q: "The term 'Puerperium' refers to the period of?", o: ["Labor", "Pregnancy", "6 weeks after childbirth", "First 24 hours after birth"], a: 2 },
+                { q: "A breech presentation means the presenting part is the?", o: ["Head", "Buttocks/Feet", "Shoulder", "Face"], a: 1 }
+            ],
+            6: [
+                { q: "Oxytocin is primarily used in obstetrics to?", o: ["Stop labor", "Induce/Augment labor", "Treat infection", "Lower blood pressure"], a: 1 },
+                { q: "Magnesium Sulfate is the drug of choice for preventing?", o: ["PPH", "Eclamptic seizures", "Preterm labor", "Anemia"], a: 1 },
+                { q: "Methergine is contraindicated in patients with?", o: ["Hypotension", "Hypertension", "Diabetes", "Asthma"], a: 1 },
+                { q: "Which drug is used to mature fetal lungs in threatened preterm labor?", o: ["Betamethasone", "Oxytocin", "Prostaglandin", "Antibiotics"], a: 0 }
+            ],
+            7: [
+                { q: "What does JSY stand for in Indian maternal welfare?", o: ["Janani Suraksha Yojana", "Jivan Suraksha Yojana", "Janani Sishu Yojana", "Janani Sahayata Yojana"], a: 0 },
+                { q: "The primary goal of RCH (Reproductive and Child Health) program is to?", o: ["Increase birth rate", "Reduce IMR and MMR", "Promote urbanization", "Increase surgeries"], a: 1 },
+                { q: "Under JSY, cash assistance is provided to promote?", o: ["Home delivery", "Institutional delivery", "Private care", "Adoption"], a: 1 },
+                { q: "The 'Pradhan Mantri Surakshit Matritva Abhiyan' guarantees antenatal checkups on which day?", o: ["1st of every month", "9th of every month", "15th of every month", "Last day of month"], a: 1 }
+            ]
+        };
+
+        let currentQuizUnit = 1;
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function toggleUnit(header) {
+            const content = header.nextElementSibling;
+            const isExpanded = header.getAttribute('aria-expanded') === 'true';
+            header.setAttribute('aria-expanded', !isExpanded);
+            content.classList.toggle('active');
+        }
+
+        function openResource(type, url, title) {
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+            document.getElementById('modal-title').textContent = title;
+            modal.style.display = 'flex';
+            // Ensure proper preview URL for Drive
+            let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
+            body.innerHTML = `<iframe class="iframe-res" src="${cleanUrl}"></iframe>`;
+        }
+
+        function startQuiz(unitId) {
+            currentQuizUnit = unitId;
+            currentQuestionIndex = 0;
+            score = 0;
+            const modal = document.getElementById('app-modal');
+            document.getElementById('modal-title').textContent = `Unit ${unitId} Quiz`;
+            modal.style.display = 'flex';
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const body = document.getElementById('modal-body');
+            const questions = QUIZ_DATA[currentQuizUnit];
+            
+            if (!questions || currentQuestionIndex >= questions.length) {
+                // Quiz Finished
+                body.innerHTML = `
+                    <div class="quiz-container" style="text-align:center;">
+                        <h2>Quiz Complete! 🎉</h2>
+                        <p style="font-size:1.2rem; margin:20px 0;">You scored <strong>${score} / ${questions.length}</strong></p>
+                        <button class="btn-quiz" onclick="closeModal()">Close Quiz</button>
+                    </div>`;
+                return;
+            }
+
+            const q = questions[currentQuestionIndex];
+            body.innerHTML = `
+                <div class="quiz-container">
+                    <p class="quiz-question-text">Q${currentQuestionIndex + 1}: ${q.q}</p>
+                    <div>
+                        ${q.o.map((opt, i) => `
+                            <div class="quiz-option" onclick="checkAnswer(this, ${i}, ${q.a})">${opt}</div>
+                        `).join('')}
+                    </div>
+                    <div class="quiz-nav">
+                        <span>Question ${currentQuestionIndex + 1} of ${questions.length}</span>
+                        <button id="next-btn" class="btn-quiz" style="display:none;" onclick="nextQuestion()">Next ➡</button>
+                    </div>
+                </div>`;
+        }
+
+        function checkAnswer(element, selectedIndex, correctIndex) {
+            // Prevent multiple clicks
+            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+
+            if (selectedIndex === correctIndex) {
+                element.classList.add('correct');
+                score++;
+            } else {
+                element.classList.add('wrong');
+                // Highlight correct answer
+                element.parentElement.children[correctIndex].classList.add('correct');
+            }
+            document.getElementById('next-btn').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            renderQuizQuestion();
+        }
+
+        function closeModal() { 
+            document.getElementById('app-modal').style.display = 'none'; 
+            document.getElementById('modal-body').innerHTML = ""; 
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nursing Education - Syllabus & Quizzes</title>
+    <meta name="description" content="Interactive syllabus with internal quizzes for Nursing Education." />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --brand: #003B82; 
+            --accent: #00B9F2;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: white;
+            color: var(--gray-900);
+            line-height: 1.6;
+            padding: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .syllabus-btn, .unit-header {
+            display: block;
+            width: 100%;
+            padding: 18px 24px;
+            margin: 12px 0;
+            background: var(--brand);
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+        .syllabus-btn:hover, .unit-header:hover {
+            background: #002d63;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .syllabus-btn.secondary { background: var(--accent); }
+        .syllabus-btn.secondary:hover { background: #009yc0; }
+
+        .unit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+            margin: 16px 0;
+        }
+        .unit-header span:last-child {
+            transition: transform 0.3s ease;
+            color: #FFA500;
+        }
+        .unit-header[aria-expanded="true"] span:last-child {
+            transform: rotate(180deg);
+        }
+
+        .unit-content {
+            padding: 0 12px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+        }
+        .unit-content.active {
+            padding: 24px 12px;
+            max-height: none; 
+        }
+
+        .subsection {
+            margin: 16px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.2s ease;
+        }
+
+        .resource-btn {
+            display: flex;
+            align-items: flex-start;
+            width: 100%;
+            padding: 14px 18px;
+            margin: 8px 0;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            border: 1px solid var(--gray-200);
+            transition: all 0.2s ease;
+            gap: 12px;
+            cursor: pointer;
+        }
+        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
+        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
+        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
+        .resource-btn.disabled { opacity: 0.6; cursor: not-allowed; background: #f3f4f6; color: #9ca3af; border-color: #e5e7eb; }
+
+        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
+        .icon.video-icon { color: #8b5cf6; }
+        .icon.quiz-icon { color: #f59e0b; }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            height: 60px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+
+        .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; }
+        
+        .btn-close {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            flex: 1;
+            background: #f3f4f6;
+            position: relative;
+            overflow-y: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .iframe-res {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+            display: block;
+        }
+
+        /* --- QUIZ STYLES --- */
+        .quiz-container {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        .quiz-question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--gray-900);
+        }
+        .quiz-option {
+            padding: 15px;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
+        
+        .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; position: relative; }
+        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
+        
+        .quiz-nav { display: flex; justify-content: space-between; margin-top: 20px; }
+        .btn-quiz { background: var(--brand); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+
+        @media (max-width: 768px) {
+            body { padding: 16px; }
+            .unit-header, .resource-btn { font-size: 15px; }
+            .modal-body { padding: 0; }
+            .quiz-container { height: 100%; border-radius: 0; max-width: 100%; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/1YVfqEwUyQbVZQ-4dDUvdXhMTb_HgZvAx/preview', 'Syllabus')">
+        📄 DOWNLOAD NURSING EDUCATION SYLLABUS
+    </div>
+    <div class="syllabus-btn secondary" onclick="openResource('notes', 'https://drive.google.com/file/d/1_suvlfoYbEGmAlIxmeKx-PRLhlTlHkE0/preview', 'Previous Year Q&A')">
+        ❓ PREVIOUS YEAR QUESTIONS & ANSWERS
+    </div>
+    
+    <div id="units">
+        
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 1 - INTRODUCTION TO NURSING EDUCATION <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1-qB7H0KFwhlYTXsKbrF_GXpakQAU9ay/preview', 'Detailed Notes: Intro')">
+                        <span class="icon">📚</span><span>Detailed Notes: Introduction</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1P1pZYgU4TKIVO_bf7xMM-TZyJTd8qrkG/preview', 'Intro Video')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1i3AyBGWfIYN5qcEwsByjIZ_IM4HF_UV7/preview', 'Education Intro')">
+                        <span class="icon video-icon">▶️</span><span>Introduction to Nursing Education</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1kyl7HICaXFdxpXjbeXEEa7YWAIwa9uEk/preview', 'Lecture Notes: Intro')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(1)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 2 - TEACHING LEARNING PROCESS <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1n735xWNAw55cqjR_T9ngnba0nOIp-M_2/preview', 'Detailed Notes: Teaching')">
+                        <span class="icon">📚</span><span>Detailed Notes: Teaching Learning Process</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1stdgagDieXLTWnBhwEl4nDG-7iLlIpKH/preview', 'Intro Video: Teaching')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/14BpSIlOwCe3AH3_WWAnQU-JDq0u94CKs/preview', 'Process Video')">
+                        <span class="icon video-icon">▶️</span><span>Learning Process & Lesson Planning</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1dtLvr39TusBrrUm3utw8Eo3EtyYZbWCt/preview', 'Lecture Notes: Teaching')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(2)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 3 - METHODS OF TEACHING <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_KBwU0pszgBaVh7gIPMzK1darm1ivlbM/preview', 'Detailed Notes: Methods')">
+                        <span class="icon">📚</span><span>Detailed Notes: Teaching Methods</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/16SKHVPOIe0ZK1EuHO8lQct4zY4yAjngu/preview', 'Intro Video: Methods')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1P_d53rayE7zevripdibMoFNepdi1IqPX/preview', 'Methods Video')">
+                        <span class="icon video-icon">▶️</span><span>Methods of Teaching</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1btqVoCyUqT8Mp6c7sxbmz9C38XhfK5aZ/preview', 'Lecture Notes: Methods')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(3)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 4 - EDUCATIONAL MEDIA <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Hl8aMV872O_-6KtEFu8WOGy_DSOeix6i/preview', 'Detailed Notes: Media')">
+                        <span class="icon">📚</span><span>Detailed Notes: Educational Media</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1RdrPf2vyaFciRuBFO-Y5S1ZP6tuQlYSS/preview', 'Intro Video: Media')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1QkltKqw-vnCZK4F408FP8kzu5GsDWQFF/preview', 'Media Video')">
+                        <span class="icon video-icon">▶️</span><span>Enhancing Learning with Media</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/196s5mr8UXL_40ryjyACEtULxbux6njlZ/preview', 'Lecture Notes: Media')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(4)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 5 - ASSESSMENT & EVALUATION <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of Bloom's taxonomy pyramid]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/11M5wmWvoB2eyYmwsxzK4oR_fTF64zm4e/preview', 'Detailed Notes: Assessment')">
+                        <span class="icon">📚</span><span>Detailed Notes: Assessment Methods</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1l4iz9IMsJV5XueU4dhZCSE4rPWLNavvD/preview', 'Intro Video: Assessment')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/17YKDxyarrgSj0vkfeLiFJ15TFnO2oQgD/preview', 'Evaluation Video')">
+                        <span class="icon video-icon">▶️</span><span>Assessment and Evaluation</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1u7dMglaopN7YSm998WUjaQwuE17lTxIO/preview', 'Lecture Notes: Assessment')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(5)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 6 - MANAGEMENT OF SCHOOL OF NURSING <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1lhi4nitKvkfHc6POGVk6y-aCPLtPvbsL/preview', 'Detailed Notes: Management')">
+                        <span class="icon">📚</span><span>Detailed Notes: School Management</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/15SFRqaDY0LDeZdbiyopuBTmjq8r0phDc/preview', 'Intro Video: Management')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1_y_1xzIsrQkUPxw8nLotzIyaHn3djOWh/preview', 'Planning Video')">
+                        <span class="icon video-icon">▶️</span><span>Planning, Budgeting & Facilities</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1PzBKQaoskn1kvWQykuDBySxx-ddOhak0/preview', 'Lecture Notes: Management')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(6)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 7 - GUIDANCE AND COUNSELLING <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Bgm7ejbEh9HEmx7YWkeQ-j-bcrgxcjl7/preview', 'Detailed Notes: Guidance')">
+                        <span class="icon">📚</span><span>Detailed Notes: Guidance & Counselling</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/17e00BItMEaMU-A_mxL12FktyAuQhEzOF/preview', 'Intro Video: Guidance')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn disabled" onclick="alert('Content Coming Soon')">
+                        <span class="icon video-icon">▶️</span><span>Guidance in Schools (Coming Soon)</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ZhxYeBhNOaoTTAasWdnltmn1osO2drAv/preview', 'Lecture Notes: Guidance')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(7)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 8 - IN-SERVICE EDUCATION <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1s95rCr449n7JRaoTJqk0WMYDKxnwoSQq/preview', 'Detailed Notes: In-Service')">
+                        <span class="icon">📚</span><span>Detailed Notes: In-Service Education</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1cVxbS5dC8PE40ozVt68NWaUEa0kJZLZC/preview', 'Intro Video: In-Service')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/103urF8DMGS6chnSIwgSZTtKxzCeTbXJI/preview', 'In-Service Video')">
+                        <span class="icon video-icon">▶️</span><span>In-Service Education in Nursing</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1KMqc0NCqm887X60R9prYYQX7REtn3fPT/preview', 'Lecture Notes: In-Service')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(8)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 8 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="app-modal" class="modal-overlay">
+        <div class="modal-header">
+            <div id="modal-title" class="modal-title">Resource</div>
+            <button class="btn-close" onclick="closeModal()">Close X</button>
+        </div>
+        <div id="modal-body" class="modal-body"></div>
+    </div>
+
+    <script>
+        const QUIZ_DATA = {
+            1: [
+                { q: "Education is a process of changing:", o: ["Books", "Behavior", "Classrooms", "Grades"], a: 1 },
+                { q: "The primary aim of nursing education is to prepare nurses to:", o: ["Earn money", "Pass exams", "Provide comprehensive nursing care", "Become doctors"], a: 2 },
+                { q: "Which philosophy emphasizes 'learning by doing'?", o: ["Idealism", "Pragmatism", "Naturalism", "Realism"], a: 1 },
+                { q: "Who is considered the founder of modern nursing education?", o: ["Florence Nightingale", "Virginia Henderson", "Dorothea Orem", "Peplau"], a: 0 }
+            ],
+            2: [
+                { q: "The three domains of learning are:", o: ["Cognitive, Affective, Psychomotor", "Knowledge, Skill, Attitude", "Thinking, Feeling, Doing", "All of the above"], a: 3 },
+                { q: "A lesson plan is best described as a:", o: ["Teacher's diary", "Blueprint for teaching", "Student record", "Time table"], a: 1 },
+                { q: "Maxims of teaching include proceeding from:", o: ["Complex to Simple", "Unknown to Known", "Simple to Complex", "Abstract to Concrete"], a: 2 },
+                { q: "The first step in lesson planning is:", o: ["Selecting content", "Formulating objectives", "Choosing AV aids", "Evaluation"], a: 1 }
+            ],
+            3: [
+                { q: "Which method is best for teaching a large group of students?", o: ["Demonstration", "Lecture", "Role Play", "Tutorial"], a: 1 },
+                { q: "Micro-teaching focuses on:", o: ["Teaching a full lesson", "Mastering a specific teaching skill", "Teaching for one hour", "Teaching without aids"], a: 1 },
+                { q: "A clinical teaching method where students discuss a patient case is:", o: ["Bedside clinic", "Nursing rounds", "Case presentation", "All of the above"], a: 3 },
+                { q: "Role play is primarily effective for developing:", o: ["Knowledge", "Psychomotor skills", "Communication and empathy", "Writing skills"], a: 2 }
+            ],
+            4: [
+                { q: "Which is a projected AV aid?", o: ["Blackboard", "Overhead Projector (OHP)", "Chart", "Model"], a: 1 },
+                { q: "The 'Cone of Experience' was developed by:", o: ["Edgar Dale", "B.F. Skinner", "John Dewey", "Bloom"], a: 0 },
+                { q: "A three-dimensional representation of a real object is called a:", o: ["Chart", "Graph", "Model", "Flashcard"], a: 2 },
+                { q: "The most commonly used non-projected visual aid in classrooms is:", o: ["Chalkboard", "Filmstrip", "Slide", "Computer"], a: 0 }
+            ],
+            5: [
+                { q: "Evaluation that occurs at the end of a course is called:", o: ["Formative", "Summative", "Diagnostic", "Placement"], a: 1 },
+                { q: "OSCE stands for:", o: ["Objective Structured Clinical Examination", "Oral Structured Clinical Exam", "Overall Student Clinical Eval", "None"], a: 0 },
+                { q: "Multiple Choice Questions (MCQs) are an example of:", o: ["Essay type test", "Objective type test", "Projective test", "Oral test"], a: 1 },
+                { q: "The reliability of a test refers to its:", o: ["Consistency", "Validity", "Difficulty", "Length"], a: 0 }
+            ],
+            6: [
+                { q: "The apex body controlling nursing education in India is:", o: ["TNAI", "SNC", "INC (Indian Nursing Council)", "MOHFW"], a: 2 },
+                { q: "Recruitment of teaching staff depends primarily on:", o: ["Budget", "Student-teacher ratio norms", "Building size", "Location"], a: 1 },
+                { q: "A master rotation plan shows the plan for:", o: ["One week", "One month", "The entire academic year", "One day"], a: 2 },
+                { q: "Budgeting in a nursing school is essentially:", o: ["Spending money", "Financial planning of income and expenditure", "Collecting fees", "Paying salaries"], a: 1 }
+            ],
+            7: [
+                { q: "Guidance is best described as:", o: ["Giving advice", "Solving problems for others", "Helping individuals to help themselves", "Disciplining students"], a: 2 },
+                { q: "Counselling is a relationship between:", o: ["Two friends", "A trained counsellor and a counselee", "Teacher and whole class", "Doctor and nurse"], a: 1 },
+                { q: "Which is NOT a principle of guidance?", o: ["It is a continuous process", "It is for all students", "It solves problems instantly", "It respects individual differences"], a: 2 },
+                { q: "Career guidance helps students to:", o: ["Pass exams", "Choose a suitable profession", "Make friends", "Find housing"], a: 1 }
+            ],
+            8: [
+                { q: "In-service education is meant for:", o: ["Students", "Employed professionals", "Retired staff", "Public"], a: 1 },
+                { q: "The main goal of in-service education is to:", o: ["Increase salary", "Improve professional competence and patient care", "Get a promotion", "Socialize"], a: 1 },
+                { q: "Orientation programs are for:", o: ["Old staff", "New staff", "All staff", "Management"], a: 1 },
+                { q: "Continuing nursing education (CNE) helps nurses to:", o: ["Forget old skills", "Stay updated with current trends", "Work less hours", "Avoid work"], a: 1 }
+            ]
+        };
+
+        let currentQuizUnit = 1;
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function toggleUnit(header) {
+            const content = header.nextElementSibling;
+            const isExpanded = header.getAttribute('aria-expanded') === 'true';
+            header.setAttribute('aria-expanded', !isExpanded);
+            content.classList.toggle('active');
+        }
+
+        function openResource(type, url, title) {
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+            document.getElementById('modal-title').textContent = title;
+            modal.style.display = 'flex';
+            let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
+            body.innerHTML = `<iframe class="iframe-res" src="${cleanUrl}"></iframe>`;
+        }
+
+        function startQuiz(unitId) {
+            currentQuizUnit = unitId;
+            currentQuestionIndex = 0;
+            score = 0;
+            const modal = document.getElementById('app-modal');
+            document.getElementById('modal-title').textContent = `Unit ${unitId} Quiz`;
+            modal.style.display = 'flex';
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const body = document.getElementById('modal-body');
+            const questions = QUIZ_DATA[currentQuizUnit];
+            
+            if (!questions || currentQuestionIndex >= questions.length) {
+                body.innerHTML = `
+                    <div class="quiz-container" style="text-align:center;">
+                        <h2>Quiz Complete! 🎉</h2>
+                        <p style="font-size:1.2rem; margin:20px 0;">You scored <strong>${score} / ${questions.length}</strong></p>
+                        <button class="btn-quiz" onclick="closeModal()">Close Quiz</button>
+                    </div>`;
+                return;
+            }
+
+            const q = questions[currentQuestionIndex];
+            body.innerHTML = `
+                <div class="quiz-container">
+                    <p class="quiz-question-text">Q${currentQuestionIndex + 1}: ${q.q}</p>
+                    <div>
+                        ${q.o.map((opt, i) => `
+                            <div class="quiz-option" onclick="checkAnswer(this, ${i}, ${q.a})">${opt}</div>
+                        `).join('')}
+                    </div>
+                    <div class="quiz-nav">
+                        <span>Question ${currentQuestionIndex + 1} of ${questions.length}</span>
+                        <button id="next-btn" class="btn-quiz" style="display:none;" onclick="nextQuestion()">Next ➡</button>
+                    </div>
+                </div>`;
+        }
+
+        function checkAnswer(element, selectedIndex, correctIndex) {
+            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+
+            if (selectedIndex === correctIndex) {
+                element.classList.add('correct');
+                score++;
+            } else {
+                element.classList.add('wrong');
+                element.parentElement.children[correctIndex].classList.add('correct');
+            }
+            document.getElementById('next-btn').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            renderQuizQuestion();
+        }
+
+        function closeModal() { 
+            document.getElementById('app-modal').style.display = 'none'; 
+            document.getElementById('modal-body').innerHTML = ""; 
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Biochemistry & Biophysics - Syllabus</title>
+    <meta name="description" content="Interactive syllabus for Biochemistry & Biophysics." />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --brand: #003B82; 
+            --accent: #00B9F2;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: white;
+            color: var(--gray-900);
+            line-height: 1.6;
+            padding: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h2.section-title {
+            color: var(--brand);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .syllabus-btn, .unit-header {
+            display: block;
+            width: 100%;
+            padding: 18px 24px;
+            margin: 12px 0;
+            background: var(--brand);
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+        .syllabus-btn:hover, .unit-header:hover {
+            background: #002d63;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .syllabus-btn.secondary { background: var(--accent); }
+        .syllabus-btn.secondary:hover { background: #009yc0; }
+
+        .unit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+            margin: 16px 0;
+        }
+        .unit-header span:last-child {
+            transition: transform 0.3s ease;
+            color: #FFA500;
+        }
+        .unit-header[aria-expanded="true"] span:last-child {
+            transform: rotate(180deg);
+        }
+
+        .unit-content {
+            padding: 0 12px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+        }
+        .unit-content.active {
+            padding: 24px 12px;
+            max-height: none; 
+        }
+
+        .subsection {
+            margin: 16px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.2s ease;
+        }
+
+        .resource-btn {
+            display: flex;
+            align-items: flex-start;
+            width: 100%;
+            padding: 14px 18px;
+            margin: 8px 0;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            border: 1px solid var(--gray-200);
+            transition: all 0.2s ease;
+            gap: 12px;
+            cursor: pointer;
+        }
+        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
+        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
+        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
+
+        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
+        .icon.video-icon { color: #8b5cf6; }
+        .icon.quiz-icon { color: #f59e0b; }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            height: 60px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+
+        .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; }
+        
+        .btn-close {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            flex: 1;
+            background: #f3f4f6;
+            position: relative;
+            overflow-y: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .iframe-res {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+            display: block;
+        }
+
+        /* --- QUIZ STYLES --- */
+        .quiz-container {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        .quiz-question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--gray-900);
+        }
+        .quiz-option {
+            padding: 15px;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
+        
+        .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; position: relative; }
+        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
+        
+        .quiz-nav { display: flex; justify-content: space-between; margin-top: 20px; }
+        .btn-quiz { background: var(--brand); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+
+        @media (max-width: 768px) {
+            body { padding: 16px; }
+            .unit-header, .resource-btn { font-size: 15px; }
+            .modal-body { padding: 0; }
+            .quiz-container { height: 100%; border-radius: 0; max-width: 100%; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/1K3u3vanpMh8JE_NpvP3SUEkkMsqL-Rce/preview', 'Syllabus')">
+        📄 DOWNLOAD BIOCHEMISTRY & BIOPHYSICS SYLLABUS
+    </div>
+    <div class="syllabus-btn secondary" onclick="openResource('notes', 'https://drive.google.com/file/d/1HtgCASerzg8cdqEMmibfgCZPewV8ijhI/preview', 'Previous Year Q&A')">
+        ❓ PREVIOUS YEAR QUESTIONS & ANSWERS
+    </div>
+    
+    <h2 class="section-title">BIOCHEMISTRY</h2>
+    <div id="biochem-units">
+        
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 1 - INTRODUCTION TO BIOCHEMISTRY <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of prokaryotic vs eukaryotic cell structure]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ymDO69kUIFjxHVlhcl_-dtqlcxddc60-/preview', 'Detailed Notes: Intro')">
+                        <span class="icon">📚</span><span>Detailed Notes: Importance in Nursing</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1GDIH-NP5-bfSeTvniyk4quqiIKyvXYe3/preview', 'Intro Video')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/12vIKXOzYCKjt4U4UqBk3UtKKWkAR0xAv/preview', 'Biochem Video')">
+                        <span class="icon video-icon">▶️</span><span>Biochemistry Overview</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1bItwp-RTb_zHOTt589XeVqAcWv1h-0d7/preview', 'Lecture Notes: Intro')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(1)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 2 - WATER AND ELECTROLYTES <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of pH scale]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1XAPezYJLo5dSvg6-nRixyFzNj71LzGAo/preview', 'Detailed Notes: Water')">
+                        <span class="icon">📚</span><span>Detailed Notes: Water & Electrolytes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1caw2vtO3M2HZlYy9mW-A_O4cHqR1fb8c/preview', 'Intro Video: Water')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Uc0NcGXreT51bsupgBomlyuf3aPVdm-d/preview', 'Water Electrolytes')">
+                        <span class="icon video-icon">▶️</span><span>Water Electrolytes</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1oOxf-Sap2g-H1_d6zt-KyzThuqa_hfdk/preview', 'Lecture Notes: Water')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(2)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 3 - ENZYMES <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1wteYXWjMahUw9Y7ZEDAt9dJIQ7wYk_Vg/preview', 'Detailed Notes: Enzymes')">
+                        <span class="icon">📚</span><span>Detailed Notes: Mechanism of Action</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1NP2VXXG5oGu_k6Na8OIAG9-ak67Ys-Bg/preview', 'Intro Video: Enzymes')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1jhNvvtB-KXx8AMEkP5OvxGtCuOGgX7et/preview', 'Enzymes Pt 1')">
+                        <span class="icon video-icon">▶️</span><span>Enzymes Part 1</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1mqzrQ3pHbYOsFJMqVz3vNZszp0KGj6Ai/preview', 'Enzymes Pt 2')">
+                        <span class="icon video-icon">▶️</span><span>Enzymes Part 2</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1k8WDyjy16s09vPXjygdpHmaVq3VDRIId/preview', 'Enzymes Pt 3')">
+                        <span class="icon video-icon">▶️</span><span>Enzymes Part 3</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/19-hzXX7_XYcNkRPT6l8mUdWBqIl2msHC/preview', 'Enzymes Pt 4')">
+                        <span class="icon video-icon">▶️</span><span>Enzymes Part 4</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1CC8Lqi6z5EwdfHM4Cq1LXvwnkjcsVmRa/preview', 'Lecture Notes: Enzymes')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(3)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 4 - CARBOHYDRATES <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of classification of carbohydrates]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1VUvWaB7JdxM1f_q2KFQrHTVUELlwDuK-/preview', 'Detailed Notes: Carbs')">
+                        <span class="icon">📚</span><span>Detailed Notes: Carbohydrates</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1KXK55A3rrKCAyzE5iBWe_x-d38zGpovZ/preview', 'Intro Video: Carbs')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1AOmDL7-ECszXj2Vl16y2rKKeszVbrhGM/preview', 'Lecture Notes: Carbs')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(4)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 5 - PROTEINS <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of protein structure levels]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1lq50_Fl7NINXuXvu7Axt8TCQ44Vwqs93/preview', 'Detailed Notes: Proteins')">
+                        <span class="icon">📚</span><span>Detailed Notes: Proteins</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1HX1amrt8kzzGXLG5ruon3p8kJkU9O1_l/preview', 'Intro Video: Proteins')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1TR9im_-ZUv8tFImSe_T4o1feIbR435VQ/preview', 'Lecture Notes: Proteins')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(5)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 6 - FATS & METABOLISM <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of lipid bilayer structure]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/146pOEiKBU00bcLjAmGiYXxC5_UJrkeMP/preview', 'Detailed Notes: Fats')">
+                        <span class="icon">📚</span><span>Detailed Notes: Fat & Metabolism</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1zbie-WzdQOcjCKf1_h8sfcWdE7QGgu_v/preview', 'Intro Video: Fats')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Pd-BrYF5fYPMPwap95ohsJMyvoRZfo53/preview', 'Lecture Notes: Fats')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(6)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 7 - BIOMEDICAL WASTE MANAGEMENT <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1phvcM092pB4wP69u0C031VBCsP_NrozG/preview', 'Detailed Notes: Waste')">
+                        <span class="icon">📚</span><span>Detailed Notes: Biomedical Waste</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Ffav-RfOT29bEla-hqVLATaG62rwf0jy/preview', 'Intro Video: Waste')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1HkA3H-r5Qdpsno_-fsWHR1T9Q3Kqa9a0/preview', 'Waste Video')">
+                        <span class="icon video-icon">▶️</span><span>Biomedical Waste Management</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1csWmKWhqMdjQYEfSFPXsaKYucK433ut6/preview', 'Lecture Notes: Waste')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(7)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="section-title">BIOPHYSICS</h2>
+    <div id="biophysics-units">
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNITS 1 - 11 (NOTES ONLY) <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/17H3BXpX7rrWwfkDXKXlo-SlvIBFQzoYh/preview', 'Unit 1: Measurements')">
+                        <span class="icon">📄</span><span>Unit 1: Units and Measurements</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1kdv2_Ln7ZD11HOKxDTseuR4xXX4RkKFq/preview', 'Unit 2: Vector & Motion')">
+                        <span class="icon">📄</span><span>Unit 2: Vector and Solar Motion</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1-BbSwufTU7ERzCSc4k2Mp6mmiopYnOpw/preview', 'Unit 3: Gravity')">
+                        <span class="icon">📄</span><span>Unit 3: Gravity</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1-JZOJ2ByKksk5IRiLW9zbaDdg-XkaXTC/preview', 'Unit 4: Force')">
+                        <span class="icon">📄</span><span>Unit 4: Force</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1eGcy22aTor7usNErE0xIkhC2SI4zsgVV/preview', 'Unit 5: Heat')">
+                        <span class="icon">📄</span><span>Unit 5: Heat</span>
+                    </div>
+                    
+
+[Image of electromagnetic spectrum]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1qLtl8SP7qfRLc5xEUjmwC1zo3Q2XE0Bs/preview', 'Unit 6: Light')">
+                        <span class="icon">📄</span><span>Unit 6: Light</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1sQqhrvM5buFcsppTAMXpATbZrY83_Iwf/preview', 'Unit 7: Pressures')">
+                        <span class="icon">📄</span><span>Unit 7: Pressures</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Fqx7GHHghSXzEFIvPC3z-1MJo8P2TxlH/preview', 'Unit 8: Sound')">
+                        <span class="icon">📄</span><span>Unit 8: Sound</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1glBCwBntm_KOoyesYEGjrT5O0gEY2x0e/preview', 'Unit 9: Electricity')">
+                        <span class="icon">📄</span><span>Unit 9: Electricity</span>
+                    </div>
+                    
+
+[Image of atomic structure]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1k34CKAJ5fkGro1-bYYFmtEg1kjof_cx8/preview', 'Unit 10: Atomic Energy')">
+                        <span class="icon">📄</span><span>Unit 10: Atomic Energy</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1vmO_iH5pSDTkmqr9R2Kz8Mq3531GMq01/preview', 'Unit 11: Electronics')">
+                        <span class="icon">📄</span><span>Unit 11: Electronics</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="app-modal" class="modal-overlay">
+        <div class="modal-header">
+            <div id="modal-title" class="modal-title">Resource</div>
+            <button class="btn-close" onclick="closeModal()">Close X</button>
+        </div>
+        <div id="modal-body" class="modal-body"></div>
+    </div>
+
+    <script>
+        const QUIZ_DATA = {
+            1: [
+                { q: "Biochemistry is best defined as the study of:", o: ["Physical movements", "Chemical processes within living organisms", "Ecosystems", "Rock formations"], a: 1 },
+                { q: "Which organelle is known as the 'Powerhouse' of the cell?", o: ["Nucleus", "Ribosome", "Mitochondria", "Lysosome"], a: 2 },
+                { q: "Which is a prokaryotic organism?", o: ["Human", "Fungi", "Bacteria", "Plant"], a: 2 },
+                { q: "Knowledge of biochemistry helps nurses to:", o: ["Diagnose diseases via lab tests", "Perform surgery", "Prescribe physical therapy", "Ignore symptoms"], a: 0 }
+            ],
+            2: [
+                { q: "The normal pH range of human blood is:", o: ["7.0 - 7.2", "7.35 - 7.45", "6.8 - 7.0", "7.5 - 7.8"], a: 1 },
+                { q: "Which is the major cation in intracellular fluid?", o: ["Sodium (Na+)", "Calcium (Ca++)", "Potassium (K+)", "Chloride (Cl-)"], a: 2 },
+                { q: "Movement of water from high concentration to low concentration through a semi-permeable membrane is:", o: ["Diffusion", "Osmosis", "Active Transport", "Filtration"], a: 1 },
+                { q: "Dehydration is characterized by:", o: ["Loss of water", "Excess water", "Low blood pressure", "Both A and C"], a: 3 }
+            ],
+            3: [
+                { q: "Enzymes are primarily composed of:", o: ["Carbohydrates", "Lipids", "Proteins", "Nucleic Acids"], a: 2 },
+                { q: "The 'Lock and Key' model explains:", o: ["Enzyme specificity", "Enzyme denaturation", "Enzyme production", "Enzyme storage"], a: 0 },
+                { q: "Which factor affects enzyme activity?", o: ["Temperature", "pH", "Substrate concentration", "All of the above"], a: 3 },
+                { q: "An enzyme that helps digestion in the stomach is:", o: ["Amylase", "Pepsin", "Lipase", "Trypsin"], a: 1 }
+            ],
+            4: [
+                { q: "Glucose is an example of a:", o: ["Monosaccharide", "Disaccharide", "Polysaccharide", "Fatty Acid"], a: 0 },
+                { q: "The storage form of glucose in humans is:", o: ["Starch", "Cellulose", "Glycogen", "Sucrose"], a: 2 },
+                { q: "Which carbohydrate is known as table sugar?", o: ["Lactose", "Sucrose", "Maltose", "Fructose"], a: 1 },
+                { q: "The primary function of carbohydrates is to provide:", o: ["Structure", "Energy", "Insulation", "Genetic information"], a: 1 }
+            ],
+            5: [
+                { q: "The building blocks of proteins are:", o: ["Fatty acids", "Amino acids", "Monosaccharides", "Nucleotides"], a: 1 },
+                { q: "Which bond links amino acids together?", o: ["Ionic bond", "Hydrogen bond", "Peptide bond", "Glycosidic bond"], a: 2 },
+                { q: "Albumin is an example of a:", o: ["Plasma protein", "Structural protein", "Contractile protein", "Storage protein"], a: 0 },
+                { q: "Denaturation of proteins results in:", o: ["Loss of biological activity", "Increase in size", "Color change", "Synthesis of new proteins"], a: 0 }
+            ],
+            6: [
+                { q: "Lipids that are solid at room temperature are usually:", o: ["Saturated fats", "Unsaturated fats", "Oils", "Liquids"], a: 0 },
+                { q: "Which lipid is a major component of cell membranes?", o: ["Triglycerides", "Phospholipids", "Steroids", "Waxes"], a: 1 },
+                { q: "Cholesterol is a precursor for:", o: ["Vitamin D", "Steroid hormones", "Bile salts", "All of the above"], a: 3 },
+                { q: "Essential fatty acids must be:", o: ["Synthesized by the body", "Obtained from diet", "Avoided completely", "Converted to sugar"], a: 1 }
+            ],
+            7: [
+                { q: "In biomedical waste management, human anatomical waste goes in the:", o: ["Red bin", "Blue bin", "Yellow bin", "Black bin"], a: 2 },
+                { q: "Plastic waste like catheters and IV tubes should be discarded in:", o: ["Yellow bin", "Red bin", "White bin", "Blue bin"], a: 1 },
+                { q: "The symbol for biohazard consists of:", o: ["Three interlocked circles", "Skull and crossbones", "Green square", "Red triangle"], a: 0 },
+                { q: "Sharps (needles, blades) must be disposed of in a:", o: ["Puncture-proof container (White)", "Black bag", "Yellow bag", "Red bag"], a: 0 }
+            ]
+        };
+
+        let currentQuizUnit = 1;
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function toggleUnit(header) {
+            const content = header.nextElementSibling;
+            const isExpanded = header.getAttribute('aria-expanded') === 'true';
+            header.setAttribute('aria-expanded', !isExpanded);
+            content.classList.toggle('active');
+        }
+
+        function openResource(type, url, title) {
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+            document.getElementById('modal-title').textContent = title;
+            modal.style.display = 'flex';
+            let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
+            body.innerHTML = `<iframe class="iframe-res" src="${cleanUrl}"></iframe>`;
+        }
+
+        function startQuiz(unitId) {
+            currentQuizUnit = unitId;
+            currentQuestionIndex = 0;
+            score = 0;
+            const modal = document.getElementById('app-modal');
+            document.getElementById('modal-title').textContent = `Unit ${unitId} Quiz`;
+            modal.style.display = 'flex';
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const body = document.getElementById('modal-body');
+            const questions = QUIZ_DATA[currentQuizUnit];
+            
+            if (!questions || currentQuestionIndex >= questions.length) {
+                body.innerHTML = `
+                    <div class="quiz-container" style="text-align:center;">
+                        <h2>Quiz Complete! 🎉</h2>
+                        <p style="font-size:1.2rem; margin:20px 0;">You scored <strong>${score} / ${questions.length}</strong></p>
+                        <button class="btn-quiz" onclick="closeModal()">Close Quiz</button>
+                    </div>`;
+                return;
+            }
+
+            const q = questions[currentQuestionIndex];
+            body.innerHTML = `
+                <div class="quiz-container">
+                    <p class="quiz-question-text">Q${currentQuestionIndex + 1}: ${q.q}</p>
+                    <div>
+                        ${q.o.map((opt, i) => `
+                            <div class="quiz-option" onclick="checkAnswer(this, ${i}, ${q.a})">${opt}</div>
+                        `).join('')}
+                    </div>
+                    <div class="quiz-nav">
+                        <span>Question ${currentQuestionIndex + 1} of ${questions.length}</span>
+                        <button id="next-btn" class="btn-quiz" style="display:none;" onclick="nextQuestion()">Next ➡</button>
+                    </div>
+                </div>`;
+        }
+
+        function checkAnswer(element, selectedIndex, correctIndex) {
+            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+
+            if (selectedIndex === correctIndex) {
+                element.classList.add('correct');
+                score++;
+            } else {
+                element.classList.add('wrong');
+                element.parentElement.children[correctIndex].classList.add('correct');
+            }
+            document.getElementById('next-btn').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            renderQuizQuestion();
+        }
+
+        function closeModal() { 
+            document.getElementById('app-modal').style.display = 'none'; 
+            document.getElementById('modal-body').innerHTML = ""; 
+        }
+    </script>
+</body>
+</html>

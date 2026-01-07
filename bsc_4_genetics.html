@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Genetics - Syllabus</title>
+    <meta name="description" content="Comprehensive syllabus with detailed notes, video lectures, and quizzes for Genetics." />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            --brand: #003B82;
+            --accent: #00B9F2;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --danger: #ef4444;
+            --success: #10b981;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: white;
+            color: var(--gray-900);
+            line-height: 1.6;
+            padding: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .syllabus-btn, .unit-header {
+            display: block;
+            width: 100%;
+            padding: 18px 24px;
+            margin: 24px 0;
+            background: var(--brand);
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+        .syllabus-btn:hover, .unit-header:hover {
+            background: #002d63;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .unit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+            margin: 16px 0;
+        }
+        .unit-header span:last-child {
+            transition: transform 0.3s ease;
+            color: #FFA500;
+        }
+        .unit-header[aria-expanded="true"] span:last-child {
+            transform: rotate(180deg);
+        }
+
+        .unit-content {
+            padding: 0 12px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+        }
+        .unit-content.active {
+            padding: 24px 12px;
+            max-height: none;
+        }
+
+        .subsection {
+            margin: 16px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.2s ease;
+        }
+        .subsection:hover { box-shadow: var(--shadow-md); }
+
+        .resource-btn {
+            display: flex;
+            align-items: flex-start;
+            width: 100%;
+            padding: 14px 18px;
+            margin: 8px 0;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            border: 1px solid var(--gray-200);
+            transition: all 0.2s ease;
+            gap: 12px;
+            flex-wrap: wrap;
+            min-height: 50px;
+            cursor: pointer;
+        }
+        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
+        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
+        .resource-btn.quiz { background: #fff5e8; border-color: #ffd8a8; color: #8c5e08; }
+        .resource-btn:hover { background: #f9fafb; transform: translateY(-1px); }
+        .resource-btn.notes:hover { background: #e0f2fe; }
+        .resource-btn.video:hover { background: #ede9fe; }
+        .resource-btn.quiz:hover { background: #ffead1; }
+        .resource-btn.coming-soon { 
+            background: #e5e7eb;
+            color: #6b7280;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
+        .icon.video-icon { color: #8b5cf6; }
+        .icon.quiz-icon { color: #FFA500; }
+        .icon.coming-soon-icon { color: #9ca3af; }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            height: 60px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+
+        .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        
+        .btn-close {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            flex: 1;
+            background: #000;
+            position: relative;
+            overflow-y: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- FIXED IFRAME STYLES --- */
+        .iframe-video {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16 / 9;
+            border: none;
+            background: #000;
+            display: block;
+        }
+
+        .iframe-doc {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+            display: block;
+        }
+
+        /* --- QUIZ STYLES --- */
+        .quiz-container {
+            background: white;
+            width: 100%;
+            min-height: 100%;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .quiz-question { margin-bottom: 20px; font-size: 1.1rem; font-weight: 600; }
+        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+        .quiz-option {
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .quiz-option:hover { background: #f0f9ff; border-color: var(--accent); }
+        .quiz-option.correct { background: var(--success); color: white; border-color: var(--success); }
+        .quiz-option.correct::after { content: '✓'; position: absolute; right: 15px; font-weight: bold; }
+        .quiz-option.wrong { background: var(--danger); color: white; border-color: var(--danger); }
+        .quiz-option.wrong::after { content: '✗'; position: absolute; right: 15px; font-weight: bold; }
+
+        @media (max-width: 768px) {
+            body { padding: 16px; }
+            .syllabus-btn, .unit-header, .resource-btn { font-size: 15px; padding: 14px 16px; }
+            .resource-btn { font-size: 14px; }
+            .subsection { padding: 16px; }
+            .unit-content.active { padding: 16px 8px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/1EhdyneXQCHha7tsVBlWuTzAHhtuBOMse/preview', 'Syllabus')">
+        📄 GENETICS - SYLLABUS
+    </div>
+    
+    <div id="units">
+        <div class="unit-container" id="unit1">
+            <div class="unit-header" role="button" tabindex="0" aria-expanded="true" onclick="toggleUnit(this)">
+                UNIT 1 - INTRODUCTION
+                <span>🔽</span>
+            </div>
+            <div class="unit-content active">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/16P5AQ6XgWF8D7CyGRxSEvoh0zDu3v__w/preview', 'Detailed Notes')">
+                        <span class="icon">📚</span><span>Detailed Notes: Introduction to Genetics</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1F5Xl819lkE3y0if61Z-iOapzD6fzqNUQ/preview', 'Gene Structure & Impact')">
+                        <span class="icon video-icon">▶️</span><span>Impact, Cellular Division & Gene Structure</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1X6ZObdyoWG2ygXDtkX2yUNzlAxyFao0f/preview', 'Lecture Notes')">
+                        <span class="icon">📚</span><span>Lecture Notes: Genes & Cellular Division</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Be61baDyRZ9WQIsx092vMMdkO9rB3CCp/preview', 'Chromosomes')">
+                        <span class="icon video-icon">▶️</span><span>Chromosomes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1qJqGyEuO4tB9ksWrDgduzxxdgwlzrvWX/preview', 'Mendelian Theory')">
+                        <span class="icon video-icon">▶️</span><span>Mendelian Theory of Inheritance</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1BgX5b0-Ytkhfq2u0ih48DNjnMR-WCowP/preview', 'Lecture Notes')">
+                        <span class="icon">📚</span><span>Lecture Notes: Chromosomes & Mendelian Theory</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ajlX2seXTh58nrbDHulSk8BCoKOWwjDa/preview', 'Blood Groups')">
+                        <span class="icon video-icon">▶️</span><span>Blood Groups & Errors in Transmission</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1__4UDbIsSWB24ljtCAM6J45CktuFefSc/preview', 'Lecture Notes')">
+                        <span class="icon">📚</span><span>Lecture Notes: Blood Groups</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="openQuiz(1)">
+                        <span class="icon quiz-icon">⏳</span><span>Take Unit 1 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container" id="unit2">
+            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 2 - MATERNAL & PRENATAL INFLUENCES
+                <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1TVvIb4Zzb0RiNWF760tGf0_C_mwTpsjC/preview', 'Detailed Notes')">
+                        <span class="icon">📚</span><span>Detailed Notes: Maternal & Prenatal Influences</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Q0PMApTfSQ3wdIqQETnwl8d0e3Gjmtj8/preview', 'Maternal Conditions')">
+                        <span class="icon video-icon">▶️</span><span>Maternal Conditions & Prenatal Nutrition</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1kvUA5FHceedYeKgcZgM394Bu0yE-DyYD/preview', 'Testing & Diagnosis')">
+                        <span class="icon video-icon">▶️</span><span>Prenatal Testing, Diagnosis & Factors (Age/Allergy)</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1KPpJvlJJzMfJIMPq-MV5asoVi1EqmMl7/preview', 'Lecture Notes')">
+                        <span class="icon">📚</span><span>Lecture Notes: Maternal Conditions & Diagnosis</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/18Vvu5wKcPCPbtp9MPAlse8NnQ1ASh2Vx/preview', 'Infertility')">
+                        <span class="icon video-icon">▶️</span><span>Infertility & Spontaneous Abortion</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Nd7KuPGJ4Tsg8aKWc0WfVeJcc32F6zIS/preview', 'Lecture Notes')">
+                        <span class="icon">📚</span><span>Lecture Notes: Infertility</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1-QzhkwFxMMyqHf-RklqcrTeYWMche97J/preview', 'Neural Tube Defects')">
+                        <span class="icon video-icon">▶️</span><span>Neural Tube Defects</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/17JgG-BrvYds6ZC0cS-1UIMUX03llgRa-/preview', 'Lecture Notes')">
+                        <span class="icon">📚</span><span>Lecture Notes: Neural Tube Defects</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="openQuiz(2)">
+                        <span class="icon quiz-icon">⏳</span><span>Take Unit 2 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container" id="unit3">
+            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 3 - GENETIC TESTING (NEONATES & CHILDREN)
+                <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1OzI17QKrMVZqOuBLCAhlajkMIuXwjISn/preview', 'Detailed Notes')">
+                        <span class="icon">📚</span><span>Detailed Notes: Genetic Testing</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1_PiuZIdagK6mlmfoIW-eyv_YsxTa7TvK/preview', 'Congenital Screening')">
+                        <span class="icon video-icon">▶️</span><span>Screening for Congenital Abnormalities</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1mcDVW5JdnOoB-KgM7j9ZFLY3JSscj0EG/preview', 'Lecture Notes')">
+                        <span class="icon">📚</span><span>Lecture Notes: Congenital Screening</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1hzAo1DHOoOVb56nxuJPFarC-CC9C3ucN/preview', 'Developmental Delay')">
+                        <span class="icon video-icon">▶️</span><span>Screening for Developmental Delay & Dysmorphism</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ApObvUgTMqx5pH1Q2MP_YKKy6W2vFKAO/preview', 'Lecture Notes')">
+                        <span class="icon">📚</span><span>Lecture Notes: Developmental Screening</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="openQuiz(3)">
+                        <span class="icon quiz-icon">⏳</span><span>Take Unit 3 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container" id="unit4">
+            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 4 - GENETIC CONDITIONS (ADOLESCENTS & ADULTS)
+                <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/170s9ZWAjSbQfP44Fd2cQ5tyi72jt8BOJ/preview', 'Detailed Notes')">
+                        <span class="icon">📚</span><span>Detailed Notes: Adult Genetic Conditions</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1E-9Y-WirlxyPcTxt39iL-Ls1_6iJZfvl/preview', 'Cancer & IEM')">
+                        <span class="icon video-icon">▶️</span><span>Cancer Genetics & Inborn Errors of Metabolism</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1C0OP0nJUIhuZaV7b05b9x9b_NRl2elb4/preview', 'Lecture Notes')">
+                        <span class="icon">📚</span><span>Lecture Notes: Cancer Genetics</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1WW6zcSdg5H0GPsv01EA1Ic7k8i4h9KA4/preview', 'Hematological Disorders')">
+                        <span class="icon video-icon">▶️</span><span>Hematological Disorders (Thalassemia, Sickle Cell)</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1fSWOggz-rufbc4hfkNr1y17mEyGTXYkw/preview', 'Other Disorders')">
+                        <span class="icon video-icon">▶️</span><span>Huntington's, Mental Illness & Others</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1wK3MwPvFV3nTpV5Wz_vStVRyLE8wlQ1E/preview', 'Lecture Notes')">
+                        <span class="icon">📚</span><span>Lecture Notes: Adult Genetic Disorders</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="openQuiz(4)">
+                        <span class="icon quiz-icon">⏳</span><span>Take Unit 4 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container" id="unit5">
+            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 5 - SERVICES RELATED TO GENETICS
+                <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/17rAPP7U5yCpAz8r4hLWHyzvgtDPynPCv/preview', 'Detailed Notes')">
+                        <span class="icon">📚</span><span>Detailed Notes: Genetic Services</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/16GTH747Dn_UNdWssLZ4Oc9ryHB8J4X8R/preview', 'Services & Role')">
+                        <span class="icon video-icon">▶️</span><span>Services Related to Genetics & Role of Nurse</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1eDPrbDZCsjEB6eonE1r2SF0Aj2H1yiMc/preview', 'Lecture Notes')">
+                        <span class="icon">📚</span><span>Lecture Notes: Services & Nursing Role</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="openQuiz(5)">
+                        <span class="icon quiz-icon">⏳</span><span>Take Unit 5 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="app-modal" class="modal-overlay">
+        <div class="modal-header">
+            <div id="modal-title" class="modal-title">Resource</div>
+            <button class="btn-close" onclick="closeModal()">Close X</button>
+        </div>
+        <div id="modal-body" class="modal-body"></div>
+    </div>
+
+    <script>
+        // --- 1. QUIZ DATA (5 Units) ---
+        const QUIZ_DATA = {
+            1: [ // Unit 1: Intro
+                { q: "Who is the father of modern genetics?", o: ["Charles Darwin", "Gregor Mendel", "Watson & Crick", "Louis Pasteur"], a: 1 },
+                { q: "The basic unit of heredity is:", o: ["Chromosome", "Gene", "DNA", "RNA"], a: 1 },
+                { q: "How many pairs of chromosomes does a normal human have?", o: ["22", "23", "46", "44"], a: 1 },
+                { q: "Mitosis results in:", o: ["4 haploid cells", "2 identical diploid cells", "2 haploid cells", "4 diploid cells"], a: 1 },
+                { q: "Which blood group is the universal donor?", o: ["AB Positive", "O Negative", "A Positive", "B Negative"], a: 1 }
+            ],
+            2: [ // Unit 2: Maternal & Prenatal
+                { q: "Neural tube defects can be prevented by intake of:", o: ["Calcium", "Iron", "Folic Acid", "Vitamin C"], a: 2 },
+                { q: "Advanced maternal age (>35) increases risk for:", o: ["Down Syndrome", "Spina Bifida", "Cleft Lip", "Club Foot"], a: 0 },
+                { q: "Which test is used for prenatal diagnosis of genetic disorders?", o: ["CBC", "Amniocentesis", "Urine Routine", "X-ray"], a: 1 },
+                { q: "Teratogens are agents that cause:", o: ["Cancer", "Birth defects", "Infection", "Infertility"], a: 1 },
+                { q: "Spontaneous abortion is most commonly caused by:", o: ["Trauma", "Chromosomal abnormalities", "Infection", "Stress"], a: 1 }
+            ],
+            3: [ // Unit 3: Neonates & Children
+                { q: "Dysmorphism refers to:", o: ["Abnormal shape/form", "Delayed speech", "Low IQ", "Short stature"], a: 0 },
+                { q: "Newborn screening typically tests for:", o: ["Flu", "Congenital Hypothyroidism & PKU", "Fractures", "Vision"], a: 1 },
+                { q: "Down Syndrome is also known as:", o: ["Trisomy 18", "Trisomy 21", "Turner Syndrome", "Klinefelter Syndrome"], a: 1 },
+                { q: "Developmental delay is a warning sign for:", o: ["Genetic disorders", "Infection", "Poor diet only", "Lack of sleep"], a: 0 },
+                { q: "A karyotype is a visual representation of:", o: ["Genes", "Chromosomes", "Proteins", "Cells"], a: 1 }
+            ],
+            4: [ // Unit 4: Adolescents & Adults
+                { q: "Sickle Cell Anemia is characterized by:", o: ["Round RBCs", "Crescent/Sickle shaped RBCs", "Large RBCs", "Pale RBCs"], a: 1 },
+                { q: "Which of these is a hereditary clotting disorder?", o: ["Anemia", "Hemophilia", "Leukemia", "Thrombocytopenia"], a: 1 },
+                { q: "Huntington's Disease affects the:", o: ["Heart", "Nervous System", "Liver", "Kidneys"], a: 1 },
+                { q: "Inborn Errors of Metabolism (IEM) are defects in:", o: ["Structure", "Enzymes/Metabolic pathways", "Hormones", "Bones"], a: 1 },
+                { q: "Thalassemia is a defect in the synthesis of:", o: ["Insulin", "Hemoglobin", "Collagen", "Melanin"], a: 1 }
+            ],
+            5: [ // Unit 5: Services
+                { q: "Genetic counseling helps families to:", o: ["Change their genes", "Understand risks and options", "Cure the disease", "Forget the problem"], a: 1 },
+                { q: "A key role of a nurse in genetics is:", o: ["Prescribing drugs", "Obtaining detailed family history", "Performing surgery", "Lab analysis"], a: 1 },
+                { q: "Eugenics refers to:", o: ["Improving human species by selective breeding", "Gene therapy", "Cloning", "Stem cell research"], a: 0 },
+                { q: "The Human Genome Project aimed to:", o: ["Clone humans", "Map all human genes", "Create superhumans", "Cure all diseases"], a: 1 },
+                { q: "Confidentiality in genetics means:", o: ["Sharing results with everyone", "Keeping genetic info private", "Posting online", "Telling employers"], a: 1 }
+            ]
+        };
+
+        // --- 2. MODAL LOGIC & NAVIGATION CONTROL ---
+        function toggleUnit(header) {
+            const content = header.nextElementSibling;
+            const isExpanded = header.getAttribute('aria-expanded') === 'true';
+            header.setAttribute('aria-expanded', !isExpanded);
+            content.classList.toggle('active');
+        }
+
+        function openResource(type, url, title) {
+            if(type === 'coming-soon') return;
+
+            history.pushState({ modalOpen: true }, null, '#resource');
+
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+            const titleEl = document.getElementById('modal-title');
+            
+            titleEl.textContent = title;
+            modal.style.display = 'flex';
+            body.innerHTML = ''; 
+            body.style.display = 'flex'; // Default flex for centering
+
+            // FIX: Restore flex centering for Video/Doc
+            if (type === 'quiz') {
+                // Handled by openQuiz
+            }
+            else {
+                let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
+                
+                // Videos get 16:9, Notes get full height
+                let className = (type === 'video') ? 'iframe-video' : 'iframe-doc';
+
+                body.innerHTML = `<iframe 
+                    class="${className}" 
+                    src="${cleanUrl}" 
+                    sandbox="allow-scripts allow-same-origin allow-presentation"
+                    allow="autoplay; encrypted-media; fullscreen">
+                </iframe>`;
+            }
+        }
+
+        function openQuiz(unitId) {
+            history.pushState({ modalOpen: true }, null, '#quiz');
+
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+            const titleEl = document.getElementById('modal-title');
+            
+            titleEl.textContent = `Quiz: Unit ${unitId}`;
+            modal.style.display = 'flex';
+            
+            // FIX: Remove flex centering for Quiz so it starts at the top
+            body.style.display = 'block';
+            body.scrollTop = 0; 
+            
+            const questions = QUIZ_DATA[unitId] || [];
+            
+            let quizHtml = `<div class="quiz-container">`;
+            questions.forEach((q, idx) => {
+                quizHtml += `
+                    <div class="quiz-question">${idx + 1}. ${q.q}</div>
+                    <div class="quiz-options" id="q-${idx}">
+                        ${q.o.map((opt, oIdx) => `
+                            <div class="quiz-option" onclick="checkAnswer(this, ${idx}, ${oIdx}, ${q.a})">${opt}</div>
+                        `).join('')}
+                    </div>
+                `;
+            });
+            
+            if(questions.length === 0) quizHtml += `<p>Quiz coming soon!</p>`;
+            
+            quizHtml += `</div>`;
+            body.innerHTML = quizHtml;
+        }
+
+        function checkAnswer(el, qIdx, oIdx, correctIdx) {
+            const parent = document.getElementById(`q-${qIdx}`);
+            const opts = parent.children;
+            for(let opt of opts) opt.style.pointerEvents = 'none';
+
+            if(oIdx === correctIdx) {
+                el.classList.add('correct');
+            } else {
+                el.classList.add('wrong');
+                opts[correctIdx].classList.add('correct');
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+            modal.style.display = 'none';
+            body.innerHTML = ''; 
+            
+            if (history.state && history.state.modalOpen) {
+                history.back();
+            }
+        }
+
+        window.onpopstate = function(event) {
+            const modal = document.getElementById('app-modal');
+            if (modal.style.display === 'flex') {
+                modal.style.display = 'none';
+                document.getElementById('modal-body').innerHTML = '';
+            }
+        };
+
+        // Auto-expand first unit
+        document.addEventListener('DOMContentLoaded', () => {
+            const firstUnitHeader = document.querySelector('.unit-header');
+            if(firstUnitHeader) {
+                // toggleUnit(firstUnitHeader); // Optional: if not hardcoded 'active'
+            }
+        });
+    </script>
+
+</body>
+</html>

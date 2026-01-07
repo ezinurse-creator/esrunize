@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Child Health Nursing Syllabus</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        /* --- MODERN THEME --- */
+        :root {
+            --primary: #01b9f1;
+            --primary-dark: #003b80;
+            --bg-card: #ffffff;
+            --bg-body: #f1f5f9;
+            --text-main: #003b80;
+            --text-muted: #64748b;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --radius-md: 12px;
+        }
+
+        * { box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        } 
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding-bottom: 80px;
+        }
+
+        /* --- HEADER & SYLLABUS --- */
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+
+        .syllabus-card {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 20px;
+            border-radius: var(--radius-md);
+            text-align: center;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 30px;
+            display: block;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+        .syllabus-card:active { transform: scale(0.98); }
+
+        /* --- UNITS (ACCORDION STYLE) --- */
+        .unit-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        .unit-header {
+            padding: 20px;
+            background: var(--bg-card);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 700;
+            color: var(--primary-dark);
+            border-bottom: 1px solid transparent;
+            transition: background 0.2s;
+        }
+        
+        .unit-header:hover { background: #f8fafc; }
+        
+        .unit-header.active {
+            border-bottom-color: #e2e8f0;
+            background: #f0f9ff;
+            color: var(--primary);
+        }
+
+        .unit-content {
+            display: none;
+            padding: 20px;
+            background: #fdfdfd;
+        }
+        .unit-content.show { display: block; }
+
+        /* --- RESOURCES LIST --- */
+        .resource-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .resource-btn {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .resource-btn:hover {
+            border-color: var(--primary);
+            transform: translateX(4px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Color coding by type */
+        .type-notes { border-left: 4px solid #0ea5e9; }
+        .type-video { border-left: 4px solid #8b5cf6; }
+        .type-model { border-left: 4px solid #10b981; }
+        .type-quiz  { border-left: 4px solid #f59e0b; background: #fffbeb; }
+
+        .icon {
+            margin-right: 12px;
+            font-size: 1.2rem;
+            width: 30px;
+            text-align: center;
+        }
+
+        /* --- MODAL (The "Close Button" Wrapper) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95); /* Darker background for focus */
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            height: 60px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+
+        .modal-title { font-weight: 700; color: var(--primary-dark); font-size: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        
+        .btn-close {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            flex: 1;
+            background: #000;
+            position: relative;
+            overflow-y: auto; /* Allow scrolling */
+            /* Default display is flexible to center videos */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- FIXED IFRAME STYLES --- */
+        
+        /* 1. For Videos (Keeps 16:9 Aspect Ratio) */
+        .iframe-video {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16 / 9;
+            border: none;
+            background: #000;
+            display: block;
+        }
+
+        /* 2. For Notes & Models (Fills the screen vertically) */
+        .iframe-doc {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+            display: block;
+        }
+
+        /* --- QUIZ STYLES (Inside Modal) --- */
+        .quiz-container {
+            background: white;
+            width: 100%;
+            min-height: 100%; /* Ensures it fills screen if short */
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .quiz-question { margin-bottom: 20px; font-size: 1.1rem; font-weight: 600; }
+        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+        .quiz-option {
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .quiz-option:hover { background: #f0f9ff; border-color: var(--primary); }
+        .quiz-option.selected { background: var(--primary); color: white; border-color: var(--primary); }
+        
+        /* Visual Indicators for Tick/Cross */
+        .quiz-option.correct { 
+            background: var(--success); 
+            color: white; 
+            border-color: var(--success); 
+        }
+        .quiz-option.correct::after {
+            content: '✓';
+            position: absolute;
+            right: 15px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .quiz-option.wrong { 
+            background: var(--danger); 
+            color: white; 
+            border-color: var(--danger); 
+        }
+        .quiz-option.wrong::after {
+            content: '✗';
+            position: absolute;
+            right: 15px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .quiz-score { text-align: center; font-size: 1.5rem; color: var(--primary-dark); padding: 40px; }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="page-header">
+            <div class="page-title">Child Health Nursing</div>
+            <p style="color: var(--text-muted);">BSc Semester</p>
+        </div>
+
+        <div class="syllabus-card" onclick="openResource('Syllabus', 'https://drive.google.com/file/d/1aFe6JOMcBSxUDCXfSslRaSr3fsNuwcf0/preview')">
+            📄 View Full Syllabus
+        </div>
+
+        <div id="units-container">
+            </div>
+    </div>
+
+    <div id="app-modal" class="modal-overlay">
+        <div class="modal-header">
+            <div id="modal-title" class="modal-title">Resource</div>
+            <button class="btn-close" onclick="closeModal()">Close X</button>
+        </div>
+        <div id="modal-body" class="modal-body">
+            </div>
+    </div>
+
+    <script>
+        // --- 1. DUMMY 3D MODEL CODES (Placeholder for compatibility) ---
+        const MODEL_CODE_A = `<div><p>Model Loading...</p></div>`;
+        const MODEL_CODE_B = `<div><p>Model Loading...</p></div>`;
+
+        // --- 2. CHILD HEALTH QUIZ DATA (5 Questions each) ---
+        const QUIZ_DATA = {
+            1: [ // Introduction
+                { q: "Atraumatic care focuses on:", o: ["Maximizing pain", "Minimizing psychological and physical distress", "Avoiding medication", "Home care only"], a: 1 },
+                { q: "The Juvenile Justice Act primarily deals with:", o: ["Marriage age", "Child Labor", "Care and protection of children in conflict with law", "Vaccination"], a: 2 },
+                { q: "Which agency is International?", o: ["ICCW", "UNICEF", "Red Cross India", "CSWB"], a: 1 },
+                { q: "Vitamin A prophylaxis is given to prevent:", o: ["Rickets", "Night Blindness", "Scurvy", "Beriberi"], a: 1 },
+                { q: "A 5-year-old requires CPR. The compression:breath ratio (single rescuer) is:", o: ["30:2", "15:2", "5:1", "10:2"], a: 0 }
+            ],
+            2: [ // The Healthy Child
+                { q: "Development proceeds from:", o: ["Feet to Head", "Head to Toe (Cephalocaudal)", "Extremities to Center", "Specific to General"], a: 1 },
+                { q: "According to Freud, the infant is in which stage?", o: ["Oral", "Anal", "Phallic", "Latency"], a: 0 },
+                { q: "Solitary play is most common in:", o: ["Toddlers", "Infants", "Preschoolers", "School Age"], a: 1 },
+                { q: "The anterior fontanelle typically closes by:", o: ["2 months", "6 months", "12-18 months", "24 months"], a: 2 },
+                { q: "Weaning is usually started at:", o: ["1 month", "3 months", "6 months", "1 year"], a: 2 }
+            ],
+            3: [ // Neonate
+                { q: "A normal Apgar score at 5 minutes is:", o: ["0-3", "4-6", "7-10", "Above 12"], a: 2 },
+                { q: "Kangaroo Mother Care (KMC) provides:", o: ["Hypothermia", "Thermal control and bonding", "Isolation", "Artificial feeding"], a: 1 },
+                { q: "Physiological jaundice usually appears:", o: ["At birth", "After 24 hours", "After 1 week", "After 1 month"], a: 1 },
+                { q: "The Moro reflex is also known as the:", o: ["Startle reflex", "Sucking reflex", "Rooting reflex", "Grasp reflex"], a: 0 },
+                { q: "Exclusive breastfeeding is recommended for:", o: ["3 months", "6 months", "9 months", "12 months"], a: 1 }
+            ],
+            4: [ // IMNCI
+                { q: "In IMNCI, the color PINK indicates:", o: ["Home care", "OPD treatment", "Urgent referral", "Healthy child"], a: 2 },
+                { q: "Which is a general danger sign in IMNCI?", o: ["Cough", "Vomiting everything", "Fever", "Diarrhea"], a: 1 },
+                { q: "Yellow color code in IMNCI implies:", o: ["Specific medical treatment at facility", "Urgent referral", "No treatment", "Surgery"], a: 0 },
+                { q: "IMNCI stands for:", o: ["Integrated Management of Neonatal and Childhood Illness", "Indian Management of Nursing Care", "International Medical Nursing Care Institute", "None"], a: 0 },
+                { q: "Dysentery in a child is classified by the presence of:", o: ["Watery stool", "Blood in stool", "Mucus in stool", "Green stool"], a: 1 }
+            ],
+            5: [ // Childhood Diseases
+                { q: "A characteristic sign of Pyloric Stenosis is:", o: ["Projectile vomiting", "Diarrhea", "Fever", "Cough"], a: 0 },
+                { q: "Tracheoesophageal Fistula (TEF) presents with:", o: ["Choking, Coughing, Cyanosis", "Fever only", "Rash", "Leg pain"], a: 0 },
+                { q: "Rheumatic fever is caused by:", o: ["Virus", "Group A Beta-hemolytic Streptococcus", "Fungi", "Protozoa"], a: 1 },
+                { q: "In Nephrotic Syndrome, urine contains high levels of:", o: ["Sugar", "Protein (Albumin)", "Blood", "Ketones"], a: 1 },
+                { q: "Identify the congenital heart defect: 'Blue Baby':", o: ["VSD", "ASD", "Tetralogy of Fallot", "PDA"], a: 2 }
+            ],
+            6: [ // Emergencies
+                { q: "The 'Rule of Nines' is used to assess:", o: ["Dehydration", "Burns surface area", "Fractures", "Growth"], a: 1 },
+                { q: "Immediate management for kerosene ingestion is:", o: ["Induce vomiting", "Do NOT induce vomiting", "Give water", "Give milk"], a: 1 },
+                { q: "Heimlich maneuver is used for:", o: ["Drowning", "Choking (Foreign body)", "Burns", "Fracture"], a: 1 },
+                { q: "ORS is primarily used to treat:", o: ["Fever", "Dehydration", "Cough", "Pain"], a: 1 },
+                { q: "First aid for a nosebleed (Epistaxis) involves:", o: ["Tilting head back", "Pinching the nose and leaning forward", "Lying down", "Blowing nose"], a: 1 }
+            ]
+        };
+
+        // --- 3. COURSE DATA ---
+        const UNITS = [
+            {
+                id: 1, title: "INTRODUCTION",
+                resources: [
+                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1QXYN-rbAqj3uX-jJiUR7ND4ecYC2l831/preview' },
+                    { type: 'video', title: 'Modern Concepts & Philosophy', url: 'https://drive.google.com/file/d/1UV-8iAgynfOC7pwJWwGtGWIDkL2Y8ITC/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1Yf-gk3nOE74k5tthqe5J2pWb6gv3MkX7/preview' },
+                    { type: 'video', title: 'Cultural & Religious Considerations', url: 'https://drive.google.com/file/d/19pu67tnELDiEKLmix8sZCKD2C6BzaD82/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1NXsbqVcpMkyXEyL1B57Ex88oI84OiXp-/preview' },
+                    { type: 'video', title: 'National Policy & Legislation', url: 'https://drive.google.com/file/d/1dXjVgfBw_BaBZiHX4xksDV8SvzHbP1vu/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1f7JG72X4wOPz3G0qkVclwbZOLzSGbjJO/preview' },
+                    { type: 'video', title: 'Rights of Children & Programs', url: 'https://drive.google.com/file/d/1OnWWbWcXL_dGIZFYlZd96z2SuzeQyfDs/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1xnrJmS65oSH0zrXveH9ihbNB6SGloW9f/preview' },
+                    { type: 'video', title: 'School Health & MCH', url: 'https://drive.google.com/file/d/1sovMp7ovMKZpXoYWkWs9JUQonwl09fTY/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1Tu3NP4D2mmOijkeRPvK_j8xXXk39BOP3/preview' },
+                    { type: 'video', title: 'RCH & Nutritional Programs', url: 'https://drive.google.com/file/d/1VI4JWYGVdBaHjb8xIM4bcqW8Zegg1nbb/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1KVGHpw0QQiz6L0abNlWnusgwGJDSFDNs/preview' },
+                    { type: 'video', title: 'Welfare Agencies (National)', url: 'https://drive.google.com/file/d/1VW5SD7uXZv_pfINmI1qNHnJkBQ4Qqs6L/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1qw4Zrh2654FArR77Yw00BI4NbbqXJOMx/preview' },
+                    { type: 'video', title: 'International Agencies (WHO/UNICEF)', url: 'https://drive.google.com/file/d/19lol9rfeP2_Bl6FORTK-fanrpFnydMb1/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1VdbpbXxKhf4x-kSfyCjSNhPdjQfiP57f/preview' },
+                    { type: 'video', title: 'Hospital Care Trends', url: 'https://drive.google.com/file/d/10_mu0gugwopUmS93xjfzKNoVRuZLmY2C/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1Xo4rhzi8EFHW_LJzaGuK_GTImvAjyfh8/preview' },
+                    { type: 'video', title: 'Under Five Clinic', url: 'https://drive.google.com/file/d/1y5D2HiWKXyB5NqO9qw8XKGWMvpV9fXcY/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/13OLmY1RL-OdrgtGc1IKvQJMGb3Ecye4n/preview' },
+                    { type: 'video', title: 'Immunization', url: 'https://drive.google.com/file/d/1KE7MBlxinleHrUfQGRd378HeuifuafWD/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1h2hxA7dpf-TgVc3j2nqAqNfJgDUtH1ID/preview' },
+                    { type: 'video', title: 'Grief and Bereavement', url: 'https://drive.google.com/file/d/1T-YOmr8ItvEHxAyaEqXYErQliXgSp_TR/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1ehHllBuVejr20FAJCjszXXKEmuf7kkff/preview' },
+                    { type: 'video', title: 'Pre & Post Op Care', url: 'https://drive.google.com/file/d/1GidQODFjEMzi7wg_F6rTyGbd1d2ojAyk/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1g9J9VC6MpwMvFYfgtwXRPYXD2ufKPLu_/preview' },
+                    { type: 'video', title: 'Role of Pediatric Nurse', url: 'https://drive.google.com/file/d/1Tmz7xUQjr9VMhYWMWMjK_ctXiwCi4pLw/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1AVjGROMcoAA3pZ79dWBlOJ6z7_u2wHHV/preview' },
+                    { type: 'video', title: 'Hospital Environment', url: 'https://drive.google.com/file/d/1c3MdBh8_pH1RRKqF_ryzt9Tvmnor4m8k/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1qq_fCux57XM8EgzaFWTykHxSoDdxpEtE/preview' },
+                    { type: 'video', title: 'Accident Prevention', url: 'https://drive.google.com/file/d/1DVlaTIvmaehdjyP3Dj9rGPSW5Pn2TyMs/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1UDGKa0zHl8CiX7LfDTQwKWHti_SuYLLY/preview' },
+                    { type: 'video', title: 'Mortality & Morbidity', url: 'https://drive.google.com/file/d/1gnTuS3UVdBTX46vu7zopGpGZscxDL0eE/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/112UwBnZwkS2awNEyRVbwChkBkH-HpuAG/preview' },
+                    { type: 'video', title: 'Adult vs Child', url: 'https://drive.google.com/file/d/1gCgNYyf_u_FtSBJTz2LtyVVA6BCjx6LL/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/100B_tsRB1u_tG2O9kUFe_ePa4G-9EKue/preview' },
+                    { type: 'video', title: 'Medication Admin & Calc', url: 'https://drive.google.com/file/d/1y0vcccdxQuXlNfMH9nXNTIZC1LrFFrlb/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1PkoHZvRVgG7jXVe4mCCatpJUSbxwynTD/preview' },
+                    { type: 'video', title: 'Oral Medication', url: 'https://drive.google.com/file/d/1GA4xjT55-CEOl7rrCWlFPdb8NcRrlnG1/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/15VeaUPas8iB_Hkh261ge0V-JOcJSxVvX/preview' },
+                    { type: 'video', title: 'Intramuscular Injection', url: 'https://drive.google.com/file/d/119Jmsii_SoLEE5OoNSwvuaHg3cF91HDD/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1UGsbRGGft0iK-m2W-ym6XGc1UI1WaicP/preview' },
+                    { type: 'video', title: 'Intravenous Therapy', url: 'https://drive.google.com/file/d/1eiBlWwawoHNpS2KGofRNtoV8lDafhFLn/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1czXMueceGtAFZ9MkVr34G8Ag7pvrWuP1/preview' },
+                    { type: 'video', title: 'Fluid Calculation', url: 'https://drive.google.com/file/d/12Yc_EmfQhfiFuTJPYe6iYybtYcigHxLm/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1sPrQJ_q3_tJmyVZHiegxuOLzeiLGn5CO/preview' },
+                    { type: 'video', title: 'Restraints', url: 'https://drive.google.com/file/d/1xMVqs2jVepXNA4uOge9AcCZZLzXBGrxo/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1ACLq1wzDBN-7zGQb6wGbrUw666o-E6dq/preview' },
+                    { type: 'video', title: 'Pain Assessment', url: 'https://drive.google.com/file/d/1w0P0yIGibk1LnVk3ROmIhdWV3zva5Uxj/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1X_n6oL_f9pI4z0uY_USRDKpu20fLLa4v/preview' }
+                ]
+            },
+            {
+                id: 2, title: "THE HEALTHY CHILD",
+                resources: [
+                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1SpzSTblooEq4kGm3MyJp252s95luBC3s/preview' },
+                    { type: 'video', title: 'Growth & Development Patterns', url: 'https://drive.google.com/file/d/1_q3b9n6x-tfCefqdFAmvrOtjKDVW5eUR/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/16ixEpT8M4meaPvtmxZiwxL-vyj4aa1pV/preview' },
+                    { type: 'video', title: 'Principles & Factors', url: 'https://drive.google.com/file/d/1jrzqfpGfGcy7vw2_lB56GCkKG0rRhg4-/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1jDLi4VY3ZxqB6HOGVu1eP3RSiu1GnnaR/preview' },
+                    { type: 'video', title: 'Birth to One Year (Infant)', url: 'https://drive.google.com/file/d/1Eb5nbxo7zsptc7WT_kJJB31ZBlmp3_5k/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1iQrkrK7Sf5VyagGuPGkbS4ztV--cHG2R/preview' },
+                    { type: 'video', title: 'Toddler', url: 'https://drive.google.com/file/d/1J-jrLOYMvx9fVK5hMbSoczD6clpi4-Qj/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1E8Uzn0WauwU3h_kWApUjA3gMyckmiPRC/preview' },
+                    { type: 'video', title: 'Preschool', url: 'https://drive.google.com/file/d/1JFLlx6Ih8jLSzVrZkHEeDn1eB_6oUWuR/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1EPhUIsGJP_Jf9cribjDALlE_1iXhkpPZ/preview' },
+                    { type: 'video', title: 'Schooler', url: 'https://drive.google.com/file/d/19kmMIq1BKKevYNbQzeJtKkRGi-3bxHoY/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1SoA2QwnaPXmZv7xK7DyHQ20Zv-5zHwkh/preview' },
+                    { type: 'video', title: 'Adolescence & Puberty', url: 'https://drive.google.com/file/d/15ax8fvPOS_XvmG9RjUV9VoOGh00_9fnS/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1w4fWIZi0gyyzGtHlvkVlDpfsrBQum6nl/preview' },
+                    { type: 'video', title: 'Freud\'s Psychosexual Theory', url: 'https://drive.google.com/file/d/1Ycw6m4Jug3pOqx9MO_sQ0j6e2-K5wwJ5/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1dXyPU6WkYqDeu5fmXvrWnd2ONNxzQzbY/preview' },
+                    { type: 'video', title: 'Erikson\'s Psychosocial Theory', url: 'https://drive.google.com/file/d/1N6ozfV0v-ZDY5ZeDdjt3PdpIBpJSDrb3/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1A5n_6-72qAozGdHlyMFmozckV8KHPt41/preview' },
+                    { type: 'video', title: 'Piaget\'s Cognitive Theory', url: 'https://drive.google.com/file/d/10P-8uDIlE-SwGxV-SZ00dvdQfRQq-OYx/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1tkwcK6RKZa7dqGotEa2pwGrLwsRwHkDQ/preview' },
+                    { type: 'video', title: 'Kohlberg\'s Moral Theory', url: 'https://drive.google.com/file/d/1lcTYtOUtjZRiMXPnoB-rO1Q7wg_zCF1a/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1KH-mBQ1pZ-QaGbX7QGtyNX1JtemblEnT/preview' },
+                    { type: 'video', title: 'Nutrition & Breast Milk', url: 'https://drive.google.com/file/d/1bmHk93Z7eOEQC4GtJOj7lrcFrSwAAj19/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1bvyJYn9h_dvnJuqyUx5YWnWry_HJ6KLL/preview' },
+                    { type: 'video', title: 'Artificial Feeding', url: 'https://drive.google.com/file/d/1i4m3ypiTMdrpaoXdmH2y8XiCo5-yyHOw/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1ayuPxMDr6fljEoh0-iz4XC0wTLap2tPW/preview' },
+                    { type: 'video', title: 'Weaning Foods', url: 'https://drive.google.com/file/d/1mxUN25SmGdDAa5BNtmYVjgdWBYejMs6H/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1OiryY8F1Wq41sZrBi7rpQQSJ0E09N75Y/preview' },
+                    { type: 'video', title: 'Baby Friendly Hospital (BFHI)', url: 'https://drive.google.com/file/d/11BpOJzARgWG5iPlh_ESW-8cs6_BDbYdr/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1OzlwLclvY_fWc4s0SGlm1vvtle7Ll1NK/preview' },
+                    { type: 'video', title: 'Needs of Normal Children', url: 'https://drive.google.com/file/d/1QWfTOEWKHRZ5mnUr1hq6qgWJLFbVfofn/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1j6gkcioO3VQDmXKL5ytLVJ3BqUDd131_/preview' },
+                    { type: 'video', title: 'Play & Types', url: 'https://drive.google.com/file/d/19qa-SxYiGp-hETSBxzDTKq3U-PbfTvln/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1H1HL4OOR3zcJWkoGBwEKLsJ8daKPrB3t/preview' },
+                    { type: 'video', title: 'Play Therapy', url: 'https://drive.google.com/file/d/1Mbsd-rXlSLbXyoJQjfSeXR6R_lZVfgnA/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1jm22Eb44wcEzKQcuBADyKDs8C_PJ7jpp/preview' }
+                ]
+            },
+            {
+                id: 3, title: "NURSING CARE OF NEONATE",
+                resources: [
+                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/15WzqxqmKcKj5CJHAaikXr05FXHGK9Ekp/preview' },
+                    { type: 'video', title: 'Appraisal of Newborn', url: 'https://drive.google.com/file/d/1Jrnd52Q52eRxVtPf5DdiX_fq_htCK8tW/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1sTq2wHt3TWwJuGnVH9OCX2_CUf_Yk4fC/preview' },
+                    { type: 'video', title: 'Care of Newborn (Immediate/Routine)', url: 'https://drive.google.com/file/d/1q_ywiCIaBSBVaFOd3HZWGfBp27ZIh8YB/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1DN3FTKkNELmg1aX8pjtQzJy8VmVLT9_6/preview' },
+                    { type: 'video', title: 'Assessment: Apgar & Head to Toe', url: 'https://drive.google.com/file/d/1JMd3UoVjKO08-mE4P_rt-53NQwi_NGAs/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/121k28fti7lVgwNY9J9n-tqR3NvpkMXu-/preview' },
+                    { type: 'video', title: 'Neurological Assessment & Reflexes', url: 'https://drive.google.com/file/d/1-SWQHhjzLh_En_cpWhEGm5B6MrO4WZge/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/19e98YRY0vmF2poGsaKWO7t1lauEm8FVH/preview' },
+                    { type: 'video', title: 'Gestational Age Assessment', url: 'https://drive.google.com/file/d/1rv2Ry67-YM9l6I9LIiOAZmE1bSOLhyuV/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/126mhxB8Zt4eTYMvxjvnYriOBYVobH1R6/preview' },
+                    { type: 'video', title: 'Neonatal Resuscitation', url: 'https://drive.google.com/file/d/1n1-BpY4IHimpskz7DBHK9cQPeh5Vl2u3/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1h4Co7pNP5c7eJVnWJZ6aYiww1hqUQ6tc/preview' },
+                    { type: 'video', title: 'Low Birth Weight & Preterm', url: 'https://drive.google.com/file/d/1ooabHe4_T7h4HnCEHxll1iWGWBcyoCBg/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/17zPsdUxe74bHskdTdHUereHznBXBj0Qo/preview' },
+                    { type: 'video', title: 'LBW Management', url: 'https://drive.google.com/file/d/1M-nEX2Fy6tV1csg01NSGn7hBrT4s25dV/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/13RCYS4CgsfJLLnwtuvr-JJ5BJHDE0IR9/preview' },
+                    { type: 'video', title: 'Kangaroo Mother Care (KMC)', url: 'https://drive.google.com/file/d/1hhfwGgm84egvAmJyZC0MBoCYw6jquVGE/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1FKZMqN2dN6KF1F8KQgv-3i2Cdqe4ISpg/preview' },
+                    { type: 'video', title: 'Hyperbilirubinemia (Jaundice)', url: 'https://drive.google.com/file/d/1uwhNEDieOU6_Nqa87snw5H5Ymuit53B8/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1SVZ7d9k34Eyz2nQuG2So7qizR3LZic9M/preview' },
+                    { type: 'video', title: 'Hypocalcemia & Hypoglycemia', url: 'https://drive.google.com/file/d/1GGzq3VDvVpywjbWs1DxnHhxThU02T6_U/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1r9zCrDT8XUXJ1lbX2hKvd1kFghYZLydk/preview' },
+                    { type: 'video', title: 'Sepsis & Convulsions', url: 'https://drive.google.com/file/d/1vAQmGu4bpDS95Fw2A-lSsOPJsfKP1luM/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/18Ch7wRe8Ri9QX-UqdYzxeuGhgCnj1501/preview' },
+                    { type: 'video', title: 'Respiratory Distress Syndrome', url: 'https://drive.google.com/file/d/1fVmVwyogcKLz-CeEz769RQUChHfrB-tg/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1j7YhLYftz4eyN5NUlBxOLDnoqsEPQ_Je/preview' },
+                    { type: 'video', title: 'Retinopathy of Prematurity', url: 'https://drive.google.com/file/d/1wtPnbOPmpikMfB3ZRNwRjKBvWg-N3Inl/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1xRUcbsoQNWHRXmU1dtgfL8kkahb0NTqs/preview' },
+                    { type: 'video', title: 'Organization of Neonatal Care', url: 'https://drive.google.com/file/d/1mWG01-9dxD_lt6u00vRMQGkhbgL-nTfL/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1mWG01-9dxD_lt6u00vRMQGkhbgL-nTfL/preview' }
+                ]
+            },
+            {
+                id: 4, title: "IMNCI",
+                resources: [
+                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1U9xtxlWSdD75QdkEcmZkmatB3HhJzqty/preview' },
+                    { type: 'video', title: 'IMNCI Structure & Objectives', url: 'https://drive.google.com/file/d/1dSUXrp8ivbdIBoC8W7G3P0kvR4LAw04z/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1BOQ6TPE-wHQ6L-gel6DK3Jy7fvHZlslb/preview' },
+                    { type: 'video', title: 'Principles & Case Management', url: 'https://drive.google.com/file/d/1VnT2P0VSiC344VLexg8sGDxzpI_f3H8A/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1CRoswOSw31TapDNhs-H2QRMGnD4lEMMv/preview' }
+                ]
+            },
+            {
+                id: 5, title: "COMMON CHILDHOOD DISEASES",
+                resources: [
+                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1UZ1TxiF5DYQTmoUhfcnGx_huP0J4gbFr/preview' },
+                    { type: 'video', title: 'Nasopharyngitis & Tonsillitis', url: 'https://drive.google.com/file/d/1xLyDRysmT6_uWj_Vhh0eDmiRFpYbV8B1/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1eJn-7ZUm8z6g8QUkXjWBeVU66CBk46PW/preview' },
+                    { type: 'video', title: 'Croup & Bronchitis', url: 'https://drive.google.com/file/d/1cRFBSzOqk32xNZ6kK1m6Lve4kFpUT7Kj/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1Vgx1dgw-ghoSJZfnztvMyCWetH2hjZZn/preview' },
+                    { type: 'video', title: 'Tracheoesophageal Fistula (TEF)', url: 'https://drive.google.com/file/d/1mRPXSIxJEGbsQhYw6-pQ8ZyoNafx0E8t/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/15D0d2_3L4chVL5f-GinmJ1_o9CM98z_G/preview' },
+                    { type: 'video', title: 'Diaphragmatic Hernia', url: 'https://drive.google.com/file/d/1I3Veqcp3VssbDjf5lFWe-Tdf121x1NN8/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1FTJXiD9Va7rZaaXvONS1hgb-5mu3XnoX/preview' },
+                    { type: 'video', title: 'Pneumonia', url: 'https://drive.google.com/file/d/1IVnOvfNe5djak6S9UiEuxnEJWv9AbZcl/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1JTW-G-UWVzeEd8vt0RPpNqX51Q9UCO18/preview' },
+                    { type: 'video', title: 'Asthma', url: 'https://drive.google.com/file/d/1-Uy3Mk1k39eGStzvS4W9Ms74e1C24p-E/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1IunpiNIkK-8JySD9g1cTXQcdezzZssA8/preview' },
+                    { type: 'video', title: 'Juvenile Diabetes Mellitus', url: 'https://drive.google.com/file/d/1swCfC9FXdtwXanp7kArZe9M4HxkGLDaB/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1gJGTYoFNDV0jBPxRcYmJnSp9dRbMReVs/preview' },
+                    { type: 'video', title: 'Hypothyroidism', url: 'https://drive.google.com/file/d/1jIOyG1w8qh8455XfI4HoIBQJJ9CQtpDF/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1i8muh4XjshmDLBkeENH1t3svLncw9qHC/preview' }
+                ]
+            },
+            {
+                id: 6, title: "CHILDHOOD EMERGENCIES",
+                resources: [
+                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1dy-asyIs6HphiqzUVenS317pv3sNzb6b/preview' },
+                    { type: 'video', title: 'Accidents, Poisoning & Foreign Body', url: 'https://drive.google.com/file/d/1ywdJGh5DxHMBubLH98LmP3J4hIZ_BQAD/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1H7hY7jg7aj79gqP2pwg4HJUMvfsC_xxR/preview' },
+                    { type: 'video', title: 'Hemorrhage', url: 'https://drive.google.com/file/d/1YrEu66hFXL4IrBE492xYSt7NgF--YxCc/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/1ZRX5zxco5NT1Hbr_GuZ8RNCAYm6gZgbs/preview' },
+                    { type: 'video', title: 'Burns & Drowning', url: 'https://drive.google.com/file/d/17wiimU2Ym5HgPogBV574BH880ITuFGD0/preview' },
+                    { type: 'notes', title: 'Lecture Note', url: 'https://drive.google.com/file/d/17GnFYBH2edqHH7YJx8sg3FQojSdaplTV/preview' }
+                ]
+            }
+        ];
+
+        // --- 4. RENDER LOGIC ---
+        function renderPage() {
+            const container = document.getElementById('units-container');
+            
+            UNITS.forEach(unit => {
+                const unitHtml = `
+                    <div class="unit-card">
+                        <div class="unit-header" onclick="toggleUnit(this)">
+                            UNIT ${unit.id} - ${unit.title}
+                            <span>🔽</span>
+                        </div>
+                        <div class="unit-content">
+                            <div class="resource-list">
+                                ${unit.resources.map(res => `
+                                    <div class="resource-btn type-${res.type}" onclick="openResource('${res.type}', '${res.url || ''}', '${res.title}')">
+                                        <div class="icon">${getIcon(res.type)}</div>
+                                        <div>${res.title}</div>
+                                    </div>
+                                `).join('')}
+                                <div class="resource-btn type-quiz" onclick="openQuiz(${unit.id})">
+                                    <div class="icon">✍️</div>
+                                    <div>Take Unit ${unit.id} Quiz</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += unitHtml;
+            });
+        }
+
+        function getIcon(type) {
+            if(type === 'notes') return '📚';
+            if(type === 'video') return '▶️';
+            if(type === 'model') return '🧊';
+            return '📄';
+        }
+
+        function toggleUnit(header) {
+            header.classList.toggle('active');
+            const content = header.nextElementSibling;
+            content.classList.toggle('show');
+            const arrow = header.querySelector('span');
+            arrow.innerText = content.classList.contains('show') ? '🔼' : '🔽';
+        }
+
+        // --- 5. MODAL LOGIC & NAVIGATION CONTROL ---
+        let modelToggle = false; 
+
+        function openResource(type, url, title) {
+            // PUSH STATE: Create a history entry so Back button closes modal
+            history.pushState({ modalOpen: true }, null, '#resource');
+
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+            const titleEl = document.getElementById('modal-title');
+            
+            titleEl.textContent = title;
+            modal.style.display = 'flex';
+            body.innerHTML = ''; 
+            
+            // FIX: Restore flex centering for Video/Model (looks better centered)
+            body.style.display = 'flex';
+
+            if (type === 'model') {
+                modelToggle = !modelToggle;
+                body.innerHTML = modelToggle ? MODEL_CODE_A : MODEL_CODE_B;
+            } 
+            else if (type === 'quiz') {
+                openQuiz(url); 
+            }
+            else {
+                // Ensure drive links are in preview mode
+                let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
+                
+                // FIX: Apply correct class based on type
+                let className = (type === 'video') ? 'iframe-video' : 'iframe-doc';
+
+                body.innerHTML = `<iframe 
+                    class="${className}" 
+                    src="${cleanUrl}" 
+                    sandbox="allow-scripts allow-same-origin allow-presentation"
+                    allow="autoplay; encrypted-media; fullscreen">
+                </iframe>`;
+            }
+        }
+
+        function openQuiz(unitId) {
+            history.pushState({ modalOpen: true }, null, '#quiz');
+
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+            const titleEl = document.getElementById('modal-title');
+            
+            titleEl.textContent = `Quiz: Unit ${unitId}`;
+            modal.style.display = 'flex';
+            
+            // FIX: Remove flex centering for Quiz so it starts at the top
+            body.style.display = 'block';
+            body.scrollTop = 0; // Ensure we start at the top
+            
+            const questions = QUIZ_DATA[unitId] || [];
+            
+            let quizHtml = `<div class="quiz-container">`;
+            questions.forEach((q, idx) => {
+                quizHtml += `
+                    <div class="quiz-question">${idx + 1}. ${q.q}</div>
+                    <div class="quiz-options" id="q-${idx}">
+                        ${q.o.map((opt, oIdx) => `
+                            <div class="quiz-option" onclick="checkAnswer(this, ${idx}, ${oIdx}, ${q.a})">${opt}</div>
+                        `).join('')}
+                    </div>
+                `;
+            });
+            
+            if(questions.length === 0) quizHtml += `<p>Quiz coming soon!</p>`;
+            
+            quizHtml += `</div>`;
+            body.innerHTML = quizHtml;
+        }
+
+        function checkAnswer(el, qIdx, oIdx, correctIdx) {
+            const parent = document.getElementById(`q-${qIdx}`);
+            const opts = parent.children;
+            for(let opt of opts) opt.style.pointerEvents = 'none';
+
+            if(oIdx === correctIdx) {
+                el.classList.add('correct');
+            } else {
+                el.classList.add('wrong');
+                opts[correctIdx].classList.add('correct');
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+            modal.style.display = 'none';
+            body.innerHTML = ''; 
+            
+            if (history.state && history.state.modalOpen) {
+                history.back();
+            }
+        }
+
+        // --- 6. HANDLE BACK BUTTON ---
+        window.onpopstate = function(event) {
+            const modal = document.getElementById('app-modal');
+            if (modal.style.display === 'flex') {
+                modal.style.display = 'none';
+                document.getElementById('modal-body').innerHTML = '';
+            }
+        };
+
+        // Initialize
+        renderPage();
+
+    </script>
+</body>
+</html>

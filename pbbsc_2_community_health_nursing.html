@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Community Health Nursing - Syllabus & Quizzes</title>
+    <meta name="description" content="Interactive syllabus with internal quizzes for Community Health Nursing." />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --brand: #003B82; 
+            --accent: #00B9F2;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: white;
+            color: var(--gray-900);
+            line-height: 1.6;
+            padding: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .syllabus-btn, .unit-header {
+            display: block;
+            width: 100%;
+            padding: 18px 24px;
+            margin: 12px 0;
+            background: var(--brand);
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+        .syllabus-btn:hover, .unit-header:hover {
+            background: #002d63;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .syllabus-btn.secondary { background: var(--accent); }
+        .syllabus-btn.secondary:hover { background: #009yc0; }
+
+        .unit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+            margin: 16px 0;
+        }
+        .unit-header span:last-child {
+            transition: transform 0.3s ease;
+            color: #FFA500;
+        }
+        .unit-header[aria-expanded="true"] span:last-child {
+            transform: rotate(180deg);
+        }
+
+        .unit-content {
+            padding: 0 12px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+        }
+        .unit-content.active {
+            padding: 24px 12px;
+            max-height: none; 
+        }
+
+        .subsection {
+            margin: 16px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.2s ease;
+        }
+
+        .resource-btn {
+            display: flex;
+            align-items: flex-start;
+            width: 100%;
+            padding: 14px 18px;
+            margin: 8px 0;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            border: 1px solid var(--gray-200);
+            transition: all 0.2s ease;
+            gap: 12px;
+            cursor: pointer;
+        }
+        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
+        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
+        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
+
+        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
+        .icon.video-icon { color: #8b5cf6; }
+        .icon.quiz-icon { color: #f59e0b; }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            height: 60px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+
+        .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; }
+        
+        .btn-close {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            flex: 1;
+            background: #f3f4f6;
+            position: relative;
+            overflow-y: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .iframe-res {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+            display: block;
+        }
+
+        /* --- QUIZ STYLES --- */
+        .quiz-container {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        .quiz-question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--gray-900);
+        }
+        .quiz-option {
+            padding: 15px;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
+        
+        .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; position: relative; }
+        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
+        
+        .quiz-nav { display: flex; justify-content: space-between; margin-top: 20px; }
+        .btn-quiz { background: var(--brand); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+
+        @media (max-width: 768px) {
+            body { padding: 16px; }
+            .unit-header, .resource-btn { font-size: 15px; }
+            .modal-body { padding: 0; }
+            .quiz-container { height: 100%; border-radius: 0; max-width: 100%; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/1rkfwSKLz4nN0WmqAA3de6Hb6OybBgRhZ/preview', 'Syllabus')">
+        📄 DOWNLOAD COMMUNITY HEALTH NURSING SYLLABUS
+    </div>
+    <div class="syllabus-btn secondary" onclick="openResource('notes', 'https://drive.google.com/file/d/1y37CybWKmm-6Tg2KuEfuJtb1QSZootON/preview', 'Previous Year Q&A')">
+        ❓ PREVIOUS YEAR QUESTIONS & ANSWERS
+    </div>
+    
+    <div id="units">
+        
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 1 - INTRODUCTION <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1OOAD0SLgTGsmjwxlxF-tsk6QhEfm7G_U/preview', 'Detailed Notes: Intro')">
+                        <span class="icon">📚</span><span>Detailed Notes: Introduction</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1M-YVSMlQ3A2oYAFOZawv-g-eIhLku3Rk/preview', 'Intro Video')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1F_JeGnL1ABhnuteAfp3wr55DL99tHd3z/preview', 'CHN Intro Video')">
+                        <span class="icon video-icon">▶️</span><span>Introduction to CHN</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1liDZ0eTW913QvGjOA06XWFGU1tScYZ0r/preview', 'Lecture Notes: Intro')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(1)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 2 - FAMILY HEALTH SERVICES <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1f0c87CwVstUMhg_hnTIMxu_I_vwg64OV/preview', 'Detailed Notes: Family')">
+                        <span class="icon">📚</span><span>Detailed Notes: Family Health</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1jfznyuQ0S6yYKX7YsOebHRSVyckRukDP/preview', 'Intro Video: Family')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/15vyPgMPupRkXwc1UxqH5v2NwoWdFuNgG/preview', 'Family Services')">
+                        <span class="icon video-icon">▶️</span><span>Family Health Services & Home Visiting</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1EDzaX_aYBmtd12GBQPb7RnNsJcfd9iol/preview', 'Lecture Notes: Family')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(2)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 3 - ORGANIZATION & ADMINISTRATION <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/147oNPSlvZi5ySJapynm_QyE4QcXhOLer/preview', 'Detailed Notes: Org')">
+                        <span class="icon">📚</span><span>Detailed Notes: Organization & Admin</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/10zya9nzc6HnLq7n2ET4AFMDZZEAdg6FT/preview', 'Intro Video: Org')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1XIr3e0M2RNcZ8ZvpfJMS8VuzvLNH1Ji3/preview', 'Health Policy')">
+                        <span class="icon video-icon">▶️</span><span>Health Services & National Policy</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1EiZcGZRrofLBuUfEG9PGw2YFqerA7v_A/preview', 'Lecture Notes: Org')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(3)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 4 - HEALTH EDUCATION <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Xk0Vxfe2V3f6ha-WP72S7AT_ZscEqe7W/preview', 'Detailed Notes: Education')">
+                        <span class="icon">📚</span><span>Detailed Notes: Health Education</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1yO7zkyqUhpLzXtXgz0RXulBltqm_1Vgr/preview', 'Intro Video: Education')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/17sDtX9QZEo3OfPWTUm114RhNVBhGkUi3/preview', 'Communication')">
+                        <span class="icon video-icon">▶️</span><span>Health Education & Communication</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1hTVuF26D0i-OAW2pCbsnL4jnvWyBAUZb/preview', 'Lecture Notes: Education')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(4)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 5 - NATIONAL HEALTH PROGRAMMES <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Kvz7hCDmFd1Pa7BAKI04K-xy1hIn5rmp/preview', 'Detailed Notes: Programmes')">
+                        <span class="icon">📚</span><span>Detailed Notes: National Programmes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1XCDUp-gPxTOyrWi_KJ4cCuIw_aJHdbWv/preview', 'Intro Video: Programmes')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1GJHVVLJi0x4Bu9A0G0Fp21alPVWYZMcg/preview', 'Programmes Video')">
+                        <span class="icon video-icon">▶️</span><span>National Health Programmes & Services</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/10XE8ceNnBeJULClD0-guMAIZJ4CSvEhF/preview', 'Lecture Notes: Programmes')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(5)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 6 - EPIDEMIOLOGY <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1NkFqCnCfSyvdeKh2Yk9PSaHP4ycB3_o1/preview', 'Detailed Notes: Epidemiology')">
+                        <span class="icon">📚</span><span>Detailed Notes: Epidemiology</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1TE9FGL_D7NxzNuYWeM8mWwP8cDwrzAyR/preview', 'Intro Video: Epidemiology')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/146l8vLL-5tkVpiMp-3WJ0JG2MnZIOH7z/preview', 'Epidemiology Concepts')">
+                        <span class="icon video-icon">▶️</span><span>Epidemiology Concepts</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1fanygYIAe2wsvqjaGeTA1PwFv4-Q5Tfn/preview', 'Lecture Notes: Epidemiology')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(6)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 7 - BIOSTATISTICS & VITAL STATISTICS <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    
+
+[Image of normal distribution curve statistics]
+
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1UfiQmRyzvs3vLNiIuWaLh9ErOgVmjFqH/preview', 'Detailed Notes: Stats')">
+                        <span class="icon">📚</span><span>Detailed Notes: Biostatistics</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1b-NOxElkRC5h8zLFdz06LzkrcQnVsdUm/preview', 'Intro Video: Stats')">
+                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1FqYQIVgoC1qqWohEyAezKZV1-hWnbicx/preview', 'Vital Stats')">
+                        <span class="icon video-icon">▶️</span><span>Biostatistics & Vital Statistics</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ro1-zFcoa0eYb_lgYhy5B73C8swWcgvd/preview', 'Lecture Notes: Stats')">
+                        <span class="icon">📄</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(7)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="app-modal" class="modal-overlay">
+        <div class="modal-header">
+            <div id="modal-title" class="modal-title">Resource</div>
+            <button class="btn-close" onclick="closeModal()">Close X</button>
+        </div>
+        <div id="modal-body" class="modal-body"></div>
+    </div>
+
+    <script>
+        const QUIZ_DATA = {
+            1: [
+                { q: "The primary goal of community health nursing is:", o: ["Treatment of disease", "Promotion of health and prevention of disease", "Rehabilitation only", "Research only"], a: 1 },
+                { q: "Who is the central focus of community health nursing?", o: ["The Individual", "The Family", "The Community", "The Hospital"], a: 2 },
+                { q: "Which level of prevention includes immunization?", o: ["Primary Prevention", "Secondary Prevention", "Tertiary Prevention", "Quaternary Prevention"], a: 0 },
+                { q: "A fundamental principle of community health nursing is:", o: ["Providing care based on ability to pay", "Focusing only on the sick", "Equitable distribution of health services", "Working in isolation"], a: 2 }
+            ],
+            2: [
+                { q: "In community health nursing, the basic unit of service is the:", o: ["Individual", "Family", "Community", "School"], a: 1 },
+                { q: "The 'Bag Technique' is primarily used to:", o: ["Carry medicines", "Prevent cross-infection", "Store records", "Collect samples"], a: 1 },
+                { q: "Which phase of the family life cycle involves the birth of the first child?", o: ["Establishment Phase", "Expanding Phase", "Contracting Phase", "Launching Phase"], a: 1 },
+                { q: "Home visiting allows the nurse to:", o: ["Observe the family in their natural setting", "Save hospital resources", "Avoid hospital administration", "Treat only emergency cases"], a: 0 }
+            ],
+            3: [
+                { q: "A Sub-Centre in the plains covers a population of:", o: ["3,000", "5,000", "20,000", "30,000"], a: 1 },
+                { q: "The Community Health Centre (CHC) acts as a:", o: ["First Referral Unit (FRU)", "Primary care provider", "Tertiary care center", "Home care unit"], a: 0 },
+                { q: "Who is the head of the health administration at the district level?", o: ["Medical Officer", "Chief Medical & Health Officer (CMHO)", "Health Inspector", "ANM"], a: 1 },
+                { q: "The National Health Policy aims to increase public health expenditure to:", o: ["1.5% of GDP", "2.5% of GDP", "5% of GDP", "10% of GDP"], a: 1 }
+            ],
+            4: [
+                { q: "Which method is best for changing health behavior?", o: ["Lecture", "Group Discussion", "Pamphlets", "Posters"], a: 1 },
+                { q: "IEC stands for:", o: ["Information, Education, and Communication", "Indian Education Council", "Internal External Communication", "Integrated Education Centre"], a: 0 },
+                { q: "Which is a barrier to effective communication?", o: ["Active listening", "Clear language", "Noise/Distraction", "Empathy"], a: 2 },
+                { q: "Flashcards are an example of which type of aid?", o: ["Audio aid", "Visual aid", "Audio-visual aid", "Projected aid"], a: 1 }
+            ],
+            5: [
+                { q: "DOTS strategy is associated with which national program?", o: ["NLEP (Leprosy)", "NTEP (Tuberculosis)", "NVBDCP (Vector Borne)", "NACP (AIDS)"], a: 1 },
+                { q: "The target group for ICDS includes children up to what age?", o: ["3 years", "5 years", "6 years", "10 years"], a: 2 },
+                { q: "Janani Suraksha Yojana (JSY) aims to reduce:", o: ["Maternal and Neonatal Mortality", "Malaria cases", "Blindness", "Cancer"], a: 0 },
+                { q: "The Universal Immunization Programme (UIP) targets prevention of how many killer diseases?", o: ["Five", "Six (originally)", "Ten", "Twelve"], a: 1 }
+            ],
+            6: [
+                { q: "The Epidemiological Triad consists of:", o: ["Agent, Host, Environment", "Doctor, Nurse, Patient", "Time, Place, Person", "Diagnosis, Treatment, Prevention"], a: 0 },
+                { q: "A disease that is constantly present in a specific population is called:", o: ["Epidemic", "Endemic", "Pandemic", "Sporadic"], a: 1 },
+                { q: "The carrier who sheds the infectious agent during the recovery period is a:", o: ["Incubatory carrier", "Convalescent carrier", "Healthy carrier", "Chronic carrier"], a: 1 },
+                { q: "Screening tests are an example of:", o: ["Primary Prevention", "Secondary Prevention", "Tertiary Prevention", "Primordial Prevention"], a: 1 }
+            ],
+            7: [
+                { q: "Vital statistics include data on:", o: ["Births and Deaths", "Marriages", "Sickness (Morbidity)", "All of the above"], a: 3 },
+                { q: "The Census in India is conducted every:", o: ["5 years", "10 years", "15 years", "20 years"], a: 1 },
+                { q: "Infant Mortality Rate (IMR) is calculated per:", o: ["100 live births", "1,000 live births", "10,000 live births", "100,000 live births"], a: 1 },
+                { q: "SRS stands for:", o: ["Sample Registration System", "Standard Research Survey", "Statistical Record System", "State Registry Service"], a: 0 }
+            ]
+        };
+
+        let currentQuizUnit = 1;
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function toggleUnit(header) {
+            const content = header.nextElementSibling;
+            const isExpanded = header.getAttribute('aria-expanded') === 'true';
+            header.setAttribute('aria-expanded', !isExpanded);
+            content.classList.toggle('active');
+        }
+
+        function openResource(type, url, title) {
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+            document.getElementById('modal-title').textContent = title;
+            modal.style.display = 'flex';
+            let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
+            body.innerHTML = `<iframe class="iframe-res" src="${cleanUrl}"></iframe>`;
+        }
+
+        function startQuiz(unitId) {
+            currentQuizUnit = unitId;
+            currentQuestionIndex = 0;
+            score = 0;
+            const modal = document.getElementById('app-modal');
+            document.getElementById('modal-title').textContent = `Unit ${unitId} Quiz`;
+            modal.style.display = 'flex';
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const body = document.getElementById('modal-body');
+            const questions = QUIZ_DATA[currentQuizUnit];
+            
+            if (!questions || currentQuestionIndex >= questions.length) {
+                body.innerHTML = `
+                    <div class="quiz-container" style="text-align:center;">
+                        <h2>Quiz Complete! 🎉</h2>
+                        <p style="font-size:1.2rem; margin:20px 0;">You scored <strong>${score} / ${questions.length}</strong></p>
+                        <button class="btn-quiz" onclick="closeModal()">Close Quiz</button>
+                    </div>`;
+                return;
+            }
+
+            const q = questions[currentQuestionIndex];
+            body.innerHTML = `
+                <div class="quiz-container">
+                    <p class="quiz-question-text">Q${currentQuestionIndex + 1}: ${q.q}</p>
+                    <div>
+                        ${q.o.map((opt, i) => `
+                            <div class="quiz-option" onclick="checkAnswer(this, ${i}, ${q.a})">${opt}</div>
+                        `).join('')}
+                    </div>
+                    <div class="quiz-nav">
+                        <span>Question ${currentQuestionIndex + 1} of ${questions.length}</span>
+                        <button id="next-btn" class="btn-quiz" style="display:none;" onclick="nextQuestion()">Next ➡</button>
+                    </div>
+                </div>`;
+        }
+
+        function checkAnswer(element, selectedIndex, correctIndex) {
+            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+
+            if (selectedIndex === correctIndex) {
+                element.classList.add('correct');
+                score++;
+            } else {
+                element.classList.add('wrong');
+                element.parentElement.children[correctIndex].classList.add('correct');
+            }
+            document.getElementById('next-btn').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            renderQuizQuestion();
+        }
+
+        function closeModal() { 
+            document.getElementById('app-modal').style.display = 'none'; 
+            document.getElementById('modal-body').innerHTML = ""; 
+        }
+    </script>
+</body>
+</html>
