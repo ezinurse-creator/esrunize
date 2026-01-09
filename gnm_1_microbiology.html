@@ -3,678 +3,152 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Microbiology Syllabus</title>
-    <meta name="description" content="Comprehensive syllabus with detailed notes, video lectures, and quizzes for Microbiology." />
+    <title>Microbiology</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
         :root {
-            --brand: #003B82; 
-            --accent: #00B9F2;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-700: #374151;
-            --gray-900: #111827;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-            --danger: #ef4444;
-            --success: #10b981;
+            --brand: #003B82; --accent: #00B9F2; --gray-50: #f9fafb; --gray-200: #e5e7eb; --gray-900: #111827;
+            --danger: #ef4444; --success: #10b981; --warning: #f59e0b;
         }
-
         * { box-sizing: border-box; }
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: white;
-            color: var(--gray-900);
-            line-height: 1.6;
-            padding: 24px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .syllabus-btn, .unit-header {
-            display: block;
-            width: 100%;
-            padding: 18px 24px;
-            margin: 24px 0;
-            background: var(--brand);
-            color: white;
-            font-weight: 600;
-            font-size: 16px;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.2s ease;
-        }
-        .syllabus-btn:hover, .unit-header:hover {
-            background: #002d63;
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .unit-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-align: left;
-            margin: 16px 0;
-        }
-        .unit-header span:last-child {
-            transition: transform 0.3s ease;
-            color: #FFA500;
-        }
-        .unit-header[aria-expanded="true"] span:last-child {
-            transform: rotate(180deg);
-        }
-
-        .unit-content {
-            padding: 0 12px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.3s ease;
-        }
-        .unit-content.active {
-            padding: 24px 12px;
-            max-height: none; 
-        }
-
-        .subsection {
-            margin: 16px 0;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            border: 1px solid var(--gray-200);
-            box-shadow: var(--shadow-sm);
-            transition: box-shadow 0.2s ease;
-        }
-        .subsection:hover { box-shadow: var(--shadow-md); }
-
-        .resource-btn {
-            display: flex;
-            align-items: flex-start;
-            width: 100%;
-            padding: 14px 18px;
-            margin: 8px 0;
-            background: var(--gray-50);
-            color: var(--gray-900);
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
-            border: 1px solid var(--gray-200);
-            transition: all 0.2s ease;
-            gap: 12px;
-            flex-wrap: wrap;
-            min-height: 50px;
-            cursor: pointer;
-        }
+        body { font-family: 'Inter', sans-serif; background: white; color: var(--gray-900); padding: 24px; max-width: 1000px; margin: 0 auto; }
+        .syllabus-btn { display: block; width: 100%; padding: 18px 24px; margin: 12px 0; background: white; color: var(--brand); border: 2px solid var(--brand); font-weight: 700; font-size: 16px; text-align: center; cursor: pointer; border-radius: 12px; transition: all 0.2s ease; text-decoration: none; }
+        .syllabus-btn:hover { background: var(--gray-50); transform: translateY(-1px); }
+        .unit-header { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 18px 24px; margin: 16px 0; background: var(--brand); color: white; font-weight: 600; font-size: 16px; border-radius: 12px; cursor: pointer; transition: 0.2s; }
+        .unit-header:hover { background: #002d63; }
+        .unit-content { padding: 0 12px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; }
+        .unit-content.active { padding: 24px 12px; max-height: none; }
+        .subsection { padding: 20px; background: white; border-radius: 12px; border: 1px solid var(--gray-200); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .resource-btn { display: flex; width: 100%; padding: 14px 18px; margin: 6px 0; background: var(--gray-50); border-radius: 8px; font-weight: 500; border: 1px solid var(--gray-200); cursor: pointer; gap: 12px; transition: 0.2s; align-items: center; }
+        
+        /* EXISTING BUTTON STYLES */
         .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
         .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
-        .resource-btn.quiz { background: #fff5e8; border-color: #ffd8a8; color: #8c5e08; }
-        .resource-btn:hover { background: #f9fafb; transform: translateY(-1px); }
-        .resource-btn.notes:hover { background: #e0f2fe; }
-        .resource-btn.video:hover { background: #ede9fe; }
-        .resource-btn.quiz:hover { background: #ffead1; }
-        .resource-btn.coming-soon { background: #e5e7eb; color: #6b7280; cursor: not-allowed; pointer-events: none; }
+        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+        .resource-btn.model { background: #fdf4ff; border-color: #f0abfc; color: #86198f; }
 
-        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
-        .icon.video-icon { color: #8b5cf6; }
-        .icon.quiz-icon { color: #FFA500; }
-        .icon.coming-soon-icon { color: #9ca3af; }
-
-        /* --- MODAL --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-        }
-
-        .modal-header {
-            height: 60px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            flex-shrink: 0;
-        }
-
-        .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        /* NEW BUTTON STYLES FOR APP */
+        .resource-btn.imp-discussion { background: #fef2f2; border-color: #fecaca; color: #b91c1c; } /* Light Red Background */
+        .resource-btn.imp-pdf { background: #fff7ed; border-color: #fed7aa; color: #c2410c; } /* Light Orange Background */
         
-        .btn-close {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            flex: 1;
-            background: #000;
-            position: relative;
-            overflow-y: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* --- FIXED IFRAME STYLES --- */
-        .iframe-video {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16 / 9;
-            border: none;
-            background: #000;
-            display: block;
-        }
-
-        .iframe-doc {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #fff;
-            display: block;
-        }
-
-        /* --- QUIZ STYLES --- */
-        .quiz-container {
-            background: white;
-            width: 100%;
-            min-height: 100%;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .quiz-question { margin-bottom: 20px; font-size: 1.1rem; font-weight: 600; }
-        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
-        .quiz-option {
-            padding: 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        .quiz-option:hover { background: #f0f9ff; border-color: var(--accent); }
-        .quiz-option.correct { background: var(--success); color: white; border-color: var(--success); }
-        .quiz-option.correct::after { content: '✓'; position: absolute; right: 15px; font-weight: bold; }
-        .quiz-option.wrong { background: var(--danger); color: white; border-color: var(--danger); }
-        .quiz-option.wrong::after { content: '✗'; position: absolute; right: 15px; font-weight: bold; }
-
-        @media (max-width: 768px) {
-            body { padding: 16px; }
-            .syllabus-btn, .unit-header, .resource-btn { font-size: 15px; padding: 14px 16px; }
-            .resource-btn { font-size: 14px; }
-            .subsection { padding: 16px; }
-            .unit-content.active { padding: 16px 8px; }
-        }
+        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
+        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
+        .icon.video-icon { color: #8b5cf6; } .icon.quiz-icon { color: #f59e0b; } .icon.model-icon { color: #d946ef; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; display: none; flex-direction: column; }
+        .modal-header { height: 60px; background: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; }
+        .btn-close { background: var(--danger); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .modal-body { flex: 1; background: #f3f4f6; position: relative; padding: 20px; display:flex; justify-content:center; overflow-y: auto;}
+        .iframe-res { width: 100%; height: 100%; border: none; background: white; }
+        .quiz-container { background: white; width: 100%; max-width: 800px; padding: 30px; border-radius: 12px; margin-bottom: 50px; }
+        .quiz-option { padding: 12px 15px; border: 2px solid var(--gray-200); border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
+        .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
+        .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; }
+        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
+        .btn-quiz { background: var(--brand); color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 600; font-size: 16px; margin-top: 20px; cursor: pointer;}
+        @media (max-width: 768px) { body { padding: 16px; } .quiz-container { padding: 15px; } }
     </style>
 </head>
 <body>
-
-    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/10KaDfQIHInpDvKfUQ0r_Fj4UdvO9fQhe/preview', 'Syllabus')">
-        📄 DOWNLOAD MICROBIOLOGY SYLLABUS
-    </div>
-    
+    <a class="syllabus-btn" href="https://drive.google.com/file/d/10KaDfQIHInpDvKfUQ0r_Fj4UdvO9fQhe/view?usp=drive_link" target="_blank">📄 DOWNLOAD SYLLABUS</a>
     <div id="units">
-        <div class="unit-container" id="unit1">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="true" onclick="toggleUnit(this)">
-                UNIT 1 - INTRODUCTION
-                <span>🔽</span>
-            </div>
-            <div class="unit-content active">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/18JJY6j9L1GUe26whx-cCxPq5V4CvoUyj/preview', 'Detailed Notes: Intro')">
-                        <span class="icon">📚</span><span>Detailed Notes: Introduction</span>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 1 - INTRODUCTION <span>🔽</span>
                     </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1tjwuOpXh39Bk3kSF5lJo1-gFCMSrrmGS/preview', 'Introduction')">
-                        <span class="icon video-icon">▶️</span><span>1.1 Introduction to Microbiology</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1pvIq40WmkoyhuykJlqpxRmlIUaUoOSCq/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    
-                    <div class="resource-btn quiz" onclick="openQuiz(1)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
-                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1q06nveSKJiq_gmb2X0GwAAWnFU6Nxdnz/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1tjwuOpXh39Bk3kSF5lJo1-gFCMSrrmGS/preview', 'Introduction')"><span class="icon video-icon">▶️</span><span>Introduction</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1pvIq40WmkoyhuykJlqpxRmlIUaUoOSCq/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(1)"><span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span></div></div></div>
                 </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit2">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 2 - MICRO ORGANISMS
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1R5hQlYmNTp5ipFJd9xwqRqqpR25I-_J_/preview', 'Detailed Notes: Microorganisms')">
-                        <span class="icon">📚</span><span>Detailed Notes: Microorganisms</span>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 2 - MICRO ORGANISMS <span>🔽</span>
                     </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1344yrR10PbQMJGJnw0yTWNwkjKVEMrj_/preview', 'Classification')">
-                        <span class="icon video-icon">▶️</span><span>2.1 Classification of Microorganisms</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1i6jbASwRap2IMzetJdydRz3di0wF3We4/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ruH3iPrYJRMPSBEt9iMPd0YVbeGFITTS/preview', 'Bacteria Types')">
-                        <span class="icon video-icon">▶️</span><span>2.2 Gram Positive & Gram Negative Bacteria</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1NhwRwNIZzcEf8s_5x33a-6TSIHYJzqcL/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1jFpItzdMm0Xk8hwYNWS5K7dxkop3fdMC/preview', 'Reproduction 1')">
-                        <span class="icon video-icon">▶️</span><span>2.3 (1) Reproduction in Microorganisms</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1hiYWj-RQUhNK1FiM5hHnfcyziZtAHQLs/preview', 'Reproduction 2')">
-                        <span class="icon video-icon">▶️</span><span>2.3 (2) Sexual Reproduction Methods</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/10rjxIx-8pWcgkbWVVK2njIeNwE9mGmG6/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1MorEGNruMCYaphTH0JQaC02P6-XM5cgl/preview', 'Growth')">
-                        <span class="icon video-icon">▶️</span><span>2.4 (1) Growth of Microorganisms</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1isjNlpuHtKRYN1e8ZVbMImk9D3xI_bWK/preview', 'Source')">
-                        <span class="icon video-icon">▶️</span><span>2.4 (2) Source and Water Availability</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/11fyQ6li5Pw1wKYPEMEW6hphwNEO037wU/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1-1izpuln98XZ8RznvjsopgU2OZVIZfVY/preview', 'Normal Flora')">
-                        <span class="icon video-icon">▶️</span><span>2.5 Normal Flora</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1I7rJgK2X5qTOHVZJNRLoXu0Mt69s1BsU/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1sxAvG9u4Qg-ywF56kwqH_DRCxkn7ln-N/preview', 'Diseases')">
-                        <span class="icon video-icon">▶️</span><span>2.6 Diseases Caused by Microorganisms</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1m_1GgwFEYa6DxFHbG5lWVnVY_cBO1zU6/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1A4dR12NzrIEjp4rsdSeSnnp1DX7C2KAC/preview', 'Viral Diseases')">
-                        <span class="icon video-icon">▶️</span><span>2.7 Common Diseases Caused by Virus</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ETyENfi9Fg02PK2JaUPu3dTWeRTGS6-z/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1BptG9GoFE8r0QDpik_G3ZE-6DvJ6Vh9j/preview', 'Fungal Diseases')">
-                        <span class="icon video-icon">▶️</span><span>2.8 Common Diseases Caused by Fungi</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_IJAvlzNGb1NRgx_7qLyhhKmRwZWZlSr/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes: Fungal Diseases</span>
-                    </div>
-
-                    <div class="resource-btn quiz" onclick="openQuiz(2)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
-                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1R5hQlYmNTp5ipFJd9xwqRqqpR25I-_J_/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1344yrR10PbQMJGJnw0yTWNwkjKVEMrj_/preview', 'Classification of Microorganism')"><span class="icon video-icon">▶️</span><span>Classification of Microorganism</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1i6jbASwRap2IMzetJdydRz3di0wF3We4/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ruH3iPrYJRMPSBEt9iMPd0YVbeGFITTS/preview', 'Gram positive and gram negative bacteria')"><span class="icon video-icon">▶️</span><span>Gram positive and gram negative bacteria</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1NhwRwNIZzcEf8s_5x33a-6TSIHYJzqcL/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/15eQfe_0_OXwNAaI04AZCnAC3Uu6jkiM3/preview', 'Reproduction in microorganism')"><span class="icon video-icon">▶️</span><span>Reproduction in microorganism</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1n6HA6nDr8DYpCQReYJOHDJVHEeJZ1FW1/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1MorEGNruMCYaphTH0JQaC02P6-XM5cgl/preview', 'Growth of microorganism')"><span class="icon video-icon">▶️</span><span>Growth of microorganism</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1isjNlpuHtKRYN1e8ZVbMImk9D3xI_bWK/preview', 'Source and water availability')"><span class="icon video-icon">▶️</span><span>Source and water availability</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/11fyQ6li5Pw1wKYPEMEW6hphwNEO037wU/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1-1izpuln98XZ8RznvjsopgU2OZVIZfVY/preview', 'Normal flora')"><span class="icon video-icon">▶️</span><span>Normal flora</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1I7rJgK2X5qTOHVZJNRLoXu0Mt69s1BsU/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1sxAvG9u4Qg-ywF56kwqH_DRCxkn7ln-N/preview', 'Diseases caused by microorganism')"><span class="icon video-icon">▶️</span><span>Diseases caused by microorganism</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1m_1GgwFEYa6DxFHbG5lWVnVY_cBO1zU6/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1A4dR12NzrIEjp4rsdSeSnnp1DX7C2KAC/preview', 'Common diseases caused by virus')"><span class="icon video-icon">▶️</span><span>Common diseases caused by virus</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ETyENfi9Fg02PK2JaUPu3dTWeRTGS6-z/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1BptG9GoFE8r0QDpik_G3ZE-6DvJ6Vh9j/preview', 'Common diseases caused by fungi')"><span class="icon video-icon">▶️</span><span>Common diseases caused by fungi</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_IJAvlzNGb1NRgx_7qLyhhKmRwZWZlSr/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(2)"><span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span></div></div></div>
                 </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit3">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 3 - INFECTION & TRANSMISSION
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1tqoUTpQCQUkvDAWo6loSQHv9YI2VeuWW/preview', 'Detailed Notes: Infection')">
-                        <span class="icon">📚</span><span>Detailed Notes: Infection</span>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 3 - INFECTION AND TRANSMISSION  <span>🔽</span>
                     </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1RO-dMnhHZXyRYKQi3sbHgM1tPQmLP19n/preview', 'Transmission')">
-                        <span class="icon video-icon">▶️</span><span>3.1 Infection and its Transmission</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/13-Pj4Rad1mIxYGpkiwY7MtsWzmkK1hGe/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1CYkpB_4XwZvoFKA2XRrVHoInDkER-ocG/preview', 'Nosocomial')">
-                        <span class="icon video-icon">▶️</span><span>3.2 Nosocomial Infection</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Ea8p9t37qoA0nH-0yUbdvOFRMx4PZvUA/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/18-AX1Oa1o-oy-glfH3FumDj6yS31Q7BU/preview', 'Resistance')">
-                        <span class="icon video-icon">▶️</span><span>Antimicrobial Resistance</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1nBaTqKR9kA-ZCDgD1w-x8GbZYqKlzo-x/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-
-                    <div class="resource-btn quiz" onclick="openQuiz(3)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
-                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1tqoUTpQCQUkvDAWo6loSQHv9YI2VeuWW/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1RO-dMnhHZXyRYKQi3sbHgM1tPQmLP19n/preview', 'Infection and its Transmission')"><span class="icon video-icon">▶️</span><span>Infection and its Transmission</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/13-Pj4Rad1mIxYGpkiwY7MtsWzmkK1hGe/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1CYkpB_4XwZvoFKA2XRrVHoInDkER-ocG/preview', 'Nosocomial infection')"><span class="icon video-icon">▶️</span><span>Nosocomial infection</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Ea8p9t37qoA0nH-0yUbdvOFRMx4PZvUA/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/18-AX1Oa1o-oy-glfH3FumDj6yS31Q7BU/preview', 'Antimicrobial resistance')"><span class="icon video-icon">▶️</span><span>Antimicrobial resistance</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1nBaTqKR9kA-ZCDgD1w-x8GbZYqKlzo-x/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(3)"><span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span></div></div></div>
                 </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit4">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 4 - IMMUNITY
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Vnjb0_kHtT1shD5YEjlkkhZzLkMTDuzl/preview', 'Detailed Notes: Immunity')">
-                        <span class="icon">📚</span><span>Detailed Notes: Immunity</span>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 4 - IMMUNITY  <span>🔽</span>
                     </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1trJYdhkUTGLIdsMrqT-ToX2KhtSVmBdy/preview', 'Types Immunity')">
-                        <span class="icon video-icon">▶️</span><span>Types of Immunity</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1dFSKctShMOTe_tzzU3ZnzWL294y9gher/preview', 'Molecular Defence')">
-                        <span class="icon video-icon">▶️</span><span>Molecular Defence</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1n0RgkTGOmj-BxwCT_zvn_pYvWoU0HZ3V/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1dFSKctShMOTe_tzzU3ZnzWL294y9gher/preview', 'Antibodies')">
-                        <span class="icon video-icon">▶️</span><span>Antibodies</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1BR-WdhK9bdFkEvRl78qLyL2qBXx6rvOs/preview', 'Vaccines')">
-                        <span class="icon video-icon">▶️</span><span>Vaccines</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1aUok3x5QojfRE9a9ONsCPnmv9TP5gegt/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1TCyaHzcPyuWdlIUYints2YRHjD2G7gmX/preview', 'Hypersensitivity')">
-                        <span class="icon video-icon">▶️</span><span>Hypersensitivity</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1T_YTLOQ5CilIFVqLMT3WCTKSDx-rS3-G/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1f_C9FgmA05RQYriNfPvgjlISHs6-6UQJ/preview', 'Serology')">
-                        <span class="icon video-icon">▶️</span><span>Principles of Serology</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ZU6DqoRXa6CFf0bOGxjtUQu810mfZMAW/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-
-                    <div class="resource-btn quiz" onclick="openQuiz(4)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
-                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Vnjb0_kHtT1shD5YEjlkkhZzLkMTDuzl/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1trJYdhkUTGLIdsMrqT-ToX2KhtSVmBdy/preview', 'Types of Immunity')"><span class="icon video-icon">▶️</span><span>Types of Immunity</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1n0RgkTGOmj-BxwCT_zvn_pYvWoU0HZ3V/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1dFSKctShMOTe_tzzU3ZnzWL294y9gher/preview', 'Antibodies')"><span class="icon video-icon">▶️</span><span>Antibodies</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1BR-WdhK9bdFkEvRl78qLyL2qBXx6rvOs/preview', 'Vaccines')"><span class="icon video-icon">▶️</span><span>Vaccines</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1aUok3x5QojfRE9a9ONsCPnmv9TP5gegt/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1TCyaHzcPyuWdlIUYints2YRHjD2G7gmX/preview', 'Hypersensitivity')"><span class="icon video-icon">▶️</span><span>Hypersensitivity</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1T_YTLOQ5CilIFVqLMT3WCTKSDx-rS3-G/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1f_C9FgmA05RQYriNfPvgjlISHs6-6UQJ/preview', 'Principles of serology')"><span class="icon video-icon">▶️</span><span>Principles of serology</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ZU6DqoRXa6CFf0bOGxjtUQu810mfZMAW/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(4)"><span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span></div></div></div>
                 </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit5">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 5 - CONTROL OF MICROBES
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1MkD8p4lSTHBvSVdJpQxGqPTkoxU2lgLa/preview', 'Detailed Notes: Control')">
-                        <span class="icon">📚</span><span>Detailed Notes: Control of Microbes</span>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 5 - CONTROL AND DESTRUCTION OF MICROBES  <span>🔽</span>
                     </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1-TrLg6Kz2lbdJhGFby-rYJZfNLIuvrnG/preview', 'Terminologies')">
-                        <span class="icon video-icon">▶️</span><span>Introduction & Important Terminologies</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1gNWKOw5oZ8RaQQwOwa1UivLg41VcIJs1/preview', 'Moist Heat')">
-                        <span class="icon video-icon">▶️</span><span>Moist Heat</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1CmBH4BYH7wzvdfj-mNU_2YEYv4bvhhfd/preview', 'Destruction')">
-                        <span class="icon video-icon">▶️</span><span>Control & Destruction of Microorganisms</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1FKzdv14V3S_Ga-Ct6L1q0Loqv8ZFdO5E/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/19OCnoCyFQ5jhYXPxHLgpipecwA2WGEHo/preview', 'Disinfectant')">
-                        <span class="icon video-icon">▶️</span><span>Chemical Disinfectant</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/195kDPGfHsgyEz3Vny0S_GBafuOXPR0WU/preview', 'Halogens')">
-                        <span class="icon video-icon">▶️</span><span>Halogens</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1DmdsW-49zSG5sSn7Y1JEsFPWs-v7Wgw2/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1uB-DQae50YWSxQpWAaYVf6bU36Qy2Izb/preview', 'Antibiotics')">
-                        <span class="icon video-icon">▶️</span><span>Chemical Therapy & Antibiotics</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1mdAsdZBOgMowFuPOGMWfR4x328vLbvGE/preview', 'Sulfonamides')">
-                        <span class="icon video-icon">▶️</span><span>Sulfonamides</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1wqj7EQs_hRxSWcv43p8_m9c6zOH4aYuA/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/18wK7ivHGLZdohOGJtL9HLispSzGAK_G4/preview', 'Asepsis')">
-                        <span class="icon video-icon">▶️</span><span>Asepsis</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1-1-onpBI1vLsNU_sSnjj59aj-OoC2oHN/preview', 'Surgical Asepsis')">
-                        <span class="icon video-icon">▶️</span><span>Surgical Asepsis</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1giF8ldmqHjW9wZs0euYGKhvN88Tw5AL3/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1rRIvHMpLmyUh-ACcKZJk0eYnWWcpzKlY/preview', 'Waste Management')">
-                        <span class="icon video-icon">▶️</span><span>Biomedical Waste Management</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1jJ-HKff5OotkCc2N79as4M_Zz5w-4z2N/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-
-                    <div class="resource-btn quiz" onclick="openQuiz(5)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span>
-                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1MkD8p4lSTHBvSVdJpQxGqPTkoxU2lgLa/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1-TrLg6Kz2lbdJhGFby-rYJZfNLIuvrnG/preview', 'Introduction and Important Terminologies')"><span class="icon video-icon">▶️</span><span>Introduction and Important Terminologies</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1gNWKOw5oZ8RaQQwOwa1UivLg41VcIJs1/preview', 'Moist heat')"><span class="icon video-icon">▶️</span><span>Moist heat</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1CmBH4BYH7wzvdfj-mNU_2YEYv4bvhhfd/preview', 'Control and Destructiuon of Microorganism')"><span class="icon video-icon">▶️</span><span>Control and Destructiuon of Microorganism</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1FKzdv14V3S_Ga-Ct6L1q0Loqv8ZFdO5E/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/19OCnoCyFQ5jhYXPxHLgpipecwA2WGEHo/preview', 'Chemical disinfectant')"><span class="icon video-icon">▶️</span><span>Chemical disinfectant</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/195kDPGfHsgyEz3Vny0S_GBafuOXPR0WU/preview', 'Halogens')"><span class="icon video-icon">▶️</span><span>Halogens</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1DmdsW-49zSG5sSn7Y1JEsFPWs-v7Wgw2/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Pj6zGxEur67YXZiFvAbbYbq_XTW8-LYA/preview', 'Chemical therapy and antibiotics')"><span class="icon video-icon">▶️</span><span>Chemical therapy and antibiotics</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1weYr0a8sCPkFS4rR7-xyF23_V2hSyZ8n/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/18wK7ivHGLZdohOGJtL9HLispSzGAK_G4/preview', 'Asepsis')"><span class="icon video-icon">▶️</span><span>Asepsis</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1-1-onpBI1vLsNU_sSnjj59aj-OoC2oHN/preview', 'Surgical asepsis')"><span class="icon video-icon">▶️</span><span>Surgical asepsis</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1giF8ldmqHjW9wZs0euYGKhvN88Tw5AL3/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1rRIvHMpLmyUh-ACcKZJk0eYnWWcpzKlY/preview', 'Biomedical waste management')"><span class="icon video-icon">▶️</span><span>Biomedical waste management</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1jJ-HKff5OotkCc2N79as4M_Zz5w-4z2N/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(5)"><span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span></div></div></div>
                 </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit6">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 6 - PRACTICAL MICROBIOLOGY
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1NRRAJ_Oe5erWgKw-CxLRDrbj71Gc0K7o/preview', 'Detailed Notes: Practical')">
-                        <span class="icon">📚</span><span>Detailed Notes: Practical Microbiology</span>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 6 - PRACTICAL MICROBIOLOGY  <span>🔽</span>
                     </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1qXiftOLvVHlu34s9Q0xSbnRtRjPi4Is/preview', 'Clinical Micro')">
-                        <span class="icon video-icon">▶️</span><span>Clinical Microbiology</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/14BWndk3whHa1Yv-agzcF9MUfdBGePV1O/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Tql_TQt5wj6pW68bw9Zws-SA9AGlHjtf/preview', 'Staining')">
-                        <span class="icon video-icon">▶️</span><span>Staining Techniques</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1yERSyJiAL20RQS6gpneW9EjlJfgLp9gy/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/15JPzBCb4dRV4NuWJ_6Jy_3DTfeUmQO7f/preview', 'Specimen')">
-                        <span class="icon video-icon">▶️</span><span>Specimen Collection</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1FB3RpmGrYLAUpUmTx90oJ6urBYxXBJdK/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-
-                    <div class="resource-btn quiz" onclick="openQuiz(6)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1NRRAJ_Oe5erWgKw-CxLRDrbj71Gc0K7o/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1q9XiftOLvVHlu34s9Q0xSbnRtRjPi4Is/preview', 'Clinical Microbiology')"><span class="icon video-icon">▶️</span><span>Clinical Microbiology</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/14BWndk3whHa1Yv-agzcF9MUfdBGePV1O/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Tql_TQt5wj6pW68bw9Zws-SA9AGlHjtf/preview', 'Staining Techniques')"><span class="icon video-icon">▶️</span><span>Staining Techniques</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1yERSyJiAL20RQS6gpneW9EjlJfgLp9gy/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/15JPzBCb4dRV4NuWJ_6Jy_3DTfeUmQO7f/preview', 'Specimen Collection')"><span class="icon video-icon">▶️</span><span>Specimen Collection</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1FB3RpmGrYLAUpUmTx90oJ6urBYxXBJdK/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(6)"><span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span></div></div></div>
+                </div></div>
     <div id="app-modal" class="modal-overlay">
         <div class="modal-header">
-            <div id="modal-title" class="modal-title">Resource</div>
+            <div id="modal-title" style="font-weight:700; color:var(--brand);">Resource</div>
             <button class="btn-close" onclick="closeModal()">Close X</button>
         </div>
         <div id="modal-body" class="modal-body"></div>
     </div>
-
     <script>
-        // --- 1. QUIZ DATA ---
-        const QUIZ_DATA = {
-            1: [ // Unit 1: Intro
-                { q: "Who is known as the Father of Microbiology?", o: ["Louis Pasteur", "Robert Koch", "Antonie van Leeuwenhoek", "Joseph Lister"], a: 2 },
-                { q: "The term 'microbiology' refers to the study of:", o: ["Small animals", "Small organisms usually invisible to naked eye", "Human anatomy", "Plant biology"], a: 1 },
-                { q: "Who introduced the Germ Theory of Disease?", o: ["Louis Pasteur", "Robert Koch", "Edward Jenner", "Alexander Fleming"], a: 0 },
-                { q: "Which microscope is commonly used in microbiology labs?", o: ["Electron Microscope", "Compound Light Microscope", "Fluorescence Microscope", "Simple Microscope"], a: 1 },
-                { q: "Koch's postulates are used to:", o: ["Classify bacteria", "Prove a specific microbe causes a specific disease", "Sterilize instruments", "Make vaccines"], a: 1 }
-            ],
-            2: [ // Unit 2: Microorganisms
-                { q: "Gram-positive bacteria appear what color after Gram staining?", o: ["Pink", "Red", "Purple/Blue", "Green"], a: 2 },
-                { q: "Bacteria reproduce mainly by:", o: ["Mitosis", "Binary Fission", "Budding", "Spore formation"], a: 1 },
-                { q: "Which of the following is a fungal infection?", o: ["Tuberculosis", "Candidiasis", "Cholera", "Malaria"], a: 1 },
-                { q: "Viruses are:", o: ["Living organisms", "Obligate intracellular parasites", "Multicellular", "Prokaryotes"], a: 1 },
-                { q: "Normal flora refers to:", o: ["Microbes causing disease", "Microbes naturally residing in/on the body without causing disease", "Plants in a garden", "Sterile body sites"], a: 1 }
-            ],
-            3: [ // Unit 3: Infection
-                { q: "Nosocomial infection means:", o: ["Community-acquired infection", "Hospital-acquired infection", "Water-borne infection", "Food-borne infection"], a: 1 },
-                { q: "The route of transmission for Tuberculosis is:", o: ["Fecal-oral", "Airborne/Droplet", "Direct contact", "Vector-borne"], a: 1 },
-                { q: "A carrier is:", o: ["A sick patient", "A person harboring a pathogen without symptoms", "A vector", "A vehicle"], a: 1 },
-                { q: "Zoonosis refers to diseases transmitted from:", o: ["Human to Human", "Animals to Humans", "Plants to Humans", "Soil to Humans"], a: 1 },
-                { q: "Antimicrobial resistance is caused by:", o: ["Overuse of antibiotics", "Proper hygiene", "Vaccination", "Sterilization"], a: 0 }
-            ],
-            4: [ // Unit 4: Immunity
-                { q: "Innate immunity is:", o: ["Specific", "Acquired after birth", "Non-specific and present at birth", "Short-lived"], a: 2 },
-                { q: "Antibodies are produced by:", o: ["T-cells", "B-cells (Plasma cells)", "Macrophages", "Red blood cells"], a: 1 },
-                { q: "Which antibody can cross the placenta?", o: ["IgM", "IgA", "IgG", "IgE"], a: 2 },
-                { q: "Passive immunity involves:", o: ["Making your own antibodies", "Receiving pre-made antibodies", "Vaccination", "Suffering from a disease"], a: 1 },
-                { q: "Hypersensitivity is essentially:", o: ["Weak immunity", "An exaggerated immune response (Allergy)", "Lack of antibodies", "Autoimmunity"], a: 1 }
-            ],
-            5: [ // Unit 5: Control
-                { q: "Sterilization means:", o: ["Reducing microbes", "Killing pathogens only", "Killing all microbial life including spores", "Cleaning surfaces"], a: 2 },
-                { q: "Autoclaving uses:", o: ["Dry heat", "Moist heat under pressure", "Chemicals", "Radiation"], a: 1 },
-                { q: "A chemical used on living tissue to kill microbes is called:", o: ["Disinfectant", "Antiseptic", "Sterilant", "Antibiotic"], a: 1 },
-                { q: "Pasteurization is used for:", o: ["Water", "Milk", "Surgical instruments", "Floors"], a: 1 },
-                { q: "Biomedical waste segregation uses:", o: ["One bin for all", "Color-coded bins", "Burning in open", "Throwing in river"], a: 1 }
-            ],
-            6: [ // Unit 6: Practical
-                { q: "The most common staining technique for bacteria is:", o: ["Acid-fast stain", "Gram stain", "Negative stain", "Simple stain"], a: 1 },
-                { q: "Urine culture is used to diagnose:", o: ["Pneumonia", "Urinary Tract Infection (UTI)", "Tuberculosis", "Anemia"], a: 1 },
-                { q: "Blood for culture should be collected:", o: ["After antibiotics", "Before antibiotics", "Anytime", "After meals"], a: 1 },
-                { q: "Sputum examination is primarily used for diagnosing:", o: ["UTI", "Tuberculosis", "Malaria", "Typhoid"], a: 1 },
-                { q: "A culture medium provides:", o: ["Antibiotics only", "Nutrients for microbial growth", "Sterile water", "Disinfectants"], a: 1 }
-            ]
-        };
-
-        // --- 2. MODAL LOGIC & NAVIGATION CONTROL ---
+        const QUIZ_DATA = {"1":[{"q":"The term \"microbiology\" is derived from which three Greek words?","o":["Micro, Bio, Graphy","Mikros, Bios, Logos","Micros, Life, Logi","Minos, Biotic, Logos"],"a":1},{"q":"Which scientist is known as the \"Father of Bacteriology and Protozoology\"?","o":["Louis Pasteur","Robert Koch","Antony van Leeuwenhoek","Alexander Fleming"],"a":2},{"q":"Louis Pasteur disproved the theory of abiogenesis through which experiment?","o":["Germ theory experiment","Swan-neck flask experiment","Anthrax vaccination experiment","Pasteurization process"],"a":1},{"q":"Who developed the first pure culture technique for bacteria?","o":["Robert Koch","Joseph Lister","Louis Pasteur","Ferdinand Cohn"],"a":0},{"q":"Antony van Leeuwenhoek first used the term \"animalcules\" to describe which of the following?","o":["Viruses","Protozoa and bacteria","Algae","Fungi"],"a":1},{"q":"Which of the following statements is NOT part of Koch’s Postulates?","o":["A specific microorganism must be found in every case of the disease","The microorganism can be isolated and grown in pure culture","The disease must be reproduced when the culture is inoculated into a healthy host","The microorganism must be visible under a compound microscope with magnification less than 50X"],"a":3},{"q":"Which of the following correctly matches the scientist with their contribution?","o":["Louis Pasteur – Discovery of Penicillin","Robert Koch – Pasteurization technique","Antony van Leeuwenhoek – First to observe bacteria from teeth scrapings","Louis Pasteur – Development of Gram staining"],"a":2},{"q":"Pasteurization is a technique mainly used for preventing spoilage of","o":["Meat","Wine and milk","Bread","Water"],"a":1},{"q":"Which microbe was identified by Louis Pasteur as the cause of anthrax disease?","o":["Vibrio cholerae","Bacillus anthracis","Mycobacterium tuberculosis","Staphylococcus aureus"],"a":1},{"q":"Which one of the following combinations is correct?","o":["Robert Koch – Father of Immunology","Antony van Leeuwenhoek – Discovered protozoa like Amoeba and Paramecium","Louis Pasteur – Introduced Gram staining technique","Alexander Fleming – Disproved abiogenesis"],"a":1}],"2":[{"q":"According to Carl Woese’s classification, which of the following is NOT a domain?","o":["Eubacteria","Eukarya","Protista","Archaea"],"a":2},{"q":"Which of the following characteristics is unique to Archaea?","o":["Cell wall containing peptidoglycan","Membrane with branched hydrocarbon chains","Presence of ergosterol in the membrane","True nucleus with membrane-bound organelles"],"a":1},{"q":"The smallest bacterium, Mycoplasma, has a diameter of about","o":["0.02–0.3 μm","0.3 μm","2–6 μm","10 μm"],"a":1},{"q":"Which bacterial structure is responsible for motility?","o":["Pili","Flagella","Capsule","Ribosomes"],"a":1},{"q":"Which of the following bacteria lacks a cell wall?","o":["Mycobacterium","Mycoplasma","Actinomycetes","Spirilla"],"a":1},{"q":"Normal flora of the adult vagina is predominantly","o":["Streptococcus pneumoniae","Lactobacilli","Escherichia coli","Staphylococcus aureus"],"a":1},{"q":"Which one of the following pairs is correctly matched?","o":["Scabies – Pediculus humanus capitis","Acne – Propionibacterium acnes","Ringworm – Candida albicans","Smallpox – Varicella-zoster virus"],"a":1},{"q":"Which fungus is responsible for Aflatoxin poisoning?","o":["Aspergillus flavus","Claviceps purpurea","Candida albicans","Sporothrix schenckii"],"a":0},{"q":"Which viral disease is caused by Human Parvovirus B19?","o":["Rubella","Fifth disease (Erythema infectiosum)","Roseola","Shingles"],"a":1},{"q":"MacConkey agar is used as","o":["Differential medium for Gram-positive bacteria","Selective medium for Gram-negative bacteria","Enrichment medium for fungi","Isolation medium for viruses"],"a":1}],"3":[{"q":"Which of the following best defines infection?","o":["Entry of any microbe into the body","Invasion and multiplication of pathogens in the host causing damage","Presence of normal flora in the human body","Only viral attack on human cells"],"a":1},{"q":"Which of the following is a sign and not a symptom?","o":["Pain","Fatigue","Fever (temperature measured)","Dizziness"],"a":2},{"q":"Which source of infection is considered endogenous?","o":["Rabies acquired from dog bite","Cholera due to contaminated water","UTI due to E. coli from intestine entering urinary tract","COVID-19 acquired from droplet infection"],"a":2},{"q":"In the chain of infection, which link refers to “the place where the pathogen survives and multiplies”?","o":["Infectious agent","Reservoir","Portal of exit","Susceptible host"],"a":1},{"q":"Which of the following diseases is transmitted by airborne route?","o":["Gonorrhea","Typhoid","Tuberculosis","Impetigo"],"a":2},{"q":"A disease caused by prions is","o":["Malaria","Creutzfeldt–Jakob disease","Influenza","Typhoid"],"a":1},{"q":"Which of the following is a portal of exit for HIV?","o":["Feces","Blood and sexual secretions","Skin rashes","Saliva only"],"a":1},{"q":"Which of the following is not a factor that increases susceptibility to infection?","o":["Poor nutrition","Immunosuppressive therapy","Regular vaccination","Chronic illness"],"a":2},{"q":"The most common type of hospital-acquired infection (HAI) is","o":["Surgical wound sepsis","Urinary tract infection","Gastrointestinal infection","Bacteremia"],"a":1},{"q":"Which of the following bacteria is associated with Methicillin resistance (MRSA)?","o":["Streptococcus pyogenes","Staphylococcus aureus","Klebsiella pneumoniae","Escherichia coli"],"a":1}],"4":[{"q":"Which of the following is part of the first line of defense in innate immunity?","o":["B lymphocytes","Cytokines","Skin and mucous membranes","Natural killer cells"],"a":2},{"q":"Which immune cells are primarily responsible for phagocytosis?","o":["Mast cells and basophils","Neutrophils and macrophages","B lymphocytes and T lymphocytes","Platelets and erythrocytes"],"a":1},{"q":"The only immunoglobulin that can cross the placenta and provide passive immunity to the fetus is","o":["IgA","IgD","IgE","IgG"],"a":3},{"q":"Which type of immunity is developed after vaccination?","o":["Passive natural","Passive artificial","Active artificial","Active natural"],"a":2},{"q":"Which antibody is the first to be produced during an infection and is present as a pentamer?","o":["IgA","IgD","IgM","IgE"],"a":2},{"q":"Complement proteins destroy pathogens directly by","o":["Neutralizing toxins","Opsonization","Membrane attack complex (MAC) formation","Cytokine release"],"a":2},{"q":"Type I hypersensitivity (immediate allergic reaction) is mediated by","o":["IgA","IgD","IgE","IgM"],"a":2},{"q":"Which of the following tests is based on antigen-antibody precipitation in agar gel?","o":["Widal test","Ouchterlony double diffusion test","ELISA","Immunofluorescence"],"a":1},{"q":"In an ELISA test, a positive reaction is indicated by","o":["Clumping of particles","Zone of equivalence","Color change due to enzyme-substrate reaction","Fluorescence under UV light"],"a":2},{"q":"Which type of hypersensitivity is involved in tuberculin skin test (Mantoux test)?","o":["Type I – Immediate","Type II – Cytotoxic","Type III – Immune complex mediated","Type IV – Delayed (cell-mediated)"],"a":3}],"5":[{"q":"Which of the following is the gold standard method for sterilization in hospitals?","o":["Boiling","Autoclaving","Hot air oven","Pasteurization"],"a":1},{"q":"The standard condition for autoclaving is","o":["100°C for 15 minutes","121°C at 15 psi for 15–20 minutes","170°C for 1 hour","72°C for 15 seconds"],"a":1},{"q":"Which of the following is an example of non-ionizing radiation used for microbial control?","o":["Gamma rays","X-rays","Ultraviolet (UV) rays","Electron beams"],"a":2},{"q":"70% alcohol is more effective as a disinfectant than 100% alcohol because","o":["Pure alcohol evaporates slowly","Water helps in protein denaturation","It is cheaper and less toxic","It prevents corrosion of surfaces"],"a":1},{"q":"Which chemical sterilant is commonly used for heat-sensitive medical instruments like catheters?","o":["Hydrogen peroxide","Ethylene oxide gas","Iodine","Phenol"],"a":1},{"q":"Which disinfectant works by producing free radicals that damage microbial proteins and DNA?","o":["Chlorine","Phenol","Hydrogen peroxide","Silver nitrate"],"a":2},{"q":"In hot air oven sterilization, the usual standard temperature and time are","o":["100°C for 10 minutes","121°C for 20 minutes","160°C for 2 hours","63°C for 30 minutes"],"a":2},{"q":"Which antibiotic class works by inhibiting bacterial cell wall synthesis?","o":["Aminoglycosides","Macrolides","Beta-lactams","Fluoroquinolones"],"a":2},{"q":"The most important practice in medical asepsis is","o":["Wearing gloves","Hand hygiene","Using sterile gowns","Disinfecting instruments"],"a":1},{"q":"Which color-coded bin is used for disposal of human anatomical waste under Biomedical Waste Management rules (India)?","o":["Red","Yellow","Blue","Black"],"a":1}],"6":[{"q":"Which microscope uses ultraviolet light to excite fluorescent dyes in specimens?","o":["Bright field microscope","Phase contrast microscope","Fluorescence microscope","Dark field microscope"],"a":2},{"q":"The principle of dark field microscopy is","o":["Direct illumination of the specimen","Use of UV light for excitation","Illumination at an angle so only scattered light enters the lens","Conversion of phase differences into brightness differences"],"a":2},{"q":"Which type of electron microscope is best suited to study the internal structure of cells?","o":["Scanning Electron Microscope (SEM)","Transmission Electron Microscope (TEM)","Phase contrast microscope","Confocal microscope"],"a":1},{"q":"The resolving power of a microscope is defined as","o":["The maximum size of the object that can be magnified","The ability to distinguish two adjacent points as separate","The ratio of magnification to working distance","The distance between the eyepiece and objective lens"],"a":1},{"q":"Which lens is used with oil immersion technique to improve resolution?","o":["10X","40X","100X","4X"],"a":2},{"q":"Which stain is used as the primary dye in Gram staining?","o":["Safranin","Crystal violet","Methylene blue","Carbol fuchsin"],"a":1},{"q":"In Gram staining, the decolorizer is","o":["70% Alcohol or Acetone","Safranin","Iodine","Methylene blue"],"a":0},{"q":"In acid-fast staining (Ziehl–Neelsen method), which step ensures the primary stain penetrates the waxy cell wall?","o":["Use of iodine","Use of heat while applying carbol fuchsin","Counterstaining with methylene blue","Washing with sulphuric acid"],"a":1},{"q":"Acid-fast bacteria like Mycobacterium tuberculosis appear","o":["Blue under microscope","Purple/violet under microscope","Bright red/pink under microscope","Green under microscope"],"a":2},{"q":"The counterstain used in Gram staining is","o":["Carbol fuchsin","Safranin","Malachite green","India ink"],"a":1}]};
+        let score = 0;
         function toggleUnit(header) {
             const content = header.nextElementSibling;
-            const isExpanded = header.getAttribute('aria-expanded') === 'true';
-            header.setAttribute('aria-expanded', !isExpanded);
+            header.setAttribute('aria-expanded', header.getAttribute('aria-expanded') !== 'true');
             content.classList.toggle('active');
         }
-
         function openResource(type, url, title) {
-            if(type === 'coming-soon') return;
-
-            history.pushState({ modalOpen: true }, null, '#resource');
-
             const modal = document.getElementById('app-modal');
             const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = title;
+            document.getElementById('modal-title').textContent = title;
             modal.style.display = 'flex';
-            body.innerHTML = ''; 
-            body.style.display = 'flex'; 
-
-            if (type === 'quiz') {
-                // Handled by openQuiz
+            
+            // Clean URL Logic (Fallback/Runtime)
+            let finalUrl = url;
+            if (url.includes('drive.google.com')) { 
+                finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview'); 
             }
-            else {
-                let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
-                let className = (type === 'video') ? 'iframe-video' : 'iframe-doc';
-
-                body.innerHTML = `<iframe 
-                    class="${className}" 
-                    src="${cleanUrl}" 
-                    sandbox="allow-scripts allow-same-origin allow-presentation"
-                    allow="autoplay; encrypted-media; fullscreen">
-                </iframe>`;
+            else if (url.includes('human.biodigital.com')) { 
+                 if (url.includes('/viewer/')) finalUrl = url.replace('/viewer/', '/widget/');
+                 else finalUrl = url.replace('/view', '/widget'); 
             }
+            
+            body.innerHTML = '<iframe class="iframe-res" src="' + finalUrl + '" width="100%" height="100%" allow="xr-spatial-tracking" allowfullscreen></iframe>';
         }
-
-        function openQuiz(unitId) {
-            history.pushState({ modalOpen: true }, null, '#quiz');
-
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = `Quiz: Unit ${unitId}`;
-            modal.style.display = 'flex';
-            
-            body.style.display = 'block';
-            body.scrollTop = 0; 
-            
-            const questions = QUIZ_DATA[unitId] || [];
-            
-            let quizHtml = `<div class="quiz-container">`;
-            questions.forEach((q, idx) => {
-                quizHtml += `
-                    <div class="quiz-question">${idx + 1}. ${q.q}</div>
-                    <div class="quiz-options" id="q-${idx}">
-                        ${q.o.map((opt, oIdx) => `
-                            <div class="quiz-option" onclick="checkAnswer(this, ${idx}, ${oIdx}, ${q.a})">${opt}</div>
-                        `).join('')}
-                    </div>
-                `;
+        function startQuiz(unitId) {
+            score = 0;
+            const questions = QUIZ_DATA[unitId];
+            if(!questions || questions.length === 0) { alert('No questions found.'); return; }
+            let html = '<div class="quiz-container"><h2 style="color:var(--brand); margin-top:0;">Unit ' + unitId + ' Quiz</h2>';
+            html += '<div id="score-display" style="background:var(--brand); color:white; padding:5px 15px; border-radius:20px; display:inline-block; font-weight:700; margin-bottom:20px;">Score: 0 / ' + questions.length + '</div>';
+            questions.forEach((q, index) => {
+                html += '<div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">';
+                html += '<p style="font-weight:600; font-size:1.1rem; margin-bottom:15px;">' + (index + 1) + '. ' + q.q + '</p>';
+                q.o.forEach((opt, optIndex) => {
+                    html += '<div class="quiz-option" onclick="checkAnswer(this, ' + unitId + ', ' + optIndex + ', ' + q.a + ')">' + opt + '</div>';
+                });
+                html += '</div>';
             });
-            
-            if(questions.length === 0) quizHtml += `<p>Quiz coming soon!</p>`;
-            
-            quizHtml += `</div>`;
-            body.innerHTML = quizHtml;
+            html += '<button class="btn-quiz" onclick="closeModal()">Close Quiz</button></div>';
+            document.getElementById('modal-body').innerHTML = html;
+            document.getElementById('modal-title').textContent = 'Unit ' + unitId + ' Quiz';
+            document.getElementById('app-modal').style.display = 'flex';
         }
-
-        function checkAnswer(el, qIdx, oIdx, correctIdx) {
-            const parent = document.getElementById(`q-${qIdx}`);
-            const opts = parent.children;
-            for(let opt of opts) opt.style.pointerEvents = 'none';
-
-            if(oIdx === correctIdx) {
-                el.classList.add('correct');
+        function checkAnswer(element, unitId, selectedIndex, correctIndex) {
+            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+            if (selectedIndex === correctIndex) {
+                element.classList.add('correct'); score++;
             } else {
-                el.classList.add('wrong');
-                opts[correctIdx].classList.add('correct');
+                element.classList.add('wrong'); element.parentElement.children[correctIndex + 1].classList.add('correct');
             }
+            document.getElementById('score-display').textContent = 'Score: ' + score + ' / ' + QUIZ_DATA[unitId].length;
         }
-
-        function closeModal() {
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            modal.style.display = 'none';
-            body.innerHTML = ''; 
-            
-            if (history.state && history.state.modalOpen) {
-                history.back();
-            }
-        }
-
-        window.onpopstate = function(event) {
-            const modal = document.getElementById('app-modal');
-            if (modal.style.display === 'flex') {
-                modal.style.display = 'none';
-                document.getElementById('modal-body').innerHTML = '';
-            }
-        };
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const firstUnitHeader = document.querySelector('.unit-header');
-            if(firstUnitHeader) {
-                // toggleUnit(firstUnitHeader);
-            }
-        });
+        function closeModal() { document.getElementById('app-modal').style.display = 'none'; document.getElementById('modal-body').innerHTML = ""; }
     </script>
-
 </body>
 </html>
