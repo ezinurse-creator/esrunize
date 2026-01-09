@@ -3,621 +3,176 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Applied Anatomy Syllabus</title>
+    <title>Applied Anatomy</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
-        /* --- MODERN THEME --- */
         :root {
-            --primary: #00B9F2;       /* Light Blue */
-            --primary-dark: #003B82;  /* Brand Navy */
-            --teal: #009688;          /* For 3D Models */
-            --bg-card: #ffffff;
-            --bg-body: #f3f4f6;
-            --text-main: #111827;
-            --text-muted: #6b7280;
-            --accent: #f59e0b;        /* Quiz Gold */
-            --danger: #ef4444;
-            --success: #10b981;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
-            --radius-md: 12px;
+            --brand: #003B82; --accent: #00B9F2; --gray-50: #f9fafb; --gray-200: #e5e7eb; --gray-900: #111827;
+            --danger: #ef4444; --success: #10b981; --warning: #f59e0b;
         }
-
         * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: white; color: var(--gray-900); padding: 24px; max-width: 1000px; margin: 0 auto; }
+        .syllabus-btn { display: block; width: 100%; padding: 18px 24px; margin: 12px 0; background: white; color: var(--brand); border: 2px solid var(--brand); font-weight: 700; font-size: 16px; text-align: center; cursor: pointer; border-radius: 12px; transition: all 0.2s ease; text-decoration: none; }
+        .syllabus-btn:hover { background: var(--gray-50); transform: translateY(-1px); }
+        .unit-header { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 18px 24px; margin: 16px 0; background: var(--brand); color: white; font-weight: 600; font-size: 16px; border-radius: 12px; cursor: pointer; transition: 0.2s; }
+        .unit-header:hover { background: #002d63; }
+        .unit-content { padding: 0 12px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; }
+        .unit-content.active { padding: 24px 12px; max-height: none; }
+        .subsection { padding: 20px; background: white; border-radius: 12px; border: 1px solid var(--gray-200); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .resource-btn { display: flex; width: 100%; padding: 14px 18px; margin: 6px 0; background: var(--gray-50); border-radius: 8px; font-weight: 500; border: 1px solid var(--gray-200); cursor: pointer; gap: 12px; transition: 0.2s; align-items: center; }
         
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-        }
+        /* EXISTING BUTTON STYLES */
+        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
+        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
+        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+        .resource-btn.model { background: #fdf4ff; border-color: #f0abfc; color: #86198f; }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding-bottom: 80px;
-        }
-
-        /* --- HEADER & SYLLABUS --- */
-        .page-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+        /* NEW BUTTON STYLES FOR APP */
+        .resource-btn.imp-discussion { background: #fef2f2; border-color: #fecaca; color: #b91c1c; } /* Light Red Background */
+        .resource-btn.imp-pdf { background: #fff7ed; border-color: #fed7aa; color: #c2410c; } /* Light Orange Background */
         
-        .page-title {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--primary-dark);
-            margin-bottom: 10px;
-        }
-
-        .syllabus-card {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-            color: white;
-            padding: 20px;
-            border-radius: var(--radius-md);
-            text-align: center;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: var(--shadow-md);
-            margin-bottom: 30px;
-            display: block;
-            text-decoration: none;
-            transition: transform 0.2s;
-        }
-        .syllabus-card:active { transform: scale(0.98); }
-
-        /* --- UNITS (ACCORDION STYLE) --- */
-        .unit-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-md);
-            margin-bottom: 16px;
-            box-shadow: var(--shadow-sm);
-            overflow: hidden;
-            border: 1px solid #e5e7eb;
-        }
-
-        .unit-header {
-            padding: 20px;
-            background: var(--bg-card);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            font-weight: 700;
-            color: var(--primary-dark);
-            border-bottom: 1px solid transparent;
-            transition: background 0.2s;
-        }
-        
-        .unit-header:hover { background: #f9fafb; }
-        
-        .unit-header.active {
-            border-bottom-color: #e5e7eb;
-            background: #f0f9ff;
-            color: var(--primary-dark);
-        }
-
-        .unit-content {
-            display: none;
-            padding: 20px;
-            background: #fdfdfd;
-        }
-        .unit-content.show { display: block; }
-
-        /* --- RESOURCES LIST --- */
-        .resource-list {
-            display: grid;
-            gap: 12px;
-        }
-
-        .resource-btn {
-            display: flex;
-            align-items: center;
-            padding: 16px;
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            text-decoration: none;
-            color: var(--text-main);
-            font-weight: 500;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-
-        .resource-btn:hover {
-            border-color: var(--primary);
-            transform: translateX(4px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        /* Color coding by type */
-        .type-notes { border-left: 4px solid #0ea5e9; background: #f0f9ff; }
-        .type-video { border-left: 4px solid #8b5cf6; background: #f5f3ff; }
-        .type-model { border-left: 4px solid var(--teal); background: #e0f7fa; }
-        .type-quiz  { border-left: 4px solid #f59e0b; background: #fffbeb; }
-
-        .icon {
-            margin-right: 12px;
-            font-size: 1.2rem;
-            width: 30px;
-            text-align: center;
-        }
-
-        /* --- MODAL --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-        }
-
-        .modal-header {
-            height: 60px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            flex-shrink: 0;
-        }
-
-        .modal-title { font-weight: 700; color: var(--primary-dark); font-size: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-        
-        .btn-close {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            flex: 1;
-            background: #000;
-            position: relative;
-            overflow-y: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* --- FIXED IFRAME STYLES --- */
-        
-        /* 1. For Videos (Keeps 16:9 Aspect Ratio) */
-        .iframe-video {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16 / 9;
-            border: none;
-            background: #000;
-            display: block;
-        }
-
-        /* 2. For Notes & Models (Fills the screen vertically) */
-        .iframe-doc {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #fff;
-            display: block;
-        }
-
-        /* --- QUIZ STYLES --- */
-        .quiz-container {
-            background: white;
-            width: 100%;
-            min-height: 100%;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .quiz-question { margin-bottom: 20px; font-size: 1.1rem; font-weight: 600; }
-        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
-        .quiz-option {
-            padding: 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        .quiz-option:hover { background: #f0f9ff; border-color: var(--primary); }
-        .quiz-option.correct { background: var(--success); color: white; border-color: var(--success); }
-        .quiz-option.correct::after { content: '✓'; position: absolute; right: 15px; font-weight: bold; }
-        .quiz-option.wrong { background: var(--danger); color: white; border-color: var(--danger); }
-        .quiz-option.wrong::after { content: '✗'; position: absolute; right: 15px; font-weight: bold; }
-
+        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
+        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
+        .icon.video-icon { color: #8b5cf6; } .icon.quiz-icon { color: #f59e0b; } .icon.model-icon { color: #d946ef; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; display: none; flex-direction: column; }
+        .modal-header { height: 60px; background: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; }
+        .btn-close { background: var(--danger); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .modal-body { flex: 1; background: #f3f4f6; position: relative; padding: 20px; display:flex; justify-content:center; overflow-y: auto;}
+        .iframe-res { width: 100%; height: 100%; border: none; background: white; }
+        .quiz-container { background: white; width: 100%; max-width: 800px; padding: 30px; border-radius: 12px; margin-bottom: 50px; }
+        .quiz-option { padding: 12px 15px; border: 2px solid var(--gray-200); border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
+        .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
+        .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; }
+        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
+        .btn-quiz { background: var(--brand); color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 600; font-size: 16px; margin-top: 20px; cursor: pointer;}
+        @media (max-width: 768px) { body { padding: 16px; } .quiz-container { padding: 15px; } }
     </style>
 </head>
 <body>
-
-    <div class="container">
-        <div class="page-header">
-            <div class="page-title">Applied Anatomy</div>
-            <p style="color: var(--text-muted);">BSc Nursing Semester 1</p>
-        </div>
-
-        <div class="syllabus-card" onclick="openResource('Syllabus', 'https://drive.google.com/file/d/1sPup33yo_7WjFxKCAd6_5WkESw46-CjI/preview')">
-            📄 View Full Syllabus
-        </div>
-
-        <div id="units-container">
-            </div>
-    </div>
-
+    <a class="syllabus-btn" href="https://drive.google.com/file/d/1sPup33yo_7WjFxKCAd6_5WkESw46-CjI/view?usp=drive_link" target="_blank">📄 DOWNLOAD SYLLABUS</a>
+    <div id="units">
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 1 - ANATOMICAL TERMS AND ORGANIZATION OF THE HUMAN BODY <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1kBEniLShpJ5aNYXwxOBv7tvC4-w-vD5V/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1q39lDL7hKo_vmSwuBKhVstPXr7m5_86p/preview', 'Introduction & Cell Structure')"><span class="icon video-icon">▶️</span><span>Introduction & Cell Structure</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WBX&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt5F3&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Male Complete Anatomy')"><span class="icon model-icon">🧊</span><span>3D Model: Male Complete Anatomy</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WBY&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt5FI&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Female Complete Anatomy')"><span class="icon model-icon">🧊</span><span>3D Model: Female Complete Anatomy</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1IWL4S5kumnZVNBIUB-sEMZVIEKQG6pre/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1CIO4-Ztrru3s_cNoDjx1TlxpN2jE8eeR/preview', 'Tissues & Its Physiology')"><span class="icon video-icon">▶️</span><span>Tissues & Its Physiology</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WMM&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt7pQ&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Cell')"><span class="icon model-icon">🧊</span><span>3D Model: Cell</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1w4E1c8Is1z4Yo2S6XewLgLHA5gQkOwum/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Igg8WpoIsghGvDyA0iTrPDbBd3UGd1uh/preview', 'Cell Division, Mitosis, Meiosis')"><span class="icon video-icon">▶️</span><span>Cell Division, Mitosis, Meiosis</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1nCtsob7hw4vKRwvGeuVUlBEFCCMU8-sV/preview', 'Meiosis I, Meiosis II')"><span class="icon video-icon">▶️</span><span>Meiosis I, Meiosis II</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1kyh1YNyGaprCHRhmsRvYU39SKnaes0ZO/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1rPbXeMjGBAoHhWuSpaKhBCXF7kJT6Ian/preview', 'Tissue, Epithelial Tissue, Connective Tissue, Muscle Tissue')"><span class="icon video-icon">▶️</span><span>Tissue, Epithelial Tissue, Connective Tissue, Muscle Tissue</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/140zaAHcIUvLdg9qCX0XD-49ODaZ-m9yL/preview', 'Nervous Tissue')"><span class="icon video-icon">▶️</span><span>Nervous Tissue</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WBK&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt5Bb&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Neuron')"><span class="icon model-icon">🧊</span><span>3D Model: Neuron</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1VE6-YBuvTBxqT6OHxxNThl3B0ySvlyb6/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1sil8smYE73u7qf7RSM_GjXX292cfEksS/preview', 'Major Surface and Bony Landmarks, Organisation of the Human Body, Organisation of the Human Body')"><span class="icon video-icon">▶️</span><span>Major Surface and Bony Landmarks, Organisation of the Human Body, Organisation of the Human Body</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WMQ&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt7pj&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Injection site')"><span class="icon model-icon">🧊</span><span>3D Model: Injection site</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/19FFQYmxZQSACqPM6EgeTqJbcaNh57zgt/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(1)"><span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 2 -  THE RESPIRATORY SYSTEM <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1zp3SJthkar0Zqglf8gIQuMjJYfWXM2EY/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1OmqEhegf9VlGH867yfBHEAQIiD9MeGFQ/preview', 'Introduction, Respiration , Organ of Respiration, Accessory Organs of Respiration')"><span class="icon video-icon">▶️</span><span>Introduction, Respiration , Organ of Respiration, Accessory Organs of Respiration</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5W6e&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt3nI&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: The Respiratory System')"><span class="icon model-icon">🧊</span><span>3D Model: The Respiratory System</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1-X7K8jrTv_fs1yWybyNFmlannrDtqkBr/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1F5xDrsluhcpwW4j0DnwC-_nKpACD4X-I/preview', 'Nose')"><span class="icon video-icon">▶️</span><span>Nose</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5W6l&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;load-rotate=10&amp;uaid=Lt3oG&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Nose')"><span class="icon model-icon">🧊</span><span>3D Model: Nose</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/12XDRcQHkRqEnxXbp5xkJ13Cn9DDNyF7C/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1wqEMaMgy1NWL4CZkjcXwfz5cE8_ETHvu/preview', 'Pharynx')"><span class="icon video-icon">▶️</span><span>Pharynx</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5W6o&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;load-rotate=10&amp;uaid=Lt3oo&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Pharynx')"><span class="icon model-icon">🧊</span><span>3D Model: Pharynx</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1AbrT7cTpXsK0ZRT_hY4ugcQGqOTeJySl/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1n9OWWqcH36vcyFHwtLkHfJIHOoOAkAGr/preview', 'Larynx')"><span class="icon video-icon">▶️</span><span>Larynx</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5W6p&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;load-rotate=10&amp;uaid=Lt3p2&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Larynx')"><span class="icon model-icon">🧊</span><span>3D Model: Larynx</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1kWOjX4RhYHLZfXLD-IDZ-eqlpluXJHsw/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ibk0bGro4EYt-EakAnC_AuSkjMv0GXbN/preview', 'Trachea')"><span class="icon video-icon">▶️</span><span>Trachea</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5W6q&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;load-rotate=10&amp;uaid=Lt3pJ&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Trachea (Carina - Bronchial Tree)')"><span class="icon model-icon">🧊</span><span>3D Model: Trachea (Carina - Bronchial Tree)</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1xwLwFOwcEQvkL0NKhSnIwUr2RRB_f5lL/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(2)"><span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 3 - THE DIGESTIVE SYSTEM <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1GsEUK__ngjD9CBpWue0CqXO56mmjxGZ0/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1J2veHwrJ83i1Qi63iMS818hWGEAkRkAA/preview', 'The Digestive System')"><span class="icon video-icon">▶️</span><span>The Digestive System</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5W6r&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;load-rotate=10&amp;uaid=Lt3pi&amp;paid=o_10a88be0', '3D Model: Gastrointestinal Tract')"><span class="icon model-icon">🧊</span><span>3D Model: Gastrointestinal Tract</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/16RBc_T9lXiDLqM7gksV3mGWRSe-LwPvb/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1UetDfsIJoGgdj_5BFmPsRCUrBbyJosfT/preview', 'Major Organs in Digestive System : Mouth, Pharynx, Esophagus, Stomach')"><span class="icon video-icon">▶️</span><span>Major Organs in Digestive System : Mouth, Pharynx, Esophagus, Stomach</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1GKJzoRPgOcGUhRQ7NaMes5nojhRm7aSD/preview', 'Major Organs in Digestive System : Small Intestine, Large Intestine and Rectum and Anus')"><span class="icon video-icon">▶️</span><span>Major Organs in Digestive System : Small Intestine, Large Intestine and Rectum and Anus</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5W6x&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;load-rotate=10&amp;uaid=Lt3rI&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Stomach')"><span class="icon model-icon">🧊</span><span>3D Model: Stomach</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5W72&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;load-rotate=10&amp;uaid=Lt3s7&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Large Intestine')"><span class="icon model-icon">🧊</span><span>3D Model: Large Intestine</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WMR&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt7qF&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Anus & Rectum')"><span class="icon model-icon">🧊</span><span>3D Model: Anus & Rectum</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WMS&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt7qJ&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Colorectal Anatomy')"><span class="icon model-icon">🧊</span><span>3D Model: Colorectal Anatomy</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1hMrH-1a31PXc2UlHZ-38fxCkUoVIMxRI/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Z10EruxmurF-VwMUkp7cH0miycrZIC8X/preview', 'Accessory Organs In Digestive System : Teeth,Tongue,Salivary Glands')"><span class="icon video-icon">▶️</span><span>Accessory Organs In Digestive System : Teeth,Tongue,Salivary Glands</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Ij8j9b45FQdVKea3NH75h59hrtsOGDMW/preview', 'Accessory Organs In Digestive System : Liver, Gall Bladder and Pancreas')"><span class="icon video-icon">▶️</span><span>Accessory Organs In Digestive System : Liver, Gall Bladder and Pancreas</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5W6s&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;load-rotate=10&amp;uaid=Lt3qG&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Teeth')"><span class="icon model-icon">🧊</span><span>3D Model: Teeth</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5W6x&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;load-rotate=10&amp;uaid=Lt3rh&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Liver')"><span class="icon model-icon">🧊</span><span>3D Model: Liver</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5W71&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;load-rotate=10&amp;uaid=Lt3s0&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Gallbladder')"><span class="icon model-icon">🧊</span><span>3D Model: Gallbladder</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5W6y&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;load-rotate=10&amp;uaid=Lt3rP&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Pancreas')"><span class="icon model-icon">🧊</span><span>3D Model: Pancreas</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5W6u&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;load-rotate=10&amp;uaid=Lt3qk&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Tongue')"><span class="icon model-icon">🧊</span><span>3D Model: Tongue</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1IkyDibJYujUNn3i2eF-DEcO2vuIrlQyU/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(3)"><span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 4 - UNIT 4 - THE CIRCULATORY AND LYMPHATIC SYSTEM <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Z-5OBzBGiQ5khWySeLIW79SrvC2B2zqz/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1c2SvDIMfV_2QROjL21zueX2AisClnOJL/preview', 'Structure, Layers & Chambers of the Heart')"><span class="icon video-icon">▶️</span><span>Structure, Layers & Chambers of the Heart</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5W6c&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt3n1&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Heart to Lungs Circulation')"><span class="icon model-icon">🧊</span><span>3D Model: Heart to Lungs Circulation</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5W6a&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt3m6&amp;paid=o_10a88be0&amp;false', '3D Model: Layers of Heart')"><span class="icon model-icon">🧊</span><span>3D Model: Layers of Heart</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_AYeDd5O-Vfv2QM3xtoWl8b6LR7YtFU2/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1gKLMDmpruJJcDO9I0tVCpNyCs5gPn29N/preview', 'Valves of the Heart')"><span class="icon video-icon">▶️</span><span>Valves of the Heart</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5W6Y&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt3lt&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Heart Valves')"><span class="icon model-icon">🧊</span><span>3D Model: Heart Valves</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1RW64cf5CCvO562MfUOSJsEofpH9Af5ta/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1YN1R3ORgCOZW7I0zwoCFSReqv--sP1V-/preview', 'Physiology of Cardiovascular : Functions, Conduction System, Cardiac Cycle')"><span class="icon video-icon">▶️</span><span>Physiology of Cardiovascular : Functions, Conduction System, Cardiac Cycle</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1AKuqG9zZUKHLpE8Y8vpRg-orQa0-D_hA/preview', 'Physiology of Cardiovascular : Stroke Volume')"><span class="icon video-icon">▶️</span><span>Physiology of Cardiovascular : Stroke Volume</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1pzDhCdA2HDEynD5ko4FNmzpVKS-GiVJa/preview', 'Physiology of Cardiovascular : Cardiac Output, Heart Rate, Normal Value and Variations ')"><span class="icon video-icon">▶️</span><span>Physiology of Cardiovascular : Cardiac Output, Heart Rate, Normal Value and Variations </span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Ec20jwtZzLFfneg0OMqK3FO261zxRM_X/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1CDpZuBMgkCM-CX9603R7-qy4aZh66qqO/preview', 'Pulmonary and Systemic Circulation')"><span class="icon video-icon">▶️</span><span>Pulmonary and Systemic Circulation</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5W1Y&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt2QA&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Blood Flow Through the Heart')"><span class="icon model-icon">🧊</span><span>3D Model: Blood Flow Through the Heart</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1262O0888IeOjk2uvL1cH_MyHU2DscFy7/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ZNSmG28SzdSISm_ymQ6lnXtt4jb8uhvm/preview', 'Thoracic Aorta Branches')"><span class="icon video-icon">▶️</span><span>Thoracic Aorta Branches</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1yak7PcNQ6ZO2_rbEmUVEb6tl5j81ZgVD/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1EcBwprEnpuWXA53qbBA35OC9On3SPh84/preview', 'Venous Circulation : Heart, Neck and Veins, Upper Limbs')"><span class="icon video-icon">▶️</span><span>Venous Circulation : Heart, Neck and Veins, Upper Limbs</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1voG33zrrdYoCKpMsZnQAChgFaVF_FWbp/preview', 'Venous Circulation : Thorax, Abdomen and Pelvis, Lower Limbs')"><span class="icon video-icon">▶️</span><span>Venous Circulation : Thorax, Abdomen and Pelvis, Lower Limbs</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5W6b&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt3mS&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Arterial and Venous Circulation')"><span class="icon model-icon">🧊</span><span>3D Model: Arterial and Venous Circulation</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1zgsHAnG1zEQyIzhClNdLrilPTVNmj_CG/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1HnNCXLNOga-LLV0BT_aRLduO2TL3uBnM/preview', 'Lymphatic System : Lymphatic Capilleries, Thoracic Duct, ')"><span class="icon video-icon">▶️</span><span>Lymphatic System : Lymphatic Capilleries, Thoracic Duct, </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1FRYKJr2ycOuAPwdSqGFcykwYrHINKrqv/preview', 'Lymphatic System : Lymphatic Organs and Tissues')"><span class="icon video-icon">▶️</span><span>Lymphatic System : Lymphatic Organs and Tissues</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1IxEFK4fjEYKfxNvBRiRlMeZIEdiCcbM5/preview', 'Lymphatic System : Functioning Parts, Medulla, Spleen, Parenchymal Tissue, Lymphatic Nodules')"><span class="icon video-icon">▶️</span><span>Lymphatic System : Functioning Parts, Medulla, Spleen, Parenchymal Tissue, Lymphatic Nodules</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1GwaGnD_sjwzfDm0VvHxfR6nB88TvJVK4/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(4)"><span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 5 - THE ENDOCRINE SYSTEM <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1DhUray7ZdgEfZmoSLxK_Ah9-P_y6uA35/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1RkkA8rAcXeFv8nQVj5MeipFSGSVyavrU/preview', 'Introduction, Hypothalamus')"><span class="icon video-icon">▶️</span><span>Introduction, Hypothalamus</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1AMGTE-wphhX8AJq0FqXqrfLJXvXXdEOn/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1oxMOZKsEqi9-v3Jkv914haQXIzQEXnMA/preview', 'Pituitary Gland : Position and Relations, Blood Supply, Hormones, Secretions from anterior pitutary Gland')"><span class="icon video-icon">▶️</span><span>Pituitary Gland : Position and Relations, Blood Supply, Hormones, Secretions from anterior pitutary Gland</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1cghequtktwARAfKOnVM5skDDTyTZv4hB/preview', 'Pituitary Gland : Hormones, Secretions from Posterior pitutary Gland, Applied Aspect of Anatomy, ')"><span class="icon video-icon">▶️</span><span>Pituitary Gland : Hormones, Secretions from Posterior pitutary Gland, Applied Aspect of Anatomy, </span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1e6y5TAS8eYquR1Q9Tvi9aAt-aG0IYRJa/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WBA&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt58W&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Thyroid Anatomy')"><span class="icon model-icon">🧊</span><span>3D Model: Thyroid Anatomy</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WBB&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt58o&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Adrenal Gland Cross Section')"><span class="icon model-icon">🧊</span><span>3D Model: Adrenal Gland Cross Section</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WBD&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt59G&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Hypothalamus')"><span class="icon model-icon">🧊</span><span>3D Model: Hypothalamus</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1apCsaobC9JRzjvKU03zqmfTbE8i1rd_1/preview', 'Thyroid Gland')"><span class="icon video-icon">▶️</span><span>Thyroid Gland</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_hlHXVYyKgHR4rcITkdZ9Cor-YCTf0ib/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(5)"><span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 6 -  THE SENSORY ORGANS <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/10ReXGEjNagS3lQWO4GcQxe9ucmx8a5Fp/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1tfjepPkz0X2V7sIX9HjLzuNG2qamX7MN/preview', 'Introduction to Sensory System')"><span class="icon video-icon">▶️</span><span>Introduction to Sensory System</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1R0wYF02yqE8FhWfjFz_lTj1Qj0w8r4vU/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1spCTVGLHIx5f8Jlg7dMkc3tIJG7i0-fw/preview', 'Skin :  Epidermis, Dermis, Glands of Skin, Appendages')"><span class="icon video-icon">▶️</span><span>Skin :  Epidermis, Dermis, Glands of Skin, Appendages</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1h4GZqcD1CAlNE_I8MpHyOhTi2kmHHwBP/preview', 'Skin : Applied Physiology')"><span class="icon video-icon">▶️</span><span>Skin : Applied Physiology</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WBZ&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt5Fl&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Skin')"><span class="icon model-icon">🧊</span><span>3D Model: Skin</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WBb&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt5GM&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Fingernail Cross Section')"><span class="icon model-icon">🧊</span><span>3D Model: Fingernail Cross Section</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Zq6UjNapvIayDsSJcRswsDGoiDgtfk1_/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1sA3BwCa5sIrlPpRJW1-8lRW_Zmr_XjeP/preview', 'Eye : Anatomy and Layers')"><span class="icon video-icon">▶️</span><span>Eye : Anatomy and Layers</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WBb&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt5GM&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Human Eye')"><span class="icon model-icon">🧊</span><span>3D Model: Human Eye</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WMs&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt7wx&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Layers of Eye')"><span class="icon model-icon">🧊</span><span>3D Model: Layers of Eye</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1scrYYbX1oU8BSo22PdnMpPyLZBGPhOg-/preview', 'Eye : Blood Supply, Nerve Supply, ')"><span class="icon video-icon">▶️</span><span>Eye : Blood Supply, Nerve Supply, </span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1qDPttOigYLc_EhGGYM8mhmBXkG7qmJc_/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1tFHvLaUNpdfA70hWRL_FVmMMBAOYs2iK/preview', 'Ear : External Ear, Middle Ear, Bloody Supply, Nerve Supply')"><span class="icon video-icon">▶️</span><span>Ear : External Ear, Middle Ear, Bloody Supply, Nerve Supply</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WBc&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt5Ge&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Human Ear')"><span class="icon model-icon">🧊</span><span>3D Model: Human Ear</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1l1jQYvsIINMf1TJs-iW6uAD-t29BKyKk/preview', 'Ear : Inner Ear')"><span class="icon video-icon">▶️</span><span>Ear : Inner Ear</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1nIBTV8L9bIjN5IMTdOwTeSgDXVHYMwX7/preview', 'Ear : Vestibular Apparatus, Cohlea, Blood Supply, Applied Phsyiology ')"><span class="icon video-icon">▶️</span><span>Ear : Vestibular Apparatus, Cohlea, Blood Supply, Applied Phsyiology </span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1QnKz-GiH4FArxiLEqhuSbJQlYTarIpgB/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1QnKz-GiH4FArxiLEqhuSbJQlYTarIpgB/preview', 'Tongue :  Gustation,  Papillae of Tongue, Muscles of Tongue')"><span class="icon video-icon">▶️</span><span>Tongue :  Gustation,  Papillae of Tongue, Muscles of Tongue</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WBd&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt5H9&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Tongue (Taste Buds)')"><span class="icon model-icon">🧊</span><span>3D Model: Tongue (Taste Buds)</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1CeReEqjIXSwl5PDACOgWqgvFdioYelhf/preview', 'Tongue : Gustatory Pathway, Functions, Nerve Supply, Lymphatic Drainage, Applied Physiology')"><span class="icon video-icon">▶️</span><span>Tongue : Gustatory Pathway, Functions, Nerve Supply, Lymphatic Drainage, Applied Physiology</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1zuHk_9YdInyhjO-OH77m3ZSjTFwu0FSX/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1j7UCi2uBxSXO22cntanx9gJr0aAb8SN3/preview', 'Nose')"><span class="icon video-icon">▶️</span><span>Nose</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5W6l&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;load-rotate=10&amp;uaid=Lt3oG&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Nose and Nasal Cavity')"><span class="icon model-icon">🧊</span><span>3D Model: Nose and Nasal Cavity</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1D4pllkIQX1mQ775x3CqXAhrQpBqewemG/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/16q4bQnbziJ7g8oNtfPl8sTCsJF76y1ax/preview', 'Smell and Olfaction')"><span class="icon video-icon">▶️</span><span>Smell and Olfaction</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1L9ZfEeHg35IAL_S2nu4hoPw0S6fUcjcL/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(6)"><span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 7 - UNIT 7 - THE MUSCULOSKELETAL SYSTEM <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1uhJdU-uVTxQYK_yBX4mnSNMUvuy6CDCE/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1uhJdU-uVTxQYK_yBX4mnSNMUvuy6CDCE/preview', 'Axial & Appendicular Skeleton')"><span class="icon video-icon">▶️</span><span>Axial & Appendicular Skeleton</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WBg&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt5Hc&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Male Skeletal System')"><span class="icon model-icon">🧊</span><span>3D Model: Male Skeletal System</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WBh&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt5Hm&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Female Skeletal System')"><span class="icon model-icon">🧊</span><span>3D Model: Female Skeletal System</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1lmL0DQ7pdhGmB_KbG2-gcsl4j_99x0Qs/preview', 'Lecture Notes   ')"><span class="icon">📝</span><span>Lecture Notes   </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1GlO-oknavSyl9c7LQiFqWXiox7OPsJJY/preview', 'Skull and Carnium : Joints, Frontal Bone, Temporal Bone, Occipital Bone, Parietal Bone')"><span class="icon video-icon">▶️</span><span>Skull and Carnium : Joints, Frontal Bone, Temporal Bone, Occipital Bone, Parietal Bone</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1GlO-oknavSyl9c7LQiFqWXiox7OPsJJY/preview', 'Skull and Carnium : Sphenoid Bone, Ethimoid Bone')"><span class="icon video-icon">▶️</span><span>Skull and Carnium : Sphenoid Bone, Ethimoid Bone</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1IKUDAxphmxHDBbYCN-eQN76Qf2N3SQue/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1AETKnAQRe44iMP-rmroqQ3SndtV6lhhk/preview', 'Facial Bones, Ear Ossicles & Hyoid Bone')"><span class="icon video-icon">▶️</span><span>Facial Bones, Ear Ossicles & Hyoid Bone</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1FymG_OrCS9wJ9TW7J2fMPddDDjTF5X6U/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1agTiGLA13gZiBpZjnVtOy7bhucniIghn/preview', 'The Thorax  : The Ribs, Sternum, Articulations, Attachments')"><span class="icon video-icon">▶️</span><span>The Thorax  : The Ribs, Sternum, Articulations, Attachments</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1yHgv14D3l4KpCE1ohLsQm8DRZ_0pPjp0/preview', 'The Vertebra : Structure, Cervical Verterbral, Lumbar Vaertebra, The Sacral, Coccygeal')"><span class="icon video-icon">▶️</span><span>The Vertebra : Structure, Cervical Verterbral, Lumbar Vaertebra, The Sacral, Coccygeal</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1gOvuFr_0qj6jAnx1RfDPsOEKoNzDLzAS/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1S0nR4p6Kqy3asO5p2AP729AkGC3_n-bv/preview', 'The Appendicular skeleton')"><span class="icon video-icon">▶️</span><span>The Appendicular skeleton</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1W0SgH2BthadBVMlve9p0ESUeg8OcvJwX/preview', 'Upper arm')"><span class="icon video-icon">▶️</span><span>Upper arm</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1xkGJiVJW9enQPQdCgpqFNK0jsQzntSGX/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1kGBTsWrYrPjABluub9l0e_3gsZIWxlJP/preview', 'Appendicular Skeleton : Lower Limb - Pelvic Gridle')"><span class="icon video-icon">▶️</span><span>Appendicular Skeleton : Lower Limb - Pelvic Gridle</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1d9dc01Ib8C9Iz0lvnKv5opAB4VlffT77/preview', 'Appendicular Skeleton : Lower Limb - Femur, Patella, Tibia')"><span class="icon video-icon">▶️</span><span>Appendicular Skeleton : Lower Limb - Femur, Patella, Tibia</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/160iJRItKSaoZy6gexqFYjTEQGQT9Zh29/preview', 'Appendicular Skeleton : Lower Limb - Fibula, Tarsals, Metatarsals, Phalanges')"><span class="icon video-icon">▶️</span><span>Appendicular Skeleton : Lower Limb - Fibula, Tarsals, Metatarsals, Phalanges</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1tgVPdQxo4uJXC_Js5YH5HR1rgKVpzxeB/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1NNbFQwSh2pow3kzGaHmczqfTtRHHhyMQ/preview', 'The Muscles Of The Body : Head, Muscles of Scalp, Auricles, Eyelids')"><span class="icon video-icon">▶️</span><span>The Muscles Of The Body : Head, Muscles of Scalp, Auricles, Eyelids</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WBi&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt5Hw&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Male Muscular System')"><span class="icon model-icon">🧊</span><span>3D Model: Male Muscular System</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WBj&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt5I6&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Female Muscular System')"><span class="icon model-icon">🧊</span><span>3D Model: Female Muscular System</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1xBYgN3fEL2PeHiKD1r7EOxVeoSbzzydK/preview', 'The Muscles Of The Body : Muscles of Nose, Mouth')"><span class="icon video-icon">▶️</span><span>The Muscles Of The Body : Muscles of Nose, Mouth</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1OKPagZy19z7Xw0zpol4QIIshRdEXaiwX/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1zaSr6Zr1gmdYBg4ySTMTIK5Jmg_jK9rI/preview', 'The Muscles of the Neck & Thorax')"><span class="icon video-icon">▶️</span><span>The Muscles of the Neck & Thorax</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1cNnQKrTNKrfGR4Oob6JvtJ8cc63YUghY/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1awZPGUvAr_bQi9N8z7dUE7hYsHiamNww/preview', 'The Muscles of the Body : Abdomen ')"><span class="icon video-icon">▶️</span><span>The Muscles of the Body : Abdomen </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/14inZNwxWOS4U4lU_8lZGsI46aA0nFWuJ/preview', 'The Muscles of the Body : Pelvis')"><span class="icon video-icon">▶️</span><span>The Muscles of the Body : Pelvis</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1XW9XQTguFmqmqRN7PdtK0emx0nsvipG-/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Zp-g9AMD6NgiEvW_tpeLm2_cpj1AyEG8/preview', 'The Muscles of the Body : Shoulder Gridle')"><span class="icon video-icon">▶️</span><span>The Muscles of the Body : Shoulder Gridle</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1p9K1agdplfI49J5BN4ZGmkU1GU6sSqq1/preview', 'The Muscles of the Body : Upper Limb')"><span class="icon video-icon">▶️</span><span>The Muscles of the Body : Upper Limb</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_nY4Tnijoe640hpDppK3f4-t8vPcYPB6/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1i4yUlGXKszLXhKO9HzZR2ud0O3TH1Flg/preview', 'The Muscles of the Body : Lower Limb - Gluteus Maximus, Gluteus Medius, Gluteus Minimus, Muscles of Thigh, Muscles of Leg')"><span class="icon video-icon">▶️</span><span>The Muscles of the Body : Lower Limb - Gluteus Maximus, Gluteus Medius, Gluteus Minimus, Muscles of Thigh, Muscles of Leg</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1hp-iS1JZ0pIKs0KPESLLxTvx7y5STnLo/preview', 'The Muscles of the Body : Lower Limb - Anterior Compartment, Lateral Compartment, Posterior Compartment, Muscles of Foot')"><span class="icon video-icon">▶️</span><span>The Muscles of the Body : Lower Limb - Anterior Compartment, Lateral Compartment, Posterior Compartment, Muscles of Foot</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1fUnjaLcQyGVxsyw38fAQG7bfJy_Vrr90/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(7)"><span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 8 - THE RENAL SYSTEM <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1kmmyy5WYzxj4H0NLbVMxkmjM1Clwy2Fh/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1vhyUdOpH4nSLgBOGZ5iAIIpsTUUysCth/preview', 'Introduction, Kidney')"><span class="icon video-icon">▶️</span><span>Introduction, Kidney</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5W74&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;load-rotate=10&amp;uaid=Lt3sG&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: The Renal System')"><span class="icon model-icon">🧊</span><span>3D Model: The Renal System</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5W76&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;load-rotate=10&amp;uaid=Lt3sW&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Kidney Coronal Cross Section')"><span class="icon model-icon">🧊</span><span>3D Model: Kidney Coronal Cross Section</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1w5FhsuNnh2-xYO0K3XOJ9Jkifujnpib1/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/14Hf9dYtVB0vcgcK62TcHl-wgFkH0svMW/preview', 'Nephron')"><span class="icon video-icon">▶️</span><span>Nephron</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5W75&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;load-rotate=10&amp;uaid=Lt3sS&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Nephron')"><span class="icon model-icon">🧊</span><span>3D Model: Nephron</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1QYHwhJfT3nsq65BQyjNyEZQyIjS2Tudb/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1GyLCexgijItmFDnqaRSRjyDOWwvsKH9o/preview', 'Formation of Urine')"><span class="icon video-icon">▶️</span><span>Formation of Urine</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1wGdhW4mIZ02dbIJBvl5MboOcJypExzpT/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1HVwzo7dyaHPjU5SEMewuSj42uDybT_YC/preview', 'Urinary Bladder')"><span class="icon video-icon">▶️</span><span>Urinary Bladder</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1VbyhtTIN9wrBBXJBcwMQcWzrIqiJr8Ax/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1KI-ghnLb9rT_nF-uHch4rzyFlgNMPZYS/preview', 'Ureters & Urethra')"><span class="icon video-icon">▶️</span><span>Ureters & Urethra</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1M4pfLTPc4F00kOZi_Duh46B8CgOr2Tfm/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1iqof5c5iQ15Q7D4cKimJp1iTBiIu_rEX/preview', 'Regulation of Renal Function : Autoregulation of the Kidney')"><span class="icon video-icon">▶️</span><span>Regulation of Renal Function : Autoregulation of the Kidney</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Mj-pmY141JZqUmkfS6watsphxsRaCfG-/preview', 'Regulation of Renal Function : Role of Kidney in Regulation of Osmolarity and Volume')"><span class="icon video-icon">▶️</span><span>Regulation of Renal Function : Role of Kidney in Regulation of Osmolarity and Volume</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1LA_fJ1OlFg-aHxKkGLLGRA8O191puYbq/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(8)"><span class="icon quiz-icon">✍️</span><span>Take Unit 8 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 9 -  THE REPRODUCTIVE SYSTEM <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1I08cHKZSrgoBuj2QBXFFSE46LctHrQVG/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1I8362MikaAHti6dN6VqYy_2Xc1GAOEj2/preview', 'Introduction to Female Reproductive System')"><span class="icon video-icon">▶️</span><span>Introduction to Female Reproductive System</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WBF&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt5AC&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: The Reproductive System')"><span class="icon model-icon">🧊</span><span>3D Model: The Reproductive System</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1hA4yjYloPMWbt1_quImXWq290hZwB_Pr/preview', 'Blood Supply to Reproductive Organs')"><span class="icon video-icon">▶️</span><span>Blood Supply to Reproductive Organs</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Q2uaIXGZeYdefhHaOQHB4La7VcU7zYSs/preview', 'Vagina')"><span class="icon video-icon">▶️</span><span>Vagina</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Sps6NRMuDs3_YI9_rCfSp4g6-SmU68Al/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/18tPRHR6HZ7xgI33sy083g0ZhzlM4wKSI/preview', 'Ovaries')"><span class="icon video-icon">▶️</span><span>Ovaries</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1sT9ooUeG2Hjb-I4lOojZ7ButvYYh91JO/preview', 'Supports of the Uterus')"><span class="icon video-icon">▶️</span><span>Supports of the Uterus</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WBH&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt5Av&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Female Breast')"><span class="icon model-icon">🧊</span><span>3D Model: Female Breast</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1bYLV6Hu4-LckHmObgAf-nildLdIllt_1/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1bjVDhPVR4nUuPvtsq6SEwLQ7eSKhHZmX/preview', 'Menstrual Cycle')"><span class="icon video-icon">▶️</span><span>Menstrual Cycle</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1SKiI6Nl70N7my_rp6e_R_NmpXgKtIRFo/preview', 'Oogenesis')"><span class="icon video-icon">▶️</span><span>Oogenesis</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1-tTembIws0qGE-Ux9sdVyjHSr9XUni_U/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WBI&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt5BC&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Male Reproductive System')"><span class="icon model-icon">🧊</span><span>3D Model: Male Reproductive System</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1I91niF_dCUutmMkRvSYSGbYlQ6WSssXJ/preview', 'Male Reproductive System Introduction')"><span class="icon video-icon">▶️</span><span>Male Reproductive System Introduction</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1WAZEZNkS8q3TA7hMfblZW0QQiWCEbwGO/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1MOp3NdW4WfTFgpD7A-z-8ibRKw6FLCSg/preview', 'Epididymis')"><span class="icon video-icon">▶️</span><span>Epididymis</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/17TmL4aHPbmDJTKb8BPBN8f1CI2VuXV1m/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WBJ&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt5BM&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Prostate: Sagittal Cross Section')"><span class="icon model-icon">🧊</span><span>3D Model: Prostate: Sagittal Cross Section</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1zCIOwHcNDcGCstfHZzxqQmyp1PSY0wq4/preview', 'Physiology of Male Reproductive System : Spermatogenesis - Steps and Flowchart')"><span class="icon video-icon">▶️</span><span>Physiology of Male Reproductive System : Spermatogenesis - Steps and Flowchart</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1-9CZj_02HT91clc8w5me4YBCGBVMPinJ/preview', 'Physiology of Male Reproductive System : Sperm and Semen - Structure and Seminal Fluid')"><span class="icon video-icon">▶️</span><span>Physiology of Male Reproductive System : Sperm and Semen - Structure and Seminal Fluid</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1uQ3c-z2ZnZw7lSiQPN9OdnQigewELq_K/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(9)"><span class="icon quiz-icon">✍️</span><span>Take Unit 9 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 10 - THE NERVOUS SYSTEM <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WBM&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt5CF&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Neuron')"><span class="icon model-icon">🧊</span><span>3D Model: Neuron</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1mhFnNF9ZWRXOIRmbFFlL0nY5dKijPyVB/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1r0exklx5ryyVG_NaT1_LZ13aa2LRbjLq/preview', 'Introduction to Nervous System & Structure of Neuron, Components of Nervous System')"><span class="icon video-icon">▶️</span><span>Introduction to Nervous System & Structure of Neuron, Components of Nervous System</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1rxxeNDqqIhoQuP3TeJfUXgyQzyfkh3wQ/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1kXeTmaH3N-d24IahIxqnDXw2fdGJbVXM/preview', 'CNS AND The Brain : Structure of Brain - Basala Ganglia, Cerebrum')"><span class="icon video-icon">▶️</span><span>CNS AND The Brain : Structure of Brain - Basala Ganglia, Cerebrum</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/13Hj_0a0Osu08I-wKgg_PPOrGRapr8p-E/preview', 'CNS AND The Brain : Structure of Brain - Cerebellum, Brain Stem')"><span class="icon video-icon">▶️</span><span>CNS AND The Brain : Structure of Brain - Cerebellum, Brain Stem</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1jlxkdv4ClaVP4iTWBNlZKojwg9dZN8GH/preview', 'CNS AND The Brain : Structure of Brain - Meninges')"><span class="icon video-icon">▶️</span><span>CNS AND The Brain : Structure of Brain - Meninges</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1xKJPUa-UiaHd1pCD_khApZqWp08VDrK9/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1K_0JLoUw5TTmV78uEYZ7nM7U44XE0EV9/preview', 'The Structure of the Spinal Cord & Spinal Nerves')"><span class="icon video-icon">▶️</span><span>The Structure of the Spinal Cord & Spinal Nerves</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1tLDfVSdMbul11iXlUApemFhq1UpZgoD6/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(10)"><span class="icon quiz-icon">✍️</span><span>Take Unit 10 Quiz</span></div></div></div>
+                </div></div>
     <div id="app-modal" class="modal-overlay">
         <div class="modal-header">
-            <div id="modal-title" class="modal-title">Resource</div>
+            <div id="modal-title" style="font-weight:700; color:var(--brand);">Resource</div>
             <button class="btn-close" onclick="closeModal()">Close X</button>
         </div>
         <div id="modal-body" class="modal-body"></div>
     </div>
-
     <script>
-        // --- 1. ANATOMY QUIZ DATA ---
-        const QUIZ_DATA = {
-            1: [ 
-                { q: "The 'Powerhouse' of the cell is:", o: ["Nucleus", "Mitochondria", "Ribosome", "Golgi Body"], a: 1 },
-                { q: "Which tissue covers body surfaces?", o: ["Connective", "Muscular", "Epithelial", "Nervous"], a: 2 },
-                { q: "The anatomical position implies the body is:", o: ["Lying down", "Sitting", "Standing erect facing forward", "Bending"], a: 2 },
-                { q: "Which plane divides the body into left and right?", o: ["Sagittal", "Coronal", "Transverse", "Oblique"], a: 0 },
-                { q: "The basic unit of life is:", o: ["Tissue", "Organ", "Cell", "System"], a: 2 }
-            ],
-            2: [ 
-                { q: "The 'Windpipe' is anatomically known as:", o: ["Esophagus", "Trachea", "Larynx", "Pharynx"], a: 1 },
-                { q: "Gas exchange occurs in the:", o: ["Bronchi", "Alveoli", "Trachea", "Nose"], a: 1 },
-                { q: "The right lung has how many lobes?", o: ["Two", "Three", "One", "Four"], a: 1 },
-                { q: "The voice box is the:", o: ["Larynx", "Pharynx", "Trachea", "Mouth"], a: 0 },
-                { q: "Which muscle is primarily responsible for breathing?", o: ["Intercostals", "Diaphragm", "Abdominals", "Pectorals"], a: 1 }
-            ],
-            3: [
-                { q: "Digestion begins in the:", o: ["Stomach", "Small Intestine", "Mouth", "Esophagus"], a: 2 },
-                { q: "The largest gland in the body is:", o: ["Pancreas", "Liver", "Thyroid", "Pituitary"], a: 1 },
-                { q: "Most absorption of nutrients occurs in the:", o: ["Stomach", "Small Intestine", "Large Intestine", "Esophagus"], a: 1 },
-                { q: "Bile is stored in the:", o: ["Liver", "Gallbladder", "Pancreas", "Stomach"], a: 1 },
-                { q: "The wave-like motion moving food is called:", o: ["Digestion", "Peristalsis", "Absorption", "Mastication"], a: 1 }
-            ],
-            4: [
-                { q: "Which chamber pumps blood to the body?", o: ["Right Atrium", "Right Ventricle", "Left Atrium", "Left Ventricle"], a: 3 },
-                { q: "The pacemaker of the heart is:", o: ["AV Node", "SA Node", "Bundle of His", "Purkinje Fibers"], a: 1 },
-                { q: "Which blood vessel carries oxygenated blood?", o: ["Pulmonary Artery", "Aorta", "Superior Vena Cava", "Pulmonary Vein"], a: 1 },
-                { q: "The mitral valve is located between:", o: ["Right Atrium/Ventricle", "Left Atrium/Ventricle", "Aorta/Ventricle", "Pulmonary/Ventricle"], a: 1 },
-                { q: "Exchange of gases occurs in:", o: ["Arteries", "Veins", "Capillaries", "Heart"], a: 2 }
-            ],
-            5: [
-                { q: "The 'Master Gland' is the:", o: ["Thyroid", "Adrenal", "Pituitary", "Pancreas"], a: 2 },
-                { q: "Insulin is secreted by the:", o: ["Liver", "Pancreas", "Spleen", "Gallbladder"], a: 1 },
-                { q: "Which gland regulates metabolism?", o: ["Thyroid", "Parathyroid", "Adrenal", "Thymus"], a: 0 },
-                { q: "Adrenaline is secreted by:", o: ["Kidney", "Adrenal Gland", "Brain", "Heart"], a: 1 },
-                { q: "Calcitonin regulates blood levels of:", o: ["Glucose", "Sodium", "Calcium", "Potassium"], a: 2 }
-            ],
-            6: [
-                { q: "The outer layer of the skin is:", o: ["Dermis", "Epidermis", "Subcutaneous", "Hypodermis"], a: 1 },
-                { q: "The white part of the eye is:", o: ["Cornea", "Sclera", "Iris", "Retina"], a: 1 },
-                { q: "Which bone is NOT in the middle ear?", o: ["Malleus", "Incus", "Stapes", "Femur"], a: 3 },
-                { q: "Olfaction refers to the sense of:", o: ["Taste", "Sight", "Smell", "Hearing"], a: 2 },
-                { q: "Gustatory receptors detect:", o: ["Light", "Sound", "Taste", "Touch"], a: 2 }
-            ],
-            7: [
-                { q: "The longest bone in the body is:", o: ["Humerus", "Tibia", "Femur", "Fibula"], a: 2 },
-                { q: "How many cervical vertebrae are there?", o: ["5", "7", "12", "4"], a: 1 },
-                { q: "Which muscle abducts the arm?", o: ["Biceps", "Triceps", "Deltoid", "Pectoralis"], a: 2 },
-                { q: "The knee cap is the:", o: ["Patella", "Tibia", "Fibula", "Femur"], a: 0 },
-                { q: "Sutures are found in the:", o: ["Knee", "Skull", "Elbow", "Hip"], a: 1 }
-            ],
-            8: [
-                { q: "The functional unit of the kidney is:", o: ["Neuron", "Nephron", "Alveoli", "Villi"], a: 1 },
-                { q: "Urine is stored in the:", o: ["Kidney", "Ureter", "Urinary Bladder", "Urethra"], a: 2 },
-                { q: "The tube carrying urine outside the body is:", o: ["Ureter", "Urethra", "Nephron", "Tubule"], a: 1 },
-                { q: "Filtration occurs in the:", o: ["Glomerulus", "Loop of Henle", "Collecting Duct", "Ureter"], a: 0 },
-                { q: "Normal urine output per day is approx:", o: ["100-200ml", "1-1.5 Liters", "5-6 Liters", "10 Liters"], a: 1 }
-            ],
-            9: [
-                { q: "The male gamete is:", o: ["Ovum", "Sperm", "Zygote", "Embryo"], a: 1 },
-                { q: "Fertilization usually occurs in:", o: ["Uterus", "Ovary", "Fallopian Tube", "Vagina"], a: 2 },
-                { q: "The hormone responsible for male characteristics:", o: ["Estrogen", "Progesterone", "Testosterone", "Insulin"], a: 2 },
-                { q: "The lining of the uterus is:", o: ["Myometrium", "Endometrium", "Perimetrium", "Epimetrium"], a: 1 },
-                { q: "Sperm maturation occurs in:", o: ["Testes", "Epididymis", "Vas Deferens", "Prostate"], a: 1 }
-            ],
-            10: [
-                { q: "The CNS consists of:", o: ["Brain only", "Spinal Cord only", "Brain & Spinal Cord", "Nerves"], a: 2 },
-                { q: "The gap between two neurons is:", o: ["Axon", "Dendrite", "Synapse", "Myelin"], a: 2 },
-                { q: "Which part controls balance and coordination?", o: ["Cerebrum", "Cerebellum", "Brain Stem", "Hypothalamus"], a: 1 },
-                { q: "The largest part of the brain is:", o: ["Cerebellum", "Cerebrum", "Pons", "Medulla"], a: 1 },
-                { q: "There are how many pairs of spinal nerves?", o: ["12", "31", "24", "10"], a: 1 }
-            ]
-        };
-
-        // --- 2. COURSE DATA ---
-        const UNITS = [
-            {
-                id: 1, title: "INTRO & ORGANIZATION",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1kBEniLShpJ5aNYXwxOBv7tvC4-w-vD5V/preview' },
-                    { type: 'video', title: 'Intro & Cell Structure', url: 'https://drive.google.com/file/d/1DGH9dBpRYV7Qmj2kti_6Y83y26r7IETO/preview' },
-                    { type: 'model', title: '3D Model: Male Anatomy', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-male-complete-anatomy' },
-                    { type: 'model', title: '3D Model: Female Anatomy', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-female-complete-anatomy' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1rCaq5q_ZlXYmRD1r618OGnFypvW9F7XC/preview' },
-                    { type: 'video', title: 'Tissues Physiology', url: 'https://drive.google.com/file/d/1w7I0QZXvBAD9BUEOn19wxY8BA_K7M5sc/preview' },
-                    { type: 'model', title: '3D Model: Cell', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-cell' },
-                    { type: 'video', title: 'Mitosis & Meiosis', url: 'https://drive.google.com/file/d/1Igg8WpoIsghGvDyA0iTrPDbBd3UGd1uh/preview' },
-                    { type: 'model', title: '3D Model: Neuron', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-neuron_1' },
-                    { type: 'video', title: 'Surface Landmarks', url: 'https://drive.google.com/file/d/1sil8smYE73u7qf7RSM_GjXX292cfEksS/preview' },
-                    { type: 'model', title: '3D Model: Injection Sites', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-injection-site' }
-                ]
-            },
-            {
-                id: 2, title: "RESPIRATORY SYSTEM",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1zp3SJthkar0Zqglf8gIQuMjJYfWXM2EY/preview' },
-                    { type: 'video', title: 'Intro to Respiration', url: 'https://drive.google.com/file/d/1-v2nXIIJkoQZPT6sdKpqtZveuxL_uTUB/preview' },
-                    { type: 'model', title: '3D Model: Respiratory Sys', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-the-respiratory-system' },
-                    { type: 'video', title: 'Nose & Pharynx', url: 'https://drive.google.com/file/d/1F5xDrsluhcpwW4j0DnwC-_nKpACD4X-I/preview' },
-                    { type: 'model', title: '3D Model: Larynx', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-larynx' },
-                    { type: 'video', title: 'Trachea', url: 'https://drive.google.com/file/d/1ibk0bGro4EYt-EakAnC_AuSkjMv0GXbN/preview' },
-                    { type: 'model', title: '3D Model: Bronchial Tree', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-trachea-carina-bronchial-tree' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1xwLwFOwcEQvkL0NKhSnIwUr2RRB_f5lL/preview' }
-                ]
-            },
-            {
-                id: 3, title: "DIGESTIVE SYSTEM",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1GsEUK__ngjD9CBpWue0CqXO56mmjxGZ0/preview' },
-                    { type: 'video', title: 'Digestive System Overview', url: 'https://drive.google.com/file/d/1J2veHwrJ83i1Qi63iMS818hWGEAkRkAA/preview' },
-                    { type: 'model', title: '3D Model: GI Tract', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-gastrointestinal-tract' },
-                    { type: 'video', title: 'Mouth to Stomach', url: 'https://drive.google.com/file/d/1UetDfsIJoGgdj_5BFmPsRCUrBbyJosfT/preview' },
-                    { type: 'model', title: '3D Model: Stomach', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-stomach' },
-                    { type: 'video', title: 'Intestines & Anus', url: 'https://drive.google.com/file/d/1GKJzoRPgOcGUhRQ7NaMes5nojhRm7aSD/preview' },
-                    { type: 'model', title: '3D Model: Liver', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-liver' },
-                    { type: 'video', title: 'Accessory: Liver/Pancreas', url: 'https://drive.google.com/file/d/1Ij8j9b45FQdVKea3NH75h59hrtsOGDMW/preview' }
-                ]
-            },
-            {
-                id: 4, title: "CIRCULATORY SYSTEM",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1Z-5OBzBGiQ5khWySeLIW79SrvC2B2zqz/preview' },
-                    { type: 'video', title: 'Heart Structure', url: 'https://drive.google.com/file/d/1KffXXkOleyEf4qOw-SbUTXaU8dYALziW/preview' },
-                    { type: 'model', title: '3D Model: Heart Layers', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-layers-of-heart' },
-                    { type: 'video', title: 'Heart Valves', url: 'https://drive.google.com/file/d/1vbW-Gm93ntL1FeIn6zJOHfLhSfAIlitO/preview' },
-                    { type: 'video', title: 'Cardiac Cycle', url: 'https://drive.google.com/file/d/1YN1R3ORgCOZW7I0zwoCFSReqv--sP1V-/preview' },
-                    { type: 'model', title: '3D Model: Blood Flow', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-blood-flow-through-the-heart' },
-                    { type: 'video', title: 'Venous Circulation', url: 'https://drive.google.com/file/d/1EcBwprEnpuWXA53qbBA35OC9On3SPh84/preview' },
-                    { type: 'video', title: 'Lymphatic System', url: 'https://drive.google.com/file/d/1HnNCXLNOga-LLV0BT_aRLduO2TL3uBnM/preview' }
-                ]
-            },
-            {
-                id: 5, title: "ENDOCRINE SYSTEM",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1DhUray7ZdgEfZmoSLxK_Ah9-P_y6uA35/preview' },
-                    { type: 'video', title: 'Intro & Hypothalamus', url: 'https://drive.google.com/file/d/1RkkA8rAcXeFv8nQVj5MeipFSGSVyavrU/preview' },
-                    { type: 'video', title: 'Pituitary Gland', url: 'https://drive.google.com/file/d/1oxMOZKsEqi9-v3Jkv914haQXIzQEXnMA/preview' },
-                    { type: 'model', title: '3D Model: Thyroid', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-thyroid-anatomy' },
-                    { type: 'model', title: '3D Model: Adrenal Gland', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-adrenal-gland-cross-section' },
-                    { type: 'video', title: 'Thyroid Gland', url: 'https://drive.google.com/file/d/1apCsaobC9JRzjvKU03zqmfTbE8i1rd_1/preview' }
-                ]
-            },
-            {
-                id: 6, title: "SENSORY ORGANS",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/10ReXGEjNagS3lQWO4GcQxe9ucmx8a5Fp/preview' },
-                    { type: 'video', title: 'Skin Anatomy', url: 'https://drive.google.com/file/d/1spCTVGLHIx5f8Jlg7dMkc3tIJG7i0-fw/preview' },
-                    { type: 'model', title: '3D Model: Skin', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-skin' },
-                    { type: 'video', title: 'Eye Anatomy', url: 'https://drive.google.com/file/d/1sA3BwCa5sIrlPpRJW1-8lRW_Zmr_XjeP/preview' },
-                    { type: 'model', title: '3D Model: Eye', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-human-eye' },
-                    { type: 'video', title: 'Ear Structure', url: 'https://drive.google.com/file/d/1tFHvLaUNpdfA70hWRL_FVmMMBAOYs2iK/preview' },
-                    { type: 'model', title: '3D Model: Ear', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-human-ear' },
-                    { type: 'video', title: 'Smell & Olfaction', url: 'https://drive.google.com/file/d/16q4bQnbziJ7g8oNtfPl8sTCsJF76y1ax/preview' }
-                ]
-            },
-            {
-                id: 7, title: "MUSCULOSKELETAL",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1MDlJQ0vjPnr5hUxgnXE-IRg9PXxS8DMr/preview' },
-                    { type: 'video', title: 'Axial/Appendicular Skeleton', url: 'https://drive.google.com/file/d/1FlwIyxMB4TFQjZSPYoMH9I0tntlHUqV0/preview' },
-                    { type: 'model', title: '3D Model: Skeleton', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-male-skeletal-system' },
-                    { type: 'video', title: 'Skull & Cranium', url: 'https://drive.google.com/file/d/1GlO-oknavSyl9c7LQiFqWXiox7OPsJJY/preview' },
-                    { type: 'video', title: 'The Vertebrae', url: 'https://drive.google.com/file/d/1yHgv14D3l4KpCE1ohLsQm8DRZ_0pPjp0/preview' },
-                    { type: 'video', title: 'Muscles of Body', url: 'https://drive.google.com/file/d/1NNbFQwSh2pow3kzGaHmczqfTtRHHhyMQ/preview' },
-                    { type: 'model', title: '3D Model: Muscles', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-male-muscular-system' },
-                    { type: 'video', title: 'Lower Limb Muscles', url: 'https://drive.google.com/file/d/1i4yUlGXKszLXhKO9HzZR2ud0O3TH1Flg/preview' }
-                ]
-            },
-            {
-                id: 8, title: "RENAL SYSTEM",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1kmmyy5WYzxj4H0NLbVMxkmjM1Clwy2Fh/preview' },
-                    { type: 'video', title: 'Kidney Intro', url: 'https://drive.google.com/file/d/1vhyUdOpH4nSLgBOGZ5iAIIpsTUUysCth/preview' },
-                    { type: 'model', title: '3D Model: Renal System', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-the-renal-system' },
-                    { type: 'model', title: '3D Model: Nephron', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-nephron' },
-                    { type: 'video', title: 'Nephron Function', url: 'https://drive.google.com/file/d/14Hf9dYtVB0vcgcK62TcHl-wgFkH0svMW/preview' },
-                    { type: 'video', title: 'Urine Formation', url: 'https://drive.google.com/file/d/1GyLCexgijItmFDnqaRSRjyDOWwvsKH9o/preview' },
-                    { type: 'video', title: 'Urinary Bladder', url: 'https://drive.google.com/file/d/1HVwzo7dyaHPjU5SEMewuSj42uDybT_YC/preview' }
-                ]
-            },
-            {
-                id: 9, title: "REPRODUCTIVE SYSTEM",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1I08cHKZSrgoBuj2QBXFFSE46LctHrQVG/preview' },
-                    { type: 'video', title: 'Female Reproductive Intro', url: 'https://drive.google.com/file/d/1I8362MikaAHti6dN6VqYy_2Xc1GAOEj2/preview' },
-                    { type: 'model', title: '3D Model: Repro System', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-the-reproductive-system' },
-                    { type: 'model', title: '3D Model: Uterus', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-uterus' },
-                    { type: 'video', title: 'Menstrual Cycle', url: 'https://drive.google.com/file/d/1bjVDhPVR4nUuPvtsq6SEwLQ7eSKhHZmX/preview' },
-                    { type: 'model', title: '3D Model: Male System', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-male-reproductive-system' },
-                    { type: 'video', title: 'Spermatogenesis', url: 'https://drive.google.com/file/d/1zCIOwHcNDcGCstfHZzxqQmyp1PSY0wq4/preview' }
-                ]
-            },
-            {
-                id: 10, title: "NERVOUS SYSTEM",
-                resources: [
-                    { type: 'model', title: '3D Model: Neuron', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-neuron' },
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1mhFnNF9ZWRXOIRmbFFlL0nY5dKijPyVB/preview' },
-                    { type: 'video', title: 'Intro to Nervous System', url: 'https://drive.google.com/file/d/1r0exklx5ryyVG_NaT1_LZ13aa2LRbjLq/preview' },
-                    { type: 'model', title: '3D Model: CNS', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-cns' },
-                    { type: 'model', title: '3D Model: Brain', url: 'https://sites.google.com/view/testredirectezinurse/3d-model-brain' },
-                    { type: 'video', title: 'Structure of Brain', url: 'https://drive.google.com/file/d/1jlxkdv4ClaVP4iTWBNlZKojwg9dZN8GH/preview' },
-                    { type: 'video', title: 'Spinal Cord', url: 'https://drive.google.com/file/d/1K_0JLoUw5TTmV78uEYZ7nM7U44XE0EV9/preview' }
-                ]
-            }
-        ];
-
-        // --- RENDER LOGIC ---
-        function renderPage() {
-            const container = document.getElementById('units-container');
-            
-            UNITS.forEach(unit => {
-                const unitHtml = `
-                    <div class="unit-card">
-                        <div class="unit-header" onclick="toggleUnit(this)">
-                            UNIT ${unit.id} - ${unit.title}
-                            <span>🔽</span>
-                        </div>
-                        <div class="unit-content">
-                            <div class="resource-list">
-                                ${unit.resources.map(res => `
-                                    <div class="resource-btn type-${res.type}" onclick="openResource('${res.type}', '${res.url || ''}', '${res.title}')">
-                                        <div class="icon">${getIcon(res.type)}</div>
-                                        <div>${res.title}</div>
-                                    </div>
-                                `).join('')}
-                                <div class="resource-btn type-quiz" onclick="openQuiz(${unit.id})">
-                                    <div class="icon">✍️</div>
-                                    <div>Take Unit ${unit.id} Quiz</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += unitHtml;
-            });
-        }
-
-        function getIcon(type) {
-            if(type === 'notes') return '📚';
-            if(type === 'video') return '▶️';
-            if(type === 'model') return '🧊';
-            return '📄';
-        }
-
+        const QUIZ_DATA = {"1":[{"q":"Who was the first person to use the term “anatome”?","o":["Hippocrates","Aristotle","Galen","Robert Hooke"],"a":1},{"q":"The study of tissues is known as:","o":["Cytology","Histology","Physiology","Embryology"],"a":1},{"q":"Which anatomical plane divides the body into anterior and posterior parts?","o":["Sagittal plane","Transverse plane","Frontal (coronal) plane","Oblique plane"],"a":null},{"q":"Which organelle is primarily responsible for detoxification of harmful substances especially in liver cells?","o":["Rough Endoplasmic Reticulum","Smooth Endoplasmic Reticulum","Golgi Apparatus","Lysosomes"],"a":1},{"q":"During Anaphase of Mitosis, what exactly happens to the chromatids?","o":["They condense into chromosomes","They condense into chromosomes","They align at the metaphase plate","The centromeres split and chromatids move to opposite poles"],"a":null},{"q":"Which type of epithelial tissue is present in the lining of the urinary bladder?","o":["Simple squamous","Stratified cuboidal","Transitional epithelium","Pseudostratified epithelium"],"a":2},{"q":"Which connective tissue cell is most involved in the release of histamine during an allergic reaction?","o":["Plasma cell","Fibroblast","Mast cell","Macrophage"],"a":2},{"q":"Which structural feature is unique to cardiac muscle tissue?","o":["Spindle-shaped cells","Intercalated discs","Multiple nuclei","Voluntary contraction"],"a":1},{"q":"Which part of the bone is defined as the curved portion that gives structural support, like in the mandible?","o":["Condyle","Ramus","Trochanter","Tubercle"],"a":1},{"q":"Which organ system is primarily responsible for maintaining ion balance and elimination of waste?","o":["Digestive system","Nervous system","Urinary system","Endocrine system"],"a":2}],"2":[{"q":"Which structure is known as the \"voice box\"?","o":["Trachea","Pharynx","Larynx","Bronchi"],"a":2},{"q":"The right lung has how many lobes?","o":["2","3","4","5"],"a":2},{"q":"Which part of the nasal cavity contains olfactory receptor cells?","o":["Vestibule","Respiratory region","Olfactory region","Inferior meatus"],"a":2},{"q":"The mucosa of the trachea is lined with:","o":["Stratified squamous epithelium","Simple cuboidal epithelium","Pseudostratified ciliated columnar epithelium with goblet cells","Transitional epithelium"],"a":2},{"q":"Which nerve is responsible for bronchoconstriction and increased mucus secretion in the lungs?","o":["Sympathetic trunk","Phrenic nerve","Vagus nerve (CN X)","Glossopharyngeal nerve (CN IX)"],"a":2},{"q":"Which paranasal sinus is the largest?","o":["Frontal sinus","Maxillary sinus","Ethmoidal sinus","Sphenoidal sinus"],"a":1},{"q":"Which part of the trachea is most sensitive and triggers the cough reflex?","o":["Apex","Carina","Vocal cords","Epiglottis"],"a":1},{"q":"The left lung differs from the right lung because it has:","o":["Horizontal fissure","No cardiac notch","Two lobes and a lingula","Three lobes and no lingula"],"a":2},{"q":"Which arteries provide oxygenated blood to lung tissues (bronchi and connective tissues)?","o":["Pulmonary arteries","Bronchial arteries","Carotid arteries","Subclavian arteries"],"a":1},{"q":"Which structure prevents food from entering the airway during swallowing?","o":["Cricoid cartilage","Epiglottis","Vocal cords","Arytenoid cartilage"],"a":1}],"3":[{"q":"Which enzyme in saliva begins the chemical digestion of carbohydrates","o":["Lipase","Amylase","Pepsin","Trypsin"],"a":1},{"q":"The longest part of the small intestine is","o":["Duodenum","Jejunum","Ileum","Cecum"],"a":2},{"q":"Which layer of the digestive tract contains blood vessels, lymphatics, and the submucosal plexus?","o":["Mucosa","Submucosa","Muscularis externa","Serosa"],"a":1},{"q":"Which sphincter prevents acid reflux from the stomach into the esophagus?","o":["Upper esophageal sphincter","Lower esophageal sphincter (LES)","Pyloric sphincter","Ileocecal valve"],"a":1},{"q":"Which vitamin is primarily absorbed in the ileum along with bile salts?","o":["Vitamin A","Vitamin B12","Vitamin D","Vitamin C"],"a":1},{"q":"The histological feature that increases surface area for absorption in the small intestine is :","o":["Crypts of Lieberkühn","Rugae","Villi and microvilli","Haustra"],"a":2},{"q":"Which specialized macrophages are found in the liver and play a role in immune defense?","o":["Osteoclasts","Kupffer cells","Microglia","Langerhans cells"],"a":1},{"q":"Which part of the large intestine is S-shaped and stores feces before elimination","o":["Cecum","Sigmoid colon","Transverse colon","Descending colon"],"a":1},{"q":"Which duct directly drains bile from the gallbladder into the common bile duct?","o":["Hepatic duct","Cystic duct","Pancreatic duct","Bile canaliculi"],"a":1},{"q":"Which hormone secreted by the pancreas lowers blood glucose levels?","o":["Glucagon","Insulin","Somatostatin","Cortisol"],"a":1}],"4":[{"q":"Which chamber of the heart pumps oxygenated blood into the systemic circulation?","o":["Right atrium","Left atrium","Right ventricle","Left ventricle"],"a":1},{"q":"Which blood vessels always carry blood away from the heart?","o":["Veins","Arteries","Capillaries","Venules"],"a":1},{"q":"The “pacemaker” of the heart is:","o":["Atrioventricular (AV) node","Bundle of His","Sinoatrial (SA) node","Purkinje fibers"],"a":2},{"q":"","o":["Tricuspid valve","Mitral (bicuspid) valve","Aortic valve","Pulmonary valve"],"a":1},{"q":"Which artery supplies the interventricular septum and anterior walls of the ventricles?","o":["Right marginal artery","Posterior interventricular artery","Left anterior descending (LAD) artery","Circumflex artery"],"a":2},{"q":"What is the normal range of resting heart rate in adults?","o":["20–40 beats/min","20–40 beats/min","40–60 beats/min","60–100 beats/min"],"a":99},{"q":"Which vein drains venous blood from the heart muscle itself into the right atrium?","o":["Pulmonary vein","Coronary sinus","Superior vena cava","Inferior vena cava"],"a":1},{"q":"Which blood vessels act as the main site of exchange of gases, nutrients, and waste?","o":["Arteries","Arterioles","Capillaries","Veins"],"a":1},{"q":"Which layer of the heart wall is composed of cardiac muscle and responsible for pumping action?","o":["Endocardium","Epicardium","Myocardium","Pericardium"],"a":2},{"q":"Which structure prevents overfilling of the heart by limiting excessive stretching?","o":["Epicardium","Fibrous pericardium","Serous pericardium","Endocardium"],"a":1}],"5":[{"q":"Which gland is known as the \"Master gland\" of the body?","o":["Thyroid gland","Pituitary gland","Adrenal gland","Pancreas"],"a":1},{"q":"Which hormone is secreted by the pineal gland to regulate sleep-wake cycles?","o":["Melatonin","Cortisol","Oxytocin","Serotonin"],"a":0},{"q":"Which hypothalamic hormone stimulates the release of ACTH from the anterior pituitary?","o":["TRH","CRH","GHRH","GnRH"],"a":1},{"q":"Which hormone lowers blood calcium levels by inhibiting bone breakdown?","o":["Parathyroid hormone","Calcitonin","Aldosterone","Cortisol"],"a":1},{"q":"Which nucleus of the hypothalamus is responsible for circadian rhythm regulation?","o":["Supraoptic nucleus","Arcuate nucleus","Suprachiasmatic nucleus","Mammillary nucleus"],"a":2},{"q":"Which hormone is responsible for stimulating milk production in females?","o":["Oxytocin","Prolactin","LH","FSH"],"a":1},{"q":"The zona glomerulosa of the adrenal cortex secretes:","o":["Cortisol","Aldosterone","Androgens","Epinephrine"],"a":1},{"q":"Hyposecretion of ADH leads to which disorder?","o":["Diabetes mellitus","Gigantism","Diabetes insipidus","Addison’s disease"],"a":2},{"q":"Which parathyroid cells are responsible for secreting PTH?","o":["Oxyphil cells","Chief (principal) cells","Follicular cells","Pituicytes"],"a":1},{"q":"Which thymus hormone promotes the maturation of T-lymphocytes?","o":["Thymulin","Thymopoietin","Thymosin","ACTH"],"a":2}],"6":[{"q":"Which photoreceptor is responsible for color vision?","o":["Rods","Cones","Bipolar cells","Ganglion cells"],"a":1},{"q":"Which structure connects the middle ear to the pharynx and equalizes pressure?","o":["Cochlea","Oval window","Eustachian tube","Tympanic membrane"],"a":2},{"q":"Which artery is the main arterial supply of the nasal cavity?","o":["Superior labial artery","Ophthalmic artery","Sphenopalatine artery","Maxillary artery"],"a":2},{"q":"Which cranial nerve carries taste sensation from the anterior 2/3rd of the tongue?","o":["Glossopharyngeal nerve","Hypoglossal nerve","Facial nerve (via chorda tympani)","Vagus nerve"],"a":2},{"q":"The optic nerve fibers partially cross at which structure before forming the optic tract?","o":["Lateral geniculate body","Optic chiasma","Superior colliculus","Primary visual cortex"],"a":1},{"q":"The smallest bone in the human body, located in the middle ear, is:","o":["Malleus","Incus","Stapes","Hyoid"],"a":2},{"q":"The vestibular branch of the vestibulocochlear nerve (CN VIII) carries signals related to:","o":["Hearing","Balance and spatial orientation","Smell","Taste"],"a":1},{"q":"Which papillae of the tongue do not contain taste buds?","o":["Fungiform papillae","Circumvallate papillae","Filiform papillae","Foliate papillae"],"a":2},{"q":"Which structure is the common site for epistaxis (nosebleeds) due to rich vascular supply?","o":["Cribriform plate","Kiesselbach’s plexus (Little’s area)","Maxillary sinus","Nasolacrimal duct"],"a":1},{"q":"Which part of the eye is transparent and helps in focusing light on the retina?","o":["Sclera","Cornea","Lens","Choroid"],"a":1}],"7":[{"q":"Smallpox is caused by which virus?","o":["Varicella-Zoster virus","Variola virus","Rubella virus","Morbillivirus"],"a":1},{"q":"Which communicable disease is also called \"lockjaw\"?","o":["Diphtheria","Tetanus","Typhoid","Measles"],"a":1},{"q":"A characteristic feature that differentiates smallpox from chickenpox is:","o":["Lesions appear first on the trunk","Lesions are superficial and in different stages","Lesions are deep-seated, same stage, and more on face & extremities","Itching is very prominent"],"a":2},{"q":"Koplik’s spots are diagnostic of which disease?","o":["Rubella","Measles","Mumps","Chickenpox"],"a":1},{"q":"Which bacterial disease produces a grayish-white pseudomembrane in the throat?","o":["Tetanus","Diphtheria","Typhoid","Meningitis"],"a":1},{"q":"Which form of smallpox has the highest fatality rate, often reaching 90%?","o":["Ordinary smallpox","Modified smallpox","Hemorrhagic smallpox","Flat-type (malignant) smallpox"],"a":2},{"q":"The period of communicability in mumps is:","o":["1 week before parotid swelling to 1 week after","2 days before swelling to 5 days after swelling","5 days before fever to 5 days after fever","From rash onset till lesions scab over"],"a":1},{"q":"Which of the following is NOT a complication of measles?","o":["Otitis media","Orchitis","Encephalitis","Pneumonia"],"a":1},{"q":"Which bacterial disease is NOT spread person-to-person?","o":["Diphtheria","Tetanus","Typhoid","Meningococcal meningitis"],"a":1},{"q":"In Rubella infection during the first trimester of pregnancy, the most common defect in Congenital Rubella Syndrome is:","o":["Blindness","Congenital heart disease (PDA)","Sensorineural deafness","Microcephaly"],"a":2}],"8":[{"q":"Which bacterium is the causative agent of tuberculosis (TB)?","o":["Mycobacterium leprae","Mycobacterium tuberculosis","Corynebacterium diphtheriae","Salmonella typhi"],"a":1},{"q":"The classic symptom of pertussis is:","o":["Barking cough","Paroxysmal cough with \"whoop\"","Productive cough with sputum","Dry hacking cough"],"a":1},{"q":"The incubation period of poliomyelitis is usually:","o":["2–5 days","7–14 days","3–6 weeks","1–2 months"],"a":2},{"q":"In leprosy, the bacterium mainly affects:","o":["Respiratory epithelium","Peripheral nerves and skin","Alveoli of lungs","Red blood cells"],"a":1},{"q":"The Mantoux test is used to diagnose:","o":["Typhoid fever","Tuberculosis","Meningitis","Tetanus"],"a":1},{"q":"Which form of leprosy is highly infectious with leonine facies?","o":["Tuberculoid leprosy","Lepromatous leprosy","Borderline leprosy","Indeterminate leprosy"],"a":1},{"q":"In poliomyelitis, the anterior horn cells of which structure are primarily affected?","o":["Spinal cord","Brainstem","Cerebellum","Medulla oblongata"],"a":0},{"q":"The “catarrhal stage” is the initial stage of which disease?","o":["Tuberculosis","Whooping cough","Measles","Diphtheria"],"a":1},{"q":"Which stain is used in the laboratory for detecting Mycobacterium tuberculosis?","o":["Gram stain","Ziehl-Neelsen stain (Acid-fast)","Giemsa stain","Wright’s stain"],"a":1},{"q":"Lepromin test is useful for:","o":["Confirming active leprosy infection","Assessing immunity and classification of leprosy","Detecting carrier state","Differentiating tuberculosis from leprosy"],"a":1}],"9":[{"q":"The female external genitalia are collectively known as:","o":["Perineum","Vulva","Introitus","Clitoris"],"a":1},{"q":"Which layer of the uterine wall is responsible for powerful contractions during labor?","o":["Endometrium","Myometrium","Perimetrium","Basal lamina"],"a":1},{"q":"Fertilization of the ovum usually occurs in which part of the fallopian tube?","o":["Isthmus","Ampulla","Infundibulum","Intramural portion"],"a":1},{"q":"Which ligament provides the primary support to the uterus?","o":["Broad ligament","Uterosacral ligament","Round ligament","Pubocervical ligament"],"a":1},{"q":"The corpus luteum secretes which hormone predominantly?","o":["Estrogen","Progesterone","LH","FSH"],"a":1},{"q":"Which ovarian follicle stage is characterized by the presence of an antrum?","o":["Primordial follicle","Primary follicle","Secondary follicle","Graafian follicle"],"a":2},{"q":"In the menstrual cycle, the decidual reaction occurs during which phase?","o":["Menstrual phase","Proliferative phase","Secretory phase","Ovulatory phase"],"a":2},{"q":"Which lobe of the prostate is most commonly affected by carcinoma?","o":["Anterior","Lateral","Posterior","Median"],"a":2},{"q":"The sperm gain motility mainly in which structure?","o":["Testis","Epididymis","Vas deferens","Ejaculatory duct"],"a":1},{"q":"Each ejaculation normally contains how many sperm per mL?","o":["1–5 million","10–20 million","60–100 million","200 million or more"],"a":2}],"10":[{"q":"The basic structural and functional unit of the nervous system is:","o":["Axon","Neuron","Synapse","Dendrite"],"a":1},{"q":"Which part of the brain is primarily responsible for balance and coordination?","o":["Cerebrum","Cerebellum","Medulla oblongata","Pons"],"a":1},{"q":"Saltatory conduction occurs due to the presence of:","o":["Dendrites","Gray matter","Nodes of Ranvier","Pia mater"],"a":2},{"q":"Which lobe of the cerebrum is responsible for vision?","o":["Frontal lobe","Parietal lobe","Temporal lobe","Occipital lobe"],"a":3},{"q":"The parasympathetic division of the autonomic nervous system is also known as:","o":["Fight-or-flight system","Thoracolumbar system","Craniosacral system","Somatic system"],"a":2},{"q":"The substantia nigra is primarily associated with which neurotransmitter?","o":["Acetylcholine","Dopamine","Serotonin","GABA"],"a":1},{"q":"The medulla oblongata regulates which of the following vital centers?","o":["Vision and hearing","Respiration, cardiovascular activity, vasomotor function","Memory and learning","Balance and coordination"],"a":1},{"q":"The cerebrospinal fluid (CSF) is located in which space?","o":["Epidural space","Subdural space","Subarachnoid space","Intramedullary space"],"a":2},{"q":"The cervical enlargement of the spinal cord supplies nerves to:","o":["Lower limbs","Upper limbs","Abdomen","Pelvis"],"a":1},{"q":"Which part of the basal ganglia is divided into pars compacta and pars reticulata?","o":["Thalamus","Putamen","Substantia nigra","Globus pallidus"],"a":2}]};
+        let score = 0;
         function toggleUnit(header) {
-            header.classList.toggle('active');
             const content = header.nextElementSibling;
-            content.classList.toggle('show');
-            const arrow = header.querySelector('span');
-            arrow.innerText = content.classList.contains('show') ? '🔼' : '🔽';
+            header.setAttribute('aria-expanded', header.getAttribute('aria-expanded') !== 'true');
+            content.classList.toggle('active');
         }
-
-        // --- MODAL LOGIC ---
-        
         function openResource(type, url, title) {
-            history.pushState({ modalOpen: true }, null, '#resource');
-
             const modal = document.getElementById('app-modal');
             const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = title;
+            document.getElementById('modal-title').textContent = title;
             modal.style.display = 'flex';
-            body.innerHTML = ''; 
-            body.style.display = 'flex';
-
-            if (type === 'quiz') {
-                openQuiz(url); 
+            
+            // Clean URL Logic (Fallback/Runtime)
+            let finalUrl = url;
+            if (url.includes('drive.google.com')) { 
+                finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview'); 
             }
-            else {
-                // Formatting URL for preview
-                let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
-                
-                // FIX: DETERMINE CLASS BASED ON TYPE
-                let className = (type === 'video') ? 'iframe-video' : 'iframe-doc';
-
-                body.innerHTML = `<iframe 
-                    class="${className}" 
-                    src="${cleanUrl}" 
-                    sandbox="allow-scripts allow-same-origin allow-presentation"
-                    allow="autoplay; encrypted-media; fullscreen">
-                </iframe>`;
+            else if (url.includes('human.biodigital.com')) { 
+                 if (url.includes('/viewer/')) finalUrl = url.replace('/viewer/', '/widget/');
+                 else finalUrl = url.replace('/view', '/widget'); 
             }
+            
+            body.innerHTML = '<iframe class="iframe-res" src="' + finalUrl + '" width="100%" height="100%" allow="xr-spatial-tracking" allowfullscreen></iframe>';
         }
-
-        function openQuiz(unitId) {
-            history.pushState({ modalOpen: true }, null, '#quiz');
-
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = `Quiz: Unit ${unitId}`;
-            modal.style.display = 'flex';
-            
-            body.style.display = 'block';
-            body.scrollTop = 0; 
-            
-            const questions = QUIZ_DATA[unitId] || [];
-            
-            let quizHtml = `<div class="quiz-container">`;
-            questions.forEach((q, idx) => {
-                quizHtml += `
-                    <div class="quiz-question">${idx + 1}. ${q.q}</div>
-                    <div class="quiz-options" id="q-${idx}">
-                        ${q.o.map((opt, oIdx) => `
-                            <div class="quiz-option" onclick="checkAnswer(this, ${idx}, ${oIdx}, ${q.a})">${opt}</div>
-                        `).join('')}
-                    </div>
-                `;
+        function startQuiz(unitId) {
+            score = 0;
+            const questions = QUIZ_DATA[unitId];
+            if(!questions || questions.length === 0) { alert('No questions found.'); return; }
+            let html = '<div class="quiz-container"><h2 style="color:var(--brand); margin-top:0;">Unit ' + unitId + ' Quiz</h2>';
+            html += '<div id="score-display" style="background:var(--brand); color:white; padding:5px 15px; border-radius:20px; display:inline-block; font-weight:700; margin-bottom:20px;">Score: 0 / ' + questions.length + '</div>';
+            questions.forEach((q, index) => {
+                html += '<div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">';
+                html += '<p style="font-weight:600; font-size:1.1rem; margin-bottom:15px;">' + (index + 1) + '. ' + q.q + '</p>';
+                q.o.forEach((opt, optIndex) => {
+                    html += '<div class="quiz-option" onclick="checkAnswer(this, ' + unitId + ', ' + optIndex + ', ' + q.a + ')">' + opt + '</div>';
+                });
+                html += '</div>';
             });
-            
-            if(questions.length === 0) quizHtml += `<p>Quiz coming soon!</p>`;
-            
-            quizHtml += `</div>`;
-            body.innerHTML = quizHtml;
+            html += '<button class="btn-quiz" onclick="closeModal()">Close Quiz</button></div>';
+            document.getElementById('modal-body').innerHTML = html;
+            document.getElementById('modal-title').textContent = 'Unit ' + unitId + ' Quiz';
+            document.getElementById('app-modal').style.display = 'flex';
         }
-
-        function checkAnswer(el, qIdx, oIdx, correctIdx) {
-            const parent = document.getElementById(`q-${qIdx}`);
-            const opts = parent.children;
-            for(let opt of opts) opt.style.pointerEvents = 'none';
-
-            if(oIdx === correctIdx) {
-                el.classList.add('correct');
+        function checkAnswer(element, unitId, selectedIndex, correctIndex) {
+            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+            if (selectedIndex === correctIndex) {
+                element.classList.add('correct'); score++;
             } else {
-                el.classList.add('wrong');
-                opts[correctIdx].classList.add('correct');
+                element.classList.add('wrong'); element.parentElement.children[correctIndex + 1].classList.add('correct');
             }
+            document.getElementById('score-display').textContent = 'Score: ' + score + ' / ' + QUIZ_DATA[unitId].length;
         }
-
-        function closeModal() {
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            modal.style.display = 'none';
-            body.innerHTML = ''; 
-            
-            if (history.state && history.state.modalOpen) {
-                history.back();
-            }
-        }
-
-        window.onpopstate = function(event) {
-            const modal = document.getElementById('app-modal');
-            if (modal.style.display === 'flex') {
-                modal.style.display = 'none';
-                document.getElementById('modal-body').innerHTML = '';
-            }
-        };
-
-        // Initialize
-        renderPage();
-
+        function closeModal() { document.getElementById('app-modal').style.display = 'none'; document.getElementById('modal-body').innerHTML = ""; }
     </script>
 </body>
 </html>
