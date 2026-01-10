@@ -3,552 +3,152 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nutrition Syllabus</title>
-    <meta name="description" content="Comprehensive syllabus with detailed notes, video lectures, and quizzes for Nutrition." />
+    <title>Nutrition</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
         :root {
-            --brand: #003B82; 
-            --accent: #00B9F2;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-700: #374151;
-            --gray-900: #111827;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-            --danger: #ef4444;
-            --success: #10b981;
+            --brand: #003B82; --accent: #00B9F2; --gray-50: #f9fafb; --gray-200: #e5e7eb; --gray-900: #111827;
+            --danger: #ef4444; --success: #10b981; --warning: #f59e0b;
         }
-
         * { box-sizing: border-box; }
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: white;
-            color: var(--gray-900);
-            line-height: 1.6;
-            padding: 24px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .syllabus-btn, .unit-header {
-            display: block;
-            width: 100%;
-            padding: 18px 24px;
-            margin: 24px 0;
-            background: var(--brand);
-            color: white;
-            font-weight: 600;
-            font-size: 16px;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.2s ease;
-        }
-        .syllabus-btn:hover, .unit-header:hover {
-            background: #002d63;
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .unit-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-align: left;
-            margin: 16px 0;
-        }
-        .unit-header span:last-child {
-            transition: transform 0.3s ease;
-            color: #FFA500;
-        }
-        .unit-header[aria-expanded="true"] span:last-child {
-            transform: rotate(180deg);
-        }
-
-        .unit-content {
-            padding: 0 12px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.3s ease;
-        }
-        .unit-content.active {
-            padding: 24px 12px;
-            max-height: none; 
-        }
-
-        .subsection {
-            margin: 16px 0;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            border: 1px solid var(--gray-200);
-            box-shadow: var(--shadow-sm);
-            transition: box-shadow 0.2s ease;
-        }
-        .subsection:hover { box-shadow: var(--shadow-md); }
-
-        .resource-btn {
-            display: flex;
-            align-items: flex-start;
-            width: 100%;
-            padding: 14px 18px;
-            margin: 8px 0;
-            background: var(--gray-50);
-            color: var(--gray-900);
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
-            border: 1px solid var(--gray-200);
-            transition: all 0.2s ease;
-            gap: 12px;
-            flex-wrap: wrap;
-            min-height: 50px;
-            cursor: pointer;
-        }
+        body { font-family: 'Inter', sans-serif; background: white; color: var(--gray-900); padding: 24px; max-width: 1000px; margin: 0 auto; }
+        .syllabus-btn { display: block; width: 100%; padding: 18px 24px; margin: 12px 0; background: white; color: var(--brand); border: 2px solid var(--brand); font-weight: 700; font-size: 16px; text-align: center; cursor: pointer; border-radius: 12px; transition: all 0.2s ease; text-decoration: none; }
+        .syllabus-btn:hover { background: var(--gray-50); transform: translateY(-1px); }
+        .unit-header { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 18px 24px; margin: 16px 0; background: var(--brand); color: white; font-weight: 600; font-size: 16px; border-radius: 12px; cursor: pointer; transition: 0.2s; }
+        .unit-header:hover { background: #002d63; }
+        .unit-content { padding: 0 12px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; }
+        .unit-content.active { padding: 24px 12px; max-height: none; }
+        .subsection { padding: 20px; background: white; border-radius: 12px; border: 1px solid var(--gray-200); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .resource-btn { display: flex; width: 100%; padding: 14px 18px; margin: 6px 0; background: var(--gray-50); border-radius: 8px; font-weight: 500; border: 1px solid var(--gray-200); cursor: pointer; gap: 12px; transition: 0.2s; align-items: center; }
+        
+        /* EXISTING BUTTON STYLES */
         .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
         .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
-        .resource-btn.quiz { background: #fff5e8; border-color: #ffd8a8; color: #8c5e08; }
-        .resource-btn:hover { background: #f9fafb; transform: translateY(-1px); }
-        .resource-btn.notes:hover { background: #e0f2fe; }
-        .resource-btn.video:hover { background: #ede9fe; }
-        .resource-btn.quiz:hover { background: #ffead1; }
-        .resource-btn.coming-soon { background: #e5e7eb; color: #6b7280; cursor: not-allowed; pointer-events: none; }
+        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+        .resource-btn.model { background: #fdf4ff; border-color: #f0abfc; color: #86198f; }
 
-        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
-        .icon.video-icon { color: #8b5cf6; }
-        .icon.quiz-icon { color: #FFA500; }
-        .icon.coming-soon-icon { color: #9ca3af; }
-
-        /* --- MODAL --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-        }
-
-        .modal-header {
-            height: 60px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            flex-shrink: 0;
-        }
-
-        .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        /* NEW BUTTON STYLES FOR APP */
+        .resource-btn.imp-discussion { background: #fef2f2; border-color: #fecaca; color: #b91c1c; } /* Light Red Background */
+        .resource-btn.imp-pdf { background: #fff7ed; border-color: #fed7aa; color: #c2410c; } /* Light Orange Background */
         
-        .btn-close {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            flex: 1;
-            background: #000;
-            position: relative;
-            overflow-y: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* --- FIXED IFRAME STYLES --- */
-        .iframe-video {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16 / 9;
-            border: none;
-            background: #000;
-            display: block;
-        }
-
-        .iframe-doc {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #fff;
-            display: block;
-        }
-
-        /* --- QUIZ STYLES --- */
-        .quiz-container {
-            background: white;
-            width: 100%;
-            min-height: 100%;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .quiz-question { margin-bottom: 20px; font-size: 1.1rem; font-weight: 600; }
-        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
-        .quiz-option {
-            padding: 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        .quiz-option:hover { background: #f0f9ff; border-color: var(--accent); }
-        .quiz-option.correct { background: var(--success); color: white; border-color: var(--success); }
-        .quiz-option.correct::after { content: '✓'; position: absolute; right: 15px; font-weight: bold; }
-        .quiz-option.wrong { background: var(--danger); color: white; border-color: var(--danger); }
-        .quiz-option.wrong::after { content: '✗'; position: absolute; right: 15px; font-weight: bold; }
-
-        @media (max-width: 768px) {
-            body { padding: 16px; }
-            .syllabus-btn, .unit-header, .resource-btn { font-size: 15px; padding: 14px 16px; }
-            .resource-btn { font-size: 14px; }
-            .subsection { padding: 16px; }
-            .unit-content.active { padding: 16px 8px; }
-        }
+        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
+        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
+        .icon.video-icon { color: #8b5cf6; } .icon.quiz-icon { color: #f59e0b; } .icon.model-icon { color: #d946ef; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; display: none; flex-direction: column; }
+        .modal-header { height: 60px; background: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; }
+        .btn-close { background: var(--danger); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .modal-body { flex: 1; background: #f3f4f6; position: relative; padding: 20px; display:flex; justify-content:center; overflow-y: auto;}
+        .iframe-res { width: 100%; height: 100%; border: none; background: white; }
+        .quiz-container { background: white; width: 100%; max-width: 800px; padding: 30px; border-radius: 12px; margin-bottom: 50px; }
+        .quiz-option { padding: 12px 15px; border: 2px solid var(--gray-200); border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
+        .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
+        .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; }
+        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
+        .btn-quiz { background: var(--brand); color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 600; font-size: 16px; margin-top: 20px; cursor: pointer;}
+        @media (max-width: 768px) { body { padding: 16px; } .quiz-container { padding: 15px; } }
     </style>
 </head>
 <body>
-
-    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/1SS_ASj_WqVQRobHIP0G_4hT6wYsdDWAw/preview', 'Syllabus')">
-        📄 DOWNLOAD NUTRITION SYLLABUS
-    </div>
-    
+    <a class="syllabus-btn" href="https://drive.google.com/file/d/1SS_ASj_WqVQRobHIP0G_4hT6wYsdDWAw/view?usp=drive_link" target="_blank">📄 DOWNLOAD SYLLABUS</a>
     <div id="units">
-        <div class="unit-container" id="unit1">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="true" onclick="toggleUnit(this)">
-                UNIT 1 - INTRODUCTION
-                <span>🔽</span>
-            </div>
-            <div class="unit-content active">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1vLFQcqUSTTw5N9uhVBeERr9rUKi62eOl/preview', 'Detailed Notes: Intro')">
-                        <span class="icon">📚</span><span>Detailed Notes: Introduction</span>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 1 - INTRODUCTION  <span>🔽</span>
                     </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1vNQe4R0oNxRofWz_Pz18P_Z9Ysjm_1dZ/preview', 'Food Nutrition')">
-                        <span class="icon video-icon">▶️</span><span>Food, Nutrition, Nutrients</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/18xEFlq9fwRjnqLHJlI8PG3yUELeQlVDJ/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    
-                    <div class="resource-btn quiz" onclick="openQuiz(1)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
-                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1vLFQcqUSTTw5N9uhVBeERr9rUKi62eOl/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1vNQe4R0oNxRofWz_Pz18P_Z9Ysjm_1dZ/preview', 'Food, Nutrition, Nutrients')"><span class="icon video-icon">▶️</span><span>Food, Nutrition, Nutrients</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/18xEFlq9fwRjnqLHJlI8PG3yUELeQlVDJ/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(1)"><span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span></div></div></div>
                 </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit2">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 2 - CLASSIFICATION OF FOOD
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/115Hs9nahVIoC4vqHbvALMhVH1t4xD3ES/preview', 'Detailed Notes: Classification')">
-                        <span class="icon">📚</span><span>Detailed Notes: Classification of Food</span>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 2 - CLASSIFICATION OF FOOD  <span>🔽</span>
                     </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1jGNn7wOB0urLnH2T16Id5U-yDb516dPJ/preview', 'Food Classification')">
-                        <span class="icon video-icon">▶️</span><span>Classification Of Food</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1T6Cet-Uts4UgB-hEov2tTsAeWcckTHUp/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-
-                    <div class="resource-btn quiz" onclick="openQuiz(2)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
-                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/115Hs9nahVIoC4vqHbvALMhVH1t4xD3ES/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1jGNn7wOB0urLnH2T16Id5U-yDb516dPJ/preview', 'Classification Of Food')"><span class="icon video-icon">▶️</span><span>Classification Of Food</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1T6Cet-Uts4UgB-hEov2tTsAeWcckTHUp/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(2)"><span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span></div></div></div>
                 </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit3">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 3 - DIETARY REQUIREMENTS
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/18hcrAHG4mV96Iwc29iYa5KjX9HpsmMJ3/preview', 'Detailed Notes: Dietary')">
-                        <span class="icon">📚</span><span>Detailed Notes: Dietary Requirements</span>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 3 - NORMAL DIETARY REQUIREMENTS <span>🔽</span>
                     </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1vlKYV6iRb-AsDl947rf8ZV-SZWnG7jF7/preview', 'Normal Requirements')">
-                        <span class="icon video-icon">▶️</span><span>Normal Dietary Requirements & BMI</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ur_mjgbIAcybp5YemdX8MJeD4pPH5fIv/preview', 'Budgeting')">
-                        <span class="icon video-icon">▶️</span><span>Budgeting & Food Substitutes</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1gBbCBu-N-gIkJqArgv87u_f8U6Ki9Hte/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-
-                    <div class="resource-btn quiz" onclick="openQuiz(3)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
-                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/18hcrAHG4mV96Iwc29iYa5KjX9HpsmMJ3/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1vlKYV6iRb-AsDl947rf8ZV-SZWnG7jF7/preview', 'Normal Dietry Requirements - Energy, Calorie Measurement, Body Mass Index, Basal Metabolic Rate, Balanced Diet')"><span class="icon video-icon">▶️</span><span>Normal Dietry Requirements - Energy, Calorie Measurement, Body Mass Index, Basal Metabolic Rate, Balanced Diet</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ur_mjgbIAcybp5YemdX8MJeD4pPH5fIv/preview', 'Budgeting For Food, Food Substitutes, Disease and Disorders Caused By Imbalance of Nutrients, Intolerances')"><span class="icon video-icon">▶️</span><span>Budgeting For Food, Food Substitutes, Disease and Disorders Caused By Imbalance of Nutrients, Intolerances</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1gBbCBu-N-gIkJqArgv87u_f8U6Ki9Hte/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(3)"><span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span></div></div></div>
                 </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit4">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 4 - PREPARATION & PRESERVATION
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Zue11v9aMM0Tir5AEMeOlnk1QW0GuQo6/preview', 'Detailed Notes: Prep')">
-                        <span class="icon">📚</span><span>Detailed Notes: Prep & Preservation</span>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 4 - FOOD PREPARATION PRESERVATION & STORAGE  <span>🔽</span>
                     </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1WFl36p9qwJPp5x7E3VoW5JYyNRhpq1zu/preview', 'Cooking Preservation')">
-                        <span class="icon video-icon">▶️</span><span>Cooking, Preservation & Adulteration</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1uvA8UdqY_CxnDKeRaHMwbIRBGTrDjnzl/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-
-                    <div class="resource-btn quiz" onclick="openQuiz(4)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
-                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Zue11v9aMM0Tir5AEMeOlnk1QW0GuQo6/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1WFl36p9qwJPp5x7E3VoW5JYyNRhpq1zu/preview', 'Cooking, Food Preservation, Precuation, Food Storage, Food Adulteration')"><span class="icon video-icon">▶️</span><span>Cooking, Food Preservation, Precuation, Food Storage, Food Adulteration</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1uvA8UdqY_CxnDKeRaHMwbIRBGTrDjnzl/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(4)"><span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span></div></div></div>
                 </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit5">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 5 - THERAPEUTIC DIET
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1vxSdgfbRyB_L3S8t2danc3kltQND65xC/preview', 'Detailed Notes: Therapeutic')">
-                        <span class="icon">📚</span><span>Detailed Notes: Therapeutic Diet</span>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 5 - THERAPEUTIC DIET  <span>🔽</span>
                     </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/110-tEmXEFxK34DVR9Qenu7isGNvj0RCJ/preview', 'Diet Modification')">
-                        <span class="icon video-icon">▶️</span><span>Diet Modification</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1RynoFS5YhtmUlHaP9PrKJCP1FN13Y82d/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1jsBUFmu3JocElqjORliTqZtEjrGrSW00/preview', 'Special Diet')">
-                        <span class="icon video-icon">▶️</span><span>Special Diet & Modification</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1SI6tMzUIzQVUoQNv3wPvvws6lU8kPlJe/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-
-                    <div class="resource-btn quiz" onclick="openQuiz(5)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span>
-                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1vxSdgfbRyB_L3S8t2danc3kltQND65xC/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/110-tEmXEFxK34DVR9Qenu7isGNvj0RCJ/preview', 'Diet Modification')"><span class="icon video-icon">▶️</span><span>Diet Modification</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1RynoFS5YhtmUlHaP9PrKJCP1FN13Y82d/preview', 'Lecture Notes ')"><span class="icon">📝</span><span>Lecture Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1jsBUFmu3JocElqjORliTqZtEjrGrSW00/preview', 'Special Diet, Diet Modification')"><span class="icon video-icon">▶️</span><span>Special Diet, Diet Modification</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1SI6tMzUIzQVUoQNv3wPvvws6lU8kPlJe/preview', 'Lecture Notes  ')"><span class="icon">📝</span><span>Lecture Notes  </span></div><div class="resource-btn quiz" onclick="startQuiz(5)"><span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span></div></div></div>
                 </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit6">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 6 - COMMUNITY NUTRITION
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1e6fcs2L9AZ9cgbduB_cWIFo7B6_xNROE/preview', 'Detailed Notes: Community')">
-                        <span class="icon">📚</span><span>Detailed Notes: Community Nutrition</span>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 6 - COMMUNITY NUTRITION <span>🔽</span>
                     </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1EdR0mnsrRvl1OWXT4iJEOpGJT9Q9vW_0/preview', 'Nutrition Programs')">
-                        <span class="icon video-icon">▶️</span><span>Nutritional Programs & Agencies</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1mxR5EgTif5Qau1ClLV_VRuf7YqoRMV_O/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-
-                    <div class="resource-btn quiz" onclick="openQuiz(6)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1e6fcs2L9AZ9cgbduB_cWIFo7B6_xNROE/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1EdR0mnsrRvl1OWXT4iJEOpGJT9Q9vW_0/preview', 'Nutritional Programs, National And International Food Agencies in India')"><span class="icon video-icon">▶️</span><span>Nutritional Programs, National And International Food Agencies in India</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1mxR5EgTif5Qau1ClLV_VRuf7YqoRMV_O/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(6)"><span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span></div></div></div>
+                </div></div>
     <div id="app-modal" class="modal-overlay">
         <div class="modal-header">
-            <div id="modal-title" class="modal-title">Resource</div>
+            <div id="modal-title" style="font-weight:700; color:var(--brand);">Resource</div>
             <button class="btn-close" onclick="closeModal()">Close X</button>
         </div>
         <div id="modal-body" class="modal-body"></div>
     </div>
-
     <script>
-        // --- 1. QUIZ DATA ---
-        const QUIZ_DATA = {
-            1: [ // Unit 1: Intro
-                { q: "Which of the following is a macronutrient?", o: ["Vitamin C", "Protein", "Iron", "Zinc"], a: 1 },
-                { q: "Nutrition is defined as:", o: ["Eating food", "Science of food and its relation to health", "Cooking food", "Buying food"], a: 1 },
-                { q: "1 gram of fat provides how many calories?", o: ["4 Kcal", "9 Kcal", "12 Kcal", "7 Kcal"], a: 1 },
-                { q: "Malnutrition includes:", o: ["Undernutrition only", "Overnutrition only", "Both Undernutrition and Overnutrition", "None"], a: 2 },
-                { q: "Which nutrient is essential for body building?", o: ["Carbohydrates", "Fats", "Proteins", "Vitamins"], a: 2 }
-            ],
-            2: [ // Unit 2: Classification
-                { q: "Milk and milk products are rich sources of:", o: ["Vitamin C", "Calcium", "Iron", "Fiber"], a: 1 },
-                { q: "Protective foods are mainly:", o: ["Cereals and millets", "Fats and sugars", "Fruits and vegetables", "Meat and fish"], a: 2 },
-                { q: "Energy yielding foods include:", o: ["Vitamins", "Minerals", "Carbohydrates and Fats", "Water"], a: 2 },
-                { q: "Pulses are a good source of:", o: ["Complete protein", "Incomplete protein", "Vitamin C", "Vitamin D"], a: 1 },
-                { q: "Which classification is based on function?", o: ["Plant vs Animal", "Energy yielding, Body building, Protective", "Solid vs Liquid", "Raw vs Cooked"], a: 1 }
-            ],
-            3: [ // Unit 3: Requirements
-                { q: "BMI stands for:", o: ["Body Mass Index", "Basal Metabolic Index", "Body Muscle Indicator", "Basal Mass Indicator"], a: 0 },
-                { q: "A balanced diet contains:", o: ["Only proteins", "Nutrients in correct proportions", "Only fats", "Only vitamins"], a: 1 },
-                { q: "BMR stands for:", o: ["Body Metabolic Rate", "Basal Metabolic Rate", "Basic Muscle Ratio", "Body Mass Ratio"], a: 1 },
-                { q: "Which factor increases BMR?", o: ["Sleep", "Starvation", "Fever", "Old age"], a: 2 },
-                { q: "Recommended daily protein intake for an adult is approx:", o: ["1 g/kg body weight", "5 g/kg body weight", "0.5 g/kg body weight", "10 g/kg body weight"], a: 0 }
-            ],
-            4: [ // Unit 4: Preparation
-                { q: "Pasteurization is a method of preserving:", o: ["Vegetables", "Milk", "Meat", "Fruits"], a: 1 },
-                { q: "Food adulteration means:", o: ["Adding nutrients", "Adding inferior or harmful substances", "Cooking food well", "Freezing food"], a: 1 },
-                { q: "Blanching is a pre-treatment for:", o: ["Drying", "Freezing", "Canning", "All of the above"], a: 3 },
-                { q: "Which cooking method destroys Vitamin C the most?", o: ["Steaming", "Boiling with excess water", "Microwaving", "Pressure cooking"], a: 1 },
-                { q: "Aflatoxin is found in:", o: ["Milk", "Groundnuts", "Meat", "Fish"], a: 1 }
-            ],
-            5: [ // Unit 5: Therapeutic Diet
-                { q: "A clear liquid diet is prescribed for:", o: ["Diabetes", "Post-operative patients", "Obesity", "Hypertension"], a: 1 },
-                { q: "Low sodium diet is recommended for:", o: ["Hypotension", "Hypertension", "Diabetes", "Fever"], a: 1 },
-                { q: "Bland diet avoids:", o: ["Milk", "Spices and fiber", "Sugar", "Water"], a: 1 },
-                { q: "High protein diet is needed in:", o: ["Kidney failure", "Burns and surgery", "Obesity", "Gout"], a: 1 },
-                { q: "Diabetic diet focuses on:", o: ["High sugar", "Complex carbohydrates and fiber", "High fat", "Low protein"], a: 1 }
-            ],
-            6: [ // Unit 6: Community
-                { q: "ICDS stands for:", o: ["Integrated Child Development Services", "Indian Child Development Society", "International Child Development Scheme", "None"], a: 0 },
-                { q: "Mid-day meal program targets:", o: ["Pregnant women", "School children", "Elderly", "Infants"], a: 1 },
-                { q: "Vitamin A prophylaxis program gives the first dose at:", o: ["Birth", "9 months", "1 year", "5 years"], a: 1 },
-                { q: "Goiter is caused by deficiency of:", o: ["Iron", "Calcium", "Iodine", "Zinc"], a: 2 },
-                { q: "NIN (National Institute of Nutrition) is located in:", o: ["Delhi", "Mumbai", "Hyderabad", "Bangalore"], a: 2 }
-            ]
-        };
-
-        // --- 2. MODAL LOGIC & NAVIGATION CONTROL ---
+        const QUIZ_DATA = {"1":[{"q":"Which of the following is NOT considered a nutrient?","o":["Carbohydrates","Proteins","Minerals","Fiber"],"a":3},{"q":"According to WHO, health is defined as:","o":["Absence of disease only","Complete physical, mental, and social well-being","Physical fitness and strength","Balance of mind and body"],"a":1},{"q":"Which nutrient is primarily responsible for repairing tissues in the body?","o":["Carbohydrates","Proteins","Fats","Minerals"],"a":1},{"q":"Which of the following is an example of a factor influencing food habits?","o":["Genetics","Cultural beliefs","Physical activity","Hormonal changes"],"a":1},{"q":"Which vitamin deficiency is most directly associated with night blindness?","o":["Vitamin A","Vitamin C","Vitamin D","Vitamin B12"],"a":0},{"q":"A patient with celiac disease needs to avoid:","o":["Lactose","Gluten","Fructose","Fiber"],"a":1},{"q":"Which statement about food customs is INCORRECT?","o":["They are influenced by religion and geography","They include meal timing and etiquette","They are always based on nutritional science","They involve preparation and sharing of food"],"a":2},{"q":"The “Green Revolution” in India is associated with:","o":["Increased milk production","Increased food grain production","Nutritional epidemiology","Improved child nutrition programs"],"a":1},{"q":"Which of the following is an example of a changing concept in nutrition?","o":["Focus only on calorie intake","Recognition of gut microbiome importance","Belief that only the health sector handles malnutrition","Ignoring environmental impact of food production"],"a":1},{"q":"Which spice has compounds that help reduce cholesterol and blood pressure?","o":["Turmeric","Cinnamon","Garlic","Ginger"],"a":2}],"2":[{"q":"Which economic activity is mainly responsible for producing foods of plant origin?","o":["Animal husbandry","Agriculture","Fisheries","Biotechnology"],"a":1},{"q":"Cereals such as rice, wheat, and oats primarily belong to which category?","o":["Protective foods","Body-building foods","Energy-yielding foods","Regulatory foods"],"a":2},{"q":"Food of animal origin is generally produced through:","o":["Agriculture","Livestock and fishing","Biotechnology","Forestry"],"a":1},{"q":"Which nutrient is classified as a macronutrient?","o":["Vitamin C","Calcium","Protein","Iron"],"a":2},{"q":"Which of the following foods is considered a protective food?","o":["Oils","Meat","Cereals","Fruits and vegetables"],"a":3},{"q":"Phytonutrients are primarily obtained from:","o":["Dairy products","Fruits, vegetables, and spices","Meat and poultry","Tubers and cereals"],"a":1},{"q":"Simple carbohydrates include:","o":["Starch and glycogen","Cellulose and fiber","Glucose and fructose","Albumin and globulin"],"a":2},{"q":"Which type of food supports growth and development of bones, muscles, and organs?","o":["Energy-yielding foods","Growth and development-supporting foods","Regulatory foods","Pleasure-giving foods"],"a":1},{"q":"Which classification of food is directly related to electrolyte balance and digestion?","o":["Protective foods","Regulatory foods","Pleasure-giving foods","Body-building foods"],"a":1},{"q":"Micronutrients include:","o":["Proteins and fats","Carbohydrates and water","Vitamins and minerals","Starch and glycogen"],"a":2}],"3":[{"q":"Which nutrient is the main energy source for the human body?","o":["Proteins","Carbohydrates","Fats","Vitamins"],"a":1},{"q":"Rickets in children is caused by the deficiency of:","o":["Vitamin A","Vitamin C","Vitamin D","Vitamin K"],"a":2},{"q":"Which among the following is NOT a function of proteins?","o":["Repair of tissues","Enzyme and hormone formation","Long-term energy storage","Antibody production"],"a":2},{"q":"In a balanced diet, cereals and grains should contribute about how much percentage of total calories?","o":["20–25%","30–35%","50–60%","70–80%"],"a":2},{"q":"Which mineral is essential for the synthesis of thyroid hormones?","o":["Iron","Iodine","Calcium","Zinc"],"a":1},{"q":"The Mid-Day Meal Programme in India was primarily introduced to combat:","o":["Vitamin A deficiency","Protein-energy malnutrition","Iodine deficiency","Obesity in school children"],"a":1},{"q":"Which of the following is a water-soluble vitamin?","o":["Vitamin A","Vitamin D","Vitamin E","Vitamin C"],"a":3},{"q":"Which cereal is recommended for diabetic patients due to its slow glucose release?","o":["Rice","Wheat","Oats","Maize"],"a":2},{"q":"Which is considered a protective food?","o":["Butter","Pulses","Fruits and vegetables","Sugar"],"a":2},{"q":"Kwashiorkor is mainly caused due to deficiency of:","o":["Protein","Carbohydrates","Fat","Vitamins"],"a":0}],"4":[{"q":"Cooking food enhances the bioavailability of which nutrient found in tomatoes?","o":["Vitamin C","Lycopene","Thiamine","Iron"],"a":1},{"q":"The Maillard reaction during cooking occurs between:","o":["Starch and water","Proteins and sugars","Fats and oils","Vitamins and minerals"],"a":1},{"q":"Which cooking method is best for preserving maximum nutrients in vegetables?","o":["Boiling","Pressure cooking","Steaming","Deep frying"],"a":2},{"q":"Which vitamin is most heat-sensitive and easily destroyed during cooking?","o":["Vitamin A","Vitamin C","Vitamin D","Vitamin K"],"a":1},{"q":"FIFO (First In, First Out) principle is mainly applied in:","o":["Cooking methods","Food storage","Food preservation","Food adulteration testing"],"a":1},{"q":"Sodium benzoate is commonly used as a preservative in:","o":["Dried fruits","Soft drinks and fruit juices","Meat and fish","Pickles"],"a":1},{"q":"Which traditional method of food preservation works by osmosis, drawing out water?","o":["Irradiation","Salting","Canning","Vacuum packing"],"a":1},{"q":"Lead chromate is an adulterant sometimes added to:","o":["Honey","Turmeric and chili powder","Milk","Salt"],"a":1},{"q":"Which law currently regulates food safety and standards in India?","o":["Prevention of Food Adulteration Act, 1954","Essential Commodities Act, 1955","Food Safety and Standards Act, 2006","Standards of Weights and Measures Act, 1976"],"a":2},{"q":"The smoking method of food preservation works because smoke contains:","o":["Enzymes","Antimicrobial compounds","Natural sugars","Excess oxygen"],"a":1}],"5":[{"q":"Which of the following is NOT a clear liquid food?","o":["Apple juice","Gelatin","Tea","Custard"],"a":3},{"q":"A low-sodium diet is mainly prescribed for patients with:","o":["Gastritis","Hypertension and kidney disease","Diabetes","Ulcers"],"a":1},{"q":"Kwashiorkor is caused primarily due to deficiency of:","o":["Calories","Protein","Fat","Vitamins"],"a":1},{"q":"In management of PEM, catch-up diet should provide protein in the range of:","o":["1–2 g/kg/day","2–3 g/kg/day","4–6 g/kg/day","7–8 g/kg/day"],"a":2},{"q":"The DASH diet is recommended mainly for:","o":["Diabetes","Hypertension","Gout","Obesity"],"a":1},{"q":"Which nutrient should be restricted in hepatic encephalopathy?","o":["Carbohydrates","Proteins","Vitamins","Fats"],"a":1},{"q":"In renal dysfunction, daily fluid allowance is calculated as:","o":["Body weight × 30 ml","Urine output + 500 ml","2 liters fixed for all","20 ml/kg body weight"],"a":1},{"q":"Foods rich in purines, such as organ meats and sardines, should be avoided in:","o":["Diabetes","Gout","Obesity","Hepatitis"],"a":1},{"q":"The low-FODMAP diet is most useful in the management of:","o":["Renal failure","IBS (Irritable Bowel Syndrome)","PEM","Hepatitis"],"a":1},{"q":"After cholecystectomy, patients are advised to:","o":["Eat high-fat meals to stimulate bile flow","Avoid dairy completely","Follow a low-fat, small frequent meal plan","Take only clear liquids permanently"],"a":2}],"6":[{"q":"Marasmus is primarily caused by:","o":["Protein deficiency","Calorie deficiency","Iron deficiency","Vitamin A deficiency"],"a":1},{"q":"The earliest sign of Vitamin A deficiency is:","o":["Bitot’s spots","Night blindness","Xerophthalmia","Corneal ulcer"],"a":1},{"q":"Which program provides supplementary nutrition through Anganwadi Centres?","o":["WIFS","ICDS","NFSA","PMMVY"],"a":1},{"q":"The Mid-Day Meal Scheme provides how much protein at the upper primary level?","o":["10 g","12 g","18 g","20 g"],"a":3},{"q":"Which mission launched in 2018 aims to reduce stunting, underweight, and anemia?","o":["NFSA","POSHAN Abhiyaan","NIPI","SABLA"],"a":1},{"q":"Weekly Iron and Folic Acid Supplementation (WIFS) is targeted at:","o":["Pregnant women only","Children under 5 years","Adolescents (10–19 years)","Elderly population"],"a":2},{"q":"Which of the following is a key function of the Food Corporation of India (FCI)?","o":["Food fortification","Procuring and distributing grains through PDS","Setting RDAs","Conducting dietary surveys"],"a":1},{"q":"The Codex Alimentarius Commission is a joint initiative of:","o":["FAO and WHO","WHO and UNICEF","WFP and FAO","FAO and CARE"],"a":0},{"q":"Which is an advantage of locally grown food over commercially prepared food?","o":["Longer shelf life","Year-round availability","Higher nutrient density when fresh","Standardized taste and branding"],"a":2},{"q":"According to food hygiene principles, cooked food should not be kept at room temperature for more than:","o":["30 minutes","1 hour","2 hours","4 hours"],"a":2}]};
+        let score = 0;
         function toggleUnit(header) {
             const content = header.nextElementSibling;
-            const isExpanded = header.getAttribute('aria-expanded') === 'true';
-            header.setAttribute('aria-expanded', !isExpanded);
+            header.setAttribute('aria-expanded', header.getAttribute('aria-expanded') !== 'true');
             content.classList.toggle('active');
         }
-
         function openResource(type, url, title) {
-            if(type === 'coming-soon') return;
-
-            history.pushState({ modalOpen: true }, null, '#resource');
-
             const modal = document.getElementById('app-modal');
             const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = title;
+            document.getElementById('modal-title').textContent = title;
             modal.style.display = 'flex';
-            body.innerHTML = ''; 
-            body.style.display = 'flex'; 
-
-            if (type === 'quiz') {
-                // Handled by openQuiz
+            
+            // Clean URL Logic (Fallback/Runtime)
+            let finalUrl = url;
+            if (url.includes('drive.google.com')) { 
+                finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview'); 
             }
-            else {
-                let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
-                let className = (type === 'video') ? 'iframe-video' : 'iframe-doc';
-
-                body.innerHTML = `<iframe 
-                    class="${className}" 
-                    src="${cleanUrl}" 
-                    sandbox="allow-scripts allow-same-origin allow-presentation"
-                    allow="autoplay; encrypted-media; fullscreen">
-                </iframe>`;
+            else if (url.includes('human.biodigital.com')) { 
+                 if (url.includes('/viewer/')) finalUrl = url.replace('/viewer/', '/widget/');
+                 else finalUrl = url.replace('/view', '/widget'); 
             }
+            
+            body.innerHTML = '<iframe class="iframe-res" src="' + finalUrl + '" width="100%" height="100%" allow="xr-spatial-tracking" allowfullscreen></iframe>';
         }
-
-        function openQuiz(unitId) {
-            history.pushState({ modalOpen: true }, null, '#quiz');
-
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = `Quiz: Unit ${unitId}`;
-            modal.style.display = 'flex';
-            
-            body.style.display = 'block';
-            body.scrollTop = 0; 
-            
-            const questions = QUIZ_DATA[unitId] || [];
-            
-            let quizHtml = `<div class="quiz-container">`;
-            questions.forEach((q, idx) => {
-                quizHtml += `
-                    <div class="quiz-question">${idx + 1}. ${q.q}</div>
-                    <div class="quiz-options" id="q-${idx}">
-                        ${q.o.map((opt, oIdx) => `
-                            <div class="quiz-option" onclick="checkAnswer(this, ${idx}, ${oIdx}, ${q.a})">${opt}</div>
-                        `).join('')}
-                    </div>
-                `;
+        function startQuiz(unitId) {
+            score = 0;
+            const questions = QUIZ_DATA[unitId];
+            if(!questions || questions.length === 0) { alert('No questions found.'); return; }
+            let html = '<div class="quiz-container"><h2 style="color:var(--brand); margin-top:0;">Unit ' + unitId + ' Quiz</h2>';
+            html += '<div id="score-display" style="background:var(--brand); color:white; padding:5px 15px; border-radius:20px; display:inline-block; font-weight:700; margin-bottom:20px;">Score: 0 / ' + questions.length + '</div>';
+            questions.forEach((q, index) => {
+                html += '<div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">';
+                html += '<p style="font-weight:600; font-size:1.1rem; margin-bottom:15px;">' + (index + 1) + '. ' + q.q + '</p>';
+                q.o.forEach((opt, optIndex) => {
+                    html += '<div class="quiz-option" onclick="checkAnswer(this, ' + unitId + ', ' + optIndex + ', ' + q.a + ')">' + opt + '</div>';
+                });
+                html += '</div>';
             });
-            
-            if(questions.length === 0) quizHtml += `<p>Quiz coming soon!</p>`;
-            
-            quizHtml += `</div>`;
-            body.innerHTML = quizHtml;
+            html += '<button class="btn-quiz" onclick="closeModal()">Close Quiz</button></div>';
+            document.getElementById('modal-body').innerHTML = html;
+            document.getElementById('modal-title').textContent = 'Unit ' + unitId + ' Quiz';
+            document.getElementById('app-modal').style.display = 'flex';
         }
-
-        function checkAnswer(el, qIdx, oIdx, correctIdx) {
-            const parent = document.getElementById(`q-${qIdx}`);
-            const opts = parent.children;
-            for(let opt of opts) opt.style.pointerEvents = 'none';
-
-            if(oIdx === correctIdx) {
-                el.classList.add('correct');
+        function checkAnswer(element, unitId, selectedIndex, correctIndex) {
+            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+            if (selectedIndex === correctIndex) {
+                element.classList.add('correct'); score++;
             } else {
-                el.classList.add('wrong');
-                opts[correctIdx].classList.add('correct');
+                element.classList.add('wrong'); element.parentElement.children[correctIndex + 1].classList.add('correct');
             }
+            document.getElementById('score-display').textContent = 'Score: ' + score + ' / ' + QUIZ_DATA[unitId].length;
         }
-
-        function closeModal() {
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            modal.style.display = 'none';
-            body.innerHTML = ''; 
-            
-            if (history.state && history.state.modalOpen) {
-                history.back();
-            }
-        }
-
-        window.onpopstate = function(event) {
-            const modal = document.getElementById('app-modal');
-            if (modal.style.display === 'flex') {
-                modal.style.display = 'none';
-                document.getElementById('modal-body').innerHTML = '';
-            }
-        };
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const firstUnitHeader = document.querySelector('.unit-header');
-            if(firstUnitHeader) {
-                // toggleUnit(firstUnitHeader);
-            }
-        });
+        function closeModal() { document.getElementById('app-modal').style.display = 'none'; document.getElementById('modal-body').innerHTML = ""; }
     </script>
-
 </body>
 </html>
