@@ -3,499 +3,140 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Health Education & Communication Skills</title>
-    <meta name="description" content="Comprehensive syllabus with detailed notes, video lectures, and quizzes for Health Education and Communication Skills." />
+    <title>Health Education And Communication Skills </title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
         :root {
-            --brand: #003B82; 
-            --accent: #00B9F2;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-700: #374151;
-            --gray-900: #111827;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-            --danger: #ef4444;
-            --success: #10b981;
+            --brand: #003B82; --accent: #00B9F2; --gray-50: #f9fafb; --gray-200: #e5e7eb; --gray-900: #111827;
+            --danger: #ef4444; --success: #10b981; --warning: #f59e0b;
         }
-
         * { box-sizing: border-box; }
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: white;
-            color: var(--gray-900);
-            line-height: 1.6;
-            padding: 24px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .syllabus-btn, .unit-header {
-            display: block;
-            width: 100%;
-            padding: 18px 24px;
-            margin: 24px 0;
-            background: var(--brand);
-            color: white;
-            font-weight: 600;
-            font-size: 16px;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.2s ease;
-        }
-        .syllabus-btn:hover, .unit-header:hover {
-            background: #002d63;
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .unit-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-align: left;
-            margin: 16px 0;
-        }
-        .unit-header span:last-child {
-            transition: transform 0.3s ease;
-            color: #FFA500;
-        }
-        .unit-header[aria-expanded="true"] span:last-child {
-            transform: rotate(180deg);
-        }
-
-        .unit-content {
-            padding: 0 12px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.3s ease;
-        }
-        .unit-content.active {
-            padding: 24px 12px;
-            max-height: none; 
-        }
-
-        .subsection {
-            margin: 16px 0;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            border: 1px solid var(--gray-200);
-            box-shadow: var(--shadow-sm);
-            transition: box-shadow 0.2s ease;
-        }
-        .subsection:hover { box-shadow: var(--shadow-md); }
-
-        .resource-btn {
-            display: flex;
-            align-items: flex-start;
-            width: 100%;
-            padding: 14px 18px;
-            margin: 8px 0;
-            background: var(--gray-50);
-            color: var(--gray-900);
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
-            border: 1px solid var(--gray-200);
-            transition: all 0.2s ease;
-            gap: 12px;
-            flex-wrap: wrap;
-            min-height: 50px;
-            cursor: pointer;
-        }
+        body { font-family: 'Inter', sans-serif; background: white; color: var(--gray-900); padding: 24px; max-width: 1000px; margin: 0 auto; }
+        .syllabus-btn { display: block; width: 100%; padding: 18px 24px; margin: 12px 0; background: white; color: var(--brand); border: 2px solid var(--brand); font-weight: 700; font-size: 16px; text-align: center; cursor: pointer; border-radius: 12px; transition: all 0.2s ease; text-decoration: none; }
+        .syllabus-btn:hover { background: var(--gray-50); transform: translateY(-1px); }
+        .unit-header { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 18px 24px; margin: 16px 0; background: var(--brand); color: white; font-weight: 600; font-size: 16px; border-radius: 12px; cursor: pointer; transition: 0.2s; }
+        .unit-header:hover { background: #002d63; }
+        .unit-content { padding: 0 12px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; }
+        .unit-content.active { padding: 24px 12px; max-height: none; }
+        .subsection { padding: 20px; background: white; border-radius: 12px; border: 1px solid var(--gray-200); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .resource-btn { display: flex; width: 100%; padding: 14px 18px; margin: 6px 0; background: var(--gray-50); border-radius: 8px; font-weight: 500; border: 1px solid var(--gray-200); cursor: pointer; gap: 12px; transition: 0.2s; align-items: center; }
+        
+        /* EXISTING BUTTON STYLES */
         .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
         .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
-        .resource-btn.quiz { background: #fff5e8; border-color: #ffd8a8; color: #8c5e08; }
-        .resource-btn:hover { background: #f9fafb; transform: translateY(-1px); }
-        .resource-btn.notes:hover { background: #e0f2fe; }
-        .resource-btn.video:hover { background: #ede9fe; }
-        .resource-btn.quiz:hover { background: #ffead1; }
-        .resource-btn.coming-soon { background: #e5e7eb; color: #6b7280; cursor: not-allowed; pointer-events: none; }
+        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+        .resource-btn.model { background: #fdf4ff; border-color: #f0abfc; color: #86198f; }
 
-        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
-        .icon.video-icon { color: #8b5cf6; }
-        .icon.quiz-icon { color: #FFA500; }
-        .icon.coming-soon-icon { color: #9ca3af; }
-
-        /* --- MODAL --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-        }
-
-        .modal-header {
-            height: 60px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            flex-shrink: 0;
-        }
-
-        .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        /* NEW BUTTON STYLES FOR APP */
+        .resource-btn.imp-discussion { background: #fef2f2; border-color: #fecaca; color: #b91c1c; } /* Light Red Background */
+        .resource-btn.imp-pdf { background: #fff7ed; border-color: #fed7aa; color: #c2410c; } /* Light Orange Background */
         
-        .btn-close {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            flex: 1;
-            background: #000;
-            position: relative;
-            overflow-y: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* --- FIXED IFRAME STYLES --- */
-        .iframe-video {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16 / 9;
-            border: none;
-            background: #000;
-            display: block;
-        }
-
-        .iframe-doc {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #fff;
-            display: block;
-        }
-
-        /* --- QUIZ STYLES --- */
-        .quiz-container {
-            background: white;
-            width: 100%;
-            min-height: 100%;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .quiz-question { margin-bottom: 20px; font-size: 1.1rem; font-weight: 600; }
-        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
-        .quiz-option {
-            padding: 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        .quiz-option:hover { background: #f0f9ff; border-color: var(--accent); }
-        .quiz-option.correct { background: var(--success); color: white; border-color: var(--success); }
-        .quiz-option.correct::after { content: '✓'; position: absolute; right: 15px; font-weight: bold; }
-        .quiz-option.wrong { background: var(--danger); color: white; border-color: var(--danger); }
-        .quiz-option.wrong::after { content: '✗'; position: absolute; right: 15px; font-weight: bold; }
-
-        @media (max-width: 768px) {
-            body { padding: 16px; }
-            .syllabus-btn, .unit-header, .resource-btn { font-size: 15px; padding: 14px 16px; }
-            .resource-btn { font-size: 14px; }
-            .subsection { padding: 16px; }
-            .unit-content.active { padding: 16px 8px; }
-        }
+        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
+        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
+        .icon.video-icon { color: #8b5cf6; } .icon.quiz-icon { color: #f59e0b; } .icon.model-icon { color: #d946ef; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; display: none; flex-direction: column; }
+        .modal-header { height: 60px; background: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; }
+        .btn-close { background: var(--danger); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .modal-body { flex: 1; background: #f3f4f6; position: relative; padding: 20px; display:flex; justify-content:center; overflow-y: auto;}
+        .iframe-res { width: 100%; height: 100%; border: none; background: white; }
+        .quiz-container { background: white; width: 100%; max-width: 800px; padding: 30px; border-radius: 12px; margin-bottom: 50px; }
+        .quiz-option { padding: 12px 15px; border: 2px solid var(--gray-200); border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
+        .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
+        .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; }
+        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
+        .btn-quiz { background: var(--brand); color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 600; font-size: 16px; margin-top: 20px; cursor: pointer;}
+        @media (max-width: 768px) { body { padding: 16px; } .quiz-container { padding: 15px; } }
     </style>
 </head>
 <body>
-
-    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/1ab75ZNnS7hGBusAflAh7Ac1CRRsSaNzb/preview', 'Syllabus')">
-        📄 DOWNLOAD HEALTH EDUCATION SYLLABUS
-    </div>
-    
+    <a class="syllabus-btn" href="https://drive.google.com/file/d/1ab75ZNnS7hGBusAflAh7Ac1CRRsSaNzb/view?usp=drive_link" target="_blank">📄 DOWNLOAD SYLLABUS</a>
     <div id="units">
-        <div class="unit-container" id="unit1">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="true" onclick="toggleUnit(this)">
-                UNIT 1 - COMMUNICATION SKILLS
-                <span>🔽</span>
-            </div>
-            <div class="unit-content active">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/10NsLk-iloybNGvnoegsrq8GXtnp4UU6x/preview', 'Detailed Notes: Communication')">
-                        <span class="icon">📚</span><span>Detailed Notes: Communication Skills</span>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 1 - COMMUNICATION SKILLS <span>🔽</span>
                     </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1a70qCQYK405wlDhUJbfgrfPDTNEwgblc/preview', 'Communication Skills')">
-                        <span class="icon video-icon">▶️</span><span>Communication Skills: Process, Types & Barriers</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1xuN6LjKcxgZBjx-HfvI9nCIeW5xIoXdR/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    
-                    <div class="resource-btn quiz" onclick="openQuiz(1)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
-                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/10NsLk-iloybNGvnoegsrq8GXtnp4UU6x/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Hi-YKEdiW0hAbp7K2reKQRm7P9PDYATr/preview', 'Communication Skills')"><span class="icon video-icon">▶️</span><span>Communication Skills</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1uMYqMuxFBIqzP9X-IQujR5ReZ9w9xXZU/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(1)"><span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span></div></div></div>
                 </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit2">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 2 - HEALTH EDUCATION
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Jg6Z7Hdqi6vW53sGg5wcpyf1N2ik_5kD/preview', 'Detailed Notes: Health Edu')">
-                        <span class="icon">📚</span><span>Detailed Notes: Health Education</span>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 2 - HEALTH EDUCATION <span>🔽</span>
                     </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1W67kSDKnp6hl_xkSwRyQMVcn650pa5tc/preview', 'Health Education')">
-                        <span class="icon video-icon">▶️</span><span>Introduction to Health Education</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1yE6CHPB-eMM7t7rFcSzZg2xrDZvuNVTJ/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Bl6qbP5HBhvBv4fxi5IbrLN4Qq6-x2i7/preview', 'Methods & Scope')">
-                        <span class="icon video-icon">▶️</span><span>Methods, Scope, Opportunities & Nurse's Role</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1V_QOIzLoZqxx1Gm4mXLXeDh4oIfULATg/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-
-                    <div class="resource-btn quiz" onclick="openQuiz(2)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
-                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Jg6Z7Hdqi6vW53sGg5wcpyf1N2ik_5kD/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1W67kSDKnp6hl_xkSwRyQMVcn650pa5tc/preview', 'Health Education')"><span class="icon video-icon">▶️</span><span>Health Education</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1yE6CHPB-eMM7t7rFcSzZg2xrDZvuNVTJ/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1MOCHldLBuU4pyX_utlnrPXsIh2de688C/preview', 'Methods, Scope, Opportunities and Nurse Role In Health Education')"><span class="icon video-icon">▶️</span><span>Methods, Scope, Opportunities and Nurse Role In Health Education</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1n_F_LM1KLITSBwbbgbilfjOx1kHB6R-q/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(2)"><span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span></div></div></div>
                 </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit3">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 3 - COUNSELLING
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/10PnKIFq0-b9_WgolljLOIiTCpcTk5jr-/preview', 'Detailed Notes: Counselling')">
-                        <span class="icon">📚</span><span>Detailed Notes: Counselling</span>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 3 - COUNSELLING  <span>🔽</span>
                     </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1FBxo3mCf5S9tgvqYD_SkAAV7kJtiwgFV/preview', 'Counselling Process')">
-                        <span class="icon video-icon">▶️</span><span>Counselling: Process & Techniques</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1WfWOlz_Znm-VHVDDwrMNthrigfJc7Rnb/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1PAygkJlrSsHTwukDi86IuaybrAHPB0Iw/preview', 'Types of Counselling')">
-                        <span class="icon video-icon">▶️</span><span>Placement and Marriage Counseling</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1oj3NcNp3VsRITeYi8jXYAVBylhFtQcYO/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-
-                    <div class="resource-btn quiz" onclick="openQuiz(3)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
-                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/10PnKIFq0-b9_WgolljLOIiTCpcTk5jr-/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1FBxo3mCf5S9tgvqYD_SkAAV7kJtiwgFV/preview', 'Counseling')"><span class="icon video-icon">▶️</span><span>Counseling</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1WfWOlz_Znm-VHVDDwrMNthrigfJc7Rnb/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1PAygkJlrSsHTwukDi86IuaybrAHPB0Iw/preview', 'Placement and Marriage Counseling')"><span class="icon video-icon">▶️</span><span>Placement and Marriage Counseling</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1oj3NcNp3VsRITeYi8jXYAVBylhFtQcYO/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(3)"><span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span></div></div></div>
                 </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit4">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 4 - METHODS AND MEDIA
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1FqvCgf8TK9w9NnAjtXGWJ4OZ5dKbY3ON/preview', 'Detailed Notes: Media')">
-                        <span class="icon">📚</span><span>Detailed Notes: Methods and Media</span>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 4 - METHODS AND MEDIA  OF HEALTH EDUCATION  <span>🔽</span>
                     </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/134rFV8UafFpVron9seSSrFNWbTFFtb7S/preview', 'Methods & Media')">
-                        <span class="icon video-icon">▶️</span><span>Methods and Media of Health Education</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1vFgotRYVZofwWCb3g6W_isi9leh9oaq_/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/11Y_2Flruu_jzDy_dEMGPocDN2_34Lr36/preview', 'AV Aids')">
-                        <span class="icon video-icon">▶️</span><span>AV Aids: Boards, Printed Aids, Models, Puppets</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1PGSWN5tcz5_DsJhL3yYc6IfF2cizdVzf/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-
-                    <div class="resource-btn quiz" onclick="openQuiz(4)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1FqvCgf8TK9w9NnAjtXGWJ4OZ5dKbY3ON/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/134rFV8UafFpVron9seSSrFNWbTFFtb7S/preview', 'Methods and Media of Health Education')"><span class="icon video-icon">▶️</span><span>Methods and Media of Health Education</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1E-dRJwyi1WAXvoTTxrNrH5oTRbz_Bn4c/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/11Y_2Flruu_jzDy_dEMGPocDN2_34Lr36/preview', 'Boards, Printed Aids, Magazines, Pamphlets, Witten Handouts, 3D Models, Specimens and Objects, Puppets')"><span class="icon video-icon">▶️</span><span>Boards, Printed Aids, Magazines, Pamphlets, Witten Handouts, 3D Models, Specimens and Objects, Puppets</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1PGSWN5tcz5_DsJhL3yYc6IfF2cizdVzf/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(4)"><span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span></div></div></div>
+                </div></div>
     <div id="app-modal" class="modal-overlay">
         <div class="modal-header">
-            <div id="modal-title" class="modal-title">Resource</div>
+            <div id="modal-title" style="font-weight:700; color:var(--brand);">Resource</div>
             <button class="btn-close" onclick="closeModal()">Close X</button>
         </div>
         <div id="modal-body" class="modal-body"></div>
     </div>
-
     <script>
-        // --- 1. QUIZ DATA ---
-        const QUIZ_DATA = {
-            1: [ // Unit 1: Communication
-                { q: "The sender in the communication process is also known as:", o: ["Decoder", "Encoder", "Receiver", "Feedback"], a: 1 },
-                { q: "Non-verbal communication includes:", o: ["Spoken words", "Written reports", "Body language and gestures", "Emails"], a: 2 },
-                { q: "Which is a barrier to effective communication?", o: ["Active listening", "Clarity", "Noise/Distraction", "Empathy"], a: 2 },
-                { q: "Feedback in communication is:", o: ["The message sent", "The response from the receiver", "The channel used", "The sender's thought"], a: 1 },
-                { q: "Therapeutic communication focuses on:", o: ["Social interaction", "Nurse's personal needs", "Patient's physical and emotional needs", "Hospital rules"], a: 2 }
-            ],
-            2: [ // Unit 2: Health Education
-                { q: "The primary goal of health education is to:", o: ["Treat diseases", "Change health behavior", "Provide medicines", "Increase hospital revenue"], a: 1 },
-                { q: "Which method is best for teaching a large group?", o: ["Counseling", "Lecture", "Home visit", "Role play"], a: 1 },
-                { q: "A planned activity to educate people about health is:", o: ["Gossip", "Health Education", "News report", "Advertisement"], a: 1 },
-                { q: "The principle of 'learning by doing' is emphasized in:", o: ["Lectures", "Demonstrations", "Reading books", "Listening to radio"], a: 1 },
-                { q: "A nurse's role in health education includes:", o: ["Diagnosing disease", "Facilitating learning and behavior change", "Performing surgery", "Ordering lab tests"], a: 1 }
-            ],
-            3: [ // Unit 3: Counselling
-                { q: "Counseling differs from advice giving because it:", o: ["Tells the patient what to do", "Empowers the patient to make decisions", "Is shorter in duration", "Is informal"], a: 1 },
-                { q: "The GATHER approach is often used in:", o: ["Surgical care", "Family Planning Counseling", "Pediatric care", "Geriatric care"], a: 1 },
-                { q: "Empathy in counseling means:", o: ["Feeling sorry for the patient", "Understanding the patient's feelings", "Ignoring the patient's feelings", "Judgemental attitude"], a: 1 },
-                { q: "A key quality of a good counselor is:", o: ["Talkative", "Good listener", "Authoritative", "Judgmental"], a: 1 },
-                { q: "Confidentiality in counseling builds:", o: ["Fear", "Trust", "Confusion", "Dependency"], a: 1 }
-            ],
-            4: [ // Unit 4: Methods & Media
-                { q: "Flash cards are effective for:", o: ["Large groups", "Small groups", "Blind patients", "Radio broadcast"], a: 1 },
-                { q: "A flannel graph uses:", o: ["Magnets", "Adhesive tape", "Friction between surfaces", "Electricity"], a: 2 },
-                { q: "Puppets are particularly useful for health education among:", o: ["Doctors", "Children", "Scientists", "Administrators"], a: 1 },
-                { q: "Which is a projected AV aid?", o: ["Blackboard", "Overhead Projector (OHP)", "Chart", "Model"], a: 1 },
-                { q: "Posters should ideally primarily contain:", o: ["Detailed text", "A clear visual message with minimal text", "Abstract art", "Statistical tables"], a: 1 }
-            ]
-        };
-
-        // --- 2. MODAL LOGIC & NAVIGATION CONTROL ---
+        const QUIZ_DATA = {"1":[{"q":"Which of the following is the first step in the process of communication?","o":["Encoding","Sender","Message","Feedback"],"a":1},{"q":"In nursing communication, the process of interpreting the received message is known as","o":["Encoding","Decoding","Feedback","Channel"],"a":1},{"q":"Which principle of communication ensures that information is given in a timely manner?","o":["Clarity","Timeliness","Empathy","Confidentiality"],"a":1},{"q":"A nurse maintaining patient privacy while discussing medical history is following which communication principle?","o":["Respect","Feedback","Confidentiality","Clarity"],"a":2},{"q":"Which type of communication skill involves gestures, body language, and facial expressions?","o":["Verbal communication","Non-verbal communication","Active listening","Empathy"],"a":1},{"q":"A patient who avoids asking questions due to cultural beliefs is facing which type of barrier?","o":["Emotional barrier","Physical barrier","Cultural barrier","Environmental barrier"],"a":2},{"q":"Active listening in nursing involves","o":["Talking more than the patient","Avoiding eye contact","Listening attentively and giving feedback","Using only non-verbal communication"],"a":2},{"q":"Which observing skill involves using the sense of smell to gather patient-related information?","o":["Auditory observation","Olfactory observation","Gustatory observation","Tactile observation"],"a":1},{"q":"Which of the following is NOT a barrier to effective communication?","o":["Emotional barrier","Cultural barrier","Feedback","Environmental barrier"],"a":2},{"q":"A nurse repeating back what the patient said to confirm understanding is applying which listening skill?","o":["Avoid interrupting","Clarify and summarize","Show interest","Empathize"],"a":1}],"2":[{"q":"The primary objective of health education is","o":["Preventing complications","Promoting health","Rehabilitation","Screening diseases"],"a":1},{"q":"Health education that helps individuals take responsibility for their own well-being is aimed at","o":["Empowering individuals","Encouraging self-care","Increasing health literacy","Enhancing quality of life"],"a":1},{"q":"Which principle of health education ensures tailoring messages to diverse populations?","o":["Evidence-based","Communication","Cultural sensitivity","Participation"],"a":2},{"q":"The stage of change model where the individual has no intention of changing behaviour is","o":["Contemplation","Precontemplation","Preparation","Termination"],"a":1},{"q":"Screening and early detection activities fall under which level of prevention?","o":["Primary prevention","Secondary prevention","Tertiary prevention","Health promotion"],"a":1},{"q":"Demonstrating hand washing technique is an example of which method of health education?","o":["Group discussion","Counselling","Demonstration","Printed material"],"a":2},{"q":"Which approach to health education focuses on social and environmental determinants?","o":["Behavioural approach","Social approach","Educational approach","Individual approach"],"a":1},{"q":"Organizing a community health fair is an example of","o":["Hospital-based health education","Workplace health education","School health education","Community-based opportunity"],"a":3},{"q":"When a nurse develops and implements a teaching plan based on patient needs, she is performing which role?","o":["Advocating for patients","Assessing knowledge","Developing teaching plan","Evaluating effectiveness"],"a":2},{"q":"Which principle of health education emphasizes promoting sustainable health behaviours over time?","o":["Collaboration","Sustainability","Lifelong learning","Participation"],"a":1}],"3":[{"q":"Which principle of counseling ensures that personal information is not shared without the client’s consent?","o":["Acceptance of the client","Confidentiality","Empathy","Non-judgmental attitude"],"a":1},{"q":"The counseling process that emphasizes client autonomy and avoids giving direct advice is","o":["Directive counseling","Nondirective counseling","Elective counseling","Group counseling"],"a":1},{"q":"In directive counseling, the first step is","o":["Prognosis","Analysis","Diagnosis","Counseling/Treatment"],"a":1},{"q":"Which of the following is an advantage of directive counseling?","o":["Promotes client independence","Time-efficient and provides clear solutions","Enhances self-awareness","Reduces counselor dependence"],"a":1},{"q":"Which type of counseling is best suited for rehabilitation after addiction or trauma?","o":["Career counseling","Rehabilitation counseling","Family counseling","Spiritual counseling"],"a":1},{"q":"Which principle of counseling emphasizes unconditional respect for the client’s uniqueness?","o":["Respect for individual differences","Client-centered approach","Empowerment of the client","Continuous evaluation"],"a":0},{"q":"Which scope of counseling deals with helping students with academic stress, peer conflicts, and career guidance?","o":["Vocational scope","Educational scope","Personal and social scope","Rehabilitation scope"],"a":1},{"q":"Which counseling method is particularly useful for individuals facing grief and loss?","o":["Career counseling","Grief or bereavement counseling","Geriatric counseling","Group counseling"],"a":1},{"q":"Which phase of group counseling is characterized by conflicts and power struggles among members?","o":["Forming","Storming","Norming","Performing"],"a":1},{"q":"Short-term counseling primarily focuses on","o":["Deep personality changes","Exploring unconscious conflicts","Goal-oriented and solution-focused interventions","Long-term behavior modification"],"a":2}],"4":[{"q":"Audio-visual aids are primarily used in health education to","o":["Replace the teacher completely","Enhance understanding and retention","Entertain the learners","Reduce the syllabus content"],"a":1},{"q":"Which of the following is a non-projected visual aid?","o":["PowerPoint presentation","Overhead projector slides","Chart","Video film"],"a":2},{"q":"The classification of AV aids based on communication medium includes","o":["Electronic aids, printed aids, and models","Audio aids, visual aids, and audio-visual aids","Projected, non-projected, and digital aids","Charts, posters, and pamphlets"],"a":1},{"q":"Flip charts are particularly useful in","o":["Large auditoriums","Small group teaching sessions","Radio health programs","Online virtual classes"],"a":1},{"q":"Which of the following is a limitation of posters as an AV aid?","o":["Costly to prepare","Limited space for detailed content","Not attractive to learners","Difficult to transport"],"a":1},{"q":"A pie chart is most appropriate when the aim is to","o":["Show trends over time","Show proportions of a whole","Compare values between groups","Display frequency distribution"],"a":1},{"q":"Which AV aid is most suitable for illiterate populations?","o":["Pamphlets","Newspapers","Pictures","Written handouts"],"a":2},{"q":"A disadvantage of using blackboards in teaching is","o":["Lack of availability","Production of chalk dust causing respiratory issues","Cannot be reused","Very costly"],"a":1},{"q":"Puppets as an AV aid are especially effective in","o":["Teaching complex medical statistics","Engaging children and low-literacy groups","Presenting lengthy written reports","Delivering advanced nursing research"],"a":1},{"q":"When selecting AV aids, which factor is MOST important to consider?","o":["Attractiveness only","Cultural appropriateness and relevance","Teacher’s preference","Availability of electricity"],"a":1}]};
+        let score = 0;
         function toggleUnit(header) {
             const content = header.nextElementSibling;
-            const isExpanded = header.getAttribute('aria-expanded') === 'true';
-            header.setAttribute('aria-expanded', !isExpanded);
+            header.setAttribute('aria-expanded', header.getAttribute('aria-expanded') !== 'true');
             content.classList.toggle('active');
         }
-
         function openResource(type, url, title) {
-            if(type === 'coming-soon') return;
-
-            history.pushState({ modalOpen: true }, null, '#resource');
-
             const modal = document.getElementById('app-modal');
             const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = title;
+            document.getElementById('modal-title').textContent = title;
             modal.style.display = 'flex';
-            body.innerHTML = ''; 
-            body.style.display = 'flex'; 
-
-            if (type === 'quiz') {
-                // Handled by openQuiz
+            
+            // Clean URL Logic (Fallback/Runtime)
+            let finalUrl = url;
+            if (url.includes('drive.google.com')) { 
+                finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview'); 
             }
-            else {
-                let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
-                let className = (type === 'video') ? 'iframe-video' : 'iframe-doc';
-
-                body.innerHTML = `<iframe 
-                    class="${className}" 
-                    src="${cleanUrl}" 
-                    sandbox="allow-scripts allow-same-origin allow-presentation"
-                    allow="autoplay; encrypted-media; fullscreen">
-                </iframe>`;
+            else if (url.includes('human.biodigital.com')) { 
+                 if (url.includes('/viewer/')) finalUrl = url.replace('/viewer/', '/widget/');
+                 else finalUrl = url.replace('/view', '/widget'); 
             }
+            
+            body.innerHTML = '<iframe class="iframe-res" src="' + finalUrl + '" width="100%" height="100%" allow="xr-spatial-tracking" allowfullscreen></iframe>';
         }
-
-        function openQuiz(unitId) {
-            history.pushState({ modalOpen: true }, null, '#quiz');
-
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = `Quiz: Unit ${unitId}`;
-            modal.style.display = 'flex';
-            
-            body.style.display = 'block';
-            body.scrollTop = 0; 
-            
-            const questions = QUIZ_DATA[unitId] || [];
-            
-            let quizHtml = `<div class="quiz-container">`;
-            questions.forEach((q, idx) => {
-                quizHtml += `
-                    <div class="quiz-question">${idx + 1}. ${q.q}</div>
-                    <div class="quiz-options" id="q-${idx}">
-                        ${q.o.map((opt, oIdx) => `
-                            <div class="quiz-option" onclick="checkAnswer(this, ${idx}, ${oIdx}, ${q.a})">${opt}</div>
-                        `).join('')}
-                    </div>
-                `;
+        function startQuiz(unitId) {
+            score = 0;
+            const questions = QUIZ_DATA[unitId];
+            if(!questions || questions.length === 0) { alert('No questions found.'); return; }
+            let html = '<div class="quiz-container"><h2 style="color:var(--brand); margin-top:0;">Unit ' + unitId + ' Quiz</h2>';
+            html += '<div id="score-display" style="background:var(--brand); color:white; padding:5px 15px; border-radius:20px; display:inline-block; font-weight:700; margin-bottom:20px;">Score: 0 / ' + questions.length + '</div>';
+            questions.forEach((q, index) => {
+                html += '<div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">';
+                html += '<p style="font-weight:600; font-size:1.1rem; margin-bottom:15px;">' + (index + 1) + '. ' + q.q + '</p>';
+                q.o.forEach((opt, optIndex) => {
+                    html += '<div class="quiz-option" onclick="checkAnswer(this, ' + unitId + ', ' + optIndex + ', ' + q.a + ')">' + opt + '</div>';
+                });
+                html += '</div>';
             });
-            
-            if(questions.length === 0) quizHtml += `<p>Quiz coming soon!</p>`;
-            
-            quizHtml += `</div>`;
-            body.innerHTML = quizHtml;
+            html += '<button class="btn-quiz" onclick="closeModal()">Close Quiz</button></div>';
+            document.getElementById('modal-body').innerHTML = html;
+            document.getElementById('modal-title').textContent = 'Unit ' + unitId + ' Quiz';
+            document.getElementById('app-modal').style.display = 'flex';
         }
-
-        function checkAnswer(el, qIdx, oIdx, correctIdx) {
-            const parent = document.getElementById(`q-${qIdx}`);
-            const opts = parent.children;
-            for(let opt of opts) opt.style.pointerEvents = 'none';
-
-            if(oIdx === correctIdx) {
-                el.classList.add('correct');
+        function checkAnswer(element, unitId, selectedIndex, correctIndex) {
+            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+            if (selectedIndex === correctIndex) {
+                element.classList.add('correct'); score++;
             } else {
-                el.classList.add('wrong');
-                opts[correctIdx].classList.add('correct');
+                element.classList.add('wrong'); element.parentElement.children[correctIndex + 1].classList.add('correct');
             }
+            document.getElementById('score-display').textContent = 'Score: ' + score + ' / ' + QUIZ_DATA[unitId].length;
         }
-
-        function closeModal() {
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            modal.style.display = 'none';
-            body.innerHTML = ''; 
-            
-            if (history.state && history.state.modalOpen) {
-                history.back();
-            }
-        }
-
-        window.onpopstate = function(event) {
-            const modal = document.getElementById('app-modal');
-            if (modal.style.display === 'flex') {
-                modal.style.display = 'none';
-                document.getElementById('modal-body').innerHTML = '';
-            }
-        };
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const firstUnitHeader = document.querySelector('.unit-header');
-            if(firstUnitHeader) {
-                // toggleUnit(firstUnitHeader);
-            }
-        });
+        function closeModal() { document.getElementById('app-modal').style.display = 'none'; document.getElementById('modal-body').innerHTML = ""; }
     </script>
-
 </body>
 </html>
