@@ -18,11 +18,26 @@
             background-color: var(--bg-body); color: var(--text-main);
         }
         
-        body.zoom-mode {
-            overflow: auto !important;
-            touch-action: manipulation !important;
+        /* --- READING MODE (Activated when viewing content) --- */
+        body.reading-mode {
+            overflow: auto !important; /* Allow window scrolling */
+            height: auto !important;
         }
-        
+        body.reading-mode #app {
+            height: auto !important; 
+            overflow: visible !important;
+            box-shadow: none; /* Remove shadow for full screen feel */
+        }
+        body.reading-mode .header {
+            display: none !important; /* Hide header to save space */
+        }
+        body.reading-mode #view-iframe {
+            padding: 0 !important;
+            height: auto !important;
+            display: block !important;
+            overflow: visible !important;
+        }
+
         #app { 
             width: 100%; max-width: 480px; margin: 0 auto; 
             background: var(--bg-card); height: 100%; position: relative; 
@@ -30,49 +45,56 @@
             overflow: hidden; 
         }
 
-        /* --- WATERMARK: Diagonal & Faint --- */
+        /* --- WATERMARK --- */
         .watermark-strip {
             position: absolute; top: 50%; left: 50%; width: 200%;
             transform: translate(-50%, -50%) rotate(-45deg);
             z-index: 9999; pointer-events: none;
             display: flex; align-items: center; justify-content: center;
             font-size: 13px; font-weight: 900;
-            color: rgba(0, 59, 128, 0.06); /* 6% Opacity */
+            color: rgba(0, 59, 128, 0.06);
             user-select: none; white-space: nowrap; letter-spacing: 6px; text-transform: uppercase;
         }
 
-        /* --- FLOATING ZOOM BUTTON --- */
-        #fab-zoom {
-            position: absolute; bottom: 30px; left: 20px;
-            width: 50px; height: 50px;
-            background-color: var(--primary);
+        /* --- FLOATING CLOSE BUTTON (Subtle X) --- */
+        #fab-close {
+            position: fixed; 
+            top: 15px; right: 15px;
+            width: 35px; height: 35px;
+            background-color: rgba(0, 0, 0, 0.4); /* See-through dark */
+            backdrop-filter: blur(2px);
             border-radius: 50%;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            display: none; /* Hidden by default, shown only in iframe view */
+            color: rgba(255, 255, 255, 0.9);
+            display: none; /* Hidden by default */
             align-items: center; justify-content: center;
-            font-size: 24px; color: white; cursor: pointer; z-index: 100;
-            transition: transform 0.2s ease;
+            font-size: 16px; font-weight: bold; 
+            cursor: pointer; z-index: 9999;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        #fab-zoom:active { transform: scale(0.9); }
+        #fab-close:active { background-color: var(--danger); opacity: 1; }
+
+        /* Landscape Optimization for Close Button */
+        @media (orientation: landscape) {
+            #fab-close {
+                top: 10px; right: 10px;
+                width: 30px; height: 30px;
+                font-size: 14px;
+                background-color: rgba(0, 0, 0, 0.3);
+            }
+        }
 
         .view { flex: 1; padding: 24px; overflow-y: auto; display: none; animation: fadeIn 0.3s ease-in-out; padding-bottom: 80px; }
         .view.active { display: flex; flex-direction: column; }
         
-        /* IFRAME CONTAINER */
         #view-iframe.view { 
             padding: 0 !important; height: 100%; width: 100%; 
             z-index: 50; -webkit-overflow-scrolling: touch; 
-            overflow: auto; /* Allow scrolling when zoomed */
             position: relative;
         }
         
-        /* ZOOM LOGIC */
-        .iframe-wrapper {
-            width: 100%; height: 100%;
-            transform-origin: 0 0;
-            transition: transform 0.3s ease, width 0.3s ease;
-        }
-        iframe { width: 100%; height: 100%; border: none; display: block; background: #fff; }
+        /* Iframe Styling for Full Height */
+        .iframe-wrapper { width: 100%; }
+        iframe { width: 100%; border: none; display: block; background: #fff; min-height: 100vh; }
 
         .header { padding: 20px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; background: var(--bg-card); z-index: 10; flex-shrink: 0; }
         .header-title { font-weight: 800; font-size: 1.5rem; color: var(--primary-dark); }
@@ -123,7 +145,7 @@
         <div onclick="app.logout()" class="logout-btn" id="btn-logout">Logout</div>
     </header>
 
-    <div id="fab-zoom" onclick="app.toggleZoom()">🔍</div>
+    <div id="fab-close" onclick="app.goBack()">✕</div>
 
     <div id="view-auth" class="view active">
         <div class="auth-container">
@@ -450,7 +472,7 @@
     };
 
     const app = {
-        currentUser: null, lockedCourseKey: null, lockedCourseSection: null, zoomLevel: 1,
+        currentUser: null, lockedCourseKey: null, lockedCourseSection: null,
         
         init: function() {
             const savedUser = localStorage.getItem('eziUser');
@@ -468,7 +490,7 @@
                 this.renderView('view-auth');
             }
             
-            // --- FIXED POPSTATE LISTENER FOR ROBUST BACK NAVIGATION ---
+            // --- FIXED BACK NAVIGATION ---
             window.addEventListener('popstate', (event) => {
                 if (event.state && event.state.viewId) {
                     if (event.state.viewId === 'view-exit-guard') { 
@@ -478,24 +500,12 @@
                     }
                     if (event.state.viewId === 'view-submenu') { 
                         const c = event.state.course || this.lockedCourseKey;
-                        if(c) {
-                             this.renderSubmenu(c); 
-                             this.renderView('view-submenu'); 
-                        } else {
-                             this.renderView('view-dashboard');
-                        }
+                        if(c) { this.renderSubmenu(c); this.renderView('view-submenu'); } else { this.renderView('view-dashboard'); }
                     }
                     else if (event.state.viewId === 'view-subjects') { 
-                        // FIX: Check for missing state data and use globals (Fixes GNM 2nd Year bug)
                         const c = event.state.course || this.lockedCourseKey;
                         const s = event.state.section || this.lockedCourseSection;
-                        
-                        if (c && s) {
-                            this.renderSubjectList(c, s); 
-                            this.renderView('view-subjects');
-                        } else {
-                            this.renderView('view-dashboard');
-                        }
+                        if (c && s) { this.renderSubjectList(c, s); this.renderView('view-subjects'); } else { this.renderView('view-dashboard'); }
                     }
                     else if (event.state.viewId === 'view-iframe') { 
                         if(event.state.sourceUrl) this.openContent(event.state.sourceUrl, event.state.title, true); 
@@ -505,19 +515,13 @@
                         this.renderView(event.state.viewId);
                     }
                 } else { 
-                    // FIX: Handle NULL state by checking hash and globals
                     if (window.location.hash.includes('subjects') && this.lockedCourseKey && this.lockedCourseSection) {
                         this.renderSubjectList(this.lockedCourseKey, this.lockedCourseSection);
                         this.renderView('view-subjects');
                     }
-                    else if(this.currentUser) {
-                        this.renderView('view-dashboard'); 
-                    } else {
-                        this.renderView('view-auth'); 
-                    }
+                    else if(this.currentUser) { this.renderView('view-dashboard'); } else { this.renderView('view-auth'); }
                 }
             });
-            // -----------------------------------------------------------
         },
 
         checkSessionNow: async function() {
@@ -542,30 +546,6 @@
             }
         },
 
-        toggleZoom: function() {
-            const wrapper = document.getElementById('iframe-wrapper');
-            if(!wrapper) return;
-            
-            if (this.zoomLevel === 1) this.zoomLevel = 1.5;
-            else if (this.zoomLevel === 1.5) this.zoomLevel = 2.0;
-            else this.zoomLevel = 1;
-
-            wrapper.style.transform = `scale(${this.zoomLevel})`;
-            wrapper.style.width = `${100 / this.zoomLevel}%`; 
-            wrapper.style.height = `${100 / this.zoomLevel}%`; 
-            
-            if (this.zoomLevel > 1) {
-                wrapper.style.width = "100%"; 
-                wrapper.style.height = "auto";
-            }
-            
-            wrapper.style.transform = 'none';
-            if (this.zoomLevel === 1) wrapper.style.width = '100%';
-            if (this.zoomLevel === 1.5) wrapper.style.width = '150%';
-            if (this.zoomLevel === 2.0) wrapper.style.width = '200%';
-            wrapper.style.height = '100%';
-        },
-        
         syncPermissions: async function(creds) {
             try {
                 const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action:'login', email: creds.email, password: creds.password, deviceId: getDeviceId(), apiKey: API_KEY }) });
@@ -611,8 +591,7 @@
 
         requestResetCode: async function() {
             const email = document.getElementById('reset-email').value.trim();
-            const btn = document.getElementById('btn-reset-req');
-            const err = document.getElementById('reset-error-1');
+            const btn = document.getElementById('btn-reset-req'); const err = document.getElementById('reset-error-1');
             err.textContent = ""; if(!email) { err.textContent = "Enter email"; return; }
             btn.textContent = "Sending..."; btn.disabled = true;
             try {
@@ -626,8 +605,7 @@
             const email = document.getElementById('reset-email').value.trim();
             const code = document.getElementById('reset-code').value.trim();
             const newPass = document.getElementById('reset-new-pass').value.trim();
-            const btn = document.getElementById('btn-reset-conf');
-            const err = document.getElementById('reset-error-2');
+            const btn = document.getElementById('btn-reset-conf'); const err = document.getElementById('reset-error-2');
             err.textContent = ""; if(!code || !newPass) { err.textContent = "Fill all fields"; return; }
             btn.textContent = "Updating..."; btn.disabled = true;
             try {
@@ -664,13 +642,34 @@
         },
         
         renderView: function(viewId) {
-            const iframeContainer = document.getElementById('view-iframe');
-            if (viewId !== 'view-iframe' && iframeContainer) iframeContainer.innerHTML = ''; 
-            
-            // SHOW/HIDE ZOOM BUTTON
-            const fab = document.getElementById('fab-zoom');
-            if (viewId === 'view-iframe') { fab.style.display = 'flex'; } else { fab.style.display = 'none'; }
+            const meta = document.getElementById('viewport-meta');
 
+            // --- READING MODE (IFRAME) ---
+            if (viewId === 'view-iframe') {
+                // 1. Full Screen Layout (Hide Header, allow full scroll)
+                document.body.classList.add('reading-mode'); 
+                
+                // 2. Show Exit Button
+                document.getElementById('fab-close').style.display = 'flex'; 
+
+                // 3. ENABLE PINCH ZOOM (Native Browser Behavior)
+                meta.setAttribute('content', 'width=device-width, initial-scale=1.0, user-scalable=yes');
+            
+            // --- DASHBOARD/MENU MODE ---
+            } else {
+                // 1. App Layout (Show Header, Fixed container)
+                document.body.classList.remove('reading-mode'); 
+                
+                // 2. Hide Exit Button
+                document.getElementById('fab-close').style.display = 'none';
+
+                // 3. DISABLE ZOOM (App-like feel)
+                meta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+            }
+
+            const container = document.getElementById('view-iframe');
+            if (viewId !== 'view-iframe' && container) container.innerHTML = ''; 
+            
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             const target = document.getElementById(viewId); if(target) target.classList.add('active');
             
@@ -702,10 +701,16 @@
                 list.appendChild(item);
             });
         },
-        checkAccessAndOpen: function(course, section) {
-            this.checkSessionNow(); // 💣 LANDMINE
+        
+        // --- SECURED ACCESS CHECK (Updated with Async/Await) ---
+        checkAccessAndOpen: async function(course, section) {
+            // 1. Await session check to prevent race condition
+            await this.checkSessionNow();
+            if (!this.currentUser) return;
+
             this.lockedCourseKey = course; this.lockedCourseSection = section;
             const pKey = getPermissionKey(course, section);
+            
             if(this.currentUser && this.currentUser.permissions && this.currentUser.permissions[pKey] === true) {
                 if (course === '3D' || course === 'REQ' || course === 'COMM') {
                     const sub = COURSES[course][section][0]; this.openContent(sub.link, sub.label);
@@ -724,26 +729,42 @@
                 list.appendChild(item);
             });
         },
+
+        // --- CONTENT LOADER (Reading Mode Logic) ---
         openContent: function(url, title, fromHistory = false) {
-            const container = document.getElementById('view-iframe');
             if (!fromHistory) this.navTo('view-iframe', false, { sourceUrl: url, title: title });
             else this.renderView('view-iframe');
             
-            // WRAPPER FOR ZOOMING
+            const container = document.getElementById('view-iframe');
+            container.innerHTML = ''; 
+            
+            // Create wrapper
             const wrapper = document.createElement('div');
-            wrapper.id = 'iframe-wrapper';
             wrapper.className = 'iframe-wrapper';
             
             const iframe = document.createElement('iframe');
             iframe.id = "content-frame";
             iframe.src = url;
+            iframe.scrolling = "no"; // Start disabling scroll to force height calc
+            iframe.style.width = "100%";
+            
+            // Auto-Resize Logic: Stretch iframe to fit content so window scrolls instead
+            iframe.onload = function() {
+                try {
+                    const doc = iframe.contentWindow.document;
+                    const height = doc.body.scrollHeight;
+                    iframe.style.height = (height + 100) + 'px'; 
+                } catch(e) {
+                    // Fallback for Cross-Origin
+                    iframe.style.height = "100vh";
+                    iframe.scrolling = "yes"; 
+                }
+            };
             
             wrapper.appendChild(iframe);
-            container.innerHTML = '';
             container.appendChild(wrapper);
-            
-            this.zoomLevel = 1; // Reset zoom on new page
         },
+        
         showReferralModal: function() { 
             const pKey = getPermissionKey(this.lockedCourseKey, this.lockedCourseSection);
             if (NO_DISCOUNT_KEYS.includes(pKey)) { this.redirectToRazorpay(false); return; }
