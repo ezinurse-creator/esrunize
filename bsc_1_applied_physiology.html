@@ -6,689 +6,179 @@
     <title>Applied Physiology Syllabus</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
-        /* --- MODERN THEME --- */
         :root {
-            --primary: #01b9f1;
-            --primary-dark: #003b80;
-            --bg-card: #ffffff;
-            --bg-body: #f1f5f9;
-            --text-main: #003b80;
-            --text-muted: #64748b;
-            --accent: #f59e0b;
-            --danger: #ef4444;
-            --success: #10b981;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
-            --radius-md: 12px;
+            --brand: #003B82; --accent: #00B9F2; --gray-50: #f9fafb; --gray-200: #e5e7eb; --gray-900: #111827;
+            --danger: #ef4444; --success: #10b981; --warning: #f59e0b;
         }
-
         * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: white; color: var(--gray-900); padding: 24px; max-width: 1000px; margin: 0 auto; }
+        .syllabus-btn { display: block; width: 100%; padding: 18px 24px; margin: 12px 0; background: white; color: var(--brand); border: 2px solid var(--brand); font-weight: 700; font-size: 16px; text-align: center; cursor: pointer; border-radius: 12px; transition: all 0.2s ease; text-decoration: none; }
+        .syllabus-btn:hover { background: var(--gray-50); transform: translateY(-1px); }
+        .unit-header { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 18px 24px; margin: 16px 0; background: var(--brand); color: white; font-weight: 600; font-size: 16px; border-radius: 12px; cursor: pointer; transition: 0.2s; }
+        .unit-header:hover { background: #002d63; }
+        .unit-content { padding: 0 12px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; }
+        .unit-content.active { padding: 24px 12px; max-height: none; }
+        .subsection { padding: 20px; background: white; border-radius: 12px; border: 1px solid var(--gray-200); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .resource-btn { display: flex; width: 100%; padding: 14px 18px; margin: 6px 0; background: var(--gray-50); border-radius: 8px; font-weight: 500; border: 1px solid var(--gray-200); cursor: pointer; gap: 12px; transition: 0.2s; align-items: center; }
         
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-        } 
+        /* EXISTING BUTTON STYLES */
+        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
+        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
+        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+        .resource-btn.model { background: #fdf4ff; border-color: #f0abfc; color: #86198f; }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding-bottom: 80px;
-        }
-
-        /* --- HEADER & SYLLABUS --- */
-        .page-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+        /* NEW BUTTON STYLES FOR APP */
+        .resource-btn.imp-discussion { background: #fef2f2; border-color: #fecaca; color: #b91c1c; } /* Light Red Background */
+        .resource-btn.imp-pdf { background: #fff7ed; border-color: #fed7aa; color: #c2410c; } /* Light Orange Background */
         
-        .page-title {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--primary-dark);
-            margin-bottom: 10px;
-        }
-
-        .syllabus-card {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-            color: white;
-            padding: 20px;
-            border-radius: var(--radius-md);
-            text-align: center;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: var(--shadow-md);
-            margin-bottom: 30px;
-            display: block;
-            text-decoration: none;
-            transition: transform 0.2s;
-        }
-        .syllabus-card:active { transform: scale(0.98); }
-
-        /* --- UNITS (ACCORDION STYLE) --- */
-        .unit-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-md);
-            margin-bottom: 16px;
-            box-shadow: var(--shadow-sm);
-            overflow: hidden;
-            border: 1px solid #e2e8f0;
-        }
-
-        .unit-header {
-            padding: 20px;
-            background: var(--bg-card);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            font-weight: 700;
-            color: var(--primary-dark);
-            border-bottom: 1px solid transparent;
-            transition: background 0.2s;
-        }
-        
-        .unit-header:hover { background: #f8fafc; }
-        
-        .unit-header.active {
-            border-bottom-color: #e2e8f0;
-            background: #f0f9ff;
-            color: var(--primary);
-        }
-
-        .unit-content {
-            display: none;
-            padding: 20px;
-            background: #fdfdfd;
-        }
-        .unit-content.show { display: block; }
-
-        /* --- RESOURCES LIST --- */
-        .resource-list {
-            display: grid;
-            gap: 12px;
-        }
-
-        .resource-btn {
-            display: flex;
-            align-items: center;
-            padding: 16px;
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            text-decoration: none;
-            color: var(--text-main);
-            font-weight: 500;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-
-        .resource-btn:hover {
-            border-color: var(--primary);
-            transform: translateX(4px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        /* Color coding by type */
-        .type-notes { border-left: 4px solid #0ea5e9; }
-        .type-video { border-left: 4px solid #8b5cf6; }
-        .type-model { border-left: 4px solid #10b981; }
-        .type-quiz  { border-left: 4px solid #f59e0b; background: #fffbeb; }
-
-        .icon {
-            margin-right: 12px;
-            font-size: 1.2rem;
-            width: 30px;
-            text-align: center;
-        }
-
-        /* --- MODAL (The "Close Button" Wrapper) --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95); /* Darker background for focus */
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-        }
-
-        .modal-header {
-            height: 60px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            flex-shrink: 0;
-        }
-
-        .modal-title { font-weight: 700; color: var(--primary-dark); font-size: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-        
-        .btn-close {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            flex: 1;
-            background: #000;
-            position: relative;
-            overflow-y: auto; /* Allow scrolling */
-            /* Default display is flexible to center videos */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* --- FIXED IFRAME STYLES --- */
-        
-        /* 1. For Videos (Keeps 16:9 Aspect Ratio) */
-        .iframe-video {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16 / 9;
-            border: none;
-            background: #000;
-            display: block;
-        }
-
-        /* 2. For Notes & Models (Fills the screen vertically) */
-        .iframe-doc {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #fff;
-            display: block;
-        }
-
-        /* --- QUIZ STYLES (Inside Modal) --- */
-        .quiz-container {
-            background: white;
-            width: 100%;
-            min-height: 100%; /* Ensures it fills screen if short */
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .quiz-question { margin-bottom: 20px; font-size: 1.1rem; font-weight: 600; }
-        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
-        .quiz-option {
-            padding: 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        .quiz-option:hover { background: #f0f9ff; border-color: var(--primary); }
-        .quiz-option.selected { background: var(--primary); color: white; border-color: var(--primary); }
-        
-        /* Visual Indicators for Tick/Cross */
-        .quiz-option.correct { 
-            background: var(--success); 
-            color: white; 
-            border-color: var(--success); 
-        }
-        .quiz-option.correct::after {
-            content: '✓';
-            position: absolute;
-            right: 15px;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .quiz-option.wrong { 
-            background: var(--danger); 
-            color: white; 
-            border-color: var(--danger); 
-        }
-        .quiz-option.wrong::after {
-            content: '✗';
-            position: absolute;
-            right: 15px;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-        
-        .quiz-score { text-align: center; font-size: 1.5rem; color: var(--primary-dark); padding: 40px; }
-
+        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
+        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
+        .icon.video-icon { color: #8b5cf6; } .icon.quiz-icon { color: #f59e0b; } .icon.model-icon { color: #d946ef; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; display: none; flex-direction: column; }
+        .modal-header { height: 60px; background: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; }
+        .btn-close { background: var(--danger); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .modal-body { flex: 1; background: #f3f4f6; position: relative; padding: 20px; display:flex; justify-content:center; overflow-y: auto;}
+        .iframe-res { width: 100%; height: 100%; border: none; background: white; }
+        .quiz-container { background: white; width: 100%; max-width: 800px; padding: 30px; border-radius: 12px; margin-bottom: 50px; }
+        .quiz-option { padding: 12px 15px; border: 2px solid var(--gray-200); border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
+        .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
+        .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; }
+        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
+        .btn-quiz { background: var(--brand); color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 600; font-size: 16px; margin-top: 20px; cursor: pointer;}
+        @media (max-width: 768px) { body { padding: 16px; } .quiz-container { padding: 15px; } }
     </style>
 </head>
 <body>
-
-    <div class="container">
-        <div class="page-header">
-            <div class="page-title">Applied Physiology</div>
-            <p style="color: var(--text-muted);">BSc Semester 1</p>
-        </div>
-
-        <div class="syllabus-card" onclick="openResource('Syllabus', 'https://drive.google.com/file/d/1WCC53x59CYh_GQP-UgVNkgyIKNTI1oEr/preview')">
-            📄 View Full Syllabus
-        </div>
-
-        <div id="units-container">
-            </div>
-    </div>
-
+    <a class="syllabus-btn" href="https://drive.google.com/file/d/1WCC53x59CYh_GQP-UgVNkgyIKNTI1oEr/view?usp=drive_link" target="_blank">📄 DOWNLOAD SYLLABUS</a>
+    <div id="units">
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 1 - GENERAL PHYSIOLOGY <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/10N3pxg1gls98_RVOKZO0nPQ9e2v02r1B/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/101-DWlLTnTOEBrjzAxchPuVM2xP46fnV/preview', 'Introduction to Physiology & Cell Structure')"><span class="icon video-icon">▶️</span><span>Introduction to Physiology & Cell Structure</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Ep6T8g1WnkNujUDVY-sWpgVgD2dXDVh5/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1bhKhpVsM0ElEwNMWdsJiB0MIAY_fChEG/preview', 'Tissues & Its Physiology')"><span class="icon video-icon">▶️</span><span>Tissues & Its Physiology</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1S2hZY_PFTZFTbGSdnkWEAhTAx5gevzmw/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/15-iWAUqIpnaxLvprQJfmzxz-spLGMSac/preview', 'Types of Tissues')"><span class="icon video-icon">▶️</span><span>Types of Tissues</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1mR75v61rIfdaUF96Mq0clHCSMS5snOka/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/16w_-3R2Lz95YWo-BIRgMo3igxK--R5ZJ/preview', 'Membranes & Glands')"><span class="icon video-icon">▶️</span><span>Membranes & Glands</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1KquOH3UyTUbDCH8x3koRhhUCSA0o9Dav/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(1)"><span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 2 -  RESPIRATORY SYSTEM <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1QcOyOGL1-9ipMLcwzzLyLJkjxH2EmhcP/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1AcSKAK1cy7huOA3B3RC3WruEdbEzb0TY/preview', 'Introduction of the Respiratory System')"><span class="icon video-icon">▶️</span><span>Introduction of the Respiratory System</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/15lx_pq6tEsNu9v05FkBaZ4bT5FOF8VgR/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1NJYsoWzQ4labwfi0Vh8m0AIMQfqFqOM1/preview', 'Mechanism of Respiration')"><span class="icon video-icon">▶️</span><span>Mechanism of Respiration</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1TVoIQs1atAaqpHp7RvmydPk5_oPkHQLs/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1EKKrvJKwWoQbEWLudT1TePBiMvo183RB/preview', 'Physiology of Respiration')"><span class="icon video-icon">▶️</span><span>Physiology of Respiration</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1YfjSZH_-AoMEuP6fIi1J5WDvK3rz5Aif/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1vphkb11o5f4kStf7T2kXCbJQ2d_IDsl8/preview', 'Transport of Gas and Regulation of Respiration')"><span class="icon video-icon">▶️</span><span>Transport of Gas and Regulation of Respiration</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1shs7jdrsUxiNb29QWs8K2WmHrOEUMqal/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(2)"><span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 3 - DIGESTIVE SYSTEM <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/156MjpYjAHJb2avDPWFyoZIoX-BqsUEzc/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Q08ViVve81AtC_HHWvJztEiQR3SleQZm/preview', 'Introduction, Organs of Digestive System')"><span class="icon video-icon">▶️</span><span>Introduction, Organs of Digestive System</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1O5lZsbUWMfVMGcV7ukDBaTR25sgM6dyd/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1T-wYVW0NrGVUXKK8QyASEK-_Eg_3z7q1/preview', 'Functions of Digestive System')"><span class="icon video-icon">▶️</span><span>Functions of Digestive System</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1nUFrHG3m8EaupqE6hREt4i3WNv-lYmVU/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1IyCKX1TJiRdQotmKop09zac4R6PJ_rdk/preview', 'Salivary glands')"><span class="icon video-icon">▶️</span><span>Salivary glands</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1UHYs-aPzvShMR6Bd5ukv5job1d6EraNm/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/14Hk3HYzHdWXam_NbwTjJwlBYkJkmfaIX/preview', 'Pancreatic Secretions (1)')"><span class="icon video-icon">▶️</span><span>Pancreatic Secretions (1)</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Vxc3fA0uwBTiLmeqKKuG7un12hZv-DmS/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/123FJomESMPRK1b9UR8pvccwfYG2OaaH9/preview', 'Pancreatic Secretions (2)')"><span class="icon video-icon">▶️</span><span>Pancreatic Secretions (2)</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/137iPCy9v9sCtsym2UTkZ_J6OazdA0AQ0/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1682B0jY1fek3EgcS1URPYme9zGBQ77_t/preview', 'Pancreas')"><span class="icon video-icon">▶️</span><span>Pancreas</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1adZ9Xf395B0wObqRMHEBwSP77eNLdj-H/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1mRAjHD9K9riuRDdKEXjr0wKw_ihTNj55/preview', 'Liver & Gall bladder')"><span class="icon video-icon">▶️</span><span>Liver & Gall bladder</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/15VpoVz_FE9yzEoQfdWGL16pPtvXsdwJK/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1PkMa8T70bfgwt6na9dJvp7ofZKDsH5rT/preview', 'Large Intestine')"><span class="icon video-icon">▶️</span><span>Large Intestine</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1mqOvwkz9vX4MVxoenKX_I2tkgqN82Sfk/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1P7ILSGQr8FaN25sr61SCqT8BDVXx_WiI/preview', 'Intestine, Intestinal Secretions')"><span class="icon video-icon">▶️</span><span>Intestine, Intestinal Secretions</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1lMo0Gh0RnQHu53CpdyhikYfU8YH3AnRF/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1PuJySZwjTRI6fJWOCsoYsly3kJmIvl7d/preview', 'Bile Secretion')"><span class="icon video-icon">▶️</span><span>Bile Secretion</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_IJk0bFLThknKDzpl1TrBwADZfE-InCc/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/14BG1zPfXCniaZn8YW72-yUcJ83QsmgNo/preview', 'Gastro Intestinal Hormones')"><span class="icon video-icon">▶️</span><span>Gastro Intestinal Hormones</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1nJDvsYONRtr49UqWHEIZF0KVIq5FJNNy/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(3)"><span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 4 -   CIRCULATORY AND LYMPHATIC SYSTEM <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1wI0my0taaQPS3gf3Peun7t2pBBs1GEP3/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1kHago-VxxxU15-w6RDZ8btHoEXRrKnMK/preview', 'Structure, Layers & Chambers of the Heart')"><span class="icon video-icon">▶️</span><span>Structure, Layers & Chambers of the Heart</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1QQO1z82Y7XxYzqru062TWQsDekyZySKY/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1tDnIULk-UmSgGmXPoHwjfv4f_86MbvH1/preview', 'Valves of the Heart')"><span class="icon video-icon">▶️</span><span>Valves of the Heart</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1GVvGAzDnXw0maPoY1n3wWp1mXaCFAOfr/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1gdiD9BHQKlKdC2jnQuuR6LfFtJZgo71C/preview', 'Physiology of Cardiovascular : Functions, Conduction System, Cardiac Cycle')"><span class="icon video-icon">▶️</span><span>Physiology of Cardiovascular : Functions, Conduction System, Cardiac Cycle</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1TOHanAbQHySY7iYYEPh14yorPGR7pBd0/preview', 'Physiology of Cardiovascular : Stroke Volume')"><span class="icon video-icon">▶️</span><span>Physiology of Cardiovascular : Stroke Volume</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/158oy_cUtC7JrrXpknynE8zjfJoHLg1Py/preview', 'Physiology of Cardiovascular : Cardiac Output, Heart Rate, Normal Value and Variations ')"><span class="icon video-icon">▶️</span><span>Physiology of Cardiovascular : Cardiac Output, Heart Rate, Normal Value and Variations </span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1tRecXngvtLIERSuUcis67eUrc8cBa4C5/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1yV7oG-8HFDxmo0O0CUTuoyI1o8bqUxCD/preview', 'Pulmonary and Systemic Circulation')"><span class="icon video-icon">▶️</span><span>Pulmonary and Systemic Circulation</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1afdNd5RwEPoQqkOw3PUe2GpHZbJaOVFk/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1DTYRtsJW3Cwm_QmzcaP6FQQRtZopvQEN/preview', 'Thoracic Aorta Branches')"><span class="icon video-icon">▶️</span><span>Thoracic Aorta Branches</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1KVbumBAz-9mTYpIUhOD_2gJtFrfqd8_w/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Cj5tjWXcFIZw9FpzOprg52nRuL1YdPYZ/preview', 'Venous Circulation : Heart, Neck and Veins, Upper Limbs')"><span class="icon video-icon">▶️</span><span>Venous Circulation : Heart, Neck and Veins, Upper Limbs</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1zcLhrIsyK37o6NmuL6wdVg-Qm6167EXt/preview', 'Venous Circulation : Thorax, Abdomen and Pelvis, Lower Limbs')"><span class="icon video-icon">▶️</span><span>Venous Circulation : Thorax, Abdomen and Pelvis, Lower Limbs</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/17ZWU1hN_cuWkeUZOXjF7lAzw9a_knqAf/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1qY8ODUBWABSiMYqOCQRlzBkl4U0Dnfet/preview', 'Lymphatic System : Lymphatic Capilleries, Thoracic Duct, ')"><span class="icon video-icon">▶️</span><span>Lymphatic System : Lymphatic Capilleries, Thoracic Duct, </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1fJz8Qd4RR1Zz0XBaxismkz3xjQvLhy-8/preview', 'Lymphatic System : Lymphatic Organs and Tissues')"><span class="icon video-icon">▶️</span><span>Lymphatic System : Lymphatic Organs and Tissues</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1O0QPzUe3mZgZfGXyfX7LG78w0hrwcWng/preview', 'Lymphatic System : Functioning Parts, Medulla, Spleen, Parenchymal Tissue, Lymphatic Nodules')"><span class="icon video-icon">▶️</span><span>Lymphatic System : Functioning Parts, Medulla, Spleen, Parenchymal Tissue, Lymphatic Nodules</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1sgJCuPG1Y8uPIaJdR9KDN_p_a4mb9je6/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(4)"><span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 5 - BLOOD <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ls7J41VQZXJikLfG1CyS0AUJjqpBLSmX/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/16UKyoVSWAA05EyGw2JAXI6MmTrdA2Pic/preview', 'Introduction to Physiology of Blood')"><span class="icon video-icon">▶️</span><span>Introduction to Physiology of Blood</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1WpfT9qo3jhqJyIAwPav0IiCrkQzxZrCM/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1qi7QuEoqpwChOM8bNujmhv-W03eEBpLg/preview', 'Erythropoiesis')"><span class="icon video-icon">▶️</span><span>Erythropoiesis</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Eu94LsnMahD2f4RnIo784m3RAvCJMYQ4/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/15zbtNNFfuag_OfF8nkc7wK0hVllUI5hS/preview', 'Leukocytes')"><span class="icon video-icon">▶️</span><span>Leukocytes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/151WfxBZGrzro-3_HeGvoQz5zpSCdHQ0p/preview', 'Thrombocytes')"><span class="icon video-icon">▶️</span><span>Thrombocytes</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1BJyc9SxhE4VoKSGmxJbq8f9KX-GovEef/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1nlDmzqM2qxXNsV_EOXd24d1AYmRuczNR/preview', 'Blood Coagulation')"><span class="icon video-icon">▶️</span><span>Blood Coagulation</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/15ce99Clydepl2BHhvwJvBh0-G256P9hD/preview', 'Coagulation Cascade')"><span class="icon video-icon">▶️</span><span>Coagulation Cascade</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1paAe9sOz84HP7lDtWBPZRM07ZwD55NwA/preview', 'Hemostasis')"><span class="icon video-icon">▶️</span><span>Hemostasis</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1U1t4fDItOuh9Qfw2gQz42Iy1Qu9EmwfT/preview', 'Coagulation of Blood & Anticoagulants')"><span class="icon video-icon">▶️</span><span>Coagulation of Blood & Anticoagulants</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1RpTNdxzu6_VY8TCK9N6mkA52mFKjqcrV/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/10DXrvF9gKNoXQ_P-nE2oI2_Q1XMf7_hp/preview', 'Blood Groups')"><span class="icon video-icon">▶️</span><span>Blood Groups</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ZhKXKrQtvrnCnKlBZqMJVk2pnHQ3DsOV/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1cyI3Ck1gnWz0sGFkD6jGGfIyhuZTZZxp/preview', 'Immune System : Types of Immunity, Innate Immunity')"><span class="icon video-icon">▶️</span><span>Immune System : Types of Immunity, Innate Immunity</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1AqSDpKlDwHw0-cYROus9rgcLDcNunT7p/preview', 'Immune System : Adaptive Immunity, Immunoglobins')"><span class="icon video-icon">▶️</span><span>Immune System : Adaptive Immunity, Immunoglobins</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1frSj5s5mAXq2rIiKMompsw2kpYXG4m3d/preview', 'Immune System : Applied Physiology')"><span class="icon video-icon">▶️</span><span>Immune System : Applied Physiology</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1HC08laHkA5NMnaDqa5WQmaE-IwQuCzHW/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1oAA_AvB6JnQaNuK9qYD-Kpl1moYlnbCi/preview', 'Reticuloendothelial System')"><span class="icon video-icon">▶️</span><span>Reticuloendothelial System</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ky5mpvNdphOJ5ovuKxFEnYXiyluUU9yS/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(5)"><span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 6 - THE ENDOCRINE SYSTEM <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1MsscO3WYvPgjCT0uH1fF3qi7v6XxC5nN/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1IgYsF1V4V1pYLIzQZW9fSCcHKyIa-JZa/preview', 'Introduction, Hypothalamus')"><span class="icon video-icon">▶️</span><span>Introduction, Hypothalamus</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ShajIyHZJBI56-C07QZChyTVaRuA32IQ/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1-Xw0_-sZ1L5YQlDYOQEjAdo9B-RE7UMo/preview', 'Pituitary Gland : Position and Relations, Blood Supply, Hormones, Secretions from anterior pitutary Gland')"><span class="icon video-icon">▶️</span><span>Pituitary Gland : Position and Relations, Blood Supply, Hormones, Secretions from anterior pitutary Gland</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1rHpKqWr7dB49Z6MRp_y5TspIBWDZYWnZ/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1PF8wFE65kZs2pD-PQ0kimQl1gkjCi2_D/preview', 'Thyroid Gland')"><span class="icon video-icon">▶️</span><span>Thyroid Gland</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1aMfEOGfiAql-KvCzqAuZrWB0XkKVu5x6/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(6)"><span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 7 -  THE SENSORY ORGANS <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/18Jy44QJ9HDkxuaCe0CUST7S0TY0b_ISo/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1qc7_JvBMl1OJE71iyATI1b-h-ovuEO_M/preview', 'Introduction to Sensory System')"><span class="icon video-icon">▶️</span><span>Introduction to Sensory System</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1SvWn0Y4kIQQ7Uqf0nhdVBIhFeNC2XP05/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Jq9wQi0MnoZiZlBggY4zz7zSo1NQ73J2/preview', 'Skin :  Epidermis, Dermis, Glands of Skin, Appendages')"><span class="icon video-icon">▶️</span><span>Skin :  Epidermis, Dermis, Glands of Skin, Appendages</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1HlRXY956MNUUGmbuFxN_ZNCM3HloWBHi/preview', 'Skin : Applied PhysiologySkin : Applied Physiology')"><span class="icon video-icon">▶️</span><span>Skin : Applied PhysiologySkin : Applied Physiology</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1GtK50v7RcU1YlKvilWPNufWDNwCE_CQE/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1-4yUyDwc7ZumVeNm_L4R_av8Mujr7-mL/preview', 'Eye : Anatomy and Layers')"><span class="icon video-icon">▶️</span><span>Eye : Anatomy and Layers</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/17AnIbYrsTuENcwBowDeY97MaICr0fjN2/preview', 'Eye : Blood Supply, Nerve Supply, ')"><span class="icon video-icon">▶️</span><span>Eye : Blood Supply, Nerve Supply, </span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Xd_7MoqDKjJwptZu3qV3-svlvThsYBT1/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1gulhuj8h8TTEQuY0WOpp0rBeooZNDUQ5/preview', 'Ear : External Ear, Middle Ear, Bloody Supply, Nerve Supply')"><span class="icon video-icon">▶️</span><span>Ear : External Ear, Middle Ear, Bloody Supply, Nerve Supply</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1nJkfPj55nK7vh5wIyossSLHOiUz1_xX3/preview', 'Ear : Inner Ear')"><span class="icon video-icon">▶️</span><span>Ear : Inner Ear</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1jt3kAbTC9MOeMiHQI0XhZGfhTJPlOyOz/preview', 'Ear : Vestibular Apparatus, Cohlea, Blood Supply, Applied Phsyiology ')"><span class="icon video-icon">▶️</span><span>Ear : Vestibular Apparatus, Cohlea, Blood Supply, Applied Phsyiology </span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1X-F0BRkeHilQnarDjOXx9Zm-fRn8XuJq/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/14mDH_IfdjSwYO6hgoOAgQeSU5GgqphWZ/preview', 'Tongue :  Gustation,  Papillae of Tongue, Muscles of Tongue')"><span class="icon video-icon">▶️</span><span>Tongue :  Gustation,  Papillae of Tongue, Muscles of Tongue</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1GY-2sUxhS-w0PckA8YjbmonxjaKlxvig/preview', 'Tongue : Gustatory Pathway, Functions, Nerve Supply, Lymphatic Drainage, Applied Physiology')"><span class="icon video-icon">▶️</span><span>Tongue : Gustatory Pathway, Functions, Nerve Supply, Lymphatic Drainage, Applied Physiology</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1jdo1aXWl6fM7FsRlYkWg36HFrgujCbJH/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Nk_Xyqjk5fjYzd5AMcAjoVC3N2DcTQgo/preview', 'Nose')"><span class="icon video-icon">▶️</span><span>Nose</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/17gZhVXS3gNJ89tRwsUQ3LnUqCt5igIf2/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1poaGG_onPauI2vR5stwoxsovNW0KnlYN/preview', 'Smell and Olfaction')"><span class="icon video-icon">▶️</span><span>Smell and Olfaction</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Qq94dq9ooba_KdepQNyW-2YQCLjrVHCt/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(7)"><span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 8 - MUSCULOSKELETAL SYSTEM <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/121sVgbcRetoxMiOcm5pvxeCGKbLxBvQv/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ibWrcuBNriXjJmxwazDGYYuUlqrmKcBa/preview', 'Axial and Appendicular Skeleton')"><span class="icon video-icon">▶️</span><span>Axial and Appendicular Skeleton</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1EqTYm8k-k5rYNOsWzRTa_sFaNunTWSeL/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/18J8M9iPKh7NuT2dHuyXx5ha1KtpSSbxn/preview', 'Skeletal System & Bone')"><span class="icon video-icon">▶️</span><span>Skeletal System & Bone</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/12hSX0brWplO51WIrmQH9PqEmzVafzMmB/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1k3tRJkoch4emH1eZQLzE7l3IUFtadM0c/preview', 'Joints')"><span class="icon video-icon">▶️</span><span>Joints</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1I6IBSns5IDLnx_CZ1UsOJGdbcPwjDipQ/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1x72mF3I_9ra-ocvXOCMnXtKUviUbAWoj/preview', 'Muscle Physiology')"><span class="icon video-icon">▶️</span><span>Muscle Physiology</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1WLrONOzn2xTg0laYGzcVKs6k6ta2-Mi4/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ffNOBgBaJghscIDElqWKvAw4V42JaKSi/preview', 'Neuromuscular Junction')"><span class="icon video-icon">▶️</span><span>Neuromuscular Junction</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1oHt2QN8hdA7tpfSUTXSVOWKkLzu7Dshr/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1C1LHBi0ylFfPbCKw7UPvs68-p0JExnO4/preview', 'Muscle Contraction')"><span class="icon video-icon">▶️</span><span>Muscle Contraction</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1wRuNnpuwJnhhi8bcwnxYMiUcZg0OXz-3/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1gxqC_lvqIgwJBfe4ye0COfFqVZJT_p1T/preview', 'Skeletal Muscles')"><span class="icon video-icon">▶️</span><span>Skeletal Muscles</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1aOTwlPZCQnHBZ5yv6tYLgYUAhs7LYN6H/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1edG6qOg1xOiS07I2cgKfHbIdCwK23Rwi/preview', 'Smooth Muscles')"><span class="icon video-icon">▶️</span><span>Smooth Muscles</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1JfM2Q2gugwIEfVk20NCgpqm_20XbuFvI/preview', 'Mechanism of Contraction of Smooth Muscles')"><span class="icon video-icon">▶️</span><span>Mechanism of Contraction of Smooth Muscles</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1f8HVLzJkHWCDdyFRSddTKAbbVAkXWoVZ/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1hWw9fEr8p5gEXj1c8FXnOkBOt3yj6BBS/preview', 'Cardiac Muscles')"><span class="icon video-icon">▶️</span><span>Cardiac Muscles</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1YjQJGVNvvZFiO4F3S-1JnUSPePg55DVn/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(8)"><span class="icon quiz-icon">✍️</span><span>Take Unit 8 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 9 - THE RENAL SYSTEM <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1XLmC8pc0ws8gPsCpETEh5WP3Aa79rFjk/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1u8ntBZBayTpd2HViW8sImZgdQlqKC9bX/preview', 'Introduction, Kidney')"><span class="icon video-icon">▶️</span><span>Introduction, Kidney</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1en4z2xbvhTLM8CTG1RXecDa3U-qnediU/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1HiG6rxo1lnGqOq1RSmIowBlAtHjTGEts/preview', 'Nephron')"><span class="icon video-icon">▶️</span><span>Nephron</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Xt8ZookIcAhOegtzDMCgwCG1yiILwLXy/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1gxZ8Y0cOOKAgEk23RWZblZySEyL4HIzL/preview', 'Formation of Urine')"><span class="icon video-icon">▶️</span><span>Formation of Urine</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Y9vkX8HYSNdAo_qGFyBTkWBTzXMLim_p/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1aUznOTMPgtFR75y7hytGSQUduNbtqmry/preview', 'Urinary Bladder')"><span class="icon video-icon">▶️</span><span>Urinary Bladder</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Gn7tarfVOfuydTiZLNcTqKnwfwI9NL1S/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/17HQLwB2daA9taJfcdAY7Cv_kiL9eHoXh/preview', 'Ureters & Urethra')"><span class="icon video-icon">▶️</span><span>Ureters & Urethra</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Gb4oXFNLrO1yjca7nYWddhgOXh0CJQcS/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ML2h5cwxdUpoly8NSRN8pTgWmPzgpQIu/preview', 'Regulation of Renal Function : Autoregulation of the Kidney')"><span class="icon video-icon">▶️</span><span>Regulation of Renal Function : Autoregulation of the Kidney</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1uhyxa6IjfVhtUgx6Xq1_Qk_rZCUv85Et/preview', 'Regulation of Renal Function : Role of Kidney in Regulation of Osmolarity and Volume')"><span class="icon video-icon">▶️</span><span>Regulation of Renal Function : Role of Kidney in Regulation of Osmolarity and Volume</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/17IwGKKTGrDPJG5jbTfot5e0F0ttUy9Uz/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(9)"><span class="icon quiz-icon">✍️</span><span>Take Unit 9 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 10 - THE REPRODUCTIVE SYSTEM <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1O6AuPR8YeiCxvLS4NdowJcAfTXe9epVJ/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1390ZTxHwRmn9IwkoqANY359aVAG5pF-H/preview', 'Introduction to Female Reproductive System')"><span class="icon video-icon">▶️</span><span>Introduction to Female Reproductive System</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/11vOWwaqQhHsrshHGW_p_lM5nl48FyOO8/preview', 'Blood Supply to Reproductive Organs')"><span class="icon video-icon">▶️</span><span>Blood Supply to Reproductive Organs</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1axBaeb5pmMRpxnwPJXZH2eKOn0qlKm_Y/preview', 'Vagina')"><span class="icon video-icon">▶️</span><span>Vagina</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1g1yj3yTiCPXcTQ2MWsOd_zu2lMPpi523/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1WqoST1I0w6WDek3OrA4DFklIhxVsyg1S/preview', 'Ovaries')"><span class="icon video-icon">▶️</span><span>Ovaries</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Kk0NvrKMBCjPywixrpmrYLQTR02loCoq/preview', 'Uterus')"><span class="icon video-icon">▶️</span><span>Uterus</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1yARI-HXvXJqdptWykQrGKuLWrK5lUmDB/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1gdStPRbXFktHL7oS-bIqc8-Fp14E0kNK/preview', 'Menstrual Cycle')"><span class="icon video-icon">▶️</span><span>Menstrual Cycle</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1vyzcePMwrS4JRO_-wyKPH63O9u6b-lE_/preview', 'Oogenesis')"><span class="icon video-icon">▶️</span><span>Oogenesis</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ujNxILzuO4yEVDbLKfZ_r4vUANnJGxMc/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1G5LJFy0GLnHkjgpOSrp1UTN-7PHM5RtP/preview', 'Male Reproductive System Introduction')"><span class="icon video-icon">▶️</span><span>Male Reproductive System Introduction</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1fiCa3FX9zg7XommZwdhxZWR-fyb15kWR/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1_UTigfbSWlVIlFxPYAN1XgkRvRbN0hqJ/preview', 'Epididymis')"><span class="icon video-icon">▶️</span><span>Epididymis</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1PVfP4s174R_v3URtFjUbWJ1lHTluOHwH/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1hx1cyhOJ9LB355io1VZZb3klLNBfu0Zj/preview', 'Physiology of Male Reproductive System : Spermatogenesis - Steps and Flowchart')"><span class="icon video-icon">▶️</span><span>Physiology of Male Reproductive System : Spermatogenesis - Steps and Flowchart</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ctWNqwGdxR07ZtSb5xns6gQjFOJHrVYe/preview', 'Physiology of Male Reproductive System : Sperm and Semen - Structure and Seminal Fluid')"><span class="icon video-icon">▶️</span><span>Physiology of Male Reproductive System : Sperm and Semen - Structure and Seminal Fluid</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/19Tk3ZV8Y4dle63MHE_g5LvXVIYdptyDP/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(10)"><span class="icon quiz-icon">✍️</span><span>Take Unit 10 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 11 - NERVOUS SYSTEM <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1MbbTX0-LMWTjAoGC9XHGcawQ04AEWU-8/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1tdNR6mo0siBxP0NWPlxpRsuxcpeMCRgs/preview', 'Neuron')"><span class="icon video-icon">▶️</span><span>Neuron</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/19nigTD6pOIM64OHZbUzzdgH6sr4MlUEm/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1z4TifczjCPRarUO7t5_Jm-MLAZ-H1-bg/preview', 'Nerve Impulse')"><span class="icon video-icon">▶️</span><span>Nerve Impulse</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1s8J_0bPobgLEXgf9g309cZCS9EldXomN/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/18-kMkugHm3fFoliUgMUF19XgVbftBLi-/preview', 'Synapse')"><span class="icon video-icon">▶️</span><span>Synapse</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1t1fX1nf_A0KuhLaZ3uztN2KFsvCQJ1oT/preview', 'Synapse Delay')"><span class="icon video-icon">▶️</span><span>Synapse Delay</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ysNPqXvCs0IUqxKD7Ga_hU2Pcr-LdOMj/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1BZKTJZJB3gx2LuayBLw8a2waJ8B-BeNV/preview', 'Introduction to Central Nervous System')"><span class="icon video-icon">▶️</span><span>Introduction to Central Nervous System</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1VvwT3kMHUXH05olYZZIuFqaBmvVasIkK/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1c6cbB53y7gO2xmRQfsFSrhTlzeRMAIFY/preview', 'Neurotransmitters')"><span class="icon video-icon">▶️</span><span>Neurotransmitters</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1nw0JPdagkfydtWN7FaBGfbdf-rVuO4H7/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1JaFdUMLzX1WvGk8O9W3ticFxhHBC522p/preview', 'Reflexes')"><span class="icon video-icon">▶️</span><span>Reflexes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/15kV0jUFIEsWuUyiOore-OC-viK-6J5f5/preview', 'Reflex Action')"><span class="icon video-icon">▶️</span><span>Reflex Action</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1a2mXPF5rtksjlCxCO0CLWGVUue2bbq6f/preview', 'Lecture Notes')"><span class="icon video-icon">▶️</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1v3vo19ZtYq0lGEOviit6Er7Kf-RB6j6D/preview', 'Receptors')"><span class="icon video-icon">▶️</span><span>Receptors</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1B1J2ifs76CNa38G03cFF8IXZxeQVBOyu/preview', 'Properties of Receptors')"><span class="icon video-icon">▶️</span><span>Properties of Receptors</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1lfU8wnnOdMsCvrYmYJTMbaWwnv-BjF1u/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1zbOJ8HiIt6HX5o7kd7hjqHBJTFa7SK8R/preview', 'Hypothalamus')"><span class="icon video-icon">▶️</span><span>Hypothalamus</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1D7RkzhkyaL_xDzqx60NLAofkWkjXSmcc/preview', 'Connection of Hypothalamus')"><span class="icon video-icon">▶️</span><span>Connection of Hypothalamus</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/14h6a_cZBCDNEx5OBIYuECxvh8TKbYYmT/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1EwWxEAFbFS8WcoDV7echf0h44WUqnQNC/preview', 'Thalamus')"><span class="icon video-icon">▶️</span><span>Thalamus</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1GXlApGJFar5BnWdBYROwpYJYyrLEHfoW/preview', 'Functions of Thalamus')"><span class="icon video-icon">▶️</span><span>Functions of Thalamus</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1IC2Rf9kWvcjPsWpPmL3c1A-IATbSDUOK/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1kAp94HyRhNl2u4Z_6pM22pAdRMAhPJgH/preview', 'Basal Ganglia')"><span class="icon video-icon">▶️</span><span>Basal Ganglia</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ZxFnPGwu3MLSm69FYVLUW7keOJlTs46j/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/13ahOrmYJv4sZBeuUfdQignlGmX6o5Ej9/preview', 'Cerebellum')"><span class="icon video-icon">▶️</span><span>Cerebellum</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1SwUDyuXo6_0rDh7c3umA-mg8wY9ZU8eB/preview', 'Nuclei of Cerebellum')"><span class="icon video-icon">▶️</span><span>Nuclei of Cerebellum</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1H1x-KyQC4PkH0Ekyq8CttyZ4rV3FbSvS/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1wxcsWC-VUUV00wlcIiu4nAd1vnvexCWB/preview', 'Cerebrum')"><span class="icon video-icon">▶️</span><span>Cerebrum</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1wxcsWC-VUUV00wlcIiu4nAd1vnvexCWB/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1zg6b9R5MVAOrjpDYSeNm8GAz4TsGohfp/preview', 'Cerebrospinal Fluid')"><span class="icon video-icon">▶️</span><span>Cerebrospinal Fluid</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1lM_8uxXICD5r5t8_RH7ZY3s69TtXB8IF/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/13a0OuwiUYXTJ9Nsu6TLh1BFJAaoPr6vp/preview', 'Motor System : Pyramidal System, Extrapyramidal System')"><span class="icon video-icon">▶️</span><span>Motor System : Pyramidal System, Extrapyramidal System</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1gjnOk6AHhf6oJSrygA8bjqZXPnmQBUSm/preview', 'Motor System : Neuron Lesion, Applied Physiology')"><span class="icon video-icon">▶️</span><span>Motor System : Neuron Lesion, Applied Physiology</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Deg7w3USrWfqQ2bsZcRynsL1t6seQ-Wv/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Deg7w3USrWfqQ2bsZcRynsL1t6seQ-Wv/preview', 'Cranial Nerves :  Offactory, Oculomotor')"><span class="icon video-icon">▶️</span><span>Cranial Nerves :  Offactory, Oculomotor</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/11ASgn2gd8UYJr8vVZqLFIWmeu5T1q135/preview', 'Cranial Nerves :  Trigeminal, Facial, Glossopharyngeal, Accessory')"><span class="icon video-icon">▶️</span><span>Cranial Nerves :  Trigeminal, Facial, Glossopharyngeal, Accessory</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1OM-hn-OUs4cTpfniCm9wDN_IOAvhr4cr/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1LH7wWfSuY20ODNap7GRlwnPMyKkLmzFM/preview', 'Autonomic Nervous System : Sympathetic Division, Parasympathetic Division')"><span class="icon video-icon">▶️</span><span>Autonomic Nervous System : Sympathetic Division, Parasympathetic Division</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ii1qD71RQi2WCPuXyMme2sQU2L4Lw0oT/preview', 'Autonomic Nervous System : Mediators of ANS, Adrenergic Divsion')"><span class="icon video-icon">▶️</span><span>Autonomic Nervous System : Mediators of ANS, Adrenergic Divsion</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1oj6wy4xaK6owqobwAcFfYw60oOOMWHHa/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(11)"><span class="icon quiz-icon">✍️</span><span>Take Unit 11 Quiz</span></div></div></div>
+                </div></div>
     <div id="app-modal" class="modal-overlay">
         <div class="modal-header">
-            <div id="modal-title" class="modal-title">Resource</div>
+            <div id="modal-title" style="font-weight:700; color:var(--brand);">Resource</div>
             <button class="btn-close" onclick="closeModal()">Close X</button>
         </div>
-        <div id="modal-body" class="modal-body">
-            </div>
+        <div id="modal-body" class="modal-body"></div>
     </div>
-
     <script>
-        // --- 1. DUMMY 3D MODEL CODES ---
-        const MODEL_CODE_A = `<div><div><p><iframe allowfullscreen="true" frameborder="0" id="embedded-human" loading="lazy" src="https://human.biodigital.com/viewer/?id=5C83&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=LnZqE&amp;paid=o_10a88be0&amp;ui-bd.link=false" style="aspect-ratio: 3 / 5; width: 100%"></iframe></p></div><p>&nbsp;</p></div>`;
-        const MODEL_CODE_B = `<div><p><iframe allowfullscreen="true" frameborder="0" id="embedded-human" loading="lazy" src="https://human.biodigital.com/viewer/?id=5C87&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=LnZqz&amp;paid=o_10a88be0&amp;ui-bd.link=false" style="aspect-ratio: 3 / 5; width: 100%"></iframe></p></div>`;
-
-        // --- 2. PHYSIOLOGY QUIZ DATA (5 Questions each) ---
-        const QUIZ_DATA = {
-            1: [ // General Phys
-                { q: "Which organelle produces ATP?", o: ["Ribosome", "Mitochondria", "Nucleus", "Golgi Body"], a: 1 },
-                { q: "Homeostasis is maintained by:", o: ["Positive Feedback", "Negative Feedback", "Both", "None"], a: 1 },
-                { q: "Which tissue type contracts?", o: ["Epithelial", "Connective", "Muscle", "Nervous"], a: 2 },
-                { q: "Active transport requires:", o: ["No Energy", "ATP", "Osmosis", "Diffusion"], a: 1 },
-                { q: "Most body water is found in:", o: ["Intracellular Fluid", "Plasma", "Lymph", "Extracellular Fluid"], a: 0 }
-            ],
-            2: [ // Respiratory
-                { q: "The primary muscle of inspiration is:", o: ["Internal Intercostal", "Diaphragm", "Abdominal", "Scalene"], a: 1 },
-                { q: "Gas exchange occurs in:", o: ["Bronchi", "Trachea", "Alveoli", "Larynx"], a: 2 },
-                { q: "Vital Capacity equals:", o: ["TV + IRV", "TV + IRV + ERV", "TLC - RV", "Both B & C"], a: 3 },
-                { q: "Surfactant prevents alveolar collapse by reducing:", o: ["Airflow", "Surface Tension", "Pressure", "Volume"], a: 1 },
-                { q: "Respiratory rhythm center is located in:", o: ["Cerebrum", "Medulla Oblongata", "Cerebellum", "Spinal Cord"], a: 1 }
-            ],
-            3: [ // Digestive
-                { q: "Pepsin digests:", o: ["Proteins", "Fats", "Carbohydrates", "Vitamins"], a: 0 },
-                { q: "Bile is stored in:", o: ["Liver", "Pancreas", "Gallbladder", "Duodenum"], a: 2 },
-                { q: "Most absorption occurs in:", o: ["Stomach", "Small Intestine", "Large Intestine", "Esophagus"], a: 1 },
-                { q: "Hydrochloric acid (HCl) is secreted by:", o: ["Chief Cells", "Parietal Cells", "Mucous Cells", "G Cells"], a: 1 },
-                { q: "Emulsification of fats is the function of:", o: ["Amylase", "Lipase", "Bile Salts", "Trypsin"], a: 2 }
-            ],
-            4: [ // Circulatory
-                { q: "Stroke Volume x Heart Rate =", o: ["Blood Pressure", "Cardiac Output", "Venous Return", "Peripheral Resistance"], a: 1 },
-                { q: "The pacemaker of the heart:", o: ["AV Node", "SA Node", "Purkinje Fibers", "Bundle of His"], a: 1 },
-                { q: "Lymph drains into:", o: ["Arteries", "Veins", "Capillaries", "Heart"], a: 1 },
-                { q: "Normal blood pressure is approx:", o: ["100/60", "120/80", "140/90", "110/70"], a: 1 },
-                { q: "In ECG, the P wave represents:", o: ["Atrial Depolarization", "Ventricular Depolarization", "Repolarization", "Diastole"], a: 0 }
-            ],
-            5: [ // Blood
-                { q: "Red blood cells are produced in:", o: ["Liver", "Spleen", "Red Bone Marrow", "Kidney"], a: 2 },
-                { q: "Which cell fights infection?", o: ["Erythrocyte", "Leukocyte", "Thrombocyte", "Adipocyte"], a: 1 },
-                { q: "Vitamin K is essential for:", o: ["Clotting", "Oxygen Transport", "Immunity", "Digestion"], a: 0 },
-                { q: "Average lifespan of RBC is:", o: ["30 days", "90 days", "120 days", "150 days"], a: 2 },
-                { q: "Universal Blood Donor is:", o: ["AB Positive", "O Negative", "A Positive", "B Negative"], a: 1 }
-            ],
-            6: [ // Endocrine
-                { q: "Growth Hormone is secreted by:", o: ["Thyroid", "Adrenal", "Anterior Pituitary", "Posterior Pituitary"], a: 2 },
-                { q: "Insulin causes blood sugar to:", o: ["Increase", "Decrease", "Stay same", "Fluctuate"], a: 1 },
-                { q: "The 'Fight or Flight' hormone is:", o: ["Thyroxine", "Adrenaline", "Cortisol", "Melatonin"], a: 1 },
-                { q: "Parathyroid hormone increases blood:", o: ["Sodium", "Potassium", "Calcium", "Iron"], a: 2 },
-                { q: "Oxytocin stimulates:", o: ["Milk Production", "Uterine Contraction", "Growth", "Metabolism"], a: 1 }
-            ],
-            7: [ // Sensory
-                { q: "Photoreceptors are located in the:", o: ["Iris", "Cornea", "Retina", "Lens"], a: 2 },
-                { q: "The organ of hearing is:", o: ["Vestibule", "Cochlea", "Ossicles", "Pinna"], a: 1 },
-                { q: "Olfaction refers to sense of:", o: ["Taste", "Touch", "Smell", "Sight"], a: 2 },
-                { q: "Which is NOT a primary taste?", o: ["Sweet", "Sour", "Spicy", "Bitter"], a: 2 },
-                { q: "Cones are responsible for:", o: ["Night vision", "Color vision", "Peripheral vision", "Motion"], a: 1 }
-            ],
-            8: [ // Musculoskeletal
-                { q: "The functional unit of muscle contraction:", o: ["Sarcomere", "Myofibril", "Actin", "Myosin"], a: 0 },
-                { q: "Neurotransmitter at NMJ is:", o: ["Dopamine", "Acetylcholine", "Serotonin", "GABA"], a: 1 },
-                { q: "Calcium is stored in muscle in:", o: ["T-tubules", "Sarcoplasmic Reticulum", "Mitochondria", "Nucleus"], a: 1 },
-                { q: "Immediate source of energy for muscle is:", o: ["Glucose", "ATP", "Fat", "Protein"], a: 1 },
-                { q: "Bone forming cells are called:", o: ["Osteoclasts", "Osteoblasts", "Osteocytes", "Chondrocytes"], a: 1 }
-            ],
-            9: [ // Renal
-                { q: "Glomerular Filtration Rate (GFR) is approx:", o: ["125 ml/min", "180 L/day", "Both A & B", "1 L/min"], a: 2 },
-                { q: "Most reabsorption occurs in:", o: ["PCT", "Loop of Henle", "DCT", "Collecting Duct"], a: 0 },
-                { q: "Which hormone concentrates urine?", o: ["Aldosterone", "ADH", "Renin", "ANP"], a: 1 },
-                { q: "Kidneys regulate blood pH by secreting:", o: ["H+ ions", "Bicarbonate", "Sodium", "Water"], a: 0 },
-                { q: "Renin is secreted by:", o: ["Macula Densa", "Juxtaglomerular Cells", "Podocytes", "Mesangial Cells"], a: 1 }
-            ],
-            10: [ // Reproductive
-                { q: "Spermatogenesis occurs in:", o: ["Epididymis", "Seminiferous Tubules", "Vas Deferens", "Prostate"], a: 1 },
-                { q: "Ovulation is triggered by surge in:", o: ["FSH", "LH", "Estrogen", "Progesterone"], a: 1 },
-                { q: "The hormone of pregnancy is:", o: ["Estrogen", "Progesterone", "Oxytocin", "Prolactin"], a: 1 },
-                { q: "Menstruation occurs due to drop in:", o: ["FSH", "LH", "Progesterone", "Oxytocin"], a: 2 },
-                { q: "An ovum remains viable for approx:", o: ["12 hours", "24 hours", "48 hours", "72 hours"], a: 1 }
-            ],
-            11: [ // Nervous
-                { q: "Action potential conduction is faster in:", o: ["Unmyelinated axons", "Myelinated axons", "Dendrites", "Cell bodies"], a: 1 },
-                { q: "Balance is coordinated by:", o: ["Cerebrum", "Cerebellum", "Brain Stem", "Hypothalamus"], a: 1 },
-                { q: "Sympathetic nervous system causes:", o: ["Pupil constriction", "Heart rate decrease", "Bronchodilation", "Digestion"], a: 2 },
-                { q: "Myelin sheath in PNS is produced by:", o: ["Oligodendrocytes", "Schwann Cells", "Astrocytes", "Microglia"], a: 1 },
-                { q: "Cerebrospinal Fluid (CSF) is produced by:", o: ["Choroid Plexus", "Dura Mater", "Arachnoid Villi", "Sinuses"], a: 0 }
-            ]
-        };
-
-        // --- 3. COURSE DATA (Extracted from your inputs) ---
-        const UNITS = [
-            {
-                id: 1, title: "GENERAL PHYSIOLOGY",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/10N3pxg1gls98_RVOKZO0nPQ9e2v02r1B/preview' },
-                    { type: 'video', title: 'Intro & Cell Structure', url: 'https://drive.google.com/file/d/101-DWlLTnTOEBrjzAxchPuVM2xP46fnV/preview' },
-                    { type: 'video', title: 'Tissues Physiology', url: 'https://drive.google.com/file/d/1bhKhpVsM0ElEwNMWdsJiB0MIAY_fChEG/preview' },
-                    { type: 'video', title: 'Types of Tissues', url: 'https://drive.google.com/file/d/15-iWAUqIpnaxLvprQJfmzxz-spLGMSac/preview' },
-                    { type: 'video', title: 'Membranes & Glands', url: 'https://drive.google.com/file/d/16w_-3R2Lz95YWo-BIRgMo3igxK--R5ZJ/preview' }
-                ]
-            },
-            {
-                id: 2, title: "RESPIRATORY SYSTEM",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1QcOyOGL1-9ipMLcwzzLyLJkjxH2EmhcP/preview' },
-                    { type: 'video', title: 'Intro to Respiratory', url: 'https://drive.google.com/file/d/1AcSKAK1cy7huOA3B3RC3WruEdbEzb0TY/preview' },
-                    { type: 'model', title: '3D Model: Respiratory' },
-                    { type: 'video', title: 'Mechanism of Respiration', url: 'https://drive.google.com/file/d/1NJYsoWzQ4labwfi0Vh8m0AIMQfqFqOM1/preview' },
-                    { type: 'video', title: 'Physiology of Respiration', url: 'https://drive.google.com/file/d/1EKKrvJKwWoQbEWLudT1TePBiMvo183RB/preview' },
-                    { type: 'video', title: 'Gas Transport & Regulation', url: 'https://drive.google.com/file/d/1vphkb11o5f4kStf7T2kXCbJQ2d_IDsl8/preview' }
-                ]
-            },
-            {
-                id: 3, title: "DIGESTIVE SYSTEM",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/156MjpYjAHJb2avDPWFyoZIoX-BqsUEzc/preview' },
-                    { type: 'video', title: 'Organs of Digestion', url: 'https://drive.google.com/file/d/1Q08ViVve81AtC_HHWvJztEiQR3SleQZm/preview' },
-                    { type: 'model', title: '3D Model: Stomach' },
-                    { type: 'video', title: 'Functions of Digestive Sys', url: 'https://drive.google.com/file/d/1T-wYVW0NrGVUXKK8QyASEK-_Eg_3z7q1/preview' },
-                    { type: 'video', title: 'Salivary Glands', url: 'https://drive.google.com/file/d/1IyCKX1TJiRdQotmKop09zac4R6PJ_rdk/preview' },
-                    { type: 'video', title: 'Gastric Secretions', url: 'https://drive.google.com/file/d/14Hk3HYzHdWXam_NbwTjJwlBYkJkmfaIX/preview' },
-                    { type: 'video', title: 'Pancreas & Secretions', url: 'https://drive.google.com/file/d/123FJomESMPRK1b9UR8pvccwfYG2OaaH9/preview' },
-                    { type: 'model', title: '3D Model: Pancreas' },
-                    { type: 'video', title: 'Liver & Gall Bladder', url: 'https://drive.google.com/file/d/1mRAjHD9K9riuRDdKEXjr0wKw_ihTNj55/preview' },
-                    { type: 'video', title: 'Large Intestine', url: 'https://drive.google.com/file/d/1PkMa8T70bfgwt6na9dJvp7ofZKDsH5rT/preview' },
-                    { type: 'video', title: 'Bile Secretion', url: 'https://drive.google.com/file/d/1PuJySZwjTRI6fJWOCsoYsly3kJmIvl7d/preview' },
-                    { type: 'video', title: 'GI Hormones', url: 'https://drive.google.com/file/d/14BG1zPfXCniaZn8YW72-yUcJ83QsmgNo/preview' }
-                ]
-            },
-            {
-                id: 4, title: "CIRCULATORY & LYMPHATIC",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1wI0my0taaQPS3gf3Peun7t2pBBs1GEP3/preview' },
-                    { type: 'video', title: 'Heart Structure', url: 'https://drive.google.com/file/d/1kHago-VxxxU15-w6RDZ8btHoEXRrKnMK/preview' },
-                    { type: 'model', title: '3D Model: Heart' },
-                    { type: 'video', title: 'Valves of Heart', url: 'https://drive.google.com/file/d/1tDnIULk-UmSgGmXPoHwjfv4f_86MbvH1/preview' },
-                    { type: 'video', title: 'Cardiac Cycle', url: 'https://drive.google.com/file/d/1gdiD9BHQKlKdC2jnQuuR6LfFtJZgo71C/preview' },
-                    { type: 'video', title: 'Stroke Volume', url: 'https://drive.google.com/file/d/1TOHanAbQHySY7iYYEPh14yorPGR7pBd0/preview' },
-                    { type: 'video', title: 'Cardiac Output & HR', url: 'https://drive.google.com/file/d/158oy_cUtC7JrrXpknynE8zjfJoHLg1Py/preview' },
-                    { type: 'video', title: 'Pulmonary & Systemic Circ', url: 'https://drive.google.com/file/d/1yV7oG-8HFDxmo0O0CUTuoyI1o8bqUxCD/preview' },
-                    { type: 'video', title: 'Lymphatic System', url: 'https://drive.google.com/file/d/1qY8ODUBWABSiMYqOCQRlzBkl4U0Dnfet/preview' }
-                ]
-            },
-            {
-                id: 5, title: "BLOOD",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1ls7J41VQZXJikLfG1CyS0AUJjqpBLSmX/preview' },
-                    { type: 'video', title: 'Intro to Blood Phys', url: 'https://drive.google.com/file/d/16UKyoVSWAA05EyGw2JAXI6MmTrdA2Pic/preview' },
-                    { type: 'video', title: 'Erythropoiesis', url: 'https://drive.google.com/file/d/1qi7QuEoqpwChOM8bNujmhv-W03eEBpLg/preview' },
-                    { type: 'video', title: 'Leukocytes', url: 'https://drive.google.com/file/d/15zbtNNFfuag_OfF8nkc7wK0hVllUI5hS/preview' },
-                    { type: 'video', title: 'Thrombocytes', url: 'https://drive.google.com/file/d/151WfxBZGrzro-3_HeGvoQz5zpSCdHQ0p/preview' },
-                    { type: 'video', title: 'Blood Coagulation', url: 'https://drive.google.com/file/d/1nlDmzqM2qxXNsV_EOXd24d1AYmRuczNR/preview' },
-                    { type: 'video', title: 'Hemostasis', url: 'https://drive.google.com/file/d/1paAe9sOz84HP7lDtWBPZRM07ZwD55NwA/preview' },
-                    { type: 'video', title: 'Blood Groups', url: 'https://drive.google.com/file/d/10DXrvF9gKNoXQ_P-nE2oI2_Q1XMf7_hp/preview' },
-                    { type: 'video', title: 'Immunity Types', url: 'https://drive.google.com/file/d/1cyI3Ck1gnWz0sGFkD6jGGfIyhuZTZZxp/preview' }
-                ]
-            },
-            {
-                id: 6, title: "THE ENDOCRINE SYSTEM",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1MsscO3WYvPgjCT0uH1fF3qi7v6XxC5nN/preview' },
-                    { type: 'video', title: 'Hypothalamus', url: 'https://drive.google.com/file/d/1IgYsF1V4V1pYLIzQZW9fSCcHKyIa-JZa/preview' },
-                    { type: 'model', title: '3D Model: Hypothalamus' },
-                    { type: 'video', title: 'Pituitary Hormones (Ant)', url: 'https://drive.google.com/file/d/1-Xw0_-sZ1L5YQlDYOQEjAdo9B-RE7UMo/preview' },
-                    { type: 'video', title: 'Pituitary Hormones (Post)', url: 'https://drive.google.com/file/d/1ua4sjsiI7Af4dEyj2AK6SsovLsTiy7Mb/preview' },
-                    { type: 'video', title: 'Thyroid Gland', url: 'https://drive.google.com/file/d/1PF8wFE65kZs2pD-PQ0kimQl1gkjCi2_D/preview' },
-                    { type: 'model', title: '3D Model: Thyroid' }
-                ]
-            },
-            {
-                id: 7, title: "SENSORY ORGANS",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/18Jy44QJ9HDkxuaCe0CUST7S0TY0b_ISo/preview' },
-                    { type: 'video', title: 'Intro to Sensory Sys', url: 'https://drive.google.com/file/d/1qc7_JvBMl1OJE71iyATI1b-h-ovuEO_M/preview' },
-                    { type: 'video', title: 'Skin Physiology', url: 'https://drive.google.com/file/d/1HlRXY956MNUUGmbuFxN_ZNCM3HloWBHi/preview' },
-                    { type: 'model', title: '3D Model: Skin' },
-                    { type: 'video', title: 'Eye Anatomy', url: 'https://drive.google.com/file/d/1-4yUyDwc7ZumVeNm_L4R_av8Mujr7-mL/preview' },
-                    { type: 'model', title: '3D Model: Eye' },
-                    { type: 'video', title: 'Ear Physiology', url: 'https://drive.google.com/file/d/1jt3kAbTC9MOeMiHQI0XhZGfhTJPlOyOz/preview' },
-                    { type: 'video', title: 'Gustation (Tongue)', url: 'https://drive.google.com/file/d/1GY-2sUxhS-w0PckA8YjbmonxjaKlxvig/preview' },
-                    { type: 'video', title: 'Olfaction (Smell)', url: 'https://drive.google.com/file/d/1poaGG_onPauI2vR5stwoxsovNW0KnlYN/preview' }
-                ]
-            },
-            {
-                id: 8, title: "MUSCULOSKELETAL SYSTEM",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/121sVgbcRetoxMiOcm5pvxeCGKbLxBvQv/preview' },
-                    { type: 'video', title: 'Skeletal System', url: 'https://drive.google.com/file/d/1ibWrcuBNriXjJmxwazDGYYuUlqrmKcBa/preview' },
-                    { type: 'model', title: '3D Model: Skeleton' },
-                    { type: 'video', title: 'Joints', url: 'https://drive.google.com/file/d/1k3tRJkoch4emH1eZQLzE7l3IUFtadM0c/preview' },
-                    { type: 'video', title: 'Muscle Physiology', url: 'https://drive.google.com/file/d/1x72mF3I_9ra-ocvXOCMnXtKUviUbAWoj/preview' },
-                    { type: 'video', title: 'Neuromuscular Junction', url: 'https://drive.google.com/file/d/1ffNOBgBaJghscIDElqWKvAw4V42JaKSi/preview' },
-                    { type: 'video', title: 'Muscle Contraction', url: 'https://drive.google.com/file/d/1C1LHBi0ylFfPbCKw7UPvs68-p0JExnO4/preview' },
-                    { type: 'video', title: 'Smooth Muscle Contraction', url: 'https://drive.google.com/file/d/1JfM2Q2gugwIEfVk20NCgpqm_20XbuFvI/preview' }
-                ]
-            },
-            {
-                id: 9, title: "THE RENAL SYSTEM",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1XLmC8pc0ws8gPsCpETEh5WP3Aa79rFjk/preview' },
-                    { type: 'video', title: 'Intro & Kidney', url: 'https://drive.google.com/file/d/1u8ntBZBayTpd2HViW8sImZgdQlqKC9bX/preview' },
-                    { type: 'model', title: '3D Model: Kidney' },
-                    { type: 'video', title: 'Nephron', url: 'https://drive.google.com/file/d/1HiG6rxo1lnGqOq1RSmIowBlAtHjTGEts/preview' },
-                    { type: 'video', title: 'Urine Formation', url: 'https://drive.google.com/file/d/1gxZ8Y0cOOKAgEk23RWZblZySEyL4HIzL/preview' },
-                    { type: 'video', title: 'Renal Regulation (Autoregulation)', url: 'https://drive.google.com/file/d/1ML2h5cwxdUpoly8NSRN8pTgWmPzgpQIu/preview' },
-                    { type: 'video', title: 'Renal Regulation (Osmolarity)', url: 'https://drive.google.com/file/d/1uhyxa6IjfVhtUgx6Xq1_Qk_rZCUv85Et/preview' }
-                ]
-            },
-            {
-                id: 10, title: "REPRODUCTIVE SYSTEM",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1O6AuPR8YeiCxvLS4NdowJcAfTXe9epVJ/preview' },
-                    { type: 'video', title: 'Female Reproductive Intro', url: 'https://drive.google.com/file/d/1390ZTxHwRmn9IwkoqANY359aVAG5pF-H/preview' },
-                    { type: 'model', title: '3D Model: Female System' },
-                    { type: 'video', title: 'Ovaries', url: 'https://drive.google.com/file/d/1WqoST1I0w6WDek3OrA4DFklIhxVsyg1S/preview' },
-                    { type: 'video', title: 'Menstrual Cycle', url: 'https://drive.google.com/file/d/1gdStPRbXFktHL7oS-bIqc8-Fp14E0kNK/preview' },
-                    { type: 'video', title: 'Oogenesis', url: 'https://drive.google.com/file/d/1vyzcePMwrS4JRO_-wyKPH63O9u6b-lE_/preview' },
-                    { type: 'video', title: 'Male Reproductive Intro', url: 'https://drive.google.com/file/d/1G5LJFy0GLnHkjgpOSrp1UTN-7PHM5RtP/preview' },
-                    { type: 'model', title: '3D Model: Male System' },
-                    { type: 'video', title: 'Spermatogenesis', url: 'https://drive.google.com/file/d/1hx1cyhOJ9LB355io1VZZb3klLNBfu0Zj/preview' },
-                    { type: 'video', title: 'Sperm & Semen', url: 'https://drive.google.com/file/d/1ctWNqwGdxR07ZtSb5xns6gQjFOJHrVYe/preview' }
-                ]
-            },
-            {
-                id: 11, title: "NERVOUS SYSTEM",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1MbbTX0-LMWTjAoGC9XHGcawQ04AEWU-8/preview' },
-                    { type: 'model', title: '3D Model: Neuron' },
-                    { type: 'video', title: 'Neuron', url: 'https://drive.google.com/file/d/1tdNR6mo0siBxP0NWPlxpRsuxcpeMCRgs/preview' },
-                    { type: 'video', title: 'Nerve Impulse', url: 'https://drive.google.com/file/d/1z4TifczjCPRarUO7t5_Jm-MLAZ-H1-bg/preview' },
-                    { type: 'video', title: 'Synapse', url: 'https://drive.google.com/file/d/18-kMkugHm3fFoliUgMUF19XgVbftBLi-/preview' },
-                    { type: 'video', title: 'Intro to CNS', url: 'https://drive.google.com/file/d/1BZKTJZJB3gx2LuayBLw8a2waJ8B-BeNV/preview' },
-                    { type: 'model', title: '3D Model: Brain' },
-                    { type: 'video', title: 'Reflexes', url: 'https://drive.google.com/file/d/1JaFdUMLzX1WvGk8O9W3ticFxhHBC522p/preview' },
-                    { type: 'video', title: 'Autonomic Nervous System', url: 'https://drive.google.com/file/d/1LH7wWfSuY20ODNap7GRlwnPMyKkLmzFM/preview' }
-                ]
-            }
-        ];
-
-        // --- 4. RENDER LOGIC ---
-        function renderPage() {
-            const container = document.getElementById('units-container');
-            
-            UNITS.forEach(unit => {
-                const unitHtml = `
-                    <div class="unit-card">
-                        <div class="unit-header" onclick="toggleUnit(this)">
-                            UNIT ${unit.id} - ${unit.title}
-                            <span>🔽</span>
-                        </div>
-                        <div class="unit-content">
-                            <div class="resource-list">
-                                ${unit.resources.map(res => `
-                                    <div class="resource-btn type-${res.type}" onclick="openResource('${res.type}', '${res.url || ''}', '${res.title}')">
-                                        <div class="icon">${getIcon(res.type)}</div>
-                                        <div>${res.title}</div>
-                                    </div>
-                                `).join('')}
-                                <div class="resource-btn type-quiz" onclick="openQuiz(${unit.id})">
-                                    <div class="icon">✍️</div>
-                                    <div>Take Unit ${unit.id} Quiz</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += unitHtml;
-            });
-        }
-
-        function getIcon(type) {
-            if(type === 'notes') return '📚';
-            if(type === 'video') return '▶️';
-            if(type === 'model') return '🧊';
-            return '📄';
-        }
-
+        const QUIZ_DATA = {"1":[{"q":"Who is regarded as the “Father of Medicine”?","o":["William Harvey","Hippocrates","Aristotle","Claude Bernard"],"a":1},{"q":"Which organelle is called the “powerhouse of the cell”?","o":["Nucleus","Lysosome","Mitochondria","Golgi apparatus"],"a":2},{"q":"The term homeostasis was introduced by:","o":["Hippocrates","W.B. Cannon","Aristotle","Galen"],"a":1},{"q":"Which type of cartilage is the most abundant in the body?","o":["Elastic cartilage","Fibrocartilage","Hyaline cartilage","Calcified cartilage"],"a":2},{"q":"Which connective tissue cells release histamine and heparin?","o":["Macrophages","Fibroblasts","Mast cells","Osteocytes"],"a":2},{"q":"Which scientist discovered the circulation of blood?","o":["Galen","William Harvey","Andreas Vesalius","Johannes Müller"],"a":1},{"q":"tratified squamous epithelium is mainly found in:","o":["Kidney tubules","Lining of blood vessels","Skin, mouth, esophagus","Respiratory tract"],"a":2},{"q":"Which phase of tissue repair involves collagen deposition and scarring?","o":["Inflammatory phase","Regeneration","Replacement","Maturation"],"a":2},{"q":"Which type of gland releases its secretions directly into the bloodstream?","o":["Exocrine glands","Sebaceous glands","Endocrine glands","Merocrine glands"],"a":2},{"q":"The serous membrane lining the thoracic cavity is called:","o":["Peritoneum","Pleura","Pericardium","Synovium"],"a":1}],"2":[{"q":"The functional unit of the lungs where gas exchange takes place is:","o":["Bronchi","Trachea","Alveoli","Pleura"],"a":2},{"q":"Which muscle is the main muscle of respiration?","o":["Intercostal muscles","Diaphragm","Sternocleidomastoid","Abdominal muscles"],"a":1},{"q":"The right lung has how many lobes?","o":["2","3","4","5"],"a":1},{"q":"Which bronchus is more prone to foreign body aspiration?","o":["Right bronchus","Left bronchus","Both equally","None"],"a":0},{"q":"Which lung volume represents the air inhaled or exhaled during normal quiet breathing?","o":["Vital capacity","Residual volume","Tidal volume","Expiratory reserve volume"],"a":2},{"q":"What is the approximate residual volume (RV) in a healthy adult?","o":["500 mL","1000 mL","1200 mL","2500 mL"],"a":2},{"q":"Hypoxic pulmonary vasoconstriction (HPV) is a mechanism that:","o":["Dilates vessels in hypoxic regions of lung","Constricts vessels in hypoxic regions of lung","Increases alveolar ventilation rate","Raises systemic arterial blood pressure"],"a":1},{"q":"The majority of carbon dioxide in blood is transported as:","o":["Dissolved CO₂","Carbaminohemoglobin","Bicarbonate ions","Carbonic acid"],"a":2},{"q":"Which test measures the diffusion capacity of the lungs?","o":["Spirometry","DLCO test (Diffusing capacity for carbon monoxide)","Peak flow meter","Arterial blood gas (ABG) test"],"a":1},{"q":"Minute ventilation is calculated as:","o":["TV × RR","VC ÷ RR","IC × ERV","FEV1 × FVC"],"a":0}],"3":[{"q":"Which enzyme in saliva begins the digestion of starch?","o":["Maltase","Ptyalin (salivary amylase)","Pepsin","Lipase"],"a":1},{"q":"The J-shaped muscular organ responsible for mixing food with gastric juices is:","o":["Pharynx","Stomach","Small intestine","Esophagus"],"a":1},{"q":"The intrinsic factor secreted by the stomach is essential for absorption of:","o":["Vitamin A","Vitamin D","Vitamin B12","Vitamin K"],"a":2},{"q":"Which hormone stimulates the gallbladder to contract and release bile?","o":["Secretin","Gastrin","Cholecystokinin (CCK)","Motilin"],"a":2},{"q":"Peyer’s patches, which play a role in immune defense, are found in which part of the digestive tract?","o":["Esophagus","Duodenum","Jejunum","Ileum"],"a":3},{"q":"The “crypts of Lieberkühn” are found in the:","o":["Stomach","Small intestine","Large intestine","Both b and c"],"a":3},{"q":"Which pancreatic enzyme is secreted in inactive form and later converted to trypsin?","o":["Amylase","Lipase","Trypsinogen","Chymotrypsinogen"],"a":2},{"q":"VIPoma, a rare tumor of the pancreas, leads to which syndrome?","o":["Zollinger–Ellison syndrome","Cushing’s syndrome","WDHA syndrome (Watery Diarrhea, Hypokalemia, Achlorhydria)","Carcinoid syndrome"],"a":2},{"q":"Which component of bile is responsible for emulsification of fats?","o":["Bilirubin","Bile salts","Cholesterol","Biliverdin"],"a":1},{"q":"The majority of protein digestion begins in the stomach due to which enzyme?","o":["Amylase","Lipase","Pepsin","Rennin"],"a":2}],"4":[{"q":"Which chamber of the heart pumps oxygenated blood into the systemic circulation?","o":["Right atrium","Left atrium","Right ventricle","Left ventricle"],"a":3},{"q":"Which blood vessels always carry blood away from the heart?","o":["Veins","Arteries","Capillaries","Venules"],"a":1},{"q":"The “pacemaker” of the heart is:","o":["Atrioventricular (AV) node","Bundle of His","Sinoatrial (SA) node","Purkinje fibers"],"a":2},{"q":"Which valve prevents backflow of blood from the left ventricle to the left atrium?","o":["Tricuspid valve","Mitral (bicuspid) valve","Aortic valve","Pulmonary valve"],"a":1},{"q":"Which artery supplies the interventricular septum and anterior walls of the ventricles?","o":["Right marginal artery","Posterior interventricular artery","Left anterior descending (LAD) artery","Circumflex artery"],"a":2},{"q":"What is the normal range of resting heart rate in adults?","o":["20–40 beats/min","40–60 beats/min","60–100 beats/min","100–140 beats/min"],"a":2},{"q":"Which vein drains venous blood from the heart muscle itself into the right atrium?","o":["Pulmonary vein","Coronary sinus","Superior vena cava","Inferior vena cava"],"a":1},{"q":"Which blood vessels act as the main site of exchange of gases, nutrients, and waste?","o":["Arteries","Arterioles","Capillaries","Veins"],"a":2},{"q":"Which layer of the heart wall is composed of cardiac muscle and responsible for pumping action?","o":["Endocardium","Epicardium","Myocardium","Pericardium"],"a":2},{"q":"Which structure prevents overfilling of the heart by limiting excessive stretching?","o":["Epicardium","Fibrous pericardium","Serous pericardium","Endocardium"],"a":1}],"5":[{"q":"Normal pH of blood is:","o":["6.8–7.0","7.0–7.2","7.35–7.45","7.5–7.8"],"a":2},{"q":"The lifespan of a red blood cell (RBC) is approximately:","o":["30 days","60 days","90 days","120 days"],"a":3},{"q":"The lifespan of a red blood cell (RBC) is approximately:","o":["30 days","60 days","90 days","120 days"],"a":3},{"q":"Deficiency of intrinsic factor leads to which type of anemia?","o":["Iron deficiency anemia","Pernicious anemia","Aplastic anemia","Sickle cell anemia"],"a":1},{"q":"The universal donor blood group is:","o":["A+","B+","AB−","O−"],"a":3},{"q":"Which clotting factor is deficient in Hemophilia A?","o":["Factor VII","Factor VIII","Factor IX","Factor X"],"a":1},{"q":"Which WBCs are primarily responsible for allergic reactions and parasitic defense?","o":["Neutrophils","Monocytes","Eosinophils","Basophils"],"a":2},{"q":"The majority of CO₂ in blood is transported as:","o":["Dissolved CO₂","Carbaminohemoglobin","Bicarbonate ions","Carbonic acid"],"a":2},{"q":"Erythroblastosis fetalis occurs due to:","o":["ABO incompatibility","Rh incompatibility","Iron deficiency","Vitamin K deficiency"],"a":1},{"q":"Which immunoglobulin is most abundant in blood and provides long-term immunity?","o":["IgA","IgD","IgE","IgG"],"a":3}],"6":[{"q":"Which gland is known as the \"Master gland\" of the body?","o":["Thyroid gland","Pituitary gland","Adrenal gland","Pancreas"],"a":1},{"q":"Which hormone is secreted by the pineal gland to regulate sleep-wake cycles?","o":["Melatonin","Cortisol","Oxytocin","Serotonin"],"a":0},{"q":"Which hypothalamic hormone stimulates the release of ACTH from the anterior pituitary?","o":["TRH","CRH","GHRH","GnRH"],"a":1},{"q":"Which hormone lowers blood calcium levels by inhibiting bone breakdown?","o":["Parathyroid hormone (PTH)","Calcitonin","Aldosterone","Cortisol"],"a":1},{"q":"Which nucleus of the hypothalamus is responsible for circadian rhythm regulation?","o":["Supraoptic nucleus","Arcuate nucleus","Suprachiasmatic nucleus","Mammillary nucleus"],"a":2},{"q":"Which hormone is responsible for stimulating milk production in females?","o":["Oxytocin","Prolactin","LH","FSH"],"a":1},{"q":"The zona glomerulosa of the adrenal cortex secretes:","o":["Cortisol","Aldosterone","Androgens","Epinephrine"],"a":1},{"q":"Hyposecretion of ADH leads to which disorder?","o":["Diabetes mellitus","Gigantism","Diabetes insipidus","Addison’s disease"],"a":2},{"q":"Which parathyroid cells are responsible for secreting PTH?","o":["Oxyphil cells","Chief (principal) cells","Follicular cells","Pituicytes"],"a":1},{"q":"Which thymus hormone promotes the maturation of T-lymphocytes?","o":["Thymulin","Thymopoietin","Thymosin","ACTH"],"a":2}],"7":[{"q":"Which photoreceptor is responsible for color vision?","o":["Rods","Cones","Bipolar cells","Ganglion cells"],"a":1},{"q":"Which structure connects the middle ear to the pharynx and equalizes pressure?","o":["Cochlea","Oval window","Eustachian tube","Tympanic membrane"],"a":2},{"q":"Which artery is the main arterial supply of the nasal cavity?","o":["Superior labial artery","Ophthalmic artery","Sphenopalatine artery","Maxillary artery"],"a":2},{"q":"Which cranial nerve carries taste sensation from the anterior 2/3rd of the tongue?","o":["Glossopharyngeal nerve (CN IX)","Hypoglossal nerve (CN XII)","Facial nerve (CN VII, via chorda tympani)","Vagus nerve (CN X)"],"a":2},{"q":"The optic nerve fibers partially cross at which structure before forming the optic tract?","o":["Lateral geniculate body","Optic chiasma","Superior colliculus","Primary visual cortex"],"a":1},{"q":"The smallest bone in the human body, located in the middle ear, is:","o":["Malleus","Incus","Stapes","Hyoid"],"a":2},{"q":"The vestibular branch of the vestibulocochlear nerve (CN VIII) carries signals related to:","o":["Hearing","Balance and spatial orientation","Smell","Taste"],"a":1},{"q":"Which papillae of the tongue do not contain taste buds?","o":["Fungiform papillae","Circumvallate papillae","Filiform papillae","Foliate papillae"],"a":2},{"q":"Which structure is the common site for epistaxis (nosebleeds) due to rich vascular supply?","o":["Cribriform plate","Kiesselbach’s plexus (Little’s area)","Maxillary sinus","Nasolacrimal duct"],"a":1},{"q":"Which part of the eye is transparent and helps in focusing light on the retina?","o":["Sclera","Cornea","Lens","Choroid"],"a":1}],"8":[{"q":"The smallest bone in the human body is","o":["Incus","Femur","Stapes","Hyoid"],"a":2},{"q":"Ligaments connect","o":["Muscle to muscle","Muscle to bone","Bone to bone","Cartilage to bone"],"a":2},{"q":"Which type of ossification forms flat bones like the skull and clavicle?","o":["Endochondral ossification","Intramembranous ossification","Appositional growth","Perichondral ossification"],"a":1},{"q":"The axial skeleton contains how many bones?","o":["126","80","206","64"],"a":1},{"q":"Which protein binds calcium during muscle contraction to expose binding sites on actin?","o":["Tropomyosin","Troponin","Myosin","Titin"],"a":1},{"q":"Which stage of bone healing involves formation of a fibrocartilaginous (soft) callus?","o":["Hematoma formation","Bony callus formation","Bone remodeling","Fibrocartilaginous callus formation"],"a":3},{"q":"Which autoimmune disease is associated with antibodies against acetylcholine receptors at the neuromuscular junction?","o":["Duchenne muscular dystrophy","Myasthenia gravis","Lambert-Eaton syndrome","Multiple sclerosis"],"a":1},{"q":"In smooth muscle contraction, calcium binds to which protein to activate contraction?","o":["Troponin","Tropomyosin","Calmodulin","Dystrophin"],"a":2},{"q":"Which synovial joint type allows rotation, such as the atlas and axis in the neck?","o":["Hinge","Pivot","Ball and socket","Saddle"],"a":1},{"q":"Duchenne muscular dystrophy is caused by deficiency of","o":["Actin","Myosin","Dystrophin","Nebulin"],"a":2}],"9":[{"q":"Which bacterium is the causative agent of tuberculosis (TB)?","o":["Mycobacterium leprae","Mycobacterium tuberculosis","Corynebacterium diphtheriae","Salmonella typhi"],"a":1},{"q":"The classic symptom of pertussis is","o":["Barking cough","Paroxysmal cough with \"whoop\"","Productive cough with sputum","Dry hacking cough"],"a":1},{"q":"The incubation period of poliomyelitis is usually","o":["2–5 days","7–14 days","3–6 weeks","1–2 months"],"a":2},{"q":"In leprosy, the bacterium mainly affects","o":["Respiratory epithelium","Peripheral nerves and skin","Alveoli of lungs","Red blood cells"],"a":1},{"q":"The Mantoux test is used to diagnose","o":["Typhoid fever","Tuberculosis","Meningitis","Tetanus"],"a":1},{"q":"Which form of leprosy is highly infectious with leonine facies?","o":["Tuberculoid leprosy","Lepromatous leprosy","Borderline leprosy","Indeterminate leprosy"],"a":1},{"q":"In poliomyelitis, the anterior horn cells of which structure are primarily affected?","o":["Spinal cord","Brainstem","Cerebellum","Medulla oblongata"],"a":0},{"q":"The “catarrhal stage” is the initial stage of which disease?","o":["Tuberculosis","Whooping cough","Measles","Diphtheria"],"a":1},{"q":"Which stain is used in the laboratory for detecting Mycobacterium tuberculosis?","o":["Gram stain","Ziehl-Neelsen stain (Acid-fast)","Giemsa stain","Wright’s stain"],"a":1},{"q":"Lepromin test is useful for","o":["Confirming active leprosy infection","Assessing immunity and classification of leprosy","Detecting carrier state","Differentiating tuberculosis from leprosy"],"a":1}],"10":[{"q":"The female external genitalia are collectively known as","o":["Perineum","Vulva","Introitus","Clitoris"],"a":1},{"q":"Which layer of the uterine wall is responsible for powerful contractions during labor?","o":["Endometrium","Myometrium","Perimetrium","Basal lamina"],"a":1},{"q":"Fertilization of the ovum usually occurs in which part of the fallopian tube?","o":["Isthmus","Ampulla","Infundibulum","Intramural portion"],"a":1},{"q":"Which ligament provides the primary support to the uterus?","o":["Broad ligament","Uterosacral ligament","Round ligament","Pubocervical ligament"],"a":1},{"q":"The corpus luteum secretes which hormone predominantly?","o":["Estrogen","Progesterone","LH","FSH"],"a":1},{"q":"Which ovarian follicle stage is characterized by the presence of an antrum?","o":["Primordial follicle","Primary follicle","Secondary follicle","Graafian follicle"],"a":2},{"q":"In the menstrual cycle, the decidual reaction occurs during which phase?","o":["Menstrual phase","Proliferative phase","Secretory phase","Ovulatory phase"],"a":2},{"q":"Which lobe of the prostate is most commonly affected by carcinoma?","o":["Anterior","Lateral","Posterior","Median"],"a":2},{"q":"The sperm gain motility mainly in which structure?","o":["Testis","Epididymis","Vas deferens","Ejaculatory duct"],"a":1},{"q":"Each ejaculation normally contains how many sperm per mL?","o":["1–5 million","10–20 million","60–100 million","200 million or more"],"a":2}],"11":[{"q":"The basic structural and functional unit of the nervous system is","o":["Axon","Neuron","Synapse","Dendrite"],"a":1},{"q":"Which part of the brain is primarily responsible for balance and coordination?","o":["Cerebrum","Cerebellum","Pons","Medulla oblongata"],"a":1},{"q":"Nodes of Ranvier help in","o":["Neurotransmitter release","Saltatory conduction","Myelin sheath formation","Axonal transport"],"a":1},{"q":"Which cranial nerve controls facial expressions and taste from the anterior 2/3 of the tongue?","o":["Trigeminal (V)","Facial (VII)","Glossopharyngeal (IX)","Vagus (X)"],"a":1},{"q":"The sympathetic nervous system causes","o":["Decreased heart rate","Pupil constriction","Increased heart rate and blood pressure","Increased digestion"],"a":2},{"q":"Which neurotransmitter is primarily released at the neuromuscular junction?","o":["Dopamine","Acetylcholine","Serotonin","GABA"],"a":1},{"q":"The limbic system is mainly involved in","o":["Balance and posture","Emotion, memory, and motivation","Visual processing","Language interpretation"],"a":1},{"q":"CSF is absorbed into venous circulation via","o":["Foramen of Monro","Arachnoid villi (granulations)","Choroid plexus","Cerebral aqueduct"],"a":1},{"q":"Multiple sclerosis primarily affects","o":["Synaptic cleft","Myelin sheath of CNS neurons","Neurotransmitter receptors","Dendrites of motor neurons"],"a":1},{"q":"Which spinal nerve plexus supplies the upper limb?","o":["Cervical plexus","Brachial plexus","Lumbar plexus","Sacral plexus"],"a":1}]};
+        let score = 0;
         function toggleUnit(header) {
-            header.classList.toggle('active');
             const content = header.nextElementSibling;
-            content.classList.toggle('show');
-            const arrow = header.querySelector('span');
-            arrow.innerText = content.classList.contains('show') ? '🔼' : '🔽';
+            header.setAttribute('aria-expanded', header.getAttribute('aria-expanded') !== 'true');
+            content.classList.toggle('active');
         }
-
-        // --- 5. MODAL LOGIC & NAVIGATION CONTROL ---
-        let modelToggle = false; 
-
         function openResource(type, url, title) {
-            // PUSH STATE: Create a history entry so Back button closes modal
-            history.pushState({ modalOpen: true }, null, '#resource');
-
             const modal = document.getElementById('app-modal');
             const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = title;
+            document.getElementById('modal-title').textContent = title;
             modal.style.display = 'flex';
-            body.innerHTML = ''; 
             
-            // FIX: Restore flex centering for Video/Model (looks better centered)
-            body.style.display = 'flex';
-
-            if (type === 'model') {
-                modelToggle = !modelToggle;
-                body.innerHTML = modelToggle ? MODEL_CODE_A : MODEL_CODE_B;
-            } 
-            else if (type === 'quiz') {
-                openQuiz(url); 
+            // Clean URL Logic (Fallback/Runtime)
+            let finalUrl = url;
+            if (url.includes('drive.google.com')) { 
+                finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview'); 
             }
-            else {
-                let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
-                
-                // FIX: Apply correct class based on type
-                let className = (type === 'video') ? 'iframe-video' : 'iframe-doc';
-
-                body.innerHTML = `<iframe 
-                    class="${className}" 
-                    src="${cleanUrl}" 
-                    sandbox="allow-scripts allow-same-origin allow-presentation"
-                    allow="autoplay; encrypted-media; fullscreen">
-                </iframe>`;
+            else if (url.includes('human.biodigital.com')) { 
+                 if (url.includes('/viewer/')) finalUrl = url.replace('/viewer/', '/widget/');
+                 else finalUrl = url.replace('/view', '/widget'); 
             }
+            
+            body.innerHTML = '<iframe class="iframe-res" src="' + finalUrl + '" width="100%" height="100%" allow="xr-spatial-tracking" allowfullscreen></iframe>';
         }
-
-        function openQuiz(unitId) {
-            history.pushState({ modalOpen: true }, null, '#quiz');
-
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = `Quiz: Unit ${unitId}`;
-            modal.style.display = 'flex';
-            
-            // FIX: Remove flex centering for Quiz so it starts at the top
-            body.style.display = 'block';
-            body.scrollTop = 0; // Ensure we start at the top
-            
-            const questions = QUIZ_DATA[unitId] || [];
-            
-            let quizHtml = `<div class="quiz-container">`;
-            questions.forEach((q, idx) => {
-                quizHtml += `
-                    <div class="quiz-question">${idx + 1}. ${q.q}</div>
-                    <div class="quiz-options" id="q-${idx}">
-                        ${q.o.map((opt, oIdx) => `
-                            <div class="quiz-option" onclick="checkAnswer(this, ${idx}, ${oIdx}, ${q.a})">${opt}</div>
-                        `).join('')}
-                    </div>
-                `;
+        function startQuiz(unitId) {
+            score = 0;
+            const questions = QUIZ_DATA[unitId];
+            if(!questions || questions.length === 0) { alert('No questions found.'); return; }
+            let html = '<div class="quiz-container"><h2 style="color:var(--brand); margin-top:0;">Unit ' + unitId + ' Quiz</h2>';
+            html += '<div id="score-display" style="background:var(--brand); color:white; padding:5px 15px; border-radius:20px; display:inline-block; font-weight:700; margin-bottom:20px;">Score: 0 / ' + questions.length + '</div>';
+            questions.forEach((q, index) => {
+                html += '<div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">';
+                html += '<p style="font-weight:600; font-size:1.1rem; margin-bottom:15px;">' + (index + 1) + '. ' + q.q + '</p>';
+                q.o.forEach((opt, optIndex) => {
+                    html += '<div class="quiz-option" onclick="checkAnswer(this, ' + unitId + ', ' + optIndex + ', ' + q.a + ')">' + opt + '</div>';
+                });
+                html += '</div>';
             });
-            
-            if(questions.length === 0) quizHtml += `<p>Quiz coming soon!</p>`;
-            
-            quizHtml += `</div>`;
-            body.innerHTML = quizHtml;
+            html += '<button class="btn-quiz" onclick="closeModal()">Close Quiz</button></div>';
+            document.getElementById('modal-body').innerHTML = html;
+            document.getElementById('modal-title').textContent = 'Unit ' + unitId + ' Quiz';
+            document.getElementById('app-modal').style.display = 'flex';
         }
-
-        function checkAnswer(el, qIdx, oIdx, correctIdx) {
-            const parent = document.getElementById(`q-${qIdx}`);
-            const opts = parent.children;
-            for(let opt of opts) opt.style.pointerEvents = 'none';
-
-            if(oIdx === correctIdx) {
-                el.classList.add('correct');
+        function checkAnswer(element, unitId, selectedIndex, correctIndex) {
+            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+            if (selectedIndex === correctIndex) {
+                element.classList.add('correct'); score++;
             } else {
-                el.classList.add('wrong');
-                opts[correctIdx].classList.add('correct');
+                element.classList.add('wrong'); element.parentElement.children[correctIndex + 1].classList.add('correct');
             }
+            document.getElementById('score-display').textContent = 'Score: ' + score + ' / ' + QUIZ_DATA[unitId].length;
         }
-
-        function closeModal() {
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            modal.style.display = 'none';
-            body.innerHTML = ''; 
-            
-            // If we are closing manually via button, go back in history to remove the state
-            // prevent unnecessary history buildup
-            if (history.state && history.state.modalOpen) {
-                history.back();
-            }
-        }
-
-        // --- 6. HANDLE BACK BUTTON ---
-        window.onpopstate = function(event) {
-            // If the state that was just popped (or current state) indicates no modal...
-            // Actually, popstate fires *after* the transition.
-            // If we went back, the modal should close.
-            const modal = document.getElementById('app-modal');
-            if (modal.style.display === 'flex') {
-                // Just hide it, don't call history.back() again
-                modal.style.display = 'none';
-                document.getElementById('modal-body').innerHTML = '';
-            }
-        };
-
-        // Initialize
-        renderPage();
-
+        function closeModal() { document.getElementById('app-modal').style.display = 'none'; document.getElementById('modal-body').innerHTML = ""; }
     </script>
 </body>
 </html>
