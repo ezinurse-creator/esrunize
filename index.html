@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta id="viewport-meta" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta id="viewport-meta" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ezi Nurse | Professional Nursing Education</title>
     <style>
         :root {
@@ -12,22 +12,22 @@
             --radius-md: 12px; --shadow-lg: 0 10px 15px -3px rgba(0,59,128,0.1);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
-       
+        
         html, body {
-            height: 100%; width: 100%; overflow: hidden;
+            height: 100%; width: 100%; overflow: hidden; 
             background-color: var(--bg-body); color: var(--text-main);
         }
-       
+        
         body.zoom-mode {
             overflow: auto !important;
             touch-action: manipulation !important;
         }
-       
-        #app {
-            width: 100%; max-width: 480px; margin: 0 auto;
-            background: var(--bg-card); height: 100%; position: relative;
-            display: flex; flex-direction: column; box-shadow: var(--shadow-lg);
-            overflow: hidden;
+        
+        #app { 
+            width: 100%; max-width: 480px; margin: 0 auto; 
+            background: var(--bg-card); height: 100%; position: relative; 
+            display: flex; flex-direction: column; box-shadow: var(--shadow-lg); 
+            overflow: hidden; 
         }
 
         /* --- WATERMARK: Diagonal & Faint --- */
@@ -43,7 +43,7 @@
 
         /* --- FLOATING ZOOM BUTTON --- */
         #fab-zoom {
-            position: absolute; bottom: 30px; left: 20px;
+            position: absolute; bottom: 30px; right: 20px;
             width: 50px; height: 50px;
             background-color: var(--primary);
             border-radius: 50%;
@@ -57,15 +57,15 @@
 
         .view { flex: 1; padding: 24px; overflow-y: auto; display: none; animation: fadeIn 0.3s ease-in-out; padding-bottom: 80px; }
         .view.active { display: flex; flex-direction: column; }
-       
+        
         /* IFRAME CONTAINER */
-        #view-iframe.view {
-            padding: 0 !important; height: 100%; width: 100%;
-            z-index: 50; -webkit-overflow-scrolling: touch;
+        #view-iframe.view { 
+            padding: 0 !important; height: 100%; width: 100%; 
+            z-index: 50; -webkit-overflow-scrolling: touch; 
             overflow: auto; /* Allow scrolling when zoomed */
             position: relative;
         }
-       
+        
         /* ZOOM LOGIC */
         .iframe-wrapper {
             width: 100%; height: 100%;
@@ -92,7 +92,7 @@
         .menu-item h3 { font-size: 1.1rem; color: var(--primary-dark); margin-bottom: 4px; }
         .menu-item p { font-size: 0.85rem; color: var(--text-muted); }
         .menu-arrow { color: var(--primary); }
-       
+        
         .form-group { margin-bottom: 20px; }
         .form-label { display: block; margin-bottom: 8px; font-size: 0.9rem; font-weight: 600; color: var(--primary-dark); }
         .form-input { width: 100%; padding: 14px; border: 1px solid #cbd5e1; border-radius: var(--radius-md); font-size: 1rem; outline: none; }
@@ -100,7 +100,7 @@
         .form-input-pass { padding-right: 45px; }
         .toggle-password-btn { position: absolute; right: 12px; background: none; border: none; cursor: pointer; color: var(--text-muted); }
         .error-msg { color: var(--danger); font-size: 0.85rem; margin-top: 8px; min-height: 20px; text-align: center; }
-       
+        
         .paywall-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
         .headline { font-size: 1.5rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
         .subtext { color: var(--text-muted); line-height: 1.5; margin-bottom: 30px; }
@@ -132,7 +132,7 @@
                 <h1 class="headline" style="font-size: 1.25rem;">Welcome Back</h1>
                 <p class="subtext">Sign in to access your dashboard</p>
             </div>
-           
+            
             <div id="form-login">
                 <div class="form-group"><label class="form-label">Email</label><input type="email" id="login-email" class="form-input" placeholder="nurse@example.com"></div>
                 <div class="form-group"><label class="form-label">Password</label>
@@ -145,7 +145,7 @@
                 <button id="btn-login-submit" class="btn btn-primary" onclick="app.login()">Login Securely</button>
                 <button class="btn btn-ghost" onclick="app.toggleAuthMode()">Don't have an account? Sign Up</button>
             </div>
-           
+            
             <div id="form-signup" class="hidden">
                 <div class="form-group"><label class="form-label">Full Name</label><input type="text" id="signup-name" class="form-input" placeholder="Nurse Joy"></div>
                 <div class="form-group"><label class="form-label">Email</label><input type="email" id="signup-email" class="form-input" placeholder="new@example.com"></div>
@@ -163,7 +163,7 @@
     <div id="view-reset" class="view">
         <div class="auth-container">
             <h2 class="headline">Reset Password</h2>
-           
+            
             <div id="reset-step-1">
                 <p class="subtext">Enter your email to receive a verification code.</p>
                 <div class="form-group"><label class="form-label">Email</label><input type="email" id="reset-email" class="form-input"></div>
@@ -194,7 +194,7 @@
             <div class="menu-item" onclick="app.navToCourse('PBBSc')"><div><h3>PBBSc Nursing</h3><p>Post Basic BSc</p></div><span class="menu-arrow">&#10095;</span></div>
             <div class="menu-item" onclick="app.navToCourse('GNM')"><div><h3>GNM</h3><p>General Nursing & Midwifery</p></div><span class="menu-arrow">&#10095;</span></div>
             <div class="menu-item" style="border-color: var(--primary);" onclick="app.checkAccessAndOpen('3D', 'Systems')"><div><h3 style="color:var(--primary)">3D Models</h3><p>Interactive Anatomy</p></div><span class="menu-arrow">&#10095;</span></div>
-           
+            
             <div class="menu-item hidden" onclick="app.navToCourse('EXAMS')"><div><h3>Nursing Exams</h3><p>NORCET, ESCI Exclusive Q&A</p></div><span class="menu-arrow">&#10095;</span></div>
             <div class="menu-item hidden" onclick="app.checkAccessAndOpen('REQ', 'Documents')"><div><h3>Nursing Requirements</h3><p>Document Checklist</p></div><span class="menu-arrow">&#10095;</span></div>
             <div class="menu-item hidden" onclick="app.checkAccessAndOpen('COMM', 'Basics')"><div><h3>Communicative English</h3><p>Language Fundamentals</p></div><span class="menu-arrow">&#10095;</span></div>
@@ -211,9 +211,9 @@
         <p class="subtext">Select subject to open.</p>
         <div class="card-menu" id="subject-list"></div>
     </div>
-   
+    
     <div id="view-iframe" class="view"></div>
-   
+    
     <div id="view-paywall" class="view">
         <div class="paywall-container">
             <h2 class="headline">Locked</h2>
@@ -254,13 +254,13 @@
     const API_KEY = "EZI_SECURE_8829_XJKS_2910";
 
     const NO_DISCOUNT_KEYS = ['msc_first_year', 'msc_second_year', '3d_models', 'exams_norcet', 'exams_esci', 'nursing_req', 'comm_english'];
-   
+    
     function getDeviceId() {
         let id = localStorage.getItem('ezi_device_id');
         if (!id) { id = 'web-' + Math.random().toString(36).substr(2, 9) + Date.now(); localStorage.setItem('ezi_device_id', id); }
         return id;
     }
-   
+    
     function getPermissionKey(course, section) {
         if (course === '3D') return '3d_models';
         if (course === 'REQ') return 'nursing_req';
@@ -302,109 +302,109 @@
             ]
         },
         'BSc': {
-            'Semester 1': [
-                { label: 'Applied Sociology', link: 'bsc_1_applied_sociology.html' },
-                { label: 'Applied Psychology', link: 'bsc_1_applied_psychology.html' },
-                { label: 'Applied Physiology', link: 'bsc_1_applied_physiology.html' },
-                { label: 'Applied Anatomy', link: 'bsc_1_applied_anatomy.html' },
+            'Semester 1': [ 
+                { label: 'Applied Sociology', link: 'bsc_1_applied_sociology.html' }, 
+                { label: 'Applied Psychology', link: 'bsc_1_applied_psychology.html' }, 
+                { label: 'Applied Physiology', link: 'bsc_1_applied_physiology.html' }, 
+                { label: 'Applied Anatomy', link: 'bsc_1_applied_anatomy.html' }, 
                 { label: 'Nursing Foundation', link: 'bsc_1_nursing_foundation.html' },
                 { label: '<span style="color: #b91c1c;">Previous Year Question Papers</span>', link: 'bsc1qp.html' }
             ],
-            'Semester 2': [
-                { label: 'Applied Nutrition', link: 'bsc_2_applied_nutrition.html' },
-                { label: 'Applied Biochemistry', link: 'bsc_2_applied_biochemistry.html' },
+            'Semester 2': [ 
+                { label: 'Applied Nutrition', link: 'bsc_2_applied_nutrition.html' }, 
+                { label: 'Applied Biochemistry', link: 'bsc_2_applied_biochemistry.html' }, 
                 { label: 'Nursing Foundation', link: 'bsc_2_nursing_foundation.html' },
                 { label: '<span style="color: #b91c1c;">Previous Year Question Papers</span>', link: 'bsc2qp.html' }
             ],
-            'Semester 3': [
-                { label: 'Pharmacology', link: 'bsc_3_pharmacology.html' },
-                { label: 'Pathology', link: 'bsc_3_pathology.html' },
-                { label: 'Applied Microbiology', link: 'bsc_3_applied_microbiology.html' },
+            'Semester 3': [ 
+                { label: 'Pharmacology', link: 'bsc_3_pharmacology.html' }, 
+                { label: 'Pathology', link: 'bsc_3_pathology.html' }, 
+                { label: 'Applied Microbiology', link: 'bsc_3_applied_microbiology.html' }, 
                 { label: 'Adult Health Nursing', link: 'bsc_3_adult_health_nursing.html' },
                 { label: '<span style="color: #b91c1c;">Previous Year Question Papers</span>', link: 'bsc3qp.html' }
             ],
-            'Semester 4': [
-                { label: 'Pharmacology II', link: 'bsc_4_pharmacology.html' },
-                { label: 'Pathology II', link: 'bsc_4_pathology.html' },
-                { label: 'Adult Health Nursing II', link: 'bsc_4_adult_health_nursing.html' },
-                { label: 'Professionalism', link: 'bsc_4_professionalism.html' },
+            'Semester 4': [ 
+                { label: 'Pharmacology II', link: 'bsc_4_pharmacology.html' }, 
+                { label: 'Pathology II', link: 'bsc_4_pathology.html' }, 
+                { label: 'Adult Health Nursing II', link: 'bsc_4_adult_health_nursing.html' }, 
+                { label: 'Professionalism', link: 'bsc_4_professionalism.html' }, 
                 { label: 'Genetics', link: 'bsc_4_genetics.html' },
                 { label: '<span style="color: #b91c1c;">Previous Year Question Papers</span>', link: 'bsc4qp.html' }
             ],
-            'Semester 5': [
-                { label: 'Forensic Nursing & Law', link: 'bsc_5_forensic_nursing_indian_law.html' },
-                { label: 'Nursing Education', link: 'bsc_5_nursing_education.html' },
-                { label: 'Community Health Nursing', link: 'bsc_5_community_health_nursing.html' },
-                { label: 'Mental Health Nursing', link: 'bsc_5_mental_health_nursing.html' },
+            'Semester 5': [ 
+                { label: 'Forensic Nursing & Law', link: 'bsc_5_forensic_nursing_indian_law.html' }, 
+                { label: 'Nursing Education', link: 'bsc_5_nursing_education.html' }, 
+                { label: 'Community Health Nursing', link: 'bsc_5_community_health_nursing.html' }, 
+                { label: 'Mental Health Nursing', link: 'bsc_5_mental_health_nursing.html' }, 
                 { label: 'Child Health Nursing', link: 'bsc_5_child_health_nursing.html' },
                 { label: '<span style="color: #b91c1c;">Previous Year Question Papers</span>', link: 'bsc5qp.html' }
             ],
-            'Semester 6': [
-                { label: 'Child Health Nursing II', link: 'bsc_6_child_health_nursing.html' },
-                { label: 'Mental Health Nursing II', link: 'bsc_6_mental_health_nursing.html' },
-                { label: 'Midwifery & OBG', link: 'bsc_6_midwifery_obgyn.html' },
+            'Semester 6': [ 
+                { label: 'Child Health Nursing II', link: 'bsc_6_child_health_nursing.html' }, 
+                { label: 'Mental Health Nursing II', link: 'bsc_6_mental_health_nursing.html' }, 
+                { label: 'Midwifery & OBG', link: 'bsc_6_midwifery_obgyn.html' }, 
                 { label: 'Nursing Management', link: 'bsc_6_nursing_management_leadership.html' },
                 { label: '<span style="color: #b91c1c;">Previous Year Question Papers</span>', link: 'bsc6qp.html' }
             ],
-            'Semester 7': [
-                { label: 'Community Health Nursing II', link: 'bsc_7_community_health_nursing.html' },
-                { label: 'Research & Statistics', link: 'bsc_7_nursing_research_statistics.html' },
+            'Semester 7': [ 
+                { label: 'Community Health Nursing II', link: 'bsc_7_community_health_nursing.html' }, 
+                { label: 'Research & Statistics', link: 'bsc_7_nursing_research_statistics.html' }, 
                 { label: 'Midwifery & OBG II', link: 'bsc_7_midwifery_obgyn.html' },
                 { label: '<span style="color: #b91c1c;">Previous Year Question Papers</span>', link: 'bsc7qp.html' }
             ]
         },
         'PBBSc': {
-            'First Year': [
-                { label: 'Medical Surgical Nursing', link: 'pbbsc_1_medical_surgical_nursing.html' },
-                { label: 'Child Health Nursing', link: 'pbbsc_1_child_health_nursing.html' },
-                { label: 'Microbiology', link: 'pbbsc_1_microbiology.html' },
-                { label: 'Biochemistry & Biophysics', link: 'pbbsc_1_biochemistry_biophysics.html' },
-                { label: 'Nutrition & Dietetics', link: 'pbbsc_1_nutrition_dietetics.html' },
-                { label: 'Nursing Foundation', link: 'pbbsc_1_nursing_foundation.html' },
-                { label: 'Maternal Nursing', link: 'pbbsc_1_maternal_nursing.html' },
+            'First Year': [ 
+                { label: 'Medical Surgical Nursing', link: 'pbbsc_1_medical_surgical_nursing.html' }, 
+                { label: 'Child Health Nursing', link: 'pbbsc_1_child_health_nursing.html' }, 
+                { label: 'Microbiology', link: 'pbbsc_1_microbiology.html' }, 
+                { label: 'Biochemistry & Biophysics', link: 'pbbsc_1_biochemistry_biophysics.html' }, 
+                { label: 'Nutrition & Dietetics', link: 'pbbsc_1_nutrition_dietetics.html' }, 
+                { label: 'Nursing Foundation', link: 'pbbsc_1_nursing_foundation.html' }, 
+                { label: 'Maternal Nursing', link: 'pbbsc_1_maternal_nursing.html' }, 
                 { label: 'Psychology', link: 'pbbsc_1_psychology.html' },
                 { label: '<span style="color: #b91c1c;">Previous Year Question Papers</span>', link: 'pbbsc1qp.html' },
                 { label: 'Live class', link: 'pbbsc1live.html' }
             ],
-            'Second Year': [
-                { label: 'Nursing Administration', link: 'pbbsc_2_nursing_service_administration.html' },
-                { label: 'Mental Health Nursing', link: 'pbbsc_2_mental_health_nursing.html' },
-                { label: 'Nursing Education', link: 'pbbsc_2_nursing_education.html' },
-                { label: 'Community Health Nursing', link: 'pbbsc_2_community_health_nursing.html' },
+            'Second Year': [ 
+                { label: 'Nursing Administration', link: 'pbbsc_2_nursing_service_administration.html' }, 
+                { label: 'Mental Health Nursing', link: 'pbbsc_2_mental_health_nursing.html' }, 
+                { label: 'Nursing Education', link: 'pbbsc_2_nursing_education.html' }, 
+                { label: 'Community Health Nursing', link: 'pbbsc_2_community_health_nursing.html' }, 
                 { label: 'Sociology', link: 'pbbsc_2_sociology.html' },
                 { label: '<span style="color: #b91c1c;">Previous Year Question Papers</span>', link: 'pbbsc2qp.html' }
             ]
         },
         'GNM': {
-            'First Year': [
-                { label: 'Nutrition', link: 'gnm_1_nutrition.html' },
-                { label: 'Health Education', link: 'gnm_1_health_education.html' },
-                { label: 'Environmental Hygiene', link: 'gnm_1_environmental_hygiene.html' },
-                { label: 'Community Health Nursing', link: 'gnm_1_community_health_nursing.html' },
-                { label: 'First Aid', link: 'gnm_1_first_aid.html' },
-                { label: 'Fundamentals of Nursing', link: 'gnm_1_fundamentals_of_nursing.html' },
-                { label: 'Sociology', link: 'gnm_1_sociology.html' },
-                { label: 'Psychology', link: 'gnm_1_psychology.html' },
-                { label: 'Microbiology', link: 'gnm_1_microbiology.html' },
+            'First Year': [ 
+                { label: 'Nutrition', link: 'gnm_1_nutrition.html' }, 
+                { label: 'Health Education', link: 'gnm_1_health_education.html' }, 
+                { label: 'Environmental Hygiene', link: 'gnm_1_environmental_hygiene.html' }, 
+                { label: 'Community Health Nursing', link: 'gnm_1_community_health_nursing.html' }, 
+                { label: 'First Aid', link: 'gnm_1_first_aid.html' }, 
+                { label: 'Fundamentals of Nursing', link: 'gnm_1_fundamentals_of_nursing.html' }, 
+                { label: 'Sociology', link: 'gnm_1_sociology.html' }, 
+                { label: 'Psychology', link: 'gnm_1_psychology.html' }, 
+                { label: 'Microbiology', link: 'gnm_1_microbiology.html' }, 
                 { label: 'Anatomy & Physiology', link: 'gnm_1_anatomy_physiology.html' },
                 { label: '<span style="color: #b91c1c;">Previous Year Question Papers</span>', link: 'gnm1qp.html' }
             ],
-            'Second Year': [
-                { label: 'Medical Surgical Nursing I', link: 'gnm_2_medical_surgical_nursing.html' },
-                { label: 'Mental Health Nursing', link: 'gnm_2_mental_health_nursing.html' },
-                { label: 'Medical Surgical Nursing II', link: 'gnm_2_medical_surgical_nursing_two.html' },
+            'Second Year': [ 
+                { label: 'Medical Surgical Nursing I', link: 'gnm_2_medical_surgical_nursing.html' }, 
+                { label: 'Mental Health Nursing', link: 'gnm_2_mental_health_nursing.html' }, 
+                { label: 'Medical Surgical Nursing II', link: 'gnm_2_medical_surgical_nursing_two.html' }, 
                 { label: 'Child Health Nursing', link: 'gnm_2_child_health_nursing.html' },
                 { label: '<span style="color: #b91c1c;">Previous Year Question Papers</span>', link: 'gnm2qp.html' }
             ],
-            'Third Year': [
-                { label: 'Community Health Nursing II', link: 'gnm_3_community_health_nursing.html' },
-                { label: 'Midwifery', link: 'gnm_3_midwifery.html' },
+            'Third Year': [ 
+                { label: 'Community Health Nursing II', link: 'gnm_3_community_health_nursing.html' }, 
+                { label: 'Midwifery', link: 'gnm_3_midwifery.html' }, 
                 { label: 'Gynecology', link: 'gnm_3_gynecology.html' },
                 { label: '<span style="color: #b91c1c;">Previous Year Question Papers</span>', link: 'gnm3qp.html' }
             ]
         },
         '3D': { 'Systems': [{ label: '3D Models', link: '3dmodels.html' }] },
-        'EXAMS': {
+        'EXAMS': { 
             'NORCET': [ { label: 'NORCET 8 (English)', link: 'norcetenglish.html' }, { label: 'NORCET (Hindi)', link: 'norcethindi.html' } ],
             'ESCI': [ { label: 'ESCI Exclusive Q&A', link: 'esci.html' } ]
         },
@@ -451,7 +451,7 @@
 
     const app = {
         currentUser: null, lockedCourseKey: null, lockedCourseSection: null, zoomLevel: 1,
-       
+        
         init: function() {
             const savedUser = localStorage.getItem('eziUser');
             if (savedUser) {
@@ -460,60 +460,60 @@
                 history.replaceState({ viewId: 'view-exit-guard' }, 'Exit Guard', '#exit');
                 history.pushState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard');
                 this.renderView('view-dashboard');
-               
+                
                 const savedAuth = localStorage.getItem('eziAuth');
                 if(savedAuth) { try { this.syncPermissions(JSON.parse(savedAuth)); } catch(e){} }
             } else {
                 history.replaceState({ viewId: 'view-auth' }, 'Login', '#login');
                 this.renderView('view-auth');
             }
-           
+            
             // --- FIXED POPSTATE LISTENER FOR ROBUST BACK NAVIGATION ---
             window.addEventListener('popstate', (event) => {
                 if (event.state && event.state.viewId) {
-                    if (event.state.viewId === 'view-exit-guard') {
-                        this.showExitModal();
-                        this.renderView('view-dashboard');
-                        return;
+                    if (event.state.viewId === 'view-exit-guard') { 
+                        this.showExitModal(); 
+                        this.renderView('view-dashboard'); 
+                        return; 
                     }
-                    if (event.state.viewId === 'view-submenu') {
+                    if (event.state.viewId === 'view-submenu') { 
                         const c = event.state.course || this.lockedCourseKey;
                         if(c) {
-                             this.renderSubmenu(c);
-                             this.renderView('view-submenu');
+                             this.renderSubmenu(c); 
+                             this.renderView('view-submenu'); 
                         } else {
                              this.renderView('view-dashboard');
                         }
                     }
-                    else if (event.state.viewId === 'view-subjects') {
+                    else if (event.state.viewId === 'view-subjects') { 
                         // FIX: Check for missing state data and use globals (Fixes GNM 2nd Year bug)
                         const c = event.state.course || this.lockedCourseKey;
                         const s = event.state.section || this.lockedCourseSection;
-                       
+                        
                         if (c && s) {
-                            this.renderSubjectList(c, s);
+                            this.renderSubjectList(c, s); 
                             this.renderView('view-subjects');
                         } else {
                             this.renderView('view-dashboard');
                         }
                     }
-                    else if (event.state.viewId === 'view-iframe') {
-                        if(event.state.sourceUrl) this.openContent(event.state.sourceUrl, event.state.title, true);
-                        else this.renderView('view-dashboard');
+                    else if (event.state.viewId === 'view-iframe') { 
+                        if(event.state.sourceUrl) this.openContent(event.state.sourceUrl, event.state.title, true); 
+                        else this.renderView('view-dashboard'); 
                     }
                     else {
                         this.renderView(event.state.viewId);
                     }
-                } else {
+                } else { 
                     // FIX: Handle NULL state by checking hash and globals
                     if (window.location.hash.includes('subjects') && this.lockedCourseKey && this.lockedCourseSection) {
                         this.renderSubjectList(this.lockedCourseKey, this.lockedCourseSection);
                         this.renderView('view-subjects');
                     }
                     else if(this.currentUser) {
-                        this.renderView('view-dashboard');
+                        this.renderView('view-dashboard'); 
                     } else {
-                        this.renderView('view-auth');
+                        this.renderView('view-auth'); 
                     }
                 }
             });
@@ -523,8 +523,8 @@
         checkSessionNow: async function() {
             if (!this.currentUser) return;
             try {
-                const res = await fetch(API_URL, {
-                    method: 'POST', body: JSON.stringify({ action: 'check_session', email: this.currentUser.email, deviceId: getDeviceId(), apiKey: API_KEY })
+                const res = await fetch(API_URL, { 
+                    method: 'POST', body: JSON.stringify({ action: 'check_session', email: this.currentUser.email, deviceId: getDeviceId(), apiKey: API_KEY }) 
                 });
                 const data = await res.json();
                 if (!data.valid) { alert("Logged out: Account active on another device."); this.logout(); }
@@ -545,27 +545,27 @@
         toggleZoom: function() {
             const wrapper = document.getElementById('iframe-wrapper');
             if(!wrapper) return;
-           
+            
             if (this.zoomLevel === 1) this.zoomLevel = 1.5;
             else if (this.zoomLevel === 1.5) this.zoomLevel = 2.0;
             else this.zoomLevel = 1;
 
             wrapper.style.transform = `scale(${this.zoomLevel})`;
-            wrapper.style.width = `${100 / this.zoomLevel}%`;
-            wrapper.style.height = `${100 / this.zoomLevel}%`;
-           
+            wrapper.style.width = `${100 / this.zoomLevel}%`; 
+            wrapper.style.height = `${100 / this.zoomLevel}%`; 
+            
             if (this.zoomLevel > 1) {
-                wrapper.style.width = "100%";
+                wrapper.style.width = "100%"; 
                 wrapper.style.height = "auto";
             }
-           
+            
             wrapper.style.transform = 'none';
             if (this.zoomLevel === 1) wrapper.style.width = '100%';
             if (this.zoomLevel === 1.5) wrapper.style.width = '150%';
             if (this.zoomLevel === 2.0) wrapper.style.width = '200%';
             wrapper.style.height = '100%';
         },
-       
+        
         syncPermissions: async function(creds) {
             try {
                 const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action:'login', email: creds.email, password: creds.password, deviceId: getDeviceId(), apiKey: API_KEY }) });
@@ -573,7 +573,7 @@
                 if(data.result === 'success'){ this.currentUser = data.user; localStorage.setItem('eziUser', JSON.stringify(data.user)); this.updateWatermark(); }
             } catch(e) {}
         },
-       
+        
         login: async function() {
             const email = document.getElementById('login-email').value.trim(); const pass = document.getElementById('login-pass').value.trim();
             const errorDiv = document.getElementById('login-error'); const btn = document.getElementById('btn-login-submit');
@@ -586,11 +586,11 @@
                     this.currentUser = data.user; localStorage.setItem('eziUser', JSON.stringify(data.user));
                     localStorage.setItem('eziAuth', JSON.stringify({email: email, password: pass}));
                     document.getElementById('login-email').value = ""; document.getElementById('login-pass').value = "";
-                    this.updateWatermark(); this.navTo('view-dashboard', true);
+                    this.updateWatermark(); this.navTo('view-dashboard', true); 
                 } else { errorDiv.textContent = data.message; }
             } catch(e) { errorDiv.textContent = "Network Error"; } finally { btn.textContent = "Login Securely"; btn.disabled = false; }
         },
-       
+        
         signup: async function() {
             const name = document.getElementById('signup-name').value.trim();
             const email = document.getElementById('signup-email').value.trim(); const pass = document.getElementById('signup-pass').value.trim();
@@ -650,9 +650,9 @@
         togglePassword: function(id, btn) {
             const el = document.getElementById(id); if(el.type === 'password') { el.type = 'text'; btn.style.color = 'var(--primary)'; } else { el.type = 'password'; btn.style.color = 'var(--text-muted)'; }
         },
-        logout: function() {
-            this.currentUser = null; localStorage.removeItem('eziUser'); localStorage.removeItem('eziAuth');
-            this.updateWatermark(); this.navTo('view-auth', true);
+        logout: function() { 
+            this.currentUser = null; localStorage.removeItem('eziUser'); localStorage.removeItem('eziAuth'); 
+            this.updateWatermark(); this.navTo('view-auth', true); 
         },
         navTo: function(viewId, isRoot = false, stateData = {}) {
             const state = { viewId: viewId, ...stateData };
@@ -662,18 +662,18 @@
             } else { history.pushState(state, null, `#${viewId.replace('view-', '')}`); }
             this.renderView(viewId);
         },
-       
+        
         renderView: function(viewId) {
             const iframeContainer = document.getElementById('view-iframe');
-            if (viewId !== 'view-iframe' && iframeContainer) iframeContainer.innerHTML = '';
-           
+            if (viewId !== 'view-iframe' && iframeContainer) iframeContainer.innerHTML = ''; 
+            
             // SHOW/HIDE ZOOM BUTTON
             const fab = document.getElementById('fab-zoom');
             if (viewId === 'view-iframe') { fab.style.display = 'flex'; } else { fab.style.display = 'none'; }
 
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             const target = document.getElementById(viewId); if(target) target.classList.add('active');
-           
+            
             const isAuth = viewId === 'view-auth' || viewId === 'view-reset'; const isDash = viewId === 'view-dashboard';
             document.getElementById('btn-back').style.display = (isAuth || isDash) ? 'none' : 'block';
             document.getElementById('btn-logout').style.display = isAuth ? 'none' : 'block';
@@ -688,7 +688,7 @@
         showExitModal: function() { document.getElementById('modal-exit').classList.remove('hidden'); },
         cancelExit: function() { document.getElementById('modal-exit').classList.add('hidden'); history.pushState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard'); },
         confirmExit: function() { window.history.back(); },
-       
+        
         navToCourse: function(key) { this.renderSubmenu(key); this.navTo('view-submenu', false, { course: key }); },
         renderSubmenu: function(key) {
             const list = document.getElementById('submenu-list'); list.innerHTML = '';
@@ -728,30 +728,30 @@
             const container = document.getElementById('view-iframe');
             if (!fromHistory) this.navTo('view-iframe', false, { sourceUrl: url, title: title });
             else this.renderView('view-iframe');
-           
+            
             // WRAPPER FOR ZOOMING
             const wrapper = document.createElement('div');
             wrapper.id = 'iframe-wrapper';
             wrapper.className = 'iframe-wrapper';
-           
+            
             const iframe = document.createElement('iframe');
             iframe.id = "content-frame";
             iframe.src = url;
-           
+            
             wrapper.appendChild(iframe);
             container.innerHTML = '';
             container.appendChild(wrapper);
-           
+            
             this.zoomLevel = 1; // Reset zoom on new page
         },
-        showReferralModal: function() {
+        showReferralModal: function() { 
             const pKey = getPermissionKey(this.lockedCourseKey, this.lockedCourseSection);
             if (NO_DISCOUNT_KEYS.includes(pKey)) { this.redirectToRazorpay(false); return; }
-            document.getElementById('modal-referral').classList.remove('hidden'); this.resetReferralModal();
+            document.getElementById('modal-referral').classList.remove('hidden'); this.resetReferralModal(); 
         },
         closeReferralModal: function() { document.getElementById('modal-referral').classList.add('hidden'); },
-        resetReferralModal: function() {
-            document.getElementById('referral-step-1').classList.remove('hidden'); document.getElementById('referral-step-2').classList.add('hidden');
+        resetReferralModal: function() { 
+            document.getElementById('referral-step-1').classList.remove('hidden'); document.getElementById('referral-step-2').classList.add('hidden'); 
             document.getElementById('referral-input').value = ""; document.getElementById('referral-error').textContent = "";
         },
         selectReferral: function(has) { if(has) { document.getElementById('referral-step-1').classList.add('hidden'); document.getElementById('referral-step-2').classList.remove('hidden'); } else this.redirectToRazorpay(false); },
