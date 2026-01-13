@@ -82,61 +82,113 @@
         </div>
         <div id="modal-body" class="modal-body"></div>
     </div>
-    <script>
-        const QUIZ_DATA = {"1":[{"q":"Which of the following is the first step in the process of communication?","o":["Encoding","Sender","Message","Feedback"],"a":1},{"q":"In nursing communication, the process of interpreting the received message is known as","o":["Encoding","Decoding","Feedback","Channel"],"a":1},{"q":"Which principle of communication ensures that information is given in a timely manner?","o":["Clarity","Timeliness","Empathy","Confidentiality"],"a":1},{"q":"A nurse maintaining patient privacy while discussing medical history is following which communication principle?","o":["Respect","Feedback","Confidentiality","Clarity"],"a":2},{"q":"Which type of communication skill involves gestures, body language, and facial expressions?","o":["Verbal communication","Non-verbal communication","Active listening","Empathy"],"a":1},{"q":"A patient who avoids asking questions due to cultural beliefs is facing which type of barrier?","o":["Emotional barrier","Physical barrier","Cultural barrier","Environmental barrier"],"a":2},{"q":"Active listening in nursing involves","o":["Talking more than the patient","Avoiding eye contact","Listening attentively and giving feedback","Using only non-verbal communication"],"a":2},{"q":"Which observing skill involves using the sense of smell to gather patient-related information?","o":["Auditory observation","Olfactory observation","Gustatory observation","Tactile observation"],"a":1},{"q":"Which of the following is NOT a barrier to effective communication?","o":["Emotional barrier","Cultural barrier","Feedback","Environmental barrier"],"a":2},{"q":"A nurse repeating back what the patient said to confirm understanding is applying which listening skill?","o":["Avoid interrupting","Clarify and summarize","Show interest","Empathize"],"a":1}],"2":[{"q":"The primary objective of health education is","o":["Preventing complications","Promoting health","Rehabilitation","Screening diseases"],"a":1},{"q":"Health education that helps individuals take responsibility for their own well-being is aimed at","o":["Empowering individuals","Encouraging self-care","Increasing health literacy","Enhancing quality of life"],"a":1},{"q":"Which principle of health education ensures tailoring messages to diverse populations?","o":["Evidence-based","Communication","Cultural sensitivity","Participation"],"a":2},{"q":"The stage of change model where the individual has no intention of changing behaviour is","o":["Contemplation","Precontemplation","Preparation","Termination"],"a":1},{"q":"Screening and early detection activities fall under which level of prevention?","o":["Primary prevention","Secondary prevention","Tertiary prevention","Health promotion"],"a":1},{"q":"Demonstrating hand washing technique is an example of which method of health education?","o":["Group discussion","Counselling","Demonstration","Printed material"],"a":2},{"q":"Which approach to health education focuses on social and environmental determinants?","o":["Behavioural approach","Social approach","Educational approach","Individual approach"],"a":1},{"q":"Organizing a community health fair is an example of","o":["Hospital-based health education","Workplace health education","School health education","Community-based opportunity"],"a":3},{"q":"When a nurse develops and implements a teaching plan based on patient needs, she is performing which role?","o":["Advocating for patients","Assessing knowledge","Developing teaching plan","Evaluating effectiveness"],"a":2},{"q":"Which principle of health education emphasizes promoting sustainable health behaviours over time?","o":["Collaboration","Sustainability","Lifelong learning","Participation"],"a":1}],"3":[{"q":"Which principle of counseling ensures that personal information is not shared without the client’s consent?","o":["Acceptance of the client","Confidentiality","Empathy","Non-judgmental attitude"],"a":1},{"q":"The counseling process that emphasizes client autonomy and avoids giving direct advice is","o":["Directive counseling","Nondirective counseling","Elective counseling","Group counseling"],"a":1},{"q":"In directive counseling, the first step is","o":["Prognosis","Analysis","Diagnosis","Counseling/Treatment"],"a":1},{"q":"Which of the following is an advantage of directive counseling?","o":["Promotes client independence","Time-efficient and provides clear solutions","Enhances self-awareness","Reduces counselor dependence"],"a":1},{"q":"Which type of counseling is best suited for rehabilitation after addiction or trauma?","o":["Career counseling","Rehabilitation counseling","Family counseling","Spiritual counseling"],"a":1},{"q":"Which principle of counseling emphasizes unconditional respect for the client’s uniqueness?","o":["Respect for individual differences","Client-centered approach","Empowerment of the client","Continuous evaluation"],"a":0},{"q":"Which scope of counseling deals with helping students with academic stress, peer conflicts, and career guidance?","o":["Vocational scope","Educational scope","Personal and social scope","Rehabilitation scope"],"a":1},{"q":"Which counseling method is particularly useful for individuals facing grief and loss?","o":["Career counseling","Grief or bereavement counseling","Geriatric counseling","Group counseling"],"a":1},{"q":"Which phase of group counseling is characterized by conflicts and power struggles among members?","o":["Forming","Storming","Norming","Performing"],"a":1},{"q":"Short-term counseling primarily focuses on","o":["Deep personality changes","Exploring unconscious conflicts","Goal-oriented and solution-focused interventions","Long-term behavior modification"],"a":2}],"4":[{"q":"Audio-visual aids are primarily used in health education to","o":["Replace the teacher completely","Enhance understanding and retention","Entertain the learners","Reduce the syllabus content"],"a":1},{"q":"Which of the following is a non-projected visual aid?","o":["PowerPoint presentation","Overhead projector slides","Chart","Video film"],"a":2},{"q":"The classification of AV aids based on communication medium includes","o":["Electronic aids, printed aids, and models","Audio aids, visual aids, and audio-visual aids","Projected, non-projected, and digital aids","Charts, posters, and pamphlets"],"a":1},{"q":"Flip charts are particularly useful in","o":["Large auditoriums","Small group teaching sessions","Radio health programs","Online virtual classes"],"a":1},{"q":"Which of the following is a limitation of posters as an AV aid?","o":["Costly to prepare","Limited space for detailed content","Not attractive to learners","Difficult to transport"],"a":1},{"q":"A pie chart is most appropriate when the aim is to","o":["Show trends over time","Show proportions of a whole","Compare values between groups","Display frequency distribution"],"a":1},{"q":"Which AV aid is most suitable for illiterate populations?","o":["Pamphlets","Newspapers","Pictures","Written handouts"],"a":2},{"q":"A disadvantage of using blackboards in teaching is","o":["Lack of availability","Production of chalk dust causing respiratory issues","Cannot be reused","Very costly"],"a":1},{"q":"Puppets as an AV aid are especially effective in","o":["Teaching complex medical statistics","Engaging children and low-literacy groups","Presenting lengthy written reports","Delivering advanced nursing research"],"a":1},{"q":"When selecting AV aids, which factor is MOST important to consider?","o":["Attractiveness only","Cultural appropriateness and relevance","Teacher’s preference","Availability of electricity"],"a":1}]};
-        let score = 0;
-        function toggleUnit(header) {
-            const content = header.nextElementSibling;
-            header.setAttribute('aria-expanded', header.getAttribute('aria-expanded') !== 'true');
-            content.classList.toggle('active');
+<script>
+    // --- 1. HEALTH EDUCATION QUIZ DATA (Units 1-4) ---
+    const QUIZ_DATA = {
+        "1": [{"q":"Which of the following is the first step in the process of communication?","o":["Encoding","Sender","Message","Feedback"],"a":1},{"q":"In nursing communication, the process of interpreting the received message is known as","o":["Encoding","Decoding","Feedback","Channel"],"a":1},{"q":"Which principle of communication ensures that information is given in a timely manner?","o":["Clarity","Timeliness","Empathy","Confidentiality"],"a":1},{"q":"A nurse maintaining patient privacy while discussing medical history is following which communication principle?","o":["Respect","Feedback","Confidentiality","Clarity"],"a":2},{"q":"Which type of communication skill involves gestures, body language, and facial expressions?","o":["Verbal communication","Non-verbal communication","Active listening","Empathy"],"a":1},{"q":"A patient who avoids asking questions due to cultural beliefs is facing which type of barrier?","o":["Emotional barrier","Physical barrier","Cultural barrier","Environmental barrier"],"a":2},{"q":"Active listening in nursing involves","o":["Talking more than the patient","Avoiding eye contact","Listening attentively and giving feedback","Using only non-verbal communication"],"a":2},{"q":"Which observing skill involves using the sense of smell to gather patient-related information?","o":["Auditory observation","Olfactory observation","Gustatory observation","Tactile observation"],"a":1},{"q":"Which of the following is NOT a barrier to effective communication?","o":["Emotional barrier","Cultural barrier","Feedback","Environmental barrier"],"a":2},{"q":"A nurse repeating back what the patient said to confirm understanding is applying which listening skill?","o":["Avoid interrupting","Clarify and summarize","Show interest","Empathize"],"a":1}],
+        "2": [{"q":"The primary objective of health education is","o":["Preventing complications","Promoting health","Rehabilitation","Screening diseases"],"a":1},{"q":"Health education that helps individuals take responsibility for their own well-being is aimed at","o":["Empowering individuals","Encouraging self-care","Increasing health literacy","Enhancing quality of life"],"a":1},{"q":"Which principle of health education ensures tailoring messages to diverse populations?","o":["Evidence-based","Communication","Cultural sensitivity","Participation"],"a":2},{"q":"The stage of change model where the individual has no intention of changing behaviour is","o":["Contemplation","Precontemplation","Preparation","Termination"],"a":1},{"q":"Screening and early detection activities fall under which level of prevention?","o":["Primary prevention","Secondary prevention","Tertiary prevention","Health promotion"],"a":1},{"q":"Demonstrating hand washing technique is an example of which method of health education?","o":["Group discussion","Counselling","Demonstration","Printed material"],"a":2},{"q":"Which approach to health education focuses on social and environmental determinants?","o":["Behavioural approach","Social approach","Educational approach","Individual approach"],"a":1},{"q":"Organizing a community health fair is an example of","o":["Hospital-based health education","Workplace health education","School health education","Community-based opportunity"],"a":3},{"q":"When a nurse develops and implements a teaching plan based on patient needs, she is performing which role?","o":["Advocating for patients","Assessing knowledge","Developing teaching plan","Evaluating effectiveness"],"a":2},{"q":"Which principle of health education emphasizes promoting sustainable health behaviours over time?","o":["Collaboration","Sustainability","Lifelong learning","Participation"],"a":1}],
+        "3": [{"q":"Which principle of counseling ensures that personal information is not shared without the client’s consent?","o":["Acceptance of the client","Confidentiality","Empathy","Non-judgmental attitude"],"a":1},{"q":"The counseling process that emphasizes client autonomy and avoids giving direct advice is","o":["Directive counseling","Nondirective counseling","Elective counseling","Group counseling"],"a":1},{"q":"In directive counseling, the first step is","o":["Prognosis","Analysis","Diagnosis","Counseling/Treatment"],"a":1},{"q":"Which of the following is an advantage of directive counseling?","o":["Promotes client independence","Time-efficient and provides clear solutions","Enhances self-awareness","Reduces counselor dependence"],"a":1},{"q":"Which type of counseling is best suited for rehabilitation after addiction or trauma?","o":["Career counseling","Rehabilitation counseling","Family counseling","Spiritual counseling"],"a":1},{"q":"Which principle of counseling emphasizes unconditional respect for the client’s uniqueness?","o":["Respect for individual differences","Client-centered approach","Empowerment of the client","Continuous evaluation"],"a":0},{"q":"Which scope of counseling deals with helping students with academic stress, peer conflicts, and career guidance?","o":["Vocational scope","Educational scope","Personal and social scope","Rehabilitation scope"],"a":1},{"q":"Which counseling method is particularly useful for individuals facing grief and loss?","o":["Career counseling","Grief or bereavement counseling","Geriatric counseling","Group counseling"],"a":1},{"q":"Which phase of group counseling is characterized by conflicts and power struggles among members?","o":["Forming","Storming","Norming","Performing"],"a":1},{"q":"Short-term counseling primarily focuses on","o":["Deep personality changes","Exploring unconscious conflicts","Goal-oriented and solution-focused interventions","Long-term behavior modification"],"a":2}],
+        "4": [{"q":"Audio-visual aids are primarily used in health education to","o":["Replace the teacher completely","Enhance understanding and retention","Entertain the learners","Reduce the syllabus content"],"a":1},{"q":"Which of the following is a non-projected visual aid?","o":["PowerPoint presentation","Overhead projector slides","Chart","Video film"],"a":2},{"q":"The classification of AV aids based on communication medium includes","o":["Electronic aids, printed aids, and models","Audio aids, visual aids, and audio-visual aids","Projected, non-projected, and digital aids","Charts, posters, and pamphlets"],"a":1},{"q":"Flip charts are particularly useful in","o":["Large auditoriums","Small group teaching sessions","Radio health programs","Online virtual classes"],"a":1},{"q":"Which of the following is a limitation of posters as an AV aid?","o":["Costly to prepare","Limited space for detailed content","Not attractive to learners","Difficult to transport"],"a":1},{"q":"A pie chart is most appropriate when the aim is to","o":["Show trends over time","Show proportions of a whole","Compare values between groups","Display frequency distribution"],"a":1},{"q":"Which AV aid is most suitable for illiterate populations?","o":["Pamphlets","Newspapers","Pictures","Written handouts"],"a":2},{"q":"A disadvantage of using blackboards in teaching is","o":["Lack of availability","Production of chalk dust causing respiratory issues","Cannot be reused","Very costly"],"a":1},{"q":"Puppets as an AV aid are especially effective in","o":["Teaching complex medical statistics","Engaging children and low-literacy groups","Presenting lengthy written reports","Delivering advanced nursing research"],"a":1},{"q":"When selecting AV aids, which factor is MOST important to consider?","o":["Attractiveness only","Cultural appropriateness and relevance","Teacher’s preference","Availability of electricity"],"a":1}]
+    };
+
+    let score = 0;
+
+    function toggleUnit(header) {
+        const content = header.nextElementSibling;
+        header.setAttribute('aria-expanded', header.getAttribute('aria-expanded') !== 'true');
+        content.classList.toggle('active');
+        const arrow = header.querySelector('span');
+        if(arrow) arrow.innerText = content.classList.contains('active') ? '🔼' : '🔽';
+    }
+
+    // --- 3. OPEN RESOURCE (FIXED VIDEO + BACK BUTTON) ---
+    function openResource(type, url, title) {
+        // PUSH STATE: Fixes Back Button
+        history.pushState({ modalOpen: true }, null, '#resource');
+
+        const modal = document.getElementById('app-modal');
+        const body = document.getElementById('modal-body');
+        document.getElementById('modal-title').textContent = title;
+        modal.style.display = 'flex';
+        
+        let finalUrl = url;
+        if (url.includes('drive.google.com')) { 
+            finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview'); 
         }
-        function openResource(type, url, title) {
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            document.getElementById('modal-title').textContent = title;
-            modal.style.display = 'flex';
-            
-            // Clean URL Logic (Fallback/Runtime)
-            let finalUrl = url;
-            if (url.includes('drive.google.com')) { 
-                finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview'); 
-            }
-            else if (url.includes('human.biodigital.com')) { 
-                 if (url.includes('/viewer/')) finalUrl = url.replace('/viewer/', '/widget/');
-                 else finalUrl = url.replace('/view', '/widget'); 
-            }
-            
-            body.innerHTML = '<iframe class="iframe-res" src="' + finalUrl + '" width="100%" height="100%" allow="xr-spatial-tracking" allowfullscreen></iframe>';
+        else if (url.includes('human.biodigital.com')) { 
+             if (url.includes('/viewer/')) finalUrl = url.replace('/viewer/', '/widget/');
+             else finalUrl = url.replace('/view', '/widget'); 
         }
-        function startQuiz(unitId) {
-            score = 0;
-            const questions = QUIZ_DATA[unitId];
-            if(!questions || questions.length === 0) { alert('No questions found.'); return; }
-            let html = '<div class="quiz-container"><h2 style="color:var(--brand); margin-top:0;">Unit ' + unitId + ' Quiz</h2>';
-            html += '<div id="score-display" style="background:var(--brand); color:white; padding:5px 15px; border-radius:20px; display:inline-block; font-weight:700; margin-bottom:20px;">Score: 0 / ' + questions.length + '</div>';
-            questions.forEach((q, index) => {
-                html += '<div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">';
-                html += '<p style="font-weight:600; font-size:1.1rem; margin-bottom:15px;">' + (index + 1) + '. ' + q.q + '</p>';
-                q.o.forEach((opt, optIndex) => {
-                    html += '<div class="quiz-option" onclick="checkAnswer(this, ' + unitId + ', ' + optIndex + ', ' + q.a + ')">' + opt + '</div>';
-                });
-                html += '</div>';
+        
+        // --- VIDEO FIX: ADDED SANDBOX AND ALLOW ATTRIBUTES ---
+        body.innerHTML = `
+            <iframe 
+                class="iframe-res" 
+                src="${finalUrl}" 
+                width="100%" 
+                height="100%" 
+                frameborder="0"
+                sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-presentation"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen">
+            </iframe>`;
+    }
+
+    // --- 4. START QUIZ (FIXED BACK BUTTON) ---
+    function startQuiz(unitId) {
+        history.pushState({ modalOpen: true }, null, '#quiz');
+
+        score = 0;
+        const questions = QUIZ_DATA[unitId];
+        if(!questions || questions.length === 0) { alert('No questions found.'); history.back(); return; }
+        
+        let html = '<div class="quiz-container"><h2 style="color:var(--brand); margin-top:0;">Unit ' + unitId + ' Quiz</h2>';
+        html += '<div id="score-display" style="background:var(--brand); color:white; padding:5px 15px; border-radius:20px; display:inline-block; font-weight:700; margin-bottom:20px;">Score: 0 / ' + questions.length + '</div>';
+        
+        questions.forEach((q, index) => {
+            html += '<div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">';
+            html += '<p style="font-weight:600; font-size:1.1rem; margin-bottom:15px;">' + (index + 1) + '. ' + q.q + '</p>';
+            q.o.forEach((opt, optIndex) => {
+                html += '<div class="quiz-option" onclick="checkAnswer(this, ' + unitId + ', ' + optIndex + ', ' + q.a + ')">' + opt + '</div>';
             });
-            html += '<button class="btn-quiz" onclick="closeModal()">Close Quiz</button></div>';
-            document.getElementById('modal-body').innerHTML = html;
-            document.getElementById('modal-title').textContent = 'Unit ' + unitId + ' Quiz';
-            document.getElementById('app-modal').style.display = 'flex';
+            html += '</div>';
+        });
+        html += '<button class="btn-quiz" onclick="closeModal()">Close Quiz</button></div>';
+        
+        document.getElementById('modal-body').innerHTML = html;
+        document.getElementById('modal-title').textContent = 'Unit ' + unitId + ' Quiz';
+        document.getElementById('app-modal').style.display = 'flex';
+    }
+
+    function checkAnswer(element, unitId, selectedIndex, correctIndex) {
+        if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+        if (selectedIndex === correctIndex) {
+            element.classList.add('correct'); score++;
+        } else {
+            element.classList.add('wrong'); element.parentElement.children[correctIndex + 1].classList.add('correct');
         }
-        function checkAnswer(element, unitId, selectedIndex, correctIndex) {
-            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
-            if (selectedIndex === correctIndex) {
-                element.classList.add('correct'); score++;
-            } else {
-                element.classList.add('wrong'); element.parentElement.children[correctIndex + 1].classList.add('correct');
-            }
-            document.getElementById('score-display').textContent = 'Score: ' + score + ' / ' + QUIZ_DATA[unitId].length;
+        document.getElementById('score-display').textContent = 'Score: ' + score + ' / ' + QUIZ_DATA[unitId].length;
+    }
+
+    // --- 6. CLOSE MODAL (MANUAL CLICK) ---
+    function closeModal() { 
+        const modal = document.getElementById('app-modal');
+        modal.style.display = 'none'; 
+        document.getElementById('modal-body').innerHTML = ""; 
+        
+        // IMPORTANT: Manually go back in history if we are closing via button
+        if ((history.state && history.state.modalOpen) || window.location.hash === '#resource' || window.location.hash === '#quiz') {
+            history.back();
         }
-        function closeModal() { document.getElementById('app-modal').style.display = 'none'; document.getElementById('modal-body').innerHTML = ""; }
-    </script>
+    }
+
+    // --- 7. HANDLE DEVICE BACK BUTTON ---
+    window.onpopstate = function(event) {
+        const modal = document.getElementById('app-modal');
+        if (modal.style.display === 'flex') {
+            modal.style.display = 'none';
+            document.getElementById('modal-body').innerHTML = '';
+        }
+    };
+</script>
 </body>
 </html>
