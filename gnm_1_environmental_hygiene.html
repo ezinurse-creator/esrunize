@@ -76,61 +76,113 @@
         </div>
         <div id="modal-body" class="modal-body"></div>
     </div>
-    <script>
-        const QUIZ_DATA = {"1":[{"q":"Which of the following gases is the most abundant in the Earth’s atmosphere?","o":["Oxygen","Nitrogen","Carbon dioxide","Argon"],"a":1},{"q":"Florence Nightingale emphasized that a clean, well-ventilated environment directly contributes to","o":["Genetic diversity","Patient recovery","Climate change","Biodiversity conservation"],"a":1},{"q":"Which of the following is not a component of the natural environment?","o":["Atmosphere","Hydrosphere","Lithosphere","Transportation networks"],"a":3},{"q":"PM2.5 and PM10, major air pollutants, primarily affect which human organ system?","o":["Nervous system","Respiratory system","Digestive system","Reproductive system"],"a":1},{"q":"Which of the following diseases is not water-borne?","o":["Cholera","Typhoid","Hepatitis A","Malaria"],"a":3},{"q":"The process of converting stagnant water into breeding grounds for mosquitoes is associated with","o":["Noise pollution","Vector-borne diseases","Industrial chemicals","Soil degradation"],"a":1},{"q":"The main role of an Environmental Health Officer (Sanitary Inspector) is to","o":["Provide immunization","Conduct sanitation inspections","Prescribe medicines","Perform laboratory tests"],"a":1},{"q":"Excessive use of chemical fertilizers and pesticides mainly leads to","o":["Air pollution","Noise pollution","Soil degradation","Ozone depletion"],"a":2},{"q":"Which of the following is a major consequence of deforestation in India?","o":["Improved groundwater recharge","Reduced greenhouse gases","Increased soil erosion","Decrease in biodiversity stability"],"a":2},{"q":"Nurses contribute to waste management in hospitals by","o":["Ignoring segregation of waste","Burning all hospital waste openly","Following Biomedical Waste Management Rules","Storing biomedical waste for long durations"],"a":2}],"2":[{"q":"Which of the following is the primary source of safe drinking water in rural areas of India?","o":["Oceans","Groundwater","Rainwater harvesting","Dams"],"a":1},{"q":"The per capita water requirement in India for domestic use as per norms is approximately","o":["25 liters/day","55 liters/day","100 liters/day","135 liters/day"],"a":3},{"q":"Which of the following diseases is most commonly caused by contaminated water?","o":["Tuberculosis","Cholera","Malaria","Influenza"],"a":1},{"q":"The breakpoint chlorination method is mainly used for","o":["Water storage","Water disinfection","Water transport","Water desalination"],"a":1},{"q":"Which indicator organism is used to check fecal contamination of drinking water?","o":["Streptococcus","Escherichia coli","Salmonella typhi","Vibrio cholerae"],"a":1},{"q":"The slow sand filter is also called","o":["Rapid gravity filter","Biological filter","Mechanical filter","Aeration filter"],"a":1},{"q":"Which is the most effective household water purification method recommended in community health?","o":["Boiling","Alum addition","Sedimentation","Filtration"],"a":0},{"q":"Which of the following is not a waterborne disease?","o":["Typhoid","Hepatitis A","Polio","Dengue"],"a":3},{"q":"The standard permissible limit of fluoride in drinking water in India is","o":["0.5 mg/L","1.0 mg/L","1.5 mg/L","3.0 mg/L"],"a":2},{"q":"Rainwater harvesting is primarily aimed at","o":["Preventing floods","Conserving water for future use","Reducing noise pollution","Controlling air quality"],"a":1}],"3":[{"q":"Which of the following is an example of a traditional environmental health hazard?","o":["Industrial waste","Poor sanitation","Vehicular emissions","Synthetic chemicals"],"a":1},{"q":"Exposure to radon gas is classified under which type of environmental health risk?","o":["Chemical risk","Biological risk","Physical risk","Social risk"],"a":2},{"q":"Which group is most vulnerable to environmental health risks?","o":["Middle-aged adults","Teenagers","Infants and elderly","Healthy workers"],"a":2},{"q":"The biological indicator of fecal contamination in water is","o":["Giardia","E. coli","Vibrio cholerae","Salmonella"],"a":1},{"q":"The Environment (Protection) Act, 1986 was enacted in response to which disaster?","o":["Chernobyl disaster","Tsunami in India","Bhopal gas tragedy","Plague outbreak in Surat"],"a":2},{"q":"The National Green Tribunal (NGT) was established under which Act?","o":["Water Act, 1974","Air Act, 1981","NGT Act, 2010","Wildlife Act, 1972"],"a":2},{"q":"Which of the following is the primary role of nurses in environmental protection?","o":["Drafting environmental laws","Conducting afforestation programs","Health education and community mobilization","Issuing pollution control certificates"],"a":2},{"q":"The Central Pollution Control Board (CPCB) functions under which ministry?","o":["Ministry of Health and Family Welfare","Ministry of Environment, Forest and Climate Change (MoEFCC)","Ministry of Agriculture","Ministry of Rural Development"],"a":1},{"q":"Which international agreement focuses on limiting global warming to below 2°C?","o":["Kyoto Protocol","Montreal Protocol","Paris Agreement","Rio Declaration"],"a":2},{"q":"The “Polluter Pays Principle” is most directly applied by","o":["Forest Survey of India","National Green Tribunal","Zoological Survey of India","Eco-Clubs in schools"],"a":1}]};
-        let score = 0;
-        function toggleUnit(header) {
-            const content = header.nextElementSibling;
-            header.setAttribute('aria-expanded', header.getAttribute('aria-expanded') !== 'true');
-            content.classList.toggle('active');
+<script>
+    // --- 1. ENVIRONMENTAL HYGIENE QUIZ DATA (Units 1-3) ---
+    const QUIZ_DATA = {
+        "1": [{"q":"Which of the following gases is the most abundant in the Earth’s atmosphere?","o":["Oxygen","Nitrogen","Carbon dioxide","Argon"],"a":1},{"q":"Florence Nightingale emphasized that a clean, well-ventilated environment directly contributes to","o":["Genetic diversity","Patient recovery","Climate change","Biodiversity conservation"],"a":1},{"q":"Which of the following is not a component of the natural environment?","o":["Atmosphere","Hydrosphere","Lithosphere","Transportation networks"],"a":3},{"q":"PM2.5 and PM10, major air pollutants, primarily affect which human organ system?","o":["Nervous system","Respiratory system","Digestive system","Reproductive system"],"a":1},{"q":"Which of the following diseases is not water-borne?","o":["Cholera","Typhoid","Hepatitis A","Malaria"],"a":3},{"q":"The process of converting stagnant water into breeding grounds for mosquitoes is associated with","o":["Noise pollution","Vector-borne diseases","Industrial chemicals","Soil degradation"],"a":1},{"q":"The main role of an Environmental Health Officer (Sanitary Inspector) is to","o":["Provide immunization","Conduct sanitation inspections","Prescribe medicines","Perform laboratory tests"],"a":1},{"q":"Excessive use of chemical fertilizers and pesticides mainly leads to","o":["Air pollution","Noise pollution","Soil degradation","Ozone depletion"],"a":2},{"q":"Which of the following is a major consequence of deforestation in India?","o":["Improved groundwater recharge","Reduced greenhouse gases","Increased soil erosion","Decrease in biodiversity stability"],"a":2},{"q":"Nurses contribute to waste management in hospitals by","o":["Ignoring segregation of waste","Burning all hospital waste openly","Following Biomedical Waste Management Rules","Storing biomedical waste for long durations"],"a":2}],
+        "2": [{"q":"Which of the following is the primary source of safe drinking water in rural areas of India?","o":["Oceans","Groundwater","Rainwater harvesting","Dams"],"a":1},{"q":"The per capita water requirement in India for domestic use as per norms is approximately","o":["25 liters/day","55 liters/day","100 liters/day","135 liters/day"],"a":3},{"q":"Which of the following diseases is most commonly caused by contaminated water?","o":["Tuberculosis","Cholera","Malaria","Influenza"],"a":1},{"q":"The breakpoint chlorination method is mainly used for","o":["Water storage","Water disinfection","Water transport","Water desalination"],"a":1},{"q":"Which indicator organism is used to check fecal contamination of drinking water?","o":["Streptococcus","Escherichia coli","Salmonella typhi","Vibrio cholerae"],"a":1},{"q":"The slow sand filter is also called","o":["Rapid gravity filter","Biological filter","Mechanical filter","Aeration filter"],"a":1},{"q":"Which is the most effective household water purification method recommended in community health?","o":["Boiling","Alum addition","Sedimentation","Filtration"],"a":0},{"q":"Which of the following is not a waterborne disease?","o":["Typhoid","Hepatitis A","Polio","Dengue"],"a":3},{"q":"The standard permissible limit of fluoride in drinking water in India is","o":["0.5 mg/L","1.0 mg/L","1.5 mg/L","3.0 mg/L"],"a":2},{"q":"Rainwater harvesting is primarily aimed at","o":["Preventing floods","Conserving water for future use","Reducing noise pollution","Controlling air quality"],"a":1}],
+        "3": [{"q":"Which of the following is an example of a traditional environmental health hazard?","o":["Industrial waste","Poor sanitation","Vehicular emissions","Synthetic chemicals"],"a":1},{"q":"Exposure to radon gas is classified under which type of environmental health risk?","o":["Chemical risk","Biological risk","Physical risk","Social risk"],"a":2},{"q":"Which group is most vulnerable to environmental health risks?","o":["Middle-aged adults","Teenagers","Infants and elderly","Healthy workers"],"a":2},{"q":"The biological indicator of fecal contamination in water is","o":["Giardia","E. coli","Vibrio cholerae","Salmonella"],"a":1},{"q":"The Environment (Protection) Act, 1986 was enacted in response to which disaster?","o":["Chernobyl disaster","Tsunami in India","Bhopal gas tragedy","Plague outbreak in Surat"],"a":2},{"q":"The National Green Tribunal (NGT) was established under which Act?","o":["Water Act, 1974","Air Act, 1981","NGT Act, 2010","Wildlife Act, 1972"],"a":2},{"q":"Which of the following is the primary role of nurses in environmental protection?","o":["Drafting environmental laws","Conducting afforestation programs","Health education and community mobilization","Issuing pollution control certificates"],"a":2},{"q":"The Central Pollution Control Board (CPCB) functions under which ministry?","o":["Ministry of Health and Family Welfare","Ministry of Environment, Forest and Climate Change (MoEFCC)","Ministry of Agriculture","Ministry of Rural Development"],"a":1},{"q":"Which international agreement focuses on limiting global warming to below 2°C?","o":["Kyoto Protocol","Montreal Protocol","Paris Agreement","Rio Declaration"],"a":2},{"q":"The “Polluter Pays Principle” is most directly applied by","o":["Forest Survey of India","National Green Tribunal","Zoological Survey of India","Eco-Clubs in schools"],"a":1}]
+    };
+
+    let score = 0;
+
+    function toggleUnit(header) {
+        const content = header.nextElementSibling;
+        header.setAttribute('aria-expanded', header.getAttribute('aria-expanded') !== 'true');
+        content.classList.toggle('active');
+        const arrow = header.querySelector('span');
+        if(arrow) arrow.innerText = content.classList.contains('active') ? '🔼' : '🔽';
+    }
+
+    // --- 3. OPEN RESOURCE (FIXED VIDEO + BACK BUTTON) ---
+    function openResource(type, url, title) {
+        // PUSH STATE: Fixes Back Button
+        history.pushState({ modalOpen: true }, null, '#resource');
+
+        const modal = document.getElementById('app-modal');
+        const body = document.getElementById('modal-body');
+        document.getElementById('modal-title').textContent = title;
+        modal.style.display = 'flex';
+        
+        let finalUrl = url;
+        if (url.includes('drive.google.com')) { 
+            finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview'); 
         }
-        function openResource(type, url, title) {
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            document.getElementById('modal-title').textContent = title;
-            modal.style.display = 'flex';
-            
-            // Clean URL Logic (Fallback/Runtime)
-            let finalUrl = url;
-            if (url.includes('drive.google.com')) { 
-                finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview'); 
-            }
-            else if (url.includes('human.biodigital.com')) { 
-                 if (url.includes('/viewer/')) finalUrl = url.replace('/viewer/', '/widget/');
-                 else finalUrl = url.replace('/view', '/widget'); 
-            }
-            
-            body.innerHTML = '<iframe class="iframe-res" src="' + finalUrl + '" width="100%" height="100%" allow="xr-spatial-tracking" allowfullscreen></iframe>';
+        else if (url.includes('human.biodigital.com')) { 
+             if (url.includes('/viewer/')) finalUrl = url.replace('/viewer/', '/widget/');
+             else finalUrl = url.replace('/view', '/widget'); 
         }
-        function startQuiz(unitId) {
-            score = 0;
-            const questions = QUIZ_DATA[unitId];
-            if(!questions || questions.length === 0) { alert('No questions found.'); return; }
-            let html = '<div class="quiz-container"><h2 style="color:var(--brand); margin-top:0;">Unit ' + unitId + ' Quiz</h2>';
-            html += '<div id="score-display" style="background:var(--brand); color:white; padding:5px 15px; border-radius:20px; display:inline-block; font-weight:700; margin-bottom:20px;">Score: 0 / ' + questions.length + '</div>';
-            questions.forEach((q, index) => {
-                html += '<div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">';
-                html += '<p style="font-weight:600; font-size:1.1rem; margin-bottom:15px;">' + (index + 1) + '. ' + q.q + '</p>';
-                q.o.forEach((opt, optIndex) => {
-                    html += '<div class="quiz-option" onclick="checkAnswer(this, ' + unitId + ', ' + optIndex + ', ' + q.a + ')">' + opt + '</div>';
-                });
-                html += '</div>';
+        
+        // --- VIDEO FIX: INCLUDES SANDBOX ATTRIBUTES ---
+        body.innerHTML = `
+            <iframe 
+                class="iframe-res" 
+                src="${finalUrl}" 
+                width="100%" 
+                height="100%" 
+                frameborder="0"
+                sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-presentation"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen">
+            </iframe>`;
+    }
+
+    // --- 4. START QUIZ (FIXED BACK BUTTON) ---
+    function startQuiz(unitId) {
+        // PUSH STATE: Add history entry for Quiz
+        history.pushState({ modalOpen: true }, null, '#quiz');
+
+        score = 0;
+        const questions = QUIZ_DATA[unitId];
+        if(!questions || questions.length === 0) { alert('No questions found.'); history.back(); return; }
+        
+        let html = '<div class="quiz-container"><h2 style="color:var(--brand); margin-top:0;">Unit ' + unitId + ' Quiz</h2>';
+        html += '<div id="score-display" style="background:var(--brand); color:white; padding:5px 15px; border-radius:20px; display:inline-block; font-weight:700; margin-bottom:20px;">Score: 0 / ' + questions.length + '</div>';
+        
+        questions.forEach((q, index) => {
+            html += '<div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">';
+            html += '<p style="font-weight:600; font-size:1.1rem; margin-bottom:15px;">' + (index + 1) + '. ' + q.q + '</p>';
+            q.o.forEach((opt, optIndex) => {
+                html += '<div class="quiz-option" onclick="checkAnswer(this, ' + unitId + ', ' + optIndex + ', ' + q.a + ')">' + opt + '</div>';
             });
-            html += '<button class="btn-quiz" onclick="closeModal()">Close Quiz</button></div>';
-            document.getElementById('modal-body').innerHTML = html;
-            document.getElementById('modal-title').textContent = 'Unit ' + unitId + ' Quiz';
-            document.getElementById('app-modal').style.display = 'flex';
+            html += '</div>';
+        });
+        html += '<button class="btn-quiz" onclick="closeModal()">Close Quiz</button></div>';
+        
+        document.getElementById('modal-body').innerHTML = html;
+        document.getElementById('modal-title').textContent = 'Unit ' + unitId + ' Quiz';
+        document.getElementById('app-modal').style.display = 'flex';
+    }
+
+    function checkAnswer(element, unitId, selectedIndex, correctIndex) {
+        if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+        if (selectedIndex === correctIndex) {
+            element.classList.add('correct'); score++;
+        } else {
+            element.classList.add('wrong'); element.parentElement.children[correctIndex + 1].classList.add('correct');
         }
-        function checkAnswer(element, unitId, selectedIndex, correctIndex) {
-            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
-            if (selectedIndex === correctIndex) {
-                element.classList.add('correct'); score++;
-            } else {
-                element.classList.add('wrong'); element.parentElement.children[correctIndex + 1].classList.add('correct');
-            }
-            document.getElementById('score-display').textContent = 'Score: ' + score + ' / ' + QUIZ_DATA[unitId].length;
+        document.getElementById('score-display').textContent = 'Score: ' + score + ' / ' + QUIZ_DATA[unitId].length;
+    }
+
+    // --- 6. CLOSE MODAL (MANUAL CLICK) ---
+    function closeModal() { 
+        const modal = document.getElementById('app-modal');
+        modal.style.display = 'none'; 
+        document.getElementById('modal-body').innerHTML = ""; 
+        
+        // IMPORTANT: Manually go back in history if we are closing via button
+        if ((history.state && history.state.modalOpen) || window.location.hash === '#resource' || window.location.hash === '#quiz') {
+            history.back();
         }
-        function closeModal() { document.getElementById('app-modal').style.display = 'none'; document.getElementById('modal-body').innerHTML = ""; }
-    </script>
+    }
+
+    // --- 7. HANDLE DEVICE BACK BUTTON ---
+    window.onpopstate = function(event) {
+        const modal = document.getElementById('app-modal');
+        if (modal.style.display === 'flex') {
+            modal.style.display = 'none';
+            document.getElementById('modal-body').innerHTML = '';
+        }
+    };
+</script>
 </body>
 </html>
