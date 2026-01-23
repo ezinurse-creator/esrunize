@@ -3,264 +3,824 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nursing Foundation I Syllabus</title>
+    <title>Nursing Foundation I - Syllabus & Quizzes</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <style>
-        /* --- MODERN THEME --- */
-        :root {
-            --primary: #00B9F2;       /* Nursing Blue */
-            --primary-dark: #003B82;  /* Navy */
-            --bg-card: #ffffff;
-            --bg-body: #f3f4f6;
-            --text-main: #111827;
-            --text-muted: #6b7280;
-            --accent: #f59e0b;        /* Quiz Gold */
-            --danger: #ef4444;
-            --success: #10b981;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
-            --radius-md: 12px;
-        }
+<style>
+    :root {
+        /* ORIGINAL BLUE COLOR SCHEME */
+        --brand: #003B82; 
+        --accent: #00B9F2;
+        --gray-50: #f9fafb;
+        --gray-100: #f3f4f6;
+        --gray-200: #e5e7eb;
+        --gray-700: #374151;
+        --gray-900: #111827;
+        --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+        --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+        --danger: #ef4444;
+        --success: #10b981;
+        --warning: #f59e0b;
+    }
 
-        * { box-sizing: border-box; }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-        }
+    * { box-sizing: border-box; }
+    body {
+        font-family: 'Inter', system-ui, sans-serif;
+        background: white;
+        color: var(--gray-900);
+        line-height: 1.6;
+        padding: 24px;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding-bottom: 80px;
-        }
+    /* --- BUTTONS & HEADERS SHARED STYLES --- */
+    .syllabus-btn, .unit-header {
+        display: block;
+        width: 100%;
+        padding: 18px 24px;
+        margin: 12px 0;
+        font-weight: 600;
+        font-size: 16px;
+        text-decoration: none;
+        border-radius: 12px;
+        cursor: pointer;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.2s ease;
+    }
 
-        /* --- HEADER & SYLLABUS --- */
-        .page-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .page-title {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--primary-dark);
-            margin-bottom: 10px;
-        }
+    /* --- SPECIFIC: SYLLABUS BUTTON (White with Blue Outline) --- */
+    .syllabus-btn {
+        background: white;
+        color: var(--brand);
+        border: 2px solid var(--brand);
+        text-align: center;
+    }
 
-        .syllabus-card {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-            color: white;
-            padding: 20px;
-            border-radius: var(--radius-md);
-            text-align: center;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: var(--shadow-md);
-            margin-bottom: 30px;
-            display: block;
-            text-decoration: none;
-            transition: transform 0.2s;
-        }
-        .syllabus-card:active { transform: scale(0.98); }
+    .syllabus-btn:hover {
+        background: #f0f9ff; /* Light blue tint on hover */
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+    }
+    
+    /* --- SPECIFIC: UNIT HEADER (Solid Blue) --- */
+    .unit-header {
+        background: var(--brand);
+        color: white;
+        border: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: left;
+        margin: 16px 0;
+    }
 
-        /* --- UNITS (ACCORDION STYLE) --- */
-        .unit-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-md);
-            margin-bottom: 16px;
-            box-shadow: var(--shadow-sm);
-            overflow: hidden;
-            border: 1px solid #e5e7eb;
-        }
+    .unit-header:hover {
+        background: #002d63;
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+    }
 
-        .unit-header {
-            padding: 20px;
-            background: var(--bg-card);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            font-weight: 700;
-            color: var(--primary-dark);
-            border-bottom: 1px solid transparent;
-            transition: background 0.2s;
-        }
-        
-        .unit-header:hover { background: #f9fafb; }
-        
-        .unit-header.active {
-            border-bottom-color: #e5e7eb;
-            background: #f0f9ff;
-            color: var(--primary-dark);
-        }
+    /* Unit Header Arrow Animation */
+    .unit-header span:last-child {
+        transition: transform 0.3s ease;
+        color: #FFA500;
+    }
+    .unit-header[aria-expanded="true"] span:last-child {
+        transform: rotate(180deg);
+    }
 
-        .unit-content {
-            display: none;
-            padding: 20px;
-            background: #fdfdfd;
-        }
-        .unit-content.show { display: block; }
+    /* --- UNIT CONTENT & RESOURCES --- */
+    .unit-content {
+        padding: 0 12px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease, padding 0.3s ease;
+    }
+    .unit-content.active {
+        padding: 24px 12px;
+        max-height: none; 
+    }
 
-        /* --- RESOURCES LIST --- */
-        .resource-list {
-            display: grid;
-            gap: 12px;
-        }
+    .subsection {
+        margin: 16px 0;
+        padding: 20px;
+        background: white;
+        border-radius: 12px;
+        border: 1px solid var(--gray-200);
+        box-shadow: var(--shadow-sm);
+        transition: box-shadow 0.2s ease;
+    }
 
-        .resource-btn {
-            display: flex;
-            align-items: center;
-            padding: 16px;
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            text-decoration: none;
-            color: var(--text-main);
-            font-weight: 500;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
+    .sub-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--gray-700);
+        margin: 15px 0 8px 0;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
 
-        .resource-btn:hover {
-            border-color: var(--primary);
-            transform: translateX(4px);
-            box-shadow: var(--shadow-sm);
-        }
+    .resource-btn {
+        display: flex;
+        align-items: flex-start;
+        width: 100%;
+        padding: 14px 18px;
+        margin: 6px 0;
+        background: var(--gray-50);
+        color: var(--gray-900);
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 500;
+        border: 1px solid var(--gray-200);
+        transition: all 0.2s ease;
+        gap: 12px;
+        cursor: pointer;
+    }
+    .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
+    .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
+    .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+    .resource-btn.model { background: #fdf4ff; border-color: #f0abfc; color: #86198f; }
+    .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
 
-        /* Color coding by type */
-        .type-notes { border-left: 4px solid #0ea5e9; background: #f0f9ff; }
-        .type-video { border-left: 4px solid #8b5cf6; background: #f5f3ff; }
-        .type-quiz  { border-left: 4px solid #f59e0b; background: #fffbeb; }
-        
-        /* Coming Soon Style */
-        .type-coming-soon { 
-            border-left: 4px solid #9ca3af; 
-            background: #f3f4f6; 
-            color: #6b7280;
-            cursor: not-allowed;
-        }
+    .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
+    .icon.video-icon { color: #8b5cf6; }
+    .icon.quiz-icon { color: #f59e0b; }
+    .icon.model-icon { color: #d946ef; }
 
-        .icon {
-            margin-right: 12px;
-            font-size: 1.2rem;
-            width: 30px;
-            text-align: center;
-        }
+    /* --- MODAL --- */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        z-index: 1000;
+        display: none;
+        flex-direction: column;
+    }
 
-        /* --- MODAL --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-        }
+    .modal-header {
+        height: 60px;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        flex-shrink: 0;
+    }
 
-        .modal-header {
-            height: 60px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            flex-shrink: 0;
-        }
+    .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; }
+    
+    .btn-close {
+        background: var(--danger);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+    }
 
-        .modal-title { font-weight: 700; color: var(--primary-dark); font-size: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-        
-        .btn-close {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
+    .modal-body {
+        flex: 1;
+        background: #f3f4f6;
+        position: relative;
+        overflow-y: auto;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 20px;
+    }
 
-        .modal-body {
-            flex: 1;
-            background: #000;
-            position: relative;
-            overflow-y: auto;
-            /* Default display is flexible to center videos */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    .iframe-res {
+        width: 100%;
+        height: 100%;
+        border: none;
+        background: #fff;
+        display: block;
+    }
 
-        /* --- FIXED IFRAME STYLES --- */
-        
-        /* 1. For Videos (Keeps 16:9 Aspect Ratio) */
-        .iframe-video {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16 / 9;
-            border: none;
-            background: #000;
-            display: block;
-        }
+    /* --- QUIZ STYLES --- */
+    .quiz-container {
+        background: white;
+        width: 100%;
+        max-width: 800px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        padding: 30px;
+        margin-bottom: 40px;
+    }
+    .quiz-header-sticky {
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 10;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--gray-100);
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .score-badge {
+        background: var(--brand);
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-weight: 700;
+    }
+    .question-block {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--gray-200);
+    }
+    .question-block:last-child { border-bottom: none; }
+    
+    .quiz-question-text {
+        font-size: 1.15rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: var(--gray-900);
+    }
+    .quiz-option {
+        padding: 12px 15px;
+        border: 2px solid var(--gray-200);
+        border-radius: 8px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-weight: 500;
+    }
+    .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
+    
+    .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; }
+    .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
+    
+    .btn-quiz { background: var(--brand); color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 16px; width: 100%; margin-top: 20px; }
 
-        /* 2. For Notes (Fills the screen vertically) */
-        .iframe-doc {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #fff;
-            display: block;
-        }
-
-        /* --- QUIZ STYLES --- */
-        .quiz-container {
-            background: white;
-            width: 100%;
-            min-height: 100%;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .quiz-question { margin-bottom: 20px; font-size: 1.1rem; font-weight: 600; }
-        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
-        .quiz-option {
-            padding: 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        .quiz-option:hover { background: #f0f9ff; border-color: var(--primary); }
-        .quiz-option.correct { background: var(--success); color: white; border-color: var(--success); }
-        .quiz-option.correct::after { content: '✓'; position: absolute; right: 15px; font-weight: bold; }
-        .quiz-option.wrong { background: var(--danger); color: white; border-color: var(--danger); }
-        .quiz-option.wrong::after { content: '✗'; position: absolute; right: 15px; font-weight: bold; }
-
-    </style>
+    @media (max-width: 768px) {
+        body { padding: 16px; }
+        .unit-header, .resource-btn { font-size: 15px; }
+        .modal-body { padding: 0; }
+        .quiz-container { height: auto; border-radius: 0; max-width: 100%; padding: 20px; min-height: 100%; }
+    }
+</style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="page-header">
-            <div class="page-title">Nursing Foundation I</div>
-            <p style="color: var(--text-muted);">BSc Nursing Semester 1</p>
-        </div>
-
-        <div class="syllabus-card" onclick="openResource('Syllabus', 'https://drive.google.com/file/d/1tmY_7Jka0j3ELLNJDShkmyNgRlkkn-1U/preview')">
-            📄 View Full Syllabus
-        </div>
-
-        <div id="units-container">
+    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/1tmY_7Jka0j3ELLNJDShkmyNgRlkkn-1U/preview', 'Syllabus')">
+        📄 DOWNLOAD NURSING FOUNDATION SYLLABUS
+    </div>
+    
+    <div id="units">
+        
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 1 - INTRODUCTION TO HEALTH AND ILLNESS <span>🔽</span>
             </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1QKZi5lxQ1TTv8pR-mPZ8tCfVn1iUQGzw/preview', 'Detailed Notes')">
+                        <span class="icon">📚</span><span>Detailed Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1bnC2E-_fHsLzTKa5kpJSU43vmbxQBGjV/preview', 'Concept of Health')">
+                        <span class="icon video-icon">▶️</span><span>Concept of Health: WHO Definitions, Dimensions</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1VbSlx0tzKdw6VtpddlNU07-1O0gMFkP0/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1HtVADKbLA0KWSQYmpI_WpSSy3qi26eaL/preview', 'Health-Illness Continuum')">
+                        <span class="icon video-icon">▶️</span><span>Health-Illness Continuum & Maslow's Hierarchy</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/10SHLD2ODqoqx1MRYIF5DPsgPt5mg1MJs/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(1)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 2 - HEALTHCARE DELIVERY SYSTEM <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1zG3rnQ8U--qh0WaZcvJUYbD0xe-2FJvL/preview', 'Detailed Notes')">
+                        <span class="icon">📚</span><span>Detailed Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1jTHYoWESEBsFmvLW7-N3FCD4ZdPQmxJQ/preview', 'Levels of Prevention')">
+                        <span class="icon video-icon">▶️</span><span>Levels of Illness Prevention & Health Agencies</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ggOdeL4tGxiXtu1INfq3IJABP65kDDBa/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1k9AI8B05SFDzkYs5ysAsn4v4IiWGhsoF/preview', 'Hospitals & Teams')">
+                        <span class="icon video-icon">▶️</span><span>Hospitals & Healthcare Teams</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ddWUlxh8O5hwgWWqO7tw8ziLEakaWUDe/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(2)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 3 - HISTORY OF NURSING <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1mYRZsAD7X-7OCcfrazPymUTUR-BWuqav/preview', 'Detailed Notes')">
+                        <span class="icon">📚</span><span>Detailed Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1A-6VNRbbm5Q6DZMbupdAlv03gD6tp4JN/preview', 'History & Concepts')">
+                        <span class="icon video-icon">▶️</span><span>History, Philosophy & Objectives of Nursing</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1wR9QR5eW5SDRM5BwL8Yxg5UBH0BvtV7A/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1IcYMG1MN8tZRdJ0y54q1BcPqc8nVAVXd/preview', 'Ethics & Profession')">
+                        <span class="icon video-icon">▶️</span><span>Qualities of a Nurse, Ethics & Professional Conduct</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1F3AultBl5-uMtp4MJ0PVRDODXsX-ht2K/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(3)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 4 - NURSE PATIENT RELATIONSHIP <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1m4RSpCro0fl5Kaw7N6xlOWUroLYMMojC/preview', 'Detailed Notes')">
+                        <span class="icon">📚</span><span>Detailed Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1DbWVLQTSJQ2byq5gaRN1SkM2r8HpA4OK/preview', 'Communication Basics')">
+                        <span class="icon video-icon">▶️</span><span>Communication: Levels, Elements & Process</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1GgqzcbHxSqw07A1pxWGrlUaR6Bt8FcNq/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1MUFw1a7bW2NLMtAvYfp6b7cOP-iQExDM/preview', 'Types & Modes')">
+                        <span class="icon video-icon">▶️</span><span>Communication: Types, Modes & Factors</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1iPMUgbfF1cGN87OpksFCnNqD3f-QU85C/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1leLC2VgpzbiyE9dxGrMj99YKyPKYGbjn/preview', 'Therapeutic Communication')">
+                        <span class="icon video-icon">▶️</span><span>Therapeutic Communication & Barriers</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/10mIV5JoDFhMi8EPV2U-v4Z2Dd6QVrmQd/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/12Y21CHkNsRlsz3sEBUBcNyx0p_JFmaLT/preview', 'Effective Communication')">
+                        <span class="icon video-icon">▶️</span><span>Effective Communication & Vulnerable Groups</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/18gnSecm3YZ5KLidPIOIwLPIkS6aqLeEP/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(4)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 5 - DOCUMENTATION AND REPORTING <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1cQpbgTNTWupCvXpvCkxhjvtE_RZUO7pT/preview', 'Detailed Notes')">
+                        <span class="icon">📚</span><span>Detailed Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1U9zWPqi-Ex2KsAw_8wNL1HrNCLTR4hLE/preview', 'Documentation Methods')">
+                        <span class="icon video-icon">▶️</span><span>Documentation Systems & Methods</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/10GL-lXPPb59PGbrrt3eqXJ6F4x39JRGH/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/10jw7GBsuFmAa5yig-65fclV9-sUa-TNk/preview', 'Reporting Types')">
+                        <span class="icon video-icon">▶️</span><span>Reporting - Types</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1PtsflV3JzoNVBhJ7pPHweu5LbPAisH1i/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(5)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 6 - VITAL SIGNS <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1NRL50PRr2ZMd7WsGvVFVKBDEyYJj386M/preview', 'Detailed Notes')">
+                        <span class="icon">📚</span><span>Detailed Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/12K1NeZe-yYMbcHAgp3MynfqYltFTHw0Q/preview', 'Body Temperature')">
+                        <span class="icon video-icon">▶️</span><span>Guidelines & Body Temperature</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1JKeuku8_XYMNrnhEmB3RJ5P-SK2Dg5Mf/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1rohWm6_KG5KN2pU_kb99XulEU6zooaBc/preview', 'Fever/Pyrexia')">
+                        <span class="icon video-icon">▶️</span><span>Fever/Pyrexia</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1FwT9LMXe4526pYqkGArX6ekNMa6DQtxk/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1E8qcOXqGEyhBJHNUiXDRGcksKTl67hfz/preview', 'Pulse')">
+                        <span class="icon video-icon">▶️</span><span>Pulse</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1K4-WECY_ca-Ot9-GcvLMZBzn_KQSBUUz/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1dOPtPj85T04NnGQgGPOtRHTd7JFJ--uE/preview', 'Respiration')">
+                        <span class="icon video-icon">▶️</span><span>Respiration</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Hc6d4y7Rs3UcrcQxIulYU-9YDdsoA3nW/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1icKMFWSvkMUYiHvCPkXku8bmEfrAQlmA/preview', 'Blood Pressure')">
+                        <span class="icon video-icon">▶️</span><span>Blood Pressure</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/17Ks5xxzX0n_2LNx3zw7shgLBxqOOZooT/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(6)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 7 - EQUIPMENT AND LINEN <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1EI36xKS7NMzPWTLbuzl0EQQgQdBAXDCp/preview', 'Detailed Notes')">
+                        <span class="icon">📚</span><span>Detailed Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1mQyy8AaWNe5DEhzr-jI_S9RaNHysgUGr/preview', 'Introduction to Equipment')">
+                        <span class="icon video-icon">▶️</span><span>Introduction, Indent & Maintenance</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1sJGL8g_nkWx9lJdhOwke2OZrxPvpRwoE/preview', 'Principles')">
+                        <span class="icon video-icon">▶️</span><span>Principles</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1DqgYzfrI8Z4507jswgFwxInjVDmaF8Ak/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1QPUlmFzMJ8HtRYCJ2d4SryDm_1G0IQN2/preview', 'Types & Linen')">
+                        <span class="icon video-icon">▶️</span><span>Types: Disposables, Reusable, Linen</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1qi-lzWzgnYi5sr1shBos7EtZIaEkuiS8/preview', 'Rubber Goods & Glassware')">
+                        <span class="icon video-icon">▶️</span><span>Rubber Goods, Glassware, Metal, Plastics</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/12iXWPtk83OoZ6Xz9noUvm1Lq08QF1y2p/preview', 'Care of Furniture')">
+                        <span class="icon video-icon">▶️</span><span>Care Of Furniture</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Csym-JjmmO650mv_KqNIXQayUHGfTTKG/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(7)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 8 - INFECTION CONTROL <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1DfVCCMfQejWUI9aijcUhUK6_nnCJ-BRb/preview', 'Detailed Notes')">
+                        <span class="icon">📚</span><span>Detailed Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1g9NAYD6AQwjO6hcyqU8EZANXSjIDika-/preview', 'Infection Basics')">
+                        <span class="icon video-icon">▶️</span><span>Nature, Chain & Types of Infection</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1EDRtxBvsx0iP1CGun_VZkswwtPsJ3hQC/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(8)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 8 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 9 - COMFORT, REST, SLEEP AND PAIN <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1G6QyKZtF-OADlNp4Bl0QkaflirnHQQu4/preview', 'Detailed Notes')">
+                        <span class="icon">📚</span><span>Detailed Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1-TTzl95CVo_PnH5VGvPnW312xC_mW3Pq/preview', 'Bed Making')">
+                        <span class="icon video-icon">▶️</span><span>Bed Making: Principles & Types</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1uZY3A4bWkwJPfD6ndCF_BIvgjttSLGxE/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1A5htuL_fIJ4EAaw-RYe5WQfDFzhYjDPB/preview', 'Therapeutic Positions')">
+                        <span class="icon video-icon">▶️</span><span>Therapeutic Positions</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Gz_tTewoNHgweQaec4evamu3i44gmBke/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1dJu2Q-4Lh1EZjck0mjrlVhzOobWTa-1i/preview', 'Comfort Devices')">
+                        <span class="icon video-icon">▶️</span><span>Comfort Devices</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/11xIkxgaVL9ElP5wWa_Fv6mSMonRjtJy8/preview', 'Sleep & Rest')">
+                        <span class="icon video-icon">▶️</span><span>Physiology of Sleep & Factors</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/179xDBj1fulf9xMoHSdBFOsuT7bAlES9I/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1fev2xrVR4v4ecRRZ2Osa_z-trxHa3d5z/preview', 'Promoting Sleep')">
+                        <span class="icon video-icon">▶️</span><span>Promoting Sleep & Sleep Disorders</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ItxcmJkgPqmPJhDLu7VEvfffbOs2aKpN/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1mg9loTQw9Zh_QDy0WKb1L0P5EVBfT6Sk/preview', 'Pain Assessment')">
+                        <span class="icon video-icon">▶️</span><span>Pain: Physiology, Types & Assessment</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1X5RQx43ZxAC3RPRF8BeFCuv0TV2hKsRH/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1HR4ps2bTsLwVJJ3CteXgVfBEc9A9NSKV/preview', 'Pain Management (CAM)')">
+                        <span class="icon video-icon">▶️</span><span>Pain Management & CAM</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1txiIQyM9aNfCPZaUl9rBH0EMgv10bIlR/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(9)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 9 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 10 - PROMOTING SAFETY <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1bxoG9XwSw5J6TtF3LpaSSawJtNqeMMW6/preview', 'Detailed Notes')">
+                        <span class="icon">📚</span><span>Detailed Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1B-vQIavMcoq7je8dlXD5jLzBzojwwbhJ/preview', 'Physical Environment')">
+                        <span class="icon video-icon">▶️</span><span>Physical Environment & Hazards</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1s64zZUjY538YhNI6kCBPviJIHdxo9FGU/preview', 'Accidents & Falls')">
+                        <span class="icon video-icon">▶️</span><span>Accidents, Fall Risk & Prevention</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1UlBuO-D2D4Nexi2EKzY1cFL4dUSIEst3/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Mz2bNN-rVOBoiW_zaZK0MO1qn8fSNdJ-/preview', 'Restraints')">
+                        <span class="icon video-icon">▶️</span><span>Restraints: Types & Purposes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1KBTNPn_WEIIP8YKYH2ef4acHLyamjqPD/preview', 'Other Safety Devices')">
+                        <span class="icon video-icon">▶️</span><span>Other Safety Devices</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/16p7ESn69E19hZ75sa0avfvhzmW9XKB3J/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(10)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 10 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 11 - HOSPITAL ADMISSION AND DISCHARGE <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1iOSe9FluFpxHrpxAhwg-AByXvThUT_2p/preview', 'Detailed Notes')">
+                        <span class="icon">📚</span><span>Detailed Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1r0Wkdrx9tmsCjbrIxODgr8aLoz66Op-n/preview', 'Hospital Admission')">
+                        <span class="icon video-icon">▶️</span><span>Hospital Admission & Types</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1kfBT6-fb_2e0YcWkvtUkyLh5ki1lopNo/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/16w9UfCRp0cRpkGPZuJoM24PgdeMbgH5C/preview', 'Unit Preparation')">
+                        <span class="icon video-icon">▶️</span><span>Unit & Preparation</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1qMuXCNd-6cGHKAAjVWz9pHDEWOrdJsvZ/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Efec1-X-8F4VdeLElKQxTZru9sg70nju/preview', 'Admission Bed')">
+                        <span class="icon video-icon">▶️</span><span>Admission Bed</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1bOkQBIv5z6RccPW_ypKDFeLGdQNxJMyI/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ztLmrU4XZD7F6bHwdHnfG99rE7_e1ozr/preview', 'Admission Procedure')">
+                        <span class="icon video-icon">▶️</span><span>Admission Procedure</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/18ojWRpsv0g42rm78C41aoLNBJVlWlaKY/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/16cyNDtHgQ5ue_YjCK_pDxZIedLWUHn6P/preview', 'Steps of Admission')">
+                        <span class="icon video-icon">▶️</span><span>Steps of Admission Procedure</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1HtBIDNxsSlsLar_xwlAUkqwC8O48Nx4J/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1NBBG5K9BegeV6tmUgIfSW-MsEDsBecsy/preview', 'Admission in ICU/Emergency')">
+                        <span class="icon video-icon">▶️</span><span>Admission Procedure - ICU & Emergency</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Z_bR_B6fdEtcGF8v7x1Esr9V6BQc115c/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1hvPgG4mzNr2z3aCPpRmYSyOt63tmaHON/preview', 'Medico-legal Issues')">
+                        <span class="icon video-icon">▶️</span><span>Medico-legal Issues in Admission</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1eS_hZf0MAVXuilHlSxtzHa8uc4JKNUYJ/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1smVYBlpxuI_N8cUMKscD8JzC64X_uhu9/preview', 'Discharge')">
+                        <span class="icon video-icon">▶️</span><span>Discharge</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1X81vwI2ADv20rARkuOaxyEs27OM3aADp/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/13vJ_oQ3GHGaMJP9F8JGP1107bibT5I0S/preview', 'Discharge Planning')">
+                        <span class="icon video-icon">▶️</span><span>Discharge Planning</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/17bJGtMn3quV1bcn2VbtNfd-3eZzgPiao/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1FUm-XIzbrq9G5KI0Z8b0h7k35LpUdvGX/preview', 'Medico-legal Role')">
+                        <span class="icon video-icon">▶️</span><span>Medico-legal Issues & Role of Nurse</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1PHLgAJGCtkHzigBtPsbKZeZ_hAzu5bet/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(11)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 11 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 12 - MOBILITY AND IMMOBILITY <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1qdosW4GXhXkYTc1Zm8GvmXN-4-lg2ULH/preview', 'Detailed Notes')">
+                        <span class="icon">📚</span><span>Detailed Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1hIRGuK32MzvfY0YLGmPlymbQiVh6Uf5R/preview', 'Body Mechanism')">
+                        <span class="icon video-icon">▶️</span><span>Body Mechanism</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/14rgga3rny8UdDYCgNRq8kjOc5bq9pbM8/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/12vlhjP_-gDe2F9XPdtnpJQYfQ24VlhWT/preview', 'Position & Exercise')">
+                        <span class="icon video-icon">▶️</span><span>Position, Range of Motion & Exercise</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1nGYv9uuXEb6V-el67GI0wM9qrPT77gPx/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/12VN8E_gWWOsXTEQHloJoipU4Bc67duVM/preview', 'Immobility')">
+                        <span class="icon video-icon">▶️</span><span>Immobility</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1-LaxcCyz3TheVKTk-WFToqrhbiqf8Gu6/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(12)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 12 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 13 - PATIENT EDUCATION <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1PkvSPFbR3_K1pH9rJ5-zoRa0cAZZl7NT/preview', 'Detailed Notes')">
+                        <span class="icon">📚</span><span>Detailed Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1v5u4t_pFTH4v8DGhzZCGBmnuiceSZQQO/preview', 'Patient Teaching Importance')">
+                        <span class="icon video-icon">▶️</span><span>Patient Teaching: Importance & Purposes</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1wDHcSqLhTQGJ2HRthK2p0OHbYbLMISnj/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1WP3lmBtRTQX4GFmL-mMqRLwcFyuKOFBw/preview', 'Teaching Process')">
+                        <span class="icon video-icon">▶️</span><span>Patient Teaching: Process & Nursing Process</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1bFh_38GK8SIxc90q8pnMVEoVeeBfxBHC/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(13)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 13 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 14 - FIRST AID <span>🔽</span>
+            </div>
+            <div class="unit-content">
+                <div class="subsection">
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1wd_u9PUGwi46jfSf7i2Wkh5SVs3P3RVo/preview', 'Detailed Notes')">
+                        <span class="icon">📚</span><span>Detailed Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1TgBceWQscHjF3t14qn3zsZhpNuDW9fnf/preview', 'First Aid Basics')">
+                        <span class="icon video-icon">▶️</span><span>First Aid Introduction</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1O8DAVCgdv_uJnjNi6VbdH79YzX3mV70o/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/15wRFvvPZ0F2cCeu6okCgccgLjTagGq6T/preview', 'Wounds & Hemorrhage')">
+                        <span class="icon video-icon">▶️</span><span>Management: Wounds & Hemorrhage</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1w1IQmiML2b1BU2VJc-VgtcSD_Pvael1n/preview', 'Shock & Fractures')">
+                        <span class="icon video-icon">▶️</span><span>Management: Shock & Fractures</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1hIOBqS3Px_unQndCWjXX6VsWGLXLtbvl/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1yVLu-D0ACTArypVU57jTlQsbEfIIgNts/preview', 'Musculoskeletal Injuries')">
+                        <span class="icon video-icon">▶️</span><span>Dislocation & Muscle Injuries</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/19wx7pPVpNb75Rys0jqBBxRN9CaldYmeb/preview', 'Transportation')">
+                        <span class="icon video-icon">▶️</span><span>Transportation of Injured Persons</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1l5gK4ViDvIEyaE_Hi__veOiZUCrEm_dV/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/19OQqoyyTrXOGnUmR-XoU9pEwbfQfBCk4/preview', 'Respiratory Emergencies')">
+                        <span class="icon video-icon">▶️</span><span>Respiratory Emergencies</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1q9i_3lBsDTl2Uyi3OkrVHeU8kkZkjyJ7/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1IQSWa64n46klV-1PyAj69yOLemOyzs78/preview', 'Foreign Bodies')">
+                        <span class="icon video-icon">▶️</span><span>Foreign Bodies: Eye, Ear, Nose, Throat</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1LUT3bZXj-ihyv8MSkHbDZLCN3JNpKcSD/preview', 'Burns & Poisoning')">
+                        <span class="icon video-icon">▶️</span><span>Burns, Scalds, Poisoning & Bites</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1mTD12JgBQ00tjmHrKtHHYnNAgmMDYX0Z/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/18GwuSkNLWyXORgwFMR4AyjPIfNWHJ7dv/preview', 'Frostbite & Heat')">
+                        <span class="icon video-icon">▶️</span><span>Frostbite, Heat Effects & Community Emergencies</span>
+                    </div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1RsVEN8ZDwq2GBgP9N0AcYkCtPLhhF0g3/preview', 'Lecture Notes')">
+                        <span class="icon">📝</span><span>Lecture Notes</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz(14)">
+                        <span class="icon quiz-icon">✍️</span><span>Take Unit 14 Quiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div id="app-modal" class="modal-overlay">
@@ -272,460 +832,254 @@
     </div>
 
     <script>
-        // --- 1. QUIZ DATA (14 Units) ---
         const QUIZ_DATA = {
-            1: [ // Health & Illness
-                { q: "According to WHO, health is a state of complete:", o: ["Physical well-being", "Absence of disease", "Physical, mental, and social well-being", "Economic stability"], a: 2 },
-                { q: "The highest level in Maslow's hierarchy of needs is:", o: ["Safety", "Self-actualization", "Belonging", "Physiological"], a: 1 },
-                { q: "An acute illness is characterized by:", o: ["Slow onset, long duration", "Rapid onset, short duration", "Permanent change", "Need for rehabilitation"], a: 1 },
-                { q: "Which is a dimension of health?", o: ["Spiritual", "Financial", "Political", "Legal"], a: 0 },
-                { q: "The health-illness continuum model suggests health is:", o: ["Static", "Dynamic/Changing", "Fixed at birth", "Uncontrollable"], a: 1 }
+            1: [
+                { q: "WHO defines health as:", o: ["Absence of disease", "Physical fitness", "Complete physical, mental, and social well-being", "Ability to function"], a: 2 },
+                { q: "Maslow's hierarchy places which need at the base?", o: ["Safety", "Self-actualization", "Physiological", "Love/Belonging"], a: 2 },
+                { q: "Which is a dimension of health?", o: ["Spiritual", "Financial", "Political", "Technological"], a: 0 },
+                { q: "The health-illness continuum model views health as:", o: ["A fixed point", "A dynamic state", "Only absence of illness", "Unchangeable"], a: 1 },
+                { q: "Primary prevention aims to:", o: ["Treat disease", "Prevent disease occurrence", "Rehabilitate", "Reduce complications"], a: 1 },
+                { q: "A risk factor is:", o: ["A guarantee of disease", "Something that increases vulnerability", "A symptom", "A cure"], a: 1 },
+                { q: "Holistic health care considers:", o: ["Only the body", "The whole person", "Only the mind", "Only environment"], a: 1 },
+                { q: "Acute illness is characterized by:", o: ["Slow onset, long duration", "Rapid onset, short duration", "Permanent change", "Need for rehabilitation"], a: 1 },
+                { q: "Self-actualization is the:", o: ["Lowest need", "Highest need", "Middle need", "Basic need"], a: 1 },
+                { q: "Wellness involves:", o: ["Passive acceptance", "Active lifestyle choices", "Genetic makeup only", "Luck"], a: 1 }
             ],
-            2: [ // Healthcare Delivery
-                { q: "Primary prevention aims to:", o: ["Treat disease", "Prevent disease occurrence", "Rehabilitate", "Diagnose"], a: 1 },
-                { q: "Which is a primary healthcare agency?", o: ["Specialty Hospital", "PHC (Primary Health Centre)", "Medical College", "Research Center"], a: 1 },
-                { q: "Tertiary level of care involves:", o: ["Immunization", "General diagnosis", "Specialized/Advanced care", "Home visits"], a: 2 },
-                { q: "Rehabilitation is an example of:", o: ["Primary prevention", "Secondary prevention", "Tertiary prevention", "Primordial prevention"], a: 2 },
-                { q: "The head of the nursing team in a hospital unit is usually the:", o: ["Staff Nurse", "Student Nurse", "Head Nurse/Ward Sister", "Doctor"], a: 2 }
+            2: [
+                { q: "Primary Health Care is focused on:", o: ["Specialized care", "Essential health care for all", "Surgery", "Research"], a: 1 },
+                { q: "Which is a tertiary level of care?", o: ["PHC", "CHC", "Specialized/Super-specialty Hospital", "Sub-center"], a: 2 },
+                { q: "The first level of contact with the health system is:", o: ["Secondary care", "Tertiary care", "Primary care", "Quaternary care"], a: 2 },
+                { q: "Rehabilitation is a form of:", o: ["Primary prevention", "Secondary prevention", "Tertiary prevention", "Health promotion"], a: 2 },
+                { q: "A teaching hospital is usually a:", o: ["Primary center", "Secondary center", "Tertiary center", "Clinic"], a: 2 },
+                { q: "Who leads the nursing team in a ward?", o: ["Student Nurse", "Head Nurse/Sister In-charge", "Physician", "Pharmacist"], a: 1 },
+                { q: "ASHA stands for:", o: ["Accredited Social Health Activist", "Association of Health", "Active Social Help", "None"], a: 0 },
+                { q: "The focus of secondary prevention is:", o: ["Vaccination", "Early diagnosis and treatment", "Rehab", "Counseling"], a: 1 },
+                { q: "Hospice care focuses on:", o: ["Curing disease", "Palliative/End-of-life care", "Surgery", "Emergency"], a: 1 },
+                { q: "An outpatient department (OPD) provides care to:", o: ["Admitted patients", "Patients who go home same day", "ICU patients", "Surgery patients"], a: 1 }
             ],
-            3: [ // History & Profession
-                { q: "Who is known as the Lady with the Lamp?", o: ["Clara Barton", "Florence Nightingale", "Dorothea Dix", "Mary Seacole"], a: 1 },
-                { q: "Nursing as a profession requires:", o: ["Only kindness", "Specialized knowledge and ethics", "High salary", "Political power"], a: 1 },
-                { q: "The code of ethics for nurses guides:", o: ["Salary negotiation", "Professional conduct", "Hospital administration", "Uniform style"], a: 1 },
-                { q: "Which is a quality of a professional nurse?", o: ["Empathy", "Judgmental attitude", "Aggression", "Dishonesty"], a: 0 },
-                { q: "The ICN stands for:", o: ["Indian Council of Nursing", "International Council of Nurses", "Integrated Care Nursing", "Internal Care Network"], a: 1 }
+            3: [
+                { q: "Who is known as the founder of modern nursing?", o: ["Clara Barton", "Florence Nightingale", "Dorothea Orem", "Virginia Henderson"], a: 1 },
+                { q: "Florence Nightingale was also known as:", o: ["The Lady with the Gun", "The Lady with the Lamp", "The Angel of Mercy", "The Mother of Nursing"], a: 1 },
+                { q: "Nursing as a profession requires:", o: ["Only kindness", "Specialized knowledge and ethics", "Physical strength only", "Obedience"], a: 1 },
+                { q: "The Code of Ethics for nurses provides:", o: ["Legal rules", "Guidelines for professional behavior", "Salary details", "Hospital policies"], a: 1 },
+                { q: "International Nurses Day is celebrated on:", o: ["May 12", "April 7", "June 5", "December 1"], a: 0 },
+                { q: "Which is a function of a nurse?", o: ["Diagnosis", "Caregiver", "Prescribing surgery", "Hospital construction"], a: 1 },
+                { q: "TNAI stands for:", o: ["Trained Nurses Association of India", "Teacher Nurse Association", "Total Nursing Aid", "None"], a: 0 },
+                { q: "Etiquette refers to:", o: ["Laws", "Polite social behavior", "Medical rules", "Uniform code"], a: 1 },
+                { q: "A characteristic of a profession is:", o: ["Short training", "Autonomy", "Low responsibility", "Manual labor only"], a: 1 },
+                { q: "The primary focus of nursing is:", o: ["Disease", "Patient/Client", "Doctor", "Equipment"], a: 1 }
             ],
-            4: [ // Nurse Patient Relationship
-                { q: "The primary goal of the nurse-patient relationship is:", o: ["Socialization", "Patient health/Therapeutic", "Friendship", "Data collection"], a: 1 },
-                { q: "Non-verbal communication includes:", o: ["Speaking", "Writing", "Body language/Touch", "Email"], a: 2 },
-                { q: "Empathy involves:", o: ["Feeling pity", "Understanding the patient's feelings", "Ignoring feelings", "Crying with patient"], a: 1 },
-                { q: "Which is a barrier to effective communication?", o: ["Active listening", "Clarifying", "False reassurance", "Silence"], a: 2 },
-                { q: "The introductory phase of relationship involves:", o: ["Termination", "Building trust/rapport", "Physical exam", "Discharge"], a: 1 }
+            4: [
+                { q: "The sender in communication is the one who:", o: ["Receives message", "Encodes message", "Decodes message", "Ignores message"], a: 1 },
+                { q: "Therapeutic communication focuses on:", o: ["Socializing", "Patient's needs", "Nurse's needs", "Hospital news"], a: 1 },
+                { q: "Non-verbal communication includes:", o: ["Writing", "Speaking", "Body language/Gestures", "Email"], a: 2 },
+                { q: "Empathy means:", o: ["Feeling pity", "Understanding another's feelings", "Ignoring feelings", "Judging"], a: 1 },
+                { q: "A barrier to communication is:", o: ["Active listening", "Clarifying", "Noise/Distraction", "Open questions"], a: 2 },
+                { q: "Which phase comes first in the nurse-patient relationship?", o: ["Working", "Termination", "Orientation", "Evaluation"], a: 2 },
+                { q: "Open-ended questions allow:", o: ["Yes/No answers", "Elaboration", "Silence", "Confusion"], a: 1 },
+                { q: "Silence in communication can indicate:", o: ["Anger only", "Thinking or reflection", "Ignorance", "Sleep"], a: 1 },
+                { q: "The goal of the nurse-patient relationship is:", o: ["Friendship", "Patient health outcomes", "Nurse popularity", "Dependency"], a: 1 },
+                { q: "Intrapersonal communication is:", o: ["With others", "Self-talk", "Public speaking", "Group discussion"], a: 1 }
             ],
-            5: [ // Documentation
-                { q: "A patient's record is a:", o: ["Public document", "Legal document", "Worthless paper", "Nurse's diary"], a: 1 },
-                { q: "Confidentiality means:", o: ["Sharing info with family", "Keeping patient info private", "Posting on social media", "Discussing in cafeteria"], a: 1 },
-                { q: "Documentation should be:", o: ["Subjective", "Accurate and Timely", "Vague", "Done next week"], a: 1 },
-                { q: "Which shift report is given between nurses?", o: ["Transfer report", "Handover/End-of-shift report", "Incident report", "Discharge report"], a: 1 },
-                { q: "An incident report is used for:", o: ["Routine care", "Unexpected events/Errors", "Daily vitals", "Medication orders"], a: 1 }
+            5: [
+                { q: "Documentation in nursing must be:", o: ["Subjective", "Accurate and objective", "Written later", "Erased if wrong"], a: 1 },
+                { q: "A Kardex is a:", o: ["Medication", "Quick reference care plan/summary", "Admission form", "Discharge paper"], a: 1 },
+                { q: "SOAP stands for:", o: ["Subjective, Objective, Assessment, Plan", "Safety, Observation, Action, Plan", "Standard, Order, Act, Procedure", "None"], a: 0 },
+                { q: "Which indicates an error correction in charting?", o: ["White-out", "Scribble over it", "Single line through with initials", "Tearing the page"], a: 2 },
+                { q: "Confidentiality means:", o: ["Sharing info with everyone", "Keeping patient info private", "Hiding errors", "Not documenting"], a: 1 },
+                { q: "Shift report is given to:", o: ["Patient", "Family", "Incoming staff", "Doctor only"], a: 2 },
+                { q: "An incident report is used for:", o: ["Routine care", "Unusual occurrences/Errors", "Discharge", "Compliments"], a: 1 },
+                { q: "Electronic Health Records (EHR) improve:", o: ["Handwriting legibility", "Access and continuity", "Data loss", "Paper waste"], a: 1 },
+                { q: "Charting by Exception focuses on:", o: ["Everything", "Normal findings", "Abnormal/Significant findings", "Vital signs only"], a: 2 },
+                { q: "The primary purpose of records is:", o: ["Legal evidence", "Communication", "Research", "All of the above"], a: 3 }
             ],
-            6: [ // Vital Signs
-                { q: "Normal adult pulse rate is:", o: ["60-100 bpm", "100-120 bpm", "40-60 bpm", "120-140 bpm"], a: 0 },
-                { q: "The most common site for taking pulse is:", o: ["Carotid", "Radial", "Femoral", "Popliteal"], a: 1 },
-                { q: "Pyrexia refers to:", o: ["Low BP", "High Fever", "Slow pulse", "No breathing"], a: 1 },
-                { q: "Normal blood pressure is:", o: ["140/90", "120/80 mmHg", "100/50", "160/100"], a: 1 },
-                { q: "Apnea means:", o: ["Rapid breathing", "Difficulty breathing", "Cessation of breathing", "Normal breathing"], a: 2 }
+            6: [
+                { q: "Normal adult body temperature is approx:", o: ["36°C", "37°C (98.6°F)", "38°C", "35°C"], a: 1 },
+                { q: "The most common site for taking pulse is:", o: ["Carotid", "Radial", "Femoral", "Apical"], a: 1 },
+                { q: "Normal adult respiratory rate is:", o: ["12-20 breaths/min", "30-40 breaths/min", "60-80 breaths/min", "5-10 breaths/min"], a: 0 },
+                { q: "Bradycardia is a pulse rate below:", o: ["100 bpm", "60 bpm", "80 bpm", "120 bpm"], a: 1 },
+                { q: "Systolic pressure represents:", o: ["Heart at rest", "Heart contraction", "Venous pressure", "Lung pressure"], a: 1 },
+                { q: "Hypertension is defined as BP consistently above:", o: ["120/80", "140/90", "100/60", "110/70"], a: 1 },
+                { q: "The apical pulse is found at the:", o: ["Wrist", "Neck", "5th intercostal space, midclavicular line", "Groin"], a: 2 },
+                { q: "Dyspnea means:", o: ["No breathing", "Difficult/Labored breathing", "Fast breathing", "Slow breathing"], a: 1 },
+                { q: "Rectal temperature is usually:", o: ["Lower than oral", "Higher than oral", "Same as oral", "Unreliable"], a: 1 },
+                { q: "A pulse oximeter measures:", o: ["Blood pressure", "Oxygen saturation", "Glucose", "Temperature"], a: 1 }
             ],
-            7: [ // Equipment & Linen
-                { q: "Dirty linen should be placed in:", o: ["Floor", "Hamper/Bag", "Patient's bed", "Table"], a: 1 },
-                { q: "Rubber goods should be cleaned with:", o: ["Boiling water", "Soap and tepid water", "Strong acid", "Oil"], a: 1 },
-                { q: "The purpose of a mackintosh is to:", o: ["Keep patient warm", "Protect mattress from moisture", "Look good", "Restrain patient"], a: 1 },
-                { q: "Sharps should be disposed of in:", o: ["Red bag", "Puncture-proof container", "Black bag", "Green bin"], a: 1 },
-                { q: "Cross-infection can be prevented by:", o: ["Sharing linen", "Hand washing & proper disposal", "Reusing needles", "Not cleaning"], a: 1 }
+            7: [
+                { q: "Medical asepsis is also known as:", o: ["Sterile technique", "Clean technique", "Surgical technique", "Isolation"], a: 1 },
+                { q: "The most effective way to prevent infection spread is:", o: ["Wearing masks", "Hand hygiene", "Antibiotics", "Isolation"], a: 1 },
+                { q: "Soiled linen should be:", o: ["Thrown on floor", "Placed in bag/hamper immediately", "Shaken", "Carried against uniform"], a: 1 },
+                { q: "Rubber goods should usually be cleaned with:", o: ["Boiling water", "Soap and water", "Acid", "Oil"], a: 1 },
+                { q: "Autoclaving uses:", o: ["Dry heat", "Steam under pressure", "Chemicals", "Radiation"], a: 1 },
+                { q: "Sharps must be disposed of in:", o: ["Trash can", "Puncture-proof container", "Laundry bag", "Toilet"], a: 1 },
+                { q: "Indent refers to:", o: ["Ordering supplies", "Cleaning", "Repairing", "Throwing away"], a: 0 },
+                { q: "Disinfection kills:", o: ["All spores", "Pathogens but not necessarily spores", "Viruses only", "Bacteria only"], a: 1 },
+                { q: "Barrier nursing is used for:", o: ["Healthy patients", "Infectious patients", "Staff protection", "Visitors"], a: 1 },
+                { q: "Furniture in hospitals should be:", o: ["Dusty", "Easy to clean", "Complex", "Soft only"], a: 1 }
             ],
-            8: [ // Infection Control
-                { q: "Nosocomial infection is acquired in:", o: ["Home", "Hospital", "School", "Park"], a: 1 },
-                { q: "The most effective way to prevent infection is:", o: ["Antibiotics", "Hand washing", "Wearing masks", "Isolation"], a: 1 },
-                { q: "Medical asepsis is also known as:", o: ["Sterile technique", "Clean technique", "Surgical technique", "Dirty technique"], a: 1 },
-                { q: "Standard precautions apply to:", o: ["Only HIV patients", "All patients", "Only coughing patients", "Only surgical patients"], a: 1 },
-                { q: "PPE stands for:", o: ["Personal Protective Equipment", "Patient Protective Equipment", "Public Private Entity", "Primary Patient Exam"], a: 0 }
+            8: [
+                { q: "A nosocomial infection is acquired in:", o: ["Home", "Hospital/Health facility", "School", "Park"], a: 1 },
+                { q: "The first link in the chain of infection is:", o: ["Reservoir", "Infectious agent", "Portal of exit", "Host"], a: 1 },
+                { q: "A vector-borne transmission involves:", o: ["Air", "Water", "Insects/Animals", "Direct touch"], a: 2 },
+                { q: "Isolation precautions include:", o: ["Standard", "Contact", "Droplet", "All of above"], a: 3 },
+                { q: "Standard precautions apply to:", o: ["Only HIV patients", "Only coughing patients", "All patients", "Only surgery"], a: 2 },
+                { q: "The incubation period is:", o: ["Time between entry and symptoms", "Recovery time", "Death", "Treatment time"], a: 0 },
+                { q: "An opportunistic infection occurs when:", o: ["Immunity is high", "Immunity is compromised", "Hygiene is good", "Vaccinated"], a: 1 },
+                { q: "PPE stands for:", o: ["Personal Protective Equipment", "Private Patient Entry", "Primary Prevention Exam", "None"], a: 0 },
+                { q: "Sterilization destroys:", o: ["Bacteria only", "All microorganisms including spores", "Viruses only", "Dirt"], a: 1 },
+                { q: "Hand washing should last at least:", o: ["5 seconds", "20 seconds", "1 minute", "5 minutes"], a: 1 }
             ],
-            9: [ // Comfort, Rest, Sleep & Pain
-                { q: "The 5th vital sign is:", o: ["Pain", "O2 Saturation", "Height", "Weight"], a: 0 },
-                { q: "Fowler's position is used for:", o: ["Sleeping", "Breathing difficulty (Dyspnea)", "Shock", "Enema"], a: 1 },
-                { q: "Insomnia is:", o: ["Excessive sleep", "Inability to sleep", "Walking in sleep", "Talking in sleep"], a: 1 },
+            9: [
+                { q: "Fowler's position is used for:", o: ["Shock", "Respiratory distress/Eating", "Enema", "Back rub"], a: 1 },
+                { q: "A mitered corner is used in:", o: ["Bandaging", "Bed making", "Suturing", "Injection"], a: 1 },
+                { q: "REM sleep stands for:", o: ["Rapid Eye Movement", "Rest Eye Motion", "Real Energy Mode", "Rapid Ear Motion"], a: 0 },
+                { q: "Insomnia is:", o: ["Excessive sleep", "Inability to sleep", "Sleep walking", "Nightmares"], a: 1 },
+                { q: "Pain is best described as:", o: ["What the nurse sees", "Whatever the patient says it is", "Only physical injury", "Imaginary"], a: 1 },
                 { q: "A bed cradle is used to:", o: ["Keep patient warm", "Keep weight of linen off body", "Restrain patient", "Elevate legs"], a: 1 },
-                { q: "Phantom pain is felt in:", o: ["Head", "Abdomen", "Missing/Amputated limb", "Chest"], a: 2 }
+                { q: "Sim's position is often used for:", o: ["Feeding", "Enema/Rectal exam", "Breathing", "Sleeping"], a: 1 },
+                { q: "Phantom pain is felt in:", o: ["Head", "Amputated limb", "Stomach", "Chest"], a: 1 },
+                { q: "CAM stands for:", o: ["Care And Medicine", "Complementary and Alternative Modalities", "Computer Aided Medicine", "Critical Acute Management"], a: 1 },
+                { q: "Promoting sleep includes:", o: ["Loud noise", "Bright lights", "Comfortable environment/Back rub", "Caffeine"], a: 2 }
             ],
-            10: [ // Promoting Safety
-                { q: "Which patients are at high risk for falls?", o: ["Young adults", "Elderly & confused", "Post-op day 5", "Visitors"], a: 1 },
-                { q: "Restraints should be used:", o: ["As a first choice", "As a last resort", "For punishment", "For convenience"], a: 1 },
-                { q: "In case of fire, the acronym RACE stands for:", o: ["Run, Act, Call, Exit", "Rescue, Alarm, Confine, Extinguish", "Run, Alarm, Call, Escape", "Rescue, Act, Calm, Exit"], a: 1 },
-                { q: "Decubitus ulcers (bedsores) are caused by:", o: ["Pressure", "Fever", "Infection", "Fall"], a: 0 },
-                { q: "Ideal room temperature for a patient is approx:", o: ["10-15°C", "20-24°C", "30-35°C", "40°C"], a: 1 }
+            10: [
+                { q: "The primary goal of patient safety is to:", o: ["Prevent injury/Harm", "Save money", "Follow rules", "Complete charts"], a: 0 },
+                { q: "RACE in fire safety stands for:", o: ["Run, Act, Call, Exit", "Rescue, Alarm, Contain, Extinguish", "Read, Ask, Call, End", "None"], a: 1 },
+                { q: "Restraints should be used:", o: ["As punishment", "As a last resort", "For convenience", "On every patient"], a: 1 },
+                { q: "A common hazard for elderly patients is:", o: ["Fire", "Falls", "Poison", "Drowning"], a: 1 },
+                { q: "Side rails are used to:", o: ["Prevent falls", "Restrain patient", "Store linen", "None"], a: 0 },
+                { q: "Proper body mechanics involves:", o: ["Bending at waist", "Bending knees/Keeping back straight", "Twisting", "Lifting high"], a: 1 },
+                { q: "A potential complication of restraints is:", o: ["Safety", "Pressure ulcers/Nerve damage", "Comfort", "Healing"], a: 1 },
+                { q: "Hospital noise can cause:", o: ["Sleep deprivation", "Healing", "Happiness", "Hunger"], a: 0 },
+                { q: "Hazardous waste goes in:", o: ["Black bag", "Red/Yellow bag (Biohazard)", "Recycle", "Pocket"], a: 1 },
+                { q: "Checking ID band helps prevent:", o: ["Falls", "Wrong patient errors", "Infection", "Fire"], a: 1 }
             ],
-            11: [ // Admission & Discharge
-                { q: "During admission, the nurse's first priority is:", o: ["Paperwork", "Assessing patient status/Safety", "Collecting money", "Calling doctor"], a: 1 },
-                { q: "LAMA stands for:", o: ["Leave Against Medical Advice", "Leave After Medical Advice", "Left Alone Medical Area", "Legal Authority Medical Act"], a: 0 },
-                { q: "Discharge planning begins at:", o: ["Day of discharge", "Admission", "One day before", "After discharge"], a: 1 },
-                { q: "Medico-legal cases (MLC) involve:", o: ["Common cold", "Accidents/Poisoning/Assault", "Fever", "Diabetes"], a: 1 },
-                { q: "An open bed is made for:", o: ["New patient", "Ambulatory patient", "Post-op patient", "Empty room"], a: 1 }
+            11: [
+                { q: "Admission procedure begins in the:", o: ["Ward", "Reception/Admitting office", "Laboratory", "Pharmacy"], a: 1 },
+                { q: "An open bed is prepared for:", o: ["New patient", "Ambulatory patient", "Empty room", "Discharge"], a: 1 },
+                { q: "Discharge planning starts at:", o: ["Admission", "Day of discharge", "One week later", "Never"], a: 0 },
+                { q: "LAMA stands for:", o: ["Leave Against Medical Advice", "Late Admission Medical Act", "Leave After Medication", "None"], a: 0 },
+                { q: "Medico-legal cases (MLC) must be:", o: ["Ignored", "Reported to police", "Hidden", "Discharged immediately"], a: 1 },
+                { q: "Transfer of a patient means:", o: ["Discharge home", "Moving to another unit/hospital", "Walking in hall", "Leaving"], a: 1 },
+                { q: "Valuables of a patient should be:", o: ["Kept by nurse", "Given to family/Locked in safe", "Left on bed", "Thrown away"], a: 1 },
+                { q: "Orientation to the unit includes:", o: ["Call light, bathroom, meal times", "Medical history", "Surgery", "Staff pay"], a: 0 },
+                { q: "Emergency admission is for:", o: ["Routine checkup", "Elective surgery", "Acute/Life-threatening condition", "Vaccination"], a: 2 },
+                { q: "Death in the hospital requires:", o: ["Discharge paper", "Death certificate/Care of body", "Transfer", "LAMA"], a: 1 }
             ],
-            12: [ // Mobility & Immobility
-                { q: "Active ROM exercises are performed by:", o: ["Nurse", "Patient", "Machine", "Family"], a: 1 },
-                { q: "A complication of immobility is:", o: ["Diarrhea", "Deep Vein Thrombosis (DVT)", "Hypertension", "Improved lung function"], a: 1 },
-                { q: "Body mechanics involves:", o: ["Lifting heavy weights", "Coordinated body movement", "Running fast", "Gymnastics"], a: 1 },
-                { q: "Foot drop is prevented by using:", o: ["Foot board", "Sandbag", "Pillow", "Bed cradle"], a: 0 },
-                { q: "Prone position means lying on:", o: ["Back", "Side", "Abdomen", "Sitting up"], a: 2 }
+            12: [
+                { q: "Active ROM exercises are done by:", o: ["Nurse", "Patient", "Machine", "Family"], a: 1 },
+                { q: "Foot drop is caused by:", o: ["Walking", "Prolonged plantar flexion", "Exercise", "Shoes"], a: 1 },
+                { q: "A complication of immobility is:", o: ["Muscle strength", "Pressure ulcers/DVT", "Better lung function", "High energy"], a: 1 },
+                { q: "Supine position means lying on:", o: ["Stomach", "Back", "Side", "Sitting"], a: 1 },
+                { q: "Abduction means moving a limb:", o: ["Toward body", "Away from body", "Circular", "Down"], a: 1 },
+                { q: "Logrolling is used for patients with:", o: ["Arm injury", "Spinal injury", "Leg cast", "Headache"], a: 1 },
+                { q: "Decubitus ulcers are prevented by turning patient every:", o: ["4 hours", "2 hours", "8 hours", "12 hours"], a: 1 },
+                { q: "Atrophy refers to:", o: ["Muscle growth", "Muscle wasting", "Bone growth", "Fat loss"], a: 1 },
+                { q: "Trapeze bar helps patient to:", o: ["Sleep", "Lift upper body in bed", "Walk", "Eat"], a: 1 },
+                { q: "Gait refers to:", o: ["Sitting style", "Manner of walking", "Running", "Lying down"], a: 1 }
             ],
-            13: [ // Patient Education
-                { q: "The goal of patient education is to:", o: ["Increase hospital revenue", "Promote health & independence", "Confuse the patient", "Pass time"], a: 1 },
-                { q: "Feedback determines if:", o: ["Nurse spoke well", "Learning has taken place", "Patient is happy", "Doctor is coming"], a: 1 },
-                { q: "Teaching should be:", o: ["Complex", "At patient's level of understanding", "Rushed", "In medical jargon"], a: 1 },
-                { q: "A visual aid for teaching includes:", o: ["Lecture", "Pamphlet/Chart", "Radio", "Discussion"], a: 1 },
-                { q: "When is the best time to teach?", o: ["When patient is in pain", "When patient is alert and comfortable", "During sleep", "During resuscitation"], a: 1 }
+            13: [
+                { q: "The purpose of patient education is to:", o: ["Confuse patient", "Promote health and independence", "Use time", "Show off knowledge"], a: 1 },
+                { q: "Which domain of learning involves skills?", o: ["Cognitive", "Affective", "Psychomotor", "Social"], a: 2 },
+                { q: "Teach-back method is used to:", o: ["Scold patient", "Verify understanding", "Repeat info", "End session"], a: 1 },
+                { q: "Readiness to learn depends on:", o: ["Nurse's time", "Patient's pain/motivation", "Hospital rules", "Weather"], a: 1 },
+                { q: "Cognitive learning involves:", o: ["Feelings", "Knowledge/Thinking", "Hands-on skills", "Beliefs"], a: 1 },
+                { q: "Patient teaching should be:", o: ["Complex", "Tailored to patient's level", "Rushed", "Only written"], a: 1 },
+                { q: "A barrier to learning is:", o: ["Motivation", "Pain/Anxiety", "Intelligence", "Interest"], a: 1 },
+                { q: "Documentation of teaching includes:", o: ["Only topic", "Content, method, and patient response", "Nurse's name only", "Time only"], a: 1 },
+                { q: "Visual aids help in:", o: ["Confusing", "Reinforcing learning", "Wasting paper", "None"], a: 1 },
+                { q: "Health literacy refers to:", o: ["Reading ability only", "Ability to understand health info", "Writing ability", "Speaking English"], a: 1 }
             ],
-            14: [ // First Aid
-                { q: "CPR stands for:", o: ["Cardio Pulmonary Resuscitation", "Cardio Pulmonary Rescue", "Cardiac Pulse Rate", "Central Patient Room"], a: 0 },
-                { q: "First aid for a burn involves:", o: ["Applying ice", "Running cool water", "Applying butter", "Popping blisters"], a: 1 },
-                { q: "In case of epistaxis (nosebleed), position the head:", o: ["Backwards", "Forward", "Flat", "Side"], a: 1 },
-                { q: "The ratio of compressions to breaths in adult CPR is:", o: ["15:2", "30:2", "5:1", "10:1"], a: 1 },
-                { q: "Immediate care for a fracture is:", o: ["Massage", "Immobilize the part", "Exercise", "Walk"], a: 1 }
+            14: [
+                { q: "First Aid is:", o: ["Surgery", "Immediate temporary care", "Long term care", "Diagnosis"], a: 1 },
+                { q: "ABC in first aid stands for:", o: ["Airway, Breathing, Circulation", "Apple, Ball, Cat", "Ask, Breathe, Call", "Air, Blood, Chest"], a: 0 },
+                { q: "CPR stands for:", o: ["Cardio Pulmonary Resuscitation", "Chest Pressure Relief", "Cardiac Pulse Rate", "None"], a: 0 },
+                { q: "For a burn, the first step is to:", o: ["Apply butter", "Cool with water", "Break blisters", "Apply ice directly"], a: 1 },
+                { q: "Shock is characterized by:", o: ["High BP", "Low BP, rapid pulse", "Slow pulse", "Warm skin"], a: 1 },
+                { q: "Heimlich maneuver is used for:", o: ["Drowning", "Choking", "Bleeding", "Fracture"], a: 1 },
+                { q: "Splinting is used for:", o: ["Burns", "Fractures", "Poisoning", "Fever"], a: 1 },
+                { q: "In case of nosebleed:", o: ["Tilt head back", "Pinch nose and lean forward", "Lie down", "Blow nose"], a: 1 },
+                { q: "Rule of Nines is used for:", o: ["Fractures", "Burns estimation", "CPR", "Poisoning"], a: 1 },
+                { q: "First action at an emergency scene is:", o: ["Help victim", "Check for safety", "Call family", "Run away"], a: 1 }
             ]
         };
 
-        // --- 2. COURSE DATA ---
-        const UNITS = [
-            {
-                id: 1, title: "HEALTH & ILLNESS",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1QKZi5lxQ1TTv8pR-mPZ8tCfVn1iUQGzw/preview' },
-                    { type: 'video', title: 'Concept of Health', url: 'https://drive.google.com/file/d/1vfBNelGFFm64Vc1XsL5PZ2YhXZa967NX/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1-uO6LyLyWTeHbyd479lmjIZV93oO1hu5/preview' },
-                    { type: 'video', title: 'Health-Illness Continuum', url: 'https://drive.google.com/file/d/1HtVADKbLA0KWSQYmpI_WpSSy3qi26eaL/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/10SHLD2ODqoqx1MRYIF5DPsgPt5mg1MJs/preview' }
-                ]
-            },
-            {
-                id: 2, title: "HEALTHCARE DELIVERY",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1zG3rnQ8U--qh0WaZcvJUYbD0xe-2FJvL/preview' },
-                    { type: 'video', title: 'Illness Prevention Levels', url: 'https://drive.google.com/file/d/1jTHYoWESEBsFmvLW7-N3FCD4ZdPQmxJQ/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1ggOdeL4tGxiXtu1INfq3IJABP65kDDBa/preview' },
-                    { type: 'video', title: 'Hospitals & Teams', url: 'https://drive.google.com/file/d/1k9AI8B05SFDzkYs5ysAsn4v4IiWGhsoF/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1ddWUlxh8O5hwgWWqO7tw8ziLEakaWUDe/preview' }
-                ]
-            },
-            {
-                id: 3, title: "HISTORY & PROFESSION",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1mYRZsAD7X-7OCcfrazPymUTUR-BWuqav/preview' },
-                    { type: 'video', title: 'History & Philosophy', url: 'https://drive.google.com/file/d/1A-6VNRbbm5Q6DZMbupdAlv03gD6tp4JN/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1wR9QR5eW5SDRM5BwL8Yxg5UBH0BvtV7A/preview' },
-                    { type: 'video', title: 'Ethics & Profession', url: 'https://drive.google.com/file/d/1IcYMG1MN8tZRdJ0y54q1BcPqc8nVAVXd/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1F3AultBl5-uMtp4MJ0PVRDODXsX-ht2K/preview' }
-                ]
-            },
-            {
-                id: 4, title: "NURSE PATIENT RELATIONSHIP",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1m4RSpCro0fl5Kaw7N6xlOWUroLYMMojC/preview' },
-                    { type: 'video', title: 'Communication Basics', url: 'https://drive.google.com/file/d/19iAt5E_mHuE1qznHzI3yO_381KRR_h2G/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/18LQOSxwhb6odgFYllnyMGjpeW-3b9LOy/preview' },
-                    { type: 'video', title: 'Modes & Factors', url: 'https://drive.google.com/file/d/1MUFw1a7bW2NLMtAvYfp6b7cOP-iQExDM/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1iPMUgbfF1cGN87OpksFCnNqD3f-QU85C/preview' },
-                    { type: 'video', title: 'Therapeutic Communication', url: 'https://drive.google.com/file/d/1leLC2VgpzbiyE9dxGrMj99YKyPKYGbjn/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/10mIV5JoDFhMi8EPV2U-v4Z2Dd6QVrmQd/preview' },
-                    { type: 'video', title: 'Vulnerable Groups', url: 'https://drive.google.com/file/d/12Y21CHkNsRlsz3sEBUBcNyx0p_JFmaLT/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/18gnSecm3YZ5KLidPIOIwLPIkS6aqLeEP/preview' }
-                ]
-            },
-            {
-                id: 5, title: "DOCUMENTATION",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1cQpbgTNTWupCvXpvCkxhjvtE_RZUO7pT/preview' },
-                    { type: 'video', title: 'Purposes & Confidentiality', url: 'https://drive.google.com/file/d/1E9EqeaPLyns95naqv5-QglzO6Gcsmjdv/preview' },
-                    { type: 'video', title: 'Methods of Recording', url: 'https://drive.google.com/file/d/1A0HufNmeeNHgQWrckJCcw6D4_NNzvD2c/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1RNvPnilKDUgX_UQRnjzBd-JCQ40ph13b/preview' },
-                    { type: 'video', title: 'Types of Reporting', url: 'https://drive.google.com/file/d/10jw7GBsuFmAa5yig-65fclV9-sUa-TNk/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1PtsflV3JzoNVBhJ7pPHweu5LbPAisH1i/preview' }
-                ]
-            },
-            {
-                id: 6, title: "VITAL SIGNS",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1NRL50PRr2ZMd7WsGvVFVKBDEyYJj386M/preview' },
-                    { type: 'video', title: 'Guidelines & Temperature', url: 'https://drive.google.com/file/d/12K1NeZe-yYMbcHAgp3MynfqYltFTHw0Q/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1JKeuku8_XYMNrnhEmB3RJ5P-SK2Dg5Mf/preview' },
-                    { type: 'video', title: 'Fever/Pyrexia', url: 'https://drive.google.com/file/d/1rohWm6_KG5KN2pU_kb99XulEU6zooaBc/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1FwT9LMXe4526pYqkGArX6ekNMa6DQtxk/preview' },
-                    { type: 'video', title: 'Pulse', url: 'https://drive.google.com/file/d/1E8qcOXqGEyhBJHNUiXDRGcksKTl67hfz/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1K4-WECY_ca-Ot9-GcvLMZBzn_KQSBUUz/preview' },
-                    { type: 'video', title: 'Respiration', url: 'https://drive.google.com/file/d/1dOPtPj85T04NnGQgGPOtRHTd7JFJ--uE/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1Hc6d4y7Rs3UcrcQxIulYU-9YDdsoA3nW/preview' },
-                    { type: 'video', title: 'Blood Pressure', url: 'https://drive.google.com/file/d/1icKMFWSvkMUYiHvCPkXku8bmEfrAQlmA/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/17Ks5xxzX0n_2LNx3zw7shgLBxqOOZooT/preview' }
-                ]
-            },
-            {
-                id: 7, title: "EQUIPMENT & LINEN",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1EI36xKS7NMzPWTLbuzl0EQQgQdBAXDCp/preview' },
-                    { type: 'video', title: 'Intro & Maintenance', url: 'https://drive.google.com/file/d/1mQyy8AaWNe5DEhzr-jI_S9RaNHysgUGr/preview' },
-                    { type: 'video', title: 'Principles', url: 'https://drive.google.com/file/d/1sJGL8g_nkWx9lJdhOwke2OZrxPvpRwoE/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1DqgYzfrI8Z4507jswgFwxInjVDmaF8Ak/preview' },
-                    { type: 'video', title: 'Disposables & Linen', url: 'https://drive.google.com/file/d/1QPUlmFzMJ8HtRYCJ2d4SryDm_1G0IQN2/preview' },
-                    { type: 'video', title: 'Rubber & Glassware', url: 'https://drive.google.com/file/d/1qi-lzWzgnYi5sr1shBos7EtZIaEkuiS8/preview' },
-                    { type: 'video', title: 'Care of Furniture', url: 'https://drive.google.com/file/d/12iXWPtk83OoZ6Xz9noUvm1Lq08QF1y2p/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1Csym-JjmmO650mv_KqNIXQayUHGfTTKG/preview' }
-                ]
-            },
-            {
-                id: 8, title: "INFECTION CONTROL",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1DfVCCMfQejWUI9aijcUhUK6_nnCJ-BRb/preview' },
-                    { type: 'video', title: 'Chain of Infection', url: 'https://drive.google.com/file/d/1g9NAYD6AQwjO6hcyqU8EZANXSjIDika-/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1EDRtxBvsx0iP1CGun_VZkswwtPsJ3hQC/preview' }
-                ]
-            },
-            {
-                id: 9, title: "COMFORT, REST & PAIN",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1G6QyKZtF-OADlNp4Bl0QkaflirnHQQu4/preview' },
-                    { type: 'video', title: 'Comfort & Bed Making', url: 'https://drive.google.com/file/d/1Pzw48R5bVe1UlajCyBiDcQG2Ocyo-7D-/preview' },
-                    { type: 'video', title: 'Bed Making Types', url: 'https://drive.google.com/file/d/1gp0YRwVIROL6nxsO9A4l48N1D_4TtHhZ/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1bBoXmXljCaYZofhwjDVKWQP_8tWqSRwJ/preview' },
-                    { type: 'video', title: 'Therapeutic Positions', url: 'https://drive.google.com/file/d/1A5htuL_fIJ4EAaw-RYe5WQfDFzhYjDPB/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1Gz_tTewoNHgweQaec4evamu3i44gmBke/preview' },
-                    { type: 'video', title: 'Comfort Devices', url: 'https://drive.google.com/file/d/1dJu2Q-4Lh1EZjck0mjrlVhzOobWTa-1i/preview' },
-                    { type: 'video', title: 'Sleep Physiology', url: 'https://drive.google.com/file/d/11xIkxgaVL9ElP5wWa_Fv6mSMonRjtJy8/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/179xDBj1fulf9xMoHSdBFOsuT7bAlES9I/preview' },
-                    { type: 'video', title: 'Sleep Disorders I', url: 'https://drive.google.com/file/d/1qv0DW8K43GG8_iK1OCI5RruzKzdzK9IX/preview' },
-                    { type: 'video', title: 'Sleep Disorders II', url: 'https://drive.google.com/file/d/1fjE-9KDYMAv-YOyEq_-KQF3aBeU9l3hl/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1T4krF3FfdWokLkOk80W-tEZ863Et0th8/preview' },
-                    { type: 'video', title: 'Pain Physiology', url: 'https://drive.google.com/file/d/1mg9loTQw9Zh_QDy0WKb1L0P5EVBfT6Sk/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1X5RQx43ZxAC3RPRF8BeFCuv0TV2hKsRH/preview' },
-                    { type: 'video', title: 'Pain Management (CAM)', url: 'https://drive.google.com/file/d/1HR4ps2bTsLwVJJ3CteXgVfBEc9A9NSKV/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1txiIQyM9aNfCPZaUl9rBH0EMgv10bIlR/preview' }
-                ]
-            },
-            {
-                id: 10, title: "SAFETY & ENVIRONMENT",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1bxoG9XwSw5J6TtF3LpaSSawJtNqeMMW6/preview' },
-                    { type: 'video', title: 'Environment & Hazards', url: 'https://drive.google.com/file/d/1B-vQIavMcoq7je8dlXD5jLzBzojwwbhJ/preview' },
-                    { type: 'video', title: 'Falls & Risk Assessment', url: 'https://drive.google.com/file/d/1s64zZUjY538YhNI6kCBPviJIHdxo9FGU/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1UlBuO-D2D4Nexi2EKzY1cFL4dUSIEst3/preview' },
-                    { type: 'coming-soon', title: 'Restraints (Coming Soon)', url: '#' },
-                    { type: 'coming-soon', title: 'Safety Devices (Coming Soon)', url: '#' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/16p7ESn69e19hZ75sa0avfvhzmW9XKB3J/preview' }
-                ]
-            },
-            {
-                id: 11, title: "ADMISSION & DISCHARGE",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1iOSe9FluFpxHrpxAhwg-AByXvThUT_2p/preview' },
-                    { type: 'video', title: 'Types of Admission', url: 'https://drive.google.com/file/d/1r0Wkdrx9tmsCjbrIxODgr8aLoz66Op-n/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1kfBT6-fb_2e0YcWkvtUkyLh5ki1lopNo/preview' },
-                    { type: 'video', title: 'Unit Preparation', url: 'https://drive.google.com/file/d/16w9UfCRp0cRpkGPZuJoM24PgdeMbgH5C/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1qMuXCNd-6cGHKAAjVWz9pHDEWOrdJsvZ/preview' },
-                    { type: 'video', title: 'Admission Bed', url: 'https://drive.google.com/file/d/1Efec1-X-8F4VdeLElKQxTZru9sg70nju/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1bOkQBIv5z6RccPW_ypKDFeLGdQNxJMyI/preview' },
-                    { type: 'video', title: 'Admission Procedure', url: 'https://drive.google.com/file/d/1ztLmrU4XZD7F6bHwdHnfG99rE7_e1ozr/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/18ojWRpsv0g42rm78C41aoLNBJVlWlaKY/preview' },
-                    { type: 'video', title: 'Steps of Procedure', url: 'https://drive.google.com/file/d/16cyNDtHgQ5ue_YjCK_pDxZIedLWUHn6P/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1HtBIDNxsSlsLar_xwlAUkqwC8O48Nx4J/preview' },
-                    { type: 'video', title: 'ICU/Emergency Admission', url: 'https://drive.google.com/file/d/1NBBG5K9BegeV6tmUgIfSW-MsEDsBecsy/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1Z_bR_B6fdEtcGF8v7x1Esr9V6BQc115c/preview' },
-                    { type: 'video', title: 'Medico-Legal Issues', url: 'https://drive.google.com/file/d/1hvPgG4mzNr2z3aCPpRmYSyOt63tmaHON/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1eS_hZf0MAVXuilHlSxtzHa8uc4JKNUYJ/preview' },
-                    { type: 'video', title: 'Discharge', url: 'https://drive.google.com/file/d/1smVYBlpxuI_N8cUMKscD8JzC64X_uhu9/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1X81vwI2ADv20rARkuOaxyEs27OM3aADp/preview' },
-                    { type: 'video', title: 'Discharge Planning', url: 'https://drive.google.com/file/d/13vJ_oQ3GHGaMJP9F8JGP1107bibT5I0S/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/17bJGtMn3quV1bcn2VbtNfd-3eZzgPiao/preview' },
-                    { type: 'video', title: 'Legal Role of Nurse', url: 'https://drive.google.com/file/d/1FUm-XIzbrq9G5KI0Z8b0h7k35LpUdvGX/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1PHLgAJGCtkHzigBtPsbKZeZ_hAzu5bet/preview' }
-                ]
-            },
-            {
-                id: 12, title: "MOBILITY & IMMOBILITY",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1qdosW4GXhXkYTc1Zm8GvmXN-4-lg2ULH/preview' },
-                    { type: 'video', title: 'Body Mechanics', url: 'https://drive.google.com/file/d/1hIRGuK32MzvfY0YLGmPlymbQiVh6Uf5R/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/14rgga3rny8UdDYCgNRq8kjOc5bq9pbM8/preview' },
-                    { type: 'video', title: 'ROM & Exercise', url: 'https://drive.google.com/file/d/12vlhjP_-gDe2F9XPdtnpJQYfQ24VlhWT/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1nGYv9uuXEb6V-el67GI0wM9qrPT77gPx/preview' },
-                    { type: 'video', title: 'Immobility', url: 'https://drive.google.com/file/d/12VN8E_gWWOsXTEQHloJoipU4Bc67duVM/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1-LaxcCyz3TheVKTk-WFToqrhbiqf8Gu6/preview' }
-                ]
-            },
-            {
-                id: 13, title: "PATIENT EDUCATION",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1PkvSPFbR3_K1pH9rJ5-zoRa0cAZZl7NT/preview' },
-                    { type: 'video', title: 'Importance of Teaching', url: 'https://drive.google.com/file/d/1v5u4t_pFTH4v8DGhzZCGBmnuiceSZQQO/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1wDHcSqLhTQGJ2HRthK2p0OHbYbLMISnj/preview' },
-                    { type: 'video', title: 'Teaching Process', url: 'https://drive.google.com/file/d/1WP3lmBtRTQX4GFmL-mMqRLwcFyuKOFBw/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1bFh_38GK8SIxc90q8pnMVEoVeeBfxBHC/preview' }
-                ]
-            },
-            {
-                id: 14, title: "FIRST AID",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1wd_u9PUGwi46jfSf7i2Wkh5SVs3P3RVo/preview' },
-                    { type: 'video', title: 'Intro to First Aid', url: 'https://drive.google.com/file/d/1TgBceWQscHjF3t14qn3zsZhpNuDW9fnf/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1O8DAVCgdv_uJnjNi6VbdH79YzX3mV70o/preview' },
-                    { type: 'video', title: 'Wounds & Hemorrhage', url: 'https://drive.google.com/file/d/15wRFvvPZ0F2cCeu6okCgccgLjTagGq6T/preview' },
-                    { type: 'video', title: 'Shock & Fractures', url: 'https://drive.google.com/file/d/1w1IQmiML2b1BU2VJc-VgtcSD_Pvael1n/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1hIOBqS3Px_unQndCWjXX6VsWGLXLtbvl/preview' },
-                    { type: 'video', title: 'Dislocation & Muscle Injury', url: 'https://drive.google.com/file/d/1yVLu-D0ACTArypVU57jTlQsbEfIIgNts/preview' },
-                    { type: 'video', title: 'Transport & Resp. Emergency', url: 'https://drive.google.com/file/d/19wx7pPVpNb75Rys0jqBBxRN9CaldYmeb/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1l5gK4ViDvIEyaE_Hi__veOiZUCrEm_dV/preview' },
-                    { type: 'coming-soon', title: 'Respiratory Emergencies', url: '#' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1q9i_3lBsDTl2Uyi3OkrVHeU8kkZkjyJ7/preview' },
-                    { type: 'video', title: 'Foreign Bodies', url: 'https://drive.google.com/file/d/1IQSWa64n46klV-1PyAj69yOLemOyzs78/preview' },
-                    { type: 'video', title: 'Burns & Poisoning', url: 'https://drive.google.com/file/d/1LUT3bZXj-ihyv8MSkHbDZLCN3JNpKcSD/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1mTD12JgBQ00tjmHrKtHHYnNAgmMDYX0Z/preview' },
-                    { type: 'video', title: 'Frostbite & Heat', url: 'https://drive.google.com/file/d/18GwuSkNLWyXORgwFMR4AyjPIfNWHJ7dv/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1RsVEN8ZDwq2GBgP9N0AcYkCtPLhhF0g3/preview' }
-                ]
-            }
-        ];
-
-        // --- 3. RENDER LOGIC ---
-        function renderPage() {
-            const container = document.getElementById('units-container');
-            
-            UNITS.forEach(unit => {
-                const unitHtml = `
-                    <div class="unit-card">
-                        <div class="unit-header" onclick="toggleUnit(this)">
-                            UNIT ${unit.id} - ${unit.title}
-                            <span>🔽</span>
-                        </div>
-                        <div class="unit-content">
-                            <div class="resource-list">
-                                ${unit.resources.map(res => `
-                                    <div class="resource-btn type-${res.type}" onclick="openResource('${res.type}', '${res.url || ''}', '${res.title}')">
-                                        <div class="icon">${getIcon(res.type)}</div>
-                                        <div>${res.title}</div>
-                                    </div>
-                                `).join('')}
-                                <div class="resource-btn type-quiz" onclick="openQuiz(${unit.id})">
-                                    <div class="icon">✍️</div>
-                                    <div>Take Unit ${unit.id} Quiz</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += unitHtml;
-            });
-        }
-
-        function getIcon(type) {
-            if(type === 'notes') return '📚';
-            if(type === 'video') return '▶️';
-            if(type === 'coming-soon') return '🔒';
-            return '📄';
-        }
+        let currentQuizUnit = 1;
+        let score = 0;
 
         function toggleUnit(header) {
-            header.classList.toggle('active');
             const content = header.nextElementSibling;
-            content.classList.toggle('show');
-            const arrow = header.querySelector('span');
-            arrow.innerText = content.classList.contains('show') ? '🔼' : '🔽';
+            const isExpanded = header.getAttribute('aria-expanded') === 'true';
+            header.setAttribute('aria-expanded', !isExpanded);
+            content.classList.toggle('active');
         }
 
-        // --- 4. MODAL LOGIC & NAVIGATION CONTROL ---
-        
         function openResource(type, url, title) {
-            if(type === 'coming-soon') return; // Do nothing for empty links
-
-            // PUSH STATE: Create a history entry so Back button closes modal
-            history.pushState({ modalOpen: true }, null, '#resource');
-
             const modal = document.getElementById('app-modal');
             const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = title;
+            document.getElementById('modal-title').textContent = title;
             modal.style.display = 'flex';
-            body.innerHTML = ''; 
             
-            // FIX: Restore flex centering for Video/Doc (looks better centered)
-            body.style.display = 'flex';
-
-            if (type === 'quiz') {
-                openQuiz(url); 
+            let finalUrl = url;
+            if (url.includes('drive.google.com')) {
+                finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
             }
-            else {
-                let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
-                
-                // FIX: Apply correct class based on type
-                // Videos get 16:9, Notes get full height
-                let className = (type === 'video') ? 'iframe-video' : 'iframe-doc';
-
-                body.innerHTML = `<iframe 
-                    class="${className}" 
-                    src="${cleanUrl}" 
-                    sandbox="allow-scripts allow-same-origin allow-presentation"
-                    allow="autoplay; encrypted-media; fullscreen">
-                </iframe>`;
-            }
+            
+            body.innerHTML = `<iframe class="iframe-res" src="${finalUrl}" allow="autoplay" allowfullscreen></iframe>`;
         }
 
-        function openQuiz(unitId) {
-            history.pushState({ modalOpen: true }, null, '#quiz');
-
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
+        function startQuiz(unitId) {
+            currentQuizUnit = unitId;
+            score = 0;
+            const questions = QUIZ_DATA[unitId];
             
-            titleEl.textContent = `Quiz: Unit ${unitId}`;
-            modal.style.display = 'flex';
+            let html = `
+                <div class="quiz-container">
+                    <div class="quiz-header-sticky">
+                        <h2 style="margin:0; color:var(--brand);">Unit ${unitId} Quiz</h2>
+                        <div id="score-display" class="score-badge">Score: 0 / 10</div>
+                    </div>
+            `;
             
-            // FIX: Remove flex centering for Quiz so it starts at the top
-            body.style.display = 'block';
-            body.scrollTop = 0; // Ensure we start at the top
-            
-            const questions = QUIZ_DATA[unitId] || [];
-            
-            let quizHtml = `<div class="quiz-container">`;
-            questions.forEach((q, idx) => {
-                quizHtml += `
-                    <div class="quiz-question">${idx + 1}. ${q.q}</div>
-                    <div class="quiz-options" id="q-${idx}">
-                        ${q.o.map((opt, oIdx) => `
-                            <div class="quiz-option" onclick="checkAnswer(this, ${idx}, ${oIdx}, ${q.a})">${opt}</div>
-                        `).join('')}
+            questions.forEach((q, index) => {
+                html += `
+                    <div class="question-block">
+                        <p class="quiz-question-text">${index + 1}. ${q.q}</p>
+                        <div class="options-container">
+                            ${q.o.map((opt, optIndex) => `
+                                <div class="quiz-option" onclick="checkAnswer(this, ${unitId}, ${optIndex}, ${q.a})">${opt}</div>
+                            `).join('')}
+                        </div>
                     </div>
                 `;
             });
             
-            if(questions.length === 0) quizHtml += `<p>Quiz coming soon!</p>`;
+            html += `
+                    <button class="btn-quiz" onclick="closeModal()">Close Quiz</button>
+                </div>
+            `;
             
-            quizHtml += `</div>`;
-            body.innerHTML = quizHtml;
+            document.getElementById('modal-body').innerHTML = html;
+            document.getElementById('modal-title').textContent = `Unit ${unitId} Quiz`;
+            document.getElementById('app-modal').style.display = 'flex';
         }
 
-        function checkAnswer(el, qIdx, oIdx, correctIdx) {
-            const parent = document.getElementById(`q-${qIdx}`);
-            const opts = parent.children;
-            for(let opt of opts) opt.style.pointerEvents = 'none';
+        function checkAnswer(element, unitId, selectedIndex, correctIndex) {
+            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
 
-            if(oIdx === correctIdx) {
-                el.classList.add('correct');
+            if (selectedIndex === correctIndex) {
+                element.classList.add('correct');
+                score++;
             } else {
-                el.classList.add('wrong');
-                opts[correctIdx].classList.add('correct');
+                element.classList.add('wrong');
+                element.parentElement.children[correctIndex].classList.add('correct');
             }
+            document.getElementById('score-display').textContent = `Score: ${score} / 10`;
         }
 
-        function closeModal() {
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            modal.style.display = 'none';
-            body.innerHTML = ''; 
-            
-            if (history.state && history.state.modalOpen) {
-                history.back();
-            }
+        function closeModal() { 
+            document.getElementById('app-modal').style.display = 'none'; 
+            document.getElementById('modal-body').innerHTML = ""; 
         }
-
-        // --- 5. HANDLE BACK BUTTON ---
-        window.onpopstate = function(event) {
-            const modal = document.getElementById('app-modal');
-            if (modal.style.display === 'flex') {
-                modal.style.display = 'none';
-                document.getElementById('modal-body').innerHTML = '';
-            }
-        };
-
-        // Initialize
-        renderPage();
-
     </script>
 </body>
 </html>
