@@ -1010,208 +1010,245 @@
         <div id="modal-body" class="modal-body"></div>
     </div>
 
-    <script>
-        const QUIZ_DATA = {
-            1: [
-                { q: "Which part of the cell is known as the 'powerhouse'?", o: ["Nucleus", "Ribosome", "Mitochondria", "Golgi Body"], a: 2 },
-                { q: "The anatomical term 'distal' refers to:", o: ["Closer to the point of attachment", "Farther from the point of attachment", "Toward the head", "Toward the feet"], a: 1 },
-                { q: "Mitosis results in:", o: ["Two identical daughter cells", "Four distinct haploid cells", "One large cell", "Dead cells"], a: 0 },
-                { q: "Which tissue type covers body surfaces and lines cavities?", o: ["Connective", "Muscle", "Nervous", "Epithelial"], a: 3 },
-                { q: "The structural and functional unit of the nervous system is the:", o: ["Nephron", "Neuron", "Alveoli", "Osteon"], a: 1 },
-                { q: "Meiosis occurs in:", o: ["Somatic cells", "Liver cells", "Germ/Sex cells", "Skin cells"], a: 2 },
-                { q: "The plane that divides the body into anterior and posterior parts is:", o: ["Sagittal", "Transverse", "Coronal (Frontal)", "Oblique"], a: 2 },
-                { q: "Adipose tissue is a type of:", o: ["Epithelial tissue", "Connective tissue", "Muscle tissue", "Nervous tissue"], a: 1 },
-                { q: "The control center of the cell containing DNA is the:", o: ["Nucleus", "Cytoplasm", "Lysosome", "Vacuole"], a: 0 },
-                { q: "Skeletal muscle is:", o: ["Involuntary and smooth", "Voluntary and striated", "Involuntary and striated", "Voluntary and smooth"], a: 1 }
-            ],
-            2: [
-                { q: "Gas exchange takes place in the:", o: ["Trachea", "Bronchi", "Alveoli", "Pharynx"], a: 2 },
-                { q: "The 'voice box' is anatomically known as the:", o: ["Pharynx", "Larynx", "Trachea", "Esophagus"], a: 1 },
-                { q: "The right lung has how many lobes?", o: ["Two", "Three", "Four", "One"], a: 1 },
-                { q: "The flap that prevents food from entering the trachea is the:", o: ["Uvula", "Epiglottis", "Tonsil", "Glottis"], a: 1 },
-                { q: "The trachea bifurcates into the right and left bronchi at the level of the:", o: ["Carina", "Cricoid", "Hyoid", "Thyroid"], a: 0 },
-                { q: "The primary muscle of respiration is the:", o: ["Intercostal", "Diaphragm", "Abdominal", "Pectoral"], a: 1 },
-                { q: "The pleural cavity contains:", o: ["Air only", "Serous fluid", "Blood", "Mucus"], a: 1 },
-                { q: "The Adam's apple is formed by the:", o: ["Cricoid cartilage", "Thyroid cartilage", "Epiglottis", "Arytenoid cartilage"], a: 1 },
-                { q: "Oxygen is transported in the blood primarily by:", o: ["Plasma", "White blood cells", "Hemoglobin in RBCs", "Platelets"], a: 2 },
-                { q: "Inhalation is an:", o: ["Active process", "Passive process", "Automatic reflex", "None of above"], a: 0 }
-            ],
-            3: [
-                { q: "Which organ produces bile?", o: ["Gallbladder", "Pancreas", "Liver", "Stomach"], a: 2 },
-                { q: "Protein digestion begins in the:", o: ["Mouth", "Stomach", "Small Intestine", "Esophagus"], a: 1 },
-                { q: "The finger-like projections in the small intestine are called:", o: ["Cilia", "Villi", "Flagella", "Ruga"], a: 1 },
-                { q: "Insulin is produced by which part of the pancreas?", o: ["Acini cells", "Islets of Langerhans", "Duct cells", "Liver cells"], a: 1 },
-                { q: "The hardest substance in the human body is:", o: ["Bone", "Enamel", "Dentin", "Cementum"], a: 1 },
-                { q: "Which acid is present in the stomach?", o: ["Sulfuric acid", "Hydrochloric acid (HCl)", "Nitric acid", "Acetic acid"], a: 1 },
-                { q: "The first part of the small intestine is the:", o: ["Jejunum", "Ileum", "Duodenum", "Cecum"], a: 2 },
-                { q: "Bile is stored and concentrated in the:", o: ["Liver", "Gallbladder", "Pancreas", "Spleen"], a: 1 },
-                { q: "Peristalsis refers to:", o: ["Breaking down food", "Wave-like muscle contractions", "Absorbing water", "Chewing"], a: 1 },
-                { q: "The appendix is attached to the:", o: ["Duodenum", "Cecum", "Rectum", "Sigmoid colon"], a: 1 }
-            ],
-            4: [
-                { q: "The muscular layer of the heart is called:", o: ["Pericardium", "Myocardium", "Endocardium", "Epicardium"], a: 1 },
-                { q: "The valve between the right atrium and right ventricle is the:", o: ["Mitral valve", "Tricuspid valve", "Aortic valve", "Pulmonary valve"], a: 1 },
-                { q: "Which blood vessel carries oxygenated blood from the lungs to the heart?", o: ["Pulmonary Artery", "Pulmonary Vein", "Aorta", "Vena Cava"], a: 1 },
-                { q: "The natural pacemaker of the heart is the:", o: ["AV Node", "SA Node", "Bundle of His", "Purkinje Fibers"], a: 1 },
-                { q: "The universal donor blood group is:", o: ["A positive", "B negative", "O negative", "AB positive"], a: 2 },
-                { q: "Exchange of nutrients and gases occurs in the:", o: ["Arteries", "Veins", "Capillaries", "Aorta"], a: 2 },
-                { q: "Systole refers to:", o: ["Relaxation of heart", "Contraction of heart", "Filling of blood", "None"], a: 1 },
-                { q: "The largest artery in the body is the:", o: ["Carotid", "Femoral", "Aorta", "Subclavian"], a: 2 },
-                { q: "Lymph nodes function to:", o: ["Pump blood", "Filter lymph and fight infection", "Digest food", "Produce insulin"], a: 1 },
-                { q: "Normal heart rate is approximately:", o: ["20-40 bpm", "60-100 bpm", "120-140 bpm", "10-20 bpm"], a: 1 }
-            ],
-            5: [
-                { q: "Which gland is known as the 'Master Gland'?", o: ["Thyroid", "Adrenal", "Pituitary", "Pineal"], a: 2 },
-                { q: "Insulin and Glucagon are secreted by the:", o: ["Liver", "Pancreas", "Kidney", "Stomach"], a: 1 },
-                { q: "T3 and T4 hormones are produced by the:", o: ["Parathyroid", "Thyroid", "Thymus", "Ovary"], a: 1 },
-                { q: "The 'Fight or Flight' hormone Adrenaline is secreted by:", o: ["Adrenal Cortex", "Adrenal Medulla", "Pituitary", "Testes"], a: 1 },
-                { q: "Oxytocin is released from the:", o: ["Anterior Pituitary", "Posterior Pituitary", "Thyroid", "Pancreas"], a: 1 },
-                { q: "Which hormone regulates calcium levels in the blood?", o: ["Insulin", "Parathyroid Hormone (PTH)", "Thyroxine", "Cortisol"], a: 1 },
-                { q: "Growth Hormone (GH) is secreted by:", o: ["Anterior Pituitary", "Posterior Pituitary", "Adrenal", "Thyroid"], a: 0 },
-                { q: "The hypothalamus regulates the:", o: ["Heart only", "Pituitary gland", "Lungs", "Muscles"], a: 1 },
-                { q: "Deficiency of iodine leads to:", o: ["Diabetes", "Goiter", "Dwarfism", "Gigantism"], a: 1 },
-                { q: "Cortisol is a type of:", o: ["Steroid hormone", "Protein hormone", "Vitamin", "Mineral"], a: 0 }
-            ],
-            6: [
-                { q: "The white part of the eye is called the:", o: ["Cornea", "Sclera", "Retina", "Iris"], a: 1 },
-                { q: "The sensory receptor for hearing (Organ of Corti) is located in the:", o: ["Outer ear", "Middle ear", "Cochlea (Inner ear)", "Eustachian tube"], a: 2 },
-                { q: "The outermost layer of the skin is the:", o: ["Dermis", "Epidermis", "Hypodermis", "Muscle"], a: 1 },
-                { q: "Olfactory receptors are responsible for:", o: ["Taste", "Sight", "Smell", "Touch"], a: 2 },
-                { q: "The tympanic membrane is also known as the:", o: ["Ear drum", "Ear canal", "Pinna", "Stapes"], a: 0 },
-                { q: "Which layer of the eye contains rods and cones?", o: ["Sclera", "Choroid", "Retina", "Lens"], a: 2 },
-                { q: "The three ossicles in the middle ear are:", o: ["Femur, Tibia, Fibula", "Malleus, Incus, Stapes", "Radius, Ulna, Humerus", "Carpals, Tarsals"], a: 1 },
-                { q: "Taste buds are located on structures called:", o: ["Villi", "Cilia", "Papillae", "Follicles"], a: 2 },
-                { q: "The pigment responsible for skin color is:", o: ["Keratin", "Melanin", "Collagen", "Hemoglobin"], a: 1 },
-                { q: "Balance and equilibrium are functions of the:", o: ["Cochlea", "Vestibular apparatus", "Pinna", "Ear lobe"], a: 1 }
-            ],
-            7: [
-                { q: "The longest bone in the human body is the:", o: ["Humerus", "Tibia", "Femur", "Fibula"], a: 2 },
-                { q: "How many vertebrae are in the cervical region?", o: ["5", "7", "12", "4"], a: 1 },
-                { q: "The shoulder blade is anatomically known as the:", o: ["Clavicle", "Scapula", "Sternum", "Rib"], a: 1 },
-                { q: "Which muscle is responsible for abduction of the arm?", o: ["Biceps", "Deltoid", "Triceps", "Pectoralis"], a: 1 },
-                { q: "The suture joining the frontal and parietal bones is the:", o: ["Sagittal", "Coronal", "Lambdoid", "Squamous"], a: 1 },
-                { q: "Acetabulum is a socket found in the:", o: ["Shoulder girdle", "Pelvic girdle (Hip)", "Skull", "Knee"], a: 1 },
-                { q: "The patella is also known as the:", o: ["Elbow cap", "Knee cap", "Wrist bone", "Ankle bone"], a: 1 },
-                { q: "Muscles are attached to bones by:", o: ["Ligaments", "Tendons", "Cartilage", "Skin"], a: 1 },
-                { q: "The large muscle of the buttocks is the:", o: ["Gluteus Maximus", "Quadriceps", "Hamstrings", "Gastrocnemius"], a: 0 },
-                { q: "The axial skeleton includes the:", o: ["Arms and legs", "Skull, vertebral column, and rib cage", "Hands and feet", "Hip and shoulder"], a: 1 }
-            ],
-            8: [
-                { q: "The functional unit of the kidney is the:", o: ["Neuron", "Nephron", "Alveolus", "Lobe"], a: 1 },
-                { q: "Urine flows from the kidneys to the bladder via the:", o: ["Urethra", "Ureter", "Aorta", "Vena cava"], a: 1 },
-                { q: "Glomerular filtration occurs in the:", o: ["Loop of Henle", "Bowman's Capsule", "Collecting Duct", "Distal Tubule"], a: 1 },
-                { q: "The hormone that regulates water reabsorption in the kidney is:", o: ["Insulin", "ADH (Antidiuretic Hormone)", "Thyroxine", "Glucagon"], a: 1 },
-                { q: "The triangular muscular organ that stores urine is the:", o: ["Kidney", "Ureter", "Urinary Bladder", "Urethra"], a: 2 },
-                { q: "The loop of Henle is found in the:", o: ["Cortex", "Medulla", "Pelvis", "Capsule"], a: 1 },
-                { q: "Normal urine output per day is approximately:", o: ["100-200 ml", "1000-1500 ml", "5000 ml", "10 ml"], a: 1 },
-                { q: "Renin is secreted by the:", o: ["Liver", "Lungs", "Kidneys (JGA cells)", "Heart"], a: 2 },
-                { q: "Which substance is NOT normally found in urine?", o: ["Urea", "Creatinine", "Glucose", "Water"], a: 2 },
-                { q: "The tube conveying urine from the bladder to the exterior is the:", o: ["Ureter", "Urethra", "Nephron", "Tubule"], a: 1 }
-            ],
-            9: [
-                { q: "The primary female sex hormone is:", o: ["Testosterone", "Estrogen", "Adrenaline", "Insulin"], a: 1 },
-                { q: "Fertilization normally occurs in the:", o: ["Uterus", "Ovary", "Fallopian Tube", "Vagina"], a: 2 },
-                { q: "Sperm production takes place in the:", o: ["Prostate", "Seminiferous tubules (Testes)", "Vas deferens", "Penis"], a: 1 },
-                { q: "The inner lining of the uterus is called the:", o: ["Myometrium", "Perimetrium", "Endometrium", "Epithelium"], a: 2 },
-                { q: "The process of releasing an egg from the ovary is:", o: ["Menstruation", "Ovulation", "Fertilization", "Gestation"], a: 1 },
-                { q: "The male gland that surrounds the urethra is the:", o: ["Testis", "Prostate", "Adrenal", "Cowper's gland"], a: 1 },
-                { q: "Testosterone is produced by:", o: ["Sertoli cells", "Leydig cells", "Sperm", "Prostate"], a: 1 },
-                { q: "The normal length of the menstrual cycle is roughly:", o: ["14 days", "28 days", "40 days", "10 days"], a: 1 },
-                { q: "The muscular layer of the uterus responsible for contractions is:", o: ["Endometrium", "Myometrium", "Perimetrium", "Cervix"], a: 1 },
-                { q: "Sperm are stored and matured in the:", o: ["Epididymis", "Vas deferens", "Seminal vesicle", "Urethra"], a: 0 }
-            ],
-            10: [
-                { q: "The Central Nervous System (CNS) consists of:", o: ["Brain and Spinal Cord", "Nerves only", "Brain only", "Spinal cord only"], a: 0 },
-                { q: "The part of the neuron that carries impulses away from the cell body is:", o: ["Dendrite", "Axon", "Nucleus", "Myelin"], a: 1 },
-                { q: "The largest part of the brain is the:", o: ["Cerebellum", "Brain Stem", "Cerebrum", "Medulla"], a: 2 },
-                { q: "The part of the brain responsible for balance and coordination is:", o: ["Cerebrum", "Cerebellum", "Pons", "Midbrain"], a: 1 },
-                { q: "The protective covering of the brain and spinal cord is:", o: ["Pericardium", "Meninges", "Pleura", "Peritoneum"], a: 1 },
-                { q: "There are how many pairs of cranial nerves?", o: ["10", "12", "31", "20"], a: 1 },
-                { q: "The junction between two neurons is called a:", o: ["Node", "Synapse", "Ganglion", "Plexus"], a: 1 },
-                { q: "Reflex actions are primarily controlled by the:", o: ["Brain", "Spinal Cord", "Heart", "Skin"], a: 1 },
-                { q: "The myelin sheath is produced by:", o: ["Schwann cells", "Neurons", "Blood cells", "Bone cells"], a: 0 },
-                { q: "CSF (Cerebrospinal Fluid) flows in the:", o: ["Subdural space", "Subarachnoid space", "Epidural space", "Veins"], a: 1 }
-            ]
-        };
+<script>
+    const QUIZ_DATA = {
+        1: [
+            { q: "Which part of the cell is known as the 'powerhouse'?", o: ["Nucleus", "Ribosome", "Mitochondria", "Golgi Body"], a: 2 },
+            { q: "The anatomical term 'distal' refers to:", o: ["Closer to the point of attachment", "Farther from the point of attachment", "Toward the head", "Toward the feet"], a: 1 },
+            { q: "Mitosis results in:", o: ["Two identical daughter cells", "Four distinct haploid cells", "One large cell", "Dead cells"], a: 0 },
+            { q: "Which tissue type covers body surfaces and lines cavities?", o: ["Connective", "Muscle", "Nervous", "Epithelial"], a: 3 },
+            { q: "The structural and functional unit of the nervous system is the:", o: ["Nephron", "Neuron", "Alveoli", "Osteon"], a: 1 },
+            { q: "Meiosis occurs in:", o: ["Somatic cells", "Liver cells", "Germ/Sex cells", "Skin cells"], a: 2 },
+            { q: "The plane that divides the body into anterior and posterior parts is:", o: ["Sagittal", "Transverse", "Coronal (Frontal)", "Oblique"], a: 2 },
+            { q: "Adipose tissue is a type of:", o: ["Epithelial tissue", "Connective tissue", "Muscle tissue", "Nervous tissue"], a: 1 },
+            { q: "The control center of the cell containing DNA is the:", o: ["Nucleus", "Cytoplasm", "Lysosome", "Vacuole"], a: 0 },
+            { q: "Skeletal muscle is:", o: ["Involuntary and smooth", "Voluntary and striated", "Involuntary and striated", "Voluntary and smooth"], a: 1 }
+        ],
+        2: [
+            { q: "Gas exchange takes place in the:", o: ["Trachea", "Bronchi", "Alveoli", "Pharynx"], a: 2 },
+            { q: "The 'voice box' is anatomically known as the:", o: ["Pharynx", "Larynx", "Trachea", "Esophagus"], a: 1 },
+            { q: "The right lung has how many lobes?", o: ["Two", "Three", "Four", "One"], a: 1 },
+            { q: "The flap that prevents food from entering the trachea is the:", o: ["Uvula", "Epiglottis", "Tonsil", "Glottis"], a: 1 },
+            { q: "The trachea bifurcates into the right and left bronchi at the level of the:", o: ["Carina", "Cricoid", "Hyoid", "Thyroid"], a: 0 },
+            { q: "The primary muscle of respiration is the:", o: ["Intercostal", "Diaphragm", "Abdominal", "Pectoral"], a: 1 },
+            { q: "The pleural cavity contains:", o: ["Air only", "Serous fluid", "Blood", "Mucus"], a: 1 },
+            { q: "The Adam's apple is formed by the:", o: ["Cricoid cartilage", "Thyroid cartilage", "Epiglottis", "Arytenoid cartilage"], a: 1 },
+            { q: "Oxygen is transported in the blood primarily by:", o: ["Plasma", "White blood cells", "Hemoglobin in RBCs", "Platelets"], a: 2 },
+            { q: "Inhalation is an:", o: ["Active process", "Passive process", "Automatic reflex", "None of above"], a: 0 }
+        ],
+        3: [
+            { q: "Which organ produces bile?", o: ["Gallbladder", "Pancreas", "Liver", "Stomach"], a: 2 },
+            { q: "Protein digestion begins in the:", o: ["Mouth", "Stomach", "Small Intestine", "Esophagus"], a: 1 },
+            { q: "The finger-like projections in the small intestine are called:", o: ["Cilia", "Villi", "Flagella", "Ruga"], a: 1 },
+            { q: "Insulin is produced by which part of the pancreas?", o: ["Acini cells", "Islets of Langerhans", "Duct cells", "Liver cells"], a: 1 },
+            { q: "The hardest substance in the human body is:", o: ["Bone", "Enamel", "Dentin", "Cementum"], a: 1 },
+            { q: "Which acid is present in the stomach?", o: ["Sulfuric acid", "Hydrochloric acid (HCl)", "Nitric acid", "Acetic acid"], a: 1 },
+            { q: "The first part of the small intestine is the:", o: ["Jejunum", "Ileum", "Duodenum", "Cecum"], a: 2 },
+            { q: "Bile is stored and concentrated in the:", o: ["Liver", "Gallbladder", "Pancreas", "Spleen"], a: 1 },
+            { q: "Peristalsis refers to:", o: ["Breaking down food", "Wave-like muscle contractions", "Absorbing water", "Chewing"], a: 1 },
+            { q: "The appendix is attached to the:", o: ["Duodenum", "Cecum", "Rectum", "Sigmoid colon"], a: 1 }
+        ],
+        4: [
+            { q: "The muscular layer of the heart is called:", o: ["Pericardium", "Myocardium", "Endocardium", "Epicardium"], a: 1 },
+            { q: "The valve between the right atrium and right ventricle is the:", o: ["Mitral valve", "Tricuspid valve", "Aortic valve", "Pulmonary valve"], a: 1 },
+            { q: "Which blood vessel carries oxygenated blood from the lungs to the heart?", o: ["Pulmonary Artery", "Pulmonary Vein", "Aorta", "Vena Cava"], a: 1 },
+            { q: "The natural pacemaker of the heart is the:", o: ["AV Node", "SA Node", "Bundle of His", "Purkinje Fibers"], a: 1 },
+            { q: "The universal donor blood group is:", o: ["A positive", "B negative", "O negative", "AB positive"], a: 2 },
+            { q: "Exchange of nutrients and gases occurs in the:", o: ["Arteries", "Veins", "Capillaries", "Aorta"], a: 2 },
+            { q: "Systole refers to:", o: ["Relaxation of heart", "Contraction of heart", "Filling of blood", "None"], a: 1 },
+            { q: "The largest artery in the body is the:", o: ["Carotid", "Femoral", "Aorta", "Subclavian"], a: 2 },
+            { q: "Lymph nodes function to:", o: ["Pump blood", "Filter lymph and fight infection", "Digest food", "Produce insulin"], a: 1 },
+            { q: "Normal heart rate is approximately:", o: ["20-40 bpm", "60-100 bpm", "120-140 bpm", "10-20 bpm"], a: 1 }
+        ],
+        5: [
+            { q: "Which gland is known as the 'Master Gland'?", o: ["Thyroid", "Adrenal", "Pituitary", "Pineal"], a: 2 },
+            { q: "Insulin and Glucagon are secreted by the:", o: ["Liver", "Pancreas", "Kidney", "Stomach"], a: 1 },
+            { q: "T3 and T4 hormones are produced by the:", o: ["Parathyroid", "Thyroid", "Thymus", "Ovary"], a: 1 },
+            { q: "The 'Fight or Flight' hormone Adrenaline is secreted by:", o: ["Adrenal Cortex", "Adrenal Medulla", "Pituitary", "Testes"], a: 1 },
+            { q: "Oxytocin is released from the:", o: ["Anterior Pituitary", "Posterior Pituitary", "Thyroid", "Pancreas"], a: 1 },
+            { q: "Which hormone regulates calcium levels in the blood?", o: ["Insulin", "Parathyroid Hormone (PTH)", "Thyroxine", "Cortisol"], a: 1 },
+            { q: "Growth Hormone (GH) is secreted by:", o: ["Anterior Pituitary", "Posterior Pituitary", "Adrenal", "Thyroid"], a: 0 },
+            { q: "The hypothalamus regulates the:", o: ["Heart only", "Pituitary gland", "Lungs", "Muscles"], a: 1 },
+            { q: "Deficiency of iodine leads to:", o: ["Diabetes", "Goiter", "Dwarfism", "Gigantism"], a: 1 },
+            { q: "Cortisol is a type of:", o: ["Steroid hormone", "Protein hormone", "Vitamin", "Mineral"], a: 0 }
+        ],
+        6: [
+            { q: "The white part of the eye is called the:", o: ["Cornea", "Sclera", "Retina", "Iris"], a: 1 },
+            { q: "The sensory receptor for hearing (Organ of Corti) is located in the:", o: ["Outer ear", "Middle ear", "Cochlea (Inner ear)", "Eustachian tube"], a: 2 },
+            { q: "The outermost layer of the skin is the:", o: ["Dermis", "Epidermis", "Hypodermis", "Muscle"], a: 1 },
+            { q: "Olfactory receptors are responsible for:", o: ["Taste", "Sight", "Smell", "Touch"], a: 2 },
+            { q: "The tympanic membrane is also known as the:", o: ["Ear drum", "Ear canal", "Pinna", "Stapes"], a: 0 },
+            { q: "Which layer of the eye contains rods and cones?", o: ["Sclera", "Choroid", "Retina", "Lens"], a: 2 },
+            { q: "The three ossicles in the middle ear are:", o: ["Femur, Tibia, Fibula", "Malleus, Incus, Stapes", "Radius, Ulna, Humerus", "Carpals, Tarsals"], a: 1 },
+            { q: "Taste buds are located on structures called:", o: ["Villi", "Cilia", "Papillae", "Follicles"], a: 2 },
+            { q: "The pigment responsible for skin color is:", o: ["Keratin", "Melanin", "Collagen", "Hemoglobin"], a: 1 },
+            { q: "Balance and equilibrium are functions of the:", o: ["Cochlea", "Vestibular apparatus", "Pinna", "Ear lobe"], a: 1 }
+        ],
+        7: [
+            { q: "The longest bone in the human body is the:", o: ["Humerus", "Tibia", "Femur", "Fibula"], a: 2 },
+            { q: "How many vertebrae are in the cervical region?", o: ["5", "7", "12", "4"], a: 1 },
+            { q: "The shoulder blade is anatomically known as the:", o: ["Clavicle", "Scapula", "Sternum", "Rib"], a: 1 },
+            { q: "Which muscle is responsible for abduction of the arm?", o: ["Biceps", "Deltoid", "Triceps", "Pectoralis"], a: 1 },
+            { q: "The suture joining the frontal and parietal bones is the:", o: ["Sagittal", "Coronal", "Lambdoid", "Squamous"], a: 1 },
+            { q: "Acetabulum is a socket found in the:", o: ["Shoulder girdle", "Pelvic girdle (Hip)", "Skull", "Knee"], a: 1 },
+            { q: "The patella is also known as the:", o: ["Elbow cap", "Knee cap", "Wrist bone", "Ankle bone"], a: 1 },
+            { q: "Muscles are attached to bones by:", o: ["Ligaments", "Tendons", "Cartilage", "Skin"], a: 1 },
+            { q: "The large muscle of the buttocks is the:", o: ["Gluteus Maximus", "Quadriceps", "Hamstrings", "Gastrocnemius"], a: 0 },
+            { q: "The axial skeleton includes the:", o: ["Arms and legs", "Skull, vertebral column, and rib cage", "Hands and feet", "Hip and shoulder"], a: 1 }
+        ],
+        8: [
+            { q: "The functional unit of the kidney is the:", o: ["Neuron", "Nephron", "Alveolus", "Lobe"], a: 1 },
+            { q: "Urine flows from the kidneys to the bladder via the:", o: ["Urethra", "Ureter", "Aorta", "Vena cava"], a: 1 },
+            { q: "Glomerular filtration occurs in the:", o: ["Loop of Henle", "Bowman's Capsule", "Collecting Duct", "Distal Tubule"], a: 1 },
+            { q: "The hormone that regulates water reabsorption in the kidney is:", o: ["Insulin", "ADH (Antidiuretic Hormone)", "Thyroxine", "Glucagon"], a: 1 },
+            { q: "The triangular muscular organ that stores urine is the:", o: ["Kidney", "Ureter", "Urinary Bladder", "Urethra"], a: 2 },
+            { q: "The loop of Henle is found in the:", o: ["Cortex", "Medulla", "Pelvis", "Capsule"], a: 1 },
+            { q: "Normal urine output per day is approximately:", o: ["100-200 ml", "1000-1500 ml", "5000 ml", "10 ml"], a: 1 },
+            { q: "Renin is secreted by the:", o: ["Liver", "Lungs", "Kidneys (JGA cells)", "Heart"], a: 2 },
+            { q: "Which substance is NOT normally found in urine?", o: ["Urea", "Creatinine", "Glucose", "Water"], a: 2 },
+            { q: "The tube conveying urine from the bladder to the exterior is the:", o: ["Ureter", "Urethra", "Nephron", "Tubule"], a: 1 }
+        ],
+        9: [
+            { q: "The primary female sex hormone is:", o: ["Testosterone", "Estrogen", "Adrenaline", "Insulin"], a: 1 },
+            { q: "Fertilization normally occurs in the:", o: ["Uterus", "Ovary", "Fallopian Tube", "Vagina"], a: 2 },
+            { q: "Sperm production takes place in the:", o: ["Prostate", "Seminiferous tubules (Testes)", "Vas deferens", "Penis"], a: 1 },
+            { q: "The inner lining of the uterus is called the:", o: ["Myometrium", "Perimetrium", "Endometrium", "Epithelium"], a: 2 },
+            { q: "The process of releasing an egg from the ovary is:", o: ["Menstruation", "Ovulation", "Fertilization", "Gestation"], a: 1 },
+            { q: "The male gland that surrounds the urethra is the:", o: ["Testis", "Prostate", "Adrenal", "Cowper's gland"], a: 1 },
+            { q: "Testosterone is produced by:", o: ["Sertoli cells", "Leydig cells", "Sperm", "Prostate"], a: 1 },
+            { q: "The normal length of the menstrual cycle is roughly:", o: ["14 days", "28 days", "40 days", "10 days"], a: 1 },
+            { q: "The muscular layer of the uterus responsible for contractions is:", o: ["Endometrium", "Myometrium", "Perimetrium", "Cervix"], a: 1 },
+            { q: "Sperm are stored and matured in the:", o: ["Epididymis", "Vas deferens", "Seminal vesicle", "Urethra"], a: 0 }
+        ],
+        10: [
+            { q: "The Central Nervous System (CNS) consists of:", o: ["Brain and Spinal Cord", "Nerves only", "Brain only", "Spinal cord only"], a: 0 },
+            { q: "The part of the neuron that carries impulses away from the cell body is:", o: ["Dendrite", "Axon", "Nucleus", "Myelin"], a: 1 },
+            { q: "The largest part of the brain is the:", o: ["Cerebellum", "Brain Stem", "Cerebrum", "Medulla"], a: 2 },
+            { q: "The part of the brain responsible for balance and coordination is:", o: ["Cerebrum", "Cerebellum", "Pons", "Midbrain"], a: 1 },
+            { q: "The protective covering of the brain and spinal cord is:", o: ["Pericardium", "Meninges", "Pleura", "Peritoneum"], a: 1 },
+            { q: "There are how many pairs of cranial nerves?", o: ["10", "12", "31", "20"], a: 1 },
+            { q: "The junction between two neurons is called a:", o: ["Node", "Synapse", "Ganglion", "Plexus"], a: 1 },
+            { q: "Reflex actions are primarily controlled by the:", o: ["Brain", "Spinal Cord", "Heart", "Skin"], a: 1 },
+            { q: "The myelin sheath is produced by:", o: ["Schwann cells", "Neurons", "Blood cells", "Bone cells"], a: 0 },
+            { q: "CSF (Cerebrospinal Fluid) flows in the:", o: ["Subdural space", "Subarachnoid space", "Epidural space", "Veins"], a: 1 }
+        ]
+    };
 
-        let currentQuizUnit = 1;
-        let score = 0;
+    let currentQuizUnit = 1;
+    let score = 0;
 
-        function toggleUnit(header) {
-            const content = header.nextElementSibling;
-            const isExpanded = header.getAttribute('aria-expanded') === 'true';
-            header.setAttribute('aria-expanded', !isExpanded);
-            content.classList.toggle('active');
+    function toggleUnit(header) {
+        const content = header.nextElementSibling;
+        const isExpanded = header.getAttribute('aria-expanded') === 'true';
+        header.setAttribute('aria-expanded', !isExpanded);
+        content.classList.toggle('active');
+    }
+
+    function openResource(type, url, title) {
+        // 1. PUSH HISTORY STATE
+        history.pushState({ modalOpen: true }, null, '#resource');
+
+        const modal = document.getElementById('app-modal');
+        const body = document.getElementById('modal-body');
+        document.getElementById('modal-title').textContent = title;
+        modal.style.display = 'flex';
+        
+        // Clean URL Logic
+        let finalUrl = url;
+        if (url.includes('drive.google.com')) { 
+            finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview'); 
         }
-
-        function openResource(type, url, title) {
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            document.getElementById('modal-title').textContent = title;
-            modal.style.display = 'flex';
-            
-            // Handle Drive Links vs Direct HTML/3D Links
-            let finalUrl = url;
-            if (url.includes('drive.google.com')) {
-                finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
-            }
-            
-            body.innerHTML = `<iframe class="iframe-res" src="${finalUrl}" allow="autoplay; xr-spatial-tracking" allowfullscreen></iframe>`;
+        else if (url.includes('human.biodigital.com')) { 
+            if (url.includes('/viewer/')) finalUrl = url.replace('/viewer/', '/widget/');
+            else finalUrl = url.replace('/view', '/widget'); 
         }
+        
+        // 2. VIDEO SECURITY FIX: Added 'sandbox' with 'allow-same-origin' and 'allow="encrypted-media"'
+        body.innerHTML = `
+            <iframe 
+                class="iframe-res" 
+                src="${finalUrl}" 
+                width="100%" 
+                height="100%" 
+                frameborder="0"
+                sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-presentation"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen">
+            </iframe>`;
+    }
 
-        function startQuiz(unitId) {
-            currentQuizUnit = unitId;
-            score = 0;
-            const questions = QUIZ_DATA[unitId];
-            
-            let html = `
-                <div class="quiz-container">
-                    <div class="quiz-header-sticky">
-                        <h2 style="margin:0; color:var(--brand);">Unit ${unitId} Quiz</h2>
-                        <div id="score-display" class="score-badge">Score: 0 / ${questions.length}</div>
-                    </div>
-            `;
-            
-            questions.forEach((q, index) => {
-                html += `
-                    <div class="question-block">
-                        <p class="quiz-question-text">${index + 1}. ${q.q}</p>
-                        <div class="options-container">
-                            ${q.o.map((opt, optIndex) => `
-                                <div class="quiz-option" onclick="checkAnswer(this, ${unitId}, ${optIndex}, ${q.a})">${opt}</div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            });
-            
+    function startQuiz(unitId) {
+        // PUSH HISTORY STATE
+        history.pushState({ modalOpen: true }, null, '#quiz');
+
+        currentQuizUnit = unitId;
+        score = 0;
+        const questions = QUIZ_DATA[unitId];
+        
+        let html = `
+            <div class="quiz-container">
+                <div class="quiz-header-sticky">
+                    <h2 style="margin:0; color:var(--brand);">Unit ${unitId} Quiz</h2>
+                    <div id="score-display" class="score-badge">Score: 0 / ${questions.length}</div>
+                </div>
+        `;
+        
+        questions.forEach((q, index) => {
             html += `
-                    <button class="btn-quiz" onclick="closeModal()">Close Quiz</button>
+                <div class="question-block">
+                    <p class="quiz-question-text">${index + 1}. ${q.q}</p>
+                    <div class="options-container">
+                        ${q.o.map((opt, optIndex) => `
+                            <div class="quiz-option" onclick="checkAnswer(this, ${unitId}, ${optIndex}, ${q.a})">${opt}</div>
+                        `).join('')}
+                    </div>
                 </div>
             `;
-            
-            document.getElementById('modal-body').innerHTML = html;
-            document.getElementById('modal-title').textContent = `Unit ${unitId} Quiz`;
-            document.getElementById('app-modal').style.display = 'flex';
-        }
+        });
+        
+        html += `
+                <button class="btn-quiz" onclick="closeModal()">Close Quiz</button>
+            </div>
+        `;
+        
+        document.getElementById('modal-body').innerHTML = html;
+        document.getElementById('modal-title').textContent = `Unit ${unitId} Quiz`;
+        document.getElementById('app-modal').style.display = 'flex';
+    }
 
-        function checkAnswer(element, unitId, selectedIndex, correctIndex) {
-            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+    function checkAnswer(element, unitId, selectedIndex, correctIndex) {
+        if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
 
-            if (selectedIndex === correctIndex) {
-                element.classList.add('correct');
-                score++;
-            } else {
-                element.classList.add('wrong');
-                element.parentElement.children[correctIndex].classList.add('correct');
-            }
-            document.getElementById('score-display').textContent = `Score: ${score} / ${QUIZ_DATA[unitId].length}`;
+        if (selectedIndex === correctIndex) {
+            element.classList.add('correct');
+            score++;
+        } else {
+            element.classList.add('wrong');
+            element.parentElement.children[correctIndex].classList.add('correct');
         }
+        document.getElementById('score-display').textContent = `Score: ${score} / ${QUIZ_DATA[unitId].length}`;
+    }
 
-        function closeModal() { 
-            document.getElementById('app-modal').style.display = 'none'; 
-            document.getElementById('modal-body').innerHTML = ""; 
+    function closeModal() { 
+        const modal = document.getElementById('app-modal');
+        modal.style.display = 'none'; 
+        document.getElementById('modal-body').innerHTML = ""; 
+        
+        // LOGIC: If we have a history state (meaning the modal is open),
+        // we manually go 'Back' to remove that state so the user doesn't get stuck.
+        if ((history.state && history.state.modalOpen) || window.location.hash === '#resource' || window.location.hash === '#quiz') {
+            history.back();
         }
-    </script>
+    }
+
+    // LISTENER FOR HARDWARE BACK BUTTON
+    window.onpopstate = function(event) {
+        const modal = document.getElementById('app-modal');
+        // If the modal is currently visible, hide it.
+        if (modal.style.display === 'flex') {
+            modal.style.display = 'none';
+            document.getElementById('modal-body').innerHTML = '';
+        }
+    };
+</script>
 </body>
 </html>
