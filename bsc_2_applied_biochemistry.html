@@ -3,577 +3,209 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Applied Biochemistry Syllabus</title>
+    <title>Applied Biochemistry</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
-        /* --- MODERN THEME --- */
         :root {
-            --primary: #00B9F2;       /* Light Blue */
-            --primary-dark: #003B82;  /* Navy */
-            --bg-card: #ffffff;
-            --bg-body: #f3f4f6;
-            --text-main: #111827;
-            --text-muted: #6b7280;
-            --accent: #f59e0b;        /* Quiz Gold */
-            --danger: #ef4444;
-            --success: #10b981;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
-            --radius-md: 12px;
+            --brand: #003B82; --accent: #00B9F2; --gray-50: #f9fafb; --gray-200: #e5e7eb; --gray-900: #111827;
+            --danger: #ef4444; --success: #10b981; --warning: #f59e0b;
         }
-
         * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: white; color: var(--gray-900); padding: 24px; max-width: 1000px; margin: 0 auto; }
+        .syllabus-btn { display: block; width: 100%; padding: 18px 24px; margin: 12px 0; background: white; color: var(--brand); border: 2px solid var(--brand); font-weight: 700; font-size: 16px; text-align: center; cursor: pointer; border-radius: 12px; transition: all 0.2s ease; text-decoration: none; }
+        .syllabus-btn:hover { background: var(--gray-50); transform: translateY(-1px); }
+        .unit-header { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 18px 24px; margin: 16px 0; background: var(--brand); color: white; font-weight: 600; font-size: 16px; border-radius: 12px; cursor: pointer; transition: 0.2s; }
+        .unit-header:hover { background: #002d63; }
+        .unit-content { padding: 0 12px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; }
+        .unit-content.active { padding: 24px 12px; max-height: none; }
+        .subsection { padding: 20px; background: white; border-radius: 12px; border: 1px solid var(--gray-200); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .resource-btn { display: flex; width: 100%; padding: 14px 18px; margin: 6px 0; background: var(--gray-50); border-radius: 8px; font-weight: 500; border: 1px solid var(--gray-200); cursor: pointer; gap: 12px; transition: 0.2s; align-items: center; }
         
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-        }
+        /* EXISTING BUTTON STYLES */
+        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
+        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
+        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+        .resource-btn.model { background: #fdf4ff; border-color: #f0abfc; color: #86198f; }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding-bottom: 80px;
-        }
-
-        /* --- HEADER & SYLLABUS --- */
-        .page-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+        /* NEW BUTTON STYLES FOR APP */
+        .resource-btn.imp-discussion { background: #fef2f2; border-color: #fecaca; color: #b91c1c; } /* Light Red Background */
+        .resource-btn.imp-pdf { background: #fff7ed; border-color: #fed7aa; color: #c2410c; } /* Light Orange Background */
         
-        .page-title {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--primary-dark);
-            margin-bottom: 10px;
-        }
-
-        .syllabus-card {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-            color: white;
-            padding: 20px;
-            border-radius: var(--radius-md);
-            text-align: center;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: var(--shadow-md);
-            margin-bottom: 30px;
-            display: block;
-            text-decoration: none;
-            transition: transform 0.2s;
-        }
-        .syllabus-card:active { transform: scale(0.98); }
-
-        /* --- UNITS (ACCORDION STYLE) --- */
-        .unit-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-md);
-            margin-bottom: 16px;
-            box-shadow: var(--shadow-sm);
-            overflow: hidden;
-            border: 1px solid #e5e7eb;
-        }
-
-        .unit-header {
-            padding: 20px;
-            background: var(--bg-card);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            font-weight: 700;
-            color: var(--primary-dark);
-            border-bottom: 1px solid transparent;
-            transition: background 0.2s;
-        }
-        
-        .unit-header:hover { background: #f9fafb; }
-        
-        .unit-header.active {
-            border-bottom-color: #e5e7eb;
-            background: #f0f9ff;
-            color: var(--primary-dark);
-        }
-
-        .unit-content {
-            display: none;
-            padding: 20px;
-            background: #fdfdfd;
-        }
-        .unit-content.show { display: block; }
-
-        /* --- RESOURCES LIST --- */
-        .resource-list {
-            display: grid;
-            gap: 12px;
-        }
-
-        .resource-btn {
-            display: flex;
-            align-items: center;
-            padding: 16px;
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            text-decoration: none;
-            color: var(--text-main);
-            font-weight: 500;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-
-        .resource-btn:hover {
-            border-color: var(--primary);
-            transform: translateX(4px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        /* Color coding by type */
-        .type-notes { border-left: 4px solid #0ea5e9; background: #f0f9ff; }
-        .type-video { border-left: 4px solid #8b5cf6; background: #f5f3ff; }
-        .type-quiz  { border-left: 4px solid #f59e0b; background: #fffbeb; }
-
-        .icon {
-            margin-right: 12px;
-            font-size: 1.2rem;
-            width: 30px;
-            text-align: center;
-        }
-
-        /* --- MODAL --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-        }
-
-        .modal-header {
-            height: 60px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            flex-shrink: 0;
-        }
-
-        .modal-title { font-weight: 700; color: var(--primary-dark); font-size: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-        
-        .btn-close {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            flex: 1;
-            background: #000;
-            position: relative;
-            overflow-y: auto;
-            /* Default display is flexible to center videos */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* --- FIXED IFRAME STYLES --- */
-        
-        /* 1. For Videos (Keeps 16:9 Aspect Ratio) */
-        .iframe-video {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16 / 9;
-            border: none;
-            background: #000;
-            display: block;
-        }
-
-        /* 2. For Notes (Fills the screen vertically) */
-        .iframe-doc {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #fff;
-            display: block;
-        }
-
-        /* --- QUIZ STYLES --- */
-        .quiz-container {
-            background: white;
-            width: 100%;
-            min-height: 100%;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .quiz-question { margin-bottom: 20px; font-size: 1.1rem; font-weight: 600; }
-        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
-        .quiz-option {
-            padding: 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        .quiz-option:hover { background: #f0f9ff; border-color: var(--primary); }
-        .quiz-option.correct { background: var(--success); color: white; border-color: var(--success); }
-        .quiz-option.correct::after { content: '✓'; position: absolute; right: 15px; font-weight: bold; }
-        .quiz-option.wrong { background: var(--danger); color: white; border-color: var(--danger); }
-        .quiz-option.wrong::after { content: '✗'; position: absolute; right: 15px; font-weight: bold; }
-
+        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
+        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
+        .icon.video-icon { color: #8b5cf6; } .icon.quiz-icon { color: #f59e0b; } .icon.model-icon { color: #d946ef; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; display: none; flex-direction: column; }
+        .modal-header { height: 60px; background: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; }
+        .btn-close { background: var(--danger); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .modal-body { flex: 1; background: #f3f4f6; position: relative; padding: 20px; display:flex; justify-content:center; overflow-y: auto;}
+        .iframe-res { width: 100%; height: 100%; border: none; background: white; }
+        .quiz-container { background: white; width: 100%; max-width: 800px; padding: 30px; border-radius: 12px; margin-bottom: 50px; }
+        .quiz-option { padding: 12px 15px; border: 2px solid var(--gray-200); border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
+        .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
+        .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; }
+        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
+        .btn-quiz { background: var(--brand); color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 600; font-size: 16px; margin-top: 20px; cursor: pointer;}
+        @media (max-width: 768px) { body { padding: 16px; } .quiz-container { padding: 15px; } }
     </style>
 </head>
 <body>
-
-    <div class="container">
-        <div class="page-header">
-            <div class="page-title">Applied Biochemistry</div>
-            <p style="color: var(--text-muted);">BSc Nursing Semester 1</p>
-        </div>
-
-        <div class="syllabus-card" onclick="openResource('Syllabus', 'https://drive.google.com/file/d/1TPEoZdbtAGXWzOGr2o9teP0TAgfbKRsr/preview')">
-            📄 View Full Syllabus
-        </div>
-
-        <div id="units-container">
-            </div>
-    </div>
-
+    <a class="syllabus-btn" href="https://drive.google.com/file/d/1TPEoZdbtAGXWzOGr2o9teP0TAgfbKRsr/view?usp=drive_link" target="_blank">📄 DOWNLOAD SYLLABUS</a>
+    <div id="units">
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 1 - CARBOHYDRATES <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1xlkza4-lyyM3YulSxxdJ02hAkDWS-Ewv/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1w3PhNhiobk-U86d-MyGIIg_U_lRE4fGt/preview', 'Carbohydrate : Introduction, Digestion, Absorption, Metabolism (Cycles)')"><span class="icon video-icon">▶️</span><span>Carbohydrate : Introduction, Digestion, Absorption, Metabolism (Cycles)</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1d7IDKBnCYJcmz8K8sQryVnCR_jjnkmtq/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1gl6N5LU8BsYkX6hJmIJhyh6h5ibqxf72/preview', 'Glycolysis, Kerbs Cycle (Citric Acid Cycle)')"><span class="icon video-icon">▶️</span><span>Glycolysis, Kerbs Cycle (Citric Acid Cycle)</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/19x2k3JL1vyckxFm-HkKeQ0yvJDmO-ZpC/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1iQfZJQEx1Yf_SSr2qu1h8ZiBSgz35jKN/preview', 'Electron Transport and Oxidative Phosphorylation, Gluconeogenesis')"><span class="icon video-icon">▶️</span><span>Electron Transport and Oxidative Phosphorylation, Gluconeogenesis</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1QFtxNhSNSqQ_lll0BUmZ-8bujBaXChZd/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ZAJV8BA5SWHnuNRCnnHoFSYkyKDWfsgO/preview', 'Cori Cycle or Lactic Acid Cycle, Hexose Monophosphate Shunt')"><span class="icon video-icon">▶️</span><span>Cori Cycle or Lactic Acid Cycle, Hexose Monophosphate Shunt</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/18-2fvg_szO8PJHdSw7zqj97S1ZAFCO_x/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1U1h2A8F6kpdaIAZ2SpEKoctOR6bGgZWB/preview', 'Glycogenesis, Glycogenolysis')"><span class="icon video-icon">▶️</span><span>Glycogenesis, Glycogenolysis</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1sSKFSm3nmC64_O-75iAHrFzN6grz-rai/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1RGNqBTG4jIuH7oioOaPr1LdOGvgvLiVQ/preview', 'Metabolic Disorders, Blood Glucose Regulation')"><span class="icon video-icon">▶️</span><span>Metabolic Disorders, Blood Glucose Regulation</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/11BcPbIrdVZ65wxSd5-RHlUkcoaNJRKJZ/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Mx4UWAq4uAESQf3xwS-Oy5jDzgumNd0C/preview', 'Diabetes Mellitus, Investigation of Diabetes Mellitus, Glucose Tolerance Test Curve, Mini GTT, Glucose Challenge Test, Intravenous GTT, Glycated Hemoglobin, Hypoglycemia')"><span class="icon video-icon">▶️</span><span>Diabetes Mellitus, Investigation of Diabetes Mellitus, Glucose Tolerance Test Curve, Mini GTT, Glucose Challenge Test, Intravenous GTT, Glycated Hemoglobin, Hypoglycemia</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1D4QNGYg2GDGNzLyoqfL9HsSXpyHVRyNY/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(1)"><span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 2 - LIPIDS <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1-1hp1OYQU50Gr4zx0Axuh98GZFXfj66p/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/11bhC9TghqQD0O9IiUOjqGmmwxH8moZL-/preview', 'Lipid, fatty acid, Classification of Fatty Acids, Monosaturated fatty Acid, Polyunsaturated Fatty Acid')"><span class="icon video-icon">▶️</span><span>Lipid, fatty acid, Classification of Fatty Acids, Monosaturated fatty Acid, Polyunsaturated Fatty Acid</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1OKuW6hhZw8WqBIl7f1MmiRJQGs609svt/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1IhD3WzBcEz1fPM1QPbDFLkXuHl-kKgeg/preview', 'Digestion and Absorption of Liquids, Metabolism of Lipid, Fatty Acid Metabolism')"><span class="icon video-icon">▶️</span><span>Digestion and Absorption of Liquids, Metabolism of Lipid, Fatty Acid Metabolism</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Li5ho3wqb1ONgZYY75ljeY2skMT5p_7Y/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1E2ATQ72gi5KEQDLtWbKK7aYXhMcoHbdb/preview', 'Metabolism of Cholesterol, Ketone Bodies, Lipoproteins, Triacylglycerol, Bile Salt Metabolism, Bile Salt steroids, Phospholipid')"><span class="icon video-icon">▶️</span><span>Metabolism of Cholesterol, Ketone Bodies, Lipoproteins, Triacylglycerol, Bile Salt Metabolism, Bile Salt steroids, Phospholipid</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1dTlWcQaAL_JByTBr2ILO1Snhk4urwe8p/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1_E9QgJwae86HuhefAWI1sWjeqYlxmPSA/preview', 'Metabolic Disorder of Lipid, Ketone Bodies, Lipoproteins, Lipid profile, Atherosclerosis')"><span class="icon video-icon">▶️</span><span>Metabolic Disorder of Lipid, Ketone Bodies, Lipoproteins, Lipid profile, Atherosclerosis</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1LqvL6jv84rC80XNKUr3y4JjdenZrqf9s/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(2)"><span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 3 - PROTEINS <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1RE8hFpycOZ7wQeiHrP5PvMkFoJRF-Utd/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Kbei5ICXJrCG0SUasIxu8-SC2fagXb6y/preview', 'Protein, Amino Acid, Digestion of Protein, Absorption of Protein')"><span class="icon video-icon">▶️</span><span>Protein, Amino Acid, Digestion of Protein, Absorption of Protein</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ILHN1XmMJN8z825EWx_vfpQd-ZYgacVr/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/11mvh2qurr-dETEglvV-EoV0-uIAMFClo/preview', 'Metabolism of Proteins, Metabolic Disorder, Biologically Important Compound')"><span class="icon video-icon">▶️</span><span>Metabolism of Proteins, Metabolic Disorder, Biologically Important Compound</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1RXxTe_Wt30-_fj9AHy8TsdlRFNhoYqQE/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1cflgWY9UKYLes28x752Edy0BrmiWhBmz/preview', 'Plasma proteins, Proteinuria, Hypoproteinemia, Hyper-Gamma Globiemia, Electrophoresis')"><span class="icon video-icon">▶️</span><span>Plasma proteins, Proteinuria, Hypoproteinemia, Hyper-Gamma Globiemia, Electrophoresis</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1HqOpw7BQOJv80mqWA-3MAp2cwouT5c24/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(3)"><span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 4 - CLINICAL ENZYMOLOGY <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1lH1KGjaTbGM6FQ54dKwHvTxJqydF1YWI/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1skZZrpMrC9JZsNHOvTbLITdfNtjVV2Go/preview', 'Enzymes Mechanism Of Action, Diagnostic Importance')"><span class="icon video-icon">▶️</span><span>Enzymes Mechanism Of Action, Diagnostic Importance</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1G0JZQLL7nafp0mg4RGaWUFge7mQbgqNi/preview', 'Enzyme Pattern in Disease')"><span class="icon video-icon">▶️</span><span>Enzyme Pattern in Disease</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1rb-0D-ST3vf2vsd4u-IFw-FJ_iDkrCLv/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(4)"><span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 5 - ACID BASE MAINTENANCE <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1PUxQGVwOFXsuQSKiXwvWB0nbdByn0NM-/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/10IlUAGnn4PpjjUJqK2pKjwdoZm3qVLFt/preview', 'Acid-base Homeostasis, Acid- Base Balance, Production of Bases, Bodys Response for Acid-base Balance, Maintenance of Body pH, Blood Buffer System')"><span class="icon video-icon">▶️</span><span>Acid-base Homeostasis, Acid- Base Balance, Production of Bases, Bodys Response for Acid-base Balance, Maintenance of Body pH, Blood Buffer System</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1GiE0OYOMUcnXAdW8j56VmZUa7hp6zm8s/preview', 'Respiratory Buffer System, Renal Buffer System')"><span class="icon video-icon">▶️</span><span>Respiratory Buffer System, Renal Buffer System</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/12arc7wREhx12mxdm3_S7_L8tkVgDoozv/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1PimQ2P3GBSYFhND5jGamjbMo_xrs4WJz/preview', 'Acid Base Disorders')"><span class="icon video-icon">▶️</span><span>Acid Base Disorders</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1oN7WTZWyGzz2CNu5kPsPz7MoEZbC7aZ-/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(5)"><span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 6 - HEME CATABOLISM <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1dxqpQ2DSFu8H7x8buCRG1jDLBVL55iuH/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1X0xsgUCTiCH4VkKjvGhf737hNUHYDI-n/preview', 'Hemoglobin, Heme Catabolism, Jaundice, Van Den Bergh Reaction')"><span class="icon video-icon">▶️</span><span>Hemoglobin, Heme Catabolism, Jaundice, Van Den Bergh Reaction</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1IYs-xBudtYsQXlKFboPskTg9-BdjDEKV/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(6)"><span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 7 - ORGAN FUNCTION TESTS <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1eUU_m7ki6EjX-IVecK0MATYKTqYKuVlu/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1UQvpaQ4xac_zstE9i9WFmStmne8pjd9P/preview', 'Organ Function Tests: Liver Function Tests (LFT)')"><span class="icon video-icon">▶️</span><span>Organ Function Tests: Liver Function Tests (LFT)</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1AH1WzHeCHnqzgIErYRUGrroJprhk6pv4/preview', 'Renal function tests (RFT), Thyroid Function Tests (TFT)')"><span class="icon video-icon">▶️</span><span>Renal function tests (RFT), Thyroid Function Tests (TFT)</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1MfXTBGi5xueFKcAme0HeKwGDpOMr8R84/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(7)"><span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span></div></div></div>
+                </div>
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT 8 - IMMUNOCHEMISTRY <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1kYZtAlTVwh1WQKPi0Xpf3JtxNRve_749/preview', 'Detailed Notes ')"><span class="icon">📚</span><span>Detailed Notes </span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1R6Sq07cMH2UZUCOMtp1D6j2G7LdwF1Ps/preview', 'Immunochemsitry: Antibodies')"><span class="icon video-icon">▶️</span><span>Immunochemsitry: Antibodies</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1G_UtEL_7yFOmtj_e62-A4xGwF5DXBBNS/preview', 'Types of Antibodies')"><span class="icon video-icon">▶️</span><span>Types of Antibodies</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1dKVVOkvUKdOz-y_MsKrB7B2vQwB43fWt/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1PjfZXCq4beI9xdi_W42XVFQ_ILoyD_nn/preview', 'Antigen Antibody Reactions, Aggulination Tests, Immunofluorescence Test')"><span class="icon video-icon">▶️</span><span>Antigen Antibody Reactions, Aggulination Tests, Immunofluorescence Test</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1nqEhRV7pV23xjdsoN8mYTcms5IbtQOB9/preview', 'ELISA (Enzyme Linked Immuno Sorbent Assay), Immunofluorescence Test')"><span class="icon video-icon">▶️</span><span>ELISA (Enzyme Linked Immuno Sorbent Assay), Immunofluorescence Test</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Zuio_SFdCyN2xpSCvDy6iExI38iIoJIc/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(8)"><span class="icon quiz-icon">✍️</span><span>Take Unit 8 Quiz</span></div></div></div>
+                </div></div>
     <div id="app-modal" class="modal-overlay">
         <div class="modal-header">
-            <div id="modal-title" class="modal-title">Resource</div>
+            <div id="modal-title" style="font-weight:700; color:var(--brand);">Resource</div>
             <button class="btn-close" onclick="closeModal()">Close X</button>
         </div>
         <div id="modal-body" class="modal-body"></div>
     </div>
-
     <script>
-        // --- 1. BIOCHEMISTRY QUIZ DATA ---
-        const QUIZ_DATA = {
-            1: [ // Carbohydrates
-                { q: "Which is the end product of Glycolysis in aerobic conditions?", o: ["Lactate", "Pyruvate", "Acetyl CoA", "Citrate"], a: 1 },
-                { q: "The 'Powerhouse' cycle of the cell is:", o: ["Glycolysis", "TCA/Krebs Cycle", "HMP Shunt", "Urea Cycle"], a: 1 },
-                { q: "Gluconeogenesis is the formation of glucose from:", o: ["Glycogen", "Non-carbohydrate sources", "Galactose", "Fructose"], a: 1 },
-                { q: "Normal Fasting Blood Glucose level is:", o: ["70-110 mg/dL", "120-160 mg/dL", "40-60 mg/dL", "200+ mg/dL"], a: 0 },
-                { q: "Which hormone lowers blood glucose?", o: ["Glucagon", "Insulin", "Cortisol", "Adrenaline"], a: 1 }
-            ],
-            2: [ // Lipids
-                { q: "Which is known as 'Bad Cholesterol'?", o: ["HDL", "LDL", "VLDL", "Chylomicrons"], a: 1 },
-                { q: "Ketone bodies are produced in the:", o: ["Kidney", "Liver", "Brain", "Heart"], a: 1 },
-                { q: "Beta-oxidation is the metabolism of:", o: ["Proteins", "Carbohydrates", "Fatty Acids", "Nucleic Acids"], a: 2 },
-                { q: "Atherosclerosis is caused by accumulation of:", o: ["Calcium", "Cholesterol/Lipids", "Iron", "Protein"], a: 1 },
-                { q: "Essential fatty acids cannot be synthesized by:", o: ["Plants", "The human body", "Bacteria", "Fungi"], a: 1 }
-            ],
-            3: [ // Proteins
-                { q: "The building blocks of proteins are:", o: ["Monosaccharides", "Amino Acids", "Fatty Acids", "Nucleotides"], a: 1 },
-                { q: "The Urea Cycle takes place primarily in the:", o: ["Kidney", "Liver", "Intestine", "Muscle"], a: 1 },
-                { q: "Albumin helps in maintaining:", o: ["Blood clotting", "Osmotic Pressure", "Immunity", "Digestion"], a: 1 },
-                { q: "Denaturation involves the disruption of:", o: ["Primary structure", "Peptide bonds", "Secondary/Tertiary structure", "Amino acid sequence"], a: 2 },
-                { q: "Phenylketonuria (PKU) is a disorder of:", o: ["Carbohydrate metabolism", "Amino acid metabolism", "Lipid metabolism", "Mineral metabolism"], a: 1 }
-            ],
-            4: [ // Enzymes
-                { q: "Enzymes are biocatalysts made of:", o: ["Lipids", "Proteins", "Carbohydrates", "Vitamins"], a: 1 },
-                { q: "Which enzyme is specific for liver damage (SGPT)?", o: ["AST", "ALT", "ALP", "CK-MB"], a: 1 },
-                { q: "Cardiac marker enzyme elevated in myocardial infarction:", o: ["Amylase", "CK-MB", "Lipase", "Acid Phosphatase"], a: 1 },
-                { q: "Factors affecting enzyme activity include:", o: ["pH only", "Temperature only", "pH, Temperature & Substrate concentration", "None"], a: 2 },
-                { q: "Isoenzymes are:", o: ["Different forms of same enzyme", "Different enzymes", "Inactive enzymes", "Co-enzymes"], a: 0 }
-            ],
-            5: [ // Acid Base
-                { q: "Normal pH of arterial blood is:", o: ["7.0 - 7.1", "7.35 - 7.45", "6.8 - 7.0", "7.5 - 7.6"], a: 1 },
-                { q: "The major buffer system in blood is:", o: ["Phosphate buffer", "Bicarbonate buffer", "Protein buffer", "Hemoglobin buffer"], a: 1 },
-                { q: "Metabolic Acidosis is characterized by:", o: ["High pH, High HCO3", "Low pH, Low HCO3", "High pH, Low CO2", "Low pH, High CO2"], a: 1 },
-                { q: "Which organ regulates pH by excreting H+ ions?", o: ["Lung", "Kidney", "Liver", "Heart"], a: 1 },
-                { q: "Respiratory Alkalosis is caused by:", o: ["Hyperventilation", "Hypoventilation", "Vomiting", "Diarrhea"], a: 0 }
-            ],
-            6: [ // Heme Catabolism
-                { q: "The end product of Heme catabolism is:", o: ["Urea", "Bilirubin", "Creatinine", "Uric Acid"], a: 1 },
-                { q: "Jaundice is caused by elevated levels of:", o: ["Glucose", "Bilirubin", "Cholesterol", "Calcium"], a: 1 },
-                { q: "Direct Bilirubin is:", o: ["Unconjugated", "Conjugated", "Bound to Albumin", "Insoluble"], a: 1 },
-                { q: "Which test detects bilirubin types?", o: ["Benedict's Test", "Van den Bergh Reaction", "Biuret Test", "Rothera's Test"], a: 1 },
-                { q: "Hemoglobin consists of:", o: ["Heme + Globin", "Iron + Albumin", "Heme + Albumin", "Iron + Globulin"], a: 0 }
-            ],
-            7: [ // Organ Function Tests
-                { q: "Serum Creatinine is a marker for:", o: ["Liver function", "Kidney function", "Heart function", "Thyroid function"], a: 1 },
-                { q: "Which is a Liver Function Test (LFT)?", o: ["Serum Bilirubin", "Serum TSH", "Serum Urea", "Serum Amylase"], a: 0 },
-                { q: "Elevated TSH usually indicates:", o: ["Hyperthyroidism", "Hypothyroidism", "Normal function", "Liver failure"], a: 1 },
-                { q: "Clearance tests (like Inulin/Creatinine) measure:", o: ["GFR", "Liver detox", "Lung volume", "Heart rate"], a: 0 },
-                { q: "Urea is the end product of:", o: ["Purine metabolism", "Protein metabolism", "Heme metabolism", "Glucose metabolism"], a: 1 }
-            ],
-            8: [ // Immunochemistry
-                { q: "Immunoglobulins (Antibodies) are produced by:", o: ["T-cells", "B-cells/Plasma cells", "RBCs", "Platelets"], a: 1 },
-                { q: "Which antibody crosses the placenta?", o: ["IgM", "IgG", "IgA", "IgE"], a: 1 },
-                { q: "The antibody involved in allergic reactions is:", o: ["IgG", "IgE", "IgM", "IgD"], a: 1 },
-                { q: "ELISA stands for:", o: ["Enzyme Linked Immuno Sorbent Assay", "Enzyme Linked Immuno Solvent Action", "Energy Level Immuno System Assay", "None"], a: 0 },
-                { q: "The first antibody produced in infection is:", o: ["IgG", "IgM", "IgA", "IgD"], a: 1 }
-            ]
-        };
-
-        // --- 2. COURSE DATA ---
-        const UNITS = [
-            {
-                id: 1, title: "CARBOHYDRATES",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1xlkza4-lyyM3YulSxxdJ02hAkDWS-Ewv/preview' },
-                    { type: 'video', title: 'Metabolism Cycles', url: 'https://drive.google.com/file/d/1w3PhNhiobk-U86d-MyGIIg_U_lRE4fGt/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1d7IDKBnCYJcmz8K8sQryVnCR_jjnkmtq/preview' },
-                    { type: 'video', title: 'Glycolysis & Krebs Cycle', url: 'https://drive.google.com/file/d/1gl6N5LU8BsYkX6hJmIJhyh6h5ibqxf72/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/19x2k3JL1vyckxFm-HkKeQ0yvJDmO-ZpC/preview' },
-                    { type: 'video', title: 'ETC & Gluconeogenesis', url: 'https://drive.google.com/file/d/1iQfZJQEx1Yf_SSr2qu1h8ZiBSgz35jKN/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1QFtxNhSNSqQ_lll0BUmZ-8bujBaXChZd/preview' },
-                    { type: 'video', title: 'Cori Cycle & HMP Shunt', url: 'https://drive.google.com/file/d/1ZAJV8BA5SWHnuNRCnnHoFSYkyKDWfsgO/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/18-2fvg_szO8PJHdSw7zqj97S1ZAFCO_x/preview' },
-                    { type: 'video', title: 'Glycogen Metabolism', url: 'https://drive.google.com/file/d/1U1h2A8F6kpdaIAZ2SpEKoctOR6bGgZWB/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1sSKFSm3nmC64_O-75iAHrFzN6grz-rai/preview' },
-                    { type: 'video', title: 'Metabolic Disorders', url: 'https://drive.google.com/file/d/1RGNqBTG4jIuH7oioOaPr1LdOGvgvLiVQ/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/11BcPbIrdVZ65wxSd5-RHlUkcoaNJRKJZ/preview' },
-                    { type: 'video', title: 'Diabetes & Investigations', url: 'https://drive.google.com/file/d/1Mx4UWAq4uAESQf3xwS-Oy5jDzgumNd0C/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1D4QNGYg2GDGNzLyoqfL9HsSXpyHVRyNY/preview' }
-                ]
-            },
-            {
-                id: 2, title: "LIPIDS",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1-1hp1OYQU50Gr4zx0Axuh98GZFXfj66p/preview' },
-                    { type: 'video', title: 'Classification of Fatty Acids', url: 'https://drive.google.com/file/d/11bhC9TghqQD0O9IiUOjqGmmwxH8moZL-/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1OKuW6hhZw8WqBIl7f1MmiRJQGs609svt/preview' },
-                    { type: 'video', title: 'Digestion & Metabolism', url: 'https://drive.google.com/file/d/1IhD3WzBcEz1fPM1QPbDFLkXuHl-kKgeg/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1Li5ho3wqb1ONgZYY75ljeY2skMT5p_7Y/preview' },
-                    { type: 'video', title: 'Cholesterol & Lipoproteins', url: 'https://drive.google.com/file/d/1E2ATQ72gi5KEQDLtWbKK7aYXhMcoHbdb/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1dTlWcQaAL_JByTBr2ILO1Snhk4urwe8p/preview' },
-                    { type: 'video', title: 'Disorders & Atherosclerosis', url: 'https://drive.google.com/file/d/1_E9QgJwae86HuhefAWI1sWjeqYlxmPSA/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1LqvL6jv84rC80XNKUr3y4JjdenZrqf9s/preview' }
-                ]
-            },
-            {
-                id: 3, title: "PROTEINS",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1RE8hFpycOZ7wQeiHrP5PvMkFoJRF-Utd/preview' },
-                    { type: 'video', title: 'Amino Acids & Digestion', url: 'https://drive.google.com/file/d/1Kbei5ICXJrCG0SUasIxu8-SC2fagXb6y/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1ILHN1XmMJN8z825EWx_vfpQd-ZYgacVr/preview' },
-                    { type: 'video', title: 'Metabolism & Disorders', url: 'https://drive.google.com/file/d/11mvh2qurr-dETEglvV-EoV0-uIAMFClo/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1RXxTe_Wt30-_fj9AHy8TsdlRFNhoYqQE/preview' },
-                    { type: 'video', title: 'Plasma Proteins', url: 'https://drive.google.com/file/d/1cflgWY9UKYLes28x752Edy0BrmiWhBmz/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1HqOpw7BQOJv80mqWA-3MAp2cwouT5c24/preview' }
-                ]
-            },
-            {
-                id: 4, title: "CLINICAL ENZYMOLOGY",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1lH1KGjaTbGM6FQ54dKwHvTxJqydF1YWI/preview' },
-                    { type: 'video', title: 'Mechanism of Action', url: 'https://drive.google.com/file/d/1skZZrpMrC9JZsNHOvTbLITdfNtjVV2Go/preview' },
-                    { type: 'video', title: 'Enzyme Patterns in Disease', url: 'https://drive.google.com/file/d/1G0JZQLL7nafp0mg4RGaWUFge7mQbgqNi/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1rb-0D-ST3vf2vsd4u-IFw-FJ_iDkrCLv/preview' }
-                ]
-            },
-            {
-                id: 5, title: "ACID BASE MAINTENANCE",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1PUxQGVwOFXsuQSKiXwvWB0nbdByn0NM-/preview' },
-                    { type: 'video', title: 'Homeostasis & Buffers', url: 'https://drive.google.com/file/d/10IlUAGnn4PpjjUJqK2pKjwdoZm3qVLFt/preview' },
-                    { type: 'video', title: 'Resp & Renal Buffers', url: 'https://drive.google.com/file/d/1GiE0OYOMUcnXAdW8j56VmZUa7hp6zm8s/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/12arc7wREhx12mxdm3_S7_L8tkVgDoozv/preview' },
-                    { type: 'video', title: 'Acid Base Disorders', url: 'https://drive.google.com/file/d/1PimQ2P3GBSYFhND5jGamjbMo_xrs4WJz/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1oN7WTZWyGzz2CNu5kPsPz7MoEZbC7aZ-/preview' }
-                ]
-            },
-            {
-                id: 6, title: "HEME CATABOLISM",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1dxqpQ2DSFu8H7x8buCRG1jDLBVL55iuH/preview' },
-                    { type: 'video', title: 'Hemoglobin & Jaundice', url: 'https://drive.google.com/file/d/1X0xsgUCTiCH4VkKjvGhf737hNUHYDI-n/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1IYs-xBudtYsQXlKFboPskTg9-BdjDEKV/preview' }
-                ]
-            },
-            {
-                id: 7, title: "ORGAN FUNCTION TESTS",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1eUU_m7ki6EjX-IVecK0MATYKTqYKuVlu/preview' },
-                    { type: 'video', title: 'Liver Function Tests (LFT)', url: 'https://drive.google.com/file/d/1UQvpaQ4xac_zstE9i9WFmStmne8pjd9P/preview' },
-                    { type: 'video', title: 'RFT & TFT', url: 'https://drive.google.com/file/d/1AH1WzHeCHnqzgIErYRUGrroJprhk6pv4/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1MfXTBGi5xueFKcAme0HeKwGDpOMr8R84/preview' }
-                ]
-            },
-            {
-                id: 8, title: "IMMUNOCHEMISTRY",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1kYZtAlTVwh1WQKPi0Xpf3JtxNRve_749/preview' },
-                    { type: 'video', title: 'Antibodies', url: 'https://drive.google.com/file/d/1R6Sq07cMH2UZUCOMtp1D6j2G7LdwF1Ps/preview' },
-                    { type: 'video', title: 'Types of Antibodies', url: 'https://drive.google.com/file/d/1G_UtEL_7yFOmtj_e62-A4xGwF5DXBBNS/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1dKVVOkvUKdOz-y_MsKrB7B2vQwB43fWt/preview' },
-                    { type: 'video', title: 'Antigen-Antibody Reactions', url: 'https://drive.google.com/file/d/1PjfZXCq4beI9xdi_W42XVFQ_ILoyD_nn/preview' },
-                    { type: 'video', title: 'ELISA & Immunofluorescence', url: 'https://drive.google.com/file/d/1nqEhRV7pV23xjdsoN8mYTcms5IbtQOB9/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1Zuio_SFdCyN2xpSCvDy6iExI38iIoJIc/preview' }
-                ]
-            }
-        ];
-
-        // --- 3. RENDER LOGIC ---
-        function renderPage() {
-            const container = document.getElementById('units-container');
-            
-            UNITS.forEach(unit => {
-                const unitHtml = `
-                    <div class="unit-card">
-                        <div class="unit-header" onclick="toggleUnit(this)">
-                            UNIT ${unit.id} - ${unit.title}
-                            <span>🔽</span>
-                        </div>
-                        <div class="unit-content">
-                            <div class="resource-list">
-                                ${unit.resources.map(res => `
-                                    <div class="resource-btn type-${res.type}" onclick="openResource('${res.type}', '${res.url || ''}', '${res.title}')">
-                                        <div class="icon">${getIcon(res.type)}</div>
-                                        <div>${res.title}</div>
-                                    </div>
-                                `).join('')}
-                                <div class="resource-btn type-quiz" onclick="openQuiz(${unit.id})">
-                                    <div class="icon">✍️</div>
-                                    <div>Take Unit ${unit.id} Quiz</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += unitHtml;
-            });
-        }
-
-        function getIcon(type) {
-            if(type === 'notes') return '📚';
-            if(type === 'video') return '▶️';
-            return '📄';
-        }
-
-        function toggleUnit(header) {
-            header.classList.toggle('active');
-            const content = header.nextElementSibling;
-            content.classList.toggle('show');
-            const arrow = header.querySelector('span');
-            arrow.innerText = content.classList.contains('show') ? '🔼' : '🔽';
-        }
-
-        // --- 4. MODAL LOGIC & NAVIGATION CONTROL ---
+        const QUIZ_DATA = {"1":[{"q":"Which enzyme initiates carbohydrate digestion in the mouth?","o":["Maltase","Amylase","Lactase","Sucrase"],"a":1},{"q":"In the stomach, carbohydrate digestion halts primarily due to:","o":["Lack of enzymes","Absence of bile","Acidic pH denaturing amylase","Lack of oxygen"],"a":2},{"q":"Which monosaccharide has the fastest absorption rate in the intestine?","o":["Glucose","Fructose","Galactose","Maltose"],"a":2},{"q":"Which enzyme catalyzes the conversion of Glucose to Glucose-6-Phosphate in glycolysis?","o":["Glucokinase/Hexokinase","Phosphofructokinase","Aldolase","Pyruvate kinase"],"a":0},{"q":"In the payoff phase of glycolysis, the enzyme that produces ATP directly is:","o":["Enolase","Phosphoglycerate kinase","Phosphoglucomutase","Glyceraldehyde-3-phosphate dehydrogenase"],"a":1},{"q":"Which TCA cycle enzyme converts succinate to fumarate?","o":["Succinyl-CoA synthetase","Succinate dehydrogenase","Malate dehydrogenase","Fumarase"],"a":1},{"q":"The final electron acceptor in the Electron Transport Chain is:","o":["NAD+","Cytochrome C","FAD","Oxygen"],"a":3},{"q":"Which enzyme is bypassed in gluconeogenesis but is essential in glycolysis?","o":["Glucokinase","Phosphoenolpyruvate carboxykinase","Fructose-1,6-bisphosphatase","Glucose-6-phosphatase"],"a":0},{"q":"Glycogen synthesis is initiated on which protein primer?","o":["Glucokinase","Glycogenin","Glycogen phosphorylase","UDP-glucose"],"a":1},{"q":"In uncontrolled Type 1 Diabetes Mellitus, which symptom is most characteristic?","o":["Hypertension","Polyuria","Blurred vision","Slow wound healing"],"a":1}],"2":[{"q":"Which type of fatty acid lacks double bonds?","o":["Unsaturated fatty acid","Saturated fatty acid","Monounsaturated fatty acid","Polyunsaturated fatty acid"],"a":1},{"q":"Omega-3 fatty acids are mainly beneficial for:","o":["Increasing LDL levels","Brain and eye health","Reducing Vitamin K absorption","Enhancing trans fat synthesis"],"a":1},{"q":"The transport of long-chain fatty acids into mitochondria requires:","o":["Coenzyme A","Glycerol kinase","Carnitine shuttle","Acetyl-CoA carboxylase"],"a":2},{"q":"During β-oxidation, which coenzymes are generated?","o":["NADPH and GTP","NADH and FADH2","ATP and AMP","CoA and Biotin"],"a":1},{"q":"Which lipoprotein is referred to as \"good cholesterol\"?","o":["LDL","VLDL","HDL","Chylomicron"],"a":2},{"q":"Ketone bodies are mainly produced in:","o":["Heart","Brain","Liver","Kidney"],"a":2},{"q":"Trans fatty acids are harmful because they:","o":["Increase HDL and decrease LDL","Increase LDL and decrease HDL","Increase both HDL and LDL","Have no effect on cholesterol"],"a":1},{"q":"Which is NOT a ketone body?","o":["Acetoacetate","Acetone","Beta-hydroxybutyrate","Pyruvate"],"a":3},{"q":"The main role of bile salts in lipid digestion is:","o":["Hydrolysis of triglycerides","Emulsification of fats","Conversion of fatty acids to glucose","Absorption of amino acids"],"a":1},{"q":"Familial Hypercholesterolemia (FH) is primarily due to a defect in:","o":["Glucokinase enzyme","LDL receptor","Lipase enzyme","Glycerol kinase"],"a":1}],"3":[{"q":"Which of the following amino acids are classified as essential?","o":["Glycine, Alanine, Serine","Leucine, Lysine, Valine","Cysteine, Proline, Tyrosine","Glutamine, Aspartate, Arginine"],"a":1},{"q":"Which amino acids are purely ketogenic?","o":["Isoleucine and Phenylalanine","Leucine and Lysine","Tyrosine and Tryptophan","Threonine and Methionine"],"a":1},{"q":"The main proteolytic enzyme in the stomach is:","o":["Trypsin","Pepsin","Carboxypeptidase","Chymotrypsin"],"a":1},{"q":"The enzyme enterokinase activates which zymogen?","o":["Pepsinogen","Chymotrypsinogen","Trypsinogen","Proelastase"],"a":2},{"q":"Which coenzyme is required for transamination reactions?","o":["NAD+","Pyridoxal phosphate (Vitamin B6)","Biotin","FAD"],"a":1},{"q":"The first step of the urea cycle involves the synthesis of:","o":["Citrulline","Argininosuccinate","Carbamoyl phosphate","Ornithine"],"a":2},{"q":"Phenylketonuria (PKU) is due to a deficiency of:","o":["Tyrosine aminotransferase","Phenylalanine hydroxylase","Homogentisate oxidase","Branched-chain ketoacid dehydrogenase"],"a":1},{"q":"Maple Syrup Urine Disease is caused by a defect in:","o":["Carbamoyl phosphate synthetase I","Branched-chain α-ketoacid dehydrogenase","Arginase","Cystathionine synthase"],"a":1},{"q":"Which plasma protein is primarily responsible for maintaining oncotic pressure?","o":["Globulin","Albumin","Fibrinogen","Transferrin"],"a":1},{"q":"In electrophoresis, proteins are separated mainly based on:","o":["Molecular weight only","Charge-to-mass ratio","Solubility in lipids","Affinity for enzymes"],"a":1}],"4":[{"q":"The functional unit of an enzyme is called:","o":["Apoenzyme","Coenzyme","Holoenzyme","Isoenzyme"],"a":2},{"q":"Which model suggests that the active site of an enzyme changes shape according to the substrate?","o":["Lock and Key model","Induced Fit model","Template model","Allosteric model"],"a":1},{"q":"Which of the following enzymes belongs to the class Oxidoreductases?","o":["Urease","Catalase","Transaminase","Peptidase"],"a":1},{"q":"CPK-MB isoenzyme is a specific marker for:","o":["Liver cirrhosis","Skeletal muscle injury","Myocardial infarction","Kidney failure"],"a":2},{"q":"In a healthy individual, which isoenzyme of LDH is higher in serum?","o":["LDH1","LDH2","LDH3","LDH5"],"a":1},{"q":"Which enzyme shows increased levels in prostatic carcinoma?","o":["Alkaline phosphatase","Acid phosphatase","Cholinesterase","Gamma-glutamyl transpeptidase"],"a":1},{"q":"The enzyme asparaginase is therapeutically used in:","o":["Leukemia","Myocardial infarction","Cystic fibrosis","Liver cirrhosis"],"a":0},{"q":"Which serum enzyme level is most specific for alcoholic liver disease?","o":["SGPT (ALT)","LDH","Gamma-glutamyl transpeptidase (GGT)","Amylase"],"a":2},{"q":"The enzyme that catalyzes the conversion of lactate to pyruvate is:","o":["Creatine kinase","Lactate dehydrogenase (LDH)","Aspartate transaminase","Alkaline phosphatase"],"a":1},{"q":"Which enzyme is increased in acute pancreatitis?","o":["Amylase","LDH","SGOT","Acid phosphatase"],"a":0}],"5":[{"q":"The normal pH range of arterial blood is:","o":["6.35 – 6.85","7.00 – 7.20","7.35 – 7.45","7.50 – 7.60"],"a":2},{"q":"Which is the most predominant buffer system in extracellular fluid (plasma)?","o":["Phosphate buffer system","Protein buffer system","Hemoglobin buffer system","Bicarbonate buffer system"],"a":3},{"q":"In healthy individuals, the ratio of plasma bicarbonate (HCO3−) to carbonic acid (H2CO3) is:","o":["4:1","10:1","20:1","30:1"],"a":2},{"q":"Which organ is the only route for elimination of H+ ions from the body?","o":["Lungs","Liver","Kidney","Intestine"],"a":2},{"q":"Metabolic acidosis is commonly seen in:","o":["Prolonged vomiting","Severe asthma","Uncontrolled diabetes mellitus (ketoacidosis)","High altitude exposure"],"a":2},{"q":"Respiratory alkalosis is caused by:","o":["Airway obstruction","Hyperventilation","Renal failure","Lactic acidosis"],"a":1},{"q":"In metabolic alkalosis, the primary cause is:","o":["Excess loss of H+ ions due to vomiting","Increased retention of CO2","Excessive production of lactic acid","Impaired renal excretion of H+"],"a":0},{"q":"Which blood gas value is decreased in respiratory alkalosis?","o":["pH","PCO2","HCO3−","Oxygen saturation"],"a":1},{"q":"The \"ROME\" mnemonic in acid-base imbalance interpretation means:","o":["Respiratory Opposite, Metabolic Equal","Respiratory Equal, Metabolic Opposite","Respiratory Over, Metabolic Equal","Respiratory Output, Metabolic Exchange"],"a":0},{"q":"In arterial blood gas (ABG) analysis, the normal bicarbonate (HCO3−) level is:","o":["12 – 16 mEq/L","18 – 22 mEq/L","22 – 26 mEq/L","28 – 32 mEq/L"],"a":2}],"6":[{"q":"The lifespan of a red blood cell (RBC) is approximately:","o":["60 – 80 days","90 – 100 days","100 – 120 days","150 – 180 days"],"a":2},{"q":"Heme is converted to biliverdin by which enzyme?","o":["Biliverdin reductase","Heme oxygenase","UDP-glucuronyltransferase","Ferrochelatase"],"a":1},{"q":"Biliverdin is reduced to bilirubin by:","o":["Heme oxygenase","Biliverdin reductase","Ferrochelatase","Multidrug resistance protein-2"],"a":1},{"q":"Which enzyme deficiency leads to Crigler-Najjar Syndrome Type I?","o":["Heme oxygenase","Biliverdin reductase","UDP-glucuronyltransferase","Multidrug resistance protein-2"],"a":2},{"q":"Dubin-Johnson syndrome is due to mutation in:","o":["UDP-glucuronyltransferase","Haptoglobin","Multidrug resistance protein-2 (MRP-2)","Ferrochelatase"],"a":2},{"q":"Which type of jaundice shows dark brown stool due to increased stercobilin?","o":["Hemolytic jaundice","Obstructive jaundice","Hepatocellular jaundice","Neonatal jaundice"],"a":0},{"q":"Which type of jaundice typically produces pale clay-colored stools?","o":["Hemolytic jaundice","Obstructive jaundice","Neonatal jaundice","Gilbert’s syndrome"],"a":1},{"q":"Kernicterus occurs when unconjugated bilirubin levels exceed:","o":["10 mg/dl","15 mg/dl","18 mg/dl","25 mg/dl"],"a":2},{"q":"Van den Bergh’s direct positive test indicates the presence of:","o":["Unconjugated bilirubin","Conjugated bilirubin","Both conjugated and unconjugated bilirubin","Stercobilinogen"],"a":1},{"q":"Which syndrome is due to defective uptake of bilirubin by hepatocytes?","o":["Crigler-Najjar Syndrome I","Crigler-Najjar Syndrome II","Gilbert’s Syndrome","Dubin-Johnson Syndrome"],"a":2}],"7":[{"q":"The lifespan of a red blood cell (RBC) is approximately:","o":["60 – 80 days","90 – 100 days","100 – 120 days","150 – 180 days"],"a":2},{"q":"Heme is converted to biliverdin by which enzyme?","o":["Biliverdin reductase","Heme oxygenase","UDP-glucuronyltransferase","Ferrochelatase"],"a":1},{"q":"Biliverdin is reduced to bilirubin by:","o":["Heme oxygenase","Biliverdin reductase","Ferrochelatase","Multidrug resistance protein-2"],"a":1},{"q":"Which enzyme deficiency leads to Crigler-Najjar Syndrome Type I?","o":["Heme oxygenase","Biliverdin reductase","UDP-glucuronyltransferase","Multidrug resistance protein-2"],"a":2},{"q":"Dubin-Johnson syndrome is due to mutation in:","o":["UDP-glucuronyltransferase","Haptoglobin","Multidrug resistance protein-2 (MRP-2)","Ferrochelatase"],"a":2},{"q":"Which type of jaundice shows dark brown stool due to increased stercobilin?","o":["Hemolytic jaundice","Obstructive jaundice","Hepatocellular jaundice","Neonatal jaundice"],"a":0},{"q":"Which type of jaundice typically produces pale clay-colored stools?","o":["Hemolytic jaundice","Obstructive jaundice","Neonatal jaundice","Gilbert’s syndrome"],"a":1},{"q":"Kernicterus occurs when unconjugated bilirubin levels exceed:","o":["10 mg/dl","15 mg/dl","18 mg/dl","25 mg/dl"],"a":2},{"q":"Van den Bergh’s direct positive test indicates the presence of:","o":["Unconjugated bilirubin","Conjugated bilirubin","Both conjugated and unconjugated bilirubin","Stercobilinogen"],"a":1},{"q":"Which syndrome is due to defective uptake of bilirubin by hepatocytes?","o":["Crigler-Najjar Syndrome I","Crigler-Najjar Syndrome II","Gilbert’s Syndrome","Dubin-Johnson Syndrome"],"a":2}],"8":[{"q":"Which immunoglobulin is the most abundant in serum?","o":["IgA","IgM","IgG","IgE"],"a":2},{"q":"Which immunoglobulin is the first antibody produced in a primary immune response?","o":["IgA","IgM","IgG","IgD"],"a":1},{"q":"Which immunoglobulin provides natural passive immunity to the fetus by crossing the placenta?","o":["IgA","IgE","IgG","IgM"],"a":2},{"q":"Secretory IgA is usually found in:","o":["Blood and lymph","Tears, saliva, colostrum, and milk","Liver and spleen","Bone marrow and thymus"],"a":1},{"q":"IgE antibodies are mainly associated with:","o":["Complement activation","Immediate hypersensitivity (allergic reactions)","Passive immunity to newborns","Agglutination of antigens"],"a":1},{"q":"Which enzyme is used to split immunoglobulin into Fab and Fc fragments?","o":["Lysozyme","Trypsin","Papain","Pepsin"],"a":2},{"q":"The Fab fragment of an antibody is responsible for:","o":["Antigen binding","Crystallization","Complement fixation","Mast cell activation"],"a":0},{"q":"Which type of ELISA is used to detect antigens in very small amounts and involves competition between antigen and enzyme-linked antigen?","o":["Direct ELISA","Indirect ELISA","Sandwich ELISA","Competitive ELISA"],"a":3},{"q":"In ELISA, the enzyme-substrate reaction produces:","o":["Heat","Fluorescence","Color change","Antibody precipitation"],"a":2},{"q":"Immunofluorescence test differs from ELISA mainly because it uses:","o":["Radioactive tracers","Enzyme-linked antibodies","Immunofluorescent dyes (like FITC, rhodamine)","Chemiluminescent substrates"],"a":2}]};
         
+        let score = 0;
+        
+        function toggleUnit(header) {
+            const content = header.nextElementSibling;
+            header.setAttribute('aria-expanded', header.getAttribute('aria-expanded') !== 'true');
+            content.classList.toggle('active');
+        }
+
         function openResource(type, url, title) {
-            // PUSH STATE: Create a history entry so Back button closes modal
+            // 1. PUSH HISTORY STATE: This creates a "fake" history entry.
+            // When the user hits "Back", this entry is removed, allowing us to catch the event.
             history.pushState({ modalOpen: true }, null, '#resource');
 
             const modal = document.getElementById('app-modal');
             const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = title;
+            document.getElementById('modal-title').textContent = title;
             modal.style.display = 'flex';
-            body.innerHTML = ''; 
             
-            // FIX: Restore flex centering for Video (looks better centered)
-            body.style.display = 'flex';
-
-            if (type === 'quiz') {
-                openQuiz(url); 
+            // Clean URL Logic
+            let finalUrl = url;
+            if (url.includes('drive.google.com')) { 
+                finalUrl = url.replace(/\/view./, '/preview').replace(/\/edit./, '/preview'); 
             }
-            else {
-                let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
-                
-                // FIX: Apply correct class based on type
-                // Videos get 16:9, Notes get full height
-                let className = (type === 'video') ? 'iframe-video' : 'iframe-doc';
-
-                body.innerHTML = `<iframe 
-                    class="${className}" 
-                    src="${cleanUrl}" 
-                    sandbox="allow-scripts allow-same-origin allow-presentation"
-                    allow="autoplay; encrypted-media; fullscreen">
+            else if (url.includes('human.biodigital.com')) { 
+                    if (url.includes('/viewer/')) finalUrl = url.replace('/viewer/', '/widget/');
+                    else finalUrl = url.replace('/view', '/widget'); 
+            }
+            
+            // 2. VIDEO SECURITY FIX: 
+            // Added 'sandbox' with 'allow-same-origin' and 'allow="encrypted-media"' 
+            // This is required for Google Drive videos to play inside an iframe.
+            body.innerHTML = `
+                <iframe 
+                    class="iframe-res" 
+                    src="${finalUrl}" 
+                    width="100%" 
+                    height="100%" 
+                    frameborder="0"
+                    sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-presentation"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen">
                 </iframe>`;
-            }
         }
 
-        function openQuiz(unitId) {
+        function startQuiz(unitId) {
+            // PUSH HISTORY STATE
             history.pushState({ modalOpen: true }, null, '#quiz');
 
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = `Quiz: Unit ${unitId}`;
-            modal.style.display = 'flex';
-            
-            // FIX: Remove flex centering for Quiz so it starts at the top
-            body.style.display = 'block';
-            body.scrollTop = 0; 
-            
-            const questions = QUIZ_DATA[unitId] || [];
-            
-            let quizHtml = `<div class="quiz-container">`;
-            questions.forEach((q, idx) => {
-                quizHtml += `
-                    <div class="quiz-question">${idx + 1}. ${q.q}</div>
-                    <div class="quiz-options" id="q-${idx}">
-                        ${q.o.map((opt, oIdx) => `
-                            <div class="quiz-option" onclick="checkAnswer(this, ${idx}, ${oIdx}, ${q.a})">${opt}</div>
-                        `).join('')}
-                    </div>
-                `;
+            score = 0;
+            const questions = QUIZ_DATA[unitId];
+            if(!questions || questions.length === 0) { alert('No questions found.'); return; }
+            let html = '<div class="quiz-container"><h2 style="color:var(--brand); margin-top:0;">Unit ' + unitId + ' Quiz</h2>';
+            html += '<div id="score-display" style="background:var(--brand); color:white; padding:5px 15px; border-radius:20px; display:inline-block; font-weight:700; margin-bottom:20px;">Score: 0 / ' + questions.length + '</div>';
+            questions.forEach((q, index) => {
+                html += '<div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">';
+                html += '<p style="font-weight:600; font-size:1.1rem; margin-bottom:15px;">' + (index + 1) + '. ' + q.q + '</p>';
+                q.o.forEach((opt, optIndex) => {
+                    html += '<div class="quiz-option" onclick="checkAnswer(this, ' + unitId + ', ' + optIndex + ', ' + q.a + ')">' + opt + '</div>';
+                });
+                html += '</div>';
             });
-            
-            if(questions.length === 0) quizHtml += `<p>Quiz coming soon!</p>`;
-            
-            quizHtml += `</div>`;
-            body.innerHTML = quizHtml;
+            html += '<button class="btn-quiz" onclick="closeModal()">Close Quiz</button></div>';
+            document.getElementById('modal-body').innerHTML = html;
+            document.getElementById('modal-title').textContent = 'Unit ' + unitId + ' Quiz';
+            document.getElementById('app-modal').style.display = 'flex';
         }
 
-        function checkAnswer(el, qIdx, oIdx, correctIdx) {
-            const parent = document.getElementById(`q-${qIdx}`);
-            const opts = parent.children;
-            for(let opt of opts) opt.style.pointerEvents = 'none';
-
-            if(oIdx === correctIdx) {
-                el.classList.add('correct');
+        function checkAnswer(element, unitId, selectedIndex, correctIndex) {
+            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+            if (selectedIndex === correctIndex) {
+                element.classList.add('correct'); score++;
             } else {
-                el.classList.add('wrong');
-                opts[correctIdx].classList.add('correct');
+                element.classList.add('wrong'); element.parentElement.children[correctIndex + 1].classList.add('correct');
             }
+            document.getElementById('score-display').textContent = 'Score: ' + score + ' / ' + QUIZ_DATA[unitId].length;
         }
 
-        function closeModal() {
+        function closeModal() { 
             const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            modal.style.display = 'none';
-            body.innerHTML = ''; 
+            modal.style.display = 'none'; 
+            document.getElementById('modal-body').innerHTML = ""; 
             
-            if (history.state && history.state.modalOpen) {
+            // LOGIC: If we have a history state (meaning the modal is open),
+            // we manually go 'Back' to remove that state so the user doesn't get stuck.
+            if ((history.state && history.state.modalOpen) || window.location.hash === '#resource' || window.location.hash === '#quiz') {
                 history.back();
             }
         }
 
-        // --- 5. HANDLE BACK BUTTON ---
+        // LISTENER FOR HARDWARE BACK BUTTON
         window.onpopstate = function(event) {
             const modal = document.getElementById('app-modal');
+            // If the modal is currently visible, hide it.
             if (modal.style.display === 'flex') {
                 modal.style.display = 'none';
                 document.getElementById('modal-body').innerHTML = '';
             }
         };
-
-        // Initialize
-        renderPage();
-
     </script>
 </body>
 </html>
