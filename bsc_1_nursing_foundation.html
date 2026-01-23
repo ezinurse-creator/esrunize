@@ -831,255 +831,293 @@
         <div id="modal-body" class="modal-body"></div>
     </div>
 
-    <script>
-        const QUIZ_DATA = {
-            1: [
-                { q: "WHO defines health as:", o: ["Absence of disease", "Physical fitness", "Complete physical, mental, and social well-being", "Ability to function"], a: 2 },
-                { q: "Maslow's hierarchy places which need at the base?", o: ["Safety", "Self-actualization", "Physiological", "Love/Belonging"], a: 2 },
-                { q: "Which is a dimension of health?", o: ["Spiritual", "Financial", "Political", "Technological"], a: 0 },
-                { q: "The health-illness continuum model views health as:", o: ["A fixed point", "A dynamic state", "Only absence of illness", "Unchangeable"], a: 1 },
-                { q: "Primary prevention aims to:", o: ["Treat disease", "Prevent disease occurrence", "Rehabilitate", "Reduce complications"], a: 1 },
-                { q: "A risk factor is:", o: ["A guarantee of disease", "Something that increases vulnerability", "A symptom", "A cure"], a: 1 },
-                { q: "Holistic health care considers:", o: ["Only the body", "The whole person", "Only the mind", "Only environment"], a: 1 },
-                { q: "Acute illness is characterized by:", o: ["Slow onset, long duration", "Rapid onset, short duration", "Permanent change", "Need for rehabilitation"], a: 1 },
-                { q: "Self-actualization is the:", o: ["Lowest need", "Highest need", "Middle need", "Basic need"], a: 1 },
-                { q: "Wellness involves:", o: ["Passive acceptance", "Active lifestyle choices", "Genetic makeup only", "Luck"], a: 1 }
-            ],
-            2: [
-                { q: "Primary Health Care is focused on:", o: ["Specialized care", "Essential health care for all", "Surgery", "Research"], a: 1 },
-                { q: "Which is a tertiary level of care?", o: ["PHC", "CHC", "Specialized/Super-specialty Hospital", "Sub-center"], a: 2 },
-                { q: "The first level of contact with the health system is:", o: ["Secondary care", "Tertiary care", "Primary care", "Quaternary care"], a: 2 },
-                { q: "Rehabilitation is a form of:", o: ["Primary prevention", "Secondary prevention", "Tertiary prevention", "Health promotion"], a: 2 },
-                { q: "A teaching hospital is usually a:", o: ["Primary center", "Secondary center", "Tertiary center", "Clinic"], a: 2 },
-                { q: "Who leads the nursing team in a ward?", o: ["Student Nurse", "Head Nurse/Sister In-charge", "Physician", "Pharmacist"], a: 1 },
-                { q: "ASHA stands for:", o: ["Accredited Social Health Activist", "Association of Health", "Active Social Help", "None"], a: 0 },
-                { q: "The focus of secondary prevention is:", o: ["Vaccination", "Early diagnosis and treatment", "Rehab", "Counseling"], a: 1 },
-                { q: "Hospice care focuses on:", o: ["Curing disease", "Palliative/End-of-life care", "Surgery", "Emergency"], a: 1 },
-                { q: "An outpatient department (OPD) provides care to:", o: ["Admitted patients", "Patients who go home same day", "ICU patients", "Surgery patients"], a: 1 }
-            ],
-            3: [
-                { q: "Who is known as the founder of modern nursing?", o: ["Clara Barton", "Florence Nightingale", "Dorothea Orem", "Virginia Henderson"], a: 1 },
-                { q: "Florence Nightingale was also known as:", o: ["The Lady with the Gun", "The Lady with the Lamp", "The Angel of Mercy", "The Mother of Nursing"], a: 1 },
-                { q: "Nursing as a profession requires:", o: ["Only kindness", "Specialized knowledge and ethics", "Physical strength only", "Obedience"], a: 1 },
-                { q: "The Code of Ethics for nurses provides:", o: ["Legal rules", "Guidelines for professional behavior", "Salary details", "Hospital policies"], a: 1 },
-                { q: "International Nurses Day is celebrated on:", o: ["May 12", "April 7", "June 5", "December 1"], a: 0 },
-                { q: "Which is a function of a nurse?", o: ["Diagnosis", "Caregiver", "Prescribing surgery", "Hospital construction"], a: 1 },
-                { q: "TNAI stands for:", o: ["Trained Nurses Association of India", "Teacher Nurse Association", "Total Nursing Aid", "None"], a: 0 },
-                { q: "Etiquette refers to:", o: ["Laws", "Polite social behavior", "Medical rules", "Uniform code"], a: 1 },
-                { q: "A characteristic of a profession is:", o: ["Short training", "Autonomy", "Low responsibility", "Manual labor only"], a: 1 },
-                { q: "The primary focus of nursing is:", o: ["Disease", "Patient/Client", "Doctor", "Equipment"], a: 1 }
-            ],
-            4: [
-                { q: "The sender in communication is the one who:", o: ["Receives message", "Encodes message", "Decodes message", "Ignores message"], a: 1 },
-                { q: "Therapeutic communication focuses on:", o: ["Socializing", "Patient's needs", "Nurse's needs", "Hospital news"], a: 1 },
-                { q: "Non-verbal communication includes:", o: ["Writing", "Speaking", "Body language/Gestures", "Email"], a: 2 },
-                { q: "Empathy means:", o: ["Feeling pity", "Understanding another's feelings", "Ignoring feelings", "Judging"], a: 1 },
-                { q: "A barrier to communication is:", o: ["Active listening", "Clarifying", "Noise/Distraction", "Open questions"], a: 2 },
-                { q: "Which phase comes first in the nurse-patient relationship?", o: ["Working", "Termination", "Orientation", "Evaluation"], a: 2 },
-                { q: "Open-ended questions allow:", o: ["Yes/No answers", "Elaboration", "Silence", "Confusion"], a: 1 },
-                { q: "Silence in communication can indicate:", o: ["Anger only", "Thinking or reflection", "Ignorance", "Sleep"], a: 1 },
-                { q: "The goal of the nurse-patient relationship is:", o: ["Friendship", "Patient health outcomes", "Nurse popularity", "Dependency"], a: 1 },
-                { q: "Intrapersonal communication is:", o: ["With others", "Self-talk", "Public speaking", "Group discussion"], a: 1 }
-            ],
-            5: [
-                { q: "Documentation in nursing must be:", o: ["Subjective", "Accurate and objective", "Written later", "Erased if wrong"], a: 1 },
-                { q: "A Kardex is a:", o: ["Medication", "Quick reference care plan/summary", "Admission form", "Discharge paper"], a: 1 },
-                { q: "SOAP stands for:", o: ["Subjective, Objective, Assessment, Plan", "Safety, Observation, Action, Plan", "Standard, Order, Act, Procedure", "None"], a: 0 },
-                { q: "Which indicates an error correction in charting?", o: ["White-out", "Scribble over it", "Single line through with initials", "Tearing the page"], a: 2 },
-                { q: "Confidentiality means:", o: ["Sharing info with everyone", "Keeping patient info private", "Hiding errors", "Not documenting"], a: 1 },
-                { q: "Shift report is given to:", o: ["Patient", "Family", "Incoming staff", "Doctor only"], a: 2 },
-                { q: "An incident report is used for:", o: ["Routine care", "Unusual occurrences/Errors", "Discharge", "Compliments"], a: 1 },
-                { q: "Electronic Health Records (EHR) improve:", o: ["Handwriting legibility", "Access and continuity", "Data loss", "Paper waste"], a: 1 },
-                { q: "Charting by Exception focuses on:", o: ["Everything", "Normal findings", "Abnormal/Significant findings", "Vital signs only"], a: 2 },
-                { q: "The primary purpose of records is:", o: ["Legal evidence", "Communication", "Research", "All of the above"], a: 3 }
-            ],
-            6: [
-                { q: "Normal adult body temperature is approx:", o: ["36°C", "37°C (98.6°F)", "38°C", "35°C"], a: 1 },
-                { q: "The most common site for taking pulse is:", o: ["Carotid", "Radial", "Femoral", "Apical"], a: 1 },
-                { q: "Normal adult respiratory rate is:", o: ["12-20 breaths/min", "30-40 breaths/min", "60-80 breaths/min", "5-10 breaths/min"], a: 0 },
-                { q: "Bradycardia is a pulse rate below:", o: ["100 bpm", "60 bpm", "80 bpm", "120 bpm"], a: 1 },
-                { q: "Systolic pressure represents:", o: ["Heart at rest", "Heart contraction", "Venous pressure", "Lung pressure"], a: 1 },
-                { q: "Hypertension is defined as BP consistently above:", o: ["120/80", "140/90", "100/60", "110/70"], a: 1 },
-                { q: "The apical pulse is found at the:", o: ["Wrist", "Neck", "5th intercostal space, midclavicular line", "Groin"], a: 2 },
-                { q: "Dyspnea means:", o: ["No breathing", "Difficult/Labored breathing", "Fast breathing", "Slow breathing"], a: 1 },
-                { q: "Rectal temperature is usually:", o: ["Lower than oral", "Higher than oral", "Same as oral", "Unreliable"], a: 1 },
-                { q: "A pulse oximeter measures:", o: ["Blood pressure", "Oxygen saturation", "Glucose", "Temperature"], a: 1 }
-            ],
-            7: [
-                { q: "Medical asepsis is also known as:", o: ["Sterile technique", "Clean technique", "Surgical technique", "Isolation"], a: 1 },
-                { q: "The most effective way to prevent infection spread is:", o: ["Wearing masks", "Hand hygiene", "Antibiotics", "Isolation"], a: 1 },
-                { q: "Soiled linen should be:", o: ["Thrown on floor", "Placed in bag/hamper immediately", "Shaken", "Carried against uniform"], a: 1 },
-                { q: "Rubber goods should usually be cleaned with:", o: ["Boiling water", "Soap and water", "Acid", "Oil"], a: 1 },
-                { q: "Autoclaving uses:", o: ["Dry heat", "Steam under pressure", "Chemicals", "Radiation"], a: 1 },
-                { q: "Sharps must be disposed of in:", o: ["Trash can", "Puncture-proof container", "Laundry bag", "Toilet"], a: 1 },
-                { q: "Indent refers to:", o: ["Ordering supplies", "Cleaning", "Repairing", "Throwing away"], a: 0 },
-                { q: "Disinfection kills:", o: ["All spores", "Pathogens but not necessarily spores", "Viruses only", "Bacteria only"], a: 1 },
-                { q: "Barrier nursing is used for:", o: ["Healthy patients", "Infectious patients", "Staff protection", "Visitors"], a: 1 },
-                { q: "Furniture in hospitals should be:", o: ["Dusty", "Easy to clean", "Complex", "Soft only"], a: 1 }
-            ],
-            8: [
-                { q: "A nosocomial infection is acquired in:", o: ["Home", "Hospital/Health facility", "School", "Park"], a: 1 },
-                { q: "The first link in the chain of infection is:", o: ["Reservoir", "Infectious agent", "Portal of exit", "Host"], a: 1 },
-                { q: "A vector-borne transmission involves:", o: ["Air", "Water", "Insects/Animals", "Direct touch"], a: 2 },
-                { q: "Isolation precautions include:", o: ["Standard", "Contact", "Droplet", "All of above"], a: 3 },
-                { q: "Standard precautions apply to:", o: ["Only HIV patients", "Only coughing patients", "All patients", "Only surgery"], a: 2 },
-                { q: "The incubation period is:", o: ["Time between entry and symptoms", "Recovery time", "Death", "Treatment time"], a: 0 },
-                { q: "An opportunistic infection occurs when:", o: ["Immunity is high", "Immunity is compromised", "Hygiene is good", "Vaccinated"], a: 1 },
-                { q: "PPE stands for:", o: ["Personal Protective Equipment", "Private Patient Entry", "Primary Prevention Exam", "None"], a: 0 },
-                { q: "Sterilization destroys:", o: ["Bacteria only", "All microorganisms including spores", "Viruses only", "Dirt"], a: 1 },
-                { q: "Hand washing should last at least:", o: ["5 seconds", "20 seconds", "1 minute", "5 minutes"], a: 1 }
-            ],
-            9: [
-                { q: "Fowler's position is used for:", o: ["Shock", "Respiratory distress/Eating", "Enema", "Back rub"], a: 1 },
-                { q: "A mitered corner is used in:", o: ["Bandaging", "Bed making", "Suturing", "Injection"], a: 1 },
-                { q: "REM sleep stands for:", o: ["Rapid Eye Movement", "Rest Eye Motion", "Real Energy Mode", "Rapid Ear Motion"], a: 0 },
-                { q: "Insomnia is:", o: ["Excessive sleep", "Inability to sleep", "Sleep walking", "Nightmares"], a: 1 },
-                { q: "Pain is best described as:", o: ["What the nurse sees", "Whatever the patient says it is", "Only physical injury", "Imaginary"], a: 1 },
-                { q: "A bed cradle is used to:", o: ["Keep patient warm", "Keep weight of linen off body", "Restrain patient", "Elevate legs"], a: 1 },
-                { q: "Sim's position is often used for:", o: ["Feeding", "Enema/Rectal exam", "Breathing", "Sleeping"], a: 1 },
-                { q: "Phantom pain is felt in:", o: ["Head", "Amputated limb", "Stomach", "Chest"], a: 1 },
-                { q: "CAM stands for:", o: ["Care And Medicine", "Complementary and Alternative Modalities", "Computer Aided Medicine", "Critical Acute Management"], a: 1 },
-                { q: "Promoting sleep includes:", o: ["Loud noise", "Bright lights", "Comfortable environment/Back rub", "Caffeine"], a: 2 }
-            ],
-            10: [
-                { q: "The primary goal of patient safety is to:", o: ["Prevent injury/Harm", "Save money", "Follow rules", "Complete charts"], a: 0 },
-                { q: "RACE in fire safety stands for:", o: ["Run, Act, Call, Exit", "Rescue, Alarm, Contain, Extinguish", "Read, Ask, Call, End", "None"], a: 1 },
-                { q: "Restraints should be used:", o: ["As punishment", "As a last resort", "For convenience", "On every patient"], a: 1 },
-                { q: "A common hazard for elderly patients is:", o: ["Fire", "Falls", "Poison", "Drowning"], a: 1 },
-                { q: "Side rails are used to:", o: ["Prevent falls", "Restrain patient", "Store linen", "None"], a: 0 },
-                { q: "Proper body mechanics involves:", o: ["Bending at waist", "Bending knees/Keeping back straight", "Twisting", "Lifting high"], a: 1 },
-                { q: "A potential complication of restraints is:", o: ["Safety", "Pressure ulcers/Nerve damage", "Comfort", "Healing"], a: 1 },
-                { q: "Hospital noise can cause:", o: ["Sleep deprivation", "Healing", "Happiness", "Hunger"], a: 0 },
-                { q: "Hazardous waste goes in:", o: ["Black bag", "Red/Yellow bag (Biohazard)", "Recycle", "Pocket"], a: 1 },
-                { q: "Checking ID band helps prevent:", o: ["Falls", "Wrong patient errors", "Infection", "Fire"], a: 1 }
-            ],
-            11: [
-                { q: "Admission procedure begins in the:", o: ["Ward", "Reception/Admitting office", "Laboratory", "Pharmacy"], a: 1 },
-                { q: "An open bed is prepared for:", o: ["New patient", "Ambulatory patient", "Empty room", "Discharge"], a: 1 },
-                { q: "Discharge planning starts at:", o: ["Admission", "Day of discharge", "One week later", "Never"], a: 0 },
-                { q: "LAMA stands for:", o: ["Leave Against Medical Advice", "Late Admission Medical Act", "Leave After Medication", "None"], a: 0 },
-                { q: "Medico-legal cases (MLC) must be:", o: ["Ignored", "Reported to police", "Hidden", "Discharged immediately"], a: 1 },
-                { q: "Transfer of a patient means:", o: ["Discharge home", "Moving to another unit/hospital", "Walking in hall", "Leaving"], a: 1 },
-                { q: "Valuables of a patient should be:", o: ["Kept by nurse", "Given to family/Locked in safe", "Left on bed", "Thrown away"], a: 1 },
-                { q: "Orientation to the unit includes:", o: ["Call light, bathroom, meal times", "Medical history", "Surgery", "Staff pay"], a: 0 },
-                { q: "Emergency admission is for:", o: ["Routine checkup", "Elective surgery", "Acute/Life-threatening condition", "Vaccination"], a: 2 },
-                { q: "Death in the hospital requires:", o: ["Discharge paper", "Death certificate/Care of body", "Transfer", "LAMA"], a: 1 }
-            ],
-            12: [
-                { q: "Active ROM exercises are done by:", o: ["Nurse", "Patient", "Machine", "Family"], a: 1 },
-                { q: "Foot drop is caused by:", o: ["Walking", "Prolonged plantar flexion", "Exercise", "Shoes"], a: 1 },
-                { q: "A complication of immobility is:", o: ["Muscle strength", "Pressure ulcers/DVT", "Better lung function", "High energy"], a: 1 },
-                { q: "Supine position means lying on:", o: ["Stomach", "Back", "Side", "Sitting"], a: 1 },
-                { q: "Abduction means moving a limb:", o: ["Toward body", "Away from body", "Circular", "Down"], a: 1 },
-                { q: "Logrolling is used for patients with:", o: ["Arm injury", "Spinal injury", "Leg cast", "Headache"], a: 1 },
-                { q: "Decubitus ulcers are prevented by turning patient every:", o: ["4 hours", "2 hours", "8 hours", "12 hours"], a: 1 },
-                { q: "Atrophy refers to:", o: ["Muscle growth", "Muscle wasting", "Bone growth", "Fat loss"], a: 1 },
-                { q: "Trapeze bar helps patient to:", o: ["Sleep", "Lift upper body in bed", "Walk", "Eat"], a: 1 },
-                { q: "Gait refers to:", o: ["Sitting style", "Manner of walking", "Running", "Lying down"], a: 1 }
-            ],
-            13: [
-                { q: "The purpose of patient education is to:", o: ["Confuse patient", "Promote health and independence", "Use time", "Show off knowledge"], a: 1 },
-                { q: "Which domain of learning involves skills?", o: ["Cognitive", "Affective", "Psychomotor", "Social"], a: 2 },
-                { q: "Teach-back method is used to:", o: ["Scold patient", "Verify understanding", "Repeat info", "End session"], a: 1 },
-                { q: "Readiness to learn depends on:", o: ["Nurse's time", "Patient's pain/motivation", "Hospital rules", "Weather"], a: 1 },
-                { q: "Cognitive learning involves:", o: ["Feelings", "Knowledge/Thinking", "Hands-on skills", "Beliefs"], a: 1 },
-                { q: "Patient teaching should be:", o: ["Complex", "Tailored to patient's level", "Rushed", "Only written"], a: 1 },
-                { q: "A barrier to learning is:", o: ["Motivation", "Pain/Anxiety", "Intelligence", "Interest"], a: 1 },
-                { q: "Documentation of teaching includes:", o: ["Only topic", "Content, method, and patient response", "Nurse's name only", "Time only"], a: 1 },
-                { q: "Visual aids help in:", o: ["Confusing", "Reinforcing learning", "Wasting paper", "None"], a: 1 },
-                { q: "Health literacy refers to:", o: ["Reading ability only", "Ability to understand health info", "Writing ability", "Speaking English"], a: 1 }
-            ],
-            14: [
-                { q: "First Aid is:", o: ["Surgery", "Immediate temporary care", "Long term care", "Diagnosis"], a: 1 },
-                { q: "ABC in first aid stands for:", o: ["Airway, Breathing, Circulation", "Apple, Ball, Cat", "Ask, Breathe, Call", "Air, Blood, Chest"], a: 0 },
-                { q: "CPR stands for:", o: ["Cardio Pulmonary Resuscitation", "Chest Pressure Relief", "Cardiac Pulse Rate", "None"], a: 0 },
-                { q: "For a burn, the first step is to:", o: ["Apply butter", "Cool with water", "Break blisters", "Apply ice directly"], a: 1 },
-                { q: "Shock is characterized by:", o: ["High BP", "Low BP, rapid pulse", "Slow pulse", "Warm skin"], a: 1 },
-                { q: "Heimlich maneuver is used for:", o: ["Drowning", "Choking", "Bleeding", "Fracture"], a: 1 },
-                { q: "Splinting is used for:", o: ["Burns", "Fractures", "Poisoning", "Fever"], a: 1 },
-                { q: "In case of nosebleed:", o: ["Tilt head back", "Pinch nose and lean forward", "Lie down", "Blow nose"], a: 1 },
-                { q: "Rule of Nines is used for:", o: ["Fractures", "Burns estimation", "CPR", "Poisoning"], a: 1 },
-                { q: "First action at an emergency scene is:", o: ["Help victim", "Check for safety", "Call family", "Run away"], a: 1 }
-            ]
-        };
+<script>
+    const QUIZ_DATA = {
+        1: [
+            { q: "WHO defines health as:", o: ["Absence of disease", "Physical fitness", "Complete physical, mental, and social well-being", "Ability to function"], a: 2 },
+            { q: "Maslow's hierarchy places which need at the base?", o: ["Safety", "Self-actualization", "Physiological", "Love/Belonging"], a: 2 },
+            { q: "Which is a dimension of health?", o: ["Spiritual", "Financial", "Political", "Technological"], a: 0 },
+            { q: "The health-illness continuum model views health as:", o: ["A fixed point", "A dynamic state", "Only absence of illness", "Unchangeable"], a: 1 },
+            { q: "Primary prevention aims to:", o: ["Treat disease", "Prevent disease occurrence", "Rehabilitate", "Reduce complications"], a: 1 },
+            { q: "A risk factor is:", o: ["A guarantee of disease", "Something that increases vulnerability", "A symptom", "A cure"], a: 1 },
+            { q: "Holistic health care considers:", o: ["Only the body", "The whole person", "Only the mind", "Only environment"], a: 1 },
+            { q: "Acute illness is characterized by:", o: ["Slow onset, long duration", "Rapid onset, short duration", "Permanent change", "Need for rehabilitation"], a: 1 },
+            { q: "Self-actualization is the:", o: ["Lowest need", "Highest need", "Middle need", "Basic need"], a: 1 },
+            { q: "Wellness involves:", o: ["Passive acceptance", "Active lifestyle choices", "Genetic makeup only", "Luck"], a: 1 }
+        ],
+        2: [
+            { q: "Primary Health Care is focused on:", o: ["Specialized care", "Essential health care for all", "Surgery", "Research"], a: 1 },
+            { q: "Which is a tertiary level of care?", o: ["PHC", "CHC", "Specialized/Super-specialty Hospital", "Sub-center"], a: 2 },
+            { q: "The first level of contact with the health system is:", o: ["Secondary care", "Tertiary care", "Primary care", "Quaternary care"], a: 2 },
+            { q: "Rehabilitation is a form of:", o: ["Primary prevention", "Secondary prevention", "Tertiary prevention", "Health promotion"], a: 2 },
+            { q: "A teaching hospital is usually a:", o: ["Primary center", "Secondary center", "Tertiary center", "Clinic"], a: 2 },
+            { q: "Who leads the nursing team in a ward?", o: ["Student Nurse", "Head Nurse/Sister In-charge", "Physician", "Pharmacist"], a: 1 },
+            { q: "ASHA stands for:", o: ["Accredited Social Health Activist", "Association of Health", "Active Social Help", "None"], a: 0 },
+            { q: "The focus of secondary prevention is:", o: ["Vaccination", "Early diagnosis and treatment", "Rehab", "Counseling"], a: 1 },
+            { q: "Hospice care focuses on:", o: ["Curing disease", "Palliative/End-of-life care", "Surgery", "Emergency"], a: 1 },
+            { q: "An outpatient department (OPD) provides care to:", o: ["Admitted patients", "Patients who go home same day", "ICU patients", "Surgery patients"], a: 1 }
+        ],
+        3: [
+            { q: "Who is known as the founder of modern nursing?", o: ["Clara Barton", "Florence Nightingale", "Dorothea Orem", "Virginia Henderson"], a: 1 },
+            { q: "Florence Nightingale was also known as:", o: ["The Lady with the Gun", "The Lady with the Lamp", "The Angel of Mercy", "The Mother of Nursing"], a: 1 },
+            { q: "Nursing as a profession requires:", o: ["Only kindness", "Specialized knowledge and ethics", "Physical strength only", "Obedience"], a: 1 },
+            { q: "The Code of Ethics for nurses provides:", o: ["Legal rules", "Guidelines for professional behavior", "Salary details", "Hospital policies"], a: 1 },
+            { q: "International Nurses Day is celebrated on:", o: ["May 12", "April 7", "June 5", "December 1"], a: 0 },
+            { q: "Which is a function of a nurse?", o: ["Diagnosis", "Caregiver", "Prescribing surgery", "Hospital construction"], a: 1 },
+            { q: "TNAI stands for:", o: ["Trained Nurses Association of India", "Teacher Nurse Association", "Total Nursing Aid", "None"], a: 0 },
+            { q: "Etiquette refers to:", o: ["Laws", "Polite social behavior", "Medical rules", "Uniform code"], a: 1 },
+            { q: "A characteristic of a profession is:", o: ["Short training", "Autonomy", "Low responsibility", "Manual labor only"], a: 1 },
+            { q: "The primary focus of nursing is:", o: ["Disease", "Patient/Client", "Doctor", "Equipment"], a: 1 }
+        ],
+        4: [
+            { q: "The sender in communication is the one who:", o: ["Receives message", "Encodes message", "Decodes message", "Ignores message"], a: 1 },
+            { q: "Therapeutic communication focuses on:", o: ["Socializing", "Patient's needs", "Nurse's needs", "Hospital news"], a: 1 },
+            { q: "Non-verbal communication includes:", o: ["Writing", "Speaking", "Body language/Gestures", "Email"], a: 2 },
+            { q: "Empathy means:", o: ["Feeling pity", "Understanding another's feelings", "Ignoring feelings", "Judging"], a: 1 },
+            { q: "A barrier to communication is:", o: ["Active listening", "Clarifying", "Noise/Distraction", "Open questions"], a: 2 },
+            { q: "Which phase comes first in the nurse-patient relationship?", o: ["Working", "Termination", "Orientation", "Evaluation"], a: 2 },
+            { q: "Open-ended questions allow:", o: ["Yes/No answers", "Elaboration", "Silence", "Confusion"], a: 1 },
+            { q: "Silence in communication can indicate:", o: ["Anger only", "Thinking or reflection", "Ignorance", "Sleep"], a: 1 },
+            { q: "The goal of the nurse-patient relationship is:", o: ["Friendship", "Patient health outcomes", "Nurse popularity", "Dependency"], a: 1 },
+            { q: "Intrapersonal communication is:", o: ["With others", "Self-talk", "Public speaking", "Group discussion"], a: 1 }
+        ],
+        5: [
+            { q: "Documentation in nursing must be:", o: ["Subjective", "Accurate and objective", "Written later", "Erased if wrong"], a: 1 },
+            { q: "A Kardex is a:", o: ["Medication", "Quick reference care plan/summary", "Admission form", "Discharge paper"], a: 1 },
+            { q: "SOAP stands for:", o: ["Subjective, Objective, Assessment, Plan", "Safety, Observation, Action, Plan", "Standard, Order, Act, Procedure", "None"], a: 0 },
+            { q: "Which indicates an error correction in charting?", o: ["White-out", "Scribble over it", "Single line through with initials", "Tearing the page"], a: 2 },
+            { q: "Confidentiality means:", o: ["Sharing info with everyone", "Keeping patient info private", "Hiding errors", "Not documenting"], a: 1 },
+            { q: "Shift report is given to:", o: ["Patient", "Family", "Incoming staff", "Doctor only"], a: 2 },
+            { q: "An incident report is used for:", o: ["Routine care", "Unusual occurrences/Errors", "Discharge", "Compliments"], a: 1 },
+            { q: "Electronic Health Records (EHR) improve:", o: ["Handwriting legibility", "Access and continuity", "Data loss", "Paper waste"], a: 1 },
+            { q: "Charting by Exception focuses on:", o: ["Everything", "Normal findings", "Abnormal/Significant findings", "Vital signs only"], a: 2 },
+            { q: "The primary purpose of records is:", o: ["Legal evidence", "Communication", "Research", "All of the above"], a: 3 }
+        ],
+        6: [
+            { q: "Normal adult body temperature is approx:", o: ["36°C", "37°C (98.6°F)", "38°C", "35°C"], a: 1 },
+            { q: "The most common site for taking pulse is:", o: ["Carotid", "Radial", "Femoral", "Apical"], a: 1 },
+            { q: "Normal adult respiratory rate is:", o: ["12-20 breaths/min", "30-40 breaths/min", "60-80 breaths/min", "5-10 breaths/min"], a: 0 },
+            { q: "Bradycardia is a pulse rate below:", o: ["100 bpm", "60 bpm", "80 bpm", "120 bpm"], a: 1 },
+            { q: "Systolic pressure represents:", o: ["Heart at rest", "Heart contraction", "Venous pressure", "Lung pressure"], a: 1 },
+            { q: "Hypertension is defined as BP consistently above:", o: ["120/80", "140/90", "100/60", "110/70"], a: 1 },
+            { q: "The apical pulse is found at the:", o: ["Wrist", "Neck", "5th intercostal space, midclavicular line", "Groin"], a: 2 },
+            { q: "Dyspnea means:", o: ["No breathing", "Difficult/Labored breathing", "Fast breathing", "Slow breathing"], a: 1 },
+            { q: "Rectal temperature is usually:", o: ["Lower than oral", "Higher than oral", "Same as oral", "Unreliable"], a: 1 },
+            { q: "A pulse oximeter measures:", o: ["Blood pressure", "Oxygen saturation", "Glucose", "Temperature"], a: 1 }
+        ],
+        7: [
+            { q: "Medical asepsis is also known as:", o: ["Sterile technique", "Clean technique", "Surgical technique", "Isolation"], a: 1 },
+            { q: "The most effective way to prevent infection spread is:", o: ["Wearing masks", "Hand hygiene", "Antibiotics", "Isolation"], a: 1 },
+            { q: "Soiled linen should be:", o: ["Thrown on floor", "Placed in bag/hamper immediately", "Shaken", "Carried against uniform"], a: 1 },
+            { q: "Rubber goods should usually be cleaned with:", o: ["Boiling water", "Soap and water", "Acid", "Oil"], a: 1 },
+            { q: "Autoclaving uses:", o: ["Dry heat", "Steam under pressure", "Chemicals", "Radiation"], a: 1 },
+            { q: "Sharps must be disposed of in:", o: ["Trash can", "Puncture-proof container", "Laundry bag", "Toilet"], a: 1 },
+            { q: "Indent refers to:", o: ["Ordering supplies", "Cleaning", "Repairing", "Throwing away"], a: 0 },
+            { q: "Disinfection kills:", o: ["All spores", "Pathogens but not necessarily spores", "Viruses only", "Bacteria only"], a: 1 },
+            { q: "Barrier nursing is used for:", o: ["Healthy patients", "Infectious patients", "Staff protection", "Visitors"], a: 1 },
+            { q: "Furniture in hospitals should be:", o: ["Dusty", "Easy to clean", "Complex", "Soft only"], a: 1 }
+        ],
+        8: [
+            { q: "A nosocomial infection is acquired in:", o: ["Home", "Hospital/Health facility", "School", "Park"], a: 1 },
+            { q: "The first link in the chain of infection is:", o: ["Reservoir", "Infectious agent", "Portal of exit", "Host"], a: 1 },
+            { q: "A vector-borne transmission involves:", o: ["Air", "Water", "Insects/Animals", "Direct touch"], a: 2 },
+            { q: "Isolation precautions include:", o: ["Standard", "Contact", "Droplet", "All of above"], a: 3 },
+            { q: "Standard precautions apply to:", o: ["Only HIV patients", "Only coughing patients", "All patients", "Only surgery"], a: 2 },
+            { q: "The incubation period is:", o: ["Time between entry and symptoms", "Recovery time", "Death", "Treatment time"], a: 0 },
+            { q: "An opportunistic infection occurs when:", o: ["Immunity is high", "Immunity is compromised", "Hygiene is good", "Vaccinated"], a: 1 },
+            { q: "PPE stands for:", o: ["Personal Protective Equipment", "Private Patient Entry", "Primary Prevention Exam", "None"], a: 0 },
+            { q: "Sterilization destroys:", o: ["Bacteria only", "All microorganisms including spores", "Viruses only", "Dirt"], a: 1 },
+            { q: "Hand washing should last at least:", o: ["5 seconds", "20 seconds", "1 minute", "5 minutes"], a: 1 }
+        ],
+        9: [
+            { q: "Fowler's position is used for:", o: ["Shock", "Respiratory distress/Eating", "Enema", "Back rub"], a: 1 },
+            { q: "A mitered corner is used in:", o: ["Bandaging", "Bed making", "Suturing", "Injection"], a: 1 },
+            { q: "REM sleep stands for:", o: ["Rapid Eye Movement", "Rest Eye Motion", "Real Energy Mode", "Rapid Ear Motion"], a: 0 },
+            { q: "Insomnia is:", o: ["Excessive sleep", "Inability to sleep", "Sleep walking", "Nightmares"], a: 1 },
+            { q: "Pain is best described as:", o: ["What the nurse sees", "Whatever the patient says it is", "Only physical injury", "Imaginary"], a: 1 },
+            { q: "A bed cradle is used to:", o: ["Keep patient warm", "Keep weight of linen off body", "Restrain patient", "Elevate legs"], a: 1 },
+            { q: "Sim's position is often used for:", o: ["Feeding", "Enema/Rectal exam", "Breathing", "Sleeping"], a: 1 },
+            { q: "Phantom pain is felt in:", o: ["Head", "Amputated limb", "Stomach", "Chest"], a: 1 },
+            { q: "CAM stands for:", o: ["Care And Medicine", "Complementary and Alternative Modalities", "Computer Aided Medicine", "Critical Acute Management"], a: 1 },
+            { q: "Promoting sleep includes:", o: ["Loud noise", "Bright lights", "Comfortable environment/Back rub", "Caffeine"], a: 2 }
+        ],
+        10: [
+            { q: "The primary goal of patient safety is to:", o: ["Prevent injury/Harm", "Save money", "Follow rules", "Complete charts"], a: 0 },
+            { q: "RACE in fire safety stands for:", o: ["Run, Act, Call, Exit", "Rescue, Alarm, Contain, Extinguish", "Read, Ask, Call, End", "None"], a: 1 },
+            { q: "Restraints should be used:", o: ["As punishment", "As a last resort", "For convenience", "On every patient"], a: 1 },
+            { q: "A common hazard for elderly patients is:", o: ["Fire", "Falls", "Poison", "Drowning"], a: 1 },
+            { q: "Side rails are used to:", o: ["Prevent falls", "Restrain patient", "Store linen", "None"], a: 0 },
+            { q: "Proper body mechanics involves:", o: ["Bending at waist", "Bending knees/Keeping back straight", "Twisting", "Lifting high"], a: 1 },
+            { q: "A potential complication of restraints is:", o: ["Safety", "Pressure ulcers/Nerve damage", "Comfort", "Healing"], a: 1 },
+            { q: "Hospital noise can cause:", o: ["Sleep deprivation", "Healing", "Happiness", "Hunger"], a: 0 },
+            { q: "Hazardous waste goes in:", o: ["Black bag", "Red/Yellow bag (Biohazard)", "Recycle", "Pocket"], a: 1 },
+            { q: "Checking ID band helps prevent:", o: ["Falls", "Wrong patient errors", "Infection", "Fire"], a: 1 }
+        ],
+        11: [
+            { q: "Admission procedure begins in the:", o: ["Ward", "Reception/Admitting office", "Laboratory", "Pharmacy"], a: 1 },
+            { q: "An open bed is prepared for:", o: ["New patient", "Ambulatory patient", "Empty room", "Discharge"], a: 1 },
+            { q: "Discharge planning starts at:", o: ["Admission", "Day of discharge", "One week later", "Never"], a: 0 },
+            { q: "LAMA stands for:", o: ["Leave Against Medical Advice", "Late Admission Medical Act", "Leave After Medication", "None"], a: 0 },
+            { q: "Medico-legal cases (MLC) must be:", o: ["Ignored", "Reported to police", "Hidden", "Discharged immediately"], a: 1 },
+            { q: "Transfer of a patient means:", o: ["Discharge home", "Moving to another unit/hospital", "Walking in hall", "Leaving"], a: 1 },
+            { q: "Valuables of a patient should be:", o: ["Kept by nurse", "Given to family/Locked in safe", "Left on bed", "Thrown away"], a: 1 },
+            { q: "Orientation to the unit includes:", o: ["Call light, bathroom, meal times", "Medical history", "Surgery", "Staff pay"], a: 0 },
+            { q: "Emergency admission is for:", o: ["Routine checkup", "Elective surgery", "Acute/Life-threatening condition", "Vaccination"], a: 2 },
+            { q: "Death in the hospital requires:", o: ["Discharge paper", "Death certificate/Care of body", "Transfer", "LAMA"], a: 1 }
+        ],
+        12: [
+            { q: "Active ROM exercises are done by:", o: ["Nurse", "Patient", "Machine", "Family"], a: 1 },
+            { q: "Foot drop is caused by:", o: ["Walking", "Prolonged plantar flexion", "Exercise", "Shoes"], a: 1 },
+            { q: "A complication of immobility is:", o: ["Muscle strength", "Pressure ulcers/DVT", "Better lung function", "High energy"], a: 1 },
+            { q: "Supine position means lying on:", o: ["Stomach", "Back", "Side", "Sitting"], a: 1 },
+            { q: "Abduction means moving a limb:", o: ["Toward body", "Away from body", "Circular", "Down"], a: 1 },
+            { q: "Logrolling is used for patients with:", o: ["Arm injury", "Spinal injury", "Leg cast", "Headache"], a: 1 },
+            { q: "Decubitus ulcers are prevented by turning patient every:", o: ["4 hours", "2 hours", "8 hours", "12 hours"], a: 1 },
+            { q: "Atrophy refers to:", o: ["Muscle growth", "Muscle wasting", "Bone growth", "Fat loss"], a: 1 },
+            { q: "Trapeze bar helps patient to:", o: ["Sleep", "Lift upper body in bed", "Walk", "Eat"], a: 1 },
+            { q: "Gait refers to:", o: ["Sitting style", "Manner of walking", "Running", "Lying down"], a: 1 }
+        ],
+        13: [
+            { q: "The purpose of patient education is to:", o: ["Confuse patient", "Promote health and independence", "Use time", "Show off knowledge"], a: 1 },
+            { q: "Which domain of learning involves skills?", o: ["Cognitive", "Affective", "Psychomotor", "Social"], a: 2 },
+            { q: "Teach-back method is used to:", o: ["Scold patient", "Verify understanding", "Repeat info", "End session"], a: 1 },
+            { q: "Readiness to learn depends on:", o: ["Nurse's time", "Patient's pain/motivation", "Hospital rules", "Weather"], a: 1 },
+            { q: "Cognitive learning involves:", o: ["Feelings", "Knowledge/Thinking", "Hands-on skills", "Beliefs"], a: 1 },
+            { q: "Patient teaching should be:", o: ["Complex", "Tailored to patient's level", "Rushed", "Only written"], a: 1 },
+            { q: "A barrier to learning is:", o: ["Motivation", "Pain/Anxiety", "Intelligence", "Interest"], a: 1 },
+            { q: "Documentation of teaching includes:", o: ["Only topic", "Content, method, and patient response", "Nurse's name only", "Time only"], a: 1 },
+            { q: "Visual aids help in:", o: ["Confusing", "Reinforcing learning", "Wasting paper", "None"], a: 1 },
+            { q: "Health literacy refers to:", o: ["Reading ability only", "Ability to understand health info", "Writing ability", "Speaking English"], a: 1 }
+        ],
+        14: [
+            { q: "First Aid is:", o: ["Surgery", "Immediate temporary care", "Long term care", "Diagnosis"], a: 1 },
+            { q: "ABC in first aid stands for:", o: ["Airway, Breathing, Circulation", "Apple, Ball, Cat", "Ask, Breathe, Call", "Air, Blood, Chest"], a: 0 },
+            { q: "CPR stands for:", o: ["Cardio Pulmonary Resuscitation", "Chest Pressure Relief", "Cardiac Pulse Rate", "None"], a: 0 },
+            { q: "For a burn, the first step is to:", o: ["Apply butter", "Cool with water", "Break blisters", "Apply ice directly"], a: 1 },
+            { q: "Shock is characterized by:", o: ["High BP", "Low BP, rapid pulse", "Slow pulse", "Warm skin"], a: 1 },
+            { q: "Heimlich maneuver is used for:", o: ["Drowning", "Choking", "Bleeding", "Fracture"], a: 1 },
+            { q: "Splinting is used for:", o: ["Burns", "Fractures", "Poisoning", "Fever"], a: 1 },
+            { q: "In case of nosebleed:", o: ["Tilt head back", "Pinch nose and lean forward", "Lie down", "Blow nose"], a: 1 },
+            { q: "Rule of Nines is used for:", o: ["Fractures", "Burns estimation", "CPR", "Poisoning"], a: 1 },
+            { q: "First action at an emergency scene is:", o: ["Help victim", "Check for safety", "Call family", "Run away"], a: 1 }
+        ]
+    };
 
-        let currentQuizUnit = 1;
-        let score = 0;
+    let currentQuizUnit = 1;
+    let score = 0;
 
-        function toggleUnit(header) {
-            const content = header.nextElementSibling;
-            const isExpanded = header.getAttribute('aria-expanded') === 'true';
-            header.setAttribute('aria-expanded', !isExpanded);
-            content.classList.toggle('active');
+    function toggleUnit(header) {
+        const content = header.nextElementSibling;
+        const isExpanded = header.getAttribute('aria-expanded') === 'true';
+        header.setAttribute('aria-expanded', !isExpanded);
+        content.classList.toggle('active');
+    }
+
+    function openResource(type, url, title) {
+        // 1. PUSH HISTORY STATE
+        history.pushState({ modalOpen: true }, null, '#resource');
+
+        const modal = document.getElementById('app-modal');
+        const body = document.getElementById('modal-body');
+        document.getElementById('modal-title').textContent = title;
+        modal.style.display = 'flex';
+        
+        // Clean URL Logic
+        let finalUrl = url;
+        if (url.includes('drive.google.com')) { 
+            finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview'); 
         }
-
-        function openResource(type, url, title) {
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            document.getElementById('modal-title').textContent = title;
-            modal.style.display = 'flex';
-            
-            let finalUrl = url;
-            if (url.includes('drive.google.com')) {
-                finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
-            }
-            
-            body.innerHTML = `<iframe class="iframe-res" src="${finalUrl}" allow="autoplay" allowfullscreen></iframe>`;
+        else if (url.includes('human.biodigital.com')) { 
+            if (url.includes('/viewer/')) finalUrl = url.replace('/viewer/', '/widget/');
+            else finalUrl = url.replace('/view', '/widget'); 
         }
+        
+        // 2. VIDEO SECURITY FIX
+        body.innerHTML = `
+            <iframe 
+                class="iframe-res" 
+                src="${finalUrl}" 
+                width="100%" 
+                height="100%" 
+                frameborder="0"
+                sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-presentation"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen">
+            </iframe>`;
+    }
 
-        function startQuiz(unitId) {
-            currentQuizUnit = unitId;
-            score = 0;
-            const questions = QUIZ_DATA[unitId];
-            
-            let html = `
-                <div class="quiz-container">
-                    <div class="quiz-header-sticky">
-                        <h2 style="margin:0; color:var(--brand);">Unit ${unitId} Quiz</h2>
-                        <div id="score-display" class="score-badge">Score: 0 / 10</div>
-                    </div>
-            `;
-            
-            questions.forEach((q, index) => {
-                html += `
-                    <div class="question-block">
-                        <p class="quiz-question-text">${index + 1}. ${q.q}</p>
-                        <div class="options-container">
-                            ${q.o.map((opt, optIndex) => `
-                                <div class="quiz-option" onclick="checkAnswer(this, ${unitId}, ${optIndex}, ${q.a})">${opt}</div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            });
-            
+    function startQuiz(unitId) {
+        // PUSH HISTORY STATE
+        history.pushState({ modalOpen: true }, null, '#quiz');
+
+        currentQuizUnit = unitId;
+        score = 0;
+        const questions = QUIZ_DATA[unitId];
+        
+        let html = `
+            <div class="quiz-container">
+                <div class="quiz-header-sticky">
+                    <h2 style="margin:0; color:var(--brand);">Unit ${unitId} Quiz</h2>
+                    <div id="score-display" class="score-badge">Score: 0 / ${questions.length}</div>
+                </div>
+        `;
+        
+        questions.forEach((q, index) => {
             html += `
-                    <button class="btn-quiz" onclick="closeModal()">Close Quiz</button>
+                <div class="question-block">
+                    <p class="quiz-question-text">${index + 1}. ${q.q}</p>
+                    <div class="options-container">
+                        ${q.o.map((opt, optIndex) => `
+                            <div class="quiz-option" onclick="checkAnswer(this, ${unitId}, ${optIndex}, ${q.a})">${opt}</div>
+                        `).join('')}
+                    </div>
                 </div>
             `;
-            
-            document.getElementById('modal-body').innerHTML = html;
-            document.getElementById('modal-title').textContent = `Unit ${unitId} Quiz`;
-            document.getElementById('app-modal').style.display = 'flex';
-        }
+        });
+        
+        html += `
+                <button class="btn-quiz" onclick="closeModal()">Close Quiz</button>
+            </div>
+        `;
+        
+        document.getElementById('modal-body').innerHTML = html;
+        document.getElementById('modal-title').textContent = `Unit ${unitId} Quiz`;
+        document.getElementById('app-modal').style.display = 'flex';
+    }
 
-        function checkAnswer(element, unitId, selectedIndex, correctIndex) {
-            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+    function checkAnswer(element, unitId, selectedIndex, correctIndex) {
+        if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
 
-            if (selectedIndex === correctIndex) {
-                element.classList.add('correct');
-                score++;
-            } else {
-                element.classList.add('wrong');
-                element.parentElement.children[correctIndex].classList.add('correct');
-            }
-            document.getElementById('score-display').textContent = `Score: ${score} / 10`;
+        if (selectedIndex === correctIndex) {
+            element.classList.add('correct');
+            score++;
+        } else {
+            element.classList.add('wrong');
+            element.parentElement.children[correctIndex].classList.add('correct');
         }
+        document.getElementById('score-display').textContent = `Score: ${score} / ${QUIZ_DATA[unitId].length}`;
+    }
 
-        function closeModal() { 
-            document.getElementById('app-modal').style.display = 'none'; 
-            document.getElementById('modal-body').innerHTML = ""; 
+    function closeModal() { 
+        const modal = document.getElementById('app-modal');
+        modal.style.display = 'none'; 
+        document.getElementById('modal-body').innerHTML = ""; 
+        
+        // LOGIC: If we have a history state (meaning the modal is open),
+        // we manually go 'Back' to remove that state so the user doesn't get stuck.
+        if ((history.state && history.state.modalOpen) || window.location.hash === '#resource' || window.location.hash === '#quiz') {
+            history.back();
         }
-    </script>
+    }
+
+    // LISTENER FOR HARDWARE BACK BUTTON
+    window.onpopstate = function(event) {
+        const modal = document.getElementById('app-modal');
+        // If the modal is currently visible, hide it.
+        if (modal.style.display === 'flex') {
+            modal.style.display = 'none';
+            document.getElementById('modal-body').innerHTML = '';
+        }
+    };
+</script>
 </body>
 </html>
