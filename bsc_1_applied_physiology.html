@@ -1037,218 +1037,255 @@
         </div>
         <div id="modal-body" class="modal-body"></div>
     </div>
+<script>
+    const QUIZ_DATA = {
+        1: [
+            { q: "Homeostasis refers to:", o: ["Cell death", "Maintenance of stable internal environment", "Rapid cell division", "Muscle contraction"], a: 1 },
+            { q: "Which organelle is responsible for ATP production?", o: ["Lysosome", "Ribosome", "Mitochondria", "Golgi"], a: 2 },
+            { q: "Active transport requires:", o: ["No energy", "Osmosis", "ATP energy", "Passive diffusion"], a: 2 },
+            { q: "Which tissue covers the body surface?", o: ["Connective", "Epithelial", "Nervous", "Muscle"], a: 3 },
+            { q: "The 'fluid mosaic model' describes the:", o: ["Nucleus", "Cytoplasm", "Cell Membrane", "Mitochondria"], a: 2 },
+            { q: "Rough ER is characterized by the presence of:", o: ["Lipids", "Ribosomes", "Glucose", "RNA"], a: 1 },
+            { q: "Programmed cell death is known as:", o: ["Necrosis", "Apoptosis", "Mitosis", "Meiosis"], a: 1 },
+            { q: "Which tissue type is specialized for contraction?", o: ["Epithelial", "Nervous", "Muscle", "Connective"], a: 2 },
+            { q: "The process of 'cell drinking' is:", o: ["Phagocytosis", "Pinocytosis", "Exocytosis", "Diffusion"], a: 1 },
+            { q: "Which tissue connects and supports other tissues?", o: ["Epithelial", "Connective", "Nervous", "Muscle"], a: 1 }
+        ],
+        2: [
+            { q: "The primary site of gas exchange is the:", o: ["Trachea", "Bronchi", "Alveoli", "Pharynx"], a: 2 },
+            { q: "Surfactant prevents the alveoli from:", o: ["Expanding", "Collapsing", "Infection", "Bleeding"], a: 1 },
+            { q: "Most carbon dioxide is transported in blood as:", o: ["Carboxyhemoglobin", "Bicarbonate ions", "Dissolved gas", "Carbonic acid"], a: 1 },
+            { q: "The volume of air inhaled or exhaled during normal breathing is:", o: ["Vital capacity", "Tidal volume", "Residual volume", "Inspiratory reserve"], a: 1 },
+            { q: "Normal arterial PCO2 is approximately:", o: ["20 mmHg", "40 mmHg", "60 mmHg", "100 mmHg"], a: 1 },
+            { q: "The center that controls the basic rhythm of respiration is in the:", o: ["Cerebrum", "Cerebellum", "Medulla Oblongata", "Hypothalamus"], a: 2 },
+            { q: "During inspiration, the diaphragm:", o: ["Relaxes and rises", "Contracts and flattens", "Does not move", "Expands"], a: 1 },
+            { q: "Compliance refers to the lung's:", o: ["Resistance", "Elasticity/Ease of expansion", "Capacity", "Gas exchange rate"], a: 1 },
+            { q: "Oxygen binds to which part of hemoglobin?", o: ["Globin", "Heme (Iron)", "Plasma", "Bicarbonate"], a: 1 },
+            { q: "Hypoxia is a condition of:", o: ["High CO2", "Low Oxygen", "High Oxygen", "Low CO2"], a: 1 }
+        ],
+        3: [
+            { q: "The first site of starch digestion is the:", o: ["Stomach", "Mouth", "Small intestine", "Esophagus"], a: 1 },
+            { q: "Which enzyme is found in saliva?", o: ["Pepsin", "Amylase", "Trypsin", "Lipase"], a: 1 },
+            { q: "The pH of gastric juice is approximately:", o: ["1.5 - 3.5", "7.0 - 8.0", "9.0 - 10.0", "5.0 - 6.0"], a: 0 },
+            { q: "Bile is essential for the digestion of:", o: ["Proteins", "Carbohydrates", "Fats", "Vitamins"], a: 2 },
+            { q: "The hormone that stimulates gallbladder contraction is:", o: ["Gastrin", "Secretin", "Cholecystokinin (CCK)", "Insulin"], a: 2 },
+            { q: "Most nutrient absorption occurs in the:", o: ["Stomach", "Large Intestine", "Small Intestine", "Esophagus"], a: 2 },
+            { q: "The intrinsic factor is necessary for the absorption of:", o: ["Iron", "Vitamin B12", "Calcium", "Vitamin C"], a: 1 },
+            { q: "Pepsinogen is converted to pepsin by:", o: ["Enterokinase", "Bile", "Hydrochloric acid (HCl)", "Mucus"], a: 2 },
+            { q: "The primary function of the large intestine is:", o: ["Protein digestion", "Water absorption", "Fat absorption", "Bile storage"], a: 1 },
+            { q: "Which organ produces all the major digestive enzymes?", o: ["Liver", "Pancreas", "Stomach", "Gallbladder"], a: 1 }
+        ],
+        4: [
+            { q: "The normal pacemaker of the heart is the:", o: ["AV Node", "SA Node", "Purkinje fibers", "Bundle of His"], a: 1 },
+            { q: "The volume of blood pumped per beat is called:", o: ["Cardiac output", "Stroke volume", "Heart rate", "Venous return"], a: 1 },
+            { q: "During 'Lub' (S1) sound, which valves close?", o: ["Aortic/Pulmonary", "Mitral/Tricuspid", "None", "All"], a: 1 },
+            { q: "The P-wave of an ECG represents:", o: ["Atrial depolarization", "Ventricular depolarization", "Ventricular repolarization", "Atrial repolarization"], a: 0 },
+            { q: "Normal blood pressure is approximately:", o: ["120/80 mmHg", "140/90 mmHg", "100/60 mmHg", "160/100 mmHg"], a: 0 },
+            { q: "Total Peripheral Resistance (TPR) mainly depends on:", o: ["Large arteries", "Veins", "Arterioles", "Capillaries"], a: 2 },
+            { q: "Lymph returns to the blood via the:", o: ["Aorta", "Subclavian veins", "Hepatic vein", "Vena cava"], a: 1 },
+            { q: "Ejection fraction is a measure of:", o: ["Heart rate", "Ventricular efficiency", "Lung capacity", "Blood volume"], a: 1 },
+            { q: "The Frank-Starling law relates:", o: ["Pressure to volume", "Stretch to contraction force", "Rate to flow", "Oxygen to CO2"], a: 1 },
+            { q: "Peripheral resistance is increased by:", o: ["Vasodilation", "Vasoconstriction", "Exercise", "Heat"], a: 1 }
+        ],
+        5: [
+            { q: "The normal lifespan of an RBC is:", o: ["30 days", "120 days", "200 days", "7 days"], a: 1 },
+            { q: "The hormone that stimulates RBC production is:", o: ["Insulin", "Erythropoietin", "Thyroxine", "Renin"], a: 1 },
+            { q: "Which WBC is the most numerous?", o: ["Lymphocyte", "Monocyte", "Neutrophil", "Eosinophil"], a: 2 },
+            { q: "Platelets are derived from:", o: ["Lymphoblasts", "Megakaryocytes", "Erythroblasts", "Monoblasts"], a: 1 },
+            { q: "The 'universal donor' blood group is:", o: ["AB Rh+", "O Rh-", "A Rh+", "B Rh-"], a: 1 },
+            { q: "Which vitamin is essential for blood clotting?", o: ["Vitamin A", "Vitamin C", "Vitamin K", "Vitamin D"], a: 2 },
+            { q: "Plasma without clotting factors is called:", o: ["Lymph", "Serum", "Water", "Platelet"], a: 1 },
+            { q: "Iron is stored in the liver as:", o: ["Hemoglobin", "Ferritin", "Transferrin", "Bilirubin"], a: 1 },
+            { q: "Which cell is responsible for humoral immunity?", o: ["T-cell", "B-cell", "Neutrophil", "Macrophage"], a: 1 },
+            { q: "Agglutination occurs when:", o: ["Blood clots", "Antibodies bind to antigens", "Cells divide", "Plasma leaks"], a: 1 }
+        ],
+        6: [
+            { q: "The 'master gland' is the:", o: ["Thyroid", "Adrenal", "Pituitary", "Pancreas"], a: 2 },
+            { q: "Antidiuretic Hormone (ADH) is secreted by the:", o: ["Anterior Pituitary", "Posterior Pituitary", "Adrenal Cortex", "Thyroid"], a: 1 },
+            { q: "Insulin acts to:", o: ["Raise blood glucose", "Lower blood glucose", "Raise blood calcium", "Lower blood calcium"], a: 1 },
+            { q: "Which hormone regulates the basal metabolic rate?", o: ["Insulin", "Thyroxine", "Cortisol", "Aldosterone"], a: 1 },
+            { q: "Cushing's syndrome is caused by excess:", o: ["Growth hormone", "Thyroxine", "Cortisol", "Adrenaline"], a: 2 },
+            { q: "The primary mineralocorticoid is:", o: ["Cortisol", "Aldosterone", "Estrogen", "Glucagon"], a: 1 },
+            { q: "Calcitonin is produced by the:", o: ["Parathyroid", "Thyroid", "Adrenal", "Pancreas"], a: 1 },
+            { q: "Diabetes Insipidus is caused by a lack of:", o: ["Insulin", "ADH", "Oxytocin", "PTH"], a: 1 },
+            { q: "Growth hormone is secreted by:", o: ["Hypothalamus", "Anterior Pituitary", "Posterior Pituitary", "Thyroid"], a: 1 },
+            { q: "The 'fight or flight' hormones are produced in the:", o: ["Adrenal Cortex", "Adrenal Medulla", "Pancreas", "Thyroid"], a: 1 }
+        ],
+        7: [
+            { q: "The photoreceptors for color vision are:", o: ["Rods", "Cones", "Optic nerve", "Lens"], a: 1 },
+            { q: "The white part of the eye is the:", o: ["Cornea", "Sclera", "Iris", "Retina"], a: 1 },
+            { q: "The auditory ossicles are located in the:", o: ["Outer ear", "Middle ear", "Inner ear", "Eustachian tube"], a: 1 },
+            { q: "Balance is maintained by the:", o: ["Cochlea", "Vestibular apparatus", "Tympanic membrane", "Pinna"], a: 1 },
+            { q: "Olfactory receptors detect:", o: ["Taste", "Light", "Smell", "Sound"], a: 2 },
+            { q: "The sensory receptor for hearing is the:", o: ["Organ of Corti", "Otolith", "Semicircular canal", "Macula"], a: 0 },
+            { q: "The colored part of the eye is the:", o: ["Sclera", "Iris", "Pupil", "Retina"], a: 1 },
+            { q: "Taste buds on the tip of the tongue are most sensitive to:", o: ["Bitter", "Sour", "Sweet", "Salty"], a: 2 },
+            { q: "The blind spot is where the:", o: ["Lens is located", "Optic nerve leaves the eye", "Cones are densest", "Cornea meets sclera"], a: 1 },
+            { q: "Accommodation is the process of:", o: ["Light entry", "Changing lens shape", "Color mixing", "Pupil dilation"], a: 1 }
+        ],
+        8: [
+            { q: "The structural unit of compact bone is the:", o: ["Osteocyte", "Osteon", "Trabeculae", "Periosteum"], a: 1 },
+            { q: "The neurotransmitter at the neuromuscular junction is:", o: ["Dopamine", "Acetylcholine", "Serotonin", "GABA"], a: 1 },
+            { q: "Calcium for muscle contraction is stored in the:", o: ["Mitochondria", "Sarcoplasmic reticulum", "Nucleus", "T-tubules"], a: 1 },
+            { q: "The 'sliding filament theory' involves:", o: ["Actin and Myosin", "Bone and Cartilage", "Nerves and Muscles", "Cells and Tissues"], a: 0 },
+            { q: "Slow-twitch fibers are also known as:", o: ["Type II", "Type I (Red)", "White fibers", "Anaerobic fibers"], a: 1 },
+            { q: "Rigor mortis occurs due to a lack of:", o: ["Oxygen", "ATP", "Calcium", "Actin"], a: 1 },
+            { q: "The connective tissue covering a whole muscle is the:", o: ["Endomysium", "Perimysium", "Epimysium", "Sarcolemma"], a: 2 },
+            { q: "Isometric contraction results in:", o: ["Shortening", "Length change", "No change in length", "Muscle tear"], a: 2 },
+            { q: "Osteoblasts function to:", o: ["Break down bone", "Build bone", "Store fat", "Produce blood"], a: 1 },
+            { q: "Synovial joints are characterized by:", o: ["No movement", "Fluid-filled cavity", "Fibrous tissue", "Cartilage only"], a: 1 }
+        ],
+        9: [
+            { q: "The functional unit of the kidney is the:", o: ["Neuron", "Nephron", "Alveolus", "Lobe"], a: 1 },
+            { q: "Normal GFR is approximately:", o: ["50 ml/min", "125 ml/min", "200 ml/min", "10 ml/min"], a: 1 },
+            { q: "Most water reabsorption occurs in the:", o: ["Proximal tubule", "Loop of Henle", "Distal tubule", "Collecting duct"], a: 0 },
+            { q: "Renin is secreted in response to:", o: ["High blood pressure", "Low blood pressure", "High blood glucose", "Low blood glucose"], a: 1 },
+            { q: "The hormone that increases water reabsorption is:", o: ["Aldosterone", "ADH", "Insulin", "ANP"], a: 1 },
+            { q: "The primary function of the Loop of Henle is to:", o: ["Filter blood", "Concentrate urine", "Secrete acid", "Produce renin"], a: 1 },
+            { q: "Glucose in the urine (glycosuria) indicates:", o: ["Normal function", "Blood sugar exceeding renal threshold", "High protein diet", "Dehydration"], a: 1 },
+            { q: "The trigone is found in the:", o: ["Kidney", "Ureter", "Urinary Bladder", "Urethra"], a: 2 },
+            { q: "Erythropoietin is produced by the:", o: ["Liver", "Kidney", "Bone marrow", "Spleen"], a: 1 },
+            { q: "Micturition is the act of:", o: ["Digestion", "Urination", "Sweating", "Breathing"], a: 1 }
+        ],
+        10: [
+            { q: "Fertilization normally occurs in the:", o: ["Uterus", "Ovary", "Fallopian tube", "Vagina"], a: 2 },
+            { q: "The primary male sex hormone is:", o: ["Estrogen", "Progesterone", "Testosterone", "LH"], a: 2 },
+            { q: "The corpus luteum secretes:", o: ["FSH", "LH", "Progesterone", "Estrogen"], a: 2 },
+            { q: "Spermatogenesis takes place in the:", o: ["Epididymis", "Vas deferens", "Seminiferous tubules", "Prostate"], a: 2 },
+            { q: "Ovulation is triggered by a surge in:", o: ["FSH", "LH", "Estrogen", "Progesterone"], a: 1 },
+            { q: "The inner lining of the uterus is the:", o: ["Myometrium", "Endometrium", "Perimetrium", "Cervix"], a: 1 },
+            { q: "The hormone detected by pregnancy tests is:", o: ["Estrogen", "HCG", "LH", "Prolactin"], a: 1 },
+            { q: "The site of sperm maturation is the:", o: ["Testis", "Epididymis", "Seminal vesicle", "Urethra"], a: 1 },
+            { q: "Milk ejection (let-down) is caused by:", o: ["Prolactin", "Oxytocin", "Estrogen", "Progesterone"], a: 1 },
+            { q: "Menopause is characterized by a decrease in:", o: ["FSH", "LH", "Estrogen", "Progesterone"], a: 2 }
+        ],
+        11: [
+            { q: "The part of the neuron that receives impulses is the:", o: ["Axon", "Dendrite", "Cell body", "Myelin"], a: 1 },
+            { q: "Saltatory conduction occurs in:", o: ["Unmyelinated fibers", "Myelinated fibers", "Muscle fibers", "Dendrites"], a: 1 },
+            { q: "The largest part of the brain is the:", o: ["Cerebellum", "Brainstem", "Cerebrum", "Thalamus"], a: 2 },
+            { q: "CSF is produced by the:", o: ["Arachnoid villi", "Choroid plexus", "Dura mater", "Astrocyte"], a: 1 },
+            { q: "The 'emotional brain' is the:", o: ["Limbic system", "Basal ganglia", "Cerebellum", "Medulla"], a: 0 },
+            { q: "The relay station for sensory information is the:", o: ["Hypothalamus", "Thalamus", "Pons", "Midbrain"], a: 1 },
+            { q: "The Parasympathetic system uses which neurotransmitter?", o: ["Adrenaline", "Acetylcholine", "Dopamine", "GABA"], a: 1 },
+            { q: "The cerebellum is primarily responsible for:", o: ["Memory", "Coordination and balance", "Vision", "Breathing"], a: 1 },
+            { q: "The 'Fight or Flight' response is part of the:", o: ["Sympathetic system", "Parasympathetic system", "Somatic system", "Enteric system"], a: 0 },
+            { q: "The blood-brain barrier is formed by:", o: ["Microglia", "Astrocytes", "Ependymal cells", "Neurons"], a: 1 }
+        ]
+    };
 
-    <script>
-        const QUIZ_DATA = {
-            1: [
-                { q: "Homeostasis refers to:", o: ["Cell death", "Maintenance of stable internal environment", "Rapid cell division", "Muscle contraction"], a: 1 },
-                { q: "Which organelle is responsible for ATP production?", o: ["Lysosome", "Ribosome", "Mitochondria", "Golgi"], a: 2 },
-                { q: "Active transport requires:", o: ["No energy", "Osmosis", "ATP energy", "Passive diffusion"], a: 2 },
-                { q: "Which tissue covers the body surface?", o: ["Connective", "Epithelial", "Nervous", "Muscle"], a: 3 },
-                { q: "The 'fluid mosaic model' describes the:", o: ["Nucleus", "Cytoplasm", "Cell Membrane", "Mitochondria"], a: 2 },
-                { q: "Rough ER is characterized by the presence of:", o: ["Lipids", "Ribosomes", "Glucose", "RNA"], a: 1 },
-                { q: "Programmed cell death is known as:", o: ["Necrosis", "Apoptosis", "Mitosis", "Meiosis"], a: 1 },
-                { q: "Which tissue type is specialized for contraction?", o: ["Epithelial", "Nervous", "Muscle", "Connective"], a: 2 },
-                { q: "The process of 'cell drinking' is:", o: ["Phagocytosis", "Pinocytosis", "Exocytosis", "Diffusion"], a: 1 },
-                { q: "Which tissue connects and supports other tissues?", o: ["Epithelial", "Connective", "Nervous", "Muscle"], a: 1 }
-            ],
-            2: [
-                { q: "The primary site of gas exchange is the:", o: ["Trachea", "Bronchi", "Alveoli", "Pharynx"], a: 2 },
-                { q: "Surfactant prevents the alveoli from:", o: ["Expanding", "Collapsing", "Infection", "Bleeding"], a: 1 },
-                { q: "Most carbon dioxide is transported in blood as:", o: ["Carboxyhemoglobin", "Bicarbonate ions", "Dissolved gas", "Carbonic acid"], a: 1 },
-                { q: "The volume of air inhaled or exhaled during normal breathing is:", o: ["Vital capacity", "Tidal volume", "Residual volume", "Inspiratory reserve"], a: 1 },
-                { q: "Normal arterial PCO2 is approximately:", o: ["20 mmHg", "40 mmHg", "60 mmHg", "100 mmHg"], a: 1 },
-                { q: "The center that controls the basic rhythm of respiration is in the:", o: ["Cerebrum", "Cerebellum", "Medulla Oblongata", "Hypothalamus"], a: 2 },
-                { q: "During inspiration, the diaphragm:", o: ["Relaxes and rises", "Contracts and flattens", "Does not move", "Expands"], a: 1 },
-                { q: "Compliance refers to the lung's:", o: ["Resistance", "Elasticity/Ease of expansion", "Capacity", "Gas exchange rate"], a: 1 },
-                { q: "Oxygen binds to which part of hemoglobin?", o: ["Globin", "Heme (Iron)", "Plasma", "Bicarbonate"], a: 1 },
-                { q: "Hypoxia is a condition of:", o: ["High CO2", "Low Oxygen", "High Oxygen", "Low CO2"], a: 1 }
-            ],
-            3: [
-                { q: "The first site of starch digestion is the:", o: ["Stomach", "Mouth", "Small intestine", "Esophagus"], a: 1 },
-                { q: "Which enzyme is found in saliva?", o: ["Pepsin", "Amylase", "Trypsin", "Lipase"], a: 1 },
-                { q: "The pH of gastric juice is approximately:", o: ["1.5 - 3.5", "7.0 - 8.0", "9.0 - 10.0", "5.0 - 6.0"], a: 0 },
-                { q: "Bile is essential for the digestion of:", o: ["Proteins", "Carbohydrates", "Fats", "Vitamins"], a: 2 },
-                { q: "The hormone that stimulates gallbladder contraction is:", o: ["Gastrin", "Secretin", "Cholecystokinin (CCK)", "Insulin"], a: 2 },
-                { q: "Most nutrient absorption occurs in the:", o: ["Stomach", "Large Intestine", "Small Intestine", "Esophagus"], a: 2 },
-                { q: "The intrinsic factor is necessary for the absorption of:", o: ["Iron", "Vitamin B12", "Calcium", "Vitamin C"], a: 1 },
-                { q: "Pepsinogen is converted to pepsin by:", o: ["Enterokinase", "Bile", "Hydrochloric acid (HCl)", "Mucus"], a: 2 },
-                { q: "The primary function of the large intestine is:", o: ["Protein digestion", "Water absorption", "Fat absorption", "Bile storage"], a: 1 },
-                { q: "Which organ produces all the major digestive enzymes?", o: ["Liver", "Pancreas", "Stomach", "Gallbladder"], a: 1 }
-            ],
-            4: [
-                { q: "The normal pacemaker of the heart is the:", o: ["AV Node", "SA Node", "Purkinje fibers", "Bundle of His"], a: 1 },
-                { q: "The volume of blood pumped per beat is called:", o: ["Cardiac output", "Stroke volume", "Heart rate", "Venous return"], a: 1 },
-                { q: "During 'Lub' (S1) sound, which valves close?", o: ["Aortic/Pulmonary", "Mitral/Tricuspid", "None", "All"], a: 1 },
-                { q: "The P-wave of an ECG represents:", o: ["Atrial depolarization", "Ventricular depolarization", "Ventricular repolarization", "Atrial repolarization"], a: 0 },
-                { q: "Normal blood pressure is approximately:", o: ["120/80 mmHg", "140/90 mmHg", "100/60 mmHg", "160/100 mmHg"], a: 0 },
-                { q: "Total Peripheral Resistance (TPR) mainly depends on:", o: ["Large arteries", "Veins", "Arterioles", "Capillaries"], a: 2 },
-                { q: "Lymph returns to the blood via the:", o: ["Aorta", "Subclavian veins", "Hepatic vein", "Vena cava"], a: 1 },
-                { q: "Ejection fraction is a measure of:", o: ["Heart rate", "Ventricular efficiency", "Lung capacity", "Blood volume"], a: 1 },
-                { q: "The Frank-Starling law relates:", o: ["Pressure to volume", "Stretch to contraction force", "Rate to flow", "Oxygen to CO2"], a: 1 },
-                { q: "Peripheral resistance is increased by:", o: ["Vasodilation", "Vasoconstriction", "Exercise", "Heat"], a: 1 }
-            ],
-            5: [
-                { q: "The normal lifespan of an RBC is:", o: ["30 days", "120 days", "200 days", "7 days"], a: 1 },
-                { q: "The hormone that stimulates RBC production is:", o: ["Insulin", "Erythropoietin", "Thyroxine", "Renin"], a: 1 },
-                { q: "Which WBC is the most numerous?", o: ["Lymphocyte", "Monocyte", "Neutrophil", "Eosinophil"], a: 2 },
-                { q: "Platelets are derived from:", o: ["Lymphoblasts", "Megakaryocytes", "Erythroblasts", "Monoblasts"], a: 1 },
-                { q: "The 'universal donor' blood group is:", o: ["AB Rh+", "O Rh-", "A Rh+", "B Rh-"], a: 1 },
-                { q: "Which vitamin is essential for blood clotting?", o: ["Vitamin A", "Vitamin C", "Vitamin K", "Vitamin D"], a: 2 },
-                { q: "Plasma without clotting factors is called:", o: ["Lymph", "Serum", "Water", "Platelet"], a: 1 },
-                { q: "Iron is stored in the liver as:", o: ["Hemoglobin", "Ferritin", "Transferrin", "Bilirubin"], a: 1 },
-                { q: "Which cell is responsible for humoral immunity?", o: ["T-cell", "B-cell", "Neutrophil", "Macrophage"], a: 1 },
-                { q: "Agglutination occurs when:", o: ["Blood clots", "Antibodies bind to antigens", "Cells divide", "Plasma leaks"], a: 1 }
-            ],
-            6: [
-                { q: "The 'master gland' is the:", o: ["Thyroid", "Adrenal", "Pituitary", "Pancreas"], a: 2 },
-                { q: "Antidiuretic Hormone (ADH) is secreted by the:", o: ["Anterior Pituitary", "Posterior Pituitary", "Adrenal Cortex", "Thyroid"], a: 1 },
-                { q: "Insulin acts to:", o: ["Raise blood glucose", "Lower blood glucose", "Raise blood calcium", "Lower blood calcium"], a: 1 },
-                { q: "Which hormone regulates the basal metabolic rate?", o: ["Insulin", "Thyroxine", "Cortisol", "Aldosterone"], a: 1 },
-                { q: "Cushing's syndrome is caused by excess:", o: ["Growth hormone", "Thyroxine", "Cortisol", "Adrenaline"], a: 2 },
-                { q: "The primary mineralocorticoid is:", o: ["Cortisol", "Aldosterone", "Estrogen", "Glucagon"], a: 1 },
-                { q: "Calcitonin is produced by the:", o: ["Parathyroid", "Thyroid", "Adrenal", "Pancreas"], a: 1 },
-                { q: "Diabetes Insipidus is caused by a lack of:", o: ["Insulin", "ADH", "Oxytocin", "PTH"], a: 1 },
-                { q: "Growth hormone is secreted by:", o: ["Hypothalamus", "Anterior Pituitary", "Posterior Pituitary", "Thyroid"], a: 1 },
-                { q: "The 'fight or flight' hormones are produced in the:", o: ["Adrenal Cortex", "Adrenal Medulla", "Pancreas", "Thyroid"], a: 1 }
-            ],
-            7: [
-                { q: "The photoreceptors for color vision are:", o: ["Rods", "Cones", "Optic nerve", "Lens"], a: 1 },
-                { q: "The white part of the eye is the:", o: ["Cornea", "Sclera", "Iris", "Retina"], a: 1 },
-                { q: "The auditory ossicles are located in the:", o: ["Outer ear", "Middle ear", "Inner ear", "Eustachian tube"], a: 1 },
-                { q: "Balance is maintained by the:", o: ["Cochlea", "Vestibular apparatus", "Tympanic membrane", "Pinna"], a: 1 },
-                { q: "Olfactory receptors detect:", o: ["Taste", "Light", "Smell", "Sound"], a: 2 },
-                { q: "The sensory receptor for hearing is the:", o: ["Organ of Corti", "Otolith", "Semicircular canal", "Macula"], a: 0 },
-                { q: "The colored part of the eye is the:", o: ["Sclera", "Iris", "Pupil", "Retina"], a: 1 },
-                { q: "Taste buds on the tip of the tongue are most sensitive to:", o: ["Bitter", "Sour", "Sweet", "Salty"], a: 2 },
-                { q: "The blind spot is where the:", o: ["Lens is located", "Optic nerve leaves the eye", "Cones are densest", "Cornea meets sclera"], a: 1 },
-                { q: "Accommodation is the process of:", o: ["Light entry", "Changing lens shape", "Color mixing", "Pupil dilation"], a: 1 }
-            ],
-            8: [
-                { q: "The structural unit of compact bone is the:", o: ["Osteocyte", "Osteon", "Trabeculae", "Periosteum"], a: 1 },
-                { q: "The neurotransmitter at the neuromuscular junction is:", o: ["Dopamine", "Acetylcholine", "Serotonin", "GABA"], a: 1 },
-                { q: "Calcium for muscle contraction is stored in the:", o: ["Mitochondria", "Sarcoplasmic reticulum", "Nucleus", "T-tubules"], a: 1 },
-                { q: "The 'sliding filament theory' involves:", o: ["Actin and Myosin", "Bone and Cartilage", "Nerves and Muscles", "Cells and Tissues"], a: 0 },
-                { q: "Slow-twitch fibers are also known as:", o: ["Type II", "Type I (Red)", "White fibers", "Anaerobic fibers"], a: 1 },
-                { q: "Rigor mortis occurs due to a lack of:", o: ["Oxygen", "ATP", "Calcium", "Actin"], a: 1 },
-                { q: "The connective tissue covering a whole muscle is the:", o: ["Endomysium", "Perimysium", "Epimysium", "Sarcolemma"], a: 2 },
-                { q: "Isometric contraction results in:", o: ["Shortening", "Length change", "No change in length", "Muscle tear"], a: 2 },
-                { q: "Osteoblasts function to:", o: ["Break down bone", "Build bone", "Store fat", "Produce blood"], a: 1 },
-                { q: "Synovial joints are characterized by:", o: ["No movement", "Fluid-filled cavity", "Fibrous tissue", "Cartilage only"], a: 1 }
-            ],
-            9: [
-                { q: "The functional unit of the kidney is the:", o: ["Neuron", "Nephron", "Alveolus", "Lobe"], a: 1 },
-                { q: "Normal GFR is approximately:", o: ["50 ml/min", "125 ml/min", "200 ml/min", "10 ml/min"], a: 1 },
-                { q: "Most water reabsorption occurs in the:", o: ["Proximal tubule", "Loop of Henle", "Distal tubule", "Collecting duct"], a: 0 },
-                { q: "Renin is secreted in response to:", o: ["High blood pressure", "Low blood pressure", "High blood glucose", "Low blood glucose"], a: 1 },
-                { q: "The hormone that increases water reabsorption is:", o: ["Aldosterone", "ADH", "Insulin", "ANP"], a: 1 },
-                { q: "The primary function of the Loop of Henle is to:", o: ["Filter blood", "Concentrate urine", "Secrete acid", "Produce renin"], a: 1 },
-                { q: "Glucose in the urine (glycosuria) indicates:", o: ["Normal function", "Blood sugar exceeding renal threshold", "High protein diet", "Dehydration"], a: 1 },
-                { q: "The trigone is found in the:", o: ["Kidney", "Ureter", "Urinary Bladder", "Urethra"], a: 2 },
-                { q: "Erythropoietin is produced by the:", o: ["Liver", "Kidney", "Bone marrow", "Spleen"], a: 1 },
-                { q: "Micturition is the act of:", o: ["Digestion", "Urination", "Sweating", "Breathing"], a: 1 }
-            ],
-            10: [
-                { q: "Fertilization normally occurs in the:", o: ["Uterus", "Ovary", "Fallopian tube", "Vagina"], a: 2 },
-                { q: "The primary male sex hormone is:", o: ["Estrogen", "Progesterone", "Testosterone", "LH"], a: 2 },
-                { q: "The corpus luteum secretes:", o: ["FSH", "LH", "Progesterone", "Estrogen"], a: 2 },
-                { q: "Spermatogenesis takes place in the:", o: ["Epididymis", "Vas deferens", "Seminiferous tubules", "Prostate"], a: 2 },
-                { q: "Ovulation is triggered by a surge in:", o: ["FSH", "LH", "Estrogen", "Progesterone"], a: 1 },
-                { q: "The inner lining of the uterus is the:", o: ["Myometrium", "Endometrium", "Perimetrium", "Cervix"], a: 1 },
-                { q: "The hormone detected by pregnancy tests is:", o: ["Estrogen", "HCG", "LH", "Prolactin"], a: 1 },
-                { q: "The site of sperm maturation is the:", o: ["Testis", "Epididymis", "Seminal vesicle", "Urethra"], a: 1 },
-                { q: "Milk ejection (let-down) is caused by:", o: ["Prolactin", "Oxytocin", "Estrogen", "Progesterone"], a: 1 },
-                { q: "Menopause is characterized by a decrease in:", o: ["FSH", "LH", "Estrogen", "Progesterone"], a: 2 }
-            ],
-            11: [
-                { q: "The part of the neuron that receives impulses is the:", o: ["Axon", "Dendrite", "Cell body", "Myelin"], a: 1 },
-                { q: "Saltatory conduction occurs in:", o: ["Unmyelinated fibers", "Myelinated fibers", "Muscle fibers", "Dendrites"], a: 1 },
-                { q: "The largest part of the brain is the:", o: ["Cerebellum", "Brainstem", "Cerebrum", "Thalamus"], a: 2 },
-                { q: "CSF is produced by the:", o: ["Arachnoid villi", "Choroid plexus", "Dura mater", "Astrocyte"], a: 1 },
-                { q: "The 'emotional brain' is the:", o: ["Limbic system", "Basal ganglia", "Cerebellum", "Medulla"], a: 0 },
-                { q: "The relay station for sensory information is the:", o: ["Hypothalamus", "Thalamus", "Pons", "Midbrain"], a: 1 },
-                { q: "The Parasympathetic system uses which neurotransmitter?", o: ["Adrenaline", "Acetylcholine", "Dopamine", "GABA"], a: 1 },
-                { q: "The cerebellum is primarily responsible for:", o: ["Memory", "Coordination and balance", "Vision", "Breathing"], a: 1 },
-                { q: "The 'Fight or Flight' response is part of the:", o: ["Sympathetic system", "Parasympathetic system", "Somatic system", "Enteric system"], a: 0 },
-                { q: "The blood-brain barrier is formed by:", o: ["Microglia", "Astrocytes", "Ependymal cells", "Neurons"], a: 1 }
-            ]
-        };
+    function toggleUnit(header) {
+        const content = header.nextElementSibling;
+        const isExpanded = header.getAttribute('aria-expanded') === 'true';
+        header.setAttribute('aria-expanded', !isExpanded);
+        content.classList.toggle('active');
+    }
 
-        function toggleUnit(header) {
-            const content = header.nextElementSibling;
-            const isExpanded = header.getAttribute('aria-expanded') === 'true';
-            header.setAttribute('aria-expanded', !isExpanded);
-            content.classList.toggle('active');
+    function openResource(type, url, title) {
+        // 1. PUSH HISTORY STATE
+        history.pushState({ modalOpen: true }, null, '#resource');
+
+        const modal = document.getElementById('app-modal');
+        const body = document.getElementById('modal-body');
+        document.getElementById('modal-title').textContent = title;
+        modal.style.display = 'flex';
+        
+        // Clean URL Logic
+        let finalUrl = url;
+        if (url.includes('drive.google.com')) { 
+            finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview'); 
         }
-
-        function openResource(type, url, title) {
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            document.getElementById('modal-title').textContent = title;
-            modal.style.display = 'flex';
-            
-            // Handle Drive links by converting /view to /preview for embedding
-            let finalUrl = url;
-            if (url.includes('drive.google.com')) {
-                finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
-            }
-            
-            body.innerHTML = `<iframe class="iframe-res" src="${finalUrl}" allow="autoplay; xr-spatial-tracking" allowfullscreen></iframe>`;
+        else if (url.includes('human.biodigital.com')) { 
+            if (url.includes('/viewer/')) finalUrl = url.replace('/viewer/', '/widget/');
+            else finalUrl = url.replace('/view', '/widget'); 
         }
+        
+        // 2. VIDEO SECURITY FIX
+        body.innerHTML = `
+            <iframe 
+                class="iframe-res" 
+                src="${finalUrl}" 
+                width="100%" 
+                height="100%" 
+                frameborder="0"
+                sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-presentation"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen">
+            </iframe>`;
+    }
 
-        let score = 0;
-        function startQuiz(unitId) {
-            score = 0;
-            const questions = QUIZ_DATA[unitId];
-            
-            let html = `
-                <div class="quiz-container">
-                    <div class="quiz-header-sticky">
-                        <h2 style="margin:0; color:var(--brand);">Unit ${unitId} Quiz</h2>
-                        <div id="score-display" class="score-badge">Score: 0 / 10</div>
-                    </div>
-            `;
-            
-            questions.forEach((q, index) => {
-                html += `
-                    <div class="question-block">
-                        <p class="quiz-question-text">${index + 1}. ${q.q}</p>
-                        <div class="options-container">
-                            ${q.o.map((opt, optIndex) => `
-                                <div class="quiz-option" onclick="checkAnswer(this, ${unitId}, ${optIndex}, ${q.a})">${opt}</div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            });
-            
+    let score = 0;
+    
+    function startQuiz(unitId) {
+        // PUSH HISTORY STATE
+        history.pushState({ modalOpen: true }, null, '#quiz');
+
+        score = 0;
+        const questions = QUIZ_DATA[unitId];
+        
+        let html = `
+            <div class="quiz-container">
+                <div class="quiz-header-sticky">
+                    <h2 style="margin:0; color:var(--brand);">Unit ${unitId} Quiz</h2>
+                    <div id="score-display" class="score-badge">Score: 0 / 10</div>
+                </div>
+        `;
+        
+        questions.forEach((q, index) => {
             html += `
-                    <button class="btn-quiz" onclick="closeModal()">Close Quiz</button>
+                <div class="question-block">
+                    <p class="quiz-question-text">${index + 1}. ${q.q}</p>
+                    <div class="options-container">
+                        ${q.o.map((opt, optIndex) => `
+                            <div class="quiz-option" onclick="checkAnswer(this, ${unitId}, ${optIndex}, ${q.a})">${opt}</div>
+                        `).join('')}
+                    </div>
                 </div>
             `;
-            
-            document.getElementById('modal-body').innerHTML = html;
-            document.getElementById('modal-title').textContent = `Unit ${unitId} Quiz`;
-            document.getElementById('app-modal').style.display = 'flex';
-        }
+        });
+        
+        html += `
+                <button class="btn-quiz" onclick="closeModal()">Close Quiz</button>
+            </div>
+        `;
+        
+        document.getElementById('modal-body').innerHTML = html;
+        document.getElementById('modal-title').textContent = `Unit ${unitId} Quiz`;
+        document.getElementById('app-modal').style.display = 'flex';
+    }
 
-        function checkAnswer(element, unitId, selectedIndex, correctIndex) {
-            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+    function checkAnswer(element, unitId, selectedIndex, correctIndex) {
+        if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
 
-            if (selectedIndex === correctIndex) {
-                element.classList.add('correct');
-                score++;
-            } else {
-                element.classList.add('wrong');
-                element.parentElement.children[correctIndex].classList.add('correct');
-            }
-            document.getElementById('score-display').textContent = `Score: ${score} / 10`;
+        if (selectedIndex === correctIndex) {
+            element.classList.add('correct');
+            score++;
+        } else {
+            element.classList.add('wrong');
+            element.parentElement.children[correctIndex].classList.add('correct');
         }
+        document.getElementById('score-display').textContent = `Score: ${score} / 10`;
+    }
 
-        function closeModal() { 
-            document.getElementById('app-modal').style.display = 'none'; 
-            document.getElementById('modal-body').innerHTML = ""; 
+    function closeModal() { 
+        const modal = document.getElementById('app-modal');
+        modal.style.display = 'none'; 
+        document.getElementById('modal-body').innerHTML = ""; 
+        
+        // LOGIC: If we have a history state (meaning the modal is open),
+        // we manually go 'Back' to remove that state so the user doesn't get stuck.
+        if ((history.state && history.state.modalOpen) || window.location.hash === '#resource' || window.location.hash === '#quiz') {
+            history.back();
         }
-    </script>
+    }
+
+    // LISTENER FOR HARDWARE BACK BUTTON
+    window.onpopstate = function(event) {
+        const modal = document.getElementById('app-modal');
+        // If the modal is currently visible, hide it.
+        if (modal.style.display === 'flex') {
+            modal.style.display = 'none';
+            document.getElementById('modal-body').innerHTML = '';
+        }
+    };
+</script>
 </body>
 </html>
