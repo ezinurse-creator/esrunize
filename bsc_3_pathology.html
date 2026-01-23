@@ -3,238 +3,272 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pathology - I Syllabus</title>
-    <meta name="description" content="Comprehensive syllabus with detailed notes and video lectures for Pathology - I." />
+    <title>Pathology I - Syllabus & Quizzes</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+    :root {
+        /* ORIGINAL BLUE COLOR SCHEME */
+        --brand: #003B82; 
+        --accent: #00B9F2;
+        --gray-50: #f9fafb;
+        --gray-100: #f3f4f6;
+        --gray-200: #e5e7eb;
+        --gray-700: #374151;
+        --gray-900: #111827;
+        --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+        --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+        --danger: #ef4444;
+        --success: #10b981;
+        --warning: #f59e0b;
+    }
 
-    <style>
-        :root {
-            --brand: #003B82;
-            --accent: #00B9F2;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-700: #374151;
-            --gray-900: #111827;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-            --danger: #ef4444;
-            --success: #10b981;
-        }
+    * { box-sizing: border-box; }
+    body {
+        font-family: 'Inter', system-ui, sans-serif;
+        background: white;
+        color: var(--gray-900);
+        line-height: 1.6;
+        padding: 24px;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
 
-        * { box-sizing: border-box; }
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: white;
-            color: var(--gray-900);
-            line-height: 1.6;
-            padding: 24px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
+    /* --- BUTTONS & HEADERS SHARED STYLES --- */
+    .syllabus-btn, .unit-header {
+        display: block;
+        width: 100%;
+        padding: 18px 24px;
+        margin: 12px 0;
+        font-weight: 600;
+        font-size: 16px;
+        text-decoration: none;
+        border-radius: 12px;
+        cursor: pointer;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.2s ease;
+    }
 
-        .syllabus-btn, .unit-header {
-            display: block;
-            width: 100%;
-            padding: 18px 24px;
-            margin: 24px 0;
-            background: var(--brand);
-            color: white;
-            font-weight: 600;
-            font-size: 16px;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.2s ease;
-        }
-        .syllabus-btn:hover, .unit-header:hover {
-            background: #002d63;
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
+    /* --- SPECIFIC: SYLLABUS BUTTON --- */
+    .syllabus-btn {
+        background: white;
+        color: var(--brand);
+        border: 2px solid var(--brand);
+        text-align: center;
+    }
 
-        .unit-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-align: left;
-            margin: 16px 0;
-        }
-        .unit-header span:last-child {
-            transition: transform 0.3s ease;
-            color: #FFA500;
-        }
-        .unit-header[aria-expanded="true"] span:last-child {
-            transform: rotate(180deg);
-        }
+    .syllabus-btn:hover {
+        background: #f0f9ff;
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+    }
+    
+    /* --- SPECIFIC: UNIT HEADER --- */
+    .unit-header {
+        background: var(--brand);
+        color: white;
+        border: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: left;
+        margin: 16px 0;
+    }
 
-        .unit-content {
-            padding: 0 12px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.3s ease;
-        }
-        .unit-content.active {
-            padding: 24px 12px;
-            max-height: none;
-        }
+    .unit-header:hover {
+        background: #002d63;
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+    }
 
-        .subsection {
-            margin: 16px 0;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            border: 1px solid var(--gray-200);
-            box-shadow: var(--shadow-sm);
-            transition: box-shadow 0.2s ease;
-        }
-        .subsection:hover { box-shadow: var(--shadow-md); }
+    /* Unit Header Arrow Animation */
+    .unit-header span:last-child {
+        transition: transform 0.3s ease;
+        color: #FFA500;
+    }
+    .unit-header[aria-expanded="true"] span:last-child {
+        transform: rotate(180deg);
+    }
 
-        .subheading {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--brand);
-            margin: 0 0 12px 0;
-            padding-top: 10px;
-        }
+    /* --- UNIT CONTENT & RESOURCES --- */
+    .unit-content {
+        padding: 0 12px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease, padding 0.3s ease;
+    }
+    .unit-content.active {
+        padding: 24px 12px;
+        max-height: none; 
+    }
 
-        .resource-btn {
-            display: flex;
-            align-items: flex-start;
-            width: 100%;
-            padding: 14px 18px;
-            margin: 8px 0;
-            background: var(--gray-50);
-            color: var(--gray-900);
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
-            border: 1px solid var(--gray-200);
-            transition: all 0.2s ease;
-            gap: 12px;
-            flex-wrap: wrap;
-            min-height: 50px;
-            cursor: pointer;
-        }
-        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
-        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
-        .resource-btn.quiz { background: #fff5e8; border-color: #ffd8a8; color: #8c5e08; }
-        .resource-btn:hover { background: #f9fafb; transform: translateY(-1px); }
-        .resource-btn.notes:hover { background: #e0f2fe; }
-        .resource-btn.video:hover { background: #ede9fe; }
-        .resource-btn.quiz:hover { background: #ffead1; }
-        .resource-btn.coming-soon { 
-            background: #e5e7eb;
-            color: #6b7280;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
+    .subsection {
+        margin: 16px 0;
+        padding: 20px;
+        background: white;
+        border-radius: 12px;
+        border: 1px solid var(--gray-200);
+        box-shadow: var(--shadow-sm);
+        transition: box-shadow 0.2s ease;
+    }
 
-        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
-        .icon.video-icon { color: #8b5cf6; }
-        .icon.quiz-icon { color: #FFA500; }
-        .icon.coming-soon-icon { color: #9ca3af; }
+    .section-header {
+        background: #e0f2fe; /* Light Blue Background */
+        color: var(--brand);
+        padding: 10px 15px;
+        border-radius: 8px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.9rem;
+        border-left: 5px solid var(--accent);
+    }
 
-        /* --- MODAL --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-        }
+    .resource-btn {
+        display: flex;
+        align-items: flex-start;
+        width: 100%;
+        padding: 14px 18px;
+        margin: 6px 0;
+        background: var(--gray-50);
+        color: var(--gray-900);
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 500;
+        border: 1px solid var(--gray-200);
+        transition: all 0.2s ease;
+        gap: 12px;
+        cursor: pointer;
+    }
+    .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
+    .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
+    .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+    .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
 
-        .modal-header {
-            height: 60px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            flex-shrink: 0;
-        }
+    .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
+    .icon.video-icon { color: #8b5cf6; }
+    .icon.quiz-icon { color: #f59e0b; }
 
-        .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-        
-        .btn-close {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
+    /* --- MODAL --- */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        z-index: 1000;
+        display: none;
+        flex-direction: column;
+    }
 
-        .modal-body {
-            flex: 1;
-            background: #000;
-            position: relative;
-            overflow-y: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    .modal-header {
+        height: 60px;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        flex-shrink: 0;
+    }
 
-        /* --- FIXED IFRAME STYLES --- */
-        .iframe-video {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16 / 9;
-            border: none;
-            background: #000;
-            display: block;
-        }
+    .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; }
+    
+    .btn-close {
+        background: var(--danger);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+    }
 
-        .iframe-doc {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #fff;
-            display: block;
-        }
+    .modal-body {
+        flex: 1;
+        background: #f3f4f6;
+        position: relative;
+        overflow-y: auto;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 20px;
+    }
 
-        /* --- QUIZ STYLES --- */
-        .quiz-container {
-            background: white;
-            width: 100%;
-            min-height: 100%;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .quiz-question { margin-bottom: 20px; font-size: 1.1rem; font-weight: 600; }
-        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
-        .quiz-option {
-            padding: 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        .quiz-option:hover { background: #f0f9ff; border-color: var(--accent); }
-        .quiz-option.correct { background: var(--success); color: white; border-color: var(--success); }
-        .quiz-option.correct::after { content: '✓'; position: absolute; right: 15px; font-weight: bold; }
-        .quiz-option.wrong { background: var(--danger); color: white; border-color: var(--danger); }
-        .quiz-option.wrong::after { content: '✗'; position: absolute; right: 15px; font-weight: bold; }
+    .iframe-res {
+        width: 100%;
+        height: 100%;
+        border: none;
+        background: #fff;
+        display: block;
+    }
 
-        @media (max-width: 768px) {
-            body { padding: 16px; }
-            .syllabus-btn, .unit-header, .resource-btn { font-size: 15px; padding: 14px 16px; }
-            .resource-btn { font-size: 14px; }
-            .subsection { padding: 16px; }
-            .unit-content.active { padding: 16px 8px; }
-        }
-    </style>
+    /* --- QUIZ STYLES --- */
+    .quiz-container {
+        background: white;
+        width: 100%;
+        max-width: 800px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        padding: 30px;
+        margin-bottom: 40px;
+    }
+    .quiz-header-sticky {
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 10;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--gray-100);
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .score-badge {
+        background: var(--brand);
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-weight: 700;
+    }
+    .question-block {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--gray-200);
+    }
+    .question-block:last-child { border-bottom: none; }
+    
+    .quiz-question-text {
+        font-size: 1.15rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: var(--gray-900);
+    }
+    .quiz-option {
+        padding: 12px 15px;
+        border: 2px solid var(--gray-200);
+        border-radius: 8px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-weight: 500;
+    }
+    .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
+    
+    .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; }
+    .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
+    
+    .btn-quiz { background: var(--brand); color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 16px; width: 100%; margin-top: 20px; }
+
+    @media (max-width: 768px) {
+        body { padding: 16px; }
+        .unit-header, .resource-btn { font-size: 15px; }
+        .modal-body { padding: 0; }
+        .quiz-container { height: auto; border-radius: 0; max-width: 100%; padding: 20px; min-height: 100%; }
+    }
+</style>
 </head>
 <body>
 
@@ -243,215 +277,255 @@
     </div>
     
     <div id="units">
-        <div class="unit-container" id="unit1">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="true" onclick="toggleUnit(this)">
-                UNIT 1 - INTRODUCTION
-                <span>🔽</span>
+        
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 1 - INTRODUCTION & GENERAL PATHOLOGY <span>🔽</span>
             </div>
-            <div class="unit-content active">
+            <div class="unit-content">
                 <div class="subsection">
-                    <h3 class="subheading">1. General Pathology</h3>
                     <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1gEeyPJBwEME_K5-Cg4BZXvxNKKWTifuB/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
+                        <span class="icon">📚</span><span>Detailed Notes: General Pathology</span>
                     </div>
+                    <div class="section-header">Cellular Adaptations & Injury</div>
                     <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1_wH1_ojQ0PT_vjYn4pi1S7FmMTN06Xf-/preview', 'Cellular Adaptations')">
-                        <span class="icon video-icon">▶️</span><span>Overview of Pathology, Cellular Adaptations</span>
+                        <span class="icon video-icon">▶️</span><span>Overview & Cellular Adaptations</span>
                     </div>
                     <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/15-pkiyYw770x5fLN-iTwMr4i4D2RsWU_/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
+                        <span class="icon">📝</span><span>Lecture Notes</span>
                     </div>
                     <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1g4LV7D57JAUoCig7y4HGUhboKNjHCOUw/preview', 'Cell Injury')">
                         <span class="icon video-icon">▶️</span><span>Cell Injury</span>
                     </div>
                     <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1PAsXaTWOkTzawKz5EdFZjVoI3BD3IXQ7/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
+                        <span class="icon">📝</span><span>Lecture Notes</span>
                     </div>
                     <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1IMAFbv86KQL2uQNc1yE7vUGJYBphTOfz/preview', 'Necrosis & Gangrene')">
                         <span class="icon video-icon">▶️</span><span>Necrosis & Gangrene</span>
                     </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1kXsTWrbdBcbKf3b9NqaNMYpXb30zOzVj/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
                     <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1J2r3y6Im_695NDwVNPn10wZKIIl1_zkh/preview', 'Apoptosis')">
                         <span class="icon video-icon">▶️</span><span>Apoptosis</span>
                     </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/11fbqieUbHzZQpe4K6N6Lz2pwJ7Cf7aAW/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
 
-                    <h3 class="subheading">2. Inflammation</h3>
+                    <div class="section-header">Inflammation & Healing</div>
                     <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1BnjqQbz0uHdKnkGvk7R4SSBUVsyejgqo/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
+                        <span class="icon">📝</span><span>Lecture Notes: Inflammation</span>
                     </div>
-
-                    <h3 class="subheading">3. Healing and Repair</h3>
                     <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1vNNP_gDsOmHxQUqhNuZYTXU0yiZEZCt_/preview', 'Wound Healing')">
-                        <span class="icon video-icon">▶️</span><span>Wound Healing, Bone Healing</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1juYvIKg4ejVfR2yFp-nPt_4sOv4b3GhV/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
+                        <span class="icon video-icon">▶️</span><span>Healing: Primary/Secondary & Bone Healing</span>
                     </div>
 
-                    <h3 class="subheading">4. Fluid and Hemodynamic Disturbances</h3>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1wgRyxkB5fwqbqsjt8jl-YjTomqRat0mC/preview', 'Hemodynamic Disturbances')">
+                    <div class="section-header">Hemodynamics & Neoplasia</div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1wgRyxkB5fwqbqsjt8jl-YjTomqRat0mC/preview', 'Fluid Disturbances')">
                         <span class="icon video-icon">▶️</span><span>Fluid & Hemodynamic Disturbances</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/10As2DXEkMM48I9NOvjk6gdefbyTq3aww/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
                     </div>
                     <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1esnHhHLZBim1NNver1bEqHIERMFer21u/preview', 'Shock')">
                         <span class="icon video-icon">▶️</span><span>Shock</span>
                     </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1CCAOrqup_S2zmtcnYpOOt_IxGlIEulUk/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1DA0jzd8T6jbW2rVTQ_jQa02sEUDZYiIj/preview', 'Neoplasia')">
+                        <span class="icon video-icon">▶️</span><span>Neoplasia (Tumors)</span>
                     </div>
 
-                    <h3 class="subheading">5. Neoplasia</h3>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1DA0jzd8T6jbW2rVTQ_jQa02sEUDZYiIj/preview', 'Neoplasia')">
-                        <span class="icon video-icon">▶️</span><span>Neoplasia</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1tbsRuJIVdaehXa8NgnoKIYpCeeVsnD1i/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(1)">
+                    <div class="resource-btn quiz" onclick="startQuiz('U1')">
                         <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="unit-container" id="unit2">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 2 - SPECIAL PATHOLOGY
-                <span>🔽</span>
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 2 - SPECIAL PATHOLOGY <span>🔽</span>
             </div>
             <div class="unit-content">
+                
                 <div class="subsection">
-                    <h3 class="subheading">1. Cardiovascular System</h3>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1F6HLzqMR2VCZbFJhi3cfg2vaXN90bI4Q/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
+                    <div class="section-header">1. Cardiovascular System</div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1F6HLzqMR2VCZbFJhi3cfg2vaXN90bI4Q/preview', 'Detailed Notes: CVS')">
+                        <span class="icon">📚</span><span>Detailed Notes: CVS</span>
                     </div>
                     <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1aRTzNpndoYLyIQxzq1Ss1td4yIwAmO5b/preview', 'Intro & CVS')">
-                        <span class="icon video-icon">▶️</span><span>Intro & CVS</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_4fpuoPKpfgmjLU8ZKTT9vmX99woQUYV/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
+                        <span class="icon video-icon">▶️</span><span>Introduction to CVS Pathology</span>
                     </div>
                     <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1kZn1Ot2emRsm-sNQ39-lif70at5KuOPu/preview', 'Atherosclerosis')">
                         <span class="icon video-icon">▶️</span><span>Atherosclerosis</span>
                     </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1lmJdfdMbHlspWf1UXTqmpKAosWNk3EQa/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/11UXDTWWfTOAYKg1TsDSXAmG2UHl0ZInI/preview', 'Rheumatic Heart Disease')">
+                        <span class="icon video-icon">▶️</span><span>Rheumatic Heart Disease (RHD)</span>
                     </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/11UXDTWWfTOAYKg1TsDSXAmG2UHl0ZInI/preview', 'RHD')">
-                        <span class="icon video-icon">▶️</span><span>RHD</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1H42QkAHMnBAKadixkVywh4kOuv0I5MgC/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1XVYYnQ0AJWXzHOrPQyjci7Pepc97cGnF/preview', 'Bacterial Endocarditis')">
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1XVYYnQ0AJWXzHOrPQyjci7Pepc97cGnF/preview', 'Endocarditis')">
                         <span class="icon video-icon">▶️</span><span>Bacterial Endocarditis</span>
                     </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1WoRv1FqvWyuvE9a-X3JFcR-YdtyRX1Ns/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
                     <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1zfEVYJ-h7m-TIos4ka70-KbiRGIu5a0-/preview', 'Angina & MI')">
-                        <span class="icon video-icon">▶️</span><span>Angina & MI</span>
+                        <span class="icon video-icon">▶️</span><span>Angina & Myocardial Infarction</span>
                     </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1pfoCEdsQ4UEFEd7u6cbZ6-Dd3BOZ8Gp8/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1939ket948JAcqKahB0-y38AniLBzz1qu/preview', 'Aneurysm')">
-                        <span class="icon video-icon">▶️</span><span>Aneurysm</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1O-_qlD2RUJCBj9DpaUj4cV5TEETDX6k8/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(2)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
+                    <div class="resource-btn quiz" onclick="startQuiz('U2_CVS')">
+                        <span class="icon quiz-icon">✍️</span><span>Take CVS Quiz</span>
                     </div>
                 </div>
 
                 <div class="subsection">
-                    <h3 class="subheading">2. Respiratory System</h3>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1qosWXZoEv88IkSHCgF1dqRjclzY2JRri/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/14QsjDpWRHbVcjJtSCl-6sseyh-27N6_E/preview', 'Tuberculosis')"><span class="icon video-icon">▶️</span><span>Tuberculosis</span></div>
+                    <div class="section-header">2. Respiratory System</div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1qosWXZoEv88IkSHCgF1dqRjclzY2JRri/preview', 'Detailed Notes: Respiratory')">
+                        <span class="icon">📚</span><span>Detailed Notes: Respiratory</span>
                     </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/14QsjDpWRHbVcjJtSCl-6sseyh-27N6_E/preview', 'Tuberculosis Part 1')">
+                        <span class="icon video-icon">▶️</span><span>Tuberculosis (Part 1)</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1fNbvff6AMLmE7HIUdOc55htHGaYJegBF/preview', 'Tuberculosis Part 2')">
+                        <span class="icon video-icon">▶️</span><span>Tuberculosis (Part 2)</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/15hqpgmOy3EIAUe8jl0NsTGqWZ8GnUV1O/preview', 'Pneumonia')">
+                        <span class="icon video-icon">▶️</span><span>Pneumonia</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1fmWT95jVoXCEmWmoDGRCFDOd7Dg-mBuP/preview', 'COPD & Emphysema')">
+                        <span class="icon video-icon">▶️</span><span>COPD & Emphysema</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1MFFSfQJtWmOJDxJXI0jvIyjv_2t03Hm5/preview', 'Bronchiectasis & Asthma')">
+                        <span class="icon video-icon">▶️</span><span>Bronchiectasis & Bronchial Asthma</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Z2cQTm7SqlHKS4KBXAXe-dsRFk7XbWMh/preview', 'Pleural Effusion')">
+                        <span class="icon video-icon">▶️</span><span>Pleural Effusion & Lung Abscess</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz('U2_RESP')">
+                        <span class="icon quiz-icon">✍️</span><span>Take Respiratory Quiz</span>
+                    </div>
+                </div>
 
                 <div class="subsection">
-                    <h3 class="subheading">3. Gastrointestinal Tract</h3>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1CC3ZRcu-ffk1HW3JB_N8lCCrAAqjqeK4/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div>
+                    <div class="section-header">3. Gastrointestinal Tract</div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1CC3ZRcu-ffk1HW3JB_N8lCCrAAqjqeK4/preview', 'Detailed Notes: GI')">
+                        <span class="icon">📚</span><span>Detailed Notes: GI Tract</span>
                     </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1lzLnvPsujvx50YoAG3R5-Ll0AziV1kxA/preview', 'H. Pylori')">
+                        <span class="icon video-icon">▶️</span><span>H. Pylori Infections</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1risjGFdAxmQjCeXDdJEtcNYB5QZtpPJq/preview', 'Esophageal Cancer')">
+                        <span class="icon video-icon">▶️</span><span>Esophageal Cancer</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/17uyWgG82SmaukpaaBLa_jJz4I4tqtEEv/preview', 'Gastric Cancer')">
+                        <span class="icon video-icon">▶️</span><span>Gastric Cancer</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1d5UVD89clI7gewGZqjwWQ70K8o4E2gl4/preview', 'IBD Part 1')">
+                        <span class="icon video-icon">▶️</span><span>Crohn's Disease & Colorectal Cancer</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1_GMxzciP8tvJOtgL2DiptItACqtEuAi-/preview', 'IBD Part 2')">
+                        <span class="icon video-icon">▶️</span><span>Ulcerative Colitis & Colorectal Cancer</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz('U2_GI')">
+                        <span class="icon quiz-icon">✍️</span><span>Take GI Tract Quiz</span>
+                    </div>
+                </div>
 
                 <div class="subsection">
-                    <h3 class="subheading">4. Liver, Gall Bladder and Pancreas</h3>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ZJTsN7SrD8bCAfGkyth1ZrDuj8jOzTmg/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div>
+                    <div class="section-header">4. Liver, Gallbladder & Pancreas</div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ZJTsN7SrD8bCAfGkyth1ZrDuj8jOzTmg/preview', 'Detailed Notes: Liver')">
+                        <span class="icon">📚</span><span>Detailed Notes: Liver & Pancreas</span>
                     </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1AO1T4r3egvzws1bwhEzu6aQEDFsTU_mk/preview', 'Cirrhosis')">
+                        <span class="icon video-icon">▶️</span><span>Liver Cirrhosis</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1hPBUP4fRAx4G_8zEnCVzcs3LZ-E_EknU/preview', 'Pathologies of Liver')">
+                        <span class="icon video-icon">▶️</span><span>Pathologies of Liver</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1HiYWfY27BEodvttTY6xRGVmcDwb5kzES/preview', 'Pancreatitis')">
+                        <span class="icon video-icon">▶️</span><span>Pancreatitis</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1VhiXPQK5gj_XQSkZyMNyQcSdZWo8pH9Z/preview', 'Pancreatic Carcinoma')">
+                        <span class="icon video-icon">▶️</span><span>Pancreatic Carcinoma</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1L5ST_yMCO4XHE5sgvF8vtUXqzByyj_Tv/preview', 'Tumors of Liver')">
+                        <span class="icon video-icon">▶️</span><span>Tumors of Liver</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1MybBxXuWrUWH7E6UqON8tA6yi5yPZlY_/preview', 'Cholecystitis')">
+                        <span class="icon video-icon">▶️</span><span>Cholecystitis & Gallbladder Cancer</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz('U2_LIVER')">
+                        <span class="icon quiz-icon">✍️</span><span>Take Liver & Pancreas Quiz</span>
+                    </div>
+                </div>
 
                 <div class="subsection">
-                    <h3 class="subheading">5. Skeletal System</h3>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/19XlaASwwnMIs8zKpL2IdO1qwUEhtRoYe/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div>
+                    <div class="section-header">5. Skeletal System</div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/19XlaASwwnMIs8zKpL2IdO1qwUEhtRoYe/preview', 'Detailed Notes: Skeletal')">
+                        <span class="icon">📚</span><span>Detailed Notes: Skeletal System</span>
                     </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1xMPJExeR5cspJTSXrAp2drilO9I36-Od/preview', 'Bone Healing')">
+                        <span class="icon video-icon">▶️</span><span>Bone Healing</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1yLo_0KK9TuqM-tVDV52spqBlPj_p6SOz/preview', 'Osteomyelitis')">
+                        <span class="icon video-icon">▶️</span><span>Osteomyelitis</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/178X1VLAZN_PUOw5AJHkRvmJb0uQneeCu/preview', 'Osteoporosis')">
+                        <span class="icon video-icon">▶️</span><span>Osteoporosis</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1r3ptHkZvq3V0kt8w2sCz1EXmt8kbHRzf/preview', 'Bone Tumors')">
+                        <span class="icon video-icon">▶️</span><span>Bone Tumors</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1SCkDx-GzQPvGbtC_M4-LHcPuFmYiAKWj/preview', 'Arthritis')">
+                        <span class="icon video-icon">▶️</span><span>Arthritis</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz('U2_SKELETAL')">
+                        <span class="icon quiz-icon">✍️</span><span>Take Skeletal Quiz</span>
+                    </div>
+                </div>
 
                 <div class="subsection">
-                    <h3 class="subheading">6. Endocrine System</h3>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1vTKbkPYBDWC5NEyPi2VxcSYzfUNqO9x0/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div>
+                    <div class="section-header">6. Endocrine System</div>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1vTKbkPYBDWC5NEyPi2VxcSYzfUNqO9x0/preview', 'Detailed Notes: Endocrine')">
+                        <span class="icon">📚</span><span>Detailed Notes: Endocrine System</span>
                     </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1C627u7nXBd6koAy5tMNz_SNNTAYZ1PPD/preview', 'Goiter')">
+                        <span class="icon video-icon">▶️</span><span>Goiter</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/10IZtokHHtPFemncmnIfPCwIMlRTaHY8E/preview', 'Thyroid Carcinoma')">
+                        <span class="icon video-icon">▶️</span><span>Carcinoma of Thyroid</span>
+                    </div>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1KlCBhxH3bC0DoZ-pjn5BvNSHyykTTk8T/preview', 'Diabetes Mellitus')">
+                        <span class="icon video-icon">▶️</span><span>Diabetes Mellitus</span>
+                    </div>
+                    <div class="resource-btn quiz" onclick="startQuiz('U2_ENDOCRINE')">
+                        <span class="icon quiz-icon">✍️</span><span>Take Endocrine Quiz</span>
+                    </div>
+                </div>
+
             </div>
         </div>
 
-        <div class="unit-container" id="unit3">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 3 - HEMATOLOGICAL TESTS
-                <span>🔽</span>
+        <div class="unit-container">
+            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                UNIT 3 - HEMATOLOGICAL TESTS <span>🔽</span>
             </div>
             <div class="unit-content">
                 <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1X688qPoJBYZKI2DodaRZW8_3RCYEC-7O/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
+                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1X688qPoJBYZKI2DodaRZW8_3RCYEC-7O/preview', 'Detailed Notes: Hematology')">
+                        <span class="icon">📚</span><span>Detailed Notes: Hematology</span>
                     </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1eo-lVAN_WtMElRZg2qpB1ivNb_KY4o5F/preview', 'Coagulation Profile')">
-                        <span class="icon video-icon">▶️</span><span>Bleeding Time, Prothrombin Time, APTT</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1sDuQuEemvGut-B3TiCNbTiuYv3Z7lx2V/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1eo-lVAN_WtMElRZg2qpB1ivNb_KY4o5F/preview', 'Clotting Profile')">
+                        <span class="icon video-icon">▶️</span><span>Bleeding Time, PT, APTT</span>
                     </div>
                     <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1EvDrL2TWP00ffqAsoGPqUrZ-C-EwHbZ5/preview', 'Blood Grouping')">
-                        <span class="icon video-icon">▶️</span><span>Blood Grouping and Cross matching</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1j8O0lkMQneINqVJ2zGpvNcCMcy_gd0i6/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
+                        <span class="icon video-icon">▶️</span><span>Blood Grouping & Cross Matching</span>
                     </div>
                     <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/10hLjwNYsUIXjOKWxyXXDhE5A9oGA9yRv/preview', 'PCV & ESR')">
-                        <span class="icon video-icon">▶️</span><span>Packed Cell Volume & Erythrocyte Sedimentation Rate</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1qxvZzXfxpCu9lVIRez3xrsKXFEnIBkWc/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
+                        <span class="icon video-icon">▶️</span><span>PCV & ESR</span>
                     </div>
                     <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1YX02gelCHnDCmSDvKK9TxCMX0jPls6hT/preview', 'Blood Components')">
                         <span class="icon video-icon">▶️</span><span>Blood Components</span>
                     </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1idXZaKEoPgDWIunB4YMwXdPzKoWrRQSJ/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
                     <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1E5vM6SOyvXyusqmrubXejD30-202uSxW/preview', 'Blood Cell Count')">
                         <span class="icon video-icon">▶️</span><span>Blood Cell Count</span>
                     </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1V8MnB8hVSlfNR54XfOM0FbheW0Hh5hZK/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
+                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1orDLo30dkzQerMpTTCRtVZOrI6m2QnvF/preview', 'Hemoglobin Estimation')">
+                        <span class="icon video-icon">▶️</span><span>Hemoglobin Estimation</span>
                     </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1orDLo30dkzQerMpTTCRtVZOrI6m2QnvF/preview', 'Hb Estimation')">
-                        <span class="icon video-icon">▶️</span><span>HemoGlobin Estimation</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1hON2mJD9BHQHfIPZR_JohDd0TkO3WGCU/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(3)">
+                    <div class="resource-btn quiz" onclick="startQuiz('U3')">
                         <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 
     <div id="app-modal" class="modal-overlay">
@@ -463,32 +537,123 @@
     </div>
 
     <script>
-        // --- 1. QUIZ DATA ---
         const QUIZ_DATA = {
-            1: [ // Unit 1: Intro & General Pathology
-                { q: "Hypertrophy refers to:", o: ["Increase in number of cells", "Increase in size of cells", "Decrease in size of cells", "Change in cell type"], a: 1 },
-                { q: "Which type of necrosis is characteristic of Tuberculosis?", o: ["Coagulative", "Liquefactive", "Caseous", "Fat"], a: 2 },
-                { q: "Apoptosis is defined as:", o: ["Accidental cell death", "Programmed cell death", "Gangrene", "Infection"], a: 1 },
-                { q: "Cardinal signs of inflammation include:", o: ["Pallor, Coldness", "Rubor, Calor, Tumor, Dolor", "Cyanosis", "Jaundice"], a: 1 },
-                { q: "Healing by primary intention occurs in:", o: ["Infected wounds", "Clean surgical wounds", "Large ulcers", "Burns"], a: 1 }
+            // UNIT 1: GENERAL PATHOLOGY
+            U1: [
+                { q: "Hypertrophy refers to:", o: ["Increase in cell number", "Increase in cell size", "Decrease in cell size", "Change in cell type"], a: 1 },
+                { q: "The cardinal signs of inflammation include all EXCEPT:", o: ["Rubor (Redness)", "Calor (Heat)", "Pallor (Paleness)", "Dolor (Pain)"], a: 2 },
+                { q: "Apoptosis is also known as:", o: ["Cell murder", "Programmed cell death", "Gangrene", "Uncontrolled growth"], a: 1 },
+                { q: "Healing by primary intention occurs in:", o: ["Infected wounds", "Clean surgical incisions", "Large tissue loss", "Ulcers"], a: 1 },
+                { q: "Which type of shock is caused by severe blood loss?", o: ["Septic", "Cardiogenic", "Hypovolemic", "Anaphylactic"], a: 2 },
+                { q: "Virchow's Triad describes factors predisposing to:", o: ["Hemorrhage", "Thrombosis", "Inflammation", "Healing"], a: 1 },
+                { q: "A benign tumor of glandular epithelium is called:", o: ["Adenoma", "Carcinoma", "Sarcoma", "Lipoma"], a: 0 },
+                { q: "Metaplasia is:", o: ["Reversible change of one cell type to another", "Irreversible cell death", "Uncontrolled growth", "Decrease in size"], a: 0 },
+                { q: "Wet gangrene is usually associated with:", o: ["Arterial blockage", "Bacterial infection", "Freezing", "Dry skin"], a: 1 },
+                { q: "Edema is defined as:", o: ["Blood clotting", "Accumulation of fluid in interstitial space", "Cell death", "Pus formation"], a: 1 }
             ],
-            2: [ // Unit 2: Special Pathology
-                { q: "Atherosclerosis mainly affects:", o: ["Veins", "Large & medium arteries", "Capillaries", "Lymphatics"], a: 1 },
-                { q: "Rheumatic Heart Disease is caused by:", o: ["Staph aureus", "Group A Beta-hemolytic Streptococcus", "E. coli", "Virus"], a: 1 },
-                { q: "Emphysema is characterized by:", o: ["Mucus hypersecretion", "Destruction of alveolar walls", "Fluid in pleural space", "Tumor"], a: 1 },
-                { q: "Peptic ulcer is most commonly caused by:", o: ["Virus", "H. pylori", "Fungus", "Parasite"], a: 1 },
-                { q: "Osteomyelitis is infection of:", o: ["Muscle", "Bone", "Joint", "Skin"], a: 1 }
+
+            // UNIT 2: CVS
+            U2_CVS: [
+                { q: "Atherosclerosis involves hardening of arteries due to:", o: ["Calcium only", "Plaque/Lipid accumulation", "Blood clots", "Bacteria"], a: 1 },
+                { q: "The most common cause of Ischemic Heart Disease is:", o: ["Coronary Atherosclerosis", "Valve defect", "Infection", "Trauma"], a: 0 },
+                { q: "Rheumatic Heart Disease is a complication of infection by:", o: ["Staphylococcus", "Group A Streptococcus", "E. Coli", "Virus"], a: 1 },
+                { q: "Angina Pectoris is caused by:", o: ["Permanent heart damage", "Transient myocardial ischemia", "Lung infection", "Acid reflux"], a: 1 },
+                { q: "A myocardial infarction (MI) results in:", o: ["Reversible injury", "Irreversible necrosis of heart muscle", "Temporary pain", "None"], a: 1 },
+                { q: "Vegetations on heart valves are characteristic of:", o: ["Hypertension", "Infective Endocarditis", "Angina", "Atherosclerosis"], a: 1 },
+                { q: "An aneurysm is:", o: ["A clot", "Abnormal dilation of a blood vessel", "Narrowing of vessel", "Valve leak"], a: 1 },
+                { q: "A modifiable risk factor for atherosclerosis is:", o: ["Age", "Genetics", "Smoking/Diet", "Gender"], a: 2 },
+                { q: "Aschoff bodies are pathognomonic of:", o: ["MI", "Rheumatic Fever", "TB", "Cancer"], a: 1 },
+                { q: "Cardiac tamponade involves accumulation of fluid in the:", o: ["Lungs", "Pericardial sac", "Ventricles", "Aorta"], a: 1 }
             ],
-            3: [ // Unit 3: Hematological Tests
-                { q: "Normal Hemoglobin level in adult male is approx:", o: ["10-12 g/dL", "13-16 g/dL", "8-10 g/dL", "18-20 g/dL"], a: 1 },
-                { q: "ESR stands for:", o: ["Erythrocyte Sedimentation Rate", "Estimated Sugar Rate", "Electrolyte Sodium Rate", "None"], a: 0 },
-                { q: "Bleeding Time assesses function of:", o: ["Liver", "Platelets", "Kidney", "RBCs"], a: 1 },
-                { q: "Which blood group is the universal donor?", o: ["AB Positive", "O Negative", "A Positive", "B Negative"], a: 1 },
-                { q: "Packed Cell Volume (PCV) is also known as:", o: ["Hemoglobin", "Hematocrit", "MCV", "MCH"], a: 1 }
+
+            // UNIT 2: RESPIRATORY
+            U2_RESP: [
+                { q: "The causative agent of Tuberculosis is:", o: ["Mycobacterium tuberculosis", "Streptococcus", "Virus", "Fungus"], a: 0 },
+                { q: "Emphysema is characterized by:", o: ["Mucus hypersecretion", "Destruction of alveolar walls", "Bronchial constriction", "Fluid in lungs"], a: 1 },
+                { q: "Lobar pneumonia affects:", o: ["Bronchioles", "An entire lobe of the lung", "Pleura only", "Trachea"], a: 1 },
+                { q: "Chronic Bronchitis is diagnosed clinically by:", o: ["Cough for 3 months in 2 consecutive years", "Fever", "Chest pain", "X-ray"], a: 0 },
+                { q: "Bronchiectasis involves:", o: ["Permanent dilation of bronchi", "Narrowing of bronchi", "Lung collapse", "Tumor"], a: 0 },
+                { q: "A Ghon complex is seen in:", o: ["Primary TB", "Secondary TB", "Pneumonia", "Cancer"], a: 0 },
+                { q: "Asthma is primarily an:", o: ["Infectious disease", "Allergic/Inflammatory airway disease", "Autoimmune disease", "Degenerative disease"], a: 1 },
+                { q: "Pleural effusion is accumulation of fluid in:", o: ["Alveoli", "Pleural space", "Bronchi", "Blood"], a: 1 },
+                { q: "Blue bloater is a term often used for:", o: ["Emphysema", "Chronic Bronchitis", "Asthma", "TB"], a: 1 },
+                { q: "Pink puffer refers to patients with:", o: ["Emphysema", "Chronic Bronchitis", "Pneumonia", "Cancer"], a: 0 }
+            ],
+
+            // UNIT 2: GI TRACT
+            U2_GI: [
+                { q: "Helicobacter pylori is a major cause of:", o: ["Appendicitis", "Peptic Ulcer/Gastritis", "Colitis", "Hepatitis"], a: 1 },
+                { q: "Typhoid fever causes ulcers primarily in the:", o: ["Stomach", "Peyer's patches of Ileum", "Colon", "Esophagus"], a: 1 },
+                { q: "Skip lesions are characteristic of:", o: ["Ulcerative Colitis", "Crohn's Disease", "Gastritis", "Typhoid"], a: 1 },
+                { q: "Ulcerative Colitis primarily involves the:", o: ["Small intestine", "Colon and Rectum", "Stomach", "Mouth"], a: 1 },
+                { q: "Oral leukoplakia is a precancerous lesion associated with:", o: ["Sugar", "Tobacco use", "Hot food", "Virus"], a: 1 },
+                { q: "Barrett's esophagus is a complication of:", o: ["GERD", "Alcohol", "Smoking", "Infection"], a: 0 },
+                { q: "The most common site for gastric carcinoma is the:", o: ["Cardia", "Fundus", "Pylorus/Antrum", "Body"], a: 2 },
+                { q: "Widal test is used to diagnose:", o: ["TB", "Typhoid (Enteric fever)", "Ulcer", "Cancer"], a: 1 },
+                { q: "Melena refers to:", o: ["Vomiting blood", "Black tarry stools", "Fresh blood in stool", "Fatty stool"], a: 1 },
+                { q: "Linitis plastica is a type of:", o: ["Gastric Cancer", "Esophageal Cancer", "Colon Cancer", "Ulcer"], a: 0 }
+            ],
+
+            // UNIT 2: LIVER & PANCREAS
+            U2_LIVER: [
+                { q: "Cirrhosis of the liver is characterized by:", o: ["Reversible injury", "Fibrosis and regenerating nodules", "Fatty change only", "Infection"], a: 1 },
+                { q: "The most common cause of cirrhosis is:", o: ["Smoking", "Alcohol abuse", "Bacteria", "Trauma"], a: 1 },
+                { q: "Jaundice is caused by elevated levels of:", o: ["Albumin", "Bilirubin", "Glucose", "Urea"], a: 1 },
+                { q: "Pancreatitis is often triggered by:", o: ["Gallstones and Alcohol", "Sugar", "Smoking", "Stress"], a: 0 },
+                { q: "The sign of pancreatic cancer 'Courvoisier's Law' involves:", o: ["Painful gallbladder", "Painless palpable gallbladder", "Liver enlargement", "Ascites"], a: 1 },
+                { q: "Hepatocellular carcinoma is a tumor of the:", o: ["Pancreas", "Liver", "Gallbladder", "Spleen"], a: 1 },
+                { q: "Cholecystitis is inflammation of the:", o: ["Liver", "Gallbladder", "Pancreas", "Stomach"], a: 1 },
+                { q: "Ascites in cirrhosis is due to:", o: ["Portal hypertension", "High protein", "Infection", "Kidney failure"], a: 0 },
+                { q: "Liver abscess is commonly caused by:", o: ["Amoeba (E. histolytica)", "Virus", "Fungus", "Worms"], a: 0 },
+                { q: "Grey Turner's sign is seen in:", o: ["Cirrhosis", "Acute Pancreatitis", "Hepatitis", "Cholecystitis"], a: 1 }
+            ],
+
+            // UNIT 2: SKELETAL
+            U2_SKELETAL: [
+                { q: "Osteomyelitis is infection of the:", o: ["Joint", "Bone and marrow", "Muscle", "Skin"], a: 1 },
+                { q: "Osteoporosis is characterized by:", o: ["Increased bone density", "Decreased bone mass/density", "Bone tumor", "Joint pain"], a: 1 },
+                { q: "Osteosarcoma is a malignant tumor of:", o: ["Cartilage", "Bone", "Muscle", "Fat"], a: 1 },
+                { q: "Rheumatoid Arthritis is an:", o: ["Infectious disease", "Autoimmune disease", "Degenerative disease", "Genetic disease"], a: 1 },
+                { q: "The healing of a fracture begins with:", o: ["Callus formation", "Hematoma formation", "Remodeling", "Ossification"], a: 1 },
+                { q: "Osteoarthritis primarily affects:", o: ["Synovial membrane", "Articular cartilage (wear and tear)", "Bone marrow", "Muscles"], a: 1 },
+                { q: "Sequestrum is dead bone seen in:", o: ["Osteoporosis", "Osteomyelitis", "Arthritis", "Rickets"], a: 1 },
+                { q: "Gout is caused by accumulation of:", o: ["Calcium", "Uric acid crystals", "Bacteria", "Fat"], a: 1 },
+                { q: "Ewing's sarcoma is a tumor commonly affecting:", o: ["Children/Young adults", "Elderly", "Infants", "None"], a: 0 },
+                { q: "Involucrum refers to:", o: ["Dead bone", "New bone formation around dead bone", "Pus", "Tumor"], a: 1 }
+            ],
+
+            // UNIT 2: ENDOCRINE
+            U2_ENDOCRINE: [
+                { q: "Goiter is enlargement of the:", o: ["Parathyroid", "Thyroid gland", "Adrenal gland", "Pituitary"], a: 1 },
+                { q: "The most common cause of Goiter worldwide is:", o: ["Tumor", "Iodine deficiency", "Infection", "Autoimmune"], a: 1 },
+                { q: "Papillary carcinoma is the most common malignancy of the:", o: ["Pancreas", "Thyroid", "Adrenal", "Pituitary"], a: 1 },
+                { q: "Diabetes Mellitus Type 1 is caused by:", o: ["Insulin resistance", "Autoimmune destruction of Beta cells (No insulin)", "Obesity", "Diet"], a: 1 },
+                { q: "Graves' disease causes:", o: ["Hypothyroidism", "Hyperthyroidism", "Diabetes", "Addison's disease"], a: 1 },
+                { q: "Hashimoto's thyroiditis leads to:", o: ["Hyperthyroidism", "Hypothyroidism", "Cushing's", "Gigantism"], a: 1 },
+                { q: "HbA1c measures average blood glucose over:", o: ["1 week", "3 months", "1 year", "1 day"], a: 1 },
+                { q: "Polyuria, Polydipsia, and Polyphagia are symptoms of:", o: ["Goiter", "Diabetes Mellitus", "Hypothyroidism", "Tumor"], a: 1 },
+                { q: "Diabetic Ketoacidosis (DKA) is a complication of:", o: ["Type 2 Diabetes", "Type 1 Diabetes", "Goiter", "Hyperthyroidism"], a: 1 },
+                { q: "Cushing's syndrome involves excess:", o: ["Thyroxine", "Cortisol", "Insulin", "Growth hormone"], a: 1 }
+            ],
+
+            // UNIT 3: HEMATOLOGY
+            U3: [
+                { q: "Bleeding time tests the function of:", o: ["Clotting factors", "Platelets", "RBCs", "WBCs"], a: 1 },
+                { q: "Prothrombin Time (PT) monitors which pathway?", o: ["Intrinsic", "Extrinsic", "Common", "None"], a: 1 },
+                { q: "The universal donor blood group is:", o: ["AB Positive", "O Negative", "A Positive", "B Negative"], a: 1 },
+                { q: "ESR (Erythrocyte Sedimentation Rate) is a non-specific indicator of:", o: ["Anemia", "Inflammation/Infection", "Clotting", "Blood type"], a: 1 },
+                { q: "Normal Hemoglobin level for adult males is approx:", o: ["10-12 g/dL", "13-17 g/dL", "8-10 g/dL", "20 g/dL"], a: 1 },
+                { q: "Packed Cell Volume (PCV) is also known as:", o: ["Hematocrit", "Hemoglobin", "ESR", "RBC count"], a: 0 },
+                { q: "Cross matching is done to prevent:", o: ["Infection", "Transfusion reactions", "Clotting", "Anemia"], a: 1 },
+                { q: "Which anticoagulant is used for CBC (Purple top)?", o: ["Heparin", "EDTA", "Citrate", "Fluoride"], a: 1 },
+                { q: "Hemophilia A is a deficiency of Factor:", o: ["VIII", "IX", "X", "VII"], a: 0 },
+                { q: "Reticulocyte count measures:", o: ["Old RBCs", "Rate of RBC production", "WBCs", "Platelets"], a: 1 }
             ]
         };
 
-        // --- 2. MODAL LOGIC & NAVIGATION CONTROL ---
+        let currentQuizUnit = 'U1';
+        let score = 0;
+
         function toggleUnit(header) {
             const content = header.nextElementSibling;
             const isExpanded = header.getAttribute('aria-expanded') === 'true';
@@ -497,112 +662,106 @@
         }
 
         function openResource(type, url, title) {
-            if(type === 'coming-soon') return;
-
+            // 1. PUSH HISTORY STATE
             history.pushState({ modalOpen: true }, null, '#resource');
 
             const modal = document.getElementById('app-modal');
             const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = title;
+            document.getElementById('modal-title').textContent = title;
             modal.style.display = 'flex';
-            body.innerHTML = ''; 
-            body.style.display = 'flex'; // Default flex for centering
-
-            // FIX: Restore flex centering for Video/Doc
-            if (type === 'quiz') {
-                // Handled by openQuiz
+            
+            // Clean URL Logic
+            let finalUrl = url;
+            if (url.includes('drive.google.com')) { 
+                finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview'); 
             }
-            else {
-                let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
-                
-                // Videos get 16:9, Notes get full height
-                let className = (type === 'video') ? 'iframe-video' : 'iframe-doc';
-
-                body.innerHTML = `<iframe 
-                    class="${className}" 
-                    src="${cleanUrl}" 
-                    sandbox="allow-scripts allow-same-origin allow-presentation"
-                    allow="autoplay; encrypted-media; fullscreen">
+            
+            // 2. VIDEO SECURITY FIX
+            body.innerHTML = `
+                <iframe 
+                    class="iframe-res" 
+                    src="${finalUrl}" 
+                    width="100%" 
+                    height="100%" 
+                    frameborder="0"
+                    sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-presentation"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen">
                 </iframe>`;
-            }
         }
 
-        function openQuiz(unitId) {
+        function startQuiz(unitId) {
+            // PUSH HISTORY STATE
             history.pushState({ modalOpen: true }, null, '#quiz');
 
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
+            currentQuizUnit = unitId;
+            score = 0;
+            const questions = QUIZ_DATA[unitId];
             
-            titleEl.textContent = `Quiz: Unit ${unitId}`;
-            modal.style.display = 'flex';
+            let html = `
+                <div class="quiz-container">
+                    <div class="quiz-header-sticky">
+                        <h2 style="margin:0; color:var(--brand);">Quiz</h2>
+                        <div id="score-display" class="score-badge">Score: 0 / ${questions.length}</div>
+                    </div>
+            `;
             
-            // FIX: Remove flex centering for Quiz so it starts at the top
-            body.style.display = 'block';
-            body.scrollTop = 0; 
-            
-            const questions = QUIZ_DATA[unitId] || [];
-            
-            let quizHtml = `<div class="quiz-container">`;
-            questions.forEach((q, idx) => {
-                quizHtml += `
-                    <div class="quiz-question">${idx + 1}. ${q.q}</div>
-                    <div class="quiz-options" id="q-${idx}">
-                        ${q.o.map((opt, oIdx) => `
-                            <div class="quiz-option" onclick="checkAnswer(this, ${idx}, ${oIdx}, ${q.a})">${opt}</div>
-                        `).join('')}
+            questions.forEach((q, index) => {
+                html += `
+                    <div class="question-block">
+                        <p class="quiz-question-text">${index + 1}. ${q.q}</p>
+                        <div class="options-container">
+                            ${q.o.map((opt, optIndex) => `
+                                <div class="quiz-option" onclick="checkAnswer(this, '${unitId}', ${optIndex}, ${q.a})">${opt}</div>
+                            `).join('')}
+                        </div>
                     </div>
                 `;
             });
             
-            if(questions.length === 0) quizHtml += `<p>Quiz coming soon!</p>`;
+            html += `
+                    <button class="btn-quiz" onclick="closeModal()">Close Quiz</button>
+                </div>
+            `;
             
-            quizHtml += `</div>`;
-            body.innerHTML = quizHtml;
+            document.getElementById('modal-body').innerHTML = html;
+            document.getElementById('modal-title').textContent = `Quiz`;
+            document.getElementById('app-modal').style.display = 'flex';
         }
 
-        function checkAnswer(el, qIdx, oIdx, correctIdx) {
-            const parent = document.getElementById(`q-${qIdx}`);
-            const opts = parent.children;
-            for(let opt of opts) opt.style.pointerEvents = 'none';
+        function checkAnswer(element, unitId, selectedIndex, correctIndex) {
+            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
 
-            if(oIdx === correctIdx) {
-                el.classList.add('correct');
+            if (selectedIndex === correctIndex) {
+                element.classList.add('correct');
+                score++;
             } else {
-                el.classList.add('wrong');
-                opts[correctIdx].classList.add('correct');
+                element.classList.add('wrong');
+                element.parentElement.children[correctIndex].classList.add('correct');
             }
+            document.getElementById('score-display').textContent = `Score: ${score} / ${QUIZ_DATA[unitId].length}`;
         }
 
-        function closeModal() {
+        function closeModal() { 
             const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            modal.style.display = 'none';
-            body.innerHTML = ''; 
+            modal.style.display = 'none'; 
+            document.getElementById('modal-body').innerHTML = ""; 
             
-            if (history.state && history.state.modalOpen) {
+            // LOGIC: If we have a history state (meaning the modal is open),
+            // we manually go 'Back' to remove that state so the user doesn't get stuck.
+            if ((history.state && history.state.modalOpen) || window.location.hash === '#resource' || window.location.hash === '#quiz') {
                 history.back();
             }
         }
 
+        // LISTENER FOR HARDWARE BACK BUTTON
         window.onpopstate = function(event) {
             const modal = document.getElementById('app-modal');
+            // If the modal is currently visible, hide it.
             if (modal.style.display === 'flex') {
                 modal.style.display = 'none';
                 document.getElementById('modal-body').innerHTML = '';
             }
         };
-
-        // Auto-expand first unit
-        document.addEventListener('DOMContentLoaded', () => {
-            const firstUnitHeader = document.querySelector('.unit-header');
-            if(firstUnitHeader) {
-                // toggleUnit(firstUnitHeader); // Optional: if not hardcoded 'active'
-            }
-        });
     </script>
-
 </body>
 </html>
