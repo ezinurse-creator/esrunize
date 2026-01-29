@@ -1,125 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta id="viewport-meta" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Ezi Nurse | Professional Nursing Education</title>
-<style>
-    :root {
-        --primary: #01b9f1;
-        --primary-dark: #003b80;
-        --bg-card: #fffffd;
-        --secondary: #334155;
-        --accent: #f59e0b;
-        --bg-body: #f1f5f9;
-        --text-main: #003b80;
-        --text-muted: #64748b;
-        --danger: #ef4444;
-        --radius-md: 12px;
-        --shadow-lg: 0 10px 15px -3px rgba(0,59,128,0.1);
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
-    html, body { height: 100%; width: 100%; overflow: hidden; background-color: var(--bg-body); color: var(--text-main); }
-    body.zoom-mode { overflow: auto !important; touch-action: manipulation !important; }
-    #app {
-        width: 100%; max-width: 480px; margin: 0 auto;
-        background: var(--bg-card); height: 100%; position: relative;
-        display: flex; flex-direction: column;
-        box-shadow: var(--shadow-lg); overflow: hidden;
-    }
-    /* --- WATERMARK: Diagonal & Faint --- */
-    .watermark-strip {
-        position: absolute; top: 50%; left: 50%; width: 200%;
-        transform: translate(-50%, -50%) rotate(-45deg);
-        z-index: 9999; pointer-events: none;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 13px; font-weight: 900;
-        color: rgba(0, 59, 128, 0.06); /* 6% Opacity */
-        user-select: none; white-space: nowrap; letter-spacing: 6px;
-        text-transform: uppercase;
-    }
-    /* --- FLOATING ZOOM BUTTON --- */
-    #fab-zoom {
-        position: absolute; bottom: 30px; left: 20px; width: 50px; height: 50px;
-        background-color: var(--primary); border-radius: 50%;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        display: none; /* Hidden by default, shown only in iframe view */
-        align-items: center; justify-content: center;
-        font-size: 24px; color: white; cursor: pointer; z-index: 100;
-        transition: transform 0.2s ease;
-    }
-    #fab-zoom:active { transform: scale(0.9); }
-    .view { flex: 1; padding: 24px; overflow-y: auto; display: none; animation: fadeIn 0.3s ease-in-out; padding-bottom: 80px; }
-    .view.active { display: flex; flex-direction: column; }
-    /* IFRAME CONTAINER */
-    #view-iframe.view { padding: 0 !important; height: 100%; width: 100%; z-index: 50; -webkit-overflow-scrolling: touch; overflow: auto; /* Allow scrolling when zoomed */ position: relative; }
-    /* ZOOM LOGIC */
-    .iframe-wrapper { width: 100%; height: 100%; transform-origin: 0 0; transition: transform 0.3s ease, width 0.3s ease; }
-    iframe { width: 100%; height: 100%; border: none; display: block; background: #fff; }
-    .header {
-        padding: 20px; border-bottom: 1px solid #e2e8f0;
-        display: flex; align-items: center; justify-content: space-between;
-        background: var(--bg-card); z-index: 10; flex-shrink: 0;
-    }
-    .header-title { font-weight: 800; font-size: 1.5rem; color: var(--primary-dark); }
-    .header-title span { color: var(--primary); }
-    .back-btn { background: none; border: none; font-size: 1.5rem; color: var(--primary-dark); cursor: pointer; display: none; }
-    .logout-btn { font-size: 0.85rem; color: var(--danger); font-weight: 600; cursor: pointer; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-    .auth-container { flex: 1; display: flex; flex-direction: column; justify-content: center; padding-bottom: 5vh; }
-    .btn {
-        width: 100%; padding: 16px; border-radius: var(--radius-md); border: none;
-        font-size: 1rem; font-weight: 600; cursor: pointer; margin-bottom: 12px;
-        display: flex; align-items: center; justify-content: center;
-    }
-    .btn-primary { background: var(--primary); color: white; }
-    .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
-    .btn-ghost { background: transparent; color: var(--text-muted); font-size: 0.9rem; }
-    .menu-item {
-        background: #fff; border: 1px solid #e2e8f0; padding: 20px;
-        border-radius: var(--radius-md); display: flex; justify-content: space-between;
-        align-items: center; cursor: pointer; margin-bottom: 16px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    }
-    .menu-item h3 { font-size: 1.1rem; color: var(--primary-dark); margin-bottom: 4px; }
-    .menu-item p { font-size: 0.85rem; color: var(--text-muted); }
-    .menu-arrow { color: var(--primary); }
-    .form-group { margin-bottom: 20px; }
-    .form-label { display: block; margin-bottom: 8px; font-size: 0.9rem; font-weight: 600; color: var(--primary-dark); }
-    .form-input { width: 100%; padding: 14px; border: 1px solid #cbd5e1; border-radius: var(--radius-md); font-size: 1rem; outline: none; background: white; }
-    /* Style select dropdown to match inputs */
-    select.form-input {
-        appearance: none; -webkit-appearance: none;
-        background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-        background-repeat: no-repeat; background-position: right 14px top 50%; background-size: 12px auto;
-    }
-    .password-wrapper { position: relative; display: flex; align-items: center; }
-    .form-input-pass { padding-right: 45px; }
-    .toggle-password-btn { position: absolute; right: 12px; background: none; border: none; cursor: pointer; color: var(--text-muted); }
-    .error-msg { color: var(--danger); font-size: 0.85rem; margin-top: 8px; min-height: 20px; text-align: center; }
-    .paywall-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
-    .headline { font-size: 1.5rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
-    .subtext { color: var(--text-muted); line-height: 1.5; margin-bottom: 30px; }
-    .logo-text-large { font-size: 3rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 10px; }
-    .logo-text-large span { color: var(--primary); }
-    /* --- PRICE DISPLAY STYLES --- */
-    .price-wrapper { margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; gap: 5px; }
-    .price-original { text-decoration: line-through; color: var(--text-muted); font-size: 1.1rem; }
-    .price-discounted { color: var(--primary-dark); font-weight: 800; font-size: 2rem; }
-    .price-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); font-weight: 700; margin-bottom: 5px;}
-    .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(2px); }
-    .modal-card { background: white; width: 90%; max-width: 350px; padding: 24px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center; }
-    .hidden { display: none !important; }
-</style>
+    <meta charset="UTF-8">
+    <meta id="viewport-meta" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ezi Nurse | Professional Nursing Education</title>
+    <style>
+        :root {
+            --primary: #01b9f1;
+            --primary-dark: #003b80;
+            --bg-card: #fffffd;
+            --secondary: #334155;
+            --accent: #f59e0b;
+            --bg-body: #f1f5f9;
+            --text-main: #003b80;
+            --text-muted: #64748b;
+            --danger: #ef4444;
+            --radius-md: 12px;
+            --shadow-lg: 0 10px 15px -3px rgba(0,59,128,0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
+        html, body { height: 100%; width: 100%; overflow: hidden; background-color: var(--bg-body); color: var(--text-main); }
+        body.zoom-mode { overflow: auto !important; touch-action: manipulation !important; }
+
+        #app {
+            width: 100%; max-width: 480px; margin: 0 auto; background: var(--bg-card);
+            height: 100%; position: relative; display: flex; flex-direction: column;
+            box-shadow: var(--shadow-lg); overflow: hidden;
+        }
+
+        /* --- WATERMARK: Diagonal & Faint --- */
+        .watermark-strip {
+            position: absolute; top: 50%; left: 50%; width: 200%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            z-index: 9999; pointer-events: none; display: flex;
+            align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 900;
+            color: rgba(0, 59, 128, 0.06); /* 6% Opacity */
+            user-select: none; white-space: nowrap;
+            letter-spacing: 6px; text-transform: uppercase;
+        }
+
+        /* --- FLOATING ZOOM BUTTON --- */
+        #fab-zoom {
+            position: absolute; bottom: 30px; left: 20px;
+            width: 50px; height: 50px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            display: none; /* Hidden by default */
+            align-items: center; justify-content: center;
+            font-size: 24px; color: white; cursor: pointer;
+            z-index: 100; transition: transform 0.2s ease;
+        }
+        #fab-zoom:active { transform: scale(0.9); }
+
+        .view {
+            flex: 1; padding: 24px; overflow-y: auto; display: none;
+            animation: fadeIn 0.3s ease-in-out; padding-bottom: 80px;
+        }
+        .view.active { display: flex; flex-direction: column; }
+
+        /* IFRAME CONTAINER */
+        #view-iframe.view {
+            padding: 0 !important; height: 100%; width: 100%; z-index: 50;
+            -webkit-overflow-scrolling: touch; overflow: auto; position: relative;
+        }
+
+        /* ZOOM LOGIC & SHIELD */
+        .iframe-wrapper {
+            width: 100%; height: 100%; transform-origin: 0 0;
+            transition: transform 0.3s ease, width 0.3s ease;
+            position: relative; /* Needed for shield positioning */
+        }
+        
+        /* The Shield: Blocks clicks on the top-right corner (Drive Pop-out button) */
+        .iframe-shield {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 70px;  /* Covers the button area */
+            height: 70px;
+            z-index: 60; /* sits on top of iframe */
+            /* background-color: rgba(255,0,0,0.3); /* UNCOMMENT TO TEST POSITION */
+            background-color: transparent; 
+        }
+
+        iframe { width: 100%; height: 100%; border: none; display: block; background: #fff; }
+
+        .header {
+            padding: 20px; border-bottom: 1px solid #e2e8f0;
+            display: flex; align-items: center; justify-content: space-between;
+            background: var(--bg-card); z-index: 10; flex-shrink: 0;
+        }
+        .header-title { font-weight: 800; font-size: 1.5rem; color: var(--primary-dark); }
+        .header-title span { color: var(--primary); }
+        
+        .back-btn {
+            background: none; border: none; font-size: 1.5rem;
+            color: var(--primary-dark); cursor: pointer; display: none;
+        }
+        .logout-btn {
+            font-size: 0.85rem; color: var(--danger); font-weight: 600; cursor: pointer;
+            display: none; /* Hidden by default in CSS to prevent flash */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .auth-container { flex: 1; display: flex; flex-direction: column; justify-content: center; padding-bottom: 5vh; }
+        
+        .btn {
+            width: 100%; padding: 16px; border-radius: var(--radius-md);
+            border: none; font-size: 1rem; font-weight: 600; cursor: pointer;
+            margin-bottom: 12px; display: flex; align-items: center; justify-content: center;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+        .btn-ghost { background: transparent; color: var(--text-muted); font-size: 0.9rem; }
+
+        .menu-item {
+            background: #fff; border: 1px solid #e2e8f0; padding: 20px;
+            border-radius: var(--radius-md); display: flex; justify-content: space-between;
+            align-items: center; cursor: pointer; margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .menu-item h3 { font-size: 1.1rem; color: var(--primary-dark); margin-bottom: 4px; }
+        .menu-item p { font-size: 0.85rem; color: var(--text-muted); }
+        .menu-arrow { color: var(--primary); }
+
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; margin-bottom: 8px; font-size: 0.9rem; font-weight: 600; color: var(--primary-dark); }
+        .form-input { width: 100%; padding: 14px; border: 1px solid #cbd5e1; border-radius: var(--radius-md); font-size: 1rem; outline: none; background: white; }
+        
+        /* Style select dropdown to match inputs */
+        select.form-input {
+            appearance: none; -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat; background-position: right 14px top 50%; background-size: 12px auto;
+        }
+
+        .password-wrapper { position: relative; display: flex; align-items: center; }
+        .form-input-pass { padding-right: 45px; }
+        .toggle-password-btn { position: absolute; right: 12px; background: none; border: none; cursor: pointer; color: var(--text-muted); }
+
+        .error-msg { color: var(--danger); font-size: 0.85rem; margin-top: 8px; min-height: 20px; text-align: center; }
+
+        .paywall-container {
+            flex: 1; display: flex; flex-direction: column; align-items: center;
+            justify-content: center; text-align: center; padding: 20px;
+        }
+        .headline { font-size: 1.5rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+        .subtext { color: var(--text-muted); line-height: 1.5; margin-bottom: 30px; }
+        .logo-text-large { font-size: 3rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 10px; }
+        .logo-text-large span { color: var(--primary); }
+
+        /* --- PRICE DISPLAY STYLES --- */
+        .price-wrapper { margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .price-original { text-decoration: line-through; color: var(--text-muted); font-size: 1.1rem; }
+        .price-discounted { color: var(--primary-dark); font-weight: 800; font-size: 2rem; }
+        .price-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); font-weight: 700; margin-bottom: 5px;}
+
+        .modal-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;
+            z-index: 100; backdrop-filter: blur(2px);
+        }
+        .modal-card {
+            background: white; width: 90%; max-width: 350px; padding: 24px;
+            border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center;
+        }
+        .hidden { display: none !important; }
+    </style>
 </head>
 <body>
+
 <div id="app">
     <div id="wm-diagonal" class="watermark-strip"></div>
+    
     <header class="header">
         <button class="back-btn" id="btn-back" onclick="app.goBack()">&#8592;</button>
         <div class="header-title" id="header-branding">Ezi<span>Nurse</span></div>
-        <div onclick="app.logout()" class="logout-btn" id="btn-logout">Logout</div>
+        <div onclick="app.logout()" class="logout-btn" id="btn-logout" style="display:none;">Logout</div>
     </header>
+
     <div id="fab-zoom" onclick="app.toggleZoom()">🔍</div>
 
     <div id="view-auth" class="view active">
@@ -129,7 +194,7 @@
                 <h1 class="headline" style="font-size: 1.25rem;">Welcome Back</h1>
                 <p class="subtext">Sign in to access your dashboard</p>
             </div>
-            
+
             <div id="form-login">
                 <div class="form-group"><label class="form-label">Email</label><input type="email" id="login-email" class="form-input" placeholder="nurse@example.com"></div>
                 <div class="form-group"><label class="form-label">Password</label>
@@ -147,12 +212,10 @@
                 <div class="form-group"><label class="form-label">Full Name</label><input type="text" id="signup-name" class="form-input" placeholder="Nurse Joy"></div>
                 <div class="form-group"><label class="form-label">Email</label><input type="email" id="signup-email" class="form-input" placeholder="new@example.com"></div>
                 <div class="form-group"><label class="form-label">Phone</label><input type="tel" id="signup-phone" class="form-input" placeholder="9876543210"></div>
-                
                 <div class="form-group">
                     <label class="form-label">How did you hear about us?</label>
                     <input type="text" id="signup-source" class="form-input" placeholder="e.g. Google, Friend, or Agent Name">
                 </div>
-
                 <div class="form-group"><label class="form-label">Password</label>
                     <div class="password-wrapper"><input type="password" id="signup-pass" class="form-input form-input-pass"><button class="toggle-password-btn" onclick="app.togglePassword('signup-pass', this)">👁</button></div>
                 </div>
@@ -166,6 +229,7 @@
     <div id="view-reset" class="view">
         <div class="auth-container">
             <h2 class="headline">Reset Password</h2>
+            
             <div id="reset-step-1">
                 <p class="subtext">Enter your email to receive a verification code.</p>
                 <div class="form-group"><label class="form-label">Email</label><input type="email" id="reset-email" class="form-input"></div>
@@ -173,6 +237,7 @@
                 <button id="btn-reset-req" class="btn btn-primary" onclick="app.requestResetCode()">Send Code</button>
                 <button class="btn btn-ghost" onclick="app.navTo('view-auth', true)">Cancel</button>
             </div>
+
             <div id="reset-step-2" class="hidden">
                 <p class="subtext">Enter the 6-digit code sent to your email.</p>
                 <div class="form-group"><label class="form-label">Code</label><input type="text" id="reset-code" class="form-input" placeholder="123456"></div>
@@ -427,13 +492,8 @@ const COURSES = {
     },
     '3D': { 'Systems': [{ label: '3D Models', link: '3dmodels.html' }] },
     'EXAMS': {
-        'NORCET': [
-            { label: 'NORCET 8 (English)', link: 'norcetenglish.html' },
-            { label: 'NORCET (Hindi)', link: 'norcethindi.html' }
-        ],
-        'ESCI': [
-            { label: 'ESCI Exclusive Q&A', link: 'esci.html' }
-        ]
+        'NORCET': [ { label: 'NORCET 8 (English)', link: 'norcetenglish.html' }, { label: 'NORCET (Hindi)', link: 'norcethindi.html' } ],
+        'ESCI': [ { label: 'ESCI Exclusive Q&A', link: 'esci.html' } ]
     },
     'REQ': { 'Documents': [{ label: 'Nursing Requirements', link: 'nursingrequirements.html' }] },
     'COMM': { 'Basics': [{ label: 'Communicative English', link: 'communicativeenglish.html' }] }
@@ -469,21 +529,13 @@ const app = {
                 }
                 if (event.state.viewId === 'view-submenu') {
                     const c = event.state.course || this.lockedCourseKey;
-                    if(c) {
-                        this.renderSubmenu(c);
-                        this.renderView('view-submenu');
-                    } else {
-                        this.renderView('view-dashboard');
-                    }
+                    if(c) { this.renderSubmenu(c); this.renderView('view-submenu'); }
+                    else { this.renderView('view-dashboard'); }
                 } else if (event.state.viewId === 'view-subjects') {
                     const c = event.state.course || this.lockedCourseKey;
                     const s = event.state.section || this.lockedCourseSection;
-                    if (c && s) {
-                        this.renderSubjectList(c, s);
-                        this.renderView('view-subjects');
-                    } else {
-                        this.renderView('view-dashboard');
-                    }
+                    if (c && s) { this.renderSubjectList(c, s); this.renderView('view-subjects'); }
+                    else { this.renderView('view-dashboard'); }
                 } else if (event.state.viewId === 'view-iframe') {
                     if(event.state.sourceUrl) this.openContent(event.state.sourceUrl, event.state.title, true);
                     else this.renderView('view-dashboard');
@@ -506,15 +558,9 @@ const app = {
     checkSessionNow: async function() {
         if (!this.currentUser) return;
         try {
-            const res = await fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify({ action: 'check_session', email: this.currentUser.email, deviceId: getDeviceId(), apiKey: API_KEY })
-            });
+            const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'check_session', email: this.currentUser.email, deviceId: getDeviceId(), apiKey: API_KEY }) });
             const data = await res.json();
-            if (!data.valid) {
-                alert("Logged out: Account active on another device.");
-                this.logout();
-            }
+            if (!data.valid) { alert("Logged out: Account active on another device."); this.logout(); }
         } catch(e) {}
     },
 
@@ -540,11 +586,9 @@ const app = {
         wrapper.style.transform = `scale(${this.zoomLevel})`;
         wrapper.style.width = `${100 / this.zoomLevel}%`;
         wrapper.style.height = `${100 / this.zoomLevel}%`;
-
-        if (this.zoomLevel > 1) {
-            wrapper.style.width = "100%";
-            wrapper.style.height = "auto";
-        }
+        
+        if (this.zoomLevel > 1) { wrapper.style.width = "100%"; wrapper.style.height = "auto"; }
+        
         wrapper.style.transform = 'none';
         if (this.zoomLevel === 1) wrapper.style.width = '100%';
         if (this.zoomLevel === 1.5) wrapper.style.width = '150%';
@@ -554,10 +598,7 @@ const app = {
 
     syncPermissions: async function(creds) {
         try {
-            const res = await fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify({ action:'login', email: creds.email, password: creds.password, deviceId: getDeviceId(), apiKey: API_KEY })
-            });
+            const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action:'login', email: creds.email, password: creds.password, deviceId: getDeviceId(), apiKey: API_KEY }) });
             const data = await res.json();
             if(data.result === 'success'){
                 this.currentUser = data.user;
@@ -576,14 +617,9 @@ const app = {
 
         if(!email || !pass) { errorDiv.textContent = "Fill all fields"; return; }
 
-        btn.textContent = "Logging in...";
-        btn.disabled = true;
-
+        btn.textContent = "Logging in..."; btn.disabled = true;
         try {
-            const res = await fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify({ action:'login', email, password:pass, deviceId:getDeviceId(), apiKey: API_KEY })
-            });
+            const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action:'login', email, password:pass, deviceId:getDeviceId(), apiKey: API_KEY }) });
             const data = await res.json();
             if(data.result === 'success'){
                 this.currentUser = data.user;
@@ -596,12 +632,8 @@ const app = {
             } else {
                 errorDiv.textContent = data.message;
             }
-        } catch(e) {
-            errorDiv.textContent = "Network Error";
-        } finally {
-            btn.textContent = "Login Securely";
-            btn.disabled = false;
-        }
+        } catch(e) { errorDiv.textContent = "Network Error"; }
+        finally { btn.textContent = "Login Securely"; btn.disabled = false; }
     },
 
     signup: async function() {
@@ -609,26 +641,16 @@ const app = {
         const email = document.getElementById('signup-email').value.trim();
         const pass = document.getElementById('signup-pass').value.trim();
         const phone = document.getElementById('signup-phone').value.trim();
-        
         const source = document.getElementById('signup-source').value.trim();
-        
         const errorDiv = document.getElementById('signup-error');
         const btn = document.getElementById('btn-signup-submit');
         errorDiv.textContent = "";
 
-        if(!name || !email || !pass || !phone || !source) {
-            errorDiv.textContent = "Fill all fields";
-            return;
-        }
+        if(!name || !email || !pass || !phone || !source) { errorDiv.textContent = "Fill all fields"; return; }
 
-        btn.textContent = "Creating...";
-        btn.disabled = true;
-
+        btn.textContent = "Creating..."; btn.disabled = true;
         try {
-            const res = await fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify({ action:'signup', name, email, password:pass, phone, source: source, deviceId:getDeviceId(), apiKey: API_KEY })
-            });
+            const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action:'signup', name, email, password:pass, phone, source: source, deviceId:getDeviceId(), apiKey: API_KEY }) });
             const data = await res.json();
             if(data.result === 'success'){
                 this.currentUser = data.user;
@@ -640,12 +662,8 @@ const app = {
             } else {
                 errorDiv.textContent = data.message;
             }
-        } catch(e) {
-            errorDiv.textContent = "Network Error";
-        } finally {
-            btn.textContent = "Create Account";
-            btn.disabled = false;
-        }
+        } catch(e) { errorDiv.textContent = "Network Error"; }
+        finally { btn.textContent = "Create Account"; btn.disabled = false; }
     },
 
     requestResetCode: async function() {
@@ -653,30 +671,18 @@ const app = {
         const btn = document.getElementById('btn-reset-req');
         const err = document.getElementById('reset-error-1');
         err.textContent = "";
-
         if(!email) { err.textContent = "Enter email"; return; }
 
-        btn.textContent = "Sending...";
-        btn.disabled = true;
-
+        btn.textContent = "Sending..."; btn.disabled = true;
         try {
-            const res = await fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify({ action:'reset_request', email: email, apiKey: API_KEY })
-            });
+            const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action:'reset_request', email: email, apiKey: API_KEY }) });
             const data = await res.json();
             if(data.result === 'success') {
                 document.getElementById('reset-step-1').classList.add('hidden');
                 document.getElementById('reset-step-2').classList.remove('hidden');
-            } else {
-                err.textContent = data.message;
-            }
-        } catch(e) {
-            err.textContent = "Network Error";
-        } finally {
-            btn.textContent = "Send Code";
-            btn.disabled = false;
-        }
+            } else { err.textContent = data.message; }
+        } catch(e) { err.textContent = "Network Error"; }
+        finally { btn.textContent = "Send Code"; btn.disabled = false; }
     },
 
     confirmResetPassword: async function() {
@@ -689,28 +695,17 @@ const app = {
 
         if(!code || !newPass) { err.textContent = "Fill all fields"; return; }
 
-        btn.textContent = "Updating...";
-        btn.disabled = true;
-
+        btn.textContent = "Updating..."; btn.disabled = true;
         try {
-            const res = await fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify({ action:'reset_confirm', email: email, code: code, newPassword: newPass, apiKey: API_KEY })
-            });
+            const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action:'reset_confirm', email: email, code: code, newPassword: newPass, apiKey: API_KEY }) });
             const data = await res.json();
             if(data.result === 'success') {
                 alert("Password Updated! Please login.");
                 this.resetResetView();
                 this.navTo('view-auth', true);
-            } else {
-                err.textContent = data.message;
-            }
-        } catch(e) {
-            err.textContent = "Network Error";
-        } finally {
-            btn.textContent = "Update Password";
-            btn.disabled = false;
-        }
+            } else { err.textContent = data.message; }
+        } catch(e) { err.textContent = "Network Error"; }
+        finally { btn.textContent = "Update Password"; btn.disabled = false; }
     },
 
     resetResetView: function() {
@@ -726,24 +721,14 @@ const app = {
     toggleAuthMode: function() {
         const login = document.getElementById('form-login');
         const signup = document.getElementById('form-signup');
-        if(login.classList.contains('hidden')){
-            signup.classList.add('hidden');
-            login.classList.remove('hidden');
-        } else {
-            login.classList.add('hidden');
-            signup.classList.remove('hidden');
-        }
+        if(login.classList.contains('hidden')){ signup.classList.add('hidden'); login.classList.remove('hidden'); }
+        else { login.classList.add('hidden'); signup.classList.remove('hidden'); }
     },
 
     togglePassword: function(id, btn) {
         const el = document.getElementById(id);
-        if(el.type === 'password') {
-            el.type = 'text';
-            btn.style.color = 'var(--primary)';
-        } else {
-            el.type = 'password';
-            btn.style.color = 'var(--text-muted)';
-        }
+        if(el.type === 'password') { el.type = 'text'; btn.style.color = 'var(--primary)'; }
+        else { el.type = 'password'; btn.style.color = 'var(--text-muted)'; }
     },
 
     logout: function() {
@@ -774,11 +759,8 @@ const app = {
         if (viewId !== 'view-iframe' && iframeContainer) iframeContainer.innerHTML = '';
         
         const fab = document.getElementById('fab-zoom');
-        if (viewId === 'view-iframe') {
-            fab.style.display = 'flex';
-        } else {
-            fab.style.display = 'none';
-        }
+        if (viewId === 'view-iframe') { fab.style.display = 'flex'; }
+        else { fab.style.display = 'none'; }
 
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         const target = document.getElementById(viewId);
@@ -788,30 +770,24 @@ const app = {
         const isDash = viewId === 'view-dashboard';
         
         document.getElementById('btn-back').style.display = (isAuth || isDash) ? 'none' : 'block';
+        
+        // Ensure logout is hidden/shown correctly via JS as well
         document.getElementById('btn-logout').style.display = isAuth ? 'none' : 'block';
+        
         document.getElementById('header-branding').style.opacity = isAuth ? '0' : '1';
     },
 
     goBack: function() {
-        if(!document.getElementById('modal-exit').classList.contains('hidden')) {
-            this.cancelExit();
-            return;
-        }
+        if(!document.getElementById('modal-exit').classList.contains('hidden')) { this.cancelExit(); return; }
         window.history.back();
     },
 
-    showExitModal: function() {
-        document.getElementById('modal-exit').classList.remove('hidden');
-    },
-
+    showExitModal: function() { document.getElementById('modal-exit').classList.remove('hidden'); },
     cancelExit: function() {
         document.getElementById('modal-exit').classList.add('hidden');
         history.pushState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard');
     },
-
-    confirmExit: function() {
-        window.history.back();
-    },
+    confirmExit: function() { window.history.back(); },
 
     navToCourse: function(key) {
         this.renderSubmenu(key);
@@ -823,9 +799,7 @@ const app = {
         list.innerHTML = '';
         document.getElementById('submenu-title').textContent = key;
         document.getElementById('submenu-subtitle').textContent = "Select Option";
-        
         const sections = key === '3D' ? Object.keys(COURSES['3D']) : Object.keys(COURSES[key]);
-        
         sections.forEach(sec => {
             const item = document.createElement('div');
             item.className = 'menu-item';
@@ -864,7 +838,6 @@ const app = {
         list.innerHTML = '';
         document.getElementById('subject-title').textContent = section;
         const subjects = COURSES[course][section];
-        
         subjects.forEach(sub => {
             const item = document.createElement('div');
             item.className = 'menu-item';
@@ -887,42 +860,34 @@ const app = {
         const iframe = document.createElement('iframe');
         iframe.id = "content-frame";
         iframe.src = url;
-        
-        // --- RESTORED: FULLSCREEN ATTRIBUTES ---
-        // Google Drive and other embeds require these attributes to allow the full-screen button to work.
-        iframe.setAttribute('allowfullscreen', 'true');
-        iframe.setAttribute('webkitallowfullscreen', 'true'); // Chrome/Safari legacy
-        iframe.setAttribute('mozallowfullscreen', 'true');    // Firefox legacy
+
+        // --- FULLSCREEN ATTRIBUTES (Restored) ---
+        iframe.allowFullscreen = true;
+        iframe.setAttribute('webkitallowfullscreen', 'true');
+        iframe.setAttribute('mozallowfullscreen', 'true');
         iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen');
+        
+        // --- NOTE: 'sandbox' attribute REMOVED to restore fullscreen ---
+        
+        // --- SHIELD: Physically blocks the "Pop-out" button top-right ---
+        const shield = document.createElement('div');
+        shield.className = 'iframe-shield';
+        wrapper.appendChild(shield);
 
         wrapper.appendChild(iframe);
         container.innerHTML = '';
         container.appendChild(wrapper);
-        this.zoomLevel = 1; // Reset zoom on new page
+        this.zoomLevel = 1; 
     },
-    
+
     renderPaywallInfo: function(course, section) {
         const display = document.getElementById('paywall-price-display');
         let html = '';
         if (course === 'BSc') {
-            html = `
-                <div class="price-label">Special Offer</div>
-                <div>
-                    <span class="price-original">₹12,000</span>
-                    <span class="price-discounted">₹5,999</span>
-                </div>
-            `;
+            html = ` <div class="price-label">Special Offer</div> <div> <span class="price-original">₹12,000</span> <span class="price-discounted">₹5,999</span> </div> `;
         } else if (course === 'GNM') {
-            html = `
-                <div class="price-label">Special Offer</div>
-                <div>
-                    <span class="price-original">₹14,000</span>
-                    <span class="price-discounted">₹5,800</span>
-                </div>
-            `;
-        } else {
-            html = '';
-        }
+            html = ` <div class="price-label">Special Offer</div> <div> <span class="price-original">₹14,000</span> <span class="price-discounted">₹5,800</span> </div> `;
+        } else { html = ''; }
         display.innerHTML = html;
     },
 
@@ -938,9 +903,7 @@ const app = {
     }
 };
 
-window.onload = function() {
-    app.init();
-};
+window.onload = function() { app.init(); };
 </script>
 </body>
 </html>
