@@ -95,7 +95,10 @@
         
         .form-group { margin-bottom: 20px; }
         .form-label { display: block; margin-bottom: 8px; font-size: 0.9rem; font-weight: 600; color: var(--primary-dark); }
-        .form-input { width: 100%; padding: 14px; border: 1px solid #cbd5e1; border-radius: var(--radius-md); font-size: 1rem; outline: none; }
+        .form-input { width: 100%; padding: 14px; border: 1px solid #cbd5e1; border-radius: var(--radius-md); font-size: 1rem; outline: none; background: white; }
+        /* Style select dropdown to match inputs */
+        select.form-input { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"); background-repeat: no-repeat; background-position: right 14px top 50%; background-size: 12px auto; }
+        
         .password-wrapper { position: relative; display: flex; align-items: center; }
         .form-input-pass { padding-right: 45px; }
         .toggle-password-btn { position: absolute; right: 12px; background: none; border: none; cursor: pointer; color: var(--text-muted); }
@@ -156,6 +159,25 @@
                 <div class="form-group"><label class="form-label">Full Name</label><input type="text" id="signup-name" class="form-input" placeholder="Nurse Joy"></div>
                 <div class="form-group"><label class="form-label">Email</label><input type="email" id="signup-email" class="form-input" placeholder="new@example.com"></div>
                 <div class="form-group"><label class="form-label">Phone</label><input type="tel" id="signup-phone" class="form-input" placeholder="9876543210"></div>
+                
+                <div class="form-group">
+                    <label class="form-label">How did you hear about us?</label>
+                    <select id="signup-source" class="form-input" onchange="app.toggleAgentInput()">
+                        <option value="" disabled selected>Select an option</option>
+                        <option value="Social Media">Social Media (Instagram/Facebook)</option>
+                        <option value="Friend/Colleague">Friend or Colleague</option>
+                        <option value="College/Teacher">College or Teacher</option>
+                        <option value="Google Search">Google Search</option>
+                        <option value="Agent">Agent</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div id="agent-input-container" class="form-group hidden">
+                    <label class="form-label">Agent Name</label>
+                    <input type="text" id="signup-agent-name" class="form-input" placeholder="Enter Agent Name">
+                </div>
+
                 <div class="form-group"><label class="form-label">Password</label>
                     <div class="password-wrapper"><input type="password" id="signup-pass" class="form-input form-input-pass"><button class="toggle-password-btn" onclick="app.togglePassword('signup-pass', this)">👁</button></div>
                 </div>
@@ -244,7 +266,7 @@
 </div>
 
 <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbyET634OhSSzGUnIX6mZg5UpQpGrCRt_aqp3nLGQUgIDG7wQj4GOvK6KTu0umF1iL32/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbwjByTFMqWtWVAU29OKEPKg4YM63eHGfYUtJB-SUhgatdB0AkEw2miu8nLu96vkqk47/exec";
     const API_KEY = "EZI_SECURE_8829_XJKS_2910";
 
     const PAYMENT_LINKS = {
@@ -576,15 +598,49 @@
             } catch(e) { errorDiv.textContent = "Network Error"; } finally { btn.textContent = "Login Securely"; btn.disabled = false; }
         },
         
+        // --- NEW: TOGGLE AGENT INPUT ---
+        toggleAgentInput: function() {
+            const source = document.getElementById('signup-source').value;
+            const agentContainer = document.getElementById('agent-input-container');
+            if (source === 'Agent') {
+                agentContainer.classList.remove('hidden');
+            } else {
+                agentContainer.classList.add('hidden');
+                document.getElementById('signup-agent-name').value = ""; // Clear input if hidden
+            }
+        },
+
         signup: async function() {
             const name = document.getElementById('signup-name').value.trim();
             const email = document.getElementById('signup-email').value.trim(); const pass = document.getElementById('signup-pass').value.trim();
-            const phone = document.getElementById('signup-phone').value.trim(); const errorDiv = document.getElementById('signup-error');
+            const phone = document.getElementById('signup-phone').value.trim();
+            
+            // GET SOURCE AND AGENT NAME LOGIC
+            const sourceSelect = document.getElementById('signup-source').value;
+            const agentName = document.getElementById('signup-agent-name').value.trim();
+            
+            const errorDiv = document.getElementById('signup-error');
             const btn = document.getElementById('btn-signup-submit');
-            errorDiv.textContent = ""; if(!name || !email || !pass || !phone) { errorDiv.textContent = "Fill all fields"; return; }
+            
+            errorDiv.textContent = ""; 
+            
+            // Validation
+            if(!name || !email || !pass || !phone || !sourceSelect) { 
+                errorDiv.textContent = "Fill all fields"; return; 
+            }
+            
+            // Check if Agent was selected but no name provided
+            if(sourceSelect === 'Agent' && !agentName) {
+                errorDiv.textContent = "Please enter Agent Name"; return;
+            }
+            
+            // LOGIC: If 'Agent' is selected, send the agentName as the source. 
+            // Otherwise, send the selected dropdown value.
+            const finalSource = (sourceSelect === 'Agent') ? agentName : sourceSelect;
+
             btn.textContent = "Creating..."; btn.disabled = true;
             try {
-                const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action:'signup', name, email, password:pass, phone, deviceId:getDeviceId(), apiKey: API_KEY }) });
+                const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action:'signup', name, email, password:pass, phone, source: finalSource, deviceId:getDeviceId(), apiKey: API_KEY }) });
                 const data = await res.json();
                 if(data.result === 'success'){
                     this.currentUser = data.user; localStorage.setItem('eziUser', JSON.stringify(data.user));
