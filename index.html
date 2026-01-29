@@ -87,7 +87,7 @@
     .form-group { margin-bottom: 20px; }
     .form-label { display: block; margin-bottom: 8px; font-size: 0.9rem; font-weight: 600; color: var(--primary-dark); }
     .form-input { width: 100%; padding: 14px; border: 1px solid #cbd5e1; border-radius: var(--radius-md); font-size: 1rem; outline: none; background: white; }
-    /* Style select dropdown to match inputs (Kept for potential future use, though select is removed) */
+    /* Style select dropdown to match inputs */
     select.form-input {
         appearance: none; -webkit-appearance: none;
         background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
@@ -152,6 +152,7 @@
                     <label class="form-label">How did you hear about us?</label>
                     <input type="text" id="signup-source" class="form-input" placeholder="e.g. Google, Friend, or Agent Name">
                 </div>
+
                 <div class="form-group"><label class="form-label">Password</label>
                     <div class="password-wrapper"><input type="password" id="signup-pass" class="form-input form-input-pass"><button class="toggle-password-btn" onclick="app.togglePassword('signup-pass', this)">👁</button></div>
                 </div>
@@ -609,14 +610,12 @@ const app = {
         const pass = document.getElementById('signup-pass').value.trim();
         const phone = document.getElementById('signup-phone').value.trim();
         
-        // --- NEW SIMPLIFIED LOGIC ---
         const source = document.getElementById('signup-source').value.trim();
         
         const errorDiv = document.getElementById('signup-error');
         const btn = document.getElementById('btn-signup-submit');
         errorDiv.textContent = "";
 
-        // Validation including the new text input
         if(!name || !email || !pass || !phone || !source) {
             errorDiv.textContent = "Fill all fields";
             return;
@@ -628,7 +627,6 @@ const app = {
         try {
             const res = await fetch(API_URL, {
                 method: 'POST',
-                // Sending the text input value directly as 'source'
                 body: JSON.stringify({ action:'signup', name, email, password:pass, phone, source: source, deviceId:getDeviceId(), apiKey: API_KEY })
             });
             const data = await res.json();
@@ -775,7 +773,6 @@ const app = {
         const iframeContainer = document.getElementById('view-iframe');
         if (viewId !== 'view-iframe' && iframeContainer) iframeContainer.innerHTML = '';
         
-        // SHOW/HIDE ZOOM BUTTON
         const fab = document.getElementById('fab-zoom');
         if (viewId === 'view-iframe') {
             fab.style.display = 'flex';
@@ -891,13 +888,19 @@ const app = {
         iframe.id = "content-frame";
         iframe.src = url;
         
+        // --- RESTORED: FULLSCREEN ATTRIBUTES ---
+        // Google Drive and other embeds require these attributes to allow the full-screen button to work.
+        iframe.setAttribute('allowfullscreen', 'true');
+        iframe.setAttribute('webkitallowfullscreen', 'true'); // Chrome/Safari legacy
+        iframe.setAttribute('mozallowfullscreen', 'true');    // Firefox legacy
+        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen');
+
         wrapper.appendChild(iframe);
         container.innerHTML = '';
         container.appendChild(wrapper);
         this.zoomLevel = 1; // Reset zoom on new page
     },
     
-    // --- NEW PAYMENT & PRICING LOGIC ---
     renderPaywallInfo: function(course, section) {
         const display = document.getElementById('paywall-price-display');
         let html = '';
@@ -918,8 +921,6 @@ const app = {
                 </div>
             `;
         } else {
-            // Default if price isn't specified for other courses (MSc, etc)
-            // We just show a generic "Unlock" message or nothing in the price box
             html = '';
         }
         display.innerHTML = html;
@@ -928,18 +929,11 @@ const app = {
     purchaseLockedContent: function() {
         const course = this.lockedCourseKey;
         const section = this.lockedCourseSection || 'Systems';
-        
-        // Logic: Try to find the Discounted (_D) link first.
-        // If not found, fallback to Full (_F) link just in case.
         const discountKey = `${course}_${section}_D`;
         const fullKey = `${course}_${section}_F`;
-        
         let url = PAYMENT_LINKS[discountKey];
         if (!url) url = PAYMENT_LINKS[fullKey];
-        
-        // Fallback safety
         if (!url) url = `https://www.razorpay.com/fallback_${course}_${section}`;
-        
         window.open(url, '_blank');
     }
 };
