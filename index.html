@@ -28,31 +28,17 @@
             box-shadow: var(--shadow-lg); overflow: hidden;
         }
 
-        /* --- WATERMARK: Diagonal & Faint --- */
+        /* --- WATERMARK --- */
         .watermark-strip {
             position: absolute; top: 50%; left: 50%; width: 200%;
             transform: translate(-50%, -50%) rotate(-45deg);
             z-index: 9999; pointer-events: none; display: flex;
             align-items: center; justify-content: center;
             font-size: 13px; font-weight: 900;
-            color: rgba(0, 59, 128, 0.06); /* 6% Opacity */
+            color: rgba(0, 59, 128, 0.06); 
             user-select: none; white-space: nowrap;
             letter-spacing: 6px; text-transform: uppercase;
         }
-
-        /* --- FLOATING ZOOM BUTTON --- */
-        #fab-zoom {
-            position: absolute; bottom: 30px; left: 20px;
-            width: 50px; height: 50px;
-            background-color: var(--primary);
-            border-radius: 50%;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            display: none; /* Hidden by default */
-            align-items: center; justify-content: center;
-            font-size: 24px; color: white; cursor: pointer;
-            z-index: 100; transition: transform 0.2s ease;
-        }
-        #fab-zoom:active { transform: scale(0.9); }
 
         .view {
             flex: 1; padding: 24px; overflow-y: auto; display: none;
@@ -60,33 +46,7 @@
         }
         .view.active { display: flex; flex-direction: column; }
 
-        /* IFRAME CONTAINER */
-        #view-iframe.view {
-            padding: 0 !important; height: 100%; width: 100%; z-index: 50;
-            -webkit-overflow-scrolling: touch; overflow: auto; position: relative;
-        }
-
-        /* ZOOM LOGIC & SHIELD */
-        .iframe-wrapper {
-            width: 100%; height: 100%; transform-origin: 0 0;
-            transition: transform 0.3s ease, width 0.3s ease;
-            position: relative; /* Needed for shield positioning */
-        }
-        
-        /* The Shield: Blocks clicks on the top-right corner (Drive Pop-out button) */
-        .iframe-shield {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 70px;  /* Covers the button area */
-            height: 70px;
-            z-index: 60; /* sits on top of iframe */
-            /* background-color: rgba(255,0,0,0.3); /* UNCOMMENT TO TEST POSITION */
-            background-color: transparent; 
-        }
-
-        iframe { width: 100%; height: 100%; border: none; display: block; background: #fff; }
-
+        /* HEADER */
         .header {
             padding: 20px; border-bottom: 1px solid #e2e8f0;
             display: flex; align-items: center; justify-content: space-between;
@@ -101,7 +61,7 @@
         }
         .logout-btn {
             font-size: 0.85rem; color: var(--danger); font-weight: 600; cursor: pointer;
-            display: none; /* Hidden by default in CSS to prevent flash */
+            display: none; /* Hidden by default */
         }
 
         @keyframes fadeIn {
@@ -134,7 +94,6 @@
         .form-label { display: block; margin-bottom: 8px; font-size: 0.9rem; font-weight: 600; color: var(--primary-dark); }
         .form-input { width: 100%; padding: 14px; border: 1px solid #cbd5e1; border-radius: var(--radius-md); font-size: 1rem; outline: none; background: white; }
         
-        /* Style select dropdown to match inputs */
         select.form-input {
             appearance: none; -webkit-appearance: none;
             background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
@@ -156,7 +115,7 @@
         .logo-text-large { font-size: 3rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 10px; }
         .logo-text-large span { color: var(--primary); }
 
-        /* --- PRICE DISPLAY STYLES --- */
+        /* PRICE DISPLAY STYLES */
         .price-wrapper { margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; gap: 5px; }
         .price-original { text-decoration: line-through; color: var(--text-muted); font-size: 1.1rem; }
         .price-discounted { color: var(--primary-dark); font-weight: 800; font-size: 2rem; }
@@ -184,8 +143,6 @@
         <div class="header-title" id="header-branding">Ezi<span>Nurse</span></div>
         <div onclick="app.logout()" class="logout-btn" id="btn-logout" style="display:none;">Logout</div>
     </header>
-
-    <div id="fab-zoom" onclick="app.toggleZoom()">🔍</div>
 
     <div id="view-auth" class="view active">
         <div class="auth-container">
@@ -503,16 +460,37 @@ const app = {
     currentUser: null,
     lockedCourseKey: null,
     lockedCourseSection: null,
-    zoomLevel: 1,
 
     init: function() {
         const savedUser = localStorage.getItem('eziUser');
         if (savedUser) {
             this.currentUser = JSON.parse(savedUser);
             this.updateWatermark();
-            history.replaceState({ viewId: 'view-exit-guard' }, 'Exit Guard', '#exit');
-            history.pushState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard');
-            this.renderView('view-dashboard');
+            
+            // --- FIX FOR BACK BUTTON RESTORATION ---
+            // If the user is returning from a Drive link, these values will exist.
+            const restoreCourse = localStorage.getItem('ezi_restore_course');
+            const restoreSection = localStorage.getItem('ezi_restore_section');
+            
+            // Clear the restored state so next fresh load goes to Dashboard
+            localStorage.removeItem('ezi_restore_course');
+            localStorage.removeItem('ezi_restore_section');
+
+            if (restoreCourse && restoreSection) {
+                // Restore logic: Initialize history stack properly so Back works
+                history.replaceState({ viewId: 'view-exit-guard' }, 'Exit Guard', '#exit');
+                history.pushState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard');
+                this.renderView('view-dashboard'); // Render background
+                
+                // Immediately open the subject list they came from
+                this.openSubjectList(restoreCourse, restoreSection);
+            } else {
+                // Normal Dashboard Load
+                history.replaceState({ viewId: 'view-exit-guard' }, 'Exit Guard', '#exit');
+                history.pushState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard');
+                this.renderView('view-dashboard');
+            }
+
             const savedAuth = localStorage.getItem('eziAuth');
             if(savedAuth) { try { this.syncPermissions(JSON.parse(savedAuth)); } catch(e){} }
         } else {
@@ -536,9 +514,6 @@ const app = {
                     const s = event.state.section || this.lockedCourseSection;
                     if (c && s) { this.renderSubjectList(c, s); this.renderView('view-subjects'); }
                     else { this.renderView('view-dashboard'); }
-                } else if (event.state.viewId === 'view-iframe') {
-                    if(event.state.sourceUrl) this.openContent(event.state.sourceUrl, event.state.title, true);
-                    else this.renderView('view-dashboard');
                 } else {
                     this.renderView(event.state.viewId);
                 }
@@ -574,26 +549,6 @@ const app = {
         } else {
             strip.style.display = 'none';
         }
-    },
-
-    toggleZoom: function() {
-        const wrapper = document.getElementById('iframe-wrapper');
-        if(!wrapper) return;
-        if (this.zoomLevel === 1) this.zoomLevel = 1.5;
-        else if (this.zoomLevel === 1.5) this.zoomLevel = 2.0;
-        else this.zoomLevel = 1;
-
-        wrapper.style.transform = `scale(${this.zoomLevel})`;
-        wrapper.style.width = `${100 / this.zoomLevel}%`;
-        wrapper.style.height = `${100 / this.zoomLevel}%`;
-        
-        if (this.zoomLevel > 1) { wrapper.style.width = "100%"; wrapper.style.height = "auto"; }
-        
-        wrapper.style.transform = 'none';
-        if (this.zoomLevel === 1) wrapper.style.width = '100%';
-        if (this.zoomLevel === 1.5) wrapper.style.width = '150%';
-        if (this.zoomLevel === 2.0) wrapper.style.width = '200%';
-        wrapper.style.height = '100%';
     },
 
     syncPermissions: async function(creds) {
@@ -735,6 +690,8 @@ const app = {
         this.currentUser = null;
         localStorage.removeItem('eziUser');
         localStorage.removeItem('eziAuth');
+        localStorage.removeItem('ezi_restore_course'); 
+        localStorage.removeItem('ezi_restore_section');
         this.updateWatermark();
         this.navTo('view-auth', true);
     },
@@ -755,13 +712,6 @@ const app = {
     },
 
     renderView: function(viewId) {
-        const iframeContainer = document.getElementById('view-iframe');
-        if (viewId !== 'view-iframe' && iframeContainer) iframeContainer.innerHTML = '';
-        
-        const fab = document.getElementById('fab-zoom');
-        if (viewId === 'view-iframe') { fab.style.display = 'flex'; }
-        else { fab.style.display = 'none'; }
-
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         const target = document.getElementById(viewId);
         if(target) target.classList.add('active');
@@ -770,10 +720,7 @@ const app = {
         const isDash = viewId === 'view-dashboard';
         
         document.getElementById('btn-back').style.display = (isAuth || isDash) ? 'none' : 'block';
-        
-        // Ensure logout is hidden/shown correctly via JS as well
         document.getElementById('btn-logout').style.display = isAuth ? 'none' : 'block';
-        
         document.getElementById('header-branding').style.opacity = isAuth ? '0' : '1';
     },
 
@@ -829,6 +776,8 @@ const app = {
     },
 
     openSubjectList: function(course, section) {
+        this.lockedCourseKey = course;
+        this.lockedCourseSection = section;
         this.renderSubjectList(course, section);
         this.navTo('view-subjects', false, { course: course, section: section });
     },
@@ -847,37 +796,17 @@ const app = {
         });
     },
 
-    openContent: function(url, title, fromHistory = false) {
-        const container = document.getElementById('view-iframe');
-        if (!fromHistory) this.navTo('view-iframe', false, { sourceUrl: url, title: title });
-        else this.renderView('view-iframe');
-
-        // WRAPPER FOR ZOOMING
-        const wrapper = document.createElement('div');
-        wrapper.id = 'iframe-wrapper';
-        wrapper.className = 'iframe-wrapper';
-
-        const iframe = document.createElement('iframe');
-        iframe.id = "content-frame";
-        iframe.src = url;
-
-        // --- FULLSCREEN ATTRIBUTES (Restored) ---
-        iframe.allowFullscreen = true;
-        iframe.setAttribute('webkitallowfullscreen', 'true');
-        iframe.setAttribute('mozallowfullscreen', 'true');
-        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen');
+    openContent: function(url, title) {
+        // --- FIX: NO EMBEDDING, NAVIGATE DIRECTLY ---
         
-        // --- NOTE: 'sandbox' attribute REMOVED to restore fullscreen ---
-        
-        // --- SHIELD: Physically blocks the "Pop-out" button top-right ---
-        const shield = document.createElement('div');
-        shield.className = 'iframe-shield';
-        wrapper.appendChild(shield);
+        // 1. Save state so when user hits BACK, we know where to return
+        localStorage.setItem('ezi_restore_course', this.lockedCourseKey);
+        localStorage.setItem('ezi_restore_section', this.lockedCourseSection);
 
-        wrapper.appendChild(iframe);
-        container.innerHTML = '';
-        container.appendChild(wrapper);
-        this.zoomLevel = 1; 
+        // 2. Navigate the whole window to the URL
+        // This solves Fullscreen (native browser handles it)
+        // This solves "Pop out" button (you are already at the destination)
+        window.location.href = url;
     },
 
     renderPaywallInfo: function(course, section) {
