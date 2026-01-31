@@ -38,7 +38,9 @@
         .modal-header { height: 60px; background: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; }
         .btn-close { background: var(--danger); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
         .modal-body { flex: 1; background: #f3f4f6; position: relative; padding: 20px; display:flex; justify-content:center; overflow-y: auto;}
-        .iframe-res { width: 100%; height: 100%; border: none; background: white; }
+        
+        /* Removed iframe-res style as we aren't using iframes anymore */
+        
         .quiz-container { background: white; width: 100%; max-width: 800px; padding: 30px; border-radius: 12px; margin-bottom: 50px; }
         .quiz-option { padding: 12px 15px; border: 2px solid var(--gray-200); border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
         .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
@@ -171,17 +173,14 @@
         if(arrow) arrow.innerText = content.classList.contains('active') ? '🔼' : '🔽';
     }
 
-    // --- 3. OPEN RESOURCE (FIXED VIDEO + BACK BUTTON) ---
+    // --- 3. OPEN RESOURCE (NO MORE EMBEDDED VIEW) ---
     function openResource(type, url, title) {
-        // PUSH STATE: Fixes Back Button Logic
-        history.pushState({ modalOpen: true }, null, '#resource');
-
-        const modal = document.getElementById('app-modal');
-        const body = document.getElementById('modal-body');
-        document.getElementById('modal-title').textContent = title;
-        modal.style.display = 'flex';
+        // This removes the "embedded view". 
+        // Instead of opening a modal, we redirect the browser to the URL.
+        // This puts the anatomy app in the history, so pressing "Back" works perfectly.
         
         let finalUrl = url;
+        // Keep the preview logic for better mobile display on Drive links
         if (url.includes('drive.google.com')) { 
             finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview'); 
         }
@@ -189,24 +188,15 @@
              if (url.includes('/viewer/')) finalUrl = url.replace('/viewer/', '/widget/');
              else finalUrl = url.replace('/view', '/widget'); 
         }
-        
-        // --- VIDEO FIX: ADDED SANDBOX AND ALLOW ATTRIBUTES ---
-        body.innerHTML = `
-            <iframe 
-                class="iframe-res" 
-                src="${finalUrl}" 
-                width="100%" 
-                height="100%" 
-                frameborder="0"
-                sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-presentation"
-                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen">
-            </iframe>`;
+
+        // Navigate the current window to the resource
+        window.location.href = finalUrl;
     }
 
-    // --- 4. START QUIZ (FIXED BACK BUTTON) ---
+    // --- 4. START QUIZ (MODAL KEPT FOR QUIZ ONLY) ---
     function startQuiz(unitId) {
-        // PUSH STATE: Add history entry for Quiz
-        history.pushState({ modalOpen: true }, null, '#quiz');
+        // PUSH STATE: Add history entry for Quiz so back button closes it
+        history.pushState({ quizOpen: true }, null, '#quiz');
 
         score = 0;
         const questions = QUIZ_DATA[unitId];
@@ -240,21 +230,22 @@
         document.getElementById('score-display').textContent = 'Score: ' + score + ' / ' + QUIZ_DATA[unitId].length;
     }
 
-    // --- 6. CLOSE MODAL (MANUAL CLICK) ---
+    // --- 6. CLOSE MODAL (QUIZ ONLY) ---
     function closeModal() { 
         const modal = document.getElementById('app-modal');
         modal.style.display = 'none'; 
         document.getElementById('modal-body').innerHTML = ""; 
         
-        // IMPORTANT: Manually go back in history if we are closing via button
-        if ((history.state && history.state.modalOpen) || window.location.hash === '#resource' || window.location.hash === '#quiz') {
+        // Go back in history if we are closing via button (removes the hash)
+        if (history.state && history.state.quizOpen) {
             history.back();
         }
     }
 
-    // --- 7. HANDLE DEVICE BACK BUTTON ---
+    // --- 7. HANDLE DEVICE BACK BUTTON FOR QUIZ ---
     window.onpopstate = function(event) {
         const modal = document.getElementById('app-modal');
+        // If modal is open (only happens for quizzes now), close it
         if (modal.style.display === 'flex') {
             modal.style.display = 'none';
             document.getElementById('modal-body').innerHTML = '';
