@@ -878,10 +878,23 @@ const app = {
     },
 
     openContent: function(url, title, fromHistory = false) {
-        // --- MODIFICATION HERE: REMOVED IFRAME LOADING LOGIC ---
-        // Instead of loading content inside an iframe in the app,
-        // we navigate directly to the file.
-        window.location.href = url;
+        const container = document.getElementById('view-iframe');
+        if (!fromHistory) this.navTo('view-iframe', false, { sourceUrl: url, title: title });
+        else this.renderView('view-iframe');
+
+        // WRAPPER FOR ZOOMING
+        const wrapper = document.createElement('div');
+        wrapper.id = 'iframe-wrapper';
+        wrapper.className = 'iframe-wrapper';
+
+        const iframe = document.createElement('iframe');
+        iframe.id = "content-frame";
+        iframe.src = url;
+        
+        wrapper.appendChild(iframe);
+        container.innerHTML = '';
+        container.appendChild(wrapper);
+        this.zoomLevel = 1; // Reset zoom on new page
     },
     
     // --- NEW PAYMENT & PRICING LOGIC ---
