@@ -6,566 +6,117 @@
 <title>Ezi Nurse | Professional Nursing Education</title>
 <style>
     :root {
-        --primary: #0EA5E9;
-        --primary-dark: #0C4A6E;
-        --primary-light: #E0F2FE;
-        --bg-card: #FFFFFF;
+        --primary: #01b9f1;
+        --primary-dark: #003b80;
+        --bg-card: #fffffd;
         --secondary: #334155;
-        --accent: #F59E0B;
-        --bg-body: #F8FAFC;
-        --text-main: #0F172A;
-        --text-muted: #64748B;
-        --danger: #EF4444;
-        --success: #10B981;
-        --border: #E2E8F0;
-        --radius-sm: 8px;
+        --accent: #f59e0b;
+        --bg-body: #f1f5f9;
+        --text-main: #003b80;
+        --text-muted: #64748b;
+        --danger: #ef4444;
         --radius-md: 12px;
-        --radius-lg: 16px;
-        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 10px 15px -3px rgba(0,59,128,0.1);
     }
-    
-    * { 
-        margin: 0; 
-        padding: 0; 
-        box-sizing: border-box; 
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    }
-    
-    html, body { 
-        height: 100%; 
-        width: 100%; 
-        overflow: hidden; 
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: var(--text-main); 
-    }
-    
-    body.zoom-mode { 
-        overflow: auto !important; 
-        touch-action: manipulation !important; 
-    }
-    
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
+    html, body { height: 100%; width: 100%; overflow: hidden; background-color: var(--bg-body); color: var(--text-main); }
+    body.zoom-mode { overflow: auto !important; touch-action: manipulation !important; }
     #app {
-        width: 100%; 
-        max-width: 480px; 
-        margin: 0 auto;
-        background: var(--bg-body); 
-        height: 100%; 
-        position: relative;
-        display: flex; 
-        flex-direction: column;
-        box-shadow: 0 0 50px rgba(0, 0, 0, 0.3);
-        overflow: hidden;
+        width: 100%; max-width: 480px; margin: 0 auto;
+        background: var(--bg-card); height: 100%; position: relative;
+        display: flex; flex-direction: column;
+        box-shadow: var(--shadow-lg); overflow: hidden;
     }
-    
-    /* Watermark - more subtle */
+    /* --- WATERMARK: Diagonal & Faint --- */
     .watermark-strip {
-        position: absolute; 
-        top: 50%; 
-        left: 50%; 
-        width: 200%;
+        position: absolute; top: 50%; left: 50%; width: 200%;
         transform: translate(-50%, -50%) rotate(-45deg);
-        z-index: 9999; 
-        pointer-events: none;
-        display: flex; 
-        align-items: center; 
-        justify-content: center;
-        font-size: 11px; 
-        font-weight: 700;
-        color: rgba(15, 23, 42, 0.04);
-        user-select: none; 
-        white-space: nowrap; 
-        letter-spacing: 4px;
+        z-index: 9999; pointer-events: none;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 13px; font-weight: 900;
+        color: rgba(0, 59, 128, 0.06); /* 6% Opacity */
+        user-select: none; white-space: nowrap; letter-spacing: 6px;
         text-transform: uppercase;
     }
-    
-    /* Modern floating zoom button */
+    /* --- FLOATING ZOOM BUTTON --- */
     #fab-zoom {
-        position: absolute; 
-        bottom: 24px; 
-        right: 24px; 
-        width: 56px; 
-        height: 56px;
-        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-        border-radius: 50%;
-        box-shadow: var(--shadow-xl);
-        display: none;
-        align-items: center; 
-        justify-content: center;
-        font-size: 24px; 
-        color: white; 
-        cursor: pointer; 
-        z-index: 100;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: absolute; bottom: 30px; left: 20px; width: 50px; height: 50px;
+        background-color: var(--primary); border-radius: 50%;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        display: none; /* Hidden by default, shown only in iframe view */
+        align-items: center; justify-content: center;
+        font-size: 24px; color: white; cursor: pointer; z-index: 100;
+        transition: transform 0.2s ease;
     }
-    
-    #fab-zoom:hover {
-        transform: scale(1.1);
-        box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.2);
-    }
-    
-    #fab-zoom:active { 
-        transform: scale(0.95); 
-    }
-    
-    .view { 
-        flex: 1; 
-        padding: 24px; 
-        overflow-y: auto; 
-        display: none; 
-        animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
-        padding-bottom: 80px; 
-    }
-    
-    .view.active { 
-        display: flex; 
-        flex-direction: column; 
-    }
-    
-    #view-iframe.view { 
-        padding: 0 !important; 
-        height: 100%; 
-        width: 100%; 
-        z-index: 50; 
-        -webkit-overflow-scrolling: touch; 
-        overflow: auto; 
-        position: relative; 
-    }
-    
-    .iframe-wrapper { 
-        width: 100%; 
-        height: 100%; 
-        transform-origin: 0 0; 
-        transition: transform 0.3s ease, width 0.3s ease; 
-    }
-    
-    iframe { 
-        width: 100%; 
-        height: 100%; 
-        border: none; 
-        display: block; 
-        background: #fff; 
-    }
-    
-    /* Modern header with gradient */
+    #fab-zoom:active { transform: scale(0.9); }
+    .view { flex: 1; padding: 24px; overflow-y: auto; display: none; animation: fadeIn 0.3s ease-in-out; padding-bottom: 80px; }
+    .view.active { display: flex; flex-direction: column; }
+    /* IFRAME CONTAINER */
+    #view-iframe.view { padding: 0 !important; height: 100%; width: 100%; z-index: 50; -webkit-overflow-scrolling: touch; overflow: auto; /* Allow scrolling when zoomed */ position: relative; }
+    /* ZOOM LOGIC */
+    .iframe-wrapper { width: 100%; height: 100%; transform-origin: 0 0; transition: transform 0.3s ease, width 0.3s ease; }
+    iframe { width: 100%; height: 100%; border: none; display: block; background: #fff; }
     .header {
-        padding: 20px 24px;
-        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-        display: flex; 
-        align-items: center; 
-        justify-content: space-between;
-        z-index: 10; 
-        flex-shrink: 0;
-        box-shadow: var(--shadow-md);
+        padding: 20px; border-bottom: 1px solid #e2e8f0;
+        display: flex; align-items: center; justify-content: space-between;
+        background: var(--bg-card); z-index: 10; flex-shrink: 0;
     }
-    
-    .header-title { 
-        font-weight: 800; 
-        font-size: 1.5rem; 
-        color: white;
-        letter-spacing: -0.5px;
-    }
-    
-    .header-title span { 
-        color: var(--accent);
-        font-weight: 900;
-    }
-    
-    .back-btn { 
-        background: rgba(255, 255, 255, 0.2); 
-        border: none; 
-        font-size: 1.3rem; 
-        color: white;
-        cursor: pointer; 
-        display: none;
-        width: 40px;
-        height: 40px;
-        border-radius: var(--radius-md);
-        align-items: center;
-        justify-content: center;
-        backdrop-filter: blur(10px);
-        transition: all 0.2s;
-    }
-    
-    .back-btn:hover {
-        background: rgba(255, 255, 255, 0.3);
-    }
-    
-    .logout-btn { 
-        font-size: 0.875rem; 
-        color: white;
-        font-weight: 600; 
-        cursor: pointer;
-        background: rgba(255, 255, 255, 0.2);
-        padding: 8px 16px;
-        border-radius: var(--radius-md);
-        backdrop-filter: blur(10px);
-        transition: all 0.2s;
-    }
-    
-    .logout-btn:hover {
-        background: rgba(255, 255, 255, 0.3);
-    }
-    
-    @keyframes fadeIn { 
-        from { opacity: 0; transform: translateY(10px); } 
-        to { opacity: 1; transform: translateY(0); } 
-    }
-    
-    .auth-container { 
-        flex: 1; 
-        display: flex; 
-        flex-direction: column; 
-        justify-content: center; 
-        padding-bottom: 5vh; 
-        max-width: 400px;
-        margin: 0 auto;
-        width: 100%;
-    }
-    
+    .header-title { font-weight: 800; font-size: 1.5rem; color: var(--primary-dark); }
+    .header-title span { color: var(--primary); }
+    .back-btn { background: none; border: none; font-size: 1.5rem; color: var(--primary-dark); cursor: pointer; display: none; }
+    .logout-btn { font-size: 0.85rem; color: var(--danger); font-weight: 600; cursor: pointer; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    .auth-container { flex: 1; display: flex; flex-direction: column; justify-content: center; padding-bottom: 5vh; }
     .btn {
-        width: 100%; 
-        padding: 16px; 
-        border-radius: var(--radius-md); 
-        border: none;
-        font-size: 1rem; 
-        font-weight: 600; 
-        cursor: pointer; 
-        margin-bottom: 12px;
-        display: flex; 
-        align-items: center; 
-        justify-content: center;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: var(--shadow-sm);
+        width: 100%; padding: 16px; border-radius: var(--radius-md); border: none;
+        font-size: 1rem; font-weight: 600; cursor: pointer; margin-bottom: 12px;
+        display: flex; align-items: center; justify-content: center;
     }
-    
-    .btn-primary { 
-        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-        color: white;
-        box-shadow: var(--shadow-md);
-    }
-    
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-lg);
-    }
-    
-    .btn-primary:active {
-        transform: translateY(0);
-    }
-    
-    .btn-outline { 
-        background: transparent; 
-        border: 2px solid var(--primary); 
-        color: var(--primary);
-    }
-    
-    .btn-outline:hover {
-        background: var(--primary-light);
-    }
-    
-    .btn-ghost { 
-        background: transparent; 
-        color: var(--text-muted); 
-        font-size: 0.9rem;
-        box-shadow: none;
-    }
-    
-    .btn-ghost:hover {
-        color: var(--primary);
-    }
-    
-    /* Enhanced menu items with better hierarchy */
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+    .btn-ghost { background: transparent; color: var(--text-muted); font-size: 0.9rem; }
     .menu-item {
-        background: white;
-        border: 1px solid var(--border);
-        padding: 20px;
-        border-radius: var(--radius-lg);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        cursor: pointer;
-        margin-bottom: 12px;
-        box-shadow: var(--shadow-sm);
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        background: #fff; border: 1px solid #e2e8f0; padding: 20px;
+        border-radius: var(--radius-md); display: flex; justify-content: space-between;
+        align-items: center; cursor: pointer; margin-bottom: 16px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
-    
-    .menu-item:hover {
-        transform: translateX(4px);
-        box-shadow: var(--shadow-md);
-        border-color: var(--primary);
+    .menu-item h3 { font-size: 1.1rem; color: var(--primary-dark); margin-bottom: 4px; }
+    .menu-item p { font-size: 0.85rem; color: var(--text-muted); }
+    .menu-arrow { color: var(--primary); }
+    .form-group { margin-bottom: 20px; }
+    .form-label { display: block; margin-bottom: 8px; font-size: 0.9rem; font-weight: 600; color: var(--primary-dark); }
+    .form-input { width: 100%; padding: 14px; border: 1px solid #cbd5e1; border-radius: var(--radius-md); font-size: 1rem; outline: none; background: white; }
+    /* Style select dropdown to match inputs (Kept for potential future use, though select is removed) */
+    select.form-input {
+        appearance: none; -webkit-appearance: none;
+        background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+        background-repeat: no-repeat; background-position: right 14px top 50%; background-size: 12px auto;
     }
-    
-    .menu-item h3 { 
-        font-size: 1.1rem; 
-        color: var(--text-main);
-        margin-bottom: 4px;
-        font-weight: 700;
-    }
-    
-    .menu-item p { 
-        font-size: 0.85rem; 
-        color: var(--text-muted);
-        font-weight: 500;
-    }
-    
-    .menu-arrow { 
-        color: var(--primary);
-        font-size: 1.2rem;
-        transition: transform 0.2s;
-    }
-    
-    .menu-item:hover .menu-arrow {
-        transform: translateX(4px);
-    }
-    
-    /* Special highlight for premium items */
-    .menu-item.premium {
-        background: linear-gradient(135deg, rgba(14, 165, 233, 0.05) 0%, rgba(12, 74, 110, 0.05) 100%);
-        border-color: var(--primary);
-    }
-    
-    .menu-item.premium h3 {
-        color: var(--primary);
-    }
-    
-    /* Modern form styling */
-    .form-group { 
-        margin-bottom: 20px; 
-    }
-    
-    .form-label { 
-        display: block; 
-        margin-bottom: 8px; 
-        font-size: 0.875rem; 
-        font-weight: 600; 
-        color: var(--text-main);
-        letter-spacing: 0.3px;
-    }
-    
-    .form-input { 
-        width: 100%; 
-        padding: 14px 16px;
-        border: 2px solid var(--border);
-        border-radius: var(--radius-md);
-        font-size: 1rem;
-        outline: none;
-        background: white;
-        transition: all 0.2s;
-        color: var(--text-main);
-    }
-    
-    .form-input:focus {
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px var(--primary-light);
-    }
-    
-    .password-wrapper { 
-        position: relative; 
-        display: flex; 
-        align-items: center; 
-    }
-    
-    .form-input-pass { 
-        padding-right: 45px; 
-    }
-    
-    .toggle-password-btn { 
-        position: absolute; 
-        right: 12px; 
-        background: none; 
-        border: none; 
-        cursor: pointer; 
-        color: var(--text-muted);
-        font-size: 1.2rem;
-        padding: 8px;
-        border-radius: var(--radius-sm);
-        transition: all 0.2s;
-    }
-    
-    .toggle-password-btn:hover {
-        background: var(--bg-body);
-        color: var(--primary);
-    }
-    
-    .error-msg { 
-        color: var(--danger); 
-        font-size: 0.85rem; 
-        margin-top: 8px; 
-        min-height: 20px; 
-        text-align: center;
-        font-weight: 500;
-    }
-    
-    /* Improved paywall design */
-    .paywall-container { 
-        flex: 1; 
-        display: flex; 
-        flex-direction: column; 
-        align-items: center; 
-        justify-content: center; 
-        text-align: center; 
-        padding: 24px;
-        max-width: 400px;
-        margin: 0 auto;
-    }
-    
-    .headline { 
-        font-size: 1.75rem;
-        font-weight: 800;
-        color: var(--text-main);
-        margin-bottom: 12px;
-        letter-spacing: -0.5px;
-        line-height: 1.2;
-    }
-    
-    .subtext { 
-        color: var(--text-muted);
-        line-height: 1.6;
-        margin-bottom: 30px;
-        font-size: 1rem;
-    }
-    
-    .logo-text-large { 
-        font-size: 3rem;
-        font-weight: 900;
-        color: var(--primary-dark);
-        margin-bottom: 10px;
-        letter-spacing: -1px;
-    }
-    
-    .logo-text-large span { 
-        background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-    
-    /* Enhanced pricing display */
-    .price-wrapper { 
-        margin-bottom: 30px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 8px;
-        background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(12, 74, 110, 0.1) 100%);
-        padding: 24px 32px;
-        border-radius: var(--radius-lg);
-        border: 2px solid var(--primary-light);
-    }
-    
-    .price-original { 
-        text-decoration: line-through;
-        color: var(--text-muted);
-        font-size: 1.1rem;
-        font-weight: 500;
-    }
-    
-    .price-discounted { 
-        color: var(--primary-dark);
-        font-weight: 900;
-        font-size: 2.5rem;
-        line-height: 1;
-    }
-    
-    .price-label { 
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        color: var(--primary);
-        font-weight: 700;
-        background: var(--primary-light);
-        padding: 4px 12px;
-        border-radius: 20px;
-    }
-    
-    /* Modern modal */
-    .modal-overlay { 
-        position: absolute; 
-        top: 0; 
-        left: 0; 
-        width: 100%; 
-        height: 100%; 
-        background: rgba(0, 0, 0, 0.6);
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        z-index: 100; 
-        backdrop-filter: blur(8px);
-        animation: fadeIn 0.2s ease;
-    }
-    
-    .modal-card { 
-        background: white;
-        width: 90%;
-        max-width: 350px;
-        padding: 28px;
-        border-radius: var(--radius-lg);
-        box-shadow: var(--shadow-xl);
-        text-align: center;
-        animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    @keyframes slideUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .hidden { 
-        display: none !important; 
-    }
-    
-    /* Additional polish */
-    .right-align {
-        text-align: right;
-        margin-bottom: 15px;
-    }
-    
-    .right-align span {
-        color: var(--primary);
-        font-size: 0.9rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-    
-    .right-align span:hover {
-        color: var(--primary-dark);
-        text-decoration: underline;
-    }
-    
-    /* Scrollbar styling */
-    .view::-webkit-scrollbar {
-        width: 6px;
-    }
-    
-    .view::-webkit-scrollbar-track {
-        background: var(--bg-body);
-    }
-    
-    .view::-webkit-scrollbar-thumb {
-        background: var(--border);
-        border-radius: 10px;
-    }
-    
-    .view::-webkit-scrollbar-thumb:hover {
-        background: var(--text-muted);
-    }
+    .password-wrapper { position: relative; display: flex; align-items: center; }
+    .form-input-pass { padding-right: 45px; }
+    .toggle-password-btn { position: absolute; right: 12px; background: none; border: none; cursor: pointer; color: var(--text-muted); }
+    .error-msg { color: var(--danger); font-size: 0.85rem; margin-top: 8px; min-height: 20px; text-align: center; }
+    .paywall-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+    .headline { font-size: 1.5rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+    .subtext { color: var(--text-muted); line-height: 1.5; margin-bottom: 30px; }
+    .logo-text-large { font-size: 3rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 10px; }
+    .logo-text-large span { color: var(--primary); }
+    /* --- PRICE DISPLAY STYLES --- */
+    .price-wrapper { margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+    .price-original { text-decoration: line-through; color: var(--text-muted); font-size: 1.1rem; }
+    .price-discounted { color: var(--primary-dark); font-weight: 800; font-size: 2rem; }
+    .price-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); font-weight: 700; margin-bottom: 5px;}
+    .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(2px); }
+    .modal-card { background: white; width: 90%; max-width: 350px; padding: 24px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center; }
+    .hidden { display: none !important; }
 </style>
 </head>
 <body>
 <div id="app">
     <div id="wm-diagonal" class="watermark-strip"></div>
     <header class="header">
-        <button class="back-btn" id="btn-back" onclick="app.goBack()">←</button>
+        <button class="back-btn" id="btn-back" onclick="app.goBack()">&#8592;</button>
         <div class="header-title" id="header-branding">Ezi<span>Nurse</span></div>
         <div onclick="app.logout()" class="logout-btn" id="btn-logout">Logout</div>
     </header>
@@ -573,56 +124,40 @@
 
     <div id="view-auth" class="view active">
         <div class="auth-container">
-            <div style="text-align: center; margin-bottom: 32px;">
+            <div style="text-align: center; margin-bottom: 20px;">
                 <div class="logo-text-large">Ezi<span>Nurse</span></div>
-                <h1 class="headline" style="font-size: 1.5rem;">Welcome Back</h1>
+                <h1 class="headline" style="font-size: 1.25rem;">Welcome Back</h1>
                 <p class="subtext">Sign in to access your dashboard</p>
             </div>
             
-            <div id="form-login">
-                <div class="form-group">
-                    <label class="form-label">Email Address</label>
-                    <input type="email" id="login-email" class="form-input" placeholder="nurse@example.com">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="login-pass" class="form-input form-input-pass">
-                        <button class="toggle-password-btn" onclick="app.togglePassword('login-pass', this)">👁</button>
-                    </div>
-                </div>
-                <div class="right-align">
-                    <span onclick="app.navTo('view-reset')">Forgot Password?</span>
-                </div>
-                <div id="login-error" class="error-msg"></div>
-                
-                <button id="btn-login-submit" class="btn btn-primary" onclick="app.login()">Login Securely</button>
-                <button class="btn btn-primary" style="background: linear-gradient(135deg, var(--primary-dark) 0%, #1e3a8a 100%); margin-top: 8px;" onclick="app.toggleAuthMode()">Create New Account</button>
-            </div>
+<div id="form-login">
+    <div class="form-group"><label class="form-label">Email</label><input type="email" id="login-email" class="form-input" placeholder="nurse@example.com"></div>
+    <div class="form-group"><label class="form-label">Password</label>
+        <div class="password-wrapper"><input type="password" id="login-pass" class="form-input form-input-pass"><button class="toggle-password-btn" onclick="app.togglePassword('login-pass', this)">👁</button></div>
+    </div>
+    <div class="right-align" style="text-align: right; margin-bottom: 15px;">
+        <span style="color: var(--primary); font-size: 0.9rem; font-weight: 600; cursor: pointer;" onclick="app.navTo('view-reset')">Forgot Password?</span>
+    </div>
+    <div id="login-error" class="error-msg"></div>
+    
+    <button id="btn-login-submit" class="btn btn-primary" onclick="app.login()">Login Securely</button>
+    
+    <button class="btn btn-primary" style="background-color: var(--primary-dark); margin-top: 8px;" onclick="app.toggleAuthMode()">Create New Account</button>
+    
+    <button class="btn btn-ghost" onclick="app.toggleAuthMode()"></button>
+</div>
 
             <div id="form-signup" class="hidden">
-                <div class="form-group">
-                    <label class="form-label">Full Name</label>
-                    <input type="text" id="signup-name" class="form-input" placeholder="Nurse Joy">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Email Address</label>
-                    <input type="email" id="signup-email" class="form-input" placeholder="new@example.com">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Phone Number</label>
-                    <input type="tel" id="signup-phone" class="form-input" placeholder="9876543210">
-                </div>
+                <div class="form-group"><label class="form-label">Full Name</label><input type="text" id="signup-name" class="form-input" placeholder="Nurse Joy"></div>
+                <div class="form-group"><label class="form-label">Email</label><input type="email" id="signup-email" class="form-input" placeholder="new@example.com"></div>
+                <div class="form-group"><label class="form-label">Phone</label><input type="tel" id="signup-phone" class="form-input" placeholder="9876543210"></div>
+                
                 <div class="form-group">
                     <label class="form-label">How did you hear about us?</label>
                     <input type="text" id="signup-source" class="form-input" placeholder="e.g. Google, Friend, or Agent Name">
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="signup-pass" class="form-input form-input-pass">
-                        <button class="toggle-password-btn" onclick="app.togglePassword('signup-pass', this)">👁</button>
-                    </div>
+                <div class="form-group"><label class="form-label">Password</label>
+                    <div class="password-wrapper"><input type="password" id="signup-pass" class="form-input form-input-pass"><button class="toggle-password-btn" onclick="app.togglePassword('signup-pass', this)">👁</button></div>
                 </div>
                 <div id="signup-error" class="error-msg"></div>
                 <button id="btn-signup-submit" class="btn btn-primary" onclick="app.signup()">Create Account</button>
@@ -636,26 +171,16 @@
             <h2 class="headline">Reset Password</h2>
             <div id="reset-step-1">
                 <p class="subtext">Enter your email to receive a verification code.</p>
-                <div class="form-group">
-                    <label class="form-label">Email Address</label>
-                    <input type="email" id="reset-email" class="form-input">
-                </div>
+                <div class="form-group"><label class="form-label">Email</label><input type="email" id="reset-email" class="form-input"></div>
                 <div id="reset-error-1" class="error-msg"></div>
                 <button id="btn-reset-req" class="btn btn-primary" onclick="app.requestResetCode()">Send Code</button>
                 <button class="btn btn-ghost" onclick="app.navTo('view-auth', true)">Cancel</button>
             </div>
             <div id="reset-step-2" class="hidden">
                 <p class="subtext">Enter the 6-digit code sent to your email.</p>
-                <div class="form-group">
-                    <label class="form-label">Verification Code</label>
-                    <input type="text" id="reset-code" class="form-input" placeholder="123456">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">New Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="reset-new-pass" class="form-input form-input-pass">
-                        <button class="toggle-password-btn" onclick="app.togglePassword('reset-new-pass', this)">👁</button>
-                    </div>
+                <div class="form-group"><label class="form-label">Code</label><input type="text" id="reset-code" class="form-input" placeholder="123456"></div>
+                <div class="form-group"><label class="form-label">New Password</label>
+                    <div class="password-wrapper"><input type="password" id="reset-new-pass" class="form-input form-input-pass"><button class="toggle-password-btn" onclick="app.togglePassword('reset-new-pass', this)">👁</button></div>
                 </div>
                 <div id="reset-error-2" class="error-msg"></div>
                 <button id="btn-reset-conf" class="btn btn-primary" onclick="app.confirmResetPassword()">Update Password</button>
@@ -666,76 +191,28 @@
 
     <div id="view-dashboard" class="view">
         <h2 class="headline">Dashboard</h2>
-        <p class="subtext">Select your course level to get started</p>
+        <p class="subtext">Select your course level.</p>
         <div class="card-menu">
-            <div class="menu-item" onclick="app.navToCourse('MSc')">
-                <div>
-                    <h3>MSc Nursing</h3>
-                    <p>Master of Science</p>
-                </div>
-                <span class="menu-arrow">›</span>
-            </div>
-            <div class="menu-item" onclick="app.navToCourse('BSc')">
-                <div>
-                    <h3>BSc Nursing</h3>
-                    <p>Bachelor of Science</p>
-                </div>
-                <span class="menu-arrow">›</span>
-            </div>
-            <div class="menu-item" onclick="app.navToCourse('PBBSc')">
-                <div>
-                    <h3>PBBSc Nursing</h3>
-                    <p>Post Basic BSc</p>
-                </div>
-                <span class="menu-arrow">›</span>
-            </div>
-            <div class="menu-item" onclick="app.navToCourse('GNM')">
-                <div>
-                    <h3>GNM</h3>
-                    <p>General Nursing & Midwifery</p>
-                </div>
-                <span class="menu-arrow">›</span>
-            </div>
-            <div class="menu-item premium" onclick="app.checkAccessAndOpen('3D', 'Systems')">
-                <div>
-                    <h3>3D Models</h3>
-                    <p>Interactive Anatomy</p>
-                </div>
-                <span class="menu-arrow">›</span>
-            </div>
-            <div class="menu-item hidden" onclick="app.navToCourse('EXAMS')">
-                <div>
-                    <h3>Nursing Exams</h3>
-                    <p>NORCET, ESCI Exclusive Q&A</p>
-                </div>
-                <span class="menu-arrow">›</span>
-            </div>
-            <div class="menu-item hidden" onclick="app.checkAccessAndOpen('REQ', 'Documents')">
-                <div>
-                    <h3>Nursing Requirements</h3>
-                    <p>Document Checklist</p>
-                </div>
-                <span class="menu-arrow">›</span>
-            </div>
-            <div class="menu-item hidden" onclick="app.checkAccessAndOpen('COMM', 'Basics')">
-                <div>
-                    <h3>Communicative English</h3>
-                    <p>Language Fundamentals</p>
-                </div>
-                <span class="menu-arrow">›</span>
-            </div>
+            <div class="menu-item" onclick="app.navToCourse('MSc')"><div><h3>MSc Nursing</h3><p>Master of Science</p></div><span class="menu-arrow">&#10095;</span></div>
+            <div class="menu-item" onclick="app.navToCourse('BSc')"><div><h3>BSc Nursing</h3><p>Bachelor of Science</p></div><span class="menu-arrow">&#10095;</span></div>
+            <div class="menu-item" onclick="app.navToCourse('PBBSc')"><div><h3>PBBSc Nursing</h3><p>Post Basic BSc</p></div><span class="menu-arrow">&#10095;</span></div>
+            <div class="menu-item" onclick="app.navToCourse('GNM')"><div><h3>GNM</h3><p>General Nursing & Midwifery</p></div><span class="menu-arrow">&#10095;</span></div>
+            <div class="menu-item" style="border-color: var(--primary);" onclick="app.checkAccessAndOpen('3D', 'Systems')"><div><h3 style="color:var(--primary)">3D Models</h3><p>Interactive Anatomy</p></div><span class="menu-arrow">&#10095;</span></div>
+            <div class="menu-item hidden" onclick="app.navToCourse('EXAMS')"><div><h3>Nursing Exams</h3><p>NORCET, ESCI Exclusive Q&A</p></div><span class="menu-arrow">&#10095;</span></div>
+            <div class="menu-item hidden" onclick="app.checkAccessAndOpen('REQ', 'Documents')"><div><h3>Nursing Requirements</h3><p>Document Checklist</p></div><span class="menu-arrow">&#10095;</span></div>
+            <div class="menu-item hidden" onclick="app.checkAccessAndOpen('COMM', 'Basics')"><div><h3>Communicative English</h3><p>Language Fundamentals</p></div><span class="menu-arrow">&#10095;</span></div>
         </div>
     </div>
 
     <div id="view-submenu" class="view">
         <h2 class="headline" id="submenu-title">Structure</h2>
-        <p class="subtext" id="submenu-subtitle">Select an option to continue</p>
+        <p class="subtext" id="submenu-subtitle">Select item.</p>
         <div class="card-menu" id="submenu-list"></div>
     </div>
 
     <div id="view-subjects" class="view">
         <h2 class="headline" id="subject-title">Subjects</h2>
-        <p class="subtext">Select a subject to open</p>
+        <p class="subtext">Select subject to open.</p>
         <div class="card-menu" id="subject-list"></div>
     </div>
 
@@ -743,8 +220,8 @@
 
     <div id="view-paywall" class="view">
         <div class="paywall-container">
-            <h2 class="headline">Unlock Premium Content</h2>
-            <p class="subtext">Get complete access to this course with lifetime updates</p>
+            <h2 class="headline">Unlock Course</h2>
+            <p class="subtext">Get complete access to this premium content.</p>
             <div id="paywall-price-display" class="price-wrapper"></div>
             <button class="btn btn-primary" onclick="app.purchaseLockedContent()">Buy Now</button>
             <button class="btn btn-outline" style="margin-top: 10px;" onclick="app.goBack()">Go Back</button>
@@ -753,9 +230,9 @@
 
     <div id="modal-exit" class="modal-overlay hidden">
         <div class="modal-card">
-            <h3 class="headline" style="font-size: 1.5rem; margin-bottom: 20px;">Exit App?</h3>
-            <div style="display:flex; flex-direction:column; gap:12px;">
-                <button class="btn btn-primary" style="background: linear-gradient(135deg, var(--danger) 0%, #b91c1c 100%);" onclick="app.confirmExit()">Yes, Exit</button>
+            <h3 class="headline">Exit App?</h3>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <button class="btn btn-primary" style="background-color: var(--danger);" onclick="app.confirmExit()">Yes, Exit</button>
                 <button class="btn btn-outline" onclick="app.cancelExit()">No, Stay</button>
             </div>
         </div>
@@ -970,20 +447,63 @@ const app = {
     lockedCourseKey: null,
     lockedCourseSection: null,
     zoomLevel: 1,
-    viewStack: [],
-    currentView: null,
 
     init: function() {
         const savedUser = localStorage.getItem('eziUser');
         if (savedUser) {
             this.currentUser = JSON.parse(savedUser);
             this.updateWatermark();
+            history.replaceState({ viewId: 'view-exit-guard' }, 'Exit Guard', '#exit');
+            history.pushState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard');
             this.renderView('view-dashboard');
             const savedAuth = localStorage.getItem('eziAuth');
             if(savedAuth) { try { this.syncPermissions(JSON.parse(savedAuth)); } catch(e){} }
         } else {
+            history.replaceState({ viewId: 'view-auth' }, 'Login', '#login');
             this.renderView('view-auth');
         }
+
+        window.addEventListener('popstate', (event) => {
+            if (event.state && event.state.viewId) {
+                if (event.state.viewId === 'view-exit-guard') {
+                    this.showExitModal();
+                    this.renderView('view-dashboard');
+                    return;
+                }
+                if (event.state.viewId === 'view-submenu') {
+                    const c = event.state.course || this.lockedCourseKey;
+                    if(c) {
+                        this.renderSubmenu(c);
+                        this.renderView('view-submenu');
+                    } else {
+                        this.renderView('view-dashboard');
+                    }
+                } else if (event.state.viewId === 'view-subjects') {
+                    const c = event.state.course || this.lockedCourseKey;
+                    const s = event.state.section || this.lockedCourseSection;
+                    if (c && s) {
+                        this.renderSubjectList(c, s);
+                        this.renderView('view-subjects');
+                    } else {
+                        this.renderView('view-dashboard');
+                    }
+                } else if (event.state.viewId === 'view-iframe') {
+                    if(event.state.sourceUrl) this.openContent(event.state.sourceUrl, event.state.title, true);
+                    else this.renderView('view-dashboard');
+                } else {
+                    this.renderView(event.state.viewId);
+                }
+            } else {
+                if (window.location.hash.includes('subjects') && this.lockedCourseKey && this.lockedCourseSection) {
+                    this.renderSubjectList(this.lockedCourseKey, this.lockedCourseSection);
+                    this.renderView('view-subjects');
+                } else if(this.currentUser) {
+                    this.renderView('view-dashboard');
+                } else {
+                    this.renderView('view-auth');
+                }
+            }
+        });
     },
 
     checkSessionNow: async function() {
@@ -1092,12 +612,15 @@ const app = {
         const email = document.getElementById('signup-email').value.trim();
         const pass = document.getElementById('signup-pass').value.trim();
         const phone = document.getElementById('signup-phone').value.trim();
+        
+        // --- NEW SIMPLIFIED LOGIC ---
         const source = document.getElementById('signup-source').value.trim();
         
         const errorDiv = document.getElementById('signup-error');
         const btn = document.getElementById('btn-signup-submit');
         errorDiv.textContent = "";
 
+        // Validation including the new text input
         if(!name || !email || !pass || !phone || !source) {
             errorDiv.textContent = "Fill all fields";
             return;
@@ -1109,6 +632,7 @@ const app = {
         try {
             const res = await fetch(API_URL, {
                 method: 'POST',
+                // Sending the text input value directly as 'source'
                 body: JSON.stringify({ action:'signup', name, email, password:pass, phone, source: source, deviceId:getDeviceId(), apiKey: API_KEY })
             });
             const data = await res.json();
@@ -1237,19 +761,17 @@ const app = {
     },
 
     navTo: function(viewId, isRoot = false, stateData = {}) {
-        if (!isRoot && this.currentView) {
-            this.viewStack.push({
-                viewId: this.currentView,
-                course: this.lockedCourseKey,
-                section: this.lockedCourseSection
-            });
-        }
-        
+        const state = { viewId: viewId, ...stateData };
         if (isRoot) {
-            this.viewStack = [];
+            if (viewId === 'view-dashboard') {
+                history.replaceState({ viewId: 'view-exit-guard' }, null, '#exit');
+                history.pushState(state, null, `#${viewId.replace('view-', '')}`);
+            } else {
+                history.replaceState(state, null, `#${viewId.replace('view-', '')}`);
+            }
+        } else {
+            history.pushState(state, null, `#${viewId.replace('view-', '')}`);
         }
-        
-        this.currentView = viewId;
         this.renderView(viewId);
     },
 
@@ -1257,6 +779,7 @@ const app = {
         const iframeContainer = document.getElementById('view-iframe');
         if (viewId !== 'view-iframe' && iframeContainer) iframeContainer.innerHTML = '';
         
+        // SHOW/HIDE ZOOM BUTTON
         const fab = document.getElementById('fab-zoom');
         if (viewId === 'view-iframe') {
             fab.style.display = 'flex';
@@ -1271,7 +794,7 @@ const app = {
         const isAuth = viewId === 'view-auth' || viewId === 'view-reset';
         const isDash = viewId === 'view-dashboard';
         
-        document.getElementById('btn-back').style.display = (isAuth || isDash) ? 'none' : 'flex';
+        document.getElementById('btn-back').style.display = (isAuth || isDash) ? 'none' : 'block';
         document.getElementById('btn-logout').style.display = isAuth ? 'none' : 'block';
         document.getElementById('header-branding').style.opacity = isAuth ? '0' : '1';
     },
@@ -1281,27 +804,7 @@ const app = {
             this.cancelExit();
             return;
         }
-        
-        if (this.viewStack.length === 0) {
-            if (this.currentView === 'view-dashboard') {
-                this.showExitModal();
-            } else {
-                this.renderView('view-dashboard');
-                this.currentView = 'view-dashboard';
-            }
-            return;
-        }
-        
-        const prev = this.viewStack.pop();
-        this.currentView = prev.viewId;
-        
-        if (prev.viewId === 'view-submenu' && prev.course) {
-            this.renderSubmenu(prev.course);
-        } else if (prev.viewId === 'view-subjects' && prev.course && prev.section) {
-            this.renderSubjectList(prev.course, prev.section);
-        }
-        
-        this.renderView(prev.viewId);
+        window.history.back();
     },
 
     showExitModal: function() {
@@ -1310,11 +813,11 @@ const app = {
 
     cancelExit: function() {
         document.getElementById('modal-exit').classList.add('hidden');
+        history.pushState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard');
     },
 
     confirmExit: function() {
-        // Clear session and redirect to login
-        this.logout();
+        window.history.back();
     },
 
     navToCourse: function(key) {
@@ -1326,14 +829,14 @@ const app = {
         const list = document.getElementById('submenu-list');
         list.innerHTML = '';
         document.getElementById('submenu-title').textContent = key;
-        document.getElementById('submenu-subtitle').textContent = "Select an option to continue";
+        document.getElementById('submenu-subtitle').textContent = "Select Option";
         
         const sections = key === '3D' ? Object.keys(COURSES['3D']) : Object.keys(COURSES[key]);
         
         sections.forEach(sec => {
             const item = document.createElement('div');
             item.className = 'menu-item';
-            item.innerHTML = `<div><h3>${sec}</h3></div><span class="menu-arrow">›</span>`;
+            item.innerHTML = `<div><h3>${sec}</h3></div><span class="menu-arrow">&#10095;</span>`;
             item.onclick = () => { this.checkAccessAndOpen(key, sec); };
             list.appendChild(item);
         });
@@ -1372,7 +875,7 @@ const app = {
         subjects.forEach(sub => {
             const item = document.createElement('div');
             item.className = 'menu-item';
-            item.innerHTML = `<div><h3>${sub.label}</h3></div><span class="menu-arrow">›</span>`;
+            item.innerHTML = `<div><h3>${sub.label}</h3></div><span class="menu-arrow">&#10095;</span>`;
             item.onclick = () => { this.openContent(sub.link, sub.label); };
             list.appendChild(item);
         });
@@ -1383,6 +886,7 @@ const app = {
         if (!fromHistory) this.navTo('view-iframe', false, { sourceUrl: url, title: title });
         else this.renderView('view-iframe');
 
+        // WRAPPER FOR ZOOMING
         const wrapper = document.createElement('div');
         wrapper.id = 'iframe-wrapper';
         wrapper.className = 'iframe-wrapper';
@@ -1394,9 +898,10 @@ const app = {
         wrapper.appendChild(iframe);
         container.innerHTML = '';
         container.appendChild(wrapper);
-        this.zoomLevel = 1;
+        this.zoomLevel = 1; // Reset zoom on new page
     },
     
+    // --- NEW PAYMENT & PRICING LOGIC ---
     renderPaywallInfo: function(course, section) {
         const display = document.getElementById('paywall-price-display');
         let html = '';
@@ -1417,6 +922,8 @@ const app = {
                 </div>
             `;
         } else {
+            // Default if price isn't specified for other courses (MSc, etc)
+            // We just show a generic "Unlock" message or nothing in the price box
             html = '';
         }
         display.innerHTML = html;
@@ -1426,11 +933,15 @@ const app = {
         const course = this.lockedCourseKey;
         const section = this.lockedCourseSection || 'Systems';
         
+        // Logic: Try to find the Discounted (_D) link first.
+        // If not found, fallback to Full (_F) link just in case.
         const discountKey = `${course}_${section}_D`;
         const fullKey = `${course}_${section}_F`;
         
         let url = PAYMENT_LINKS[discountKey];
         if (!url) url = PAYMENT_LINKS[fullKey];
+        
+        // Fallback safety
         if (!url) url = `https://www.razorpay.com/fallback_${course}_${section}`;
         
         window.open(url, '_blank');
