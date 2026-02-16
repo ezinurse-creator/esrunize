@@ -9,10 +9,10 @@
 
 <style>
     :root {
-        --primary: #5e35b1; /* Deep Purple */
+        --primary: #5e35b1;
         --primary-light: #7e57c2;
-        --secondary: #0091ea; /* Bright Blue */
-        --accent: #ff4081; /* Pink for offers */
+        --secondary: #0091ea;
+        --accent: #ff4081;
         --success: #00c853;
         --bg-body: #f5f7fa;
         --bg-card: #ffffff;
@@ -23,8 +23,6 @@
         --radius-md: 12px;
         --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
         --shadow-lg: 0 10px 25px rgba(94, 53, 177, 0.15);
-        
-        /* Gradient Presets for Cards */
         --grad-blue: linear-gradient(135deg, #42a5f5, #1976d2);
         --grad-orange: linear-gradient(135deg, #ffa726, #f57c00);
         --grad-pink: linear-gradient(135deg, #ec407a, #c2185b);
@@ -44,10 +42,9 @@
         box-shadow: var(--shadow-lg); overflow: hidden;
     }
 
-    /* --- LAYOUT UTILS --- */
     .view { 
         flex: 1; overflow-y: auto; display: none; 
-        padding-bottom: 90px; /* Space for Bottom Nav */
+        padding-bottom: 90px;
         animation: fadeIn 0.25s ease-out; 
     }
     .view.active { display: block; }
@@ -55,10 +52,8 @@
     
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* --- HEADER (App Bar) --- */
     .header {
         padding: 15px 20px;
-        background: var(--primary); /* Solid color or gradient */
         background: linear-gradient(to right, var(--primary), var(--primary-light));
         color: white;
         display: flex; align-items: center; justify-content: space-between;
@@ -70,20 +65,68 @@
     .icon-btn { background: none; border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .back-btn { margin-right: 10px; }
 
-    /* --- AUTH SCREENS --- */
     .auth-container { 
         min-height: 100%; display: flex; flex-direction: column; 
-        justify-content: center; padding: 30px; background: white; 
+        justify-content: center; padding: 30px; background: white;
+        position: relative; overflow: hidden;
+    }
+    .auth-container::before {
+        content: '';
+        position: absolute; top: -80px; right: -80px;
+        width: 220px; height: 220px; border-radius: 50%;
+        background: linear-gradient(135deg, rgba(94,53,177,0.07), rgba(0,145,234,0.07));
+        pointer-events: none;
+    }
+    .auth-container::after {
+        content: '';
+        position: absolute; bottom: -60px; left: -60px;
+        width: 180px; height: 180px; border-radius: 50%;
+        background: linear-gradient(135deg, rgba(255,64,129,0.06), rgba(94,53,177,0.06));
+        pointer-events: none;
     }
     .auth-header { text-align: center; margin-bottom: 30px; }
-    .brand-logo { 
-        font-size: 2.5rem; font-weight: 800; 
-        background: -webkit-linear-gradient(45deg, var(--primary), var(--secondary));
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        margin-bottom: 10px;
-    }
 
-    /* --- FORMS --- */
+    /* --- BRAND LOGO HERO --- */
+    .brand-hero {
+        display: flex; flex-direction: column; align-items: center;
+        margin-bottom: 20px;
+    }
+    .brand-logo-text {
+        display: flex; align-items: baseline; gap: 1px;
+        font-family: 'Poppins', sans-serif;
+    }
+    .brand-ezi {
+        font-size: 2.6rem; font-weight: 800; letter-spacing: -1px;
+        background: linear-gradient(135deg, #5e35b1, #7e57c2);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .brand-nurse {
+        font-size: 2.6rem; font-weight: 800; letter-spacing: -1px;
+        background: linear-gradient(135deg, #0091ea, #00b0ff);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .brand-tagline {
+        font-size: 0.72rem; font-weight: 600; letter-spacing: 3px;
+        text-transform: uppercase;
+        background: linear-gradient(90deg, #7e57c2, #0091ea);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text; color: transparent;
+        margin-top: 2px; opacity: 0.85;
+    }
+    .brand-pill-row {
+        display: flex; gap: 8px; margin-top: 10px;
+    }
+    .brand-pill {
+        padding: 3px 10px; border-radius: 20px; font-size: 0.68rem;
+        font-weight: 700; letter-spacing: 0.5px;
+    }
+    .brand-pill-purple { background: rgba(94,53,177,0.1); color: #5e35b1; }
+    .brand-pill-blue   { background: rgba(0,145,234,0.1); color: #0091ea; }
+    .brand-pill-pink   { background: rgba(255,64,129,0.1); color: #ff4081; }
+    .brand-pill-green  { background: rgba(56,142,60,0.1); color: #388e3c; }
+
     .form-group { margin-bottom: 16px; }
     .form-label { display: block; margin-bottom: 6px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
     .form-input { 
@@ -104,25 +147,83 @@
     .btn-outline { background: white; border: 2px solid var(--primary); color: var(--primary); }
     .btn-ghost { background: transparent; color: var(--text-muted); font-size: 0.9rem; margin-top: 10px; }
 
-    /* --- DASHBOARD HERO --- */
+    /* --- SPLASH SCREEN --- */
+    #splash-screen {
+        position: fixed; inset: 0; z-index: 9999;
+        background: white;
+        display: flex; align-items: center; justify-content: center;
+        animation: splashFadeOut 0.5s ease-out 2.2s forwards;
+    }
+    #splash-img {
+        width: 75%; max-width: 320px;
+        opacity: 0;
+        transform: scale(0.82);
+        animation: splashImgIn 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
+    }
+    @keyframes splashImgIn {
+        to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes splashFadeOut {
+        to { opacity: 0; pointer-events: none; visibility: hidden; }
+    }
+
+    /* --- END SPLASH --- */
     .dashboard-hero {
-        padding: 20px 20px 10px 20px;
+        padding: 15px 20px 8px 20px;
         background: white;
     }
     .welcome-text { font-size: 1.5rem; font-weight: 700; color: var(--text-main); margin-bottom: 5px; }
-    .welcome-sub { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px; }
-    
-    .promo-card {
-        width: 100%; height: 160px; border-radius: var(--radius-lg);
-        background: linear-gradient(to right, #2193b0, #6dd5ed);
-        position: relative; overflow: hidden; display: flex; align-items: center; padding: 20px;
-        color: white; box-shadow: var(--shadow-lg); margin-bottom: 25px;
-    }
-    .promo-content h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 5px; line-height: 1.2; }
-    .promo-content p { font-size: 0.9rem; opacity: 0.9; margin-bottom: 15px; }
-    .promo-btn { padding: 8px 16px; background: white; color: var(--primary); border-radius: 20px; font-size: 0.8rem; font-weight: 700; border: none; }
+    .welcome-sub { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px; }
 
-    /* --- CATEGORY GRID (The Reference Style) --- */
+    /* --- IMAGE SLIDER --- */
+    .slider-wrapper {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        margin-bottom: 8px;
+        border-radius: var(--radius-lg);
+    }
+    .slider-track {
+        display: flex;
+        transition: transform 0.4s ease;
+        will-change: transform;
+    }
+    .slider-slide {
+        min-width: 100%;
+        height: 135px;
+        overflow: hidden;
+        border-radius: var(--radius-lg);
+        flex-shrink: 0;
+    }
+    .slider-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+        border-radius: var(--radius-lg);
+    }
+    .slider-dots {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+        margin-top: 6px;
+        padding-bottom: 2px;
+    }
+    .slider-dot {
+        width: 7px; height: 7px;
+        border-radius: 50%;
+        background: #d1d5db;
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+    .slider-dot.active {
+        background: var(--primary);
+        width: 20px;
+        border-radius: 4px;
+    }
+
+    /* --- CATEGORY GRID --- */
     .section-title { padding: 0 20px; margin-bottom: 15px; font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
     
     .category-grid {
@@ -140,7 +241,6 @@
     .cat-card .icon { font-size: 2rem; opacity: 0.3; position: absolute; right: 10px; bottom: 10px; z-index: 1; }
     .cat-arrow { align-self: flex-start; background: rgba(255,255,255,0.2); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
 
-    /* Specific Colors */
     .bg-msc { background: var(--grad-purple); }
     .bg-bsc { background: var(--grad-orange); }
     .bg-pbbsc { background: var(--grad-blue); }
@@ -148,7 +248,7 @@
     .bg-3d { background: var(--grad-green); }
     .bg-dark { background: var(--text-main); }
 
-    /* --- LIST LISTINGS (Submenu & Subjects) --- */
+    /* --- LIST LISTINGS --- */
     .list-container { padding: 20px; }
     .list-item {
         background: white; padding: 16px; border-radius: var(--radius-md);
@@ -160,7 +260,7 @@
     .list-info p { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
     .list-icon { color: var(--primary); margin-right: 15px; }
 
-    /* --- IFRAME & UTILS --- */
+    /* --- IFRAME --- */
     #view-iframe.view { padding: 0 !important; height: 100%; width: 100%; z-index: 50; position: relative; }
     .iframe-wrapper { width: 100%; height: 100%; transform-origin: 0 0; transition: transform 0.3s ease, width 0.3s ease; }
     iframe { width: 100%; height: 100%; border: none; display: block; background: #fff; }
@@ -181,7 +281,7 @@
         position: absolute; bottom: 0; left: 0; width: 100%; height: 70px;
         background: white; border-top: 1px solid #e2e8f0;
         display: flex; justify-content: space-around; align-items: center;
-        z-index: 40; padding-bottom: 10px; /* Safe area */
+        z-index: 40; padding-bottom: 10px;
     }
     .nav-item {
         display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -214,31 +314,127 @@
     .toggle-password-btn { position: absolute; right: 12px; top: 12px; border: none; background: none; color: var(--text-muted); cursor: pointer; }
     .error-msg { color: var(--danger); font-size: 0.85rem; margin-top: 5px; text-align: left; }
 
+    /* --- HAMBURGER MENU --- */
+    .hamburger-btn { background: none; border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-right: 10px; }
+
+    .drawer-overlay {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5); z-index: 200; display: none;
+        backdrop-filter: blur(2px);
+    }
+    .drawer-overlay.open { display: block; }
+
+    .drawer {
+        position: absolute; top: 0; left: -280px; width: 260px; height: 100%;
+        background: white; z-index: 201; transition: left 0.3s ease;
+        display: flex; flex-direction: column;
+        box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+    }
+    .drawer.open { left: 0; }
+
+    .drawer-header {
+        background: linear-gradient(to right, var(--primary), var(--primary-light));
+        padding: 30px 20px 20px 20px; color: white;
+    }
+    .drawer-header .d-name { font-size: 1.1rem; font-weight: 700; margin-top: 10px; }
+    .drawer-header .d-email { font-size: 0.78rem; opacity: 0.85; margin-top: 3px; }
+    .drawer-avatar { width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; }
+
+    .drawer-body { flex: 1; padding: 15px 0; }
+    .drawer-item {
+        display: flex; align-items: center; gap: 14px;
+        padding: 14px 20px; cursor: pointer; color: var(--text-main);
+        font-size: 0.95rem; font-weight: 500; border: none; background: none;
+        width: 100%; text-align: left; transition: background 0.15s;
+    }
+    .drawer-item:active { background: #f1f5f9; }
+    .drawer-item.danger { color: var(--danger); }
+    .drawer-item .d-icon { color: inherit; }
+    .drawer-divider { height: 1px; background: #f1f5f9; margin: 8px 0; }
+
+    /* --- T&C CHECKBOX --- */
+    .tc-row {
+        display: flex; align-items: flex-start; gap: 10px;
+        margin-bottom: 14px; margin-top: 4px;
+    }
+    .tc-row input[type="checkbox"] {
+        width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0;
+        accent-color: var(--primary); cursor: pointer;
+    }
+    .tc-row label { font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; cursor: pointer; }
+    .tc-row a { color: var(--primary); font-weight: 600; text-decoration: none; }
 </style>
 </head>
 <body>
+
+<!-- SPLASH SCREEN -->
+<div id="splash-screen">
+    <img id="splash-img" src="splash.png" alt="EziNurse">
+</div>
 
 <div id="app">
     <div id="wm-diagonal" class="watermark-strip"></div>
 
     <header class="header" id="main-header" style="display:none;">
+        <button class="icon-btn hamburger-btn" onclick="app.openDrawer()">
+            <span class="material-icons-round">menu</span>
+        </button>
         <button class="icon-btn back-btn" id="btn-back" onclick="app.goBack()">
             <span class="material-icons-round">arrow_back</span>
         </button>
         <div class="header-title" id="header-title">Ezi<span>Nurse</span></div>
-        <div class="header-actions">
-            <button class="icon-btn"><span class="material-icons-round">notifications</span></button>
-        </div>
+        <div class="header-actions"></div>
     </header>
+
+    <!-- DRAWER OVERLAY -->
+    <div id="drawer-overlay" class="drawer-overlay" onclick="app.closeDrawer()"></div>
+
+    <!-- SIDE DRAWER -->
+    <div id="side-drawer" class="drawer">
+        <div class="drawer-header">
+            <div class="drawer-avatar"><span class="material-icons-round" style="font-size:28px;">person</span></div>
+            <div class="d-name" id="drawer-name">My Account</div>
+            <div class="d-email" id="drawer-email"></div>
+        </div>
+        <div class="drawer-body">
+            <div class="drawer-divider"></div>
+            <button class="drawer-item danger" onclick="app.deleteAccount()">
+                <span class="material-icons-round d-icon">delete_forever</span>
+                Delete Account
+            </button>
+        </div>
+    </div>
+
+    <!-- DELETE CONFIRM MODAL -->
+    <div id="modal-delete" class="modal-overlay hidden">
+        <div class="modal-card">
+            <span class="material-icons-round" style="font-size:48px; color:var(--danger); margin-bottom:12px;">delete_forever</span>
+            <h3 style="margin-bottom:10px;">Delete Account</h3>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px; line-height:1.5;">Deletion request successful. You will get a confirmation email when your account is deleted.</p>
+            <button class="btn btn-primary" onclick="app.closeDeleteModal()">OK</button>
+        </div>
+    </div>
 
     <div id="fab-zoom" onclick="app.toggleZoom()"><span class="material-icons-round">zoom_in</span></div>
 
+    <!-- AUTH VIEW -->
     <div id="view-auth" class="view active full-screen">
         <div class="auth-container">
             <div class="auth-header">
-                <div class="brand-logo">EziNurse</div>
-                <h1 style="font-size: 1.5rem; margin-bottom: 5px;">Welcome</h1>
-                <p style="color:var(--text-muted);">Sign in to continue your learning</p>
+                <div class="brand-hero">
+                    <div class="brand-logo-text">
+                        <span class="brand-ezi">Ezi</span><span class="brand-nurse">Nurse</span>
+                    </div>
+                    <div class="brand-tagline">Premium Nursing Education</div>
+                    <div class="brand-pill-row">
+                        <span class="brand-pill brand-pill-purple">MSc</span>
+                        <span class="brand-pill brand-pill-blue">BSc</span>
+                        <span class="brand-pill brand-pill-green">PBBSc</span>
+                        <span class="brand-pill brand-pill-pink">GNM</span>
+                    </div>
+                </div>
+                <h1 style="font-size: 1.3rem; margin-bottom: 5px; font-weight: 700;">Welcome Back 👋</h1>
+                <p style="color:var(--text-muted); font-size:0.9rem;">Sign in to continue your learning</p>
             </div>
             
             <div id="form-login">
@@ -257,14 +453,11 @@
                     </div>
                 </div>
                 <div id="login-error" class="error-msg" style="text-align:center; margin-bottom:15px;"></div>
-                
                 <button id="btn-login-submit" class="btn btn-primary" onclick="app.login()">
                     <span>Login Securely</span>
                     <span class="material-icons-round" style="font-size:18px;">login</span>
                 </button>
-                
                 <div style="text-align:center; margin: 20px 0; color:var(--text-muted); font-size:0.8rem;">OR</div>
-                
                 <button class="btn btn-outline" onclick="app.toggleAuthMode()">Create New Account</button>
             </div>
 
@@ -272,52 +465,58 @@
                 <div class="form-group"><label class="form-label">Full Name</label><input type="text" id="signup-name" class="form-input" placeholder="Nurse Joy"></div>
                 <div class="form-group"><label class="form-label">Email</label><input type="email" id="signup-email" class="form-input"></div>
                 <div class="form-group"><label class="form-label">Phone</label><input type="tel" id="signup-phone" class="form-input"></div>
-                <div class="form-group"><label class="form-label">How did you hear about us?</label><input type="text" id="signup-source" class="form-input" placeholder="Google, Friend, etc."></div>
                 <div class="form-group"><label class="form-label">Password</label>
                     <div class="password-wrapper"><input type="password" id="signup-pass" class="form-input"><button class="toggle-password-btn" onclick="app.togglePassword('signup-pass', this)"><span class="material-icons-round">visibility</span></button></div>
                 </div>
                 <div id="signup-error" class="error-msg" style="text-align:center;"></div>
-                <button id="btn-signup-submit" class="btn btn-primary" style="margin-top:15px;" onclick="app.signup()">Create Account</button>
+                <div class="tc-row">
+                    <input type="checkbox" id="signup-tc">
+                    <label for="signup-tc">I agree to the <a href="tc.html" target="_blank">Terms and Conditions</a></label>
+                </div>
+                <button id="btn-signup-submit" class="btn btn-primary" style="margin-top:5px;" onclick="app.signup()">Create Account</button>
                 <button class="btn btn-ghost" onclick="app.toggleAuthMode()">Already have an account? Login</button>
             </div>
         </div>
     </div>
 
+    <!-- RESET VIEW -->
     <div id="view-reset" class="view full-screen">
         <div class="auth-container">
             <h2 style="font-size:1.5rem; margin-bottom:10px;">Reset Password</h2>
             <div id="reset-step-1">
-                <p class="form-label">Enter your email to receive a code.</p>
+                <p class="form-label">Enter your email to receive a password reset link.</p>
                 <input type="email" id="reset-email" class="form-input" style="margin-bottom:15px;">
                 <div id="reset-error-1" class="error-msg"></div>
-                <button id="btn-reset-req" class="btn btn-primary" onclick="app.requestResetCode()">Send Code</button>
+                <button id="btn-reset-req" class="btn btn-primary" onclick="app.requestResetCode()">Send Link</button>
                 <button class="btn btn-ghost" onclick="app.navTo('view-auth', true)">Cancel</button>
-            </div>
-            <div id="reset-step-2" class="hidden">
-                <p class="form-label">Enter 6-digit code & new password.</p>
-                <input type="text" id="reset-code" class="form-input" placeholder="Code" style="margin-bottom:10px;">
-                <div class="password-wrapper" style="margin-bottom:15px;">
-                    <input type="password" id="reset-new-pass" class="form-input" placeholder="New Password">
-                    <button class="toggle-password-btn" onclick="app.togglePassword('reset-new-pass', this)"><span class="material-icons-round">visibility</span></button>
-                </div>
-                <div id="reset-error-2" class="error-msg"></div>
-                <button id="btn-reset-conf" class="btn btn-primary" onclick="app.confirmResetPassword()">Update Password</button>
             </div>
         </div>
     </div>
 
+    <!-- DASHBOARD VIEW -->
     <div id="view-dashboard" class="view">
         <div class="dashboard-hero">
             <div class="welcome-text">Hello, <span id="user-name-display" style="color:var(--primary);">Nurse</span> 👋</div>
             <div class="welcome-sub">Let's start learning today.</div>
-            
-            <div class="promo-card">
-                <div class="promo-content">
-                    <h3>Exam Batch<br>2026 Live</h3>
-                    <p>Join the elite nursing squad.</p>
-                    <button class="promo-btn">Explore Now</button>
+
+            <!-- IMAGE SLIDER -->
+            <div class="slider-wrapper" id="hero-slider">
+                <div class="slider-track" id="slider-track">
+                    <div class="slider-slide"><img src="1.png" alt="Slide 1" onerror="this.style.background='linear-gradient(135deg,#7e57c2,#512da8)';this.alt='';"></div>
+                    <div class="slider-slide"><img src="2.png" alt="Slide 2" onerror="this.style.background='linear-gradient(135deg,#ffa726,#f57c00)';this.alt='';"></div>
+                    <div class="slider-slide"><img src="3.png" alt="Slide 3" onerror="this.style.background='linear-gradient(135deg,#42a5f5,#1976d2)';this.alt='';"></div>
+                    <div class="slider-slide"><img src="4.png" alt="Slide 4" onerror="this.style.background='linear-gradient(135deg,#ec407a,#c2185b)';this.alt='';"></div>
+                    <div class="slider-slide"><img src="5.png" alt="Slide 5" onerror="this.style.background='linear-gradient(135deg,#66bb6a,#388e3c)';this.alt='';"></div>
+                    <div class="slider-slide"><img src="6.png" alt="Slide 6" onerror="this.style.background='linear-gradient(135deg,#26c6da,#00838f)';this.alt='';"></div>
                 </div>
-                <span class="material-icons-round" style="position:absolute; right:-20px; bottom:-30px; font-size:140px; opacity:0.2;">school</span>
+            </div>
+            <div class="slider-dots" id="slider-dots">
+                <div class="slider-dot active" onclick="sliderGoTo(0)"></div>
+                <div class="slider-dot" onclick="sliderGoTo(1)"></div>
+                <div class="slider-dot" onclick="sliderGoTo(2)"></div>
+                <div class="slider-dot" onclick="sliderGoTo(3)"></div>
+                <div class="slider-dot" onclick="sliderGoTo(4)"></div>
+                <div class="slider-dot" onclick="sliderGoTo(5)"></div>
             </div>
         </div>
 
@@ -341,13 +540,8 @@
             </div>
             <div class="cat-card bg-gnm" onclick="app.navToCourse('GNM')">
                 <div class="cat-arrow"><span class="material-icons-round" style="font-size:14px;">arrow_forward</span></div>
-                <h3>GNM<br>General</h3>
+                <h3>GNM<br>Nursing</h3>
                 <span class="material-icons-round icon">healing</span>
-            </div>
-            <div class="cat-card bg-3d" onclick="app.checkAccessAndOpen('3D', 'Systems')">
-                <div class="cat-arrow"><span class="material-icons-round" style="font-size:14px;">visibility</span></div>
-                <h3>3D<br>Anatomy</h3>
-                <span class="material-icons-round icon">3d_rotation</span>
             </div>
             <div class="cat-card bg-dark" onclick="app.navToCourse('EXAMS')">
                 <div class="cat-arrow"><span class="material-icons-round" style="font-size:14px;">star</span></div>
@@ -355,43 +549,28 @@
                 <span class="material-icons-round icon">quiz</span>
             </div>
         </div>
-
-        <div class="list-container">
-             <div class="list-item" onclick="app.checkAccessAndOpen('REQ', 'Documents')">
-                <div style="display:flex; align-items:center;">
-                    <span class="material-icons-round list-icon">description</span>
-                    <div class="list-info"><h4>Document Checklist</h4><p>Nursing Requirements</p></div>
-                </div>
-                <span class="material-icons-round" style="color:#ccc;">chevron_right</span>
-            </div>
-             <div class="list-item" onclick="app.checkAccessAndOpen('COMM', 'Basics')">
-                <div style="display:flex; align-items:center;">
-                    <span class="material-icons-round list-icon">language</span>
-                    <div class="list-info"><h4>English Basics</h4><p>Communicative English</p></div>
-                </div>
-                <span class="material-icons-round" style="color:#ccc;">chevron_right</span>
-            </div>
-        </div>
     </div>
 
+    <!-- SUBMENU VIEW -->
     <div id="view-submenu" class="view">
         <div class="list-container" id="submenu-list"></div>
     </div>
 
+    <!-- SUBJECTS VIEW -->
     <div id="view-subjects" class="view">
         <div class="list-container" id="subject-list"></div>
     </div>
 
+    <!-- IFRAME VIEW -->
     <div id="view-iframe" class="view full-screen"></div>
 
+    <!-- PAYWALL VIEW -->
     <div id="view-paywall" class="view full-screen">
         <div class="paywall-container">
             <span class="material-icons-round" style="font-size:64px; color:var(--accent); margin-bottom:20px;">lock</span>
             <h2 style="font-size:1.5rem; margin-bottom:10px;">Unlock Premium</h2>
             <p style="color:var(--text-muted); margin-bottom:20px;">Get complete access to this course material and boost your preparation.</p>
-            
             <div id="paywall-price-display" class="price-wrapper"></div>
-            
             <button class="btn btn-primary" onclick="app.purchaseLockedContent()">
                 <span>Unlock Now</span>
                 <span class="material-icons-round">shopping_cart</span>
@@ -400,14 +579,11 @@
         </div>
     </div>
 
+    <!-- BOTTOM NAV — Store tab hidden, only Home + Logout -->
     <nav id="bottom-nav" class="bottom-nav" style="display:none;">
         <button class="nav-item active" onclick="app.navTo('view-dashboard')">
             <span class="material-icons-round">home</span>
             <label>Home</label>
-        </button>
-        <button class="nav-item" onclick="app.navTo('view-dashboard')">
-            <span class="material-icons-round">local_library</span>
-            <label>Store</label>
         </button>
         <button class="nav-item" onclick="app.logout()">
             <span class="material-icons-round">person</span>
@@ -415,24 +591,388 @@
         </button>
     </nav>
 
-    <div id="modal-exit" class="modal-overlay hidden">
-        <div class="modal-card">
-            <h3 style="margin-bottom:10px;">Exit App?</h3>
-            <p style="margin-bottom:20px; color:var(--text-muted);">Are you sure you want to close the app?</p>
-            <div style="display:flex; flex-direction:column; gap:10px;">
-                <button class="btn btn-primary" style="background-color: var(--danger);" onclick="app.confirmExit()">Yes, Exit</button>
-                <button class="btn btn-outline" onclick="app.cancelExit()">No, Stay</button>
-            </div>
-        </div>
-    </div>
+    <!-- EXIT MODAL -->
+
 
 </div>
 
+<!-- SLIDER SCRIPT -->
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbwjByTFMqWtWVAU29OKEPKg4YM63eHGfYUtJB-SUhgatdB0AkEw2miu8nLu96vkqk47/exec";
-const API_KEY = "EZI_SECURE_8829_XJKS_2910";
+    var sliderCurrent = 0;
+    var sliderTotal = 6;
+    var sliderTimer = null;
 
-// --- PAYMENT LINKS (PRESERVED) ---
+    function sliderGoTo(index) {
+        sliderCurrent = index;
+        document.getElementById('slider-track').style.transform = 'translateX(-' + (index * 100) + '%)';
+        var dots = document.querySelectorAll('.slider-dot');
+        dots.forEach(function(d, i) { d.classList.toggle('active', i === index); });
+    }
+
+    function sliderNext() {
+        sliderGoTo((sliderCurrent + 1) % sliderTotal);
+    }
+
+    function startSliderAuto() {
+        sliderTimer = setInterval(sliderNext, 3000);
+    }
+
+    function stopSliderAuto() {
+        clearInterval(sliderTimer);
+    }
+
+    // Touch swipe support
+    (function() {
+        var startX = 0;
+        var el = document.getElementById('hero-slider');
+        el.addEventListener('touchstart', function(e) {
+            startX = e.touches[0].clientX;
+            stopSliderAuto();
+        }, { passive: true });
+        el.addEventListener('touchend', function(e) {
+            var diff = startX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 40) {
+                if (diff > 0) sliderGoTo((sliderCurrent + 1) % sliderTotal);
+                else sliderGoTo((sliderCurrent - 1 + sliderTotal) % sliderTotal);
+            }
+            startSliderAuto();
+        }, { passive: true });
+    })();
+
+    startSliderAuto();
+</script>
+
+<!-- GLOBAL PROXY — forwards onclick calls to _realApp once the module loads -->
+<script>
+  window._realApp = null;
+  window._appQueue = [];
+  window.app = new Proxy({}, {
+    get(_, prop) {
+      return function(...args) {
+        if (window._realApp && typeof window._realApp[prop] === 'function') {
+          return window._realApp[prop](...args);
+        }
+        window._appQueue.push({ prop, args });
+      };
+    }
+  });
+</script>
+
+<!-- FIREBASE MODULE SCRIPT -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDDJO6f64eN_i8kq_DRIl2J5OqvOgbybOs",
+    authDomain: "my-login-app-54abd.firebaseapp.com",
+    projectId: "my-login-app-54abd",
+    storageBucket: "my-login-app-54abd.firebasestorage.app",
+    messagingSenderId: "747689511082",
+    appId: "1:747689511082:web:0815e12c1ada17a31ca8d3"
+  };
+
+  const fbApp = initializeApp(firebaseConfig);
+  const auth = getAuth(fbApp);
+  const db = getFirestore(fbApp);
+
+  const _realApp = {
+    currentUser: null,
+    lockedCourseKey: null,
+    lockedCourseSection: null,
+    zoomLevel: 1,
+    permissions: {},
+
+    init: function() {
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                this.currentUser = user;
+                this.updateWatermark();
+                if(user.displayName) document.getElementById('user-name-display').textContent = user.displayName.split(' ')[0];
+                await this.fetchUserPermissions(user.uid);
+                history.replaceState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard');
+                this.renderView('view-dashboard');
+            } else {
+                this.currentUser = null;
+                this.permissions = {};
+                history.replaceState({ viewId: 'view-auth' }, 'Login', '#login');
+                this.renderView('view-auth');
+            }
+        });
+
+        window.addEventListener('popstate', (event) => {
+            if (event.state && event.state.viewId) {
+                if (event.state.viewId === 'view-submenu') {
+                    const c = event.state.course || this.lockedCourseKey;
+                    if(c) { this.renderSubmenu(c); this.renderView('view-submenu'); } 
+                    else this.renderView('view-dashboard');
+                } else if (event.state.viewId === 'view-subjects') {
+                    const c = event.state.course || this.lockedCourseKey;
+                    const s = event.state.section || this.lockedCourseSection;
+                    if (c && s) { this.renderSubjectList(c, s); this.renderView('view-subjects'); } 
+                    else this.renderView('view-dashboard');
+                } else if (event.state.viewId === 'view-iframe') {
+                    if(event.state.sourceUrl) this.openContent(event.state.sourceUrl, event.state.title, true);
+                    else this.renderView('view-dashboard');
+                } else {
+                    this.renderView(event.state.viewId);
+                }
+            } else {
+                this.currentUser ? this.renderView('view-dashboard') : this.renderView('view-auth');
+            }
+        });
+    },
+
+    fetchUserPermissions: async function(uid) {
+        try {
+            const docRef = doc(db, "users", uid);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                this.permissions = data.permissions || {};
+                if(data.name) document.getElementById('user-name-display').textContent = data.name.split(' ')[0];
+            } else {
+                await setDoc(doc(db, "users", uid), { email: this.currentUser.email, permissions: {} }, { merge: true });
+            }
+        } catch (e) { console.error("Error fetching permissions:", e); }
+    },
+
+    updateWatermark: function() {
+        const email = this.currentUser ? this.currentUser.email : '';
+        const strip = document.getElementById('wm-diagonal');
+        if (email) { strip.textContent = (email + " • ").repeat(30); strip.style.display = 'flex'; }
+        else { strip.style.display = 'none'; }
+    },
+
+    toggleZoom: function() {
+        const wrapper = document.getElementById('iframe-wrapper');
+        if(!wrapper) return;
+        if (this.zoomLevel === 1) this.zoomLevel = 1.5;
+        else if (this.zoomLevel === 1.5) this.zoomLevel = 2.0;
+        else this.zoomLevel = 1;
+        wrapper.style.transform = 'none';
+        if (this.zoomLevel === 1) wrapper.style.width = '100%';
+        if (this.zoomLevel === 1.5) wrapper.style.width = '150%';
+        if (this.zoomLevel === 2.0) wrapper.style.width = '200%';
+    },
+
+    login: function() {
+        const email = document.getElementById('login-email').value.trim();
+        const pass = document.getElementById('login-pass').value.trim();
+        const errorDiv = document.getElementById('login-error');
+        const btn = document.getElementById('btn-login-submit');
+        errorDiv.textContent = "";
+        if(!email || !pass) { errorDiv.textContent = "Fill all fields"; return; }
+        btn.innerHTML = '<span>Logging in...</span>'; btn.disabled = true;
+        signInWithEmailAndPassword(auth, email, pass)
+            .catch((error) => {
+                const ec = error.code;
+                if(ec === 'auth/invalid-credential' || ec === 'auth/user-not-found' || ec === 'auth/wrong-password') errorDiv.textContent = "Incorrect email or password.";
+                else if (ec === 'auth/too-many-requests') errorDiv.textContent = "Too many failed attempts. Try again later.";
+                else errorDiv.textContent = error.message;
+                btn.innerHTML = '<span>Login Securely</span><span class="material-icons-round" style="font-size:18px;">login</span>'; btn.disabled = false;
+            });
+    },
+
+    signup: function() {
+        const name = document.getElementById('signup-name').value.trim();
+        const email = document.getElementById('signup-email').value.trim();
+        const pass = document.getElementById('signup-pass').value.trim();
+        const phone = document.getElementById('signup-phone').value.trim();
+        const tc = document.getElementById('signup-tc').checked;
+        const errorDiv = document.getElementById('signup-error');
+        const btn = document.getElementById('btn-signup-submit');
+        errorDiv.textContent = "";
+        if(!name || !email || !pass || !phone) { errorDiv.textContent = "Fill all fields"; return; }
+        if(!tc) { errorDiv.textContent = "Please accept the Terms and Conditions to continue."; return; }
+        btn.textContent = "Creating..."; btn.disabled = true;
+        createUserWithEmailAndPassword(auth, email, pass)
+            .then(async (userCredential) => {
+                const user = userCredential.user;
+                await setDoc(doc(db, "users", user.uid), { name, email, phone, createdAt: new Date(), permissions: {} });
+                alert("Account Created!");
+            })
+            .catch((error) => { errorDiv.textContent = error.message; btn.textContent = "Create Account"; btn.disabled = false; });
+    },
+
+    requestResetCode: function() {
+        const email = document.getElementById('reset-email').value.trim();
+        const btn = document.getElementById('btn-reset-req');
+        const err = document.getElementById('reset-error-1');
+        err.textContent = "";
+        if(!email) { err.textContent = "Enter email"; return; }
+        btn.textContent = "Sending..."; btn.disabled = true;
+        sendPasswordResetEmail(auth, email)
+            .then(() => { alert("Password reset email sent! Check your inbox."); this.navTo('view-auth', true); })
+            .catch((error) => { err.textContent = error.message; })
+            .finally(() => { btn.textContent = "Send Link"; btn.disabled = false; });
+    },
+
+    toggleAuthMode: function() {
+        const login = document.getElementById('form-login');
+        const signup = document.getElementById('form-signup');
+        if(login.classList.contains('hidden')){ signup.classList.add('hidden'); login.classList.remove('hidden'); }
+        else { login.classList.add('hidden'); signup.classList.remove('hidden'); }
+    },
+
+    togglePassword: function(id, btn) {
+        const el = document.getElementById(id);
+        const icon = btn.querySelector('span');
+        if(el.type === 'password') { el.type = 'text'; icon.textContent = 'visibility_off'; btn.style.color = 'var(--primary)'; }
+        else { el.type = 'password'; icon.textContent = 'visibility'; btn.style.color = 'var(--text-muted)'; }
+    },
+
+    logout: function() { signOut(auth).catch((e) => console.error(e)); },
+
+    openDrawer: function() {
+        const email = this.currentUser ? this.currentUser.email : '';
+        const name = document.getElementById('user-name-display') ? document.getElementById('user-name-display').textContent : '';
+        document.getElementById('drawer-name').textContent = name || 'My Account';
+        document.getElementById('drawer-email').textContent = email;
+        document.getElementById('side-drawer').classList.add('open');
+        document.getElementById('drawer-overlay').classList.add('open');
+    },
+
+    closeDrawer: function() {
+        document.getElementById('side-drawer').classList.remove('open');
+        document.getElementById('drawer-overlay').classList.remove('open');
+    },
+
+    deleteAccount: function() {
+        this.closeDrawer();
+        document.getElementById('modal-delete').classList.remove('hidden');
+    },
+
+    closeDeleteModal: function() {
+        document.getElementById('modal-delete').classList.add('hidden');
+    },
+
+    navTo: function(viewId, isRoot = false, stateData = {}) {
+        const state = { viewId, ...stateData };
+        if (isRoot) {
+            history.replaceState(state, null, `#${viewId.replace('view-', '')}`);
+        } else { 
+            history.pushState(state, null, `#${viewId.replace('view-', '')}`);
+        }
+        this.renderView(viewId);
+    },
+
+    renderView: function(viewId) {
+        const iframeContainer = document.getElementById('view-iframe');
+        if (viewId !== 'view-iframe' && iframeContainer) iframeContainer.innerHTML = '';
+        const fab = document.getElementById('fab-zoom');
+        const header = document.getElementById('main-header');
+        const bottomNav = document.getElementById('bottom-nav');
+        fab.style.display = (viewId === 'view-iframe') ? 'flex' : 'none';
+        bottomNav.style.display = (viewId === 'view-dashboard') ? 'flex' : 'none';
+        const isAuth = viewId === 'view-auth' || viewId === 'view-reset';
+        const isDash = viewId === 'view-dashboard';
+        if (isAuth) { header.style.display = 'none'; }
+        else { header.style.display = 'flex'; }
+        // Dashboard: show hamburger, hide back. Other views: show back, hide hamburger
+        const backBtn = document.getElementById('btn-back');
+        const hamburgerBtn = document.querySelector('.hamburger-btn');
+        if (isDash) {
+            if(backBtn) backBtn.style.display = 'none';
+            if(hamburgerBtn) hamburgerBtn.style.display = 'flex';
+        } else {
+            if(backBtn) backBtn.style.display = 'flex';
+            if(hamburgerBtn) hamburgerBtn.style.display = 'none';
+        }
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        const target = document.getElementById(viewId);
+        if(target) target.classList.add('active');
+    },
+
+    goBack: function() { window.history.back(); },
+
+    navToCourse: function(key) { this.renderSubmenu(key); this.navTo('view-submenu', false, { course: key }); },
+
+    renderSubmenu: function(key) {
+        const list = document.getElementById('submenu-list');
+        list.innerHTML = '';
+        document.getElementById('header-title').innerHTML = `<span>${key}</span> Details`;
+        const sections = Object.keys(COURSES[key]);
+        sections.forEach(sec => {
+            const item = document.createElement('div');
+            item.className = 'list-item';
+            item.innerHTML = `<div style="display:flex; align-items:center;"><span class="material-icons-round list-icon">folder_open</span><div class="list-info"><h4>${sec}</h4></div></div><span class="material-icons-round" style="color:#ccc;">chevron_right</span>`;
+            item.onclick = () => { this.checkAccessAndOpen(key, sec); };
+            list.appendChild(item);
+        });
+    },
+
+    checkAccessAndOpen: function(course, section) {
+        this.lockedCourseKey = course; this.lockedCourseSection = section;
+        const pKey = getPermissionKey(course, section);
+        if(this.permissions && (this.permissions[pKey] === true || this.permissions['all_access'] === true)) {
+            this.openSubjectList(course, section);
+        } else {
+            this.renderPaywallInfo(course, section);
+            this.navTo('view-paywall', false, { from: 'checkAccess' });
+        }
+    },
+
+    openSubjectList: function(course, section) { this.renderSubjectList(course, section); this.navTo('view-subjects', false, { course, section }); },
+
+    renderSubjectList: function(course, section) {
+        const list = document.getElementById('subject-list');
+        list.innerHTML = '';
+        document.getElementById('header-title').textContent = section;
+        const subjects = COURSES[course][section];
+        subjects.forEach(sub => {
+            const item = document.createElement('div');
+            item.className = 'list-item';
+            item.innerHTML = `<div style="display:flex; align-items:center;"><span class="material-icons-round list-icon">article</span><div class="list-info"><h4>${sub.label.replace(/<[^>]*>?/gm, '')}</h4></div></div><span class="material-icons-round" style="color:#ccc;">play_circle_outline</span>`;
+            item.onclick = () => { this.openContent(sub.link, sub.label); };
+            list.appendChild(item);
+        });
+    },
+
+    openContent: function(url, title, fromHistory = false) {
+        const container = document.getElementById('view-iframe');
+        if (!fromHistory) this.navTo('view-iframe', false, { sourceUrl: url, title });
+        else this.renderView('view-iframe');
+        const wrapper = document.createElement('div');
+        wrapper.id = 'iframe-wrapper'; wrapper.className = 'iframe-wrapper';
+        const iframe = document.createElement('iframe');
+        iframe.id = "content-frame"; iframe.src = url;
+        wrapper.appendChild(iframe);
+        container.innerHTML = ''; container.appendChild(wrapper);
+        this.zoomLevel = 1;
+    },
+
+    renderPaywallInfo: function(course, section) {
+        const display = document.getElementById('paywall-price-display');
+        let html = '';
+        if (course === 'BSc') { html = `<div><span class="price-original">₹12,000</span><span class="price-discounted">₹5,999</span></div>`; }
+        else if (course === 'GNM') { html = `<div><span class="price-original">₹14,000</span><span class="price-discounted">₹5,800</span></div>`; }
+        display.innerHTML = html;
+    },
+
+    purchaseLockedContent: function() {
+        const course = this.lockedCourseKey;
+        const section = this.lockedCourseSection || 'Systems';
+        const discountKey = `${course}_${section}_D`;
+        const fullKey = `${course}_${section}_F`;
+        let url = PAYMENT_LINKS[discountKey] || PAYMENT_LINKS[fullKey] || `https://www.razorpay.com/fallback`;
+        window.open(url, '_blank');
+    }
+  };
+
+  // Expose real app and flush any calls that were queued before module loaded
+  window._realApp = _realApp;
+  if (window._appQueue && window._appQueue.length) {
+    window._appQueue.forEach(({ prop, args }) => {
+      if (typeof _realApp[prop] === 'function') _realApp[prop](...args);
+    });
+    window._appQueue = [];
+  }
+  _realApp.init();
+</script>
+
+<script>
 const PAYMENT_LINKS = {
     'GNM_Third Year_D': 'https://rzp.io/rzp/tx1GzgB0', 'GNM_Second Year_D': 'https://rzp.io/rzp/7ZEYqAR', 'GNM_First Year_D': 'https://rzp.io/rzp/m7pEmVy5',
     'GNM_Third Year_F': 'https://rzp.io/rzp/abNPOlM', 'GNM_Second Year_F': 'https://rzp.io/rzp/7uQDIiN', 'GNM_First Year_F': 'https://rzp.io/rzp/lVAKDci',
@@ -447,12 +987,6 @@ const PAYMENT_LINKS = {
     'COMM_Basics_F': 'https://rzp.io/l/dummy-comm-eng'
 };
 
-function getDeviceId() {
-    let id = localStorage.getItem('ezi_device_id');
-    if (!id) { id = 'web-' + Math.random().toString(36).substr(2, 9) + Date.now(); localStorage.setItem('ezi_device_id', id); }
-    return id;
-}
-
 function getPermissionKey(course, section) {
     if (course === '3D') return '3d_models';
     if (course === 'REQ') return 'nursing_req';
@@ -461,13 +995,12 @@ function getPermissionKey(course, section) {
     const c = course.toLowerCase();
     if (section.includes('Semester')) {
         const num = section.split(' ')[1];
-        const map = {'1':'first', '2':'second', '3':'third', '4':'fourth', '5':'fifth', '6':'sixth', '7':'seventh'};
+        const map = {'1':'first','2':'second','3':'third','4':'fourth','5':'fifth','6':'sixth','7':'seventh'};
         return `${c}_${map[num]}_semester`;
     }
     return `${c}_${section.toLowerCase().replace(' ', '_')}`;
 }
 
-// --- COURSE DATA (PRESERVED) ---
 const COURSES = {
     'MSc': {
         'First Year': [
@@ -507,354 +1040,6 @@ const COURSES = {
     'REQ': { 'Documents': [{ label: 'Nursing Requirements', link: 'nursingrequirements.html' }] },
     'COMM': { 'Basics': [{ label: 'Communicative English', link: 'communicativeenglish.html' }] }
 };
-
-const app = {
-    currentUser: null,
-    lockedCourseKey: null,
-    lockedCourseSection: null,
-    zoomLevel: 1,
-
-    init: function() {
-        const savedUser = localStorage.getItem('eziUser');
-        if (savedUser) {
-            this.currentUser = JSON.parse(savedUser);
-            this.updateWatermark();
-            if(this.currentUser.name) document.getElementById('user-name-display').textContent = this.currentUser.name.split(' ')[0];
-            history.replaceState({ viewId: 'view-exit-guard' }, 'Exit Guard', '#exit');
-            history.pushState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard');
-            this.renderView('view-dashboard');
-            const savedAuth = localStorage.getItem('eziAuth');
-            if(savedAuth) { try { this.syncPermissions(JSON.parse(savedAuth)); } catch(e){} }
-        } else {
-            history.replaceState({ viewId: 'view-auth' }, 'Login', '#login');
-            this.renderView('view-auth');
-        }
-
-        window.addEventListener('popstate', (event) => {
-            if (event.state && event.state.viewId) {
-                if (event.state.viewId === 'view-exit-guard') {
-                    this.showExitModal();
-                    this.renderView('view-dashboard');
-                    return;
-                }
-                if (event.state.viewId === 'view-submenu') {
-                    const c = event.state.course || this.lockedCourseKey;
-                    if(c) { this.renderSubmenu(c); this.renderView('view-submenu'); } 
-                    else this.renderView('view-dashboard');
-                } else if (event.state.viewId === 'view-subjects') {
-                    const c = event.state.course || this.lockedCourseKey;
-                    const s = event.state.section || this.lockedCourseSection;
-                    if (c && s) { this.renderSubjectList(c, s); this.renderView('view-subjects'); } 
-                    else this.renderView('view-dashboard');
-                } else if (event.state.viewId === 'view-iframe') {
-                    if(event.state.sourceUrl) this.openContent(event.state.sourceUrl, event.state.title, true);
-                    else this.renderView('view-dashboard');
-                } else {
-                    this.renderView(event.state.viewId);
-                }
-            } else {
-                this.currentUser ? this.renderView('view-dashboard') : this.renderView('view-auth');
-            }
-        });
-    },
-
-    checkSessionNow: async function() {
-        if (!this.currentUser) return;
-        try {
-            const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'check_session', email: this.currentUser.email, deviceId: getDeviceId(), apiKey: API_KEY }) });
-            const data = await res.json();
-            if (!data.valid) { alert("Logged out: Account active on another device."); this.logout(); }
-        } catch(e) {}
-    },
-
-    updateWatermark: function() {
-        const email = this.currentUser ? this.currentUser.email : '';
-        const strip = document.getElementById('wm-diagonal');
-        if (email) {
-            const text = (email + " • ").repeat(30);
-            strip.textContent = text;
-            strip.style.display = 'flex';
-        } else {
-            strip.style.display = 'none';
-        }
-    },
-
-    toggleZoom: function() {
-        const wrapper = document.getElementById('iframe-wrapper');
-        if(!wrapper) return;
-        if (this.zoomLevel === 1) this.zoomLevel = 1.5;
-        else if (this.zoomLevel === 1.5) this.zoomLevel = 2.0;
-        else this.zoomLevel = 1;
-
-        wrapper.style.transform = `scale(${this.zoomLevel})`;
-        wrapper.style.width = this.zoomLevel > 1 ? "100%" : `${100 / this.zoomLevel}%`;
-        wrapper.style.height = this.zoomLevel > 1 ? "auto" : `${100 / this.zoomLevel}%`;
-        wrapper.style.transform = 'none';
-        
-        if (this.zoomLevel === 1) wrapper.style.width = '100%';
-        if (this.zoomLevel === 1.5) wrapper.style.width = '150%';
-        if (this.zoomLevel === 2.0) wrapper.style.width = '200%';
-    },
-
-    syncPermissions: async function(creds) {
-        try {
-            const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action:'login', email: creds.email, password: creds.password, deviceId: getDeviceId(), apiKey: API_KEY }) });
-            const data = await res.json();
-            if(data.result === 'success'){
-                this.currentUser = data.user;
-                localStorage.setItem('eziUser', JSON.stringify(data.user));
-                this.updateWatermark();
-            }
-        } catch(e) {}
-    },
-
-    login: async function() {
-        const email = document.getElementById('login-email').value.trim();
-        const pass = document.getElementById('login-pass').value.trim();
-        const errorDiv = document.getElementById('login-error');
-        const btn = document.getElementById('btn-login-submit');
-        errorDiv.textContent = "";
-
-        if(!email || !pass) { errorDiv.textContent = "Fill all fields"; return; }
-        btn.innerHTML = '<span>Logging in...</span>'; btn.disabled = true;
-
-        try {
-            const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action:'login', email, password:pass, deviceId:getDeviceId(), apiKey: API_KEY }) });
-            const data = await res.json();
-            if(data.result === 'success'){
-                this.currentUser = data.user;
-                localStorage.setItem('eziUser', JSON.stringify(data.user));
-                localStorage.setItem('eziAuth', JSON.stringify({email: email, password: pass}));
-                document.getElementById('login-email').value = ""; document.getElementById('login-pass').value = "";
-                this.updateWatermark();
-                if(data.user.name) document.getElementById('user-name-display').textContent = data.user.name.split(' ')[0];
-                this.navTo('view-dashboard', true);
-            } else { errorDiv.textContent = data.message; }
-        } catch(e) { errorDiv.textContent = "Network Error"; } 
-        finally { btn.innerHTML = '<span>Login Securely</span><span class="material-icons-round" style="font-size:18px;">login</span>'; btn.disabled = false; }
-    },
-
-    signup: async function() {
-        const name = document.getElementById('signup-name').value.trim();
-        const email = document.getElementById('signup-email').value.trim();
-        const pass = document.getElementById('signup-pass').value.trim();
-        const phone = document.getElementById('signup-phone').value.trim();
-        const source = document.getElementById('signup-source').value.trim();
-        const errorDiv = document.getElementById('signup-error');
-        const btn = document.getElementById('btn-signup-submit');
-        errorDiv.textContent = "";
-
-        if(!name || !email || !pass || !phone || !source) { errorDiv.textContent = "Fill all fields"; return; }
-        btn.textContent = "Creating..."; btn.disabled = true;
-
-        try {
-            const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action:'signup', name, email, password:pass, phone, source: source, deviceId:getDeviceId(), apiKey: API_KEY }) });
-            const data = await res.json();
-            if(data.result === 'success'){
-                this.currentUser = data.user;
-                localStorage.setItem('eziUser', JSON.stringify(data.user));
-                localStorage.setItem('eziAuth', JSON.stringify({email: email, password: pass}));
-                this.updateWatermark();
-                alert("Account Created!");
-                if(data.user.name) document.getElementById('user-name-display').textContent = data.user.name.split(' ')[0];
-                this.navTo('view-dashboard', true);
-            } else { errorDiv.textContent = data.message; }
-        } catch(e) { errorDiv.textContent = "Network Error"; } 
-        finally { btn.textContent = "Create Account"; btn.disabled = false; }
-    },
-
-    // --- RESET PASSWORD LOGIC ---
-    requestResetCode: async function() {
-        const email = document.getElementById('reset-email').value.trim();
-        const btn = document.getElementById('btn-reset-req');
-        const err = document.getElementById('reset-error-1');
-        err.textContent = "";
-        if(!email) { err.textContent = "Enter email"; return; }
-        btn.textContent = "Sending..."; btn.disabled = true;
-        try {
-            const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action:'reset_request', email: email, apiKey: API_KEY }) });
-            const data = await res.json();
-            if(data.result === 'success') {
-                document.getElementById('reset-step-1').classList.add('hidden');
-                document.getElementById('reset-step-2').classList.remove('hidden');
-            } else { err.textContent = data.message; }
-        } catch(e) { err.textContent = "Network Error"; } finally { btn.textContent = "Send Code"; btn.disabled = false; }
-    },
-    confirmResetPassword: async function() {
-        const email = document.getElementById('reset-email').value.trim();
-        const code = document.getElementById('reset-code').value.trim();
-        const newPass = document.getElementById('reset-new-pass').value.trim();
-        const btn = document.getElementById('btn-reset-conf');
-        const err = document.getElementById('reset-error-2');
-        err.textContent = "";
-        if(!code || !newPass) { err.textContent = "Fill all fields"; return; }
-        btn.textContent = "Updating..."; btn.disabled = true;
-        try {
-            const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action:'reset_confirm', email: email, code: code, newPassword: newPass, apiKey: API_KEY }) });
-            const data = await res.json();
-            if(data.result === 'success') {
-                alert("Password Updated! Please login.");
-                this.resetResetView(); this.navTo('view-auth', true);
-            } else { err.textContent = data.message; }
-        } catch(e) { err.textContent = "Network Error"; } finally { btn.textContent = "Update Password"; btn.disabled = false; }
-    },
-    resetResetView: function() {
-        document.getElementById('reset-step-1').classList.remove('hidden');
-        document.getElementById('reset-step-2').classList.add('hidden');
-        document.getElementById('reset-email').value = ""; document.getElementById('reset-code').value = "";
-        document.getElementById('reset-new-pass').value = "";
-    },
-
-    toggleAuthMode: function() {
-        const login = document.getElementById('form-login');
-        const signup = document.getElementById('form-signup');
-        if(login.classList.contains('hidden')){ signup.classList.add('hidden'); login.classList.remove('hidden'); } 
-        else { login.classList.add('hidden'); signup.classList.remove('hidden'); }
-    },
-
-    togglePassword: function(id, btn) {
-        const el = document.getElementById(id);
-        const icon = btn.querySelector('span');
-        if(el.type === 'password') { el.type = 'text'; icon.textContent = 'visibility_off'; btn.style.color = 'var(--primary)'; } 
-        else { el.type = 'password'; icon.textContent = 'visibility'; btn.style.color = 'var(--text-muted)'; }
-    },
-
-    logout: function() {
-        this.currentUser = null;
-        localStorage.removeItem('eziUser'); localStorage.removeItem('eziAuth');
-        this.updateWatermark(); this.navTo('view-auth', true);
-    },
-
-    navTo: function(viewId, isRoot = false, stateData = {}) {
-        const state = { viewId: viewId, ...stateData };
-        if (isRoot) {
-            if (viewId === 'view-dashboard') {
-                history.replaceState({ viewId: 'view-exit-guard' }, null, '#exit');
-                history.pushState(state, null, `#${viewId.replace('view-', '')}`);
-            } else { history.replaceState(state, null, `#${viewId.replace('view-', '')}`); }
-        } else { history.pushState(state, null, `#${viewId.replace('view-', '')}`); }
-        this.renderView(viewId);
-    },
-
-    renderView: function(viewId) {
-        const iframeContainer = document.getElementById('view-iframe');
-        if (viewId !== 'view-iframe' && iframeContainer) iframeContainer.innerHTML = '';
-        
-        // --- UI STATE MANAGEMENT ---
-        const fab = document.getElementById('fab-zoom');
-        const header = document.getElementById('main-header');
-        const bottomNav = document.getElementById('bottom-nav');
-        
-        fab.style.display = (viewId === 'view-iframe') ? 'flex' : 'none';
-        
-        // Show Bottom Nav only on Dashboard
-        bottomNav.style.display = (viewId === 'view-dashboard') ? 'flex' : 'none';
-        
-        // Header Logic
-        const isAuth = viewId === 'view-auth' || viewId === 'view-reset';
-        const isDash = viewId === 'view-dashboard';
-        
-        if (isAuth || isDash) {
-            header.style.display = 'none'; // Dashboard has its own hero section
-        } else {
-            header.style.display = 'flex';
-        }
-
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        const target = document.getElementById(viewId);
-        if(target) target.classList.add('active');
-    },
-
-    goBack: function() {
-        if(!document.getElementById('modal-exit').classList.contains('hidden')) { this.cancelExit(); return; }
-        window.history.back();
-    },
-    showExitModal: function() { document.getElementById('modal-exit').classList.remove('hidden'); },
-    cancelExit: function() { document.getElementById('modal-exit').classList.add('hidden'); history.pushState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard'); },
-    confirmExit: function() { window.history.back(); },
-
-    navToCourse: function(key) { this.renderSubmenu(key); this.navTo('view-submenu', false, { course: key }); },
-
-    renderSubmenu: function(key) {
-        const list = document.getElementById('submenu-list');
-        list.innerHTML = '';
-        // Update header title dynamically
-        document.getElementById('header-title').innerHTML = `<span>${key}</span> Details`;
-        
-        const sections = key === '3D' ? Object.keys(COURSES['3D']) : Object.keys(COURSES[key]);
-        sections.forEach(sec => {
-            const item = document.createElement('div');
-            item.className = 'list-item';
-            item.innerHTML = `<div style="display:flex; align-items:center;"><span class="material-icons-round list-icon">folder_open</span><div class="list-info"><h4>${sec}</h4></div></div><span class="material-icons-round" style="color:#ccc;">chevron_right</span>`;
-            item.onclick = () => { this.checkAccessAndOpen(key, sec); };
-            list.appendChild(item);
-        });
-    },
-
-    checkAccessAndOpen: function(course, section) {
-        this.checkSessionNow();
-        this.lockedCourseKey = course; this.lockedCourseSection = section;
-        const pKey = getPermissionKey(course, section);
-        if(this.currentUser && this.currentUser.permissions && this.currentUser.permissions[pKey] === true) {
-            if (course === '3D' || course === 'REQ' || course === 'COMM') {
-                const sub = COURSES[course][section][0];
-                this.openContent(sub.link, sub.label);
-            } else { this.openSubjectList(course, section); }
-        } else {
-            this.renderPaywallInfo(course, section);
-            this.navTo('view-paywall', false, { from: 'checkAccess' });
-        }
-    },
-
-    openSubjectList: function(course, section) { this.renderSubjectList(course, section); this.navTo('view-subjects', false, { course: course, section: section }); },
-
-    renderSubjectList: function(course, section) {
-        const list = document.getElementById('subject-list');
-        list.innerHTML = '';
-        document.getElementById('header-title').textContent = section;
-        const subjects = COURSES[course][section];
-        subjects.forEach(sub => {
-            const item = document.createElement('div');
-            item.className = 'list-item';
-            item.innerHTML = `<div style="display:flex; align-items:center;"><span class="material-icons-round list-icon">article</span><div class="list-info"><h4>${sub.label.replace(/<[^>]*>?/gm, '')}</h4></div></div><span class="material-icons-round" style="color:#ccc;">play_circle_outline</span>`;
-            item.onclick = () => { this.openContent(sub.link, sub.label); };
-            list.appendChild(item);
-        });
-    },
-
-    openContent: function(url, title, fromHistory = false) {
-        const container = document.getElementById('view-iframe');
-        if (!fromHistory) this.navTo('view-iframe', false, { sourceUrl: url, title: title });
-        else this.renderView('view-iframe');
-
-        const wrapper = document.createElement('div');
-        wrapper.id = 'iframe-wrapper'; wrapper.className = 'iframe-wrapper';
-        const iframe = document.createElement('iframe');
-        iframe.id = "content-frame"; iframe.src = url;
-        wrapper.appendChild(iframe);
-        container.innerHTML = ''; container.appendChild(wrapper);
-        this.zoomLevel = 1;
-    },
-    
-    renderPaywallInfo: function(course, section) {
-        const display = document.getElementById('paywall-price-display');
-        let html = '';
-        if (course === 'BSc') { html = `<div><span class="price-original">₹12,000</span><span class="price-discounted">₹5,999</span></div>`; } 
-        else if (course === 'GNM') { html = `<div><span class="price-original">₹14,000</span><span class="price-discounted">₹5,800</span></div>`; }
-        display.innerHTML = html;
-    },
-
-    purchaseLockedContent: function() {
-        const course = this.lockedCourseKey;
-        const section = this.lockedCourseSection || 'Systems';
-        const discountKey = `${course}_${section}_D`;
-        const fullKey = `${course}_${section}_F`;
-        let url = PAYMENT_LINKS[discountKey] || PAYMENT_LINKS[fullKey] || `https://www.razorpay.com/fallback`;
-        window.open(url, '_blank');
-    }
-};
-
-window.onload = function() { app.init(); };
 </script>
 </body>
 </html>
