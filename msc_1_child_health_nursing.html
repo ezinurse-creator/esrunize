@@ -189,7 +189,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
 <body>
 
 <header class="topbar">
-  <button class="tb-back" onclick="history.back()" aria-label="Back">&#8592;</button>
+  <button class="tb-back" onclick="goBackToApp()" aria-label="Back">&#8592;</button>
   <div class="tb-info">
     <div class="tb-title">Child Health Nursing I</div>
     <div class="tb-sub">MSc Nursing · First Year</div>
@@ -517,15 +517,18 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
 // window.open with _blank will open the PDF in the user's browser,
 // and when they close/come back they land exactly here (the subject page
 // still visible inside the app iframe) — NOT the dashboard.
+function goBackToApp() {
+  // If inside the EziNurse app iframe, tell the parent to navigate back
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage({ action: 'goBack' }, '*');
+  } else {
+    history.back();
+  }
+}
+
 function openPDF(url) {
   const clean = url.replace(/\/preview.*$/,'').replace(/\/view.*$/,'') + '/view';
-  const a = document.createElement('a');
-  a.href = clean;
-  a.target = '_blank';
-  a.rel = 'noopener noreferrer';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+  window.open(clean, '_blank');
 }
 
 // ── UNIT TOGGLE ──
