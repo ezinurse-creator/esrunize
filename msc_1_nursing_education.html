@@ -1,755 +1,749 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nursing Education - Syllabus</title>
-    <meta name="description" content="Comprehensive syllabus with detailed notes and quizzes for Nursing Education." />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <style>
-        :root {
-            --brand: #003B82; 
-            --accent: #00B9F2;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-700: #374151;
-            --gray-900: #111827;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-            --danger: #ef4444;
-            --success: #10b981;
-        }
-
-        * { box-sizing: border-box; }
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: white;
-            color: var(--gray-900);
-            line-height: 1.6;
-            padding: 24px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .syllabus-btn, .unit-header {
-            display: block;
-            width: 100%;
-            padding: 18px 24px;
-            margin: 24px 0;
-            background: var(--brand);
-            color: white;
-            font-weight: 600;
-            font-size: 16px;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.2s ease;
-        }
-        .syllabus-btn:hover, .unit-header:hover {
-            background: #002d63;
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .unit-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-align: left;
-            margin: 16px 0;
-        }
-        .unit-header span:last-child {
-            transition: transform 0.3s ease;
-            color: #FFA500;
-        }
-        .unit-header[aria-expanded="true"] span:last-child {
-            transform: rotate(180deg);
-        }
-
-        .unit-content {
-            padding: 0 12px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.3s ease;
-        }
-        .unit-content.active {
-            padding: 24px 12px;
-            max-height: none; 
-        }
-
-        .subsection {
-            margin: 16px 0;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            border: 1px solid var(--gray-200);
-            box-shadow: var(--shadow-sm);
-            transition: box-shadow 0.2s ease;
-        }
-        .subsection:hover { box-shadow: var(--shadow-md); }
-
-        .resource-btn {
-            display: flex;
-            align-items: flex-start;
-            width: 100%;
-            padding: 14px 18px;
-            margin: 8px 0;
-            background: var(--gray-50);
-            color: var(--gray-900);
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
-            border: 1px solid var(--gray-200);
-            transition: all 0.2s ease;
-            gap: 12px;
-            flex-wrap: wrap;
-            min-height: 50px;
-            cursor: pointer;
-        }
-        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
-        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
-        .resource-btn.quiz { background: #fff5e8; border-color: #ffd8a8; color: #8c5e08; }
-        .resource-btn:hover { background: #f9fafb; transform: translateY(-1px); }
-        .resource-btn.notes:hover { background: #e0f2fe; }
-        .resource-btn.video:hover { background: #ede9fe; }
-        .resource-btn.quiz:hover { background: #ffead1; }
-
-        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
-        .icon.video-icon { color: #8b5cf6; }
-        .icon.quiz-icon { color: #FFA500; }
-
-        /* --- MODAL --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-        }
-
-        .modal-header {
-            height: 60px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            flex-shrink: 0;
-        }
-
-        .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-        
-        .btn-close {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            flex: 1;
-            background: #000;
-            position: relative;
-            overflow-y: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* --- FIXED IFRAME STYLES --- */
-        .iframe-video {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16 / 9;
-            border: none;
-            background: #000;
-            display: block;
-        }
-
-        .iframe-doc {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #fff;
-            display: block;
-        }
-
-        /* --- QUIZ STYLES --- */
-        .quiz-container {
-            background: white;
-            width: 100%;
-            min-height: 100%;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .quiz-question { margin-bottom: 20px; font-size: 1.1rem; font-weight: 600; }
-        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
-        .quiz-option {
-            padding: 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        .quiz-option:hover { background: #f0f9ff; border-color: var(--accent); }
-        .quiz-option.correct { background: var(--success); color: white; border-color: var(--success); }
-        .quiz-option.correct::after { content: '✓'; position: absolute; right: 15px; font-weight: bold; }
-        .quiz-option.wrong { background: var(--danger); color: white; border-color: var(--danger); }
-        .quiz-option.wrong::after { content: '✗'; position: absolute; right: 15px; font-weight: bold; }
-
-        @media (max-width: 768px) {
-            body { padding: 16px; }
-            .syllabus-btn, .unit-header, .resource-btn { font-size: 15px; padding: 14px 16px; }
-            .resource-btn { font-size: 14px; }
-            .subsection { padding: 16px; }
-            .unit-content.active { padding: 16px 8px; }
-        }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nursing Education</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --p50:#faf5ff;--p100:#f3e8ff;--p200:#e9d5ff;--p300:#d8b4fe;
+  --p400:#c084fc;--p500:#a855f7;--p600:#9333ea;--p700:#7e22ce;
+  --p800:#6b21a8;--p900:#581c87;
+  --w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;
+  --g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;
+  --ok:#16a34a;--ok-lt:#dcfce7;--err:#dc2626;--err-lt:#fee2e2;
+  --warn:#d97706;--warn-lt:#fef3c7;
+  --r:12px;--rs:8px;
+  --s1:0 1px 3px rgba(109,40,217,.08);
+  --s2:0 4px 12px rgba(109,40,217,.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:90;background:var(--w);border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 16px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-back{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:var(--p100);color:var(--p700);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;margin-right:12px}
+.tb-back:hover{background:var(--p200)}
+.tb-info{flex:1;min-width:0}
+.tb-title{font-size:.88rem;font-weight:700;color:var(--g900);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb-sub{font-size:.65rem;color:var(--g400);font-weight:500;margin-top:1px}
+.tb-chip{background:var(--p100);color:var(--p700);border:1px solid var(--p200);font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
+.hero{background:linear-gradient(145deg,var(--p900),var(--p700) 55%,var(--p500));padding:28px 18px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.08),transparent 50%),radial-gradient(circle at 10% 85%,rgba(255,255,255,.05),transparent 40%)}
+.hero::after{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-dot-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:.65rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border-radius:30px;margin-bottom:12px}
+.hero-eyebrow-dot{width:5px;height:5px;background:#c4b5fd;border-radius:50%}
+.hero h1{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:7px}
+.hero h1 em{color:rgba(255,255,255,.45);font-style:italic;font-weight:300}
+.hero-desc{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:18px}
+.hero-cta{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.28);color:#fff;font-size:.8rem;font-weight:700;padding:9px 16px;border-radius:9px;cursor:pointer;transition:all .2s;backdrop-filter:blur(6px)}
+.hero-cta:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
+.hero-stats{display:flex;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+.hs{flex:1;text-align:center}
+.hs+.hs{border-left:1px solid rgba(255,255,255,.1)}
+.hs-n{font-size:1.35rem;font-weight:800;color:#fff;line-height:1}
+.hs-l{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
+.main{padding:16px 14px 56px}
+.divider{display:flex;align-items:center;gap:8px;margin-bottom:12px;margin-top:2px}
+.divider span{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g400)}
+.divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+.uc{background:var(--w);border:1.5px solid var(--g200);border-radius:var(--r);margin-bottom:9px;overflow:hidden;box-shadow:var(--s1);transition:border-color .2s,box-shadow .2s}
+.uc:hover{border-color:var(--p300);box-shadow:var(--s2)}
+.uc[data-open=true]{border-color:var(--p400);box-shadow:var(--s2)}
+.ubtn{width:100%;display:flex;align-items:center;padding:14px 15px;gap:12px;background:none;border:none;cursor:pointer;text-align:left}
+.upill{width:36px;height:36px;border-radius:9px;flex-shrink:0;background:var(--p100);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.upill span{font-size:.67rem;font-weight:800;color:var(--p700);letter-spacing:-.01em}
+.uc[data-open=true] .upill{background:var(--p700)}
+.uc[data-open=true] .upill span{color:#fff}
+.uinfo{flex:1;min-width:0}
+.uname{font-size:.85rem;font-weight:700;color:var(--g900);line-height:1.3}
+.umeta{font-size:.66rem;color:var(--g400);margin-top:2px;font-weight:500}
+.uright{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.uchev{width:16px;height:16px;color:var(--g300);transition:transform .3s,color .2s}
+.uc[data-open=true] .uchev{transform:rotate(180deg);color:var(--p500)}
+.ubody{display:none;background:var(--p50);border-top:1.5px solid var(--p200);padding:12px 13px 14px}
+.ubody.open{display:block;animation:bodyIn .2s ease}
+@keyframes bodyIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.rrow{display:flex;gap:9px}
+@media(max-width:380px){.rrow{flex-direction:column}}
+.rbtn{flex:1;display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .17s;background:var(--w);text-decoration:none}
+.rbtn .rico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.rbtn .rtxt{line-height:1.25}
+.rbtn .rtxt small{display:block;font-size:.62rem;font-weight:400;opacity:.5;margin-top:1px}
+.rbtn .rarr{margin-left:auto;opacity:0;font-size:.7rem;color:var(--g400);transition:opacity .15s}
+.rbtn:hover .rarr{opacity:1}
+.rbtn.notes{border-color:var(--p200);color:var(--p800)}
+.rbtn.notes .rico{background:var(--p100)}
+.rbtn.notes:hover{background:var(--p50);border-color:var(--p500);box-shadow:var(--s2);transform:translateY(-1px)}
+.rbtn.quiz{border-color:#fde68a;color:#78350f}
+.rbtn.quiz .rico{background:var(--warn-lt)}
+.rbtn.quiz:hover{background:#fffbeb;border-color:var(--warn);box-shadow:0 3px 10px rgba(217,119,6,.12);transform:translateY(-1px)}
+.rbtn.pyq{border-color:#bbf7d0;color:#14532d}
+.rbtn.pyq .rico{background:var(--ok-lt)}
+.rbtn.pyq:hover{background:#f0fdf4;border-color:var(--ok);box-shadow:0 3px 10px rgba(22,163,74,.12);transform:translateY(-1px)}
+.pyq-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:380px){.pyq-grid{grid-template-columns:1fr}}
+.qoverlay{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end}
+.qoverlay.open{display:flex}
+.qscrim{position:absolute;inset:0;background:rgba(15,10,40,.55);backdrop-filter:blur(3px)}
+.qpanel{position:relative;z-index:1;background:var(--w);width:100%;max-width:580px;margin:0 auto;border-radius:18px 18px 0 0;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 -10px 50px rgba(109,40,217,.2);animation:panelUp .3s cubic-bezier(.32,.72,0,1)}
+@keyframes panelUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.qhead{padding:16px 18px 12px;border-bottom:1px solid var(--g100);flex-shrink:0}
+.qhead-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.qtitle{font-size:1rem;font-weight:800;color:var(--p800)}
+.qclose{width:28px;height:28px;border-radius:50%;background:var(--g100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--g500);transition:all .15s}
+.qclose:hover{background:var(--err-lt);color:var(--err)}
+.qpips{display:flex;gap:3px}
+.pip{flex:1;height:4px;border-radius:4px;background:var(--g100);transition:background .3s}
+.pip.ans{background:var(--p300)}.pip.cor{background:var(--ok)}.pip.wrg{background:var(--err)}
+.qbody{overflow-y:auto;padding:14px 18px 28px;flex:1}
+.qscore{display:none;background:linear-gradient(135deg,var(--p800),var(--p500));color:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;align-items:center;gap:14px}
+.qscore.show{display:flex}
+.qs-num{font-size:1.9rem;font-weight:800;line-height:1}
+.qs-sub{font-size:.65rem;opacity:.6;margin-top:2px}
+.qs-msg{font-size:.85rem;font-weight:600}
+.qitem{margin-bottom:24px}
+.qitem:last-child{margin-bottom:0}
+.qlbl{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--p500);margin-bottom:4px}
+.qtext{font-size:.88rem;font-weight:600;color:var(--g900);line-height:1.5;margin-bottom:10px}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1.5px solid var(--g200);border-radius:var(--rs);cursor:pointer;font-size:.83rem;font-weight:500;background:var(--w);color:var(--g700);transition:all .14s}
+.qopt:hover{border-color:var(--p300);background:var(--p50);color:var(--p800)}
+.qltr{width:21px;height:21px;border-radius:50%;background:var(--g100);border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:800;color:var(--g500);flex-shrink:0;transition:all .14s}
+.qopt.cor{background:var(--ok-lt);border-color:#86efac;color:#14532d}
+.qopt.cor .qltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.qopt.wrg{background:var(--err-lt);border-color:#fca5a5;color:#7f1d1d}
+.qopt.wrg .qltr{background:var(--err);border-color:var(--err);color:#fff}
+.qopt.lock{cursor:default;pointer-events:none}
+.qopt.lock:not(.cor):not(.wrg):hover{border-color:var(--g200);background:var(--w);color:var(--g700)}
+</style>
 </head>
 <body>
 
-    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/10zqzBfgzvczBWDwSr2r3tJiR5amA7xek/preview', 'Nursing Education Syllabus')">
-        📄 DOWNLOAD SYLLABUS
+<header class="topbar">
+  <button class="tb-back" onclick="goBackToApp()" aria-label="Back">&#8592;</button>
+  <div class="tb-info">
+    <div class="tb-title">Nursing Education</div>
+    <div class="tb-sub">MSc Nursing · First Year</div>
+  </div>
+  <div class="tb-chip">15 Units</div>
+</header>
+
+<section class="hero">
+  <div class="hero-dot-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>MSc Nursing · First Year</div>
+    <h1>Nursing<br/><em>Education</em></h1>
+    <p class="hero-desc">Unit notes, quizzes & previous year papers — everything you need for your exams.</p>
+    <button class="hero-cta" onclick="openPDF('https://drive.google.com/file/d/10zqzBfgzvczBWDwSr2r3tJiR5amA7xek/view')">
+      📄 &nbsp;Download Syllabus
+    </button>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-n">15</div><div class="hs-l">Units</div></div>
+      <div class="hs"><div class="hs-n">150</div><div class="hs-l">Quizzes</div></div>
+      <div class="hs"><div class="hs-n">8</div><div class="hs-l">PYQs</div></div>
     </div>
-    
-    <div id="units">
-        
-        <div class="unit-container" id="unit1">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="true" onclick="toggleUnit(this)">
-                UNIT 1 - INTRODUCTION
-                <span>🔽</span>
-            </div>
-            <div class="unit-content active">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1hSyBW7h9g7BfWWvx_KKvnpDykuBOmxra/preview', 'Detailed Notes: Introduction')">
-                        <span class="icon">📚</span><span>Detailed Notes: Introduction</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(1)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  </div>
+</section>
 
-        <div class="unit-container" id="unit2">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 2 - TEACHING LEARNING PROCESS
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1QSQTqFkwHWKE57H8TaY3rcgSxUtrj5nf/preview', 'Detailed Notes: Teaching Learning')">
-                        <span class="icon">📚</span><span>Detailed Notes: Teaching Learning Process</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(2)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+<main class="main">
+  <div class="divider"><span>Course Units</span></div>
 
-        <div class="unit-container" id="unit3">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 3 - EDUCATIONAL TECHNOLOGY
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1uB93pTQIRgogNLHxaN0CHH7o1U_Mw1OD/preview', 'Detailed Notes: Educational Technology')">
-                        <span class="icon">📚</span><span>Detailed Notes: Educational & Instructional Technology</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(3)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit4">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 4 - MEASUREMENT AND EVALUATION
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1LUu3EJ3GkYx0L2R6JzU79kFVlInFuR6P/preview', 'Detailed Notes: Evaluation')">
-                        <span class="icon">📚</span><span>Detailed Notes: Measurement and Evaluation</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(4)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit5">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 5 - STANDARDIZED & NON-STANDARDIZED TESTS
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1luXvr1c8JSm9ay9OO3aqThtv5avBxY5Z/preview', 'Detailed Notes: Tests')">
-                        <span class="icon">📚</span><span>Detailed Notes: Standardized & Non-Standardized Tests</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(5)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit6">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 6 - ADMINISTRATION, SCORING & REPORTING
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/13kK8Z75OIQF9WgjmUPrncuT6RXZryBBw/preview', 'Detailed Notes: Scoring')">
-                        <span class="icon">📚</span><span>Detailed Notes: Administration, Scoring and Reporting</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(6)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit7">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 7 - STANDARDIZED TOOLS
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Xc4-9F5AbVfR16tZwodTGKeF1fC3nkS4/preview', 'Detailed Notes: Standardized Tools')">
-                        <span class="icon">📚</span><span>Detailed Notes: Standardized Tools</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(7)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit8">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 8 - NURSING EDUCATIONAL PROGRAMS
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1L5J9uuzscWr3092RZDRFIy8xb8x_JYZe/preview', 'Detailed Notes: Programs')">
-                        <span class="icon">📚</span><span>Detailed Notes: Nursing Educational Programs</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(8)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 8 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit9">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 9 - CONTINUING EDUCATION IN NURSING
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1X9vR02KnO9SOrlbPEzwS30FEDH760GfC/preview', 'Detailed Notes: Continuing Education')">
-                        <span class="icon">📚</span><span>Detailed Notes: Continuing Education in Nursing</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(9)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 9 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit10">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 10 - CURRICULUM DEVELOPMENT
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1FZzOuC6nyrDOvpBOGm7RwFFuXDn4voNy/preview', 'Detailed Notes: Curriculum')">
-                        <span class="icon">📚</span><span>Detailed Notes: Curriculum Development</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(10)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 10 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit11">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 11 - TEACHER PREPARATION
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/17yhkHsttzvbFB2k2SObCCLMpGof6BH8O/preview', 'Detailed Notes: Teacher Preparation')">
-                        <span class="icon">📚</span><span>Detailed Notes: Teacher Preparation</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(11)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 11 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit12">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 12 - GUIDANCE AND COUNSELING
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/18iosJA095VbxaoVf_EuwQS-WxN2KYNhn/preview', 'Detailed Notes: Guidance')">
-                        <span class="icon">📚</span><span>Detailed Notes: Guidance and Counseling</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(12)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 12 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit13">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 13 - ADMINISTRATION OF NURSING CURRICULUM
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1-qVTHpVi-WGKzpJRoZUOSTzmzaDDHjPa/preview', 'Detailed Notes: Administration')">
-                        <span class="icon">📚</span><span>Detailed Notes: Administration of Nursing Curriculum</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(13)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 13 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit14">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 14 - MANAGEMENT OF EDUCATIONAL INSTITUTIONS
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/14JNi3o2DI0mu_QmEnu-xINnWpuGpWbht/preview', 'Detailed Notes: Management')">
-                        <span class="icon">📚</span><span>Detailed Notes: Management of Educational Institutions</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(14)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 14 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit15">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 15 - STANDARDS AND ACCREDITATION
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1UbbwBTJHGtWksS5Fgo_DyD957Tz8alG5/preview', 'Detailed Notes: Standards')">
-                        <span class="icon">📚</span><span>Detailed Notes: Standards and Accreditation</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(15)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 15 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="pyq">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                PREVIOUS YEAR QUESTIONS
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1E14_cVTlgxbJDb5O4r39Osa6ch8Mu5fY/preview', 'PYQ July 2020')">
-                        <span class="icon">📄</span><span>PYQ - July 2020</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1B0YTIZG1n0CxuTdByyT2p4GZ_pHLXu_S/preview', 'PYQ Sept 2020')">
-                        <span class="icon">📄</span><span>PYQ - September 2020</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/14NlepSQXlIGC1ilN1s7Cf7LC-OlMdk4Z/preview', 'PYQ July 2021')">
-                        <span class="icon">📄</span><span>PYQ - July 2021</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1nMCJKAeJUfOClDO_BojGacABnMUWaGwy/preview', 'PYQ Nov 2022')">
-                        <span class="icon">📄</span><span>PYQ - November 2022</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/16AmFz9qgRMlgrRzY-_3u0EQtFeM0AcF6/preview', 'PYQ July 2022')">
-                        <span class="icon">📄</span><span>PYQ - July 2022</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1l74MSEIU-IWE74TQWGjlWrgIf1RM5xQ2/preview', 'PYQ Jan 2023')">
-                        <span class="icon">📄</span><span>PYQ - January 2023</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1TTWNgx9K8sbcAxBbsM51BT-AidcoVrB0/preview', 'PYQ Nov 2023')">
-                        <span class="icon">📄</span><span>PYQ - November 2023</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ZjjGKZB750Frrh7bBhIsD4W5C2PqvxCi/preview', 'PYQ July 2024')">
-                        <span class="icon">📄</span><span>PYQ - July 2024</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+  <!-- U1 -->
+  <div class="uc" id="u1" data-open="false">
+    <button class="ubtn" onclick="tog('u1')">
+      <div class="upill"><span>01</span></div>
+      <div class="uinfo"><div class="uname">Introduction</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u1">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1hSyBW7h9g7BfWWvx_KKvnpDykuBOmxra/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(1)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
     </div>
+  </div>
 
-    <div id="app-modal" class="modal-overlay">
-        <div class="modal-header">
-            <div id="modal-title" class="modal-title">Resource</div>
-            <button class="btn-close" onclick="closeModal()">Close X</button>
-        </div>
-        <div id="modal-body" class="modal-body"></div>
+  <!-- U2 -->
+  <div class="uc" id="u2" data-open="false">
+    <button class="ubtn" onclick="tog('u2')">
+      <div class="upill"><span>02</span></div>
+      <div class="uinfo"><div class="uname">Teaching Learning Process</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u2">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1QSQTqFkwHWKE57H8TaY3rcgSxUtrj5nf/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(2)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
     </div>
+  </div>
 
-    <script>
-        // --- 1. QUIZ DATA ---
-        const QUIZ_DATA = {
-            1: [
-                { q: "Which philosophy emphasizes 'Ideas are the only true reality'?", o: ["Pragmatism", "Idealism", "Naturalism", "Realism"], a: 1 },
-                { q: "Education is defined as:", o: ["Acquisition of knowledge only", "Modification of behavior", "Passing exams", "Attending school"], a: 1 },
-                { q: "A modern trend in nursing education is:", o: ["Teacher-centered learning", "Evidence-based practice", "Rote memorization", "Passive learning"], a: 1 },
-                { q: "The primary aim of nursing education is to:", o: ["Prepare nurses for service", "Earn money", "Gain power", "Travel abroad"], a: 0 },
-                { q: "Which is a factor influencing nursing education?", o: ["Social changes", "Technological advances", "Health needs", "All of the above"], a: 3 }
-            ],
-            2: [
-                { q: "Learning is best defined as:", o: ["Temporary change in behavior", "Permanent change in behavior due to experience", "Maturation", "Reflex action"], a: 1 },
-                { q: "Which is a maxim of teaching?", o: ["Complex to Simple", "Unknown to Known", "Simple to Complex", "Abstract to Concrete"], a: 2 },
-                { q: "Thorndike's 'Law of Effect' states that:", o: ["Practice makes perfect", "Learning is better with pleasant consequences", "Readiness is key", "Repetition is useless"], a: 1 },
-                { q: "A characteristic of a good teacher is:", o: ["Authoritative", "Facilitator of learning", "Passive", "Biased"], a: 1 },
-                { q: "Which domain of learning deals with skills?", o: ["Cognitive", "Affective", "Psychomotor", "Spiritual"], a: 2 }
-            ],
-            3: [
-                { q: "Which of the following is a projected AV aid?", o: ["Blackboard", "Overhead Projector (OHP)", "Chart", "Model"], a: 1 },
-                { q: "A 'Simulation' in teaching refers to:", o: ["Real life experience", "Artificial representation of reality", "Lecture", "Reading a book"], a: 1 },
-                { q: "The cone of experience was proposed by:", o: ["Edgar Dale", "Bloom", "Skinner", "Maslow"], a: 0 },
-                { q: "Computer Assisted Instruction (CAI) is a type of:", o: ["Traditional method", "Modern instructional technology", "Group discussion", "Field trip"], a: 1 },
-                { q: "Which is a three-dimensional aid?", o: ["Photograph", "Diagram", "Model", "Slide"], a: 2 }
-            ],
-            4: [
-                { q: "Evaluation that occurs during the instructional process is called:", o: ["Summative", "Formative", "Placement", "Diagnostic"], a: 1 },
-                { q: "The primary purpose of evaluation is to:", o: ["Grade students", "Improve instruction and learning", "Punish students", "Rank schools"], a: 1 },
-                { q: "Which is a quantitative method of evaluation?", o: ["Observation", "Interview", "Written Test", "Anecdotal record"], a: 2 },
-                { q: "Reliability of a test refers to:", o: ["Consistency of scores", "Measuring what it intends to measure", "Ease of administration", "Objectivity"], a: 0 },
-                { q: "Validity ensures:", o: ["Consistency", "Accuracy/Truthfulness", "Usability", "Norms"], a: 1 }
-            ],
-            5: [
-                { q: "Which is an example of an objective type test?", o: ["Essay", "Multiple Choice Question (MCQ)", "Short answer", "Case study"], a: 1 },
-                { q: "A checklist is used to assess:", o: ["Knowledge", "Attitude", "Performance/Skill steps", "Intelligence"], a: 2 },
-                { q: "The main disadvantage of essay questions is:", o: ["Subjectivity in scoring", "Hard to prepare", "Guessing", "Limited scope"], a: 0 },
-                { q: "OSCE stands for:", o: ["Objective Structured Clinical Examination", "Oral Standard Clinical Evaluation", "Objective Standard Care Exam", "None"], a: 0 },
-                { q: "Rating scales allow the observer to indicate the:", o: ["Presence of a trait", "Degree or frequency of a trait", "Absence of a trait", "Pass/Fail status"], a: 1 }
-            ],
-            6: [
-                { q: "Item analysis is done to determine:", o: ["Student rank", "Difficulty and discrimination power of items", "Teacher performance", "School quality"], a: 1 },
-                { q: "The difficulty index of an item represents:", o: ["How many students answered correctly", "How many failed", "How clear the question is", "The length of the question"], a: 0 },
-                { q: "Cumulative records contain:", o: ["Only marks", "Comprehensive history of a student", "Health records only", "Attendance only"], a: 1 },
-                { q: "Scoring key is essential for:", o: ["Essay tests", "Objective tests", "Oral tests", "Projects"], a: 1 },
-                { q: "A transcript is a:", o: ["Daily diary", "Official record of grades", "Lesson plan", " Syllabus"], a: 1 }
-            ],
-            7: [
-                { q: "A standardized test has:", o: ["Uniform procedure for administration and scoring", "Variable scoring", "Different questions for everyone", "No norms"], a: 0 },
-                { q: "Intelligence tests measure:", o: ["Personality", "Cognitive potential/IQ", "Physical strength", "Emotional stability"], a: 1 },
-                { q: "Aptitude tests predict:", o: ["Current knowledge", "Future performance/Potential", "Past achievements", "Social skills"], a: 1 },
-                { q: "Personality tests assesses:", o: ["IQ", "Traits and behavioral patterns", "Skill", "Memory"], a: 1 },
-                { q: "Norms in standardized tests allow for:", o: ["Self-evaluation", "Comparison with a group", "Teacher evaluation", "Pass/Fail decision"], a: 1 }
-            ],
-            8: [
-                { q: "The GNM program duration is typically:", o: ["2 years", "3 years", "4 years", "5 years"], a: 1 },
-                { q: "Basic B.Sc. Nursing is a:", o: ["Diploma program", "Degree program", "Certificate course", "Post-graduate course"], a: 1 },
-                { q: "M.Sc. Nursing specializations include:", o: ["Medical Surgical", "Community Health", "Pediatrics", "All of the above"], a: 3 },
-                { q: "PhD in Nursing focuses on:", o: ["Clinical practice only", "Research and advanced theory", "Administration", "Teaching only"], a: 1 },
-                { q: "Post Basic B.Sc. Nursing is for:", o: ["12th pass students", "Registered Nurses (GNM)", "Doctors", "Engineers"], a: 1 }
-            ],
-            9: [
-                { q: "Continuing Nursing Education (CNE) helps to:", o: ["Update knowledge and skills", "Pass time", "Get promoted only", "Meet friends"], a: 0 },
-                { q: "In-service education is provided:", o: ["Before employment", "During employment", "After retirement", "In college"], a: 1 },
-                { q: "Andragogy refers to:", o: ["Child learning", "Adult learning", "Animal learning", "Machine learning"], a: 1 },
-                { q: "A barrier to adult learning is:", o: ["Motivation", "Life experience", "Fear of failure/change", "Relevance"], a: 2 },
-                { q: "Distance education in nursing allows for:", o: ["Flexible learning", "Daily classroom attendance", "No exams", "No practicals"], a: 0 }
-            ],
-            10: [
-                { q: "Curriculum is best defined as:", o: ["Syllabus only", "Total learning experiences provided by school", "Textbooks", "Exam schedule"], a: 1 },
-                { q: "Which is a determinant of curriculum?", o: ["Philosophy of nursing", "Social needs", "Learner needs", "All of the above"], a: 3 },
-                { q: "Core curriculum refers to:", o: ["Optional subjects", "Essential/Common learning for all", "Extra-curricular activities", "Sports"], a: 1 },
-                { q: "Curriculum evaluation determines:", o: ["Teacher salary", "Effectiveness of the program", "Student fees", "Building maintenance"], a: 1 },
-                { q: "Sequence in curriculum organization refers to:", o: ["Scope", "Order of content", "Integration", "Balance"], a: 1 }
-            ],
-            11: [
-                { q: "Micro-teaching is a technique for:", o: ["Teaching students", "Teacher training/Practicing skills", "Small group discussion", "Lecture"], a: 1 },
-                { q: "The micro-teaching cycle includes:", o: ["Plan, Teach, Feedback, Re-plan, Re-teach, Re-feedback", "Teach only", "Plan and Teach", "Feedback only"], a: 0 },
-                { q: "A key quality of a nursing teacher is:", o: ["Clinical competence", "Patience", "Communication skills", "All of the above"], a: 3 },
-                { q: "Lesson planning helps the teacher to:", o: ["Organize content", "Waste time", "Restrict freedom", "Avoid questions"], a: 0 },
-                { q: "Student teaching is also known as:", o: ["Internship", "Practice teaching", "Observation", "Demonstration"], a: 1 }
-            ],
-            12: [
-                { q: "Guidance is:", o: ["Giving advice", "Helping individuals make choices and adjustments", "Solving problems for others", "Disciplining"], a: 1 },
-                { q: "Counseling is essentially a:", o: ["Lecture", "Relationship between counselor and counselee", "Casual chat", "Interrogation"], a: 1 },
-                { q: "Which is a tool used in guidance?", o: ["Cumulative record", "Interview", "Psychological tests", "All of the above"], a: 3 },
-                { q: "Educational guidance focuses on:", o: ["Personal problems", "Academic choices and progress", "Health issues", "Marital issues"], a: 1 },
-                { q: "A crisis intervention is a type of:", o: ["Long term counseling", "Short term immediate counseling", "Career guidance", "Placement service"], a: 1 }
-            ],
-            13: [
-                { q: "A Master Rotation Plan shows:", o: ["Daily schedule", "Overall plan for the entire course/year", "Teacher's leave", "Exam dates only"], a: 1 },
-                { q: "Clinical rotation ensures:", o: ["Students stay in one ward", "Students get experience in various specialty areas", "Nurses get rest", "Doctors teach"], a: 1 },
-                { q: "Course plan is prepared by:", o: ["Student", "Subject teacher", "Principal only", "Parents"], a: 1 },
-                { q: "The purpose of a timetable is:", o: ["To confuse students", "To allocate time and resources efficiently", "To increase work load", "None"], a: 1 },
-                { q: "Co-curricular activities are:", o: ["Useless", "Essential for overall development", "Waste of time", "Only for fun"], a: 1 }
-            ],
-            14: [
-                { q: "Budgeting in a nursing college is:", o: ["Estimating income and expenditure", "Spending money freely", "Saving only", "Borrowing money"], a: 1 },
-                { q: "Recruitment of faculty is based on:", o: ["Favoritism", "Qualifications and INC norms", "Random selection", "Appearance"], a: 1 },
-                { q: "Supervision in nursing education aims to:", o: ["Find faults", "Improve teaching and learning", "Punish teachers", "Control students"], a: 1 },
-                { q: "Maintenance of records is important for:", o: ["Legal evidence and continuity", "Filling shelves", "Increasing paper work", "Decoration"], a: 0 },
-                { q: "Staff welfare services include:", o: ["Housing, health, and recreation", "More work", "Strict rules", "Low salary"], a: 0 }
-            ],
-            15: [
-                { q: "The apex body controlling nursing education in India is:", o: ["MCI", "INC (Indian Nursing Council)", "UGC", "AICTE"], a: 1 },
-                { q: "Accreditation ensures:", o: ["High fees", "Quality standards", "Government control", "Student union"], a: 1 },
-                { q: "SNC stands for:", o: ["State Nursing Council", "Student Nursing Committee", "School Nursing Center", "Standard Nursing Care"], a: 0 },
-                { q: "NAAC accreditation focuses on:", o: ["Hospitals", "Higher educational institutions", "Primary schools", "Factories"], a: 1 },
-                { q: "Inspection of nursing colleges is done to:", o: ["Close them down", "Verify adherence to standards", "Collect money", "Meet staff"], a: 1 }
-            ]
-        };
+  <!-- U3 -->
+  <div class="uc" id="u3" data-open="false">
+    <button class="ubtn" onclick="tog('u3')">
+      <div class="upill"><span>03</span></div>
+      <div class="uinfo"><div class="uname">Educational Technology &amp; Instructional Technology</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u3">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1uB93pTQIRgogNLHxaN0CHH7o1U_Mw1OD/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(3)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        // --- 2. LOGIC ---
-        function toggleUnit(header) {
-            const content = header.nextElementSibling;
-            const isExpanded = header.getAttribute('aria-expanded') === 'true';
-            header.setAttribute('aria-expanded', !isExpanded);
-            content.classList.toggle('active');
-        }
+  <!-- U4 -->
+  <div class="uc" id="u4" data-open="false">
+    <button class="ubtn" onclick="tog('u4')">
+      <div class="upill"><span>04</span></div>
+      <div class="uinfo"><div class="uname">Measurement and Evaluation</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u4">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1LUu3EJ3GkYx0L2R6JzU79kFVlInFuR6P/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(4)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        function openResource(type, url, title) {
-            if(type === 'coming-soon') {
-                alert('This resource is under development.');
-                return;
-            }
+  <!-- U5 -->
+  <div class="uc" id="u5" data-open="false">
+    <button class="ubtn" onclick="tog('u5')">
+      <div class="upill"><span>05</span></div>
+      <div class="uinfo"><div class="uname">Standardized and Non-Standardized Tests</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u5">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1luXvr1c8JSm9ay9OO3aqThtv5avBxY5Z/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(5)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-            history.pushState({ modalOpen: true }, null, '#resource');
+  <!-- U6 -->
+  <div class="uc" id="u6" data-open="false">
+    <button class="ubtn" onclick="tog('u6')">
+      <div class="upill"><span>06</span></div>
+      <div class="uinfo"><div class="uname">Administration, Scoring and Reporting</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u6">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/13kK8Z75OIQF9WgjmUPrncuT6RXZryBBw/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(6)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = title;
-            modal.style.display = 'flex';
-            body.innerHTML = ''; 
-            body.style.display = 'flex'; 
+  <!-- U7 -->
+  <div class="uc" id="u7" data-open="false">
+    <button class="ubtn" onclick="tog('u7')">
+      <div class="upill"><span>07</span></div>
+      <div class="uinfo"><div class="uname">Standardized Tools</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u7">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Xc4-9F5AbVfR16tZwodTGKeF1fC3nkS4/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(7)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-            if (type === 'quiz') {
-                // Handled by openQuiz
-            }
-            else {
-                let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
-                let className = (type === 'video') ? 'iframe-video' : 'iframe-doc';
+  <!-- U8 -->
+  <div class="uc" id="u8" data-open="false">
+    <button class="ubtn" onclick="tog('u8')">
+      <div class="upill"><span>08</span></div>
+      <div class="uinfo"><div class="uname">Nursing Educational Programs</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u8">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1L5J9uuzscWr3092RZDRFIy8xb8x_JYZe/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(8)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-                body.innerHTML = `<iframe 
-                    class="${className}" 
-                    src="${cleanUrl}" 
-                    sandbox="allow-scripts allow-same-origin allow-presentation"
-                    allow="autoplay; encrypted-media; fullscreen">
-                </iframe>`;
-            }
-        }
+  <!-- U9 -->
+  <div class="uc" id="u9" data-open="false">
+    <button class="ubtn" onclick="tog('u9')">
+      <div class="upill"><span>09</span></div>
+      <div class="uinfo"><div class="uname">Continuing Education in Nursing</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u9">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1X9vR02KnO9SOrlbPEzwS30FEDH760GfC/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(9)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        function openQuiz(unitId) {
-            history.pushState({ modalOpen: true }, null, '#quiz');
+  <!-- U10 -->
+  <div class="uc" id="u10" data-open="false">
+    <button class="ubtn" onclick="tog('u10')">
+      <div class="upill"><span>10</span></div>
+      <div class="uinfo"><div class="uname">Curriculum Development</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u10">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1FZzOuC6nyrDOvpBOGm7RwFFuXDn4voNy/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(10)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = `Quiz: Unit ${unitId}`;
-            modal.style.display = 'flex';
-            
-            body.style.display = 'block';
-            body.scrollTop = 0; 
-            
-            const questions = QUIZ_DATA[unitId] || [];
-            
-            let quizHtml = `<div class="quiz-container">`;
-            questions.forEach((q, idx) => {
-                quizHtml += `
-                    <div class="quiz-question">${idx + 1}. ${q.q}</div>
-                    <div class="quiz-options" id="q-${idx}">
-                        ${q.o.map((opt, oIdx) => `
-                            <div class="quiz-option" onclick="checkAnswer(this, ${idx}, ${oIdx}, ${q.a})">${opt}</div>
-                        `).join('')}
-                    </div>
-                `;
-            });
-            
-            if(questions.length === 0) quizHtml += `<p>Quiz coming soon!</p>`;
-            
-            quizHtml += `</div>`;
-            body.innerHTML = quizHtml;
-        }
+  <!-- U11 -->
+  <div class="uc" id="u11" data-open="false">
+    <button class="ubtn" onclick="tog('u11')">
+      <div class="upill"><span>11</span></div>
+      <div class="uinfo"><div class="uname">Teacher Preparation</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u11">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/17yhkHsttzvbFB2k2SObCCLMpGof6BH8O/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(11)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        function checkAnswer(el, qIdx, oIdx, correctIdx) {
-            const parent = document.getElementById(`q-${qIdx}`);
-            const opts = parent.children;
-            for(let opt of opts) opt.style.pointerEvents = 'none';
+  <!-- U12 -->
+  <div class="uc" id="u12" data-open="false">
+    <button class="ubtn" onclick="tog('u12')">
+      <div class="upill"><span>12</span></div>
+      <div class="uinfo"><div class="uname">Guidance and Counseling</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u12">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/18iosJA095VbxaoVf_EuwQS-WxN2KYNhn/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(12)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-            if(oIdx === correctIdx) {
-                el.classList.add('correct');
-            } else {
-                el.classList.add('wrong');
-                opts[correctIdx].classList.add('correct');
-            }
-        }
+  <!-- U13 -->
+  <div class="uc" id="u13" data-open="false">
+    <button class="ubtn" onclick="tog('u13')">
+      <div class="upill"><span>13</span></div>
+      <div class="uinfo"><div class="uname">Administration of Nursing Curriculum</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u13">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1-qVTHpVi-WGKzpJRoZUOSTzmzaDDHjPa/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(13)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        function closeModal() {
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            modal.style.display = 'none';
-            body.innerHTML = ''; 
-            
-            if (history.state && history.state.modalOpen) {
-                history.back();
-            }
-        }
+  <!-- U14 -->
+  <div class="uc" id="u14" data-open="false">
+    <button class="ubtn" onclick="tog('u14')">
+      <div class="upill"><span>14</span></div>
+      <div class="uinfo"><div class="uname">Management of Nursing Educational Institutions</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u14">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/14JNi3o2DI0mu_QmEnu-9AxLAjFz2Wcq1/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(14)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        window.onpopstate = function(event) {
-            const modal = document.getElementById('app-modal');
-            if (modal.style.display === 'flex') {
-                modal.style.display = 'none';
-                document.getElementById('modal-body').innerHTML = '';
-            }
-        };
+  <!-- U15 -->
+  <div class="uc" id="u15" data-open="false">
+    <button class="ubtn" onclick="tog('u15')">
+      <div class="upill"><span>15</span></div>
+      <div class="uinfo"><div class="uname">Standards and Accreditation</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u15">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1UbbwBTJHGtWksS5Fgo_DyD957Tz8alG5/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(15)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const firstUnitHeader = document.querySelector('.unit-header');
-            if(firstUnitHeader) {
-                // toggleUnit(firstUnitHeader);
-            }
-        });
-    </script>
+  <!-- PYQ -->
+  <div class="divider" style="margin-top:20px"><span>Previous Year Questions</span></div>
+  <div class="uc" id="upyq" data-open="false">
+    <button class="ubtn" onclick="tog('upyq')">
+      <div class="upill"><span style="font-size:.58rem">PYQ</span></div>
+      <div class="uinfo"><div class="uname">Previous Year Papers</div><div class="umeta">8 exam papers</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-upyq">
+      <div class="pyq-grid">
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1E14_cVTlgxbJDb5O4r39Osa6ch8Mu5fY/view')">
+          <div class="rico">📄</div><div class="rtxt">Jul 2020<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1B0YTIZG1n0CxuTdByyT2p4GZ_pHLXu_S/view')">
+          <div class="rico">📄</div><div class="rtxt">Sep 2020<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/14NlepSQXlIGC1ilN1s7Cf7LC-OlMdk4Z/view')">
+          <div class="rico">📄</div><div class="rtxt">Jul 2021<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1nMCJKAeJUfOClDO_BojGacABnMUWaGwy/view')">
+          <div class="rico">📄</div><div class="rtxt">Nov 2022<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/16AmFz9qgRMlgrRzY-_3u0EQtFeM0AcF6/view')">
+          <div class="rico">📄</div><div class="rtxt">Jul 2022<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1l74MSEIU-IWE74TQWGjlWrgIf1RM5xQ2/view')">
+          <div class="rico">📄</div><div class="rtxt">Jan 2023<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1TTWNgx9K8sbcAxBbsM51BT-AidcoVrB0/view')">
+          <div class="rico">📄</div><div class="rtxt">Nov 2023<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1ZjjGKZB750Frrh7bBhIsD4W5C2PqvxCi/view')">
+          <div class="rico">📄</div><div class="rtxt">Jul 2024<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- QUIZ BOTTOM SHEET -->
+<div class="qoverlay" id="qmodal">
+  <div class="qscrim" onclick="closeQuiz()"></div>
+  <div class="qpanel">
+    <div class="qhead">
+      <div class="qhead-top">
+        <div class="qtitle" id="qtitle">Quiz</div>
+        <button class="qclose" onclick="closeQuiz()">✕</button>
+      </div>
+      <div class="qpips" id="qpips"></div>
+    </div>
+    <div class="qbody" id="qbody"></div>
+  </div>
+</div>
+
+<script>
+function goBackToApp() {
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage({ action: 'goBack' }, '*');
+  } else {
+    history.back();
+  }
+}
+
+function openPDF(url) {
+  const clean = url.replace(/\/preview.*$/,'').replace(/\/view.*$/,'') + '/view';
+  window.open(clean, '_blank');
+}
+
+function tog(id) {
+  const card = document.getElementById(id);
+  const body = document.getElementById('b-' + id);
+  const open = card.dataset.open === 'true';
+  card.dataset.open = String(!open);
+  body.classList.toggle('open', !open);
+}
+
+const QD = {
+1:[
+  {q:"Nursing education primarily aims to:",o:["Train nurses only for hospitals","Prepare competent and compassionate nursing professionals","Focus on research only","Manage hospital administration"],a:1},
+  {q:"The first nursing school in India was established at:",o:["Delhi","Madras (Chennai)","Mumbai","Kolkata"],a:1},
+  {q:"The Indian Nursing Council (INC) was established in:",o:["1947","1949","1963","1952"],a:1},
+  {q:"Philosophy of nursing education is based on beliefs about:",o:["Hospital management","The nature of humans, health, nursing and education","Drug administration","Financial management"],a:1},
+  {q:"The primary goal of basic nursing education is to:",o:["Produce researchers","Prepare nurses for beginning practice","Train administrators","Focus on specialization only"],a:1},
+  {q:"Nursing education in India is regulated by:",o:["Medical Council of India","Indian Nursing Council","Ministry of Health only","State governments only"],a:1},
+  {q:"The concept of lifelong learning in nursing refers to:",o:["Learning only during student years","Continuous professional development throughout a nurse's career","Learning only when required by law","Attending conferences only"],a:1},
+  {q:"Which level of nursing education prepares nurses for advanced clinical practice?",o:["GNM","BSc Nursing","MSc Nursing","ANM"],a:2},
+  {q:"Accreditation of nursing programs ensures:",o:["Higher fees","Programs meet established standards of quality","More students are admitted","Less curriculum requirements"],a:1},
+  {q:"The WHO's role in nursing education includes:",o:["Direct management of nursing schools","Setting global standards and providing technical guidance","Employing nurses worldwide","Conducting examinations"],a:1}
+],
+2:[
+  {q:"The teaching-learning process is best described as:",o:["One-way information transfer","A dynamic, interactive process between teacher and learner","Memorization of facts","Examination preparation only"],a:1},
+  {q:"Which learning theory emphasizes that learning occurs through stimulus-response connections?",o:["Cognitive theory","Humanistic theory","Behaviorist theory","Constructivist theory"],a:2},
+  {q:"Bloom's Taxonomy classifies learning objectives into:",o:["2 domains","3 domains","4 domains","5 domains"],a:1},
+  {q:"The affective domain of learning relates to:",o:["Knowledge and facts","Attitudes, values and feelings","Psychomotor skills","Memory"],a:1},
+  {q:"Motivation in learning is best described as:",o:["Forcing students to study","Internal and external forces that drive a person to learn","Punishment for poor performance","Strict discipline"],a:1},
+  {q:"Adult learning theory (Andragogy) was developed by:",o:["Bloom","Bruner","Malcolm Knowles","Piaget"],a:2},
+  {q:"The psychomotor domain of Bloom's Taxonomy deals with:",o:["Attitudes","Physical skills and coordination","Knowledge recall","Emotions"],a:1},
+  {q:"Constructivism in education proposes that learners:",o:["Passively receive knowledge","Actively construct their own understanding based on experience","Learn only through repetition","Are taught by strict instruction"],a:1},
+  {q:"'Transfer of learning' means:",o:["Moving to a new school","Applying knowledge learned in one context to new situations","Transferring files","Changing subjects"],a:1},
+  {q:"Formative evaluation is done:",o:["At the end of a course","During the learning process to provide ongoing feedback","Only for failing students","Before a course begins"],a:1}
+],
+3:[
+  {q:"Educational technology refers to:",o:["Only electronic gadgets","Systematic application of scientific knowledge to improve teaching and learning","Purchasing computers for schools","Television in classrooms only"],a:1},
+  {q:"A 'chalk and talk' method is classified as which type of teaching aid?",o:["Projected aid","Non-projected aid","Electronic aid","Audio aid"],a:1},
+  {q:"Overhead Projector (OHP) is an example of:",o:["Non-projected visual aid","Projected visual aid","Audio aid","Tactile aid"],a:1},
+  {q:"Simulation in nursing education is used to:",o:["Replace all clinical practice","Provide safe, controlled practice of clinical skills","Entertain students","Reduce faculty workload"],a:1},
+  {q:"E-learning advantages include:",o:["No interaction possible","Flexibility, self-pacing and accessibility","Only for technology experts","Replaces all classroom learning"],a:1},
+  {q:"A mannequin used for CPR practice is an example of:",o:["Projected aid","Electronic aid","Simulation model","Printed material"],a:2},
+  {q:"SMART board technology in education allows:",o:["Only writing on paper","Interactive digital whiteboard experience","Printing documents only","Storing physical books"],a:1},
+  {q:"Instructional technology focuses on:",o:["Buying equipment","Designing effective instruction using technology","Social media","Game development"],a:1},
+  {q:"Programmed instruction is characterized by:",o:["Group learning","Self-paced learning with immediate feedback","Lecture-based delivery","Random question order"],a:1},
+  {q:"The primary benefit of using audio-visual aids in nursing education is:",o:["They replace the teacher","They enhance understanding by engaging multiple senses","They are always cheaper","They reduce study time to zero"],a:1}
+],
+4:[
+  {q:"Measurement in education refers to:",o:["Judging student character","Quantifying student performance using numbers or scores","Predicting career success","Administrative record keeping"],a:1},
+  {q:"Evaluation in education involves:",o:["Assigning random grades","Making value judgments about student performance based on measurement","Physical assessment","Financial auditing"],a:1},
+  {q:"Validity of a test means:",o:["The test is long","The test measures what it is intended to measure","The test is easy","The test has many questions"],a:1},
+  {q:"Reliability of a test means:",o:["It measures the right thing","It consistently produces the same results under the same conditions","It is used by many schools","It has been used for many years"],a:1},
+  {q:"Norm-referenced evaluation compares a student's performance to:",o:["A fixed standard","The performance of other students in the group","Their own previous performance","Teacher expectations"],a:1},
+  {q:"Criterion-referenced evaluation measures performance against:",o:["Other students","A predetermined standard or criterion","The class average","National norms"],a:1},
+  {q:"Summative evaluation is performed:",o:["During instruction","At the end of an instructional unit to judge overall achievement","Before instruction begins","Only for remedial students"],a:1},
+  {q:"A test blueprint (table of specifications) helps to ensure:",o:["Questions are difficult","Content validity by mapping questions to learning objectives","Questions are random","Tests are long"],a:1},
+  {q:"Objective type questions in nursing exams include:",o:["Essays","Multiple choice questions","Short answer questions","Case studies only"],a:1},
+  {q:"The purpose of diagnostic evaluation is to:",o:["Assign final grades","Identify learning difficulties before instruction begins","Compare students","Evaluate teachers"],a:1}
+],
+5:[
+  {q:"A standardized test is one that has been:",o:["Used in many schools","Developed with uniform procedures for administration, scoring and interpretation","Created by a single teacher","Made very difficult"],a:1},
+  {q:"The NCLEX-RN is an example of:",o:["A classroom test","A standardized licensure examination","A diagnostic test","A formative test"],a:1},
+  {q:"Non-standardized tests are typically:",o:["More reliable than standardized tests","Teacher-made tests for specific classroom use","Used nationally","Validated on large populations"],a:1},
+  {q:"Objectivity in a test means:",o:["Questions are easy","Scoring is not influenced by personal judgment","Only factual questions are asked","The test is short"],a:1},
+  {q:"Item analysis in test development helps to evaluate:",o:["The length of the test","The difficulty and discriminating power of individual questions","Student attendance","Teacher performance"],a:1},
+  {q:"The difficulty index of a test item refers to:",o:["How confusing the question is","The proportion of students who answered the question correctly","The time needed to answer","The length of the question"],a:1},
+  {q:"A high discrimination index means:",o:["The question is too hard","The question effectively differentiates between high and low performers","The question is ambiguous","All students answered correctly"],a:1},
+  {q:"Standardization of a test involves:",o:["Making the test long","Trying out the test on a representative sample to establish norms","Using difficult vocabulary","Including only essay questions"],a:1},
+  {q:"Achievement tests measure:",o:["Potential ability","What a student has learned in a specific subject area","Personality traits","Intelligence quotient"],a:1},
+  {q:"Aptitude tests measure:",o:["Past learning","Potential to learn or perform in a future field","Current knowledge","Physical fitness"],a:1}
+],
+6:[
+  {q:"Test administration refers to:",o:["Writing test questions","The process of conducting the test under standardized conditions","Grading tests","Distributing results"],a:1},
+  {q:"Which of the following is essential during test administration?",o:["Allowing unlimited time","Maintaining standard conditions for all examinees","Allowing students to share answers","Making questions easy"],a:1},
+  {q:"Scoring a test involves:",o:["Only writing comments","Assigning marks or scores to student responses according to a key","Decorating answer papers","Filing papers"],a:1},
+  {q:"An answer key in MCQ tests ensures:",o:["Questions are hard","Objective and consistent scoring","Creative marking","Subjective assessment"],a:1},
+  {q:"Test reporting means:",o:["Sending test papers to authorities","Communicating test results to students, parents and administration in a meaningful way","Destroying test papers","Publishing results online only"],a:1},
+  {q:"Percentile rank indicates:",o:["The percentage of questions answered correctly","The percentage of examinees who scored below a given score","The average score","The highest possible score"],a:1},
+  {q:"Grade normalization ensures:",o:["All students pass","Fair comparison of scores across different test versions","Only top students are rewarded","Scores are inflated"],a:1},
+  {q:"Feedback after evaluation should be:",o:["Delayed as long as possible","Timely, specific and constructive","Only negative","Only for failing students"],a:1},
+  {q:"A cumulative record in student evaluation:",o:["Records only exam scores","Documents comprehensive data about a student's academic progress over time","Is kept secret","Is only for administrative use"],a:1},
+  {q:"Statistical measures used in test reporting include:",o:["Only pass/fail","Mean, median, mode and standard deviation","Only percentages","Only raw scores"],a:1}
+],
+7:[
+  {q:"A standardized tool in nursing education is one that has been:",o:["Used informally","Tested for validity, reliability and established norms","Created recently","Made by students"],a:1},
+  {q:"Likert scale is used to measure:",o:["Physical skills","Attitudes and opinions","Blood pressure","Knowledge only"],a:1},
+  {q:"A rating scale in clinical nursing evaluation is used to assess:",o:["Written exam scores","Degree of performance of clinical skills on a continuum","Multiple choice answers","Attendance"],a:1},
+  {q:"Checklists in clinical evaluation are used to:",o:["Measure attitudes","Record whether specific steps were performed or not","Calculate grades automatically","Replace written exams"],a:1},
+  {q:"An OSCE (Objective Structured Clinical Examination) evaluates:",o:["Only theoretical knowledge","Clinical skills, communication and professionalism in standardized scenarios","Social skills only","Research ability"],a:1},
+  {q:"Anecdotal records in nursing education are:",o:["Formal scheduled reports","Narrative descriptions of specific student behaviors or incidents","Test scores","Attendance sheets"],a:1},
+  {q:"A portfolio as an assessment tool contains:",o:["Only exam papers","A collection of student work demonstrating learning and growth over time","Teacher notes only","Hospital records"],a:1},
+  {q:"360-degree feedback in nursing education involves:",o:["Only teacher evaluation","Feedback from multiple sources including peers, patients and supervisors","Self-assessment only","Written exams"],a:1},
+  {q:"Semantic differential scale measures:",o:["Factual knowledge","The meaning a concept holds for an individual using bipolar adjectives","Motor skills","Physical attributes"],a:1},
+  {q:"Logan's Clinical Performance Scale assesses:",o:["Academic knowledge","Clinical nursing performance","Personality","Research skills"],a:1}
+],
+8:[
+  {q:"The GNM (General Nursing and Midwifery) program in India is of duration:",o:["2 years","3 years","4 years","5 years"],a:1},
+  {q:"BSc Nursing (Basic) program duration in India:",o:["3 years","4 years","5 years","2 years"],a:1},
+  {q:"Post Basic BSc Nursing (PBBSc) is designed for:",o:["Fresh students","Registered nurses with GNM qualification","MSc graduates","Diploma holders in other fields"],a:1},
+  {q:"MSc Nursing program prepares nurses for:",o:["Basic bedside care","Specialization and advanced clinical practice or education","GNM level work","Administrative roles only"],a:1},
+  {q:"ANM (Auxiliary Nurse Midwife) primarily works at:",o:["Tertiary hospitals","Primary healthcare and community level","Specialty centers","Research institutions"],a:1},
+  {q:"PhD in Nursing focuses on:",o:["Clinical practice","Original nursing research and scholarly contributions","Teaching only","Administration only"],a:1},
+  {q:"Nurse Practitioner programs prepare nurses for:",o:["Basic nursing care","Advanced practice including independent diagnosis and prescribing","Administrative roles","Research only"],a:1},
+  {q:"The INC prescribes minimum standards for nursing education including:",o:["Only exam patterns","Faculty qualifications, infrastructure, clinical facilities and curriculum","Only fees","Only student intake"],a:1},
+  {q:"Nursing specialization programs in India include:",o:["Only medical-surgical","Critical care, oncology, pediatrics, psychiatric nursing and others","Only community health","Only obstetrics"],a:1},
+  {q:"Distance education in nursing in India is regulated by:",o:["Only the universities","INC guidelines which restrict distance education for clinical programs","State governments only","No regulation exists"],a:1}
+],
+9:[
+  {q:"Continuing education in nursing (CNE) is defined as:",o:["Completing a degree","Planned learning activities beyond basic nursing education to maintain and enhance competence","Optional refresher courses","Only attending conferences"],a:1},
+  {q:"The primary purpose of CNE is:",o:["To earn more money","To maintain competency and keep pace with advances in healthcare","To get promotions automatically","To fulfill social requirements"],a:1},
+  {q:"In-service education differs from continuing education in that it is:",o:["More expensive","Provided by the employer specifically for the needs of the institution","Offered by universities","Internationally recognized"],a:1},
+  {q:"Staff development programs include:",o:["Only new employee orientation","Orientation, in-service education and continuing education","Only clinical skills","Only management training"],a:1},
+  {q:"Preceptorship in nursing refers to:",o:["Classroom teaching","A one-to-one mentoring relationship between an experienced nurse and a new nurse","Group training","Online learning"],a:1},
+  {q:"A journal club in nursing education promotes:",o:["Social interaction only","Critical appraisal of current research and evidence-based practice","Recreation","Administrative skills"],a:1},
+  {q:"Mandatory continuing education (MCE) means:",o:["Optional additional courses","CE required by law or licensing body for license renewal","CE paid for by the employer","CE done voluntarily"],a:1},
+  {q:"Competency-based continuing education focuses on:",o:["Hours attended","Demonstrable improvement in specific skills and knowledge","Certificate collection","Theoretical knowledge only"],a:1},
+  {q:"Refresher courses in nursing are primarily intended to:",o:["Teach new specialties","Update and reinforce existing knowledge and skills","Replace basic education","Prepare for administration"],a:1},
+  {q:"E-learning for CNE offers the advantage of:",o:["Mandatory group attendance","Flexibility allowing nurses to learn at their own pace and time","No assessment needed","Less content coverage"],a:1}
+],
+10:[
+  {q:"Curriculum in nursing education refers to:",o:["Only the timetable","All planned learning experiences including content, methods and evaluation","Only textbooks","Only clinical rotations"],a:1},
+  {q:"The first step in curriculum development is:",o:["Writing objectives","Needs assessment and situation analysis","Selecting teaching methods","Creating exams"],a:1},
+  {q:"A competency-based curriculum is organized around:",o:["Subjects and topics","Demonstrable skills and abilities graduates must possess","Credit hours","Teacher preferences"],a:1},
+  {q:"Vertical integration in curriculum means:",o:["Linking subjects across the same year","Building on previously learned concepts progressively across years","Teaching all subjects simultaneously","Mixing clinical and classroom randomly"],a:1},
+  {q:"Horizontal integration in curriculum means:",o:["Progressive building across years","Coordinating related content across subjects taught in the same period","Only clinical content","Only theoretical content"],a:1},
+  {q:"The 'hidden curriculum' refers to:",o:["Secret subjects","Implicit values, norms and behaviors learned informally in the educational environment","Online courses","Elective subjects"],a:1},
+  {q:"INC's role in nursing curriculum is to:",o:["Write textbooks","Prescribe minimum curriculum standards and approve programs","Employ nurses","Conduct all exams"],a:1},
+  {q:"Learning outcomes in curriculum development describe:",o:["Teaching methods","What students are expected to know, do and value upon completion","Number of hours","Faculty qualifications"],a:1},
+  {q:"Curriculum revision should be done:",o:["Never","Periodically based on changes in healthcare, student needs and societal demands","Only every 20 years","Only when students complain"],a:1},
+  {q:"Integrated curriculum in nursing combines:",o:["Only clinical subjects","Basic sciences and nursing concepts throughout the program","Only theory"],a:1}
+],
+11:[
+  {q:"Teacher preparation in nursing primarily focuses on:",o:["Clinical skills only","Developing skills in teaching, curriculum planning and evaluation","Administrative tasks","Research only"],a:1},
+  {q:"Pedagogical content knowledge (PCK) refers to:",o:["Knowledge of students' names","The ability to effectively teach subject matter to learners","Physical education skills","Hospital management"],a:1},
+  {q:"Microteaching is used in teacher preparation to:",o:["Teach large groups","Practice and refine specific teaching skills in a controlled, reduced setting","Manage classrooms","Evaluate students"],a:1},
+  {q:"A lesson plan should include:",o:["Only the topic","Objectives, content outline, teaching methods, aids and evaluation","Only teaching time","Only the textbook page"],a:1},
+  {q:"The role of a nurse educator includes:",o:["Only delivering lectures","Facilitating learning, role modeling, mentoring and evaluating students","Only clinical supervision","Only administration"],a:1},
+  {q:"Reflective teaching involves:",o:["Repeating the same methods always","Critically analyzing one's own teaching to improve practice","Only observing others","Reading textbooks only"],a:1},
+  {q:"Mentorship for new nurse educators involves:",o:["Strict supervision","Guidance, support and professional development by an experienced educator","Assigning extra work","Ignoring new teachers"],a:1},
+  {q:"Teacher effectiveness is best evaluated by:",o:["Years of experience","Student learning outcomes, peer review and self-reflection","Number of publications","Physical appearance"],a:1},
+  {q:"Academic preparation required for nursing faculty in India (BSc level) minimally includes:",o:["GNM only","MSc Nursing","BSc Nursing only","PhD required"],a:1},
+  {q:"Professional development for nurse educators includes:",o:["Clinical practice only","Workshops, conferences, higher education and scholarly activities","Only attending meetings","No special requirement"],a:1}
+],
+12:[
+  {q:"Guidance in education is defined as:",o:["Giving strict orders","A process of helping individuals understand themselves and their world to make wise decisions","Disciplining students","Conducting examinations"],a:1},
+  {q:"Counseling in nursing education aims to:",o:["Change student personalities forcefully","Help students resolve personal, academic or career problems through professional support","Punish misconduct","Manage hospital records"],a:1},
+  {q:"The primary difference between guidance and counseling is:",o:["There is no difference","Guidance is broader and preventive; counseling is deeper and remedial","Counseling is for all students; guidance is only for problems","Guidance is medical; counseling is educational"],a:1},
+  {q:"Vocational guidance helps students with:",o:["Personal problems","Career exploration and occupational decision-making","Academic content","Clinical skills"],a:1},
+  {q:"The principle of confidentiality in counseling means:",o:["Sharing information with all staff","Information shared in counseling is kept private except in specific mandatory situations","Writing reports for everyone","Publishing student problems"],a:1},
+  {q:"Active listening in counseling involves:",o:["Talking constantly","Giving full attention, understanding and responding to what the client says","Interrupting frequently","Taking notes only"],a:1},
+  {q:"A peer counselor is:",o:["A professional therapist","A trained student who provides support and guidance to fellow students","A senior faculty member","An external consultant"],a:1},
+  {q:"Group guidance sessions are useful for:",o:["Individual problem-solving only","Providing information and support to many students simultaneously","Replacing individual counseling","Administrative announcements"],a:1},
+  {q:"Academic counseling in nursing education helps students with:",o:["Career choices only","Study skills, academic difficulties and course selection","Personal problems only","Clinical placement only"],a:1},
+  {q:"The counselor's role in crisis intervention is to:",o:["Ignore the crisis","Provide immediate support, assess risk and connect with appropriate resources","Prescribe medications","Make decisions for the student"],a:1}
+],
+13:[
+  {q:"Administration of nursing curriculum involves:",o:["Only purchasing textbooks","Planning, organizing, implementing and evaluating the curriculum effectively","Only scheduling classes","Only hiring teachers"],a:1},
+  {q:"Academic calendar in nursing education serves to:",o:["Decorate the institution","Plan and organize all academic activities for the year systematically","Track employee leave","Monitor finances"],a:1},
+  {q:"The role of the Principal in curriculum administration is:",o:["Only teaching classes","Providing educational leadership, resource management and program oversight","Only attending meetings","Only disciplining students"],a:1},
+  {q:"Clinical posting schedule in nursing education ensures:",o:["Random clinical experience","Planned, systematic exposure to all required clinical areas","Convenience for students only","Reduction in clinical hours"],a:1},
+  {q:"Faculty meetings in curriculum administration are important for:",o:["Social interaction","Coordinating curriculum delivery, sharing information and problem-solving","Attendance tracking","Announcing exam dates only"],a:1},
+  {q:"Student representation in curriculum committees is valuable because:",o:["It is mandatory by law","It provides learner perspectives that improve curriculum relevance","Students manage administration","It reduces faculty workload"],a:1},
+  {q:"Record keeping in nursing education includes:",o:["Only financial records","Student academic records, clinical logs, attendance and evaluation data","Only attendance","Only exam results"],a:1},
+  {q:"Timetable construction in nursing education must consider:",o:["Only teacher preferences","Student learning needs, faculty availability, clinical rotations and facilities","Only room availability","Only exam schedules"],a:1},
+  {q:"Curriculum mapping is used to:",o:["Draw physical maps","Visually represent the alignment of curriculum content, objectives and assessments","Plan infrastructure","Schedule sports"],a:1},
+  {q:"Outcome monitoring in curriculum administration ensures:",o:["High fees are collected","Learning outcomes are being achieved and curriculum is effective","Faculty are present","Buildings are maintained"],a:1}
+],
+14:[
+  {q:"Management of nursing educational institutions involves:",o:["Only financial management","Effective leadership, administration and organization of all institutional resources","Only student discipline","Only curriculum planning"],a:1},
+  {q:"Organizational structure of a nursing college typically includes:",o:["Only Principal and students","Governing body, principal, faculty, non-teaching staff and students in a hierarchical arrangement","Only teaching staff","Only administrative staff"],a:1},
+  {q:"Budget preparation in nursing education should be:",o:["Prepared only by the accountant","Based on institutional goals and aligned with educational needs","Kept secret","Done annually without review"],a:1},
+  {q:"Infrastructure requirements for a nursing college include:",o:["Only classrooms","Classrooms, labs, library, clinical facilities, hostel and administrative spaces","Only a building","Only computers"],a:1},
+  {q:"Library management in nursing education involves:",o:["Only storing books","Curating, organizing and providing access to learning resources to support education","Only purchasing books","Only issuing books"],a:1},
+  {q:"Human resource management in nursing institutions includes:",o:["Only recruitment","Recruitment, development, performance evaluation and retention of faculty and staff","Only salaries","Only dismissals"],a:1},
+  {q:"Student welfare services in nursing institutions include:",o:["Academic support only","Counseling, health services, financial aid, accommodation and extracurricular activities","Only accommodation","Only food services"],a:1},
+  {q:"Grievance redressal mechanism in nursing institutions exists to:",o:["Punish complainants","Provide a formal channel for students and staff to raise and resolve issues","Avoid accountability","Create records"],a:1},
+  {q:"Annual reports in nursing institutions serve to:",o:["Satisfy government only","Document institutional performance, achievements and challenges for accountability","Only list staff names","Only record finances"],a:1},
+  {q:"Institutional quality improvement requires:",o:["Only external inspection","Regular self-assessment, stakeholder feedback and implementation of improvements","No changes once established","Only accreditation"],a:1}
+],
+15:[
+  {q:"Accreditation of nursing programs is a process of:",o:["Government control","External quality review where programs are assessed against established standards","Automatic renewal of registration","Financial audit"],a:1},
+  {q:"The body responsible for accreditation of nursing institutions in India is:",o:["NAAC for nursing","Indian Nursing Council (INC) for nursing programs","UGC only","State Medical Councils"],a:1},
+  {q:"NAAC accreditation in India evaluates institutions on:",o:["Financial performance only","Curricular aspects, teaching-learning, research, infrastructure and governance","Student numbers only","Staff salaries"],a:1},
+  {q:"Minimum standards for nursing education in India are set by:",o:["Individual institutions","Indian Nursing Council through prescribed regulations","State governments alone","Private bodies"],a:1},
+  {q:"Self-appraisal report (SAR) in accreditation is prepared by:",o:["External assessors","The institution itself as part of the accreditation process","Government officials","Students"],a:1},
+  {q:"Peer review in accreditation involves:",o:["Students reviewing faculty","Expert evaluators visiting and assessing the institution against standards","Self-assessment only","Financial inspection"],a:1},
+  {q:"The INC norms specify minimum requirements for:",o:["Only exam fees","Faculty qualifications, student-teacher ratio, clinical facilities and infrastructure","Only library books","Only hostel facilities"],a:1},
+  {q:"Quality indicators in nursing education include:",o:["Only pass percentages","Faculty qualifications, research output, clinical outcomes, student satisfaction and graduate competency","Only infrastructure","Only accreditation status"],a:1},
+  {q:"Institutional accreditation benefits include:",o:["Only prestige","Assures quality to students and employers, enables improvement and increases accountability","Automatic ranking","Financial grants only"],a:1},
+  {q:"Re-accreditation is necessary because:",o:["It is a one-time formality","Quality maintenance requires periodic reassessment as institutions and standards evolve","Accreditors need income","It is not necessary"],a:1}
+]
+};
+
+const LTRS=['A','B','C','D'];
+let curQuiz=null, answered=[];
+
+function openQuiz(id){
+  curQuiz=id;
+  const qs=QD[id]||[];
+  answered=new Array(qs.length).fill(null);
+  document.getElementById('qtitle').textContent='Unit '+id+' Quiz';
+  document.getElementById('qpips').innerHTML=qs.map((_,i)=>`<div class="pip" id="pip${i}"></div>`).join('');
+  let html=`<div class="qscore" id="qscore"><div><div class="qs-num" id="qsnum">—</div><div class="qs-sub">Score</div></div><div class="qs-msg" id="qsmsg"></div></div>`;
+  qs.forEach((q,qi)=>{
+    html+=`<div class="qitem" id="qi${qi}"><div class="qlbl">Question ${qi+1} of ${qs.length}</div><div class="qtext">${q.q}</div><div class="qopts">${q.o.map((opt,oi)=>`<button class="qopt" id="opt${qi}_${oi}" onclick="ans(${qi},${oi},${q.a})"><span class="qltr">${LTRS[oi]}</span>${opt}</button>`).join('')}</div></div>`;
+  });
+  document.getElementById('qbody').innerHTML=html;
+  document.getElementById('qmodal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function ans(qi,oi,correct){
+  if(answered[qi]!==null)return;
+  answered[qi]=oi;
+  const opts=document.querySelectorAll(`#qi${qi} .qopt`);
+  opts.forEach(b=>b.classList.add('lock'));
+  opts[correct].classList.add('cor');
+  if(oi!==correct)opts[oi].classList.add('wrg');
+  const pip=document.getElementById('pip'+qi);
+  pip.classList.add('ans',oi===correct?'cor':'wrg');
+  if(answered.every(a=>a!==null)){
+    const score=answered.filter((a,i)=>a===QD[curQuiz][i].a).length;
+    const total=QD[curQuiz].length;
+    const pct=Math.round(score/total*100);
+    const msgs=['📚 Keep Studying!','👍 Good Effort!','🎉 Well Done!','🏆 Perfect!'];
+    const mi=pct<50?0:pct<70?1:pct<100?2:3;
+    document.getElementById('qsnum').textContent=score+'/'+total;
+    document.getElementById('qsmsg').textContent=msgs[mi];
+    const sc=document.getElementById('qscore');
+    sc.classList.add('show');
+    sc.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+
+function closeQuiz(){
+  document.getElementById('qmodal').classList.remove('open');
+  document.body.style.overflow='';
+  curQuiz=null;
+}
+
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQuiz();});
+</script>
 </body>
 </html>
