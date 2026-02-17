@@ -1,1100 +1,768 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Child Health Nursing I</title>
-    <meta name="description" content="Comprehensive syllabus with detailed notes and quizzes for Child Health Nursing I." />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-    <style>
-        :root {
-            --navy:     #0f2744;
-            --blue:     #1a4b8c;
-            --sky:      #3b82c4;
-            --accent:   #e8a020;
-            --accent-lt:#fef3dc;
-            --teal:     #0d8c8c;
-            --teal-lt:  #e0f5f5;
-            --rose:     #c0392b;
-            --rose-lt:  #fdecea;
-            --white:    #ffffff;
-            --off:      #f7f8fc;
-            --border:   #e2e8f2;
-            --muted:    #6b7a99;
-            --text:     #1a2740;
-            --radius:   14px;
-            --shadow-xs: 0 1px 3px rgba(15,39,68,0.07);
-            --shadow-sm: 0 2px 8px rgba(15,39,68,0.10);
-            --shadow-md: 0 6px 24px rgba(15,39,68,0.13);
-        }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Child Health Nursing I</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --p50:#faf5ff;--p100:#f3e8ff;--p200:#e9d5ff;--p300:#d8b4fe;
+  --p400:#c084fc;--p500:#a855f7;--p600:#9333ea;--p700:#7e22ce;
+  --p800:#6b21a8;--p900:#581c87;
+  --w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;
+  --g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;
+  --ok:#16a34a;--ok-lt:#dcfce7;--err:#dc2626;--err-lt:#fee2e2;
+  --warn:#d97706;--warn-lt:#fef3c7;
+  --r:12px;--rs:8px;
+  --s1:0 1px 3px rgba(109,40,217,.08);
+  --s2:0 4px 12px rgba(109,40,217,.12);
+  --s3:0 8px 30px rgba(109,40,217,.16);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;-webkit-font-smoothing:antialiased}
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── TOPBAR ── */
+.topbar{position:sticky;top:0;z-index:90;background:var(--w);border-bottom:1px solid var(--g200);
+  display:flex;align-items:center;padding:0 16px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-back{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;
+  background:var(--p100);color:var(--p700);font-size:1rem;display:flex;align-items:center;
+  justify-content:center;transition:background .15s;flex-shrink:0;margin-right:12px}
+.tb-back:hover{background:var(--p200)}
+.tb-info{flex:1;min-width:0}
+.tb-title{font-size:.88rem;font-weight:700;color:var(--g900);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb-sub{font-size:.65rem;color:var(--g400);font-weight:500;margin-top:1px}
+.tb-chip{background:var(--p100);color:var(--p700);border:1px solid var(--p200);
+  font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
 
-        body {
-            font-family: 'DM Sans', system-ui, sans-serif;
-            background: var(--off);
-            color: var(--text);
-            min-height: 100vh;
-        }
+/* ── HERO ── */
+.hero{background:linear-gradient(145deg,var(--p900),var(--p700) 55%,var(--p500));
+  padding:28px 18px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.08),transparent 50%),
+             radial-gradient(circle at 10% 85%,rgba(255,255,255,.05),transparent 40%)}
+.hero::after{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;
+  border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-dot-grid{position:absolute;inset:0;
+  background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);
+  background-size:24px 24px;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:rgba(255,255,255,.8);font-size:.65rem;font-weight:600;
+  letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border-radius:30px;margin-bottom:12px}
+.hero-eyebrow-dot{width:5px;height:5px;background:#c4b5fd;border-radius:50%}
+.hero h1{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:800;color:#fff;
+  line-height:1.2;letter-spacing:-.02em;margin-bottom:7px}
+.hero h1 em{color:rgba(255,255,255,.45);font-style:italic;font-weight:300}
+.hero-desc{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:18px}
+.hero-cta{display:inline-flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.28);
+  color:#fff;font-size:.8rem;font-weight:700;padding:9px 16px;border-radius:9px;
+  cursor:pointer;transition:all .2s;backdrop-filter:blur(6px)}
+.hero-cta:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
+.hero-stats{display:flex;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+.hs{flex:1;text-align:center}
+.hs+.hs{border-left:1px solid rgba(255,255,255,.1)}
+.hs-n{font-size:1.35rem;font-weight:800;color:#fff;line-height:1}
+.hs-l{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
 
-        /* ── HEADER ── */
-        .page-header {
-            background: var(--navy);
-            padding: 0 32px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 64px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.18);
-        }
-        .page-header .brand {
-            display: flex; align-items: center; gap: 10px;
-        }
-        .brand-dot {
-            width: 10px; height: 10px;
-            background: var(--accent);
-            border-radius: 50%;
-            box-shadow: 0 0 0 3px rgba(232,160,32,0.25);
-        }
-        .brand-name {
-            font-family: 'DM Serif Display', serif;
-            font-size: 1.05rem;
-            color: #fff;
-            letter-spacing: 0.01em;
-        }
-        .brand-sub {
-            font-size: 0.72rem;
-            color: rgba(255,255,255,0.45);
-            font-weight: 300;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-        }
+/* ── MAIN ── */
+.main{padding:16px 14px 56px}
 
-        /* ── HERO ── */
-        .hero {
-            background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 60%, #1e5fa8 100%);
-            padding: 52px 32px 44px;
-            position: relative;
-            overflow: hidden;
-        }
-        .hero::before {
-            content: '';
-            position: absolute; inset: 0;
-            background: radial-gradient(ellipse at 80% 50%, rgba(59,130,196,0.25) 0%, transparent 65%);
-        }
-        .hero-pattern {
-            position: absolute; inset: 0;
-            background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
-            background-size: 28px 28px;
-        }
-        .hero-inner {
-            max-width: 860px; margin: 0 auto;
-            position: relative; z-index: 1;
-        }
-        .hero-eyebrow {
-            display: inline-flex; align-items: center; gap: 7px;
-            background: rgba(255,255,255,0.09);
-            border: 1px solid rgba(255,255,255,0.14);
-            color: rgba(255,255,255,0.75);
-            font-size: 0.72rem;
-            font-weight: 500;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            padding: 5px 12px;
-            border-radius: 40px;
-            margin-bottom: 18px;
-        }
-        .hero-eyebrow span { color: var(--accent); }
-        .hero h1 {
-            font-family: 'DM Serif Display', serif;
-            font-size: clamp(1.9rem, 4vw, 2.7rem);
-            color: #fff;
-            line-height: 1.15;
-            margin-bottom: 10px;
-        }
-        .hero h1 em { color: var(--accent); font-style: italic; }
-        .hero-desc {
-            color: rgba(255,255,255,0.58);
-            font-size: 0.95rem;
-            font-weight: 300;
-            margin-bottom: 28px;
-        }
-        .hero-actions {
-            display: flex; gap: 12px; flex-wrap: wrap;
-        }
-        .btn-primary {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: var(--accent);
-            color: var(--navy);
-            font-weight: 600;
-            font-size: 0.9rem;
-            padding: 11px 22px;
-            border-radius: 8px;
-            text-decoration: none;
-            border: none; cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 2px 10px rgba(232,160,32,0.35);
-        }
-        .btn-primary:hover {
-            background: #f5b030;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 16px rgba(232,160,32,0.45);
-        }
-        .hero-stat-row {
-            display: flex; gap: 28px; flex-wrap: wrap;
-            margin-top: 32px; padding-top: 28px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-        .hero-stat { text-align: left; }
-        .hero-stat .num {
-            font-family: 'DM Serif Display', serif;
-            font-size: 1.6rem; color: #fff;
-        }
-        .hero-stat .lbl {
-            font-size: 0.72rem; color: rgba(255,255,255,0.45);
-            text-transform: uppercase; letter-spacing: 0.07em;
-        }
 
-        /* ── MAIN ── */
-        .main { max-width: 860px; margin: 0 auto; padding: 36px 32px 60px; }
 
-        /* ── SECTION LABEL ── */
-        .section-label {
-            display: flex; align-items: center; gap: 10px;
-            margin-bottom: 20px;
-        }
-        .section-label span {
-            font-size: 0.72rem; font-weight: 600;
-            letter-spacing: 0.12em; text-transform: uppercase;
-            color: var(--muted);
-        }
-        .section-label::after {
-            content: ''; flex: 1;
-            height: 1px; background: var(--border);
-        }
+/* ── DIVIDER ── */
+.divider{display:flex;align-items:center;gap:8px;margin-bottom:12px;margin-top:2px}
+.divider span{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g400)}
+.divider::after{content:'';flex:1;height:1px;background:var(--g200)}
 
-        /* ── UNIT CARD ── */
-        .unit-card {
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            margin-bottom: 12px;
-            box-shadow: var(--shadow-xs);
-            overflow: hidden;
-            transition: box-shadow 0.2s;
-        }
-        .unit-card:hover { box-shadow: var(--shadow-sm); }
+/* ── UNIT CARD ── */
+.uc{background:var(--w);border:1.5px solid var(--g200);border-radius:var(--r);
+  margin-bottom:9px;overflow:hidden;box-shadow:var(--s1);transition:border-color .2s,box-shadow .2s}
+.uc:hover{border-color:var(--p300);box-shadow:var(--s2)}
+.uc[data-open=true]{border-color:var(--p400);box-shadow:var(--s2)}
 
-        .unit-toggle {
-            width: 100%;
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 18px 22px;
-            background: none; border: none; cursor: pointer;
-            text-align: left;
-            gap: 16px;
-        }
-        .unit-toggle-left {
-            display: flex; align-items: center; gap: 14px;
-        }
-        .unit-num {
-            width: 34px; height: 34px;
-            background: var(--off);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.72rem; font-weight: 700;
-            color: var(--muted);
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
-            letter-spacing: 0.03em;
-        }
-        .unit-card[data-open="true"] .unit-num {
-            background: var(--navy);
-            border-color: var(--navy);
-            color: #fff;
-        }
-        .unit-name {
-            font-size: 0.93rem; font-weight: 600;
-            color: var(--text);
-            line-height: 1.3;
-        }
-        .unit-toggle-right {
-            display: flex; align-items: center; gap: 10px; flex-shrink: 0;
-        }
-        .unit-count {
-            font-size: 0.72rem; font-weight: 500;
-            color: var(--muted);
-            background: var(--off);
-            border: 1px solid var(--border);
-            padding: 3px 8px; border-radius: 20px;
-        }
-        .chevron {
-            width: 20px; height: 20px;
-            color: var(--muted);
-            transition: transform 0.3s ease;
-            flex-shrink: 0;
-        }
-        .unit-card[data-open="true"] .chevron { transform: rotate(180deg); }
+.ubtn{width:100%;display:flex;align-items:center;padding:14px 15px;gap:12px;
+  background:none;border:none;cursor:pointer;text-align:left}
+.upill{width:36px;height:36px;border-radius:9px;flex-shrink:0;
+  background:var(--p100);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.upill span{font-size:.67rem;font-weight:800;color:var(--p700);letter-spacing:-.01em}
+.uc[data-open=true] .upill{background:var(--p700)}
+.uc[data-open=true] .upill span{color:#fff}
+.uinfo{flex:1;min-width:0}
+.uname{font-size:.85rem;font-weight:700;color:var(--g900);line-height:1.3}
+.umeta{font-size:.66rem;color:var(--g400);margin-top:2px;font-weight:500}
+.uright{display:flex;align-items:center;gap:7px;flex-shrink:0}
 
-        .unit-body {
-            display: none;
-            padding: 0 16px 16px;
-            border-top: 1px solid var(--border);
-            background: var(--off);
-        }
-        .unit-body.open { display: block; }
+.uchev{width:16px;height:16px;color:var(--g300);transition:transform .3s,color .2s}
+.uc[data-open=true] .uchev{transform:rotate(180deg);color:var(--p500)}
 
-        /* ── RESOURCE GRID ── */
-        .resource-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            padding: 14px 0;
-        }
-        @media (max-width: 560px) { .resource-grid { grid-template-columns: 1fr; } }
+/* ── UNIT BODY ── */
+.ubody{display:none;background:var(--p50);border-top:1.5px solid var(--p200);padding:12px 13px 14px}
+.ubody.open{display:block;animation:bodyIn .2s ease}
+@keyframes bodyIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
 
-        .res-btn {
-            display: flex; align-items: center; gap: 10px;
-            padding: 13px 16px;
-            border-radius: 10px;
-            border: 1.5px solid transparent;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 0.875rem; font-weight: 500;
-            transition: all 0.18s;
-            background: var(--white);
-            color: var(--text);
-        }
-        .res-btn .res-icon {
-            width: 34px; height: 34px;
-            border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1rem; flex-shrink: 0;
-        }
-        .res-btn .res-label { line-height: 1.3; }
-        .res-btn .res-label small {
-            display: block; font-size: 0.72rem;
-            font-weight: 400; opacity: 0.6; margin-top: 1px;
-        }
+/* ── RESOURCE ROW ── */
+.rrow{display:flex;gap:9px}
+@media(max-width:380px){.rrow{flex-direction:column}}
+.rbtn{flex:1;display:flex;align-items:center;gap:9px;padding:11px 13px;
+  border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;
+  font-size:.8rem;font-weight:600;transition:all .17s;background:var(--w);text-decoration:none}
+.rbtn .rico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;
+  justify-content:center;font-size:.9rem;flex-shrink:0}
+.rbtn .rtxt{line-height:1.25}
+.rbtn .rtxt small{display:block;font-size:.62rem;font-weight:400;opacity:.5;margin-top:1px}
+.rbtn .rarr{margin-left:auto;opacity:0;font-size:.7rem;color:var(--g400);transition:opacity .15s}
+.rbtn:hover .rarr{opacity:1}
 
-        /* Notes */
-        .res-btn.notes {
-            border-color: #bfdbfe;
-        }
-        .res-btn.notes .res-icon { background: #dbeafe; }
-        .res-btn.notes:hover { background: #eff6ff; border-color: var(--sky); box-shadow: var(--shadow-sm); }
+.rbtn.notes{border-color:var(--p200);color:var(--p800)}
+.rbtn.notes .rico{background:var(--p100)}
+.rbtn.notes:hover{background:var(--p50);border-color:var(--p500);box-shadow:var(--s2);transform:translateY(-1px)}
 
-        /* Quiz */
-        .res-btn.quiz {
-            border-color: #fde68a;
-        }
-        .res-btn.quiz .res-icon { background: var(--accent-lt); }
-        .res-btn.quiz:hover { background: #fffbeb; border-color: var(--accent); box-shadow: var(--shadow-sm); }
+.rbtn.quiz{border-color:#fde68a;color:#78350f}
+.rbtn.quiz .rico{background:var(--warn-lt)}
+.rbtn.quiz:hover{background:#fffbeb;border-color:var(--warn);box-shadow:0 3px 10px rgba(217,119,6,.12);transform:translateY(-1px)}
 
-        /* PYQ */
-        .res-btn.pyq {
-            border-color: #d1fae5;
-        }
-        .res-btn.pyq .res-icon { background: #ecfdf5; }
-        .res-btn.pyq:hover { background: #f0fdf4; border-color: var(--teal); box-shadow: var(--shadow-sm); }
+.rbtn.pyq{border-color:#bbf7d0;color:#14532d}
+.rbtn.pyq .rico{background:var(--ok-lt)}
+.rbtn.pyq:hover{background:#f0fdf4;border-color:var(--ok);box-shadow:0 3px 10px rgba(22,163,74,.12);transform:translateY(-1px)}
 
-        /* open-external arrow */
-        .res-btn .ext-arrow {
-            margin-left: auto; opacity: 0; font-size: 0.8rem; color: var(--muted);
-            transition: opacity 0.18s;
-        }
-        .res-btn:hover .ext-arrow { opacity: 1; }
+/* ── PYQ GRID ── */
+.pyq-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:380px){.pyq-grid{grid-template-columns:1fr}}
 
-        /* ── QUIZ MODAL ── */
-        .quiz-modal {
-            position: fixed; inset: 0;
-            z-index: 200;
-            display: none;
-            align-items: flex-end;
-        }
-        .quiz-modal.open { display: flex; }
-        .quiz-backdrop {
-            position: absolute; inset: 0;
-            background: rgba(10,20,40,0.6);
-            backdrop-filter: blur(4px);
-        }
-        .quiz-sheet {
-            position: relative; z-index: 1;
-            background: var(--white);
-            width: 100%;
-            max-width: 680px;
-            margin: 0 auto;
-            border-radius: 20px 20px 0 0;
-            max-height: 90vh;
-            display: flex; flex-direction: column;
-            box-shadow: 0 -8px 40px rgba(0,0,0,0.2);
-            animation: slideUp 0.3s cubic-bezier(0.32,0.72,0,1);
-        }
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to   { transform: translateY(0); }
-        }
-        .quiz-sheet-header {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 20px 24px 16px;
-            border-bottom: 1px solid var(--border);
-            flex-shrink: 0;
-        }
-        .quiz-sheet-title {
-            font-family: 'DM Serif Display', serif;
-            font-size: 1.15rem; color: var(--navy);
-        }
-        .quiz-close-btn {
-            width: 32px; height: 32px;
-            background: var(--off); border: 1px solid var(--border);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-size: 1rem; color: var(--muted);
-            transition: all 0.15s;
-        }
-        .quiz-close-btn:hover { background: var(--rose-lt); color: var(--rose); border-color: #f5c6c2; }
-        .quiz-body {
-            overflow-y: auto; padding: 20px 24px 28px; flex: 1;
-        }
-        .quiz-progress {
-            display: flex; gap: 4px; margin-bottom: 22px;
-        }
-        .quiz-progress-pip {
-            flex: 1; height: 4px;
-            border-radius: 4px;
-            background: var(--border);
-            transition: background 0.3s;
-        }
-        .quiz-progress-pip.answered { background: var(--sky); }
-        .quiz-progress-pip.correct  { background: var(--teal); }
-        .quiz-progress-pip.wrong    { background: var(--rose); }
+/* ── QUIZ MODAL ── */
+.qoverlay{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end}
+.qoverlay.open{display:flex}
+.qscrim{position:absolute;inset:0;background:rgba(15,10,40,.55);backdrop-filter:blur(3px)}
+.qpanel{position:relative;z-index:1;background:var(--w);width:100%;max-width:580px;
+  margin:0 auto;border-radius:18px 18px 0 0;max-height:90vh;
+  display:flex;flex-direction:column;box-shadow:0 -10px 50px rgba(109,40,217,.2);
+  animation:panelUp .3s cubic-bezier(.32,.72,0,1)}
+@keyframes panelUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 
-        .q-block { margin-bottom: 28px; }
-        .q-block:last-child { margin-bottom: 0; }
-        .q-num {
-            font-size: 0.72rem; font-weight: 700;
-            color: var(--muted); letter-spacing: 0.08em;
-            text-transform: uppercase; margin-bottom: 6px;
-        }
-        .q-text {
-            font-weight: 500; font-size: 0.95rem;
-            color: var(--text); line-height: 1.5;
-            margin-bottom: 12px;
-        }
-        .q-options { display: flex; flex-direction: column; gap: 8px; }
-        .q-option {
-            display: flex; align-items: center; gap: 10px;
-            padding: 11px 14px;
-            border: 1.5px solid var(--border);
-            border-radius: 9px;
-            cursor: pointer;
-            font-size: 0.88rem;
-            font-weight: 400;
-            background: var(--white);
-            transition: all 0.15s;
-            position: relative;
-        }
-        .q-option:hover { border-color: var(--sky); background: #f0f7ff; }
-        .q-option .q-opt-letter {
-            width: 22px; height: 22px;
-            border-radius: 50%;
-            background: var(--off);
-            border: 1px solid var(--border);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.72rem; font-weight: 700;
-            color: var(--muted); flex-shrink: 0;
-            transition: all 0.15s;
-        }
-        .q-option.correct {
-            background: var(--teal-lt); border-color: var(--teal); color: #065050;
-        }
-        .q-option.correct .q-opt-letter { background: var(--teal); border-color: var(--teal); color: #fff; }
-        .q-option.wrong {
-            background: var(--rose-lt); border-color: var(--rose); color: #7a1e16;
-        }
-        .q-option.wrong .q-opt-letter { background: var(--rose); border-color: var(--rose); color: #fff; }
-        .q-option.disabled { cursor: default; }
-        .q-option.disabled:not(.correct):not(.wrong):hover { border-color: var(--border); background: var(--white); }
+.qhead{padding:16px 18px 12px;border-bottom:1px solid var(--g100);flex-shrink:0}
+.qhead-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.qtitle{font-size:1rem;font-weight:800;color:var(--p800)}
+.qclose{width:28px;height:28px;border-radius:50%;background:var(--g100);border:none;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:.8rem;color:var(--g500);transition:all .15s}
+.qclose:hover{background:var(--err-lt);color:var(--err)}
 
-        /* quiz score banner */
-        .quiz-score {
-            background: linear-gradient(135deg, var(--navy), var(--blue));
-            color: #fff;
-            border-radius: 12px;
-            padding: 20px 22px;
-            margin-bottom: 20px;
-            display: none;
-            align-items: center; gap: 16px;
-        }
-        .quiz-score.show { display: flex; }
-        .quiz-score-num {
-            font-family: 'DM Serif Display', serif;
-            font-size: 2.2rem; line-height: 1;
-        }
-        .quiz-score-lbl { font-size: 0.8rem; opacity: 0.65; margin-top: 2px; }
-        .quiz-score-msg { font-weight: 500; font-size: 0.92rem; }
+.qpips{display:flex;gap:3px}
+.pip{flex:1;height:4px;border-radius:4px;background:var(--g100);transition:background .3s}
+.pip.ans{background:var(--p300)}.pip.cor{background:var(--ok)}.pip.wrg{background:var(--err)}
 
-        /* ── RESPONSIVE ── */
-        @media (max-width: 640px) {
-            .page-header { padding: 0 16px; }
-            .hero { padding: 36px 16px 32px; }
-            .main { padding: 24px 16px 48px; }
-            .unit-toggle { padding: 14px 16px; }
-            .unit-body { padding: 0 10px 12px; }
-            .quiz-sheet { border-radius: 16px 16px 0 0; }
-            .quiz-body { padding: 16px 16px 24px; }
-        }
-    </style>
+.qbody{overflow-y:auto;padding:14px 18px 28px;flex:1}
+
+.qscore{display:none;background:linear-gradient(135deg,var(--p800),var(--p500));
+  color:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;
+  align-items:center;gap:14px}
+.qscore.show{display:flex}
+.qs-num{font-size:1.9rem;font-weight:800;line-height:1}
+.qs-sub{font-size:.65rem;opacity:.6;margin-top:2px}
+.qs-msg{font-size:.85rem;font-weight:600}
+
+.qitem{margin-bottom:24px}
+.qitem:last-child{margin-bottom:0}
+.qlbl{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--p500);margin-bottom:4px}
+.qtext{font-size:.88rem;font-weight:600;color:var(--g900);line-height:1.5;margin-bottom:10px}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:9px;padding:10px 12px;
+  border:1.5px solid var(--g200);border-radius:var(--rs);cursor:pointer;
+  font-size:.83rem;font-weight:500;background:var(--w);color:var(--g700);transition:all .14s}
+.qopt:hover{border-color:var(--p300);background:var(--p50);color:var(--p800)}
+.qltr{width:21px;height:21px;border-radius:50%;background:var(--g100);
+  border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;
+  font-size:.63rem;font-weight:800;color:var(--g500);flex-shrink:0;transition:all .14s}
+.qopt.cor{background:var(--ok-lt);border-color:#86efac;color:#14532d}
+.qopt.cor .qltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.qopt.wrg{background:var(--err-lt);border-color:#fca5a5;color:#7f1d1d}
+.qopt.wrg .qltr{background:var(--err);border-color:var(--err);color:#fff}
+.qopt.lock{cursor:default;pointer-events:none}
+.qopt.lock:not(.cor):not(.wrg):hover{border-color:var(--g200);background:var(--w);color:var(--g700)}
+</style>
 </head>
 <body>
 
-<!-- ── HEADER ── -->
-<header class="page-header">
-    <div class="brand">
-        <div class="brand-dot"></div>
-        <div>
-            <div class="brand-name">Child Health Nursing I</div>
-            <div class="brand-sub">BSc Nursing · Study Portal</div>
-        </div>
-    </div>
+<header class="topbar">
+  <button class="tb-back" onclick="history.back()" aria-label="Back">&#8592;</button>
+  <div class="tb-info">
+    <div class="tb-title">Child Health Nursing I</div>
+    <div class="tb-sub">MSc Nursing · First Year</div>
+  </div>
+  <div class="tb-chip">12 Units</div>
 </header>
 
-<!-- ── HERO ── -->
 <section class="hero">
-    <div class="hero-inner">
-        <div class="hero-eyebrow">📋 <span>Syllabus 2024–25</span> · Child Health Nursing</div>
-        <h1>Child Health<br/><em>Nursing I</em></h1>
-        <p class="hero-desc">Unit notes, quizzes & previous year questions — all in one place.</p>
-        <div class="hero-actions">
-            <button class="btn-primary" onclick="openDrive('https://drive.google.com/file/d/1rgyh9yvG8KYd3pGj76KYTA6eXrBDtDgv/view', 'Child Health Nursing Syllabus')">
-                📄 Download Syllabus
-            </button>
-        </div>
-        <div class="hero-stat-row">
-            <div class="hero-stat"><div class="num">12</div><div class="lbl">Units</div></div>
-            <div class="hero-stat"><div class="num">60+</div><div class="lbl">Quiz Questions</div></div>
-            <div class="hero-stat"><div class="num">7</div><div class="lbl">PYQ Papers</div></div>
-        </div>
+  <div class="hero-dot-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>MSc Nursing · First Year</div>
+    <h1>Child Health<br/><em>Nursing I</em></h1>
+    <p class="hero-desc">Unit notes, quizzes & previous year papers — everything you need for your exams.</p>
+    <button class="hero-cta" onclick="openPDF('https://drive.google.com/file/d/1rgyh9yvG8KYd3pGj76KYTA6eXrBDtDgv/view')">
+      📄 &nbsp;Download Syllabus
+    </button>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-n">12</div><div class="hs-l">Units</div></div>
+      <div class="hs"><div class="hs-n">120</div><div class="hs-l">Quizzes</div></div>
+      <div class="hs"><div class="hs-n">7</div><div class="hs-l">PYQs</div></div>
     </div>
+  </div>
 </section>
 
-<!-- ── MAIN ── -->
 <main class="main">
 
-    <div class="section-label"><span>Course Units</span></div>
+  <div class="divider"><span>Course Units</span></div>
 
-    <div id="units-list">
+  <!-- U1 -->
+  <div class="uc" id="u1" data-open="false">
+    <button class="ubtn" onclick="tog('u1')">
+      <div class="upill"><span>01</span></div>
+      <div class="uinfo"><div class="uname">Introduction</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright">
+        <svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u1">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1X7htNfDOlqnwA6ak9yOy-2mQZDGSADs8/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(1)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        <!-- UNIT 1 -->
-        <div class="unit-card" data-open="false" id="unit1">
-            <button class="unit-toggle" onclick="toggleUnit('unit1')" aria-expanded="false">
-                <div class="unit-toggle-left">
-                    <div class="unit-num">01</div>
-                    <div class="unit-name">Introduction</div>
-                </div>
-                <div class="unit-toggle-right">
-                    <span class="unit-count">2 resources</span>
-                    <svg class="chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5,8 10,13 15,8"/></svg>
-                </div>
-            </button>
-            <div class="unit-body" id="unit1-body">
-                <div class="resource-grid">
-                    <button class="res-btn notes" onclick="openDrive('https://drive.google.com/file/d/1X7htNfDOlqnwA6ak9yOy-2mQZDGSADs8/view', 'Unit 1 Notes')">
-                        <div class="res-icon">📖</div>
-                        <div class="res-label">Detailed Notes <small>Open in Drive</small></div>
-                        <span class="ext-arrow">↗</span>
-                    </button>
-                    <button class="res-btn quiz" onclick="openQuiz(1)">
-                        <div class="res-icon">✍️</div>
-                        <div class="res-label">Unit 1 Quiz <small>5 questions</small></div>
-                    </button>
-                </div>
-            </div>
-        </div>
+  <!-- U2 -->
+  <div class="uc" id="u2" data-open="false">
+    <button class="ubtn" onclick="tog('u2')">
+      <div class="upill"><span>02</span></div>
+      <div class="uinfo"><div class="uname">Assessment of Pediatric Clients</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright">
+        <svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u2">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1GwiQQjr26JHX2W2mVY5y1JXeJo1Oa3Y1/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(2)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        <!-- UNIT 2 -->
-        <div class="unit-card" data-open="false" id="unit2">
-            <button class="unit-toggle" onclick="toggleUnit('unit2')" aria-expanded="false">
-                <div class="unit-toggle-left">
-                    <div class="unit-num">02</div>
-                    <div class="unit-name">Assessment of Pediatric Clients</div>
-                </div>
-                <div class="unit-toggle-right">
-                    <span class="unit-count">2 resources</span>
-                    <svg class="chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5,8 10,13 15,8"/></svg>
-                </div>
-            </button>
-            <div class="unit-body" id="unit2-body">
-                <div class="resource-grid">
-                    <button class="res-btn notes" onclick="openDrive('https://drive.google.com/file/d/1GwiQQjr26JHX2W2mVY5y1JXeJo1Oa3Y1/view', 'Unit 2 Notes')">
-                        <div class="res-icon">📖</div>
-                        <div class="res-label">Detailed Notes <small>Open in Drive</small></div>
-                        <span class="ext-arrow">↗</span>
-                    </button>
-                    <button class="res-btn quiz" onclick="openQuiz(2)">
-                        <div class="res-icon">✍️</div>
-                        <div class="res-label">Unit 2 Quiz <small>5 questions</small></div>
-                    </button>
-                </div>
-            </div>
-        </div>
+  <!-- U3 -->
+  <div class="uc" id="u3" data-open="false">
+    <button class="ubtn" onclick="tog('u3')">
+      <div class="upill"><span>03</span></div>
+      <div class="uinfo"><div class="uname">Hospitalized Child</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright">
+        <svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u3">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1BAM5EXg3LxEgBSNTuHDjGXuS7tusSJfR/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(3)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        <!-- UNIT 3 -->
-        <div class="unit-card" data-open="false" id="unit3">
-            <button class="unit-toggle" onclick="toggleUnit('unit3')" aria-expanded="false">
-                <div class="unit-toggle-left">
-                    <div class="unit-num">03</div>
-                    <div class="unit-name">Hospitalized Child</div>
-                </div>
-                <div class="unit-toggle-right">
-                    <span class="unit-count">2 resources</span>
-                    <svg class="chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5,8 10,13 15,8"/></svg>
-                </div>
-            </button>
-            <div class="unit-body" id="unit3-body">
-                <div class="resource-grid">
-                    <button class="res-btn notes" onclick="openDrive('https://drive.google.com/file/d/1BAM5EXg3LxEgBSNTuHDjGXuS7tusSJfR/view', 'Unit 3 Notes')">
-                        <div class="res-icon">📖</div>
-                        <div class="res-label">Detailed Notes <small>Open in Drive</small></div>
-                        <span class="ext-arrow">↗</span>
-                    </button>
-                    <button class="res-btn quiz" onclick="openQuiz(3)">
-                        <div class="res-icon">✍️</div>
-                        <div class="res-label">Unit 3 Quiz <small>5 questions</small></div>
-                    </button>
-                </div>
-            </div>
-        </div>
+  <!-- U4 -->
+  <div class="uc" id="u4" data-open="false">
+    <button class="ubtn" onclick="tog('u4')">
+      <div class="upill"><span>04</span></div>
+      <div class="uinfo"><div class="uname">Pre-natal Pediatrics</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright">
+        <svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u4">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1ny2P9ZHhgzavWRgOnpwrpuwhcsVa_S5B/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(4)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        <!-- UNIT 4 -->
-        <div class="unit-card" data-open="false" id="unit4">
-            <button class="unit-toggle" onclick="toggleUnit('unit4')" aria-expanded="false">
-                <div class="unit-toggle-left">
-                    <div class="unit-num">04</div>
-                    <div class="unit-name">Pre-natal Pediatrics</div>
-                </div>
-                <div class="unit-toggle-right">
-                    <span class="unit-count">2 resources</span>
-                    <svg class="chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5,8 10,13 15,8"/></svg>
-                </div>
-            </button>
-            <div class="unit-body" id="unit4-body">
-                <div class="resource-grid">
-                    <button class="res-btn notes" onclick="openDrive('https://drive.google.com/file/d/1ny2P9ZHhgzavWRgOnpwrpuwhcsVa_S5B/view', 'Unit 4 Notes')">
-                        <div class="res-icon">📖</div>
-                        <div class="res-label">Detailed Notes <small>Open in Drive</small></div>
-                        <span class="ext-arrow">↗</span>
-                    </button>
-                    <button class="res-btn quiz" onclick="openQuiz(4)">
-                        <div class="res-icon">✍️</div>
-                        <div class="res-label">Unit 4 Quiz <small>5 questions</small></div>
-                    </button>
-                </div>
-            </div>
-        </div>
+  <!-- U5 -->
+  <div class="uc" id="u5" data-open="false">
+    <button class="ubtn" onclick="tog('u5')">
+      <div class="upill"><span>05</span></div>
+      <div class="uinfo"><div class="uname">Growth &amp; Development of Children</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright">
+        <svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u5">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1zVOLhHXoDawnP7K9DaeJuSUQzQhPbhaY/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(5)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        <!-- UNIT 5 -->
-        <div class="unit-card" data-open="false" id="unit5">
-            <button class="unit-toggle" onclick="toggleUnit('unit5')" aria-expanded="false">
-                <div class="unit-toggle-left">
-                    <div class="unit-num">05</div>
-                    <div class="unit-name">Growth & Development of Children</div>
-                </div>
-                <div class="unit-toggle-right">
-                    <span class="unit-count">2 resources</span>
-                    <svg class="chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5,8 10,13 15,8"/></svg>
-                </div>
-            </button>
-            <div class="unit-body" id="unit5-body">
-                <div class="resource-grid">
-                    <button class="res-btn notes" onclick="openDrive('https://drive.google.com/file/d/1zVOLhHXoDawnP7K9DaeJuSUQzQhPbhaY/view', 'Unit 5 Notes')">
-                        <div class="res-icon">📖</div>
-                        <div class="res-label">Detailed Notes <small>Open in Drive</small></div>
-                        <span class="ext-arrow">↗</span>
-                    </button>
-                    <button class="res-btn quiz" onclick="openQuiz(5)">
-                        <div class="res-icon">✍️</div>
-                        <div class="res-label">Unit 5 Quiz <small>5 questions</small></div>
-                    </button>
-                </div>
-            </div>
-        </div>
+  <!-- U6 -->
+  <div class="uc" id="u6" data-open="false">
+    <button class="ubtn" onclick="tog('u6')">
+      <div class="upill"><span>06</span></div>
+      <div class="uinfo"><div class="uname">Behavioral Pediatrics</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright">
+        <svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u6">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1QpP1JApAnXedWwy7I57MOHxvhr9eTSET/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(6)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        <!-- UNIT 6 -->
-        <div class="unit-card" data-open="false" id="unit6">
-            <button class="unit-toggle" onclick="toggleUnit('unit6')" aria-expanded="false">
-                <div class="unit-toggle-left">
-                    <div class="unit-num">06</div>
-                    <div class="unit-name">Behavioral Pediatrics</div>
-                </div>
-                <div class="unit-toggle-right">
-                    <span class="unit-count">2 resources</span>
-                    <svg class="chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5,8 10,13 15,8"/></svg>
-                </div>
-            </button>
-            <div class="unit-body" id="unit6-body">
-                <div class="resource-grid">
-                    <button class="res-btn notes" onclick="openDrive('https://drive.google.com/file/d/1QpP1JApAnXedWwy7I57MOHxvhr9eTSET/view', 'Unit 6 Notes')">
-                        <div class="res-icon">📖</div>
-                        <div class="res-label">Detailed Notes <small>Open in Drive</small></div>
-                        <span class="ext-arrow">↗</span>
-                    </button>
-                    <button class="res-btn quiz" onclick="openQuiz(6)">
-                        <div class="res-icon">✍️</div>
-                        <div class="res-label">Unit 6 Quiz <small>5 questions</small></div>
-                    </button>
-                </div>
-            </div>
-        </div>
+  <!-- U7 -->
+  <div class="uc" id="u7" data-open="false">
+    <button class="ubtn" onclick="tog('u7')">
+      <div class="upill"><span>07</span></div>
+      <div class="uinfo"><div class="uname">Preventive Pediatrics</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright">
+        <svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u7">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1uOztwz2zuJRktVofSfu4asmQo1pGmrgI/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(7)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        <!-- UNIT 7 -->
-        <div class="unit-card" data-open="false" id="unit7">
-            <button class="unit-toggle" onclick="toggleUnit('unit7')" aria-expanded="false">
-                <div class="unit-toggle-left">
-                    <div class="unit-num">07</div>
-                    <div class="unit-name">Preventive Pediatrics</div>
-                </div>
-                <div class="unit-toggle-right">
-                    <span class="unit-count">2 resources</span>
-                    <svg class="chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5,8 10,13 15,8"/></svg>
-                </div>
-            </button>
-            <div class="unit-body" id="unit7-body">
-                <div class="resource-grid">
-                    <button class="res-btn notes" onclick="openDrive('https://drive.google.com/file/d/1uOztwz2zuJRktVofSfu4asmQo1pGmrgI/view', 'Unit 7 Notes')">
-                        <div class="res-icon">📖</div>
-                        <div class="res-label">Detailed Notes <small>Open in Drive</small></div>
-                        <span class="ext-arrow">↗</span>
-                    </button>
-                    <button class="res-btn quiz" onclick="openQuiz(7)">
-                        <div class="res-icon">✍️</div>
-                        <div class="res-label">Unit 7 Quiz <small>5 questions</small></div>
-                    </button>
-                </div>
-            </div>
-        </div>
+  <!-- U8 -->
+  <div class="uc" id="u8" data-open="false">
+    <button class="ubtn" onclick="tog('u8')">
+      <div class="upill"><span>08</span></div>
+      <div class="uinfo"><div class="uname">Neonatal Nursing</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright">
+        <svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u8">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1RMz0AkFU7OEXBXzvprgM3aJ6rKOK6fbt/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(8)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        <!-- UNIT 8 -->
-        <div class="unit-card" data-open="false" id="unit8">
-            <button class="unit-toggle" onclick="toggleUnit('unit8')" aria-expanded="false">
-                <div class="unit-toggle-left">
-                    <div class="unit-num">08</div>
-                    <div class="unit-name">Neonatal Nursing</div>
-                </div>
-                <div class="unit-toggle-right">
-                    <span class="unit-count">2 resources</span>
-                    <svg class="chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5,8 10,13 15,8"/></svg>
-                </div>
-            </button>
-            <div class="unit-body" id="unit8-body">
-                <div class="resource-grid">
-                    <button class="res-btn notes" onclick="openDrive('https://drive.google.com/file/d/1RMz0AkFU7OEXBXzvprgM3aJ6rKOK6fbt/view', 'Unit 8 Notes')">
-                        <div class="res-icon">📖</div>
-                        <div class="res-label">Detailed Notes <small>Open in Drive</small></div>
-                        <span class="ext-arrow">↗</span>
-                    </button>
-                    <button class="res-btn quiz" onclick="openQuiz(8)">
-                        <div class="res-icon">✍️</div>
-                        <div class="res-label">Unit 8 Quiz <small>5 questions</small></div>
-                    </button>
-                </div>
-            </div>
-        </div>
+  <!-- U9 -->
+  <div class="uc" id="u9" data-open="false">
+    <button class="ubtn" onclick="tog('u9')">
+      <div class="upill"><span>09</span></div>
+      <div class="uinfo"><div class="uname">IMNCI</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright">
+        <svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u9">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1O3opAT_2iR154yBD4KH_Q4eRu7G0xcXF/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(9)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        <!-- UNIT 9 -->
-        <div class="unit-card" data-open="false" id="unit9">
-            <button class="unit-toggle" onclick="toggleUnit('unit9')" aria-expanded="false">
-                <div class="unit-toggle-left">
-                    <div class="unit-num">09</div>
-                    <div class="unit-name">IMNCI</div>
-                </div>
-                <div class="unit-toggle-right">
-                    <span class="unit-count">2 resources</span>
-                    <svg class="chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5,8 10,13 15,8"/></svg>
-                </div>
-            </button>
-            <div class="unit-body" id="unit9-body">
-                <div class="resource-grid">
-                    <button class="res-btn notes" onclick="openDrive('https://drive.google.com/file/d/1O3opAT_2iR154yBD4KH_Q4eRu7G0xcXF/view', 'Unit 9 Notes')">
-                        <div class="res-icon">📖</div>
-                        <div class="res-label">Detailed Notes <small>Open in Drive</small></div>
-                        <span class="ext-arrow">↗</span>
-                    </button>
-                    <button class="res-btn quiz" onclick="openQuiz(9)">
-                        <div class="res-icon">✍️</div>
-                        <div class="res-label">Unit 9 Quiz <small>5 questions</small></div>
-                    </button>
-                </div>
-            </div>
-        </div>
+  <!-- U10 -->
+  <div class="uc" id="u10" data-open="false">
+    <button class="ubtn" onclick="tog('u10')">
+      <div class="upill"><span>10</span></div>
+      <div class="uinfo"><div class="uname">Pediatric Emergency</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright">
+        <svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u10">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1-0xNrJCuCll-Bt-0u24S7zPgL87Q8ciY/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(10)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        <!-- UNIT 10 -->
-        <div class="unit-card" data-open="false" id="unit10">
-            <button class="unit-toggle" onclick="toggleUnit('unit10')" aria-expanded="false">
-                <div class="unit-toggle-left">
-                    <div class="unit-num">10</div>
-                    <div class="unit-name">Pediatric Emergency</div>
-                </div>
-                <div class="unit-toggle-right">
-                    <span class="unit-count">2 resources</span>
-                    <svg class="chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5,8 10,13 15,8"/></svg>
-                </div>
-            </button>
-            <div class="unit-body" id="unit10-body">
-                <div class="resource-grid">
-                    <button class="res-btn notes" onclick="openDrive('https://drive.google.com/file/d/1-0xNrJCuCll-Bt-0u24S7zPgL87Q8ciY/view', 'Unit 10 Notes')">
-                        <div class="res-icon">📖</div>
-                        <div class="res-label">Detailed Notes <small>Open in Drive</small></div>
-                        <span class="ext-arrow">↗</span>
-                    </button>
-                    <button class="res-btn quiz" onclick="openQuiz(10)">
-                        <div class="res-icon">✍️</div>
-                        <div class="res-label">Unit 10 Quiz <small>5 questions</small></div>
-                    </button>
-                </div>
-            </div>
-        </div>
+  <!-- U11 -->
+  <div class="uc" id="u11" data-open="false">
+    <button class="ubtn" onclick="tog('u11')">
+      <div class="upill"><span>11</span></div>
+      <div class="uinfo"><div class="uname">Quality Assurance</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright">
+        <svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u11">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1sSuwxb9pQEa_zVgKkeBlfXySbHj55iki/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(11)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        <!-- UNIT 11 -->
-        <div class="unit-card" data-open="false" id="unit11">
-            <button class="unit-toggle" onclick="toggleUnit('unit11')" aria-expanded="false">
-                <div class="unit-toggle-left">
-                    <div class="unit-num">11</div>
-                    <div class="unit-name">Quality Assurance</div>
-                </div>
-                <div class="unit-toggle-right">
-                    <span class="unit-count">2 resources</span>
-                    <svg class="chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5,8 10,13 15,8"/></svg>
-                </div>
-            </button>
-            <div class="unit-body" id="unit11-body">
-                <div class="resource-grid">
-                    <button class="res-btn notes" onclick="openDrive('https://drive.google.com/file/d/1sSuwxb9pQEa_zVgKkeBlfXySbHj55iki/view', 'Unit 11 Notes')">
-                        <div class="res-icon">📖</div>
-                        <div class="res-label">Detailed Notes <small>Open in Drive</small></div>
-                        <span class="ext-arrow">↗</span>
-                    </button>
-                    <button class="res-btn quiz" onclick="openQuiz(11)">
-                        <div class="res-icon">✍️</div>
-                        <div class="res-label">Unit 11 Quiz <small>5 questions</small></div>
-                    </button>
-                </div>
-            </div>
-        </div>
+  <!-- U12 -->
+  <div class="uc" id="u12" data-open="false">
+    <button class="ubtn" onclick="tog('u12')">
+      <div class="upill"><span>12</span></div>
+      <div class="uinfo"><div class="uname">Modification of Nursing Management</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright">
+        <svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u12">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1C4pxv-YpkL04zwwlv5FmoCImns4CBfWz/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(12)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        <!-- UNIT 12 -->
-        <div class="unit-card" data-open="false" id="unit12">
-            <button class="unit-toggle" onclick="toggleUnit('unit12')" aria-expanded="false">
-                <div class="unit-toggle-left">
-                    <div class="unit-num">12</div>
-                    <div class="unit-name">Modification of Nursing Management</div>
-                </div>
-                <div class="unit-toggle-right">
-                    <span class="unit-count">2 resources</span>
-                    <svg class="chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5,8 10,13 15,8"/></svg>
-                </div>
-            </button>
-            <div class="unit-body" id="unit12-body">
-                <div class="resource-grid">
-                    <button class="res-btn notes" onclick="openDrive('https://drive.google.com/file/d/1C4pxv-YpkL04zwwlv5FmoCImns4CBfWz/view', 'Unit 12 Notes')">
-                        <div class="res-icon">📖</div>
-                        <div class="res-label">Detailed Notes <small>Open in Drive</small></div>
-                        <span class="ext-arrow">↗</span>
-                    </button>
-                    <button class="res-btn quiz" onclick="openQuiz(12)">
-                        <div class="res-icon">✍️</div>
-                        <div class="res-label">Unit 12 Quiz <small>5 questions</small></div>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- PYQ -->
-        <div class="unit-card" data-open="false" id="pyq">
-            <button class="unit-toggle" onclick="toggleUnit('pyq')" aria-expanded="false">
-                <div class="unit-toggle-left">
-                    <div class="unit-num" style="font-size:0.62rem;">PYQ</div>
-                    <div class="unit-name">Previous Year Questions</div>
-                </div>
-                <div class="unit-toggle-right">
-                    <span class="unit-count">7 papers</span>
-                    <svg class="chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5,8 10,13 15,8"/></svg>
-                </div>
-            </button>
-            <div class="unit-body" id="pyq-body">
-                <div class="resource-grid">
-                    <button class="res-btn pyq" onclick="openDrive('https://drive.google.com/file/d/1IDO6xUMEcfkBo0FsZm9e67pLXXpkun_i/view', 'PYQ Jan 2024')">
-                        <div class="res-icon">📄</div>
-                        <div class="res-label">January 2024 <small>Open in Drive</small></div>
-                        <span class="ext-arrow">↗</span>
-                    </button>
-                    <button class="res-btn pyq" onclick="openDrive('https://drive.google.com/file/d/13pRNSS5dd1ftdrg9yCCGHCS8zJ2Nb_0l/view', 'PYQ Jun 2023')">
-                        <div class="res-icon">📄</div>
-                        <div class="res-label">June 2023 <small>Open in Drive</small></div>
-                        <span class="ext-arrow">↗</span>
-                    </button>
-                    <button class="res-btn pyq" onclick="openDrive('https://drive.google.com/file/d/1DRViJXCulJElinNODJzK36tegIl_i9rB/view', 'PYQ Mar 2023')">
-                        <div class="res-icon">📄</div>
-                        <div class="res-label">March 2023 <small>Open in Drive</small></div>
-                        <span class="ext-arrow">↗</span>
-                    </button>
-                    <button class="res-btn pyq" onclick="openDrive('https://drive.google.com/file/d/17t8ah3BiNjAL86IzBJIQS1nvXbDObB1x/view', 'PYQ May 2022')">
-                        <div class="res-icon">📄</div>
-                        <div class="res-label">May 2022 <small>Open in Drive</small></div>
-                        <span class="ext-arrow">↗</span>
-                    </button>
-                    <button class="res-btn pyq" onclick="openDrive('https://drive.google.com/file/d/1pp9j2oOVHLmvrlDCKSsCdbhS1v5kZfug/view', 'PYQ Feb 2022')">
-                        <div class="res-icon">📄</div>
-                        <div class="res-label">February 2022 <small>Open in Drive</small></div>
-                        <span class="ext-arrow">↗</span>
-                    </button>
-                    <button class="res-btn pyq" onclick="openDrive('https://drive.google.com/file/d/137po9CmHx946_Xx3xxfPXpDMlfm4-Ubu/view', 'PYQ Aug 2021')">
-                        <div class="res-icon">📄</div>
-                        <div class="res-label">August 2021 <small>Open in Drive</small></div>
-                        <span class="ext-arrow">↗</span>
-                    </button>
-                    <button class="res-btn pyq" onclick="openDrive('https://drive.google.com/file/d/13KqPvoPUKQUYyUiQPRvmkwcXfE-qpYht/view', 'PYQ Sep 2020')">
-                        <div class="res-icon">📄</div>
-                        <div class="res-label">September 2020 <small>Open in Drive</small></div>
-                        <span class="ext-arrow">↗</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-    </div><!-- /units-list -->
+  <!-- PYQ -->
+  <div class="divider" style="margin-top:20px"><span>Previous Year Questions</span></div>
+  <div class="uc" id="upyq" data-open="false">
+    <button class="ubtn" onclick="tog('upyq')">
+      <div class="upill"><span style="font-size:.58rem">PYQ</span></div>
+      <div class="uinfo"><div class="uname">Previous Year Papers</div><div class="umeta">7 exam papers</div></div>
+      <div class="uright">
+        <svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-upyq">
+      <div class="pyq-grid">
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1IDO6xUMEcfkBo0FsZm9e67pLXXpkun_i/view')">
+          <div class="rico">📄</div><div class="rtxt">Jan 2024<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/13pRNSS5dd1ftdrg9yCCGHCS8zJ2Nb_0l/view')">
+          <div class="rico">📄</div><div class="rtxt">Jun 2023<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1DRViJXCulJElinNODJzK36tegIl_i9rB/view')">
+          <div class="rico">📄</div><div class="rtxt">Mar 2023<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/17t8ah3BiNjAL86IzBJIQS1nvXbDObB1x/view')">
+          <div class="rico">📄</div><div class="rtxt">May 2022<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1pp9j2oOVHLmvrlDCKSsCdbhS1v5kZfug/view')">
+          <div class="rico">📄</div><div class="rtxt">Feb 2022<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/137po9CmHx946_Xx3xxfPXpDMlfm4-Ubu/view')">
+          <div class="rico">📄</div><div class="rtxt">Aug 2021<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/13KqPvoPUKQUYyUiQPRvmkwcXfE-qpYht/view')">
+          <div class="rico">📄</div><div class="rtxt">Sep 2020<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
 </main>
 
 <!-- ── QUIZ BOTTOM SHEET ── -->
-<div class="quiz-modal" id="quiz-modal" role="dialog" aria-modal="true" aria-label="Quiz">
-    <div class="quiz-backdrop" onclick="closeQuiz()"></div>
-    <div class="quiz-sheet">
-        <div class="quiz-sheet-header">
-            <div class="quiz-sheet-title" id="quiz-title">Quiz</div>
-            <button class="quiz-close-btn" onclick="closeQuiz()" aria-label="Close quiz">✕</button>
-        </div>
-        <div class="quiz-body" id="quiz-body"></div>
+<div class="qoverlay" id="qmodal">
+  <div class="qscrim" onclick="closeQuiz()"></div>
+  <div class="qpanel">
+    <div class="qhead">
+      <div class="qhead-top">
+        <div class="qtitle" id="qtitle">Quiz</div>
+        <button class="qclose" onclick="closeQuiz()">✕</button>
+      </div>
+      <div class="qpips" id="qpips"></div>
     </div>
+    <div class="qbody" id="qbody"></div>
+  </div>
 </div>
 
 <script>
-// ── QUIZ DATA ──
-const QUIZ_DATA = {
-    1: [
-        { q: "Who is known as the 'Father of Pediatrics'?", o: ["Hippocrates", "Abraham Jacobi", "Sigmund Freud", "Florence Nightingale"], a: 1 },
-        { q: "The term 'Pediatrics' is derived from Greek words meaning:", o: ["Child and Cure", "Child and Play", "Disease and Child", "Growth and Development"], a: 0 },
-        { q: "Which of the following is a key trend in pediatric nursing?", o: ["Institutionalization", "Family-Centered Care", "Excluding parents", "Adult-focused care"], a: 1 },
-        { q: "The rights of the child were adopted by the UN General Assembly in:", o: ["1959", "1989", "1948", "2000"], a: 1 },
-        { q: "Pediatric nursing care focuses on:", o: ["Curative care only", "Preventive, Promotive, and Curative care", "Hospice care only", "Surgical care only"], a: 1 }
-    ],
-    2: [
-        { q: "The normal heart rate of a newborn is:", o: ["60-80 bpm", "120-160 bpm", "80-100 bpm", "100-120 bpm"], a: 1 },
-        { q: "Anthropometric measurements include:", o: ["BP and Pulse", "Height, Weight, Head Circumference", "Urine output", "Blood sugar"], a: 1 },
-        { q: "The posterior fontanelle usually closes by:", o: ["6-8 weeks", "12-18 months", "3-4 months", "Birth"], a: 0 },
-        { q: "Which site is most preferred for taking temperature in infants?", o: ["Oral", "Axillary", "Rectal", "Tympanic"], a: 1 },
-        { q: "Head circumference is measured at the level of:", o: ["Eyebrows", "Occipital protuberance and supraorbital ridges", "Ears", "Neck"], a: 1 }
-    ],
-    3: [
-        { q: "The major stressor for a toddler in the hospital is:", o: ["Pain", "Separation Anxiety", "Loss of control", "Fear of death"], a: 1 },
-        { q: "The three stages of separation anxiety are:", o: ["Cry, Sleep, Eat", "Protest, Despair, Detachment", "Anger, Bargaining, Acceptance", "Shock, Denial, Anger"], a: 1 },
-        { q: "Therapeutic play in the hospital helps the child to:", o: ["Forget parents", "Express fears and feelings", "Sleep better", "Eat more"], a: 1 },
-        { q: "During the 'Despair' stage of separation anxiety, the child appears:", o: ["Happy", "Withdrawn and sad", "Violent", "Active"], a: 1 },
-        { q: "To reduce anxiety in a preschooler, the nurse should:", o: ["Restrain the child", "Explain procedures in simple terms", "Ignore the child", "Send parents away"], a: 1 }
-    ],
-    4: [
-        { q: "Genetic counseling is most important for:", o: ["Consanguineous marriages", "Common cold", "Fractures", "Infections"], a: 0 },
-        { q: "Down syndrome is caused by:", o: ["Trisomy 18", "Trisomy 21", "Monosomy X", "Fragile X"], a: 1 },
-        { q: "Prenatal pediatrics primarily deals with:", o: ["School health", "Fetal health and genetics", "Adolescent health", "Geriatrics"], a: 1 },
-        { q: "Teratogens are agents that cause:", o: ["Better growth", "Congenital anomalies", "Genetic mutation", "Multiple pregnancies"], a: 1 },
-        { q: "Amniocentesis is used for:", o: ["Inducing labor", "Detecting fetal abnormalities", "Feeding the fetus", "Measuring weight"], a: 1 }
-    ],
-    5: [
-        { q: "Cephalocaudal development means growth proceeds from:", o: ["Feet to Head", "Head to Toe", "Center to Periphery", "Simple to Complex"], a: 1 },
-        { q: "According to Erikson, the developmental task of infancy is:", o: ["Trust vs Mistrust", "Autonomy vs Shame", "Initiative vs Guilt", "Industry vs Inferiority"], a: 0 },
-        { q: "An infant usually doubles their birth weight by:", o: ["3 months", "6 months", "9 months", "12 months"], a: 1 },
-        { q: "Object permanence is a concept in which theory?", o: ["Freud", "Piaget", "Kohlberg", "Erikson"], a: 1 },
-        { q: "Which age group engages in 'Parallel Play'?", o: ["Infants", "Toddlers", "Preschoolers", "School age"], a: 1 }
-    ],
-    6: [
-        { q: "Pica is defined as:", o: ["Bedwetting", "Eating non-nutritive substances", "Thumb sucking", "Nail biting"], a: 1 },
-        { q: "Enuresis refers to:", o: ["Involuntary passage of stool", "Involuntary urination", "Sleep walking", "Stuttering"], a: 1 },
-        { q: "Temper tantrums are most common in:", o: ["Infants", "Toddlers", "School age", "Adolescents"], a: 1 },
-        { q: "Encopresis is:", o: ["Bedwetting", "Fecal incontinence", "Vomiting", "Stuttering"], a: 1 },
-        { q: "A common cause of thumb sucking is:", o: ["Hunger", "Insecurity/Anxiety", "Pain", "Thirst"], a: 1 }
-    ],
-    7: [
-        { q: "BCG vaccine protects against:", o: ["Polio", "Tuberculosis", "Measles", "Diphtheria"], a: 1 },
-        { q: "The 'Cold Chain' is used to:", o: ["Store food", "Maintain vaccine potency", "Cool patients", "Transport blood"], a: 1 },
-        { q: "Vitamin A solution is administered to prevent:", o: ["Rickets", "Night Blindness", "Scurvy", "Beriberi"], a: 1 },
-        { q: "The route of administration for the Measles vaccine is:", o: ["Intramuscular", "Subcutaneous", "Intradermal", "Oral"], a: 1 },
-        { q: "Exclusive breastfeeding is recommended for:", o: ["3 months", "6 months", "9 months", "1 year"], a: 1 }
-    ],
-    8: [
-        { q: "APGAR score is assessed at:", o: ["1 and 5 minutes", "10 and 20 minutes", "1 hour", "24 hours"], a: 0 },
-        { q: "Kangaroo Mother Care (KMC) provides:", o: ["Food", "Warmth and bonding", "Medicine", "Oxygen"], a: 1 },
-        { q: "Physiological jaundice usually appears:", o: ["At birth", "After 24 hours", "After 1 week", "Never"], a: 1 },
-        { q: "The reflex where a baby turns its head towards a touch on the cheek is:", o: ["Moro", "Rooting", "Grasp", "Babinski"], a: 1 },
-        { q: "Meconium is:", o: ["First urine", "First stool", "Vernix caseosa", "Breast milk"], a: 1 }
-    ],
-    9: [
-        { q: "IMNCI stands for:", o: ["International Management of Newborns", "Integrated Management of Neonatal and Childhood Illnesses", "Indian Medical Nursing Council", "None"], a: 1 },
-        { q: "In IMNCI, 'Pink' color code indicates:", o: ["Home care", "OPD treatment", "Urgent referral/Hospitalization", "Follow up"], a: 2 },
-        { q: "A general danger sign in IMNCI is:", o: ["Cough", "Fever", "Convulsions/Inability to drink", "Diarrhea"], a: 2 },
-        { q: "ORS is used to treat:", o: ["Pneumonia", "Dehydration", "Malaria", "Ear infection"], a: 1 },
-        { q: "In IMNCI, 'Yellow' color code implies:", o: ["No treatment", "Referral", "Specific medical treatment at outpatient health facility", "Surgery"], a: 2 }
-    ],
-    10: [
-        { q: "The ratio of compressions to breaths in pediatric CPR (one rescuer) is:", o: ["15:2", "30:2", "5:1", "10:1"], a: 1 },
-        { q: "Heimlich maneuver is used for:", o: ["Drowning", "Choking/Foreign body aspiration", "Burns", "Poisoning"], a: 1 },
-        { q: "In case of Kerosene poisoning, you should:", o: ["Induce vomiting", "NOT induce vomiting", "Give water", "Give milk"], a: 1 },
-        { q: "The most common type of burn in children is:", o: ["Electrical", "Scalds", "Chemical", "Radiation"], a: 1 },
-        { q: "Rule of Nines is used to assess:", o: ["Height", "Weight", "Burn surface area", "Fractures"], a: 2 }
-    ],
-    11: [
-        { q: "Quality Assurance (QA) mainly focuses on:", o: ["Cutting costs", "Improving standards of care", "Staff attendance", "Equipment purchase"], a: 1 },
-        { q: "Nursing Audit is a method of:", o: ["Budgeting", "Evaluating nursing care", "Teaching", "Recruitment"], a: 1 },
-        { q: "Standard precautions are used to prevent:", o: ["Accidents", "Infection transmission", "Bed sores", "Falls"], a: 1 },
-        { q: "Documentation in nursing should be:", o: ["Subjective", "Accurate, timely, and complete", "Written in pencil", "Done next day"], a: 1 },
-        { q: "Benchmarking is used to:", o: ["Compare performance with best practices", "Mark attendance", "Clean benches", "Discipline staff"], a: 0 }
-    ],
-    12: [
-        { q: "Clark's rule for drug calculation is based on:", o: ["Age", "Weight", "Height", "BSA"], a: 1 },
-        { q: "When restraining a child, the nurse must:", o: ["Leave child alone", "Check circulation and skin integrity frequently", "Tie knots very tight", "Use metal chains"], a: 1 },
-        { q: "Before a procedure, consent should be obtained from:", o: ["The child", "Parents/Guardians", "Nurse", "Teacher"], a: 1 },
-        { q: "Pediatric drug doses are usually calculated in:", o: ["mg/kg body weight", "mg/year of age", "Fixed adult dose", "Random estimation"], a: 0 },
-        { q: "Mummy restraint is used for:", o: ["Leg surgery", "Head and neck examination", "Feeding", "Playing"], a: 1 }
-    ]
-};
-
-const LETTERS = ['A','B','C','D'];
-let quizAnswered = [];
-let currentQuizId = null;
+// ── OPEN PDF IN NEW TAB (full Drive view, no iframe) ──
+// Because this page itself is in an iframe inside the EziNurse app,
+// window.open with _blank will open the PDF in the user's browser,
+// and when they close/come back they land exactly here (the subject page
+// still visible inside the app iframe) — NOT the dashboard.
+function openPDF(url) {
+  const clean = url.replace(/\/preview.*$/,'').replace(/\/view.*$/,'') + '/view';
+  const a = document.createElement('a');
+  a.href = clean;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
 
 // ── UNIT TOGGLE ──
-function toggleUnit(id) {
-    const card = document.getElementById(id);
-    const body = document.getElementById(id + '-body');
-    const btn  = card.querySelector('.unit-toggle');
-    const open = card.dataset.open === 'true';
-    card.dataset.open = !open;
-    btn.setAttribute('aria-expanded', !open);
-    body.classList.toggle('open', !open);
+function tog(id) {
+  const card = document.getElementById(id);
+  const body = document.getElementById('b-' + id);
+  const open = card.dataset.open === 'true';
+  card.dataset.open = String(!open);
+  card.querySelector('.ubtn').setAttribute('aria-expanded', String(!open));
+  body.classList.toggle('open', !open);
 }
 
-// ── OPEN DRIVE (new tab, full view) ──
-function openDrive(url, title) {
-    // Strip /preview suffix and ensure /view for full Google Drive view
-    const fullUrl = url
-        .replace(/\/preview.*$/, '')
-        .replace(/\/view.*$/, '')
-        + '/view';
-    window.open(fullUrl, '_blank', 'noopener,noreferrer');
-}
 
-// ── QUIZ ──
-function openQuiz(unitId) {
-    currentQuizId = unitId;
-    const qs = QUIZ_DATA[unitId] || [];
-    quizAnswered = new Array(qs.length).fill(null);
+// ── QUIZ DATA — 10 questions per unit ──
+const QD = {
+1:[
+  {q:"Who is known as the 'Father of Pediatrics'?",o:["Hippocrates","Abraham Jacobi","Sigmund Freud","Florence Nightingale"],a:1},
+  {q:"The term 'Pediatrics' is derived from Greek words meaning:",o:["Child and Cure","Child and Play","Disease and Child","Growth and Development"],a:0},
+  {q:"Which is a key trend in modern pediatric nursing?",o:["Institutionalization","Family-Centered Care","Excluding parents","Adult-focused care"],a:1},
+  {q:"The UN Convention on the Rights of the Child was adopted in:",o:["1959","1989","1948","2000"],a:1},
+  {q:"Pediatric nursing primarily focuses on:",o:["Curative care only","Preventive, Promotive, and Curative care","Hospice care only","Surgical care only"],a:1},
+  {q:"Neonatology deals with newborns up to the age of:",o:["1 month","3 months","6 months","1 year"],a:0},
+  {q:"The age group classified as 'toddler' is:",o:["0–1 year","1–3 years","3–6 years","6–12 years"],a:1},
+  {q:"Child mortality rate refers to deaths in children under:",o:["1 year","5 years","10 years","15 years"],a:1},
+  {q:"'Atraumatic care' in pediatric nursing means:",o:["Avoiding all injections","Providing care that minimizes physical and psychological distress","Keeping children sedated","Restricting parental visits"],a:1},
+  {q:"The primary goal of pediatric nursing is:",o:["Disease treatment only","Promoting optimal health and development","Research only","Surgical intervention"],a:1}
+],
+2:[
+  {q:"Normal heart rate of a newborn is:",o:["60–80 bpm","120–160 bpm","80–100 bpm","100–120 bpm"],a:1},
+  {q:"Anthropometric measurements include:",o:["BP and Pulse","Height, Weight, Head Circumference","Urine output","Blood sugar"],a:1},
+  {q:"Posterior fontanelle usually closes by:",o:["6–8 weeks","12–18 months","3–4 months","Birth"],a:0},
+  {q:"Most preferred site for temperature in infants:",o:["Oral","Axillary","Rectal","Tympanic"],a:1},
+  {q:"Head circumference measured at the level of:",o:["Eyebrows","Occipital protuberance and supraorbital ridges","Ears","Neck"],a:1},
+  {q:"Normal respiratory rate of a newborn is:",o:["12–20/min","20–30/min","30–60/min","60–80/min"],a:2},
+  {q:"The anterior fontanelle closes at:",o:["2–3 months","6–8 months","12–18 months","24 months"],a:2},
+  {q:"Skinfold thickness measurement assesses:",o:["Bone density","Subcutaneous fat","Muscle mass","Hydration"],a:1},
+  {q:"Denver Developmental Screening Test (DDST) assesses:",o:["Intelligence only","Growth charts only","Developmental milestones","Blood counts"],a:2},
+  {q:"Normal blood pressure of a newborn (systolic) is approximately:",o:["40–60 mmHg","60–90 mmHg","90–120 mmHg","120–140 mmHg"],a:1}
+],
+3:[
+  {q:"Major stressor for a toddler in the hospital:",o:["Pain","Separation Anxiety","Loss of control","Fear of death"],a:1},
+  {q:"Three stages of separation anxiety:",o:["Cry, Sleep, Eat","Protest, Despair, Detachment","Anger, Bargaining, Acceptance","Shock, Denial, Anger"],a:1},
+  {q:"Therapeutic play helps the child to:",o:["Forget parents","Express fears and feelings","Sleep better","Eat more"],a:1},
+  {q:"During 'Despair' stage, the child appears:",o:["Happy","Withdrawn and sad","Violent","Active"],a:1},
+  {q:"To reduce anxiety in a preschooler, nurse should:",o:["Restrain the child","Explain procedures in simple terms","Ignore the child","Send parents away"],a:1},
+  {q:"Rooming-in facility is important because:",o:["Reduces hospital costs","Decreases separation anxiety","Increases infection risk","Limits nursing care"],a:1},
+  {q:"School-age children's primary fear during hospitalization:",o:["Separation anxiety","Fear of bodily harm and loss of control","Fear of the dark","Fear of strangers"],a:1},
+  {q:"The 'Detachment' stage of separation anxiety is characterized by:",o:["Crying loudly","Appearing adjusted but emotionally withdrawn","Aggression","Running away"],a:1},
+  {q:"Which type of play is most appropriate for hospitalized infants?",o:["Cooperative play","Parallel play","Solitary play","Onlooker play"],a:2},
+  {q:"Informed assent in pediatric nursing refers to:",o:["Parent consent only","Child's agreement to treatment in age-appropriate terms","Doctor's decision","Legal document"],a:1}
+],
+4:[
+  {q:"Genetic counseling is most important for:",o:["Consanguineous marriages","Common cold","Fractures","Infections"],a:0},
+  {q:"Down syndrome is caused by:",o:["Trisomy 18","Trisomy 21","Monosomy X","Fragile X"],a:1},
+  {q:"Prenatal pediatrics primarily deals with:",o:["School health","Fetal health and genetics","Adolescent health","Geriatrics"],a:1},
+  {q:"Teratogens are agents that cause:",o:["Better growth","Congenital anomalies","Genetic mutation","Multiple pregnancies"],a:1},
+  {q:"Amniocentesis is used for:",o:["Inducing labor","Detecting fetal abnormalities","Feeding the fetus","Measuring weight"],a:1},
+  {q:"Neural tube defects are prevented by adequate intake of:",o:["Vitamin C","Folic acid","Iron","Calcium"],a:1},
+  {q:"Phenylketonuria (PKU) is inherited in which pattern?",o:["X-linked dominant","Autosomal dominant","Autosomal recessive","X-linked recessive"],a:2},
+  {q:"CVS (Chorionic Villus Sampling) is done at:",o:["8–12 weeks","16–20 weeks","24–28 weeks","After 30 weeks"],a:0},
+  {q:"Rubella infection in first trimester causes:",o:["Hypertension in mother","Congenital rubella syndrome","Preterm labor","Anemia"],a:1},
+  {q:"Which condition is screened by the Guthrie test?",o:["Down syndrome","Phenylketonuria","Thalassemia","Sickle cell anemia"],a:1}
+],
+5:[
+  {q:"Cephalocaudal development means growth proceeds from:",o:["Feet to Head","Head to Toe","Center to Periphery","Simple to Complex"],a:1},
+  {q:"According to Erikson, developmental task of infancy is:",o:["Trust vs Mistrust","Autonomy vs Shame","Initiative vs Guilt","Industry vs Inferiority"],a:0},
+  {q:"Infant usually doubles birth weight by:",o:["3 months","6 months","9 months","12 months"],a:1},
+  {q:"Object permanence is a concept in which theory?",o:["Freud","Piaget","Kohlberg","Erikson"],a:1},
+  {q:"Which age group engages in 'Parallel Play'?",o:["Infants","Toddlers","Preschoolers","School age"],a:1},
+  {q:"Moro reflex disappears by:",o:["1 month","3–4 months","6 months","12 months"],a:1},
+  {q:"An infant triples birth weight by:",o:["6 months","9 months","12 months","18 months"],a:2},
+  {q:"Proximodistal development means growth proceeds from:",o:["Head to toe","Near to far (center outward)","Feet to head","Simple to complex"],a:1},
+  {q:"First permanent tooth erupts at approximately:",o:["2–3 years","4–5 years","6–7 years","8–9 years"],a:2},
+  {q:"According to Kohlberg, a child at the preconventional level of moral development is primarily motivated by:",o:["Social approval","Rules and laws","Avoiding punishment and seeking reward","Personal values"],a:2}
+],
+6:[
+  {q:"Pica is defined as:",o:["Bedwetting","Eating non-nutritive substances","Thumb sucking","Nail biting"],a:1},
+  {q:"Enuresis refers to:",o:["Involuntary passage of stool","Involuntary urination","Sleep walking","Stuttering"],a:1},
+  {q:"Temper tantrums are most common in:",o:["Infants","Toddlers","School age","Adolescents"],a:1},
+  {q:"Encopresis is:",o:["Bedwetting","Fecal incontinence","Vomiting","Stuttering"],a:1},
+  {q:"Common cause of thumb sucking:",o:["Hunger","Insecurity/Anxiety","Pain","Thirst"],a:1},
+  {q:"Night terrors are most common in which age group?",o:["Infants","Toddlers and preschoolers","School age","Adolescents"],a:1},
+  {q:"Attention Deficit Hyperactivity Disorder (ADHD) is characterized by:",o:["Excessive sleep","Inattention, hyperactivity, and impulsivity","Visual impairment","Low intelligence"],a:1},
+  {q:"The first-line management for simple enuresis is:",o:["Medication","Bladder training and motivational therapy","Surgery","Restriction of fluids completely"],a:1},
+  {q:"Autism Spectrum Disorder (ASD) primarily affects:",o:["Motor skills","Social communication and interaction","Physical growth","Cardiac function"],a:1},
+  {q:"Stuttering is most effectively managed by:",o:["Ignoring the child","Speech therapy and reducing anxiety","Punishment","Medication"],a:1}
+],
+7:[
+  {q:"BCG vaccine protects against:",o:["Polio","Tuberculosis","Measles","Diphtheria"],a:1},
+  {q:"'Cold Chain' is used to:",o:["Store food","Maintain vaccine potency","Cool patients","Transport blood"],a:1},
+  {q:"Vitamin A solution is administered to prevent:",o:["Rickets","Night Blindness","Scurvy","Beriberi"],a:1},
+  {q:"Route of administration for Measles vaccine:",o:["Intramuscular","Subcutaneous","Intradermal","Oral"],a:1},
+  {q:"Exclusive breastfeeding is recommended for:",o:["3 months","6 months","9 months","1 year"],a:1},
+  {q:"OPV (Oral Polio Vaccine) route of administration:",o:["Intramuscular","Subcutaneous","Intradermal","Oral"],a:3},
+  {q:"DPT vaccine protects against Diphtheria, Pertussis, and:",o:["Typhoid","Tetanus","Tuberculosis","Typhus"],a:1},
+  {q:"ICDS stands for:",o:["Indian Child Development Service","Integrated Child Development Services","International Child Disease Surveillance","Indian Council of Development Studies"],a:1},
+  {q:"Herd immunity is achieved when a sufficient proportion of the population is:",o:["Infected","Vaccinated","Quarantined","Treated"],a:1},
+  {q:"Supplementary Immunization Activity (SIA) primarily targets:",o:["Adults","Elderly","Children who missed routine vaccines","Healthcare workers"],a:2}
+],
+8:[
+  {q:"APGAR score is assessed at:",o:["1 and 5 minutes","10 and 20 minutes","1 hour","24 hours"],a:0},
+  {q:"Kangaroo Mother Care (KMC) provides:",o:["Food","Warmth and bonding","Medicine","Oxygen"],a:1},
+  {q:"Physiological jaundice usually appears:",o:["At birth","After 24 hours","After 1 week","Never"],a:1},
+  {q:"Reflex where baby turns head towards cheek touch:",o:["Moro","Rooting","Grasp","Babinski"],a:1},
+  {q:"Meconium is:",o:["First urine","First stool","Vernix caseosa","Breast milk"],a:1},
+  {q:"Maximum score in APGAR scoring:",o:["5","8","10","12"],a:2},
+  {q:"Surfactant deficiency causes:",o:["Jaundice","Respiratory Distress Syndrome (RDS)","Septicemia","Hypoglycemia"],a:1},
+  {q:"Lanugo is:",o:["Vernix caseosa","Fine hair covering the fetus","First stool","Umbilical secretion"],a:1},
+  {q:"Pathological jaundice in a newborn appears:",o:["After 24 hours","Within 24 hours of birth","After 1 week","Only in preterm babies"],a:1},
+  {q:"Birth weight below which a neonate is classified as Low Birth Weight (LBW):",o:["1500 g","2000 g","2500 g","3000 g"],a:2}
+],
+9:[
+  {q:"IMNCI stands for:",o:["International Management of Newborns","Integrated Management of Neonatal and Childhood Illnesses","Indian Medical Nursing Council","None"],a:1},
+  {q:"In IMNCI, 'Pink' color code indicates:",o:["Home care","OPD treatment","Urgent referral/Hospitalization","Follow up"],a:2},
+  {q:"A general danger sign in IMNCI:",o:["Cough","Fever","Convulsions/Inability to drink","Diarrhea"],a:2},
+  {q:"ORS is used to treat:",o:["Pneumonia","Dehydration","Malaria","Ear infection"],a:1},
+  {q:"In IMNCI, 'Yellow' color code implies:",o:["No treatment","Referral","Specific medical treatment at outpatient facility","Surgery"],a:2},
+  {q:"In IMNCI, 'Green' color code means:",o:["Urgent referral","Specific treatment","Home management and counseling","Hospitalization"],a:2},
+  {q:"Fast breathing in a child aged 2–12 months is defined as ≥:",o:["40 breaths/min","50 breaths/min","60 breaths/min","70 breaths/min"],a:1},
+  {q:"Co-trimoxazole is used in IMNCI for treating:",o:["Severe dehydration","Pneumonia","Malaria","Ear discharge"],a:1},
+  {q:"'Chest indrawing' in IMNCI indicates:",o:["Mild pneumonia","Severe pneumonia","Normal breathing","Asthma"],a:1},
+  {q:"The IMNCI strategy integrates care for children under:",o:["1 year","2 years","5 years","10 years"],a:2}
+],
+10:[
+  {q:"Ratio of compressions to breaths in pediatric CPR (one rescuer):",o:["15:2","30:2","5:1","10:1"],a:1},
+  {q:"Heimlich maneuver is used for:",o:["Drowning","Choking/Foreign body aspiration","Burns","Poisoning"],a:1},
+  {q:"In Kerosene poisoning, you should:",o:["Induce vomiting","NOT induce vomiting","Give water","Give milk"],a:1},
+  {q:"Most common type of burn in children:",o:["Electrical","Scalds","Chemical","Radiation"],a:1},
+  {q:"Rule of Nines assesses:",o:["Height","Weight","Burn surface area","Fractures"],a:2},
+  {q:"Normal depth of chest compressions in infant CPR:",o:["1 cm","1.5–2 cm","3–4 cm","5–6 cm"],a:1},
+  {q:"Near-drowning refers to:",o:["Death by drowning","Survival after submersion","Swimming accident","Water allergy"],a:1},
+  {q:"First aid for a chemical burn is:",o:["Apply butter","Immediate copious water irrigation","Cover with dry cloth","Apply ice"],a:1},
+  {q:"Febrile convulsions are most common in children aged:",o:["0–6 months","6 months–5 years","5–10 years","10–15 years"],a:1},
+  {q:"In pediatric anaphylaxis, the first-line drug is:",o:["Hydrocortisone","Diphenhydramine","Epinephrine (Adrenaline)","Salbutamol"],a:2}
+],
+11:[
+  {q:"Quality Assurance (QA) mainly focuses on:",o:["Cutting costs","Improving standards of care","Staff attendance","Equipment purchase"],a:1},
+  {q:"Nursing Audit is a method of:",o:["Budgeting","Evaluating nursing care","Teaching","Recruitment"],a:1},
+  {q:"Standard precautions are used to prevent:",o:["Accidents","Infection transmission","Bed sores","Falls"],a:1},
+  {q:"Documentation in nursing should be:",o:["Subjective","Accurate, timely, and complete","Written in pencil","Done next day"],a:1},
+  {q:"Benchmarking is used to:",o:["Compare performance with best practices","Mark attendance","Clean benches","Discipline staff"],a:0},
+  {q:"Concurrent nursing audit is done:",o:["After patient discharge","During active nursing care","Once a year","Only by managers"],a:1},
+  {q:"The concept of 'Six Sigma' in healthcare aims to:",o:["Increase hospital charges","Reduce defects and errors to near zero","Hire more staff","Expand hospital size"],a:1},
+  {q:"Patient safety indicators in pediatric care include:",o:["Staff salaries","Fall prevention, infection control, medication safety","Hospital architecture","Administration fees"],a:1},
+  {q:"NABH stands for:",o:["National Accreditation Board for Hospitals","National Association of Better Health","Nursing Accreditation Bureau of Healthcare","None"],a:0},
+  {q:"Root Cause Analysis (RCA) is performed after:",o:["Routine audits","A critical incident or near-miss","Annual reviews","Recruitment"],a:1}
+],
+12:[
+  {q:"Clark's rule for drug calculation is based on:",o:["Age","Weight","Height","BSA"],a:1},
+  {q:"When restraining a child, nurse must:",o:["Leave child alone","Check circulation and skin integrity frequently","Tie knots very tight","Use metal chains"],a:1},
+  {q:"Consent for procedures should be obtained from:",o:["The child only","Parents/Guardians","Nurse","Teacher"],a:1},
+  {q:"Pediatric drug doses are usually calculated in:",o:["mg/kg body weight","mg/year of age","Fixed adult dose","Random estimation"],a:0},
+  {q:"Mummy restraint is used for:",o:["Leg surgery","Head and neck examination","Feeding","Playing"],a:1},
+  {q:"Young's rule for drug dosage uses:",o:["Weight","Age","Height","Surface area"],a:1},
+  {q:"Clove hitch restraint is used to restrict:",o:["Head movement","Trunk","Extremities (limbs)","Jaw"],a:2},
+  {q:"Nasogastric tube placement is confirmed by:",o:["X-ray and aspiration of gastric contents","Color of tube","Patient comfort","Nurse judgment alone"],a:0},
+  {q:"When calculating IV fluid rate in children, which formula is used?",o:["Parkland formula","Holliday-Segar method","Clark's rule","Young's rule"],a:1},
+  {q:"Intramuscular injection in infants is given at:",o:["Deltoid","Vastus lateralis","Gluteus maximus","Ventrogluteal"],a:1}
+]
+};
 
-    document.getElementById('quiz-title').textContent = `Unit ${unitId} Quiz`;
+const LTRS = ['A','B','C','D'];
+let curQuiz = null, answered = [];
 
-    // Build HTML
-    const pips = qs.map((_, i) => `<div class="quiz-progress-pip" id="pip-${i}"></div>`).join('');
+function openQuiz(id) {
+  curQuiz = id;
+  const qs = QD[id] || [];
+  answered = new Array(qs.length).fill(null);
+  document.getElementById('qtitle').textContent = 'Unit ' + id + ' Quiz';
 
-    let html = `<div class="quiz-score" id="quiz-score">
-        <div>
-            <div class="quiz-score-num" id="score-num">—</div>
-            <div class="quiz-score-lbl">Score</div>
-        </div>
-        <div class="quiz-score-msg" id="score-msg"></div>
+  // Build pips
+  document.getElementById('qpips').innerHTML =
+    qs.map((_,i) => `<div class="pip" id="pip${i}"></div>`).join('');
+
+  // Build questions
+  let html = `<div class="qscore" id="qscore">
+    <div><div class="qs-num" id="qsnum">—</div><div class="qs-sub">Score</div></div>
+    <div class="qs-msg" id="qsmsg"></div>
+  </div>`;
+
+  qs.forEach((q,qi)=>{
+    html += `<div class="qitem" id="qi${qi}">
+      <div class="qlbl">Question ${qi+1} of ${qs.length}</div>
+      <div class="qtext">${q.q}</div>
+      <div class="qopts">
+        ${q.o.map((opt,oi)=>`
+          <button class="qopt" id="opt${qi}_${oi}" onclick="ans(${qi},${oi},${q.a})">
+            <span class="qltr">${LTRS[oi]}</span>${opt}
+          </button>`).join('')}
+      </div>
     </div>`;
+  });
 
-    html += `<div class="quiz-progress" id="quiz-progress">${pips}</div>`;
-
-    qs.forEach((q, qi) => {
-        html += `<div class="q-block" id="qblock-${qi}">
-            <div class="q-num">Question ${qi + 1} of ${qs.length}</div>
-            <div class="q-text">${q.q}</div>
-            <div class="q-options">
-                ${q.o.map((opt, oi) => `
-                    <button class="q-option" id="opt-${qi}-${oi}" onclick="answer(${qi}, ${oi}, ${q.a})">
-                        <span class="q-opt-letter">${LETTERS[oi]}</span>
-                        ${opt}
-                    </button>
-                `).join('')}
-            </div>
-        </div>`;
-    });
-
-    if (qs.length === 0) html += `<p style="color:var(--muted);padding:20px 0;">Quiz coming soon!</p>`;
-
-    document.getElementById('quiz-body').innerHTML = html;
-
-    // Show modal — use pushState so back button closes it
-    const modal = document.getElementById('quiz-modal');
-    modal.classList.add('open');
-    document.body.style.overflow = 'hidden';
-    history.pushState({ quiz: true, unitId }, '', '#quiz');
+  document.getElementById('qbody').innerHTML = html;
+  const m = document.getElementById('qmodal');
+  m.classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
 
-function answer(qi, oi, correct) {
-    if (quizAnswered[qi] !== null) return;
-    quizAnswered[qi] = oi;
-
-    const qs = QUIZ_DATA[currentQuizId];
-    const allOpts = document.querySelectorAll(`#qblock-${qi} .q-option`);
-
-    allOpts.forEach((btn, i) => {
-        btn.classList.add('disabled');
-        if (i === correct)  btn.classList.add('correct');
-        else if (i === oi)  btn.classList.add('wrong');
-    });
-
-    // Update pip
-    const pip = document.getElementById(`pip-${qi}`);
-    pip.classList.add(oi === correct ? 'correct' : 'wrong');
-
-    // Check if all answered
-    if (quizAnswered.every(a => a !== null)) {
-        const score = quizAnswered.filter((a, i) => a === (QUIZ_DATA[currentQuizId][i].a)).length;
-        const pct = Math.round((score / qs.length) * 100);
-        const msg = pct === 100 ? '🏆 Perfect score!' : pct >= 80 ? '🎉 Great job!' : pct >= 60 ? '👍 Good effort!' : '📚 Keep studying!';
-        const scoreEl = document.getElementById('quiz-score');
-        document.getElementById('score-num').textContent = `${score}/${qs.length}`;
-        document.getElementById('score-msg').textContent = msg;
-        scoreEl.classList.add('show');
-        scoreEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+function ans(qi, oi, correct) {
+  if (answered[qi] !== null) return;
+  answered[qi] = oi;
+  const allOpts = document.querySelectorAll(`#qi${qi} .qopt`);
+  allOpts.forEach(b => b.classList.add('lock'));
+  allOpts[correct].classList.add('cor');
+  if (oi !== correct) allOpts[oi].classList.add('wrg');
+  // Update pip
+  const pip = document.getElementById('pip' + qi);
+  pip.classList.add('ans');
+  pip.classList.add(oi === correct ? 'cor' : 'wrg');
+  // Check if all answered
+  if (answered.every(a => a !== null)) {
+    const score = answered.filter((a,i) => a === QD[curQuiz][i].a).length;
+    const total = QD[curQuiz].length;
+    const pct = Math.round(score/total*100);
+    const msgs = ['📚 Keep Studying!','👍 Good Effort!','🎉 Well Done!','🏆 Perfect!'];
+    const mi = pct < 50 ? 0 : pct < 70 ? 1 : pct < 100 ? 2 : 3;
+    document.getElementById('qsnum').textContent = score + '/' + total;
+    document.getElementById('qsmsg').textContent = msgs[mi];
+    const sc = document.getElementById('qscore');
+    sc.classList.add('show');
+    sc.scrollIntoView({behavior:'smooth', block:'start'});
+    
+  }
 }
 
 function closeQuiz() {
-    const modal = document.getElementById('quiz-modal');
-    modal.classList.remove('open');
-    document.body.style.overflow = '';
-    currentQuizId = null;
-    // Only go back if we pushed a quiz state
-    if (history.state && history.state.quiz) {
-        history.back();
-    }
+  document.getElementById('qmodal').classList.remove('open');
+  document.body.style.overflow = '';
+  curQuiz = null;
 }
 
-// Back button closes quiz (not the page)
-window.addEventListener('popstate', (e) => {
-    const modal = document.getElementById('quiz-modal');
-    if (modal.classList.contains('open')) {
-        modal.classList.remove('open');
-        document.body.style.overflow = '';
-        currentQuizId = null;
-    }
-});
 
-// Keyboard close
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeQuiz();
+
+// Escape key to close
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeQuiz();
 });
 </script>
 </body>
