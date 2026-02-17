@@ -554,29 +554,43 @@ const _realApp = {
                 if (user.displayName) document.getElementById('user-name-display').textContent = user.displayName.split(' ')[0];
                 await this.fetchUserPermissions(user.uid);
                 if (this.currentUser) {
-                    history.replaceState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard');
-                    // Signal that auth resolved with dashboard
-                    onAuthResolved('view-dashboard');
+                    // --- RECOVERY LOGIC: restore subject page if user returns from Drive tab ---
+                    const savedView = sessionStorage.getItem('currentView');
+                    const savedUrl = sessionStorage.getItem('currentUrl');
+                    const savedTitle = sessionStorage.getItem('currentTitle') || 'Subject View';
+                    if (savedView === 'view-iframe' && savedUrl) {
+                        history.replaceState({ viewId: 'view-iframe', sourceUrl: savedUrl, title: savedTitle }, savedTitle, '#content');
+                        this.openContent(savedUrl, savedTitle, true);
+                        onAuthResolved('view-iframe');
+                    } else {
+                        history.replaceState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard');
+                        onAuthResolved('view-dashboard');
+                    }
                 }
             } else {
                 this.currentUser = null;
                 this.permissions = {};
+                sessionStorage.clear();
                 history.replaceState({ viewId: 'view-auth' }, 'Login', '#login');
-                // Signal that auth resolved with login
                 onAuthResolved('view-auth');
             }
         });
 
-
         // Listen for back navigation requests from subject pages loaded in iframe
         window.addEventListener('message', (event) => {
             if (event.data && event.data.action === 'goBack') {
+                sessionStorage.removeItem('currentView');
+                sessionStorage.removeItem('currentUrl');
                 window.history.back();
             }
         });
 
         window.addEventListener('popstate', (event) => {
             if (event.state && event.state.viewId) {
+                if (event.state.viewId === 'view-dashboard') {
+                    sessionStorage.removeItem('currentView');
+                    sessionStorage.removeItem('currentUrl');
+                }
                 if (event.state.viewId === 'view-submenu') {
                     const c = event.state.course || this.lockedCourseKey;
                     if (c) { this.renderSubmenu(c); this.renderView('view-submenu'); }
@@ -830,6 +844,11 @@ const _realApp = {
     },
 
     openContent: function(url, title, fromHistory = false) {
+        // Save to sessionStorage so app survives a full page reload (e.g. returning from Drive)
+        sessionStorage.setItem('currentView', 'view-iframe');
+        sessionStorage.setItem('currentUrl', url);
+        sessionStorage.setItem('currentTitle', title);
+
         const container = document.getElementById('view-iframe');
         if (!fromHistory) this.navTo('view-iframe', false, { sourceUrl: url, title });
         else this.renderView('view-iframe');
