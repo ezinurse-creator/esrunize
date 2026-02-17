@@ -567,6 +567,14 @@ const _realApp = {
             }
         });
 
+
+        // Listen for back navigation requests from subject pages loaded in iframe
+        window.addEventListener('message', (event) => {
+            if (event.data && event.data.action === 'goBack') {
+                window.history.back();
+            }
+        });
+
         window.addEventListener('popstate', (event) => {
             if (event.state && event.state.viewId) {
                 if (event.state.viewId === 'view-submenu') {
@@ -815,9 +823,8 @@ const _realApp = {
         subjects.forEach(sub => {
             const item = document.createElement('div');
             item.className = 'list-item';
-            item.innerHTML = `<div style="display:flex;align-items:center;"><span class="material-icons-round list-icon">article</span><div class="list-info"><h4>${sub.label.replace(/<[^>]*>?/gm, '')}</h4></div></div><span class="material-icons-round" style="color:#ccc;">open_in_new</span>`;
-            // ── FIXED: open subject pages in new tab, not iframe ──
-            item.onclick = () => { window.open(sub.link, '_blank'); };
+            item.innerHTML = `<div style="display:flex;align-items:center;"><span class="material-icons-round list-icon">article</span><div class="list-info"><h4>${sub.label.replace(/<[^>]*>?/gm, '')}</h4></div></div><span class="material-icons-round" style="color:#ccc;">play_circle_outline</span>`;
+            item.onclick = () => { this.openContent(sub.link, sub.label); };
             list.appendChild(item);
         });
     },
