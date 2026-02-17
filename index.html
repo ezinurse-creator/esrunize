@@ -471,19 +471,18 @@ function getDeviceId() {
     return id;
 }
 
-// ── SPLASH LOGIC ──
-// Show splash for exactly 2s, then hand off to Firebase auth check
+// SPLASH LOGIC
 var splashDone = false;
 var authResolved = false;
 var pendingView = null;
 
 function onSplashDone() {
+    if (splashDone) return;
     splashDone = true;
     document.getElementById('splash-screen').style.display = 'none';
     if (authResolved) {
         showApp();
     } else {
-        // Auth hasn't resolved yet — show subtle loading screen (not login)
         document.getElementById('auth-loading').classList.remove('hidden');
     }
 }
@@ -491,10 +490,7 @@ function onSplashDone() {
 function onAuthResolved(viewId) {
     authResolved = true;
     pendingView = viewId;
-    if (splashDone) {
-        showApp();
-    }
-    // else: splash is still showing, showApp() will be called when it finishes
+    if (splashDone) showApp();
 }
 
 function showApp() {
@@ -505,7 +501,14 @@ function showApp() {
     }
 }
 
-setTimeout(onSplashDone, 2000);
+// FAST-TRACK RECOVERY: skip splash if returning to a subject page
+if (sessionStorage.getItem('currentView') === 'view-iframe') {
+    splashDone = true;
+    document.getElementById('splash-screen').style.display = 'none';
+    document.getElementById('auth-loading').classList.remove('hidden');
+} else {
+    setTimeout(onSplashDone, 2000);
+}
 </script>
 
 <script>
