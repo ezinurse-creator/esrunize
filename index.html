@@ -579,7 +579,7 @@
         </div>
     </div>
 
-    <!-- BOTTOM NAV — Store tab hidden, only Home + Logout -->
+    <!-- BOTTOM NAV -->
     <nav id="bottom-nav" class="bottom-nav" style="display:none;">
         <button class="nav-item active" onclick="app.navTo('view-dashboard')">
             <span class="material-icons-round">home</span>
@@ -590,9 +590,6 @@
             <label>Logout</label>
         </button>
     </nav>
-
-    <!-- EXIT MODAL -->
-
 
 </div>
 
@@ -640,6 +637,18 @@
     })();
 
     startSliderAuto();
+
+    // ─── DEVICE ID HELPER ───────────────────────────────────────────────────────
+    // Generates a unique ID for this browser and stores it in localStorage.
+    // Same browser = same device. Clearing localStorage = treated as a new device.
+    function getDeviceId() {
+        let id = localStorage.getItem('ezinurse_device_id');
+        if (!id) {
+            id = crypto.randomUUID();
+            localStorage.setItem('ezinurse_device_id', id);
+        }
+        return id;
+    }
 </script>
 
 <!-- GLOBAL PROXY — forwards onclick calls to _realApp once the module loads -->
@@ -691,8 +700,12 @@
                 this.updateWatermark();
                 if(user.displayName) document.getElementById('user-name-display').textContent = user.displayName.split(' ')[0];
                 await this.fetchUserPermissions(user.uid);
-                history.replaceState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard');
-                this.renderView('view-dashboard');
+                // Only navigate to dashboard if we still have a currentUser
+                // (fetchUserPermissions may have signed us out due to device mismatch)
+                if (this.currentUser) {
+                    history.replaceState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard');
+                    this.renderView('view-dashboard');
+                }
             } else {
                 this.currentUser = null;
                 this.permissions = {};
@@ -724,15 +737,37 @@
         });
     },
 
+    // ─── UPDATED: fetchUserPermissions now also validates the device on every session ──
     fetchUserPermissions: async function(uid) {
         try {
             const docRef = doc(db, "users", uid);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
                 const data = docSnap.data();
+
+                // ── DEVICE CHECK ─────────────────────────────────────────────
+                // On every session restore, compare the stored deviceId in
+                // Firestore with the one in this browser's localStorage.
+                // If they don't match, sign this session out immediately.
+                const deviceId = getDeviceId();
+                if (data.deviceId && data.deviceId !== deviceId) {
+                    this.currentUser = null;
+                    this.permissions = {};
+                    await signOut(auth);
+                    // Show a friendly message on the login screen
+                    const errEl = document.getElementById('login-error');
+                    if (errEl) errEl.textContent = '⚠️ Your account is active on another device. Log out there first, then try again.';
+                    return; // stop — onAuthStateChanged will handle the redirect
+                }
+                // ── END DEVICE CHECK ─────────────────────────────────────────
+
                 this.permissions = data.permissions || {};
-                if(data.name) document.getElementById('user-name-display').textContent = data.name.split(' ')[0];
+                if(data.name) {
+                    document.getElementById('user-name-display').textContent = data.name.split(' ')[0];
+                    document.getElementById('drawer-name').textContent = data.name;
+                }
             } else {
+                // First time: create the user doc (no deviceId yet — set at login)
                 await setDoc(doc(db, "users", uid), { email: this.currentUser.email, permissions: {} }, { merge: true });
             }
         } catch (e) { console.error("Error fetching permissions:", e); }
@@ -757,6 +792,7 @@
         if (this.zoomLevel === 2.0) wrapper.style.width = '200%';
     },
 
+    // ─── UPDATED: login now checks & registers the device in Firestore ──────────
     login: function() {
         const email = document.getElementById('login-email').value.trim();
         const pass = document.getElementById('login-pass').value.trim();
@@ -765,13 +801,42 @@
         errorDiv.textContent = "";
         if(!email || !pass) { errorDiv.textContent = "Fill all fields"; return; }
         btn.innerHTML = '<span>Logging in...</span>'; btn.disabled = true;
+
         signInWithEmailAndPassword(auth, email, pass)
+            .then(async (userCredential) => {
+                const user = userCredential.user;
+                const deviceId = getDeviceId();
+
+                // Check Firestore for an existing deviceId on this account
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+
+                if (userSnap.exists()) {
+                    const stored = userSnap.data().deviceId;
+
+                    // If a different device is already registered, block the login
+                    if (stored && stored !== deviceId) {
+                        await signOut(auth);
+                        errorDiv.textContent = '⚠️ This account is active on another device. Please log out from that device first.';
+                        btn.innerHTML = '<span>Login Securely</span><span class="material-icons-round" style="font-size:18px;">login</span>';
+                        btn.disabled = false;
+                        return;
+                    }
+                }
+
+                // ✅ Same device or no device registered yet — save/update deviceId
+                await setDoc(userRef, { deviceId }, { merge: true });
+                // onAuthStateChanged will handle the rest (dashboard redirect, permissions, etc.)
+            })
             .catch((error) => {
                 const ec = error.code;
-                if(ec === 'auth/invalid-credential' || ec === 'auth/user-not-found' || ec === 'auth/wrong-password') errorDiv.textContent = "Incorrect email or password.";
-                else if (ec === 'auth/too-many-requests') errorDiv.textContent = "Too many failed attempts. Try again later.";
+                if(ec === 'auth/invalid-credential' || ec === 'auth/user-not-found' || ec === 'auth/wrong-password') 
+                    errorDiv.textContent = "Incorrect email or password.";
+                else if (ec === 'auth/too-many-requests') 
+                    errorDiv.textContent = "Too many failed attempts. Try again later.";
                 else errorDiv.textContent = error.message;
-                btn.innerHTML = '<span>Login Securely</span><span class="material-icons-round" style="font-size:18px;">login</span>'; btn.disabled = false;
+                btn.innerHTML = '<span>Login Securely</span><span class="material-icons-round" style="font-size:18px;">login</span>';
+                btn.disabled = false;
             });
     },
 
@@ -823,7 +888,17 @@
         else { el.type = 'password'; icon.textContent = 'visibility'; btn.style.color = 'var(--text-muted)'; }
     },
 
-    logout: function() { signOut(auth).catch((e) => console.error(e)); },
+    // ─── UPDATED: logout clears deviceId so the user can log in elsewhere ───────
+    logout: function() {
+        if (this.currentUser) {
+            // Clear the device binding first, then sign out.
+            // This allows the user to log in from any device after logging out.
+            setDoc(doc(db, "users", this.currentUser.uid), { deviceId: null }, { merge: true })
+                .finally(() => signOut(auth).catch((e) => console.error(e)));
+        } else {
+            signOut(auth).catch((e) => console.error(e));
+        }
+    },
 
     openDrawer: function() {
         const email = this.currentUser ? this.currentUser.email : '';
@@ -870,7 +945,6 @@
         const isDash = viewId === 'view-dashboard';
         if (isAuth) { header.style.display = 'none'; }
         else { header.style.display = 'flex'; }
-        // Dashboard: show hamburger, hide back. Other views: show back, hide hamburger
         const backBtn = document.getElementById('btn-back');
         const hamburgerBtn = document.querySelector('.hamburger-btn');
         if (isDash) {
