@@ -1,1613 +1,593 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Advance Nursing Practice - Syllabus</title>
-    <meta name="description" content="Comprehensive syllabus with detailed notes and quizzes for Advance Nursing Practice." />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <style>
-        :root {
-            --brand: #003B82; 
-            --accent: #00B9F2;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-700: #374151;
-            --gray-900: #111827;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-            --danger: #ef4444;
-            --success: #10b981;
-        }
-
-        * { box-sizing: border-box; }
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: white;
-            color: var(--gray-900);
-            line-height: 1.6;
-            padding: 24px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .syllabus-btn, .unit-header {
-            display: block;
-            width: 100%;
-            padding: 18px 24px;
-            margin: 24px 0;
-            background: var(--brand);
-            color: white;
-            font-weight: 600;
-            font-size: 16px;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.2s ease;
-        }
-        .syllabus-btn:hover, .unit-header:hover {
-            background: #002d63;
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .unit-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-align: left;
-            margin: 16px 0;
-        }
-        .unit-header span:last-child {
-            transition: transform 0.3s ease;
-            color: #FFA500;
-        }
-        .unit-header[aria-expanded="true"] span:last-child {
-            transform: rotate(180deg);
-        }
-
-        .unit-content {
-            padding: 0 12px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.3s ease;
-        }
-        .unit-content.active {
-            padding: 24px 12px;
-            max-height: none; 
-        }
-
-        .subsection {
-            margin: 16px 0;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            border: 1px solid var(--gray-200);
-            box-shadow: var(--shadow-sm);
-            transition: box-shadow 0.2s ease;
-        }
-        .subsection:hover { box-shadow: var(--shadow-md); }
-
-        .resource-btn {
-            display: flex;
-            align-items: flex-start;
-            width: 100%;
-            padding: 14px 18px;
-            margin: 8px 0;
-            background: var(--gray-50);
-            color: var(--gray-900);
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
-            border: 1px solid var(--gray-200);
-            transition: all 0.2s ease;
-            gap: 12px;
-            flex-wrap: wrap;
-            min-height: 50px;
-            cursor: pointer;
-        }
-        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
-        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
-        .resource-btn.quiz { background: #fff5e8; border-color: #ffd8a8; color: #8c5e08; }
-        .resource-btn:hover { background: #f9fafb; transform: translateY(-1px); }
-        .resource-btn.notes:hover { background: #e0f2fe; }
-        .resource-btn.video:hover { background: #ede9fe; }
-        .resource-btn.quiz:hover { background: #ffead1; }
-
-        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
-        .icon.video-icon { color: #8b5cf6; }
-        .icon.quiz-icon { color: #FFA500; }
-
-        /* --- MODAL --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-        }
-
-        .modal-header {
-            height: 60px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            flex-shrink: 0;
-        }
-
-        .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-        
-        .btn-close {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            flex: 1;
-            background: #000;
-            position: relative;
-            overflow-y: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* --- FIXED IFRAME STYLES --- */
-        .iframe-video {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16 / 9;
-            border: none;
-            background: #000;
-            display: block;
-        }
-
-        .iframe-doc {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #fff;
-            display: block;
-        }
-
-        /* --- NOTES VIEWER STYLES --- */
-        .notes-viewer {
-            background: white;
-            width: 100%;
-            min-height: 100%;
-            padding: 32px 28px;
-            max-width: 800px;
-            margin: 0 auto;
-            font-size: 1rem;
-            line-height: 1.8;
-            color: var(--gray-900);
-        }
-        .notes-viewer h1 {
-            font-size: 1.6rem;
-            color: var(--brand);
-            border-bottom: 3px solid var(--accent);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-        .notes-viewer h2 {
-            font-size: 1.3rem;
-            color: var(--brand);
-            margin-top: 28px;
-            margin-bottom: 12px;
-            border-left: 4px solid var(--accent);
-            padding-left: 12px;
-        }
-        .notes-viewer h3 {
-            font-size: 1.1rem;
-            color: #1e40af;
-            margin-top: 20px;
-            margin-bottom: 8px;
-        }
-        .notes-viewer p {
-            margin-bottom: 12px;
-        }
-        .notes-viewer ul, .notes-viewer ol {
-            margin: 10px 0 16px 20px;
-        }
-        .notes-viewer li {
-            margin-bottom: 6px;
-        }
-        .notes-viewer strong {
-            color: var(--brand);
-        }
-        .notes-viewer .highlight-box {
-            background: #f0f9ff;
-            border: 1px solid #bae6fd;
-            border-radius: 8px;
-            padding: 16px;
-            margin: 16px 0;
-        }
-        .notes-viewer table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 16px 0;
-        }
-        .notes-viewer th, .notes-viewer td {
-            border: 1px solid var(--gray-200);
-            padding: 10px 14px;
-            text-align: left;
-        }
-        .notes-viewer th {
-            background: var(--brand);
-            color: white;
-            font-weight: 600;
-        }
-        .notes-viewer tr:nth-child(even) {
-            background: var(--gray-50);
-        }
-
-        /* --- QUIZ STYLES --- */
-        .quiz-container {
-            background: white;
-            width: 100%;
-            min-height: 100%;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .quiz-question { margin-bottom: 20px; font-size: 1.1rem; font-weight: 600; }
-        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
-        .quiz-option {
-            padding: 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        .quiz-option:hover { background: #f0f9ff; border-color: var(--accent); }
-        .quiz-option.correct { background: var(--success); color: white; border-color: var(--success); }
-        .quiz-option.correct::after { content: '✓'; position: absolute; right: 15px; font-weight: bold; }
-        .quiz-option.wrong { background: var(--danger); color: white; border-color: var(--danger); }
-        .quiz-option.wrong::after { content: '✗'; position: absolute; right: 15px; font-weight: bold; }
-
-        @media (max-width: 768px) {
-            body { padding: 16px; }
-            .syllabus-btn, .unit-header, .resource-btn { font-size: 15px; padding: 14px 16px; }
-            .resource-btn { font-size: 14px; }
-            .subsection { padding: 16px; }
-            .unit-content.active { padding: 16px 8px; }
-            .notes-viewer { padding: 20px 16px; }
-            .notes-viewer h1 { font-size: 1.3rem; }
-            .notes-viewer h2 { font-size: 1.15rem; }
-        }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Advanced Nursing Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --p50:#faf5ff;--p100:#f3e8ff;--p200:#e9d5ff;--p300:#d8b4fe;
+  --p400:#c084fc;--p500:#a855f7;--p600:#9333ea;--p700:#7e22ce;
+  --p800:#6b21a8;--p900:#581c87;
+  --w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;
+  --g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;
+  --ok:#16a34a;--ok-lt:#dcfce7;--err:#dc2626;--err-lt:#fee2e2;
+  --warn:#d97706;--warn-lt:#fef3c7;
+  --r:12px;--rs:8px;
+  --s1:0 1px 3px rgba(109,40,217,.08);
+  --s2:0 4px 12px rgba(109,40,217,.12);
+  --s3:0 8px 30px rgba(109,40,217,.16);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:90;background:var(--w);border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 16px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-back{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:var(--p100);color:var(--p700);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;margin-right:12px}
+.tb-back:hover{background:var(--p200)}
+.tb-info{flex:1;min-width:0}
+.tb-title{font-size:.88rem;font-weight:700;color:var(--g900);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb-sub{font-size:.65rem;color:var(--g400);font-weight:500;margin-top:1px}
+.tb-chip{background:var(--p100);color:var(--p700);border:1px solid var(--p200);font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
+.hero{background:linear-gradient(145deg,var(--p900),var(--p700) 55%,var(--p500));padding:28px 18px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.08),transparent 50%),radial-gradient(circle at 10% 85%,rgba(255,255,255,.05),transparent 40%)}
+.hero::after{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-dot-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:.65rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border-radius:30px;margin-bottom:12px}
+.hero-eyebrow-dot{width:5px;height:5px;background:#c4b5fd;border-radius:50%}
+.hero h1{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:7px}
+.hero h1 em{color:rgba(255,255,255,.45);font-style:italic;font-weight:300}
+.hero-desc{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:18px}
+.hero-cta{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.28);color:#fff;font-size:.8rem;font-weight:700;padding:9px 16px;border-radius:9px;cursor:pointer;transition:all .2s;backdrop-filter:blur(6px)}
+.hero-cta:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
+.hero-stats{display:flex;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+.hs{flex:1;text-align:center}
+.hs+.hs{border-left:1px solid rgba(255,255,255,.1)}
+.hs-n{font-size:1.35rem;font-weight:800;color:#fff;line-height:1}
+.hs-l{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
+.main{padding:16px 14px 56px}
+.divider{display:flex;align-items:center;gap:8px;margin-bottom:12px;margin-top:2px}
+.divider span{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g400)}
+.divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+.uc{background:var(--w);border:1.5px solid var(--g200);border-radius:var(--r);margin-bottom:9px;overflow:hidden;box-shadow:var(--s1);transition:border-color .2s,box-shadow .2s}
+.uc:hover{border-color:var(--p300);box-shadow:var(--s2)}
+.uc[data-open=true]{border-color:var(--p400);box-shadow:var(--s2)}
+.ubtn{width:100%;display:flex;align-items:center;padding:14px 15px;gap:12px;background:none;border:none;cursor:pointer;text-align:left}
+.upill{width:36px;height:36px;border-radius:9px;flex-shrink:0;background:var(--p100);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.upill span{font-size:.67rem;font-weight:800;color:var(--p700);letter-spacing:-.01em}
+.uc[data-open=true] .upill{background:var(--p700)}
+.uc[data-open=true] .upill span{color:#fff}
+.uinfo{flex:1;min-width:0}
+.uname{font-size:.85rem;font-weight:700;color:var(--g900);line-height:1.3}
+.umeta{font-size:.66rem;color:var(--g400);margin-top:2px;font-weight:500}
+.uright{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.uchev{width:16px;height:16px;color:var(--g300);transition:transform .3s,color .2s}
+.uc[data-open=true] .uchev{transform:rotate(180deg);color:var(--p500)}
+.ubody{display:none;background:var(--p50);border-top:1.5px solid var(--p200);padding:12px 13px 14px}
+.ubody.open{display:block;animation:bodyIn .2s ease}
+@keyframes bodyIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.rrow{display:flex;gap:9px}
+@media(max-width:380px){.rrow{flex-direction:column}}
+.rbtn{flex:1;display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .17s;background:var(--w);text-decoration:none}
+.rbtn .rico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.rbtn .rtxt{line-height:1.25}
+.rbtn .rtxt small{display:block;font-size:.62rem;font-weight:400;opacity:.5;margin-top:1px}
+.rbtn .rarr{margin-left:auto;opacity:0;font-size:.7rem;color:var(--g400);transition:opacity .15s}
+.rbtn:hover .rarr{opacity:1}
+.rbtn.notes{border-color:var(--p200);color:var(--p800)}
+.rbtn.notes .rico{background:var(--p100)}
+.rbtn.notes:hover{background:var(--p50);border-color:var(--p500);box-shadow:var(--s2);transform:translateY(-1px)}
+.rbtn.quiz{border-color:#fde68a;color:#78350f}
+.rbtn.quiz .rico{background:var(--warn-lt)}
+.rbtn.quiz:hover{background:#fffbeb;border-color:var(--warn);box-shadow:0 3px 10px rgba(217,119,6,.12);transform:translateY(-1px)}
+.rbtn.pyq{border-color:#bbf7d0;color:#14532d}
+.rbtn.pyq .rico{background:var(--ok-lt)}
+.rbtn.pyq:hover{background:#f0fdf4;border-color:var(--ok);box-shadow:0 3px 10px rgba(22,163,74,.12);transform:translateY(-1px)}
+.pyq-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:380px){.pyq-grid{grid-template-columns:1fr}}
+.qoverlay{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end}
+.qoverlay.open{display:flex}
+.qscrim{position:absolute;inset:0;background:rgba(15,10,40,.55);backdrop-filter:blur(3px)}
+.qpanel{position:relative;z-index:1;background:var(--w);width:100%;max-width:580px;margin:0 auto;border-radius:18px 18px 0 0;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 -10px 50px rgba(109,40,217,.2);animation:panelUp .3s cubic-bezier(.32,.72,0,1)}
+@keyframes panelUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.qhead{padding:16px 18px 12px;border-bottom:1px solid var(--g100);flex-shrink:0}
+.qhead-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.qtitle{font-size:1rem;font-weight:800;color:var(--p800)}
+.qclose{width:28px;height:28px;border-radius:50%;background:var(--g100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--g500);transition:all .15s}
+.qclose:hover{background:var(--err-lt);color:var(--err)}
+.qpips{display:flex;gap:3px}
+.pip{flex:1;height:4px;border-radius:4px;background:var(--g100);transition:background .3s}
+.pip.ans{background:var(--p300)}.pip.cor{background:var(--ok)}.pip.wrg{background:var(--err)}
+.qbody{overflow-y:auto;padding:14px 18px 28px;flex:1}
+.qscore{display:none;background:linear-gradient(135deg,var(--p800),var(--p500));color:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;align-items:center;gap:14px}
+.qscore.show{display:flex}
+.qs-num{font-size:1.9rem;font-weight:800;line-height:1}
+.qs-sub{font-size:.65rem;opacity:.6;margin-top:2px}
+.qs-msg{font-size:.85rem;font-weight:600}
+.qitem{margin-bottom:24px}
+.qitem:last-child{margin-bottom:0}
+.qlbl{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--p500);margin-bottom:4px}
+.qtext{font-size:.88rem;font-weight:600;color:var(--g900);line-height:1.5;margin-bottom:10px}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1.5px solid var(--g200);border-radius:var(--rs);cursor:pointer;font-size:.83rem;font-weight:500;background:var(--w);color:var(--g700);transition:all .14s}
+.qopt:hover{border-color:var(--p300);background:var(--p50);color:var(--p800)}
+.qltr{width:21px;height:21px;border-radius:50%;background:var(--g100);border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:800;color:var(--g500);flex-shrink:0;transition:all .14s}
+.qopt.cor{background:var(--ok-lt);border-color:#86efac;color:#14532d}
+.qopt.cor .qltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.qopt.wrg{background:var(--err-lt);border-color:#fca5a5;color:#7f1d1d}
+.qopt.wrg .qltr{background:var(--err);border-color:var(--err);color:#fff}
+.qopt.lock{cursor:default;pointer-events:none}
+.qopt.lock:not(.cor):not(.wrg):hover{border-color:var(--g200);background:var(--w);color:var(--g700)}
+</style>
 </head>
 <body>
 
-    <div class="syllabus-btn" onclick="openNotes('syllabus')">
-        📄 VIEW ANP SYLLABUS
+<header class="topbar">
+  <button class="tb-back" onclick="goBackToApp()" aria-label="Back">&#8592;</button>
+  <div class="tb-info">
+    <div class="tb-title">Advanced Nursing Practice</div>
+    <div class="tb-sub">MSc Nursing · First Year</div>
+  </div>
+  <div class="tb-chip">10 Units</div>
+</header>
+
+<section class="hero">
+  <div class="hero-dot-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>MSc Nursing · First Year</div>
+    <h1>Advanced Nursing<br/><em>Practice</em></h1>
+    <p class="hero-desc">Unit notes, quizzes & previous year papers — everything you need for your exams.</p>
+    <button class="hero-cta" onclick="openPDF('https://drive.google.com/file/d/153NVm7d-u3mfyVVy7t8hPo5oiWDr1p8b/view')">
+      📄 &nbsp;Download Syllabus
+    </button>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-n">10</div><div class="hs-l">Units</div></div>
+      <div class="hs"><div class="hs-n">100</div><div class="hs-l">Quizzes</div></div>
+      <div class="hs"><div class="hs-n">7</div><div class="hs-l">PYQs</div></div>
     </div>
-    
-    <div id="units">
-        
-        <div class="unit-container" id="unit1">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="true" onclick="toggleUnit(this)">
-                UNIT 1 - NURSING AS A PROFESSION
-                <span>🔽</span>
-            </div>
-            <div class="unit-content active">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openNotes(1)">
-                        <span class="icon">📚</span><span>Detailed Notes: Nursing as a Profession</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(1)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  </div>
+</section>
 
-        <div class="unit-container" id="unit2">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 2 - HEALTHCARE DELIVERY
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openNotes(2)">
-                        <span class="icon">📚</span><span>Detailed Notes: Healthcare Delivery</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(2)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+<main class="main">
+  <div class="divider"><span>Course Units</span></div>
 
-        <div class="unit-container" id="unit3">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 3 - GENETICS
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openNotes(3)">
-                        <span class="icon">📚</span><span>Detailed Notes: Genetics</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(3)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit4">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 4 - EPIDEMIOLOGY
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openNotes(4)">
-                        <span class="icon">📚</span><span>Detailed Notes: Epidemiology</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(4)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit5">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 5 - BIOPSYCHO SOCIAL PATHOLOGY
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openNotes(5)">
-                        <span class="icon">📚</span><span>Detailed Notes: Biopsycho Social Pathology</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(5)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit6">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 6 - PHILOSOPHY AND THEORIES
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openNotes(6)">
-                        <span class="icon">📚</span><span>Detailed Notes: Philosophy & Theories</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(6)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit7">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 7 - NURSING PROCESS APPROACH I
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openNotes(7)">
-                        <span class="icon">📚</span><span>Detailed Notes: Nursing Process Approach I</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(7)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit8">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 8 - NURSING PROCESS APPROACH II
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openNotes(8)">
-                        <span class="icon">📚</span><span>Detailed Notes: Nursing Process Approach II</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(8)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 8 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit9">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 9 - NURSING PRACTICE
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openNotes(9)">
-                        <span class="icon">📚</span><span>Detailed Notes: Nursing Practice</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(9)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 9 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit10">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 10 - COMPUTER APPLICATIONS
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openNotes(10)">
-                        <span class="icon">📚</span><span>Detailed Notes: Computer Applications</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(10)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 10 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="pyq">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                PREVIOUS YEAR QUESTIONS (PYQ)
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openNotes('pyq_jan2024')">
-                        <span class="icon">📄</span><span>PYQ - January 2024</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openNotes('pyq_jun2023')">
-                        <span class="icon">📄</span><span>PYQ - June 2023</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openNotes('pyq_feb2023')">
-                        <span class="icon">📄</span><span>PYQ - February 2023</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openNotes('pyq_may2022')">
-                        <span class="icon">📄</span><span>PYQ - May 2022</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openNotes('pyq_feb2022')">
-                        <span class="icon">📄</span><span>PYQ - February 2022</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openNotes('pyq_jul2021')">
-                        <span class="icon">📄</span><span>PYQ - July 2021</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openNotes('pyq_nov2020')">
-                        <span class="icon">📄</span><span>PYQ - November 2020</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+  <!-- U1 -->
+  <div class="uc" id="u1" data-open="false">
+    <button class="ubtn" onclick="tog('u1')">
+      <div class="upill"><span>01</span></div>
+      <div class="uinfo"><div class="uname">Nursing as a Profession</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u1">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1U-nq7q_yZaqFe888Of6oc07dWuGpcSE9/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(1)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
     </div>
+  </div>
 
-    <div id="app-modal" class="modal-overlay">
-        <div class="modal-header">
-            <div id="modal-title" class="modal-title">Resource</div>
-            <button class="btn-close" onclick="closeModal()">Close X</button>
-        </div>
-        <div id="modal-body" class="modal-body"></div>
+  <!-- U2 -->
+  <div class="uc" id="u2" data-open="false">
+    <button class="ubtn" onclick="tog('u2')">
+      <div class="upill"><span>02</span></div>
+      <div class="uinfo"><div class="uname">Healthcare Delivery</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u2">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1BAva7uX63TW_8xHV6W90l_hd6Xf6Lilt/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(2)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
     </div>
-
-    <script>
-        // =====================================================================
-        // 1. NOTES DATA — Paste your content as HTML for each chapter/key below.
-        //    Use standard HTML: <h1>, <h2>, <h3>, <p>, <ul>, <li>, <table>, 
-        //    <strong>, <em>, etc. The .notes-viewer class styles them nicely.
-        // =====================================================================
-        const NOTES_DATA = {
-
-            // --- SYLLABUS ---
-            "syllabus": `
-                <h1>Advance Nursing Practice — Syllabus</h1>
-                <p><em>Paste the full syllabus content here...</em></p>
-            `,
-
-            // --- CHAPTER 1: Nursing as a Profession ---
-            1: `
-<h1 style="text-align:center;">UNIT- I</h1>
-<h1 style="text-align:center;">NURSING AS A PROFESSION</h1>
-
-<p>The evolution of the nursing profession mirrors the broader journey of human society, reflecting its advances in science, healthcare, and ethical values. Originating from informal, compassionate caregiving roles primarily carried out by women within families and communities, nursing has grown into a structured, evidence-based, and autonomous profession. Influenced by pivotal historical events, renowned global figures such as Florence Nightingale, socio-political reforms, global conflicts, and academic milestones, the nursing profession has become an indispensable pillar of modern healthcare systems across the globe.</p>
-
-<h2>I. Early Beginnings of Nursing</h2>
-
-<h3>Primitive Era:</h3>
-<ul>
-<li>Nursing was an instinctive and informal act rooted in maternal and communal care.</li>
-<li>Women were the primary caregivers, responsible for attending to sick family members.</li>
-<li>Healing practices involved the use of natural remedies, plant-based medicines, and rituals performed by tribal healers or shamans.</li>
-<li>Care was spiritual and superstitious in nature, with illness often believed to be caused by evil spirits.</li>
-</ul>
-
-<h3>Ancient Civilizations:</h3>
-<ul>
-<li><strong>Egypt:</strong> Medical papyri from 1900 BC described surgical techniques, wound care, and medicinal preparations; female caretakers supported priests in healing temples.</li>
-<li><strong>India:</strong> Ayurveda, the ancient Indian medical system, emphasized a holistic approach; nurses (known as <em>attendants</em>) served in hospitals attached to temples as early as the 6th century BC.</li>
-<li><strong>Greece:</strong> Temples dedicated to Aesculapius functioned as healing centers; male attendants, known as <em>therapeutae</em>, assisted in care.</li>
-<li><strong>Rome:</strong> Mobile military hospitals were established; both men and women provided battlefield care.</li>
-<li><strong>China:</strong> Confucian philosophy emphasized filial piety and care for the sick and elderly; early medical texts described hygiene, pulse diagnosis, and herbal therapies.</li>
-</ul>
-
-<h2>II. Nursing in the Early Christian Era</h2>
-
-<h3>Role of Religion:</h3>
-<ul>
-<li>The rise of Christianity emphasized charitable acts and the care of the poor, sick, and dying.</li>
-<li>Early Christian women, like <strong>Phoebe</strong>, served as deaconesses who provided home-based care.</li>
-<li>Religious institutions and convents began organizing care systematically.</li>
-</ul>
-
-<h3>Middle Ages (500–1500 AD):</h3>
-<ul>
-<li>Monasteries and convents functioned as hospitals, where monks and nuns provided care with compassion and dedication.</li>
-<li>Nursing duties were considered religious acts of mercy rather than a secular profession.</li>
-<li>The knowledge of hygiene, anatomy, and disease regressed due to political instability, plagues, and lack of scientific inquiry.</li>
-<li>Despite a decline in scientific progress, the Church preserved caregiving traditions during this time.</li>
-</ul>
-
-<h2>III. Nursing During the Renaissance and Reformation</h2>
-
-<h3>Renaissance Period (1300–1600 AD):</h3>
-<ul>
-<li>Scientific inquiry began to flourish; however, nursing did not see parallel growth.</li>
-<li>Caregiving was often performed by untrained, lower-class women.</li>
-<li>Hospitals existed, but conditions were poor and unsanitary.</li>
-</ul>
-
-<h3>Reformation (16th Century):</h3>
-<ul>
-<li>Closure of Catholic monasteries by Protestant reformers in many parts of Europe led to the collapse of many religious hospitals.</li>
-<li>Nursing roles fell into the hands of criminals, prostitutes, and marginalized women, as religious caregivers were displaced.</li>
-<li>This era became known as the &ldquo;<strong>Dark Age of Nursing</strong>&rdquo; due to poor standards and lack of professionalism in caregiving.</li>
-</ul>
-
-<h2>IV. Florence Nightingale Era &ndash; The Birth of Modern Nursing (19th Century)</h2>
-
-<h3>Florence Nightingale (1820–1910):</h3>
-<ul>
-<li>Widely recognized as the founder of modern nursing.</li>
-<li>During the <strong>Crimean War (1853–1856)</strong>, she drastically improved sanitation and organization in field hospitals, reducing mortality from 42% to 2%.</li>
-<li>Introduced structured record-keeping, nutritional support, and clean environments in patient care.</li>
-</ul>
-
-<h3>Major Contributions:</h3>
-<ul>
-<li>Established the <strong>Nightingale Training School for Nurses</strong> at St. Thomas' Hospital in London in 1860.</li>
-<li>Elevated nursing to a respected and morally valued profession for educated women.</li>
-<li>Pioneered the use of <strong>statistical diagrams</strong> to advocate for healthcare reform.</li>
-<li>Proposed the <strong>Environmental Theory of Nursing</strong>, emphasizing clean air, clean water, sanitation, proper diet, and light for recovery.</li>
-<li>Advocated for public health policies, hospital design, and nursing ethics.</li>
-</ul>
-
-<h2>V. Global Expansion and Institutionalization of Nursing</h2>
-
-<h3>Late 19th to Early 20th Century:</h3>
-<ul>
-<li>Nursing schools based on the Nightingale model were established worldwide, including in Europe, America, and Asia.</li>
-<li>Standardized nursing curricula and certification exams emerged to ensure competence.</li>
-</ul>
-
-<h3>Prominent Nursing Leaders:</h3>
-<ul>
-<li><strong>Clara Barton:</strong> Founded the <strong>American Red Cross</strong>, contributing to emergency care and disaster response.</li>
-<li><strong>Mary Seacole:</strong> A Jamaican nurse who independently treated soldiers during the Crimean War using herbal medicine.</li>
-<li><strong>Linda Richards:</strong> Recognized as America's first professionally trained nurse.</li>
-<li><strong>Isabel Hampton Robb:</strong> Reformed nursing education and founded the <strong>American Nurses Association (ANA)</strong>.</li>
-</ul>
-
-<h3>Nursing Organizations Formed:</h3>
-<ul>
-<li><strong>International Council of Nurses (ICN)</strong> in 1899 unified global nursing voices.</li>
-<li><strong>American Nurses Association (ANA)</strong> in 1911 promoted nursing standards and advocacy.</li>
-</ul>
-
-<h2>VI. Nursing During the World Wars</h2>
-
-<h3>World War I (1914–1918) &amp; World War II (1939–1945):</h3>
-<ul>
-<li>Nurses were indispensable in battlefield triage, surgery assistance, and emergency care.</li>
-<li>Military service roles helped elevate the public and governmental recognition of nurses.</li>
-<li>Provided care in field hospitals, hospital ships, and frontline tents under life-threatening conditions.</li>
-</ul>
-
-<h3>Post-War Developments:</h3>
-<ul>
-<li>Led to significant expansion in nursing education and recruitment.</li>
-<li>Introduced structured career ladders such as <strong>Registered Nurses (RNs)</strong> and <strong>Licensed Practical Nurses (LPNs)</strong>.</li>
-<li>Sparked the birth of specialty nursing fields: pediatrics, psychiatry, surgery, and obstetrics.</li>
-</ul>
-
-<h2>VII. Modernization and Professionalization (Mid-20th Century Onwards)</h2>
-
-<h3>Advances in Education:</h3>
-<ul>
-<li>Nursing education shifted from hospital-based diploma programs to university-based <strong>degree programs (B.Sc. Nursing, M.Sc., PhD)</strong>.</li>
-<li>Institutions began focusing on nursing theory, leadership, research, and ethics.</li>
-<li>Inclusion of men and minority groups in nursing was promoted.</li>
-</ul>
-
-<h3>Expanded Roles:</h3>
-<p>Emergence of specialized roles such as:</p>
-<ul>
-<li><strong>Nurse Practitioners (NPs)</strong> &ndash; with prescribing rights and diagnostic authority.</li>
-<li><strong>Clinical Nurse Specialists (CNSs)</strong> &ndash; focused on complex health conditions.</li>
-<li><strong>Nurse Educators</strong> &ndash; teaching and training future nurses.</li>
-<li><strong>Nurse Administrators and Public Health Nurses</strong> &ndash; involved in planning and community services.</li>
-</ul>
-
-<h3>Technological Integration:</h3>
-<ul>
-<li>Introduction of <strong>electronic health records</strong>, telehealth platforms, smart beds, and point-of-care devices.</li>
-<li>Nurses trained in <strong>informatics</strong> to manage healthcare data and improve quality.</li>
-</ul>
-
-<h3>Global Recognition:</h3>
-<ul>
-<li>Nurses now contribute to <strong>health policy-making</strong>, leadership, research, and disaster preparedness.</li>
-<li>WHO declared <strong>2020 as the Year of the Nurse and the Midwife</strong> to honor nurses' contributions during the COVID-19 pandemic.</li>
-</ul>
-
-<h2>VIII. Nursing in India &ndash; A Parallel Evolution</h2>
-
-<h3>Ancient India:</h3>
-<ul>
-<li>Caregiving rooted in <strong>Ayurvedic philosophy</strong>, which emphasized physical, mental, and spiritual well-being.</li>
-<li>Early hospitals were linked to temples; attendants served under the guidance of Ayurvedic physicians.</li>
-</ul>
-
-<h3>Colonial Era:</h3>
-<ul>
-<li>First organized nursing school established in <strong>1867 in Madras (now Chennai)</strong>.</li>
-<li>The curriculum and structure followed the <strong>British Nightingale model</strong>.</li>
-</ul>
-
-<h3>Post-Independence Developments:</h3>
-<ul>
-<li>Formation of the <strong>Indian Nursing Council (INC)</strong> in <strong>1947</strong> to standardize nursing education.</li>
-<li>Establishment of <strong>nursing colleges</strong>, <strong>auxiliary nurse midwife (ANM)</strong> training centers, and <strong>postgraduate programs</strong>.</li>
-<li>Inclusion of <strong>male nurses</strong> and introduction of community health nursing programs.</li>
-<li>Indian nurses now play active roles globally in clinical, administrative, academic, and research sectors.</li>
-</ul>
-
-<div class="highlight-box"><strong>Conclusion:</strong> The history of nursing reflects a transformative journey from humble, service-based roots to a well-established profession rooted in scientific knowledge, human empathy, and leadership. From ancient temples to modern ICUs, and from Florence Nightingale to global nurse leaders, the nursing profession continues to evolve by embracing technological advancements, educational reforms, and a deep commitment to patient-centered care.</div>
-
-<hr>
-
-<h2 style="text-align:center;">CHARACTERISTICS, CRITERIA OF THE PROFESSION</h2>
-
-<p>Nursing is a dynamic and essential component of the healthcare system, dedicated to promoting, maintaining, and restoring health throughout all stages of life. It is not limited to performing clinical tasks but encompasses a broad and specialized scientific discipline that integrates knowledge from biological, behavioral, and social sciences. Rooted in ethical values and social responsibility, nursing serves the needs of individuals, families, and communities while meeting established professional standards.</p>
-
-<h2>I. Characteristics of the Nursing Profession</h2>
-
-<h3>1. Specialized Body of Knowledge</h3>
-<ul>
-<li>Nursing is based on a well-structured and evolving knowledge base derived from sciences such as anatomy, physiology, pharmacology, psychology, sociology, and public health.</li>
-<li>It integrates theoretical frameworks with clinical practice to ensure safe, holistic, and evidence-based care.</li>
-<li>Continuous advancements in healthcare demand regular updating of knowledge through research, publications, and guidelines.</li>
-</ul>
-
-<h3>2. Formal Education and Structured Training</h3>
-<ul>
-<li>Nurses acquire their professional competencies through accredited programs like ANM, GNM, B.Sc. Nursing, M.Sc. Nursing, and doctoral degrees.</li>
-<li>Curriculum includes both theoretical classroom teaching and practical hands-on clinical experience.</li>
-<li>Continuing Nursing Education (CNE), workshops, and in-service training help maintain clinical competence and professional growth.</li>
-</ul>
-
-<h3>3. Service-Oriented Nature</h3>
-<ul>
-<li>Nursing emphasizes compassion, empathy, and selfless service for the betterment of patients and the larger community.</li>
-<li>It focuses on health promotion, disease prevention, rehabilitation, and palliative care for vulnerable populations.</li>
-<li>The profession prioritizes patient welfare over personal gain and fosters trust-based relationships.</li>
-</ul>
-
-<h3>4. Ethical Code of Conduct</h3>
-<ul>
-<li>Professional behavior in nursing is governed by ethical principles laid down by bodies such as the ICN and TNAI.</li>
-<li>Ethical principles include respect for patient autonomy, confidentiality, informed consent, non-maleficence, and justice.</li>
-<li>Nurses are responsible for maintaining integrity, accountability, and dignity in all clinical and interpersonal interactions.</li>
-</ul>
-
-<h3>5. Autonomy and Accountability</h3>
-<ul>
-<li>Registered nurses are trained to make independent decisions regarding patient care within their legal and ethical scope of practice.</li>
-<li>They are responsible for assessing, planning, implementing, and evaluating nursing interventions.</li>
-<li>Accountability is owed to patients, the healthcare system, regulatory authorities, and society at large.</li>
-</ul>
-
-<h3>6. Existence of Professional Organizations</h3>
-<ul>
-<li>Nurses are represented by professional bodies such as the ICN, TNAI, and state-level nursing associations.</li>
-<li>These organizations work to uphold professional standards, ensure quality nursing education, and advocate for the rights of nurses.</li>
-<li>They also promote leadership development, research dissemination, and policy advocacy.</li>
-</ul>
-
-<h3>7. Licensure and Legal Recognition</h3>
-<ul>
-<li>Nursing practice in India is legally regulated by the Indian Nursing Council (INC) and respective State Nursing Councils.</li>
-<li>Nurses are required to register with the council to legally practice and maintain a valid license through renewal and re-certification.</li>
-<li>Licensure ensures public protection by upholding uniform standards of education, ethics, and practice.</li>
-</ul>
-
-<h3>8. Commitment to Lifelong Learning and Research</h3>
-<ul>
-<li>The profession encourages nurses to engage in continuous learning to stay updated with current evidence-based practices.</li>
-<li>Many nurses participate in clinical research to improve nursing interventions, patient outcomes, and health systems.</li>
-<li>Academic progression through specialization and doctoral studies is common in advanced nursing roles.</li>
-</ul>
-
-<h3>9. Respect and Trust of the Public</h3>
-<ul>
-<li>Nurses are consistently ranked among the most trusted professionals globally due to their honesty, empathy, dedication, and commitment to quality care.</li>
-<li>Their close patient interactions, 24/7 presence in healthcare settings, and advocacy for patient rights contribute to their societal value.</li>
-<li>This trust strengthens the nurse-patient relationship and enhances health-seeking behavior in communities.</li>
-</ul>
-
-<h2>II. Criteria for a Profession (As Applied to Nursing)</h2>
-<ul>
-<li><strong>A Unique Body of Knowledge:</strong> Nursing possesses a distinct, scientific knowledge base that supports clinical practice, education, and research.</li>
-<li><strong>Formal Education and Training:</strong> Entry into the nursing profession requires completion of accredited academic and clinical training programs.</li>
-<li><strong>Licensure and Certification:</strong> Practice is legally governed through licensure by national or state nursing councils.</li>
-<li><strong>Code of Ethics and Professional Conduct:</strong> Nursing is guided by ethical frameworks that direct clinical decisions and interactions.</li>
-<li><strong>Service Orientation to Society:</strong> Nursing is committed to addressing health needs and promoting the well-being of individuals and communities.</li>
-<li><strong>Autonomy in Decision-Making:</strong> Nurses are empowered to independently perform assessments, implement interventions, and evaluate outcomes within their scope.</li>
-<li><strong>Active Participation in Professional Associations:</strong> Membership in nursing organizations helps maintain professional identity, unity, and continuous development.</li>
-<li><strong>Ongoing Research and Development:</strong> Nurses are actively involved in academic and clinical research that contributes to the advancement of the profession.</li>
-</ul>
-
-<div class="highlight-box"><strong>Conclusion:</strong> Nursing is a highly respected and regulated profession that blends scientific knowledge with compassionate service to enhance health outcomes. By fulfilling the essential characteristics and universally accepted criteria of a profession, nursing earns its position as a cornerstone of healthcare systems worldwide.</div>
-
-<hr>
-
-<h2 style="text-align:center;">PERSPECTIVE OF NURSING PROFESSION &ndash; NATIONAL, GLOBAL</h2>
-
-<p>The nursing profession holds a crucial position in healthcare systems across the globe, acting as a vital link between patients and the broader medical infrastructure. Viewing nursing from both national and global perspectives allows us to explore its development, educational structures, policy involvement, challenges, and opportunities for growth.</p>
-
-<h2>I. NATIONAL PERSPECTIVE (INDIA)</h2>
-
-<h3>Historical Evolution</h3>
-<ul>
-<li>Nursing as a formal profession began during British colonial rule.</li>
-<li>The first structured training school was established in <strong>Chennai at St. Stephen's Hospital in 1867</strong>.</li>
-<li><strong>Florence Nightingale's influence</strong> laid the foundation for professional nursing education and ethical practice.</li>
-<li>After independence, India emphasized the <strong>expansion of nursing education</strong> and integration into public health systems.</li>
-</ul>
-
-<h3>Regulatory Framework</h3>
-<ul>
-<li><strong>Indian Nursing Council (INC):</strong> A statutory body responsible for regulating nursing education, practice standards, and ethics nationwide.</li>
-<li><strong>State Nursing Councils:</strong> Handle registration, licensure, and continuing professional oversight at the state level.</li>
-</ul>
-
-<h3>Structure of Nursing Education in India</h3>
-<ul>
-<li>Auxiliary Nurse Midwives (ANM) &ndash; Entry-level nursing</li>
-<li>General Nursing and Midwifery (GNM) &ndash; Diploma-based program</li>
-<li>B.Sc. Nursing (Basic/Post-basic) &ndash; Degree-level training</li>
-<li>M.Sc. Nursing, M.Phil, PhD &ndash; Advanced academic and research qualifications</li>
-</ul>
-
-<h3>Roles and Responsibilities</h3>
-<ul>
-<li>Provide care at <strong>primary, secondary, and tertiary levels</strong>.</li>
-<li>Clinical care, Maternal and child health (MCH) services, Health education, Vaccination, and Support in disease surveillance.</li>
-</ul>
-
-<h3>Involvement in National Health Programs</h3>
-<ul>
-<li><strong>Reproductive and Child Health (RCH)</strong></li>
-<li><strong>National AIDS Control Programme (NACP)</strong></li>
-<li><strong>RMNCH+A</strong> (Reproductive, Maternal, Newborn, Child, and Adolescent Health)</li>
-<li><strong>Ayushman Bharat Health and Wellness Centres (HWCs)</strong> as Mid-Level Health Providers (MLHPs)</li>
-</ul>
-
-<h3>Challenges in the Indian Context</h3>
-<ul>
-<li>Inadequate nurse-to-population ratio below WHO-recommended levels</li>
-<li>Poor working conditions, heavy workload, lack of recognition</li>
-<li>Low remuneration and limited scope for career growth</li>
-<li>Underrepresentation in decision-making and health policy</li>
-<li>Inconsistent educational standards between institutions</li>
-</ul>
-
-<h3>Reforms and Future Opportunities</h3>
-<ul>
-<li>Expansion of Nurse Practitioner (NP) roles</li>
-<li>Introduction of Bridge Programs for GNM to B.Sc. upgrades</li>
-<li>Growing demand for tele-nursing, digital health roles, and community-based nursing care</li>
-<li>Recognition of nursing's role in achieving Universal Health Coverage (UHC)</li>
-</ul>
-
-<h2>II. GLOBAL PERSPECTIVE</h2>
-
-<h3>Global Scope and Recognition</h3>
-<ul>
-<li>Nursing is the <strong>largest group of healthcare professionals globally</strong>, comprising over <strong>27 million nurses</strong> (WHO, 2020).</li>
-<li>WHO's <strong>State of the World's Nursing Report 2020</strong> emphasizes nurses' critical role in achieving UHC and SDGs.</li>
-</ul>
-
-<h3>Key International Organizations</h3>
-<ul>
-<li><strong>International Council of Nurses (ICN):</strong> Represents over 130 national associations.</li>
-<li><strong>World Health Organization (WHO):</strong> Supports global nursing workforce policies.</li>
-<li><strong>Nursing Now Campaign:</strong> Focused on enhancing nurses' roles in health leadership.</li>
-</ul>
-
-<h3>Global Nursing Roles and Specializations</h3>
-<ul>
-<li>Nurse Practitioners (NPs), Certified Nurse Midwives (CNMs), Clinical Nurse Specialists (CNS), Certified Registered Nurse Anesthetists (CRNAs)</li>
-<li>Increasing role in evidence-based practice, interdisciplinary teamwork, policy advocacy, and humanitarian missions.</li>
-</ul>
-
-<h3>Emerging Global Trends</h3>
-<ul>
-<li><strong>Digital Transformation:</strong> EHR, Tele-nursing, AI-supported diagnostics</li>
-<li><strong>COVID-19 pandemic response:</strong> Highlighted essential role of nurses</li>
-<li><strong>Global nursing shortage:</strong> Estimated shortfall of 5.9 million nurses worldwide</li>
-</ul>
-
-<h3>Comparative Analysis: National vs Global</h3>
-<table>
-<tr><th>Aspect</th><th>India (National)</th><th>Global</th></tr>
-<tr><td>Regulatory Body</td><td>INC, State Nursing Councils</td><td>ICN, WHO, ANA, NMC</td></tr>
-<tr><td>Role Emphasis</td><td>Clinical care, MCH, public health</td><td>Specialized care, leadership, global health</td></tr>
-<tr><td>Education Levels</td><td>ANM, GNM, B.Sc., M.Sc., PhD</td><td>Diploma to Doctorate (Bologna)</td></tr>
-<tr><td>Workforce</td><td>Urban-centric, rural deficits</td><td>LMICs face shortages, HICs better distributed</td></tr>
-<tr><td>Challenges</td><td>Low pay, limited leadership</td><td>Migration, shortage, workplace safety</td></tr>
-<tr><td>Opportunities</td><td>Telehealth, NP roles</td><td>Global mobility, digital transformation</td></tr>
-</table>
-
-<div class="highlight-box"><strong>Conclusion:</strong> Both nationally and globally, nursing is undergoing a transformative shift. Empowering nurses at all levels will ultimately lead to a more resilient and responsive global health system.</div>
-
-<hr>
-
-<h2 style="text-align:center;">CODE OF ETHICS (INC)</h2>
-
-<p>The Code of Ethics formulated by the Indian Nursing Council (INC) is a vital framework guiding the ethical and professional behavior of nurses across India. It ensures that nursing professionals uphold values such as compassion, respect, honesty, responsibility, and accountability in all aspects of their practice.</p>
-
-<h2>1. Nurses and People (Patients and the Public)</h2>
-<ul>
-<li><strong>Respect for Human Rights:</strong> Care without discrimination; based on human dignity, compassion, empathy, and cultural sensitivity.</li>
-<li><strong>Confidentiality:</strong> Patient information must be protected and not disclosed unless legally or ethically required.</li>
-<li><strong>Patient Advocacy:</strong> Actively support and speak on behalf of patients, especially the vulnerable.</li>
-<li><strong>Informed Consent:</strong> Ensure patients are well-informed about procedures, risks, and alternatives before consent.</li>
-</ul>
-
-<h2>2. Nurses and Nursing Practice</h2>
-<ul>
-<li><strong>Accountability and Responsibility:</strong> Personally accountable for quality and outcomes of care.</li>
-<li><strong>Evidence-Based Practice:</strong> Care based on current best practices and research evidence.</li>
-<li><strong>Professional Standards:</strong> Maintain discipline in appearance, punctuality, documentation, and behavior.</li>
-<li><strong>Continuing Education:</strong> Engage in lifelong learning through workshops, conferences, and advanced courses.</li>
-</ul>
-
-<h2>3. Nurses and Society</h2>
-<ul>
-<li><strong>Health Promotion and Education:</strong> Promote health awareness, hygiene, nutrition, and disease prevention.</li>
-<li><strong>Social Justice and Equality:</strong> Work toward reducing health inequities for all including marginalized groups.</li>
-<li><strong>Environmental Responsibility:</strong> Support eco-friendly hospital practices like biomedical waste segregation.</li>
-</ul>
-
-<h2>4. Nurses and Co-workers</h2>
-<ul>
-<li><strong>Mutual Respect:</strong> Show respect toward fellow nurses, doctors, technicians, and other team members.</li>
-<li><strong>Collaboration and Communication:</strong> Maintain clear, open, and honest communication with colleagues.</li>
-<li><strong>Reporting Misconduct:</strong> Report unethical, abusive, or negligent behavior by healthcare professionals.</li>
-</ul>
-
-<h2>5. Nurses and the Nursing Profession</h2>
-<ul>
-<li><strong>Upholding Professional Integrity:</strong> Act as ambassadors of the profession by displaying moral character and dedication.</li>
-<li><strong>Involvement in Professional Associations:</strong> Participate in nursing councils and associations.</li>
-<li><strong>Advocacy for the Profession:</strong> Support initiatives ensuring fair wages, safe environments, and adequate staffing.</li>
-</ul>
-
-<h2>6. Nurses and Research</h2>
-<ul>
-<li><strong>Ethical Research Conduct:</strong> Conduct research with honesty, integrity, and informed consent.</li>
-<li><strong>Participant Rights and Safety:</strong> Ensure privacy, confidentiality, and voluntary participation.</li>
-</ul>
-
-<h2>7. Nurses and Legal Obligations</h2>
-<ul>
-<li><strong>Compliance with Laws:</strong> Adhere to Indian Nursing Council Act, Clinical Establishments Act, etc.</li>
-<li><strong>Legal Documentation:</strong> Maintain accurate, timely, and legal documentation of nursing care.</li>
-</ul>
-
-<div class="highlight-box"><strong>Conclusion:</strong> The INC Code of Ethics establishes a moral and professional foundation for nursing practice in India, ensuring compassionate, just, and accountable nursing service delivery.</div>
-
-<hr>
-
-<h2 style="text-align:center;">CODE OF PROFESSIONAL CONDUCT (INC), AUTONOMY AND ACCOUNTABILITY, ASSERTIVENESS, VISIBILITY OF NURSES, LEGAL CONSIDERATIONS</h2>
-
-<h2>Code of Professional Conduct (INC)</h2>
-<ul>
-<li><strong>Respect for Human Dignity and Rights</strong></li>
-<li><strong>Confidentiality and Privacy</strong></li>
-<li><strong>Professional Competence and Development</strong></li>
-<li><strong>Accountability and Responsibility</strong></li>
-<li><strong>Patient Advocacy</strong></li>
-<li><strong>Interprofessional Collaboration</strong></li>
-<li><strong>Ethical Conduct and Integrity</strong></li>
-<li><strong>Commitment to the Profession</strong></li>
-</ul>
-
-<h2>Autonomy and Accountability in Nursing</h2>
-<ul>
-<li><strong>Clinical Autonomy:</strong> Ability to assess, plan, and execute nursing interventions based on critical thinking.</li>
-<li><strong>Decision-Making Rights:</strong> Exercise the right to decline unsafe or unethical procedures.</li>
-<li><strong>Accountability in Practice:</strong> Take full ownership of nursing decisions.</li>
-<li><strong>Documentation as Accountability Tool:</strong> Maintain accurate, complete, and timely records.</li>
-<li><strong>Self-Regulation and Competency:</strong> Engage in reflective practice and self-evaluation.</li>
-<li><strong>Ethico-Legal Responsibility:</strong> Abide by national laws such as the Indian Nursing Act, IPC.</li>
-<li><strong>Team-based Accountability:</strong> Work collaboratively while remaining responsible for individual tasks.</li>
-</ul>
-
-<h2>Assertiveness in Nursing</h2>
-<ul>
-<li><strong>Definition:</strong> Standing up for one's rights without infringing upon the rights of others.</li>
-<li><strong>Significance:</strong> Helps address unsafe practices, errors, or policy violations.</li>
-<li><strong>Features:</strong> Clear verbal expression, respectful tone, good posture, eye contact.</li>
-<li><strong>Advantages:</strong> Builds mutual respect, enhances morale, reduces burnout.</li>
-<li><strong>Barriers:</strong> Fear of conflict, lack of confidence, organizational hierarchy, cultural norms.</li>
-<li><strong>Strategies:</strong> Role-playing, assertiveness training, mentorship, learning to say "no" professionally.</li>
-</ul>
-
-<h2>Visibility of Nurses</h2>
-<ul>
-<li><strong>Professional Engagement:</strong> Participate in hospital committees, policy discussions, and clinical governance.</li>
-<li><strong>Leadership Roles:</strong> Take positions as ward in-charges, nurse educators, clinical specialists, or nursing directors.</li>
-<li><strong>Public and Media Presence:</strong> Educate the public through media, articles, or social media.</li>
-<li><strong>Clinical Visibility:</strong> Speak up during ward rounds and multidisciplinary meetings.</li>
-<li><strong>Recognition and Empowerment:</strong> Seek formal recognition for nursing excellence and innovation.</li>
-<li><strong>Mentorship:</strong> Act as mentors to junior staff and students.</li>
-</ul>
-
-<h2>Legal Considerations in Nursing</h2>
-<ul>
-<li><strong>Licensure and Registration:</strong> Must be registered under the State Nursing Council.</li>
-<li><strong>Informed Consent:</strong> Obtain and verify informed consent before procedures.</li>
-<li><strong>Negligence and Malpractice:</strong> Failure to perform duties to acceptable standards may result in legal action.</li>
-<li><strong>Confidentiality and Data Protection:</strong> Patient health information should not be disclosed without justification.</li>
-<li><strong>Documentation Standards:</strong> Record all nursing actions accurately and promptly.</li>
-<li><strong>Patient Rights:</strong> Respect and uphold patients' legal rights to dignity, autonomy, privacy, and safety.</li>
-<li><strong>Workplace Legal Protection:</strong> Nurses are protected under labor laws regarding safety, working hours, and harassment.</li>
-<li><strong>Relevant Laws:</strong> IPC, Consumer Protection Act, Clinical Establishments Act, Mental Health Act.</li>
-</ul>
-
-<div class="highlight-box"><strong>Conclusion:</strong> Incorporating the principles of professional conduct, autonomy, accountability, assertiveness, and legal compliance is essential for safe, ethical, and effective nursing care.</div>
-
-<hr>
-
-<h2 style="text-align:center;">PROFESSIONAL ORGANIZATIONS AND UNIONS &ndash; SELF DEFENSE, INDIVIDUAL AND COLLECTIVE BARGAINING</h2>
-
-<h2>I. Professional Organizations</h2>
-<h3>Examples in Nursing:</h3>
-<ul>
-<li><strong>Indian Nursing Council (INC)</strong> &ndash; National regulatory body</li>
-<li><strong>Trained Nurses Association of India (TNAI)</strong> &ndash; Professional welfare body</li>
-<li><strong>International Council of Nurses (ICN)</strong> &ndash; Global federation</li>
-<li><strong>State Nursing Councils</strong> &ndash; State-level regulation</li>
-</ul>
-
-<h3>Functions:</h3>
-<ul>
-<li>Licensing and Accreditation</li>
-<li>Policy Advocacy</li>
-<li>Capacity Building (training, workshops, seminars)</li>
-<li>Ethical Oversight</li>
-<li>Representation on national and international platforms</li>
-<li>Regulation of Practice</li>
-<li>Recognition and Awards</li>
-</ul>
-
-<h2>II. Unions</h2>
-<h3>Examples:</h3>
-<ul>
-<li><strong>All India Government Nurses Federation (AIGNF)</strong></li>
-<li><strong>Nurses Welfare Association</strong></li>
-<li>Hospital/PHC-based Health Workers' Unions</li>
-</ul>
-
-<h2>III. Self-Defense through Organizations and Unions</h2>
-<ol>
-<li><strong>Legal Protection:</strong> Assist members facing termination, harassment, or legal issues.</li>
-<li><strong>Grievance Redressal:</strong> Act as intermediaries to resolve conflicts.</li>
-<li><strong>Whistle-blower Security:</strong> Support individuals who expose unethical practices.</li>
-<li><strong>Awareness and Education:</strong> Inform members about rights and standards.</li>
-<li><strong>Emergency Support:</strong> Financial aid, mental health support, or insurance.</li>
-<li><strong>Empowerment Training:</strong> Equip members with knowledge and confidence.</li>
-<li><strong>Campaigning and Protests:</strong> Organize lawful actions against unjust policies.</li>
-</ol>
-
-<h2>IV. Individual Bargaining</h2>
-<ul>
-<li>Customized negotiation between one employee and employer</li>
-<li>Personalized benefits tailored to qualifications and experience</li>
-<li>Limited scope; lacks collective power</li>
-</ul>
-
-<h2>V. Collective Bargaining</h2>
-<h3>Types:</h3>
-<ul>
-<li><strong>Distributive:</strong> Focused on dividing economic benefits (wages, bonuses)</li>
-<li><strong>Integrative:</strong> Seeks mutual benefits and cooperation</li>
-<li><strong>Productivity:</strong> Links wages to measurable productivity gains</li>
-<li><strong>Composite:</strong> Includes both financial and non-financial aspects</li>
-</ul>
-
-<div class="highlight-box"><strong>Conclusion:</strong> Professional organizations and unions empower professionals to contribute effectively, ethically, and confidently to healthcare delivery through self-defence, individual representation, and collective bargaining.</div>
-
-<hr>
-
-<h2 style="text-align:center;">EDUCATIONAL PREPARATIONS, CONTINUING EDUCATION, CAREER OPPORTUNITIES, PROFESSIONAL ADVANCEMENT &amp; ROLE AND SCOPE OF NURSING EDUCATION</h2>
-
-<h2>I. Educational Preparation in Nursing</h2>
-
-<h3>Auxiliary Nurse Midwife (ANM)</h3>
-<ul>
-<li>Duration: 18 months to 2 years</li>
-<li>Focus: Maternal and child health, basic nursing care, community outreach</li>
-<li>Eligibility: 10+2 pass</li>
-</ul>
-
-<h3>General Nursing and Midwifery (GNM)</h3>
-<ul>
-<li>Duration: 3 years including internship</li>
-<li>Curriculum: General nursing, midwifery, pediatric, psychiatric, community health</li>
-<li>Eligibility: 10+2</li>
-</ul>
-
-<h3>B.Sc. Nursing</h3>
-<ul>
-<li>Duration: 4 years</li>
-<li>Curriculum: Anatomy, physiology, microbiology, medical-surgical nursing, community health, mental health, research, administration</li>
-<li>Eligibility: 10+2 with PCB and English</li>
-</ul>
-
-<h3>Post Basic B.Sc. Nursing</h3>
-<ul>
-<li>Duration: 2 years</li>
-<li>Designed for registered GNM nurses seeking a degree</li>
-</ul>
-
-<h3>M.Sc. Nursing</h3>
-<ul>
-<li>Duration: 2 years</li>
-<li>Specializations: Medical-surgical, psychiatric, pediatric, community health, OBG nursing</li>
-<li>Eligibility: B.Sc. Nursing with 55% and 1 year clinical experience</li>
-</ul>
-
-<h3>PhD in Nursing</h3>
-<ul>
-<li>Duration: 3 to 5 years</li>
-<li>Focus: Nursing research, healthcare policy, leadership, advanced teaching</li>
-</ul>
-
-<h2>II. Continuing Education</h2>
-<ul>
-<li>Workshops and Seminars</li>
-<li>Online Courses (NPTEL, SWAYAM, Coursera, WHO)</li>
-<li>Certification Programs (critical care, dialysis, geriatrics, oncology)</li>
-<li>In-service Training</li>
-<li>Conferences and Symposiums</li>
-</ul>
-
-<h2>III. Career Opportunities</h2>
-<ul>
-<li><strong>Clinical:</strong> Staff Nurse, ICU Nurse, OT Nurse, Emergency Nurse, Neonatal Nurse, NP, Nurse Anesthetist</li>
-<li><strong>Educational:</strong> Clinical Instructor, Nurse Educator, Professor, Principal</li>
-<li><strong>Administrative:</strong> Ward Supervisor, Matron, CNO, Director of Nursing</li>
-<li><strong>Research:</strong> Clinical Research Nurse, Research Coordinator, Fellow</li>
-<li><strong>Community:</strong> Public Health Nurse, CHO, ASHA Trainer</li>
-<li><strong>Military:</strong> MNS, CRPF, BSF, Indian Navy, Air Force</li>
-<li><strong>International:</strong> After passing NCLEX-RN, CGFNS, IELTS/OET</li>
-<li><strong>Entrepreneurship:</strong> Private clinics, home healthcare, training centers</li>
-</ul>
-
-<h2>IV. Professional Advancement</h2>
-<ul>
-<li><strong>Academic Pathway:</strong> ANM &rarr; GNM &rarr; B.Sc. &rarr; M.Sc. &rarr; PhD</li>
-<li><strong>Professional Ladder:</strong> Staff Nurse &rarr; Senior Nurse &rarr; Ward In-Charge &rarr; Matron &rarr; CNO</li>
-<li>Certifications: BLS, ACLS, PALS, IV Therapy, Infection Control, Palliative Care</li>
-<li>Professional Bodies: TNAI, INC, ICN, Sigma Theta Tau International</li>
-</ul>
-
-<h2>V. Role and Scope of Nursing Education</h2>
-<ul>
-<li>Develops foundational and advanced theoretical knowledge, critical clinical skills</li>
-<li>Shapes professional ethics, communication abilities, and leadership qualities</li>
-<li>Encompasses hospital-based, community-based, and institutional care</li>
-<li>Opens opportunities in teaching, administration, consultancy, research, entrepreneurship, and global health</li>
-</ul>
-
-<div class="highlight-box"><strong>Conclusion:</strong> Nursing education is the cornerstone of a responsive and competent healthcare workforce, ensuring continuous personal and professional development from foundational roles to leadership and policy-making positions.</div>
-
-<hr>
-
-<h2 style="text-align:center;">ROLE OF RESEARCH, LEADERSHIP AND MANAGEMENT</h2>
-
-<h2>I. Role of Research in Nursing</h2>
-<ul>
-<li><strong>Enhancement of Evidence-Based Practice (EBP):</strong> Guides nurses in integrating the latest scientific evidence into clinical care.</li>
-<li><strong>Improvement of Patient Outcomes:</strong> Identifies effective nursing interventions and care models.</li>
-<li><strong>Fostering Professional Growth:</strong> Encourages analytical thinking and reflective practice.</li>
-<li><strong>Policy and Protocol Formulation:</strong> Empirical evidence informs institutional guidelines and national health policies.</li>
-<li><strong>Quality Improvement:</strong> Identifies gaps in service delivery and assesses effectiveness.</li>
-<li><strong>Enrichment of Nursing Education:</strong> Updates curricula with current knowledge.</li>
-<li><strong>Driving Innovation:</strong> Facilitates development of novel care techniques and digital tools.</li>
-</ul>
-
-<h2>II. Role of Leadership in Nursing</h2>
-<ul>
-<li><strong>Inspiration and Team Motivation:</strong> Nurse leaders act as visionary figures.</li>
-<li><strong>Patient and Staff Advocacy:</strong> Voice patient needs and nurses' concerns.</li>
-<li><strong>Driving Organizational Change:</strong> Lead transformative projects and technology adoption.</li>
-<li><strong>Conflict Management:</strong> Resolve disputes professionally and diplomatically.</li>
-<li><strong>Strategic Planning:</strong> Align nursing goals with institutional mission.</li>
-<li><strong>Talent Development and Mentorship:</strong> Identify and develop emerging leaders.</li>
-<li><strong>Ethical and Professional Standards:</strong> Uphold accountability, compassion, respect, and dignity.</li>
-</ul>
-
-<h2>III. Role of Management in Nursing</h2>
-<ul>
-<li><strong>Resource Management:</strong> Allocate staff according to patient needs and workload.</li>
-<li><strong>Organizing and Planning:</strong> Prepare duty rosters, shift schedules, and care plans.</li>
-<li><strong>Policy Implementation:</strong> Translate hospital policies into actionable workflows.</li>
-<li><strong>Risk and Crisis Management:</strong> Develop contingency plans for emergencies.</li>
-<li><strong>Performance Monitoring:</strong> Set benchmarks and use audits and surveys to evaluate.</li>
-<li><strong>Training and Orientation:</strong> Conduct in-service education and competency evaluations.</li>
-<li><strong>Communication and Coordination:</strong> Facilitate timely interprofessional communication.</li>
-</ul>
-
-<div class="highlight-box"><strong>Conclusion:</strong> Research fuels innovation and scientific rigor; leadership fosters motivation, direction, and ethical excellence; and management ensures structured, efficient, and safe operations. Together, they empower nurses as competent professionals.</div>
-
-<hr>
-
-<h2 style="text-align:center;">QUALITY ASSURANCE IN NURSING (INC)</h2>
-
-<p>Quality Assurance (QA) in nursing is an essential and continuous process focused on ensuring that nursing care is safe, effective, ethical, and aligned with established professional standards.</p>
-
-<h3>Objectives:</h3>
-<ul>
-<li>Ensure adherence to national and institutional nursing protocols</li>
-<li>Enhance quality, safety, and satisfaction of patient care</li>
-<li>Promote professional accountability and ethical practice</li>
-<li>Encourage continuous professional development</li>
-<li>Support data-driven decision-making</li>
-</ul>
-
-<h3>Role of INC in Quality Assurance:</h3>
-<ul>
-<li><strong>Standard Development and Curriculum Revision</strong></li>
-<li><strong>Accreditation and Periodic Inspection</strong></li>
-<li><strong>Licensing and Registration</strong></li>
-<li><strong>Monitoring and Evaluation Systems</strong></li>
-<li><strong>Training, CNEs, and Quality Workshops</strong></li>
-<li><strong>Setting Quality Indicators and Benchmarks</strong></li>
-</ul>
-
-<h3>Key Components (Donabedian Model):</h3>
-<ul>
-<li><strong>Structure Evaluation:</strong> Reviews infrastructure, staffing, qualifications, materials, technology.</li>
-<li><strong>Process Evaluation:</strong> Examines methods of nursing care delivery, documentation, communication.</li>
-<li><strong>Outcome Evaluation:</strong> Measures patient health status, complication rates, satisfaction levels.</li>
-</ul>
-
-<h3>Models of Quality Assurance:</h3>
-<ul>
-<li><strong>Donabedian Model:</strong> Structure &rarr; Process &rarr; Outcome</li>
-<li><strong>QA Cycle:</strong> Identify issues &rarr; Set standards &rarr; Measure &rarr; Analyze &rarr; Correct &rarr; Revaluate</li>
-<li><strong>PDSA Cycle:</strong> Plan-Do-Study-Act for continuous improvement</li>
-</ul>
-
-<h3>Barriers:</h3>
-<ul>
-<li>Inadequate staffing and heavy workloads</li>
-<li>Lack of training and awareness</li>
-<li>Poor infrastructure and resources</li>
-<li>Resistance to change</li>
-<li>Weak monitoring mechanisms</li>
-</ul>
-
-<h3>Strategies to Enhance QA:</h3>
-<ul>
-<li>Capacity building programs</li>
-<li>Strong leadership engagement</li>
-<li>Effective feedback systems</li>
-<li>Technology integration (EHR, HMIS)</li>
-<li>Adoption of best practices and benchmarking</li>
-</ul>
-
-<div class="highlight-box"><strong>Conclusion:</strong> Quality Assurance in nursing is a dynamic process that serves as the backbone of safe and competent healthcare delivery. Through regulatory oversight and monitoring systems, the INC ensures every nurse contributes to a culture of excellence.</div>
-
-<hr>
-
-<h2 style="text-align:center;">FUTURISTIC NURSING</h2>
-
-<p>Futuristic nursing represents the progressive transformation of the nursing profession driven by breakthroughs in technology, medical sciences, healthcare delivery systems, and global public health needs.</p>
-
-<h2>I. Concept of Futuristic Nursing</h2>
-<ul>
-<li><strong>Vision-Oriented Practice:</strong> Forward-thinking, adaptability, anticipation of future healthcare trends.</li>
-<li><strong>Technology-Integrated Care:</strong> AI, robotics, and health informatics in clinical practice.</li>
-<li><strong>Global Health Orientation:</strong> Handling pandemics, climate disasters, and migration-related issues.</li>
-<li><strong>Advanced and Diversified Roles:</strong> Nurse practitioners, clinical nurse specialists, nurse entrepreneurs.</li>
-<li><strong>Evidence-Based and Personalized Approach:</strong> Data-driven, genomics-based interventions.</li>
-</ul>
-
-<h2>II. Key Features</h2>
-<ul>
-<li><strong>Digital Literacy and Health Informatics:</strong> EHR, telemedicine, mHealth, cybersecurity.</li>
-<li><strong>AI and Robotics Integration:</strong> Clinical decision support, patient monitoring, robotic assistance.</li>
-<li><strong>Virtual and Augmented Reality (VR/AR):</strong> Immersive simulation-based learning.</li>
-<li><strong>Tele-nursing and Remote Monitoring:</strong> Virtual consultations, wearable sensors.</li>
-<li><strong>Genomics and Personalized Healthcare:</strong> Genetic screening, personalized care planning.</li>
-<li><strong>Sustainability and Eco-Nursing:</strong> Green practices, waste segregation, climate-sensitive care.</li>
-<li><strong>Cultural Competence:</strong> Multilingual communication, inclusive care, global health missions.</li>
-</ul>
-
-<h2>III. Emerging Roles</h2>
-<ul>
-<li><strong>Nurse Informatics:</strong> Manages electronic records and health IT systems.</li>
-<li><strong>Nurse Practitioner (NP):</strong> Primary care, diagnosis, prescriptions with greater autonomy.</li>
-<li><strong>Nurse Researcher:</strong> Leads evidence-based research and innovation.</li>
-<li><strong>Nurse Entrepreneur:</strong> Develops innovative healthcare products and start-ups.</li>
-<li><strong>Nurse Futurist:</strong> Anticipates emerging healthcare trends and advises on strategic planning.</li>
-<li><strong>Nurse Life-Care Planner:</strong> Develops long-term care strategies for chronic conditions.</li>
-</ul>
-
-<h2>IV. Education for Futuristic Nursing</h2>
-<ul>
-<li>Curriculum updates integrating AI, robotics, genomics, telehealth, digital ethics</li>
-<li>Interdisciplinary learning with IT professionals, biomedical engineers, geneticists</li>
-<li>Simulation-based and experiential learning with VR/AR labs</li>
-<li>Emphasis on lifelong professional development and micro-credentials</li>
-</ul>
-
-<h2>V. Challenges</h2>
-<ul>
-<li>Technological inequity between urban and rural settings</li>
-<li>Resistance to change and fear of job displacement</li>
-<li>Gaps in training infrastructure and qualified trainers</li>
-<li>Ethical, legal, and privacy issues in AI-assisted care</li>
-<li>High cost of technology implementation</li>
-</ul>
-
-<h2>VI. Role of Nurses in Shaping the Future</h2>
-<ul>
-<li>Health policy advocacy and representation in regulatory bodies</li>
-<li>Leading hospital digital transformations and quality improvement</li>
-<li>Innovation and design thinking for new care delivery models</li>
-<li>Clinical research and evidence generation</li>
-<li>Mentorship and capacity building for emerging areas</li>
-</ul>
-
-<div class="highlight-box"><strong>Conclusion:</strong> Futuristic nursing envisions a dynamic and transformative future by integrating advanced technologies, interdisciplinary knowledge, personalized care strategies, and expanded practice roles. With a strong foundation in technology, ethics, leadership, and human-centered care, futuristic nurses will play a crucial role in shaping global health outcomes.</div>
-`,
-
-            // --- CHAPTER 2: Healthcare Delivery ---
-            2: `
-                <h1>Unit 2: Healthcare Delivery</h1>
-                <p><em>Paste the full content of your Chapter 2 PDF here...</em></p>
-            `,
-
-            // --- CHAPTER 3: Genetics ---
-            3: `
-                <h1>Unit 3: Genetics</h1>
-                <p><em>Paste the full content of your Chapter 3 PDF here...</em></p>
-            `,
-
-            // --- CHAPTER 4: Epidemiology ---
-            4: `
-                <h1>Unit 4: Epidemiology</h1>
-                <p><em>Paste the full content of your Chapter 4 PDF here...</em></p>
-            `,
-
-            // --- CHAPTER 5: Biopsycho Social Pathology ---
-            5: `
-                <h1>Unit 5: Biopsycho Social Pathology</h1>
-                <p><em>Paste the full content of your Chapter 5 PDF here...</em></p>
-            `,
-
-            // --- CHAPTER 6: Philosophy and Theories ---
-            6: `
-                <h1>Unit 6: Philosophy and Theories</h1>
-                <p><em>Paste the full content of your Chapter 6 PDF here...</em></p>
-            `,
-
-            // --- CHAPTER 7: Nursing Process Approach I ---
-            7: `
-                <h1>Unit 7: Nursing Process Approach I</h1>
-                <p><em>Paste the full content of your Chapter 7 PDF here...</em></p>
-            `,
-
-            // --- CHAPTER 8: Nursing Process Approach II ---
-            8: `
-                <h1>Unit 8: Nursing Process Approach II</h1>
-                <p><em>Paste the full content of your Chapter 8 PDF here...</em></p>
-            `,
-
-            // --- CHAPTER 9: Nursing Practice ---
-            9: `
-                <h1>Unit 9: Nursing Practice</h1>
-                <p><em>Paste the full content of your Chapter 9 PDF here...</em></p>
-            `,
-
-            // --- CHAPTER 10: Computer Applications ---
-            10: `
-                <h1>Unit 10: Computer Applications</h1>
-                <p><em>Paste the full content of your Chapter 10 PDF here...</em></p>
-            `,
-
-            // --- PYQ SECTIONS ---
-            "pyq_jan2024": `
-                <h1>Previous Year Questions — January 2024</h1>
-                <p><em>Paste PYQ January 2024 content here...</em></p>
-            `,
-            "pyq_jun2023": `
-                <h1>Previous Year Questions — June 2023</h1>
-                <p><em>Paste PYQ June 2023 content here...</em></p>
-            `,
-            "pyq_feb2023": `
-                <h1>Previous Year Questions — February 2023</h1>
-                <p><em>Paste PYQ February 2023 content here...</em></p>
-            `,
-            "pyq_may2022": `
-                <h1>Previous Year Questions — May 2022</h1>
-                <p><em>Paste PYQ May 2022 content here...</em></p>
-            `,
-            "pyq_feb2022": `
-                <h1>Previous Year Questions — February 2022</h1>
-                <p><em>Paste PYQ February 2022 content here...</em></p>
-            `,
-            "pyq_jul2021": `
-                <h1>Previous Year Questions — July 2021</h1>
-                <p><em>Paste PYQ July 2021 content here...</em></p>
-            `,
-            "pyq_nov2020": `
-                <h1>Previous Year Questions — November 2020</h1>
-                <p><em>Paste PYQ November 2020 content here...</em></p>
-            `
-        };
-
-
-        // =====================================================================
-        // 2. QUIZ DATA — All quizzes preserved exactly as original
-        // =====================================================================
-        const QUIZ_DATA = {
-            1: [
-                { q: "Which of the following is a primary characteristic of a profession?", o: ["High salary", "Specialized body of knowledge", "Working in a hospital", "Following orders"], a: 1 },
-                { q: "The Code of Ethics for nurses is established by:", o: ["Hospital Management", "International Council of Nurses (ICN)", "Patients", "Doctors"], a: 1 },
-                { q: "Professional autonomy in nursing means:", o: ["Working without a doctor", "Authority to make decisions within the scope of practice", "Ignoring hospital policy", "Scheduling own shifts"], a: 1 },
-                { q: "Accountability in nursing practice refers to:", o: ["Financial responsibility", "Answering for one's own actions", "Counting equipment", "Reporting to seniors only"], a: 1 },
-                { q: "Evidence-Based Practice (EBP) integrates:", o: ["Clinical expertise, patient values, and research evidence", "Old traditions", "Doctor's orders only", "Textbook knowledge only"], a: 0 },
-                { q: "The Indian Nursing Council (INC) was established in:", o: ["1920", "1935", "1947", "1960"], a: 2 },
-                { q: "Florence Nightingale is known as the founder of modern nursing due to her work during:", o: ["World War I", "Crimean War", "World War II", "American Civil War"], a: 1 },
-                { q: "The 'Dark Age of Nursing' refers to the period during:", o: ["Ancient Egypt", "The Reformation (16th century)", "World War I", "Industrial Revolution"], a: 1 },
-                { q: "Collective bargaining in nursing involves:", o: ["Individual salary negotiation", "Group negotiation for employment terms through unions", "Nurses competing for promotions", "Hospital management deciding pay alone"], a: 1 },
-                { q: "The Donabedian Model of Quality Assurance evaluates:", o: ["Only patient satisfaction", "Structure, Process, and Outcome", "Only nurse performance", "Only hospital infrastructure"], a: 1 }
-            ],
-            2: [
-                { q: "Which level of healthcare deals with complex and specialized cases?", o: ["Primary", "Secondary", "Tertiary", "Home care"], a: 2 },
-                { q: "The primary goal of the healthcare delivery system is to:", o: ["Generate profit", "Promote, restore and maintain health", "Employ nurses", "Conduct research"], a: 1 },
-                { q: "Quality Assurance in healthcare focuses on:", o: ["Reducing cost", "Maintaining standards of care", "Hiring more staff", "Speed of service"], a: 1 },
-                { q: "Telemedicine is an example of:", o: ["Traditional care", "Technological advancement in delivery", "Herbal medicine", "Surgical procedure"], a: 1 },
-                { q: "Primary Health Care implies:", o: ["Hospital care", "Essential health care made universally accessible", "ICU care", "Private clinics"], a: 1 },
-                { q: "The Alma-Ata Declaration (1978) emphasized:", o: ["Tertiary care for all", "Health for All through primary health care", "Privatization of hospitals", "Surgical advancements"], a: 1 },
-                { q: "Which agency is primarily responsible for global health policy?", o: ["UNICEF", "WHO", "Red Cross", "INC"], a: 1 },
-                { q: "Community Health Centres (CHCs) serve a population of approximately:", o: ["5,000", "30,000", "80,000–1,20,000", "5,00,000"], a: 2 },
-                { q: "The referral system in healthcare ensures:", o: ["Patients stay at primary level only", "Continuity of care from lower to higher facilities", "All patients go to tertiary hospitals", "No transfer of patients"], a: 1 },
-                { q: "Health indicators include all EXCEPT:", o: ["Infant Mortality Rate", "Life Expectancy", "GDP growth rate", "Maternal Mortality Ratio"], a: 2 }
-            ],
-            3: [
-                { q: "The basic unit of heredity is:", o: ["Cell", "Gene", "Chromosome", "Nucleus"], a: 1 },
-                { q: "Which condition is an example of a chromosomal abnormality?", o: ["Down Syndrome", "Diabetes", "Hypertension", "Malaria"], a: 0 },
-                { q: "Genetic counseling is recommended for:", o: ["All patients", "Couples with a family history of genetic disorders", "Patients with flu", "Surgical patients"], a: 1 },
-                { q: "DNA stands for:", o: ["Deoxyribonucleic Acid", "Dual Nitrogen Acid", "Direct Nucleus Acid", "None"], a: 0 },
-                { q: "Phenotype refers to:", o: ["Genetic makeup", "Physical appearance/expression of traits", "Family tree", "Mutation"], a: 1 },
-                { q: "The total number of chromosomes in a normal human cell is:", o: ["23", "44", "46", "48"], a: 2 },
-                { q: "Autosomal dominant inheritance means the condition appears when:", o: ["Both parents carry the gene", "Only one copy of the mutant gene is needed", "The gene is on the X chromosome", "Neither parent is affected"], a: 1 },
-                { q: "A pedigree chart is used to:", o: ["Track patient medications", "Map inheritance patterns in a family", "Plan nursing care", "Record vital signs"], a: 1 },
-                { q: "Turner Syndrome is characterized by:", o: ["47 chromosomes (XXY)", "45 chromosomes (45,X)", "Trisomy 21", "Normal karyotype"], a: 1 },
-                { q: "The role of a nurse in genetics includes:", o: ["Performing gene therapy", "Providing genetic counseling and education", "Prescribing genetic tests independently", "Conducting DNA sequencing"], a: 1 }
-            ],
-            4: [
-                { q: "The Epidemiological Triad consists of:", o: ["Doctor, Nurse, Patient", "Agent, Host, Environment", "Diagnosis, Treatment, Cure", "Time, Place, Person"], a: 1 },
-                { q: "Prevalence rate refers to:", o: ["New cases only", "Total existing cases at a point in time", "Death rate", "Cure rate"], a: 1 },
-                { q: "Incidence refers to:", o: ["New cases occurring in a period", "Old cases", "Total population", "Hospital admissions"], a: 0 },
-                { q: "Pandemic refers to:", o: ["Local outbreak", "Global spread of disease", "Seasonal flu", "Animal disease"], a: 1 },
-                { q: "Secondary prevention involves:", o: ["Health promotion", "Early diagnosis and treatment", "Rehabilitation", "Vaccination"], a: 1 },
-                { q: "An endemic disease is one that:", o: ["Occurs suddenly in large numbers", "Is constantly present in a region", "Spreads worldwide", "Affects only animals"], a: 1 },
-                { q: "John Snow is considered the father of:", o: ["Microbiology", "Epidemiology", "Nursing", "Surgery"], a: 1 },
-                { q: "Morbidity rate measures:", o: ["Number of deaths", "Frequency of disease in a population", "Birth rate", "Recovery rate"], a: 1 },
-                { q: "Primary prevention includes:", o: ["Screening programs", "Immunization and health education", "Surgical treatment", "Palliative care"], a: 1 },
-                { q: "A case-control study is:", o: ["Prospective in design", "Retrospective, comparing cases with controls", "A clinical trial", "An ecological study"], a: 1 }
-            ],
-            5: [
-                { q: "Biopsychosocial model considers:", o: ["Only biological factors", "Only psychological factors", "Biological, psychological, and social factors", "Economic factors only"], a: 2 },
-                { q: "Stress adaptation is:", o: ["Avoiding stress", "Physiological and psychological adjustment to change", "Ignoring problems", "Sedation"], a: 1 },
-                { q: "Crisis intervention aims to:", o: ["Provide long-term therapy", "Restore pre-crisis functioning", "Change personality", "Prescribe medication"], a: 1 },
-                { q: "Which is a psychosomatic disorder?", o: ["Fracture", "Peptic Ulcer (stress-related)", "Appendicitis", "Cataract"], a: 1 },
-                { q: "Vulnerable populations include:", o: ["Healthy adults", "Elderly, children, and poor", "Doctors", "Athletes"], a: 1 },
-                { q: "The General Adaptation Syndrome (GAS) was proposed by:", o: ["Sigmund Freud", "Hans Selye", "Abraham Maslow", "Erik Erikson"], a: 1 },
-                { q: "The three stages of GAS are:", o: ["Onset, Peak, Recovery", "Alarm, Resistance, Exhaustion", "Acute, Chronic, Terminal", "Mild, Moderate, Severe"], a: 1 },
-                { q: "Maslow's hierarchy places which need at the base?", o: ["Safety needs", "Self-actualization", "Physiological needs", "Love and belonging"], a: 2 },
-                { q: "Coping mechanisms that distort reality are called:", o: ["Adaptive coping", "Defense mechanisms", "Problem-solving", "Health promotion"], a: 1 },
-                { q: "Social determinants of health include:", o: ["Only genetics", "Income, education, and living conditions", "Only hospital facilities", "Only personal behavior"], a: 1 }
-            ],
-            6: [
-                { q: "Who is known as the founder of modern nursing?", o: ["Florence Nightingale", "Dorothea Orem", "Callista Roy", "Betty Neuman"], a: 0 },
-                { q: "Orem's theory focuses on:", o: ["Self-care deficit", "Adaptation", "Interpersonal relations", "Culture care"], a: 0 },
-                { q: "The four metaparadigms of nursing are:", o: ["Person, Environment, Health, Nursing", "Doctor, Nurse, Medicine, Hospital", "Diagnosis, Drug, Dose, Duration", "None"], a: 0 },
-                { q: "Roy's Adaptation Model views the person as:", o: ["A set of parts", "An adaptive system", "A chemical being", "Dependent only"], a: 1 },
-                { q: "Peplau's theory emphasizes:", o: ["Environment", "Interpersonal relations", "Self-care", "Energy fields"], a: 1 },
-                { q: "Nightingale's Environmental Theory focuses on:", o: ["Nurse-patient relationship", "Clean air, water, sanitation, light, and nutrition", "Self-care abilities", "Cultural care diversity"], a: 1 },
-                { q: "Leininger's theory is known as:", o: ["Self-care deficit theory", "Culture Care Diversity and Universality", "Systems Model", "Adaptation Model"], a: 1 },
-                { q: "Henderson identified how many fundamental needs of patients?", o: ["10", "12", "14", "16"], a: 2 },
-                { q: "A nursing theory serves to:", o: ["Replace medical treatment", "Guide nursing practice, education, and research", "Eliminate the need for clinical skills", "Provide legal protection only"], a: 1 },
-                { q: "Betty Neuman's model is based on:", o: ["Interpersonal relations", "Systems theory and stress reactions", "Self-care", "Transcultural nursing"], a: 1 }
-            ],
-            7: [
-                { q: "The first step of the Nursing Process is:", o: ["Diagnosis", "Assessment", "Planning", "Evaluation"], a: 1 },
-                { q: "Subjective data is:", o: ["Measured by nurse", "What the patient says/feels", "Lab results", "X-ray report"], a: 1 },
-                { q: "NANDA is responsible for:", o: ["Drug classification", "Standardizing Nursing Diagnoses", "Hospital accreditation", "Nurse salaries"], a: 1 },
-                { q: "The primary source of data is:", o: ["The patient", "Family", "Medical records", "Doctor"], a: 0 },
-                { q: "Assessment involves:", o: ["Giving meds", "Data collection", "Discharge planning", "Goal setting"], a: 1 },
-                { q: "Objective data includes:", o: ["Patient's feelings", "Patient's opinions", "Vital signs and lab reports", "Patient's beliefs"], a: 2 },
-                { q: "A nursing diagnosis differs from a medical diagnosis in that it focuses on:", o: ["Disease pathology", "Human responses to health conditions", "Prescribing medications", "Ordering lab tests"], a: 1 },
-                { q: "Which is a method of data collection in assessment?", o: ["Medication administration", "Interview, observation, and physical examination", "Discharge planning", "Goal evaluation"], a: 1 },
-                { q: "Validation of data means:", o: ["Documenting all findings", "Confirming data accuracy through multiple sources", "Deleting incorrect information", "Sharing data with family"], a: 1 },
-                { q: "The nursing process is best described as:", o: ["A one-time event", "A systematic, dynamic, and cyclical process", "Only used in hospitals", "A medical procedure"], a: 1 }
-            ],
-            8: [
-                { q: "SMART goals in planning stand for:", o: ["Specific, Measurable, Achievable, Relevant, Time-bound", "Simple, More, Active, Real, True", "Standard, Medical, Action, Right, Time", "None"], a: 0 },
-                { q: "Implementation phase involves:", o: ["Collecting data", "Carrying out nursing interventions", "Writing diagnosis", "Checking outcomes"], a: 1 },
-                { q: "Evaluation determines:", o: ["Cost of care", "If goals were met", "Nurse's schedule", "Diagnosis accuracy"], a: 1 },
-                { q: "Collaborative interventions involve:", o: ["Nurse only", "Nurse working with other health team members", "Patient only", "Family only"], a: 1 },
-                { q: "Documentation of care is essential for:", o: ["Legal protection and continuity of care", "Increasing salary", "Wasting time", "Decoration"], a: 0 },
-                { q: "Priority setting in planning is based on:", o: ["Nurse's convenience", "Maslow's hierarchy and patient urgency", "Alphabetical order of diagnoses", "Doctor's preference only"], a: 1 },
-                { q: "Independent nursing interventions are actions that:", o: ["Require a physician's order", "Nurses perform based on their own judgment and knowledge", "Are done by technicians", "Need administrative approval"], a: 1 },
-                { q: "A short-term goal is typically expected to be met within:", o: ["1 year", "Hours to a few days", "6 months", "After discharge only"], a: 1 },
-                { q: "Reassessment during evaluation may lead to:", o: ["Termination of all care", "Modification of the care plan", "Ignoring new findings", "Discharging the patient immediately"], a: 1 },
-                { q: "NIC stands for:", o: ["Nursing International Council", "Nursing Interventions Classification", "National Infection Control", "Nurse In Charge"], a: 1 }
-            ],
-            9: [
-                { q: "Holistic nursing care addresses:", o: ["Only physical body", "Mind, body, and spirit", "Only symptoms", "Only disease"], a: 1 },
-                { q: "Alternative modalities include:", o: ["Surgery", "Antibiotics", "Yoga and Meditation", "Radiation"], a: 2 },
-                { q: "Expanded role of a nurse includes:", o: ["Bedside care only", "Nurse Practitioner/Researcher", "Receptionist", "Technician"], a: 1 },
-                { q: "Progressive Patient Care (PPC) organizes care based on:", o: ["Patient's ability to pay", "Degree of illness and care needs", "Age", "Gender"], a: 1 },
-                { q: "Triage is used to:", o: ["Diagnose", "Prioritize patients based on severity", "Discharge patients", "Administer drugs"], a: 1 },
-                { q: "Complementary therapy is used:", o: ["As a replacement for conventional treatment", "Alongside conventional medical treatment", "Only for terminal patients", "Only in rural areas"], a: 1 },
-                { q: "Patient-centered care emphasizes:", o: ["Hospital protocols above all", "Respecting patient preferences, values, and needs", "Following nurse's convenience", "Reducing hospital stay only"], a: 1 },
-                { q: "The scope of nursing practice is defined by:", o: ["Individual hospitals only", "Nursing Practice Acts and regulatory bodies", "Patients themselves", "Pharmaceutical companies"], a: 1 },
-                { q: "Palliative care focuses on:", o: ["Curing the disease", "Relieving suffering and improving quality of life", "Surgical intervention", "Diagnostic procedures"], a: 1 },
-                { q: "Interprofessional collaboration in nursing means:", o: ["Nurses working alone", "Nurses working with doctors, therapists, and other professionals as a team", "Only doctors making decisions", "Patients managing their own care"], a: 1 }
-            ],
-            10: [
-                { q: "EHR stands for:", o: ["Electronic Health Record", "Emergency Health Room", "Early Heart Rate", "Electric Hospital Record"], a: 0 },
-                { q: "Telenursing involves:", o: ["Nursing on TV", "Providing care via telecommunication technology", "Repairing telephones", "None"], a: 1 },
-                { q: "A major concern in computerized patient records is:", o: ["Speed", "Legibility", "Privacy and Confidentiality", "Storage space"], a: 2 },
-                { q: "NIS stands for:", o: ["Nurse In School", "Nursing Information System", "National Immunization Schedule", "None"], a: 1 },
-                { q: "CPOE (Computerized Physician Order Entry) helps reduce:", o: ["Medication errors", "Nursing staff", "Electricity bill", "Patient wait time"], a: 0 },
-                { q: "Health informatics combines healthcare science with:", o: ["Agriculture", "Information technology", "Mechanical engineering", "Architecture"], a: 1 },
-                { q: "A Hospital Management Information System (HMIS) is used for:", o: ["Patient entertainment", "Managing hospital operations and patient data", "Social media", "Nurse recruitment only"], a: 1 },
-                { q: "The advantage of digital health records over paper records includes:", o: ["Higher cost always", "Easy retrieval, sharing, and reduced errors", "Requires no training", "Cannot be updated"], a: 1 },
-                { q: "Artificial Intelligence (AI) in nursing can assist with:", o: ["Replacing nurses entirely", "Clinical decision support and patient monitoring", "Performing surgery", "Legal documentation only"], a: 1 },
-                { q: "Cybersecurity in healthcare is important to:", o: ["Increase internet speed", "Protect patient data from unauthorized access", "Reduce nurse workload", "Improve hospital aesthetics"], a: 1 }
-            ]
-        };
-
-
-        // =====================================================================
-        // 3. APP LOGIC
-        // =====================================================================
-
-        function toggleUnit(header) {
-            const content = header.nextElementSibling;
-            const isExpanded = header.getAttribute('aria-expanded') === 'true';
-            header.setAttribute('aria-expanded', !isExpanded);
-            content.classList.toggle('active');
-        }
-
-        function openNotes(key) {
-            const content = NOTES_DATA[key];
-            if (!content) {
-                alert('Notes for this section are coming soon!');
-                return;
-            }
-
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-
-            let title = 'Notes';
-            if (key === 'syllabus') title = 'ANP Syllabus';
-            else if (typeof key === 'number') title = `Unit ${key} — Detailed Notes`;
-            else title = key.replace(/_/g, ' ').toUpperCase();
-
-            titleEl.textContent = title;
-            modal.style.display = 'flex';
-            body.style.display = 'block';
-            body.scrollTop = 0;
-            body.innerHTML = `<div class="notes-viewer">${content}</div>`;
-        }
-
-        function openQuiz(unitId) {
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = `Quiz: Unit ${unitId}`;
-            modal.style.display = 'flex';
-            
-            body.style.display = 'block';
-            body.scrollTop = 0; 
-            
-            const questions = QUIZ_DATA[unitId] || [];
-            
-            let quizHtml = `<div class="quiz-container">`;
-            questions.forEach((q, idx) => {
-                quizHtml += `
-                    <div class="quiz-question">${idx + 1}. ${q.q}</div>
-                    <div class="quiz-options" id="q-${idx}">
-                        ${q.o.map((opt, oIdx) => `
-                            <div class="quiz-option" onclick="checkAnswer(this, ${idx}, ${oIdx}, ${q.a})">${opt}</div>
-                        `).join('')}
-                    </div>
-                `;
-            });
-            
-            if(questions.length === 0) quizHtml += `<p>Quiz coming soon!</p>`;
-            
-            quizHtml += `</div>`;
-            body.innerHTML = quizHtml;
-        }
-
-        function checkAnswer(el, qIdx, oIdx, correctIdx) {
-            const parent = document.getElementById(`q-${qIdx}`);
-            const opts = parent.children;
-            for(let opt of opts) opt.style.pointerEvents = 'none';
-
-            if(oIdx === correctIdx) {
-                el.classList.add('correct');
-            } else {
-                el.classList.add('wrong');
-                opts[correctIdx].classList.add('correct');
-            }
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            modal.style.display = 'none';
-            body.innerHTML = '';
-        }
-    </script>
+  </div>
+
+  <!-- U3 -->
+  <div class="uc" id="u3" data-open="false">
+    <button class="ubtn" onclick="tog('u3')">
+      <div class="upill"><span>03</span></div>
+      <div class="uinfo"><div class="uname">Genetics</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u3">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/152qt5G1PfFV7tg-RhoazBfZkqpKQmoGH/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(3)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- U4 -->
+  <div class="uc" id="u4" data-open="false">
+    <button class="ubtn" onclick="tog('u4')">
+      <div class="upill"><span>04</span></div>
+      <div class="uinfo"><div class="uname">Epidemiology</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u4">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1AvBqfqJsaSKqFQTl5FEmYnqTgHFawC0a/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(4)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- U5 -->
+  <div class="uc" id="u5" data-open="false">
+    <button class="ubtn" onclick="tog('u5')">
+      <div class="upill"><span>05</span></div>
+      <div class="uinfo"><div class="uname">Biopsychosocial Pathology</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u5">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1NJEDSscp5utagDlRv1Al6fO4Tfh_7oFa/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(5)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- U6 -->
+  <div class="uc" id="u6" data-open="false">
+    <button class="ubtn" onclick="tog('u6')">
+      <div class="upill"><span>06</span></div>
+      <div class="uinfo"><div class="uname">Philosophy &amp; Theories of Nursing</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u6">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1g3ST8agz0Ihnb1LzsDxpXilAjiKWBoh4/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(6)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- U7 -->
+  <div class="uc" id="u7" data-open="false">
+    <button class="ubtn" onclick="tog('u7')">
+      <div class="upill"><span>07</span></div>
+      <div class="uinfo"><div class="uname">Nursing Process Approach I</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u7">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1ftELNhUIjdxwacwHlOSLHByIn_t-4_cU/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(7)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- U8 -->
+  <div class="uc" id="u8" data-open="false">
+    <button class="ubtn" onclick="tog('u8')">
+      <div class="upill"><span>08</span></div>
+      <div class="uinfo"><div class="uname">Nursing Process Approach II</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u8">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1jTCWem1HnoWBhheQRD_2gp85G_NbVLrS/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(8)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- U9 -->
+  <div class="uc" id="u9" data-open="false">
+    <button class="ubtn" onclick="tog('u9')">
+      <div class="upill"><span>09</span></div>
+      <div class="uinfo"><div class="uname">Nursing Practice</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u9">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1CjmeSesoUWXIaZQtaWX5hlIJ79E_3yaM/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(9)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- U10 -->
+  <div class="uc" id="u10" data-open="false">
+    <button class="ubtn" onclick="tog('u10')">
+      <div class="upill"><span>10</span></div>
+      <div class="uinfo"><div class="uname">Computer Applications in Patient Care &amp; Nursing</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u10">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1lTd8rpmVkqLkkBGWYlozXXRFaxVgqIL0/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(10)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PYQ -->
+  <div class="divider" style="margin-top:20px"><span>Previous Year Questions</span></div>
+  <div class="uc" id="upyq" data-open="false">
+    <button class="ubtn" onclick="tog('upyq')">
+      <div class="upill"><span style="font-size:.58rem">PYQ</span></div>
+      <div class="uinfo"><div class="uname">Previous Year Papers</div><div class="umeta">7 exam papers</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-upyq">
+      <div class="pyq-grid">
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1O-e4QB72WtGSEBD7uAmnmKoVaCYUe0KS/view')">
+          <div class="rico">📄</div><div class="rtxt">Jan 2024<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/15d7Ia6KSpulCT_Bi3dBMC8-EmnUhy7lU/view')">
+          <div class="rico">📄</div><div class="rtxt">Jun 2023<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1StOx-24Ded-1gf4CYsACLwv0qUJn3-wr/view')">
+          <div class="rico">📄</div><div class="rtxt">Feb 2023<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1PY3MjW4C2gfSKEXwH2-LnOcMSysy-o_h/view')">
+          <div class="rico">📄</div><div class="rtxt">May 2022<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1X4vQDEf9L8tyOv-CHfakN9pS8O5KU7pb/view')">
+          <div class="rico">📄</div><div class="rtxt">Feb 2022<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/16tR7wIoARm3ms-znhhrUqV-yzviLndc8/view')">
+          <div class="rico">📄</div><div class="rtxt">Jul 2021<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1fN5CrTClxPAWlDikDUdifpdhFFavSU6t/view')">
+          <div class="rico">📄</div><div class="rtxt">Nov 2020<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- QUIZ BOTTOM SHEET -->
+<div class="qoverlay" id="qmodal">
+  <div class="qscrim" onclick="closeQuiz()"></div>
+  <div class="qpanel">
+    <div class="qhead">
+      <div class="qhead-top">
+        <div class="qtitle" id="qtitle">Quiz</div>
+        <button class="qclose" onclick="closeQuiz()">✕</button>
+      </div>
+      <div class="qpips" id="qpips"></div>
+    </div>
+    <div class="qbody" id="qbody"></div>
+  </div>
+</div>
+
+<script>
+function goBackToApp() {
+  // If inside the EziNurse app iframe, tell the parent to navigate back
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage({ action: 'goBack' }, '*');
+  } else {
+    history.back();
+  }
+}
+
+function openPDF(url) {
+  const clean = url.replace(/\/preview.*$/,'').replace(/\/view.*$/,'') + '/view';
+  window.open(clean, '_blank');
+}
+
+function tog(id) {
+  const card = document.getElementById(id);
+  const body = document.getElementById('b-' + id);
+  const open = card.dataset.open === 'true';
+  card.dataset.open = String(!open);
+  body.classList.toggle('open', !open);
+}
+
+const QD = {
+1:[
+  {q:"Nursing was first recognized as a profession by:",o:["Florence Nightingale","Abraham Flexner","Lillian Wald","Virginia Henderson"],a:0},
+  {q:"Which of the following is NOT a characteristic of a profession?",o:["Specialized knowledge base","Code of ethics","Profit-driven practice","Autonomy"],a:2},
+  {q:"The International Council of Nurses (ICN) was founded in:",o:["1889","1899","1909","1919"],a:1},
+  {q:"Nursing licensure primarily serves to:",o:["Increase nurse salaries","Protect the public","Limit nursing practice","Control hospital staffing"],a:1},
+  {q:"Professional socialization in nursing refers to:",o:["Joining social media groups","Acquiring values, attitudes and behaviors of the profession","Attending parties with colleagues","Hospital orientation only"],a:1},
+  {q:"Which organization regulates nursing practice in India?",o:["IMA","Indian Nursing Council (INC)","WHO","AIIMS"],a:1},
+  {q:"A code of ethics in nursing primarily provides:",o:["Legal protection for nurses","Moral guidance for practice","Financial benefits","Administrative rules"],a:1},
+  {q:"Continuing nursing education (CNE) is important because it:",o:["Increases salary automatically","Ensures nurses maintain and update competence","Is mandatory for promotions only","Replaces basic nursing education"],a:1},
+  {q:"The concept of 'expanded role' of nurses refers to:",o:["Working extra hours","Taking on additional clinical responsibilities beyond traditional scope","Supervising housekeeping","Managing hospital finances"],a:1},
+  {q:"Which nursing theorist defined nursing as 'the diagnosis and treatment of human responses to actual or potential health problems'?",o:["Florence Nightingale","Virginia Henderson","American Nurses Association (ANA)","Dorothea Orem"],a:2}
+],
+2:[
+  {q:"The primary level of healthcare focuses on:",o:["Curative care","Preventive and promotive care","Rehabilitative care","Palliative care"],a:1},
+  {q:"AYUSH stands for:",o:["Ayurveda, Yoga, Unani, Siddha, Homeopathy","Asian Youth Universal System of Health","Ayurvedic Youth Universal Standard of Healing","None of the above"],a:0},
+  {q:"The Alma Ata Declaration (1978) emphasized:",o:["Hospital-based care","Primary Health Care for all","Specialized surgical care","Mental health reform"],a:1},
+  {q:"District hospitals in India are categorized under which level of healthcare?",o:["Primary","Secondary","Tertiary","Quaternary"],a:1},
+  {q:"ASHA workers function at which level of healthcare?",o:["District level","Sub-district level","Village/community level","State level"],a:2},
+  {q:"The National Health Policy of India was most recently revised in:",o:["2002","2010","2017","2020"],a:2},
+  {q:"Universal Health Coverage (UHC) ensures:",o:["Free medicines only","Access to quality essential health services without financial hardship","Only government hospital access","Free surgery for all"],a:1},
+  {q:"The concept of 'continuum of care' means:",o:["Providing care continuously for 24 hours","Integrated services across all levels from prevention to rehabilitation","Giving the same treatment repeatedly","Working in multiple hospitals"],a:1},
+  {q:"Ayushman Bharat PM-JAY provides health coverage up to:",o:["₹1 lakh per family","₹5 lakh per family per year","₹10 lakh per individual","₹50,000 per family"],a:1},
+  {q:"The sub-centre in India serves a population of approximately:",o:["1,000","3,000–5,000","10,000","30,000"],a:1}
+],
+3:[
+  {q:"DNA is made up of nucleotides containing:",o:["Ribose sugar","Deoxyribose sugar","Fructose","Galactose"],a:1},
+  {q:"Down syndrome is caused by trisomy of chromosome:",o:["18","21","13","X"],a:1},
+  {q:"Autosomal dominant inheritance means:",o:["Only females are affected","One copy of the mutated gene causes the disorder","Two copies are needed","Only males are affected"],a:1},
+  {q:"Sickle cell anemia follows which inheritance pattern?",o:["Autosomal dominant","X-linked recessive","Autosomal recessive","X-linked dominant"],a:2},
+  {q:"The Human Genome Project was completed in:",o:["1990","2000","2003","2010"],a:2},
+  {q:"Karyotyping is used to:",o:["Measure blood pressure","Analyze chromosome number and structure","Test blood sugar","Assess kidney function"],a:1},
+  {q:"A carrier in genetics is a person who:",o:["Has the disease","Carries one copy of a recessive gene without showing symptoms","Always passes the disease to children","Has two copies of a dominant gene"],a:1},
+  {q:"Genetic counseling helps families:",o:["Cure genetic diseases","Understand risks and make informed reproductive decisions","Avoid vaccination","Get financial support"],a:1},
+  {q:"Phenylketonuria (PKU) is caused by deficiency of:",o:["Insulin","Phenylalanine hydroxylase","Thyroxine","Growth hormone"],a:1},
+  {q:"Amniocentesis is typically performed at:",o:["8–10 weeks","15–20 weeks","28–30 weeks","After 35 weeks"],a:1}
+],
+4:[
+  {q:"Epidemiology is defined as the study of:",o:["Individual patient diseases","Distribution and determinants of health and disease in populations","Hospital infections only","Drug effects"],a:1},
+  {q:"Incidence rate measures:",o:["Existing cases in a population at a point in time","New cases occurring in a population over a specified period","Death rate","Recovery rate"],a:1},
+  {q:"Prevalence rate measures:",o:["New cases only","All existing cases (old + new) at a given time","Mortality only","Vaccination coverage"],a:1},
+  {q:"The 'epidemiological triad' consists of:",o:["Doctor, Nurse, Patient","Agent, Host, Environment","Prevention, Treatment, Rehabilitation","Primary, Secondary, Tertiary care"],a:1},
+  {q:"Herd immunity is achieved when:",o:["All members of a community are vaccinated","Enough of the population is immune to interrupt disease transmission","Only children are immunized","A new vaccine is developed"],a:1},
+  {q:"A cohort study follows:",o:["People with disease backward to find cause","Disease-free people forward in time to observe who develops disease","Only hospitalized patients","A random sample once"],a:1},
+  {q:"A case-control study compares:",o:["Two treatment groups","People with a disease (cases) to people without (controls)","Vaccinated vs unvaccinated countries","Nurses vs doctors"],a:1},
+  {q:"Attack rate is used primarily in:",o:["Chronic disease surveillance","Outbreak/epidemic investigation","Cancer registries","Mental health studies"],a:1},
+  {q:"The R0 (basic reproduction number) represents:",o:["Recovery rate","Average number of secondary cases one case generates in a fully susceptible population","Mortality rate","Vaccination coverage needed"],a:1},
+  {q:"Surveillance in epidemiology means:",o:["Police monitoring","Ongoing systematic collection, analysis and interpretation of health data","One-time surveys","Random sampling"],a:1}
+],
+5:[
+  {q:"The biopsychosocial model was proposed by:",o:["Sigmund Freud","George Engel","Abraham Maslow","Carl Rogers"],a:1},
+  {q:"In the biopsychosocial model, 'psycho' refers to:",o:["Brain anatomy","Mental processes including thoughts, emotions and behavior","Pharmaceutical drugs","Physical symptoms"],a:1},
+  {q:"Stress-diathesis model suggests that mental illness results from:",o:["Only genetic factors","Only environmental stress","Interaction between biological vulnerability and environmental stress","Nutritional deficiency alone"],a:2},
+  {q:"Secondary gain in illness behavior refers to:",o:["Financial compensation from insurance","Psychological or social benefits derived from being sick","A drug side effect","Improved physical health"],a:1},
+  {q:"Somatization disorder is characterized by:",o:["Medically explained physical symptoms","Multiple physical complaints not fully explained by organic pathology","Purely psychological symptoms","Drug addiction"],a:1},
+  {q:"The 'sick role' concept was introduced by:",o:["Freud","Parsons","Maslow","Erikson"],a:1},
+  {q:"Psychoneuroimmunology studies the relationship between:",o:["Drugs and the nervous system","Psychological processes, the nervous system, and immunity","Brain tumors and psychology","Nutrition and mental health"],a:1},
+  {q:"Which of the following is a psychosocial factor affecting health?",o:["Blood group","Social support and relationships","Chromosome number","Height"],a:1},
+  {q:"Munchausen syndrome involves:",o:["Deliberately inducing or fabricating illness for sympathy/attention","Fear of illness","Excessive healthy behavior","Addiction to painkillers"],a:0},
+  {q:"The holistic approach to patient care considers:",o:["Physical symptoms only","Physical, psychological, social and spiritual dimensions","Lab results only","Surgical needs only"],a:1}
+],
+6:[
+  {q:"Florence Nightingale's Environmental Theory emphasizes:",o:["Drug therapy","Manipulation of the environment to aid recovery","Psychological care only","Community health"],a:1},
+  {q:"Virginia Henderson defined nursing's unique function as:",o:["Following doctor's orders","Assisting individuals to perform activities contributing to health they would perform unaided if able","Providing medications","Conducting research"],a:1},
+  {q:"Dorothea Orem's Self-Care Deficit Theory focuses on:",o:["Family-centered care","Patients' ability or inability to meet their own self-care needs","Hospital management","Environmental factors"],a:1},
+  {q:"Sister Callista Roy's Adaptation Model views the person as:",o:["A machine","An adaptive system responding to environmental stimuli","A passive recipient of care","A spiritual being only"],a:1},
+  {q:"Betty Neuman's Systems Model centers on:",o:["Self-care","The client system and lines of defense against stressors","Nursing process only","Cultural care"],a:1},
+  {q:"Madeleine Leininger is known for:",o:["Environmental theory","Transcultural Nursing and Culture Care Theory","Self-care deficit theory","Adaptation model"],a:1},
+  {q:"Jean Watson's Theory of Human Caring emphasizes:",o:["Technical nursing skills","Caring as the essence of nursing and a moral ideal","Disease management","Hospital administration"],a:1},
+  {q:"Martha Rogers' Science of Unitary Human Beings views humans as:",o:["Biological machines","Irreducible, indivisible energy fields in continuous interaction with the environment","Passive recipients of care","Disease entities"],a:1},
+  {q:"A nursing theory is considered 'grand theory' when it:",o:["Applies to one clinical situation","Provides broad, abstract perspectives applicable to all of nursing","Is evidence-based","Is used only in ICU"],a:1},
+  {q:"The metaparadigm of nursing consists of four concepts:",o:["Nurse, Doctor, Patient, Hospital","Person, Health, Environment, Nursing","Assessment, Diagnosis, Planning, Evaluation","Prevention, Treatment, Recovery, Discharge"],a:1}
+],
+7:[
+  {q:"The nursing process is a:",o:["Fixed hospital protocol","Systematic problem-solving framework for nursing care","Medical diagnosis system","Drug administration procedure"],a:1},
+  {q:"The first step of the nursing process is:",o:["Planning","Implementation","Assessment","Evaluation"],a:2},
+  {q:"A nursing diagnosis differs from a medical diagnosis in that it:",o:["Requires lab tests","Focuses on human responses to health problems","Identifies disease pathology","Is made by doctors"],a:1},
+  {q:"NANDA stands for:",o:["North American Nursing Diagnosis Association","National Association of Nursing and Diagnostic Analysis","Nursing and Diagnostic Assessment","None of the above"],a:0},
+  {q:"A correctly written nursing diagnosis (PES format) includes:",o:["Problem only","Problem, Etiology, Signs/Symptoms","Plan, Evaluation, Summary","Patient, Environment, Support"],a:1},
+  {q:"Which type of nursing diagnosis describes a potential problem the patient does not yet have?",o:["Actual nursing diagnosis","Risk nursing diagnosis","Wellness nursing diagnosis","Syndrome nursing diagnosis"],a:1},
+  {q:"In nursing care planning, goals/outcomes should be:",o:["Vague and broad","SMART (Specific, Measurable, Achievable, Realistic, Time-bound)","Set by nurses alone without patient input","Same for all patients"],a:1},
+  {q:"The planning phase of the nursing process involves:",o:["Collecting data","Setting priorities and writing nursing orders","Giving medications","Reviewing outcomes"],a:1},
+  {q:"Critical pathways in nursing are:",o:["Hospital corridors","Standardized, multidisciplinary care plans for specific conditions","Emergency evacuation routes","ICU protocols only"],a:1},
+  {q:"The evaluation phase of the nursing process determines:",o:["Patient's diagnosis","Whether patient outcomes have been achieved","Drug dosages","Discharge date"],a:1}
+],
+8:[
+  {q:"The implementation phase of the nursing process involves:",o:["Writing care plans","Carrying out nursing interventions","Collecting health history","Setting goals"],a:1},
+  {q:"Independent nursing interventions are actions that:",o:["Require a doctor's order","Nurses initiate based on their own knowledge and judgment","Are performed only by senior nurses","Require pharmacist approval"],a:1},
+  {q:"Collaborative nursing interventions require:",o:["Only nursing judgment","Cooperation with other healthcare team members","Patient approval only","Administrative permission"],a:1},
+  {q:"Documentation of nursing care is important because:",o:["It increases nurse salaries","It provides legal evidence, ensures continuity and supports evaluation","It replaces verbal communication","It is done only for billing"],a:1},
+  {q:"SOAP notes stand for:",o:["Symptoms, Orders, Actions, Plan","Subjective, Objective, Assessment, Plan","Summary, Observation, Analysis, Procedure","Signs, Outcomes, Activities, Progress"],a:1},
+  {q:"Nursing rounds are conducted to:",o:["Inspect hospital cleanliness","Assess patient condition, evaluate care and promote communication","Count medications","Train new staff only"],a:1},
+  {q:"Prioritization of nursing care is best guided by:",o:["Patient preference only","Maslow's hierarchy of needs","Alphabetical order of diagnoses","Time available"],a:1},
+  {q:"Discharge planning should begin:",o:["On the day of discharge","At admission","After surgery only","When doctor orders it"],a:1},
+  {q:"A nursing audit evaluates:",o:["Doctor's performance","Quality of nursing care provided through record review","Hospital finances","Drug inventory"],a:1},
+  {q:"Reflective practice in nursing means:",o:["Looking in a mirror","Critically analyzing one's own clinical experiences to improve practice","Documenting care","Attending lectures"],a:1}
+],
+9:[
+  {q:"Evidence-based nursing practice (EBNP) integrates:",o:["Tradition and routine only","Best research evidence, clinical expertise and patient preferences","Hospital policies only","Doctor's orders only"],a:1},
+  {q:"Clinical governance in nursing refers to:",o:["Financial management","A framework for continuous improvement in quality and accountability of patient care","Staff scheduling","Drug procurement"],a:1},
+  {q:"The Nurse Practitioner (NP) role includes:",o:["Administrative duties only","Advanced clinical practice including diagnosis and prescribing","Basic bedside care only","Housekeeping supervision"],a:1},
+  {q:"Scope of practice for nurses is defined by:",o:["Individual nurses","State/national nursing councils and legislation","Hospital management alone","Patients"],a:1},
+  {q:"Mentorship in nursing means:",o:["Strictly evaluating students","An experienced nurse guiding and supporting a less experienced nurse's professional development","Teaching theory classes only","Supervising clinical procedures"],a:1},
+  {q:"Professional accountability in nursing means:",o:["Being responsible only to employers","Answering for one's professional actions and decisions to patients, profession and public","Following only hospital rules","Avoiding documentation"],a:1},
+  {q:"Telehealth nursing involves:",o:["Telephone billing","Using technology to deliver nursing care and health information remotely","Hospital IT management","Social media use"],a:1},
+  {q:"The primary goal of palliative nursing care is:",o:["Curative treatment","Improving quality of life by relieving suffering for patients with life-limiting illness","Aggressive life prolongation","Surgical intervention"],a:1},
+  {q:"Cultural competence in nursing requires:",o:["Treating all patients identically","Understanding and respecting diverse cultural beliefs in providing care","Speaking multiple languages only","Avoiding cultural topics"],a:1},
+  {q:"Nursing informatics integrates nursing science with:",o:["Architecture","Information and communication sciences to manage nursing data","Business studies","Law"],a:1}
+],
+10:[
+  {q:"HIS in hospital computing stands for:",o:["Health Information System","Hospital Information System","Healthcare Interface Software","Human Identification System"],a:1},
+  {q:"Electronic Health Records (EHR) differ from paper records by:",o:["Being less accurate","Providing real-time, patient-centered records accessible to authorized users","Being available only in ICU","Containing less information"],a:1},
+  {q:"CPOE stands for:",o:["Clinical Practice Outcome Evaluation","Computerized Physician Order Entry","Central Patient Observation Equipment","Clinical Protocol for Operative Emergencies"],a:1},
+  {q:"Clinical Decision Support Systems (CDSS) help nurses by:",o:["Replacing clinical judgment","Providing evidence-based alerts, reminders and recommendations at point of care","Managing hospital finances","Scheduling staff"],a:1},
+  {q:"Telemedicine in nursing care primarily enables:",o:["Remote patient monitoring and consultation","In-person surgical assistance","Drug manufacturing","Hospital construction"],a:0},
+  {q:"HL7 in healthcare informatics is:",o:["A hospital location code","A standard for exchanging electronic health information between systems","A nursing diagnosis","A drug classification"],a:1},
+  {q:"The primary concern with digital patient data is:",o:["Data size","Privacy, confidentiality and cybersecurity","Printing costs","Screen brightness"],a:1},
+  {q:"Barcode medication administration (BCMA) helps to prevent:",o:["Patient falls","Medication errors at bedside","Equipment theft","Staff absenteeism"],a:1},
+  {q:"Simulation technology in nursing education is used to:",o:["Replace all clinical placements","Practice clinical skills in a safe, controlled environment without risk to real patients","Manage hospital databases","Schedule nursing staff"],a:1},
+  {q:"A nursing informatics specialist's primary role is to:",o:["Provide bedside care","Bridge the gap between clinical nursing practice and information technology systems","Manage payroll","Conduct surgery"],a:1}
+]
+};
+
+const LTRS=['A','B','C','D'];
+let curQuiz=null, answered=[];
+
+function openQuiz(id){
+  curQuiz=id;
+  const qs=QD[id]||[];
+  answered=new Array(qs.length).fill(null);
+  document.getElementById('qtitle').textContent='Unit '+id+' Quiz';
+  document.getElementById('qpips').innerHTML=qs.map((_,i)=>`<div class="pip" id="pip${i}"></div>`).join('');
+  let html=`<div class="qscore" id="qscore"><div><div class="qs-num" id="qsnum">—</div><div class="qs-sub">Score</div></div><div class="qs-msg" id="qsmsg"></div></div>`;
+  qs.forEach((q,qi)=>{
+    html+=`<div class="qitem" id="qi${qi}"><div class="qlbl">Question ${qi+1} of ${qs.length}</div><div class="qtext">${q.q}</div><div class="qopts">${q.o.map((opt,oi)=>`<button class="qopt" id="opt${qi}_${oi}" onclick="ans(${qi},${oi},${q.a})"><span class="qltr">${LTRS[oi]}</span>${opt}</button>`).join('')}</div></div>`;
+  });
+  document.getElementById('qbody').innerHTML=html;
+  document.getElementById('qmodal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function ans(qi,oi,correct){
+  if(answered[qi]!==null)return;
+  answered[qi]=oi;
+  const opts=document.querySelectorAll(`#qi${qi} .qopt`);
+  opts.forEach(b=>b.classList.add('lock'));
+  opts[correct].classList.add('cor');
+  if(oi!==correct)opts[oi].classList.add('wrg');
+  const pip=document.getElementById('pip'+qi);
+  pip.classList.add('ans',oi===correct?'cor':'wrg');
+  if(answered.every(a=>a!==null)){
+    const score=answered.filter((a,i)=>a===QD[curQuiz][i].a).length;
+    const total=QD[curQuiz].length;
+    const pct=Math.round(score/total*100);
+    const msgs=['📚 Keep Studying!','👍 Good Effort!','🎉 Well Done!','🏆 Perfect!'];
+    const mi=pct<50?0:pct<70?1:pct<100?2:3;
+    document.getElementById('qsnum').textContent=score+'/'+total;
+    document.getElementById('qsmsg').textContent=msgs[mi];
+    const sc=document.getElementById('qscore');
+    sc.classList.add('show');
+    sc.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+
+function closeQuiz(){
+  document.getElementById('qmodal').classList.remove('open');
+  document.body.style.overflow='';
+  curQuiz=null;
+}
+
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQuiz();});
+</script>
 </body>
 </html>
