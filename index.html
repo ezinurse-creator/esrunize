@@ -527,7 +527,8 @@ window.app = new Proxy({}, {
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+// Notice we added enableIndexedDbPersistence below
+import { getFirestore, doc, setDoc, getDoc, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDVAJZaxBjcCjWUirUXnffZv5nmM5Th1No",
@@ -541,6 +542,16 @@ const firebaseConfig = {
 const fbApp = initializeApp(firebaseConfig);
 const auth = getAuth(fbApp);
 const db = getFirestore(fbApp);
+
+// 🔥 ENABLE OFFLINE CACHING HERE TO SAVE READ QUOTA 🔥
+enableIndexedDbPersistence(db)
+    .catch((err) => {
+        if (err.code == 'failed-precondition') {
+            console.warn("Multiple tabs open, persistence can only be enabled in one open tab at a time.");
+        } else if (err.code == 'unimplemented') {
+            console.warn("The current browser does not support all of the features required to enable persistence");
+        }
+    });
 
 const _realApp = {
     currentUser: null,
