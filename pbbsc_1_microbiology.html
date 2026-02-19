@@ -1,695 +1,761 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Microbiology - Syllabus & Quizzes</title>
-    <meta name="description" content="Interactive syllabus with internal quizzes for Microbiology." />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <style>
-        :root {
-            --brand: #003B82; 
-            --accent: #00B9F2;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-700: #374151;
-            --gray-900: #111827;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-            --danger: #ef4444;
-            --success: #10b981;
-            --warning: #f59e0b;
-        }
-
-        * { box-sizing: border-box; }
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: white;
-            color: var(--gray-900);
-            line-height: 1.6;
-            padding: 24px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .syllabus-btn, .unit-header {
-            display: block;
-            width: 100%;
-            padding: 18px 24px;
-            margin: 12px 0;
-            background: var(--brand);
-            color: white;
-            font-weight: 600;
-            font-size: 16px;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.2s ease;
-        }
-        .syllabus-btn:hover, .unit-header:hover {
-            background: #002d63;
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
-        
-        .syllabus-btn.secondary { background: var(--accent); }
-        .syllabus-btn.secondary:hover { background: #009yc0; }
-
-        .unit-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-align: left;
-            margin: 16px 0;
-        }
-        .unit-header span:last-child {
-            transition: transform 0.3s ease;
-            color: #FFA500;
-        }
-        .unit-header[aria-expanded="true"] span:last-child {
-            transform: rotate(180deg);
-        }
-
-        .unit-content {
-            padding: 0 12px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.3s ease;
-        }
-        .unit-content.active {
-            padding: 24px 12px;
-            max-height: none; 
-        }
-
-        .subsection {
-            margin: 16px 0;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            border: 1px solid var(--gray-200);
-            box-shadow: var(--shadow-sm);
-            transition: box-shadow 0.2s ease;
-        }
-
-        .resource-btn {
-            display: flex;
-            align-items: flex-start;
-            width: 100%;
-            padding: 14px 18px;
-            margin: 8px 0;
-            background: var(--gray-50);
-            color: var(--gray-900);
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
-            border: 1px solid var(--gray-200);
-            transition: all 0.2s ease;
-            gap: 12px;
-            cursor: pointer;
-        }
-        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
-        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
-        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
-        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
-        .resource-btn.disabled { opacity: 0.6; cursor: not-allowed; background: #f3f4f6; color: #9ca3af; border-color: #e5e7eb; }
-
-        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
-        .icon.video-icon { color: #8b5cf6; }
-        .icon.quiz-icon { color: #f59e0b; }
-
-        /* --- MODAL --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-        }
-
-        .modal-header {
-            height: 60px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            flex-shrink: 0;
-        }
-
-        .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; }
-        
-        .btn-close {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            flex: 1;
-            background: #f3f4f6;
-            position: relative;
-            overflow-y: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .iframe-res {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #fff;
-            display: block;
-        }
-
-        /* --- QUIZ STYLES --- */
-        .quiz-container {
-            background: white;
-            width: 100%;
-            max-width: 600px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            padding: 30px;
-        }
-        .quiz-question-text {
-            font-size: 1.15rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: var(--gray-900);
-        }
-        .quiz-option {
-            padding: 15px;
-            border: 2px solid var(--gray-200);
-            border-radius: 8px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-weight: 500;
-        }
-        .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
-        
-        .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; position: relative; }
-        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
-        
-        .quiz-nav { display: flex; justify-content: space-between; margin-top: 20px; }
-        .btn-quiz { background: var(--brand); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
-
-        @media (max-width: 768px) {
-            body { padding: 16px; }
-            .unit-header, .resource-btn { font-size: 15px; }
-            .modal-body { padding: 0; }
-            .quiz-container { height: 100%; border-radius: 0; max-width: 100%; padding: 20px; }
-        }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Microbiology</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --p50:#faf5ff;--p100:#f3e8ff;--p200:#e9d5ff;--p300:#d8b4fe;
+  --p400:#c084fc;--p500:#a855f7;--p600:#9333ea;--p700:#7e22ce;
+  --p800:#6b21a8;--p900:#581c87;
+  --w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;
+  --g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;
+  --ok:#16a34a;--ok-lt:#dcfce7;--err:#dc2626;--err-lt:#fee2e2;
+  --warn:#d97706;--warn-lt:#fef3c7;
+  --r:12px;--rs:8px;
+  --s1:0 1px 3px rgba(109,40,217,.08);
+  --s2:0 4px 12px rgba(109,40,217,.12);
+  --s3:0 8px 30px rgba(109,40,217,.16);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:90;background:var(--w);border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 16px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-back{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:var(--p100);color:var(--p700);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;margin-right:12px}
+.tb-back:hover{background:var(--p200)}
+.tb-info{flex:1;min-width:0}
+.tb-title{font-size:.88rem;font-weight:700;color:var(--g900);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb-sub{font-size:.65rem;color:var(--g400);font-weight:500;margin-top:1px}
+.tb-chip{background:var(--p100);color:var(--p700);border:1px solid var(--p200);font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
+.hero{background:linear-gradient(145deg,var(--p900),var(--p700) 55%,var(--p500));padding:28px 18px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.08),transparent 50%),radial-gradient(circle at 10% 85%,rgba(255,255,255,.05),transparent 40%)}
+.hero::after{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-dot-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:.65rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border-radius:30px;margin-bottom:12px}
+.hero-eyebrow-dot{width:5px;height:5px;background:#c4b5fd;border-radius:50%}
+.hero h1{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:7px}
+.hero h1 em{color:rgba(255,255,255,.45);font-style:italic;font-weight:300}
+.hero-desc{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:18px}
+.hero-cta{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.28);color:#fff;font-size:.8rem;font-weight:700;padding:9px 16px;border-radius:9px;cursor:pointer;transition:all .2s;backdrop-filter:blur(6px)}
+.hero-cta:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
+.hero-stats{display:flex;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+.hs{flex:1;text-align:center}
+.hs+.hs{border-left:1px solid rgba(255,255,255,.1)}
+.hs-n{font-size:1.35rem;font-weight:800;color:#fff;line-height:1}
+.hs-l{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
+.main{padding:16px 14px 56px}
+.divider{display:flex;align-items:center;gap:8px;margin-bottom:12px;margin-top:2px}
+.divider span{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g400)}
+.divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+.uc{background:var(--w);border:1.5px solid var(--g200);border-radius:var(--r);margin-bottom:9px;overflow:hidden;box-shadow:var(--s1);transition:border-color .2s,box-shadow .2s}
+.uc:hover{border-color:var(--p300);box-shadow:var(--s2)}
+.uc[data-open=true]{border-color:var(--p400);box-shadow:var(--s2)}
+.ubtn{width:100%;display:flex;align-items:center;padding:14px 15px;gap:12px;background:none;border:none;cursor:pointer;text-align:left}
+.upill{height:36px;padding:0 12px;border-radius:9px;flex-shrink:0;background:var(--p100);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.upill span{font-size:.67rem;font-weight:800;color:var(--p700);letter-spacing:-.01em;white-space:nowrap}
+.uc[data-open=true] .upill{background:var(--p700)}
+.uc[data-open=true] .upill span{color:#fff}
+.uinfo{flex:1;min-width:0}
+.uname{font-size:.85rem;font-weight:700;color:var(--g900);line-height:1.3}
+.umeta{font-size:.66rem;color:var(--g400);margin-top:2px;font-weight:500}
+.uright{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.uchev{width:16px;height:16px;color:var(--g300);transition:transform .3s,color .2s}
+.uc[data-open=true] .uchev{transform:rotate(180deg);color:var(--p500)}
+.ubody{display:none;background:var(--p50);border-top:1.5px solid var(--p200);padding:12px 13px 14px}
+.ubody.open{display:block;animation:bodyIn .2s ease}
+@keyframes bodyIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.img-tag-container{margin-bottom:12px;font-size:0.75rem;font-weight:700;color:var(--p700);background:var(--p100);padding:10px 12px;border-radius:var(--rs);border:1px dashed var(--p300);text-align:center;}
+.rrow{display:flex;gap:9px;margin-bottom:9px}
+.rrow:last-child{margin-bottom:0}
+@media(max-width:380px){.rrow{flex-direction:column}}
+.rbtn{flex:1;display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .17s;background:var(--w);text-decoration:none}
+.rbtn[disabled], .rbtn.disabled {opacity:0.6; cursor:not-allowed; background:var(--g100); border-color:var(--g200); color:var(--g500);}
+.rbtn[disabled] .rico, .rbtn.disabled .rico {background:var(--g200); color:var(--g500);}
+.rbtn .rico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.rbtn .rtxt{line-height:1.25}
+.rbtn .rtxt small{display:block;font-size:.62rem;font-weight:400;opacity:.5;margin-top:1px}
+.rbtn .rarr{margin-left:auto;opacity:0;font-size:.7rem;color:var(--g400);transition:opacity .15s}
+.rbtn:not(.disabled):hover .rarr{opacity:1}
+.rbtn.notes{border-color:var(--p200);color:var(--p800)}
+.rbtn.notes .rico{background:var(--p100)}
+.rbtn.notes:not(.disabled):hover{background:var(--p50);border-color:var(--p500);box-shadow:var(--s2);transform:translateY(-1px)}
+.rbtn.video{border-color:var(--p300);color:var(--p900)}
+.rbtn.video .rico{background:var(--p100);color:var(--p700)}
+.rbtn.video:not(.disabled):hover{background:var(--p50);border-color:var(--p600);box-shadow:var(--s2);transform:translateY(-1px)}
+.rbtn.quiz{border-color:#fde68a;color:#78350f}
+.rbtn.quiz .rico{background:var(--warn-lt)}
+.rbtn.quiz:not(.disabled):hover{background:#fffbeb;border-color:var(--warn);box-shadow:0 3px 10px rgba(217,119,6,.12);transform:translateY(-1px)}
+.rbtn.pyq{border-color:#bbf7d0;color:#14532d}
+.rbtn.pyq .rico{background:var(--ok-lt)}
+.rbtn.pyq:not(.disabled):hover{background:#f0fdf4;border-color:var(--ok);box-shadow:0 3px 10px rgba(22,163,74,.12);transform:translateY(-1px)}
+.pyq-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:380px){.pyq-grid{grid-template-columns:1fr}}
+.qoverlay{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end}
+.qoverlay.open{display:flex}
+.qscrim{position:absolute;inset:0;background:rgba(15,10,40,.55);backdrop-filter:blur(3px)}
+.qpanel{position:relative;z-index:1;background:var(--w);width:100%;max-width:580px;margin:0 auto;border-radius:18px 18px 0 0;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 -10px 50px rgba(109,40,217,.2);animation:panelUp .3s cubic-bezier(.32,.72,0,1)}
+@keyframes panelUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.qhead{padding:16px 18px 12px;border-bottom:1px solid var(--g100);flex-shrink:0}
+.qhead-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.qtitle{font-size:1rem;font-weight:800;color:var(--p800)}
+.qclose{width:28px;height:28px;border-radius:50%;background:var(--g100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--g500);transition:all .15s}
+.qclose:hover{background:var(--err-lt);color:var(--err)}
+.qpips{display:flex;gap:3px}
+.pip{flex:1;height:4px;border-radius:4px;background:var(--g100);transition:background .3s}
+.pip.ans{background:var(--p300)}.pip.cor{background:var(--ok)}.pip.wrg{background:var(--err)}
+.qbody{overflow-y:auto;padding:14px 18px 28px;flex:1}
+.qscore{display:none;background:linear-gradient(135deg,var(--p800),var(--p500));color:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;align-items:center;gap:14px}
+.qscore.show{display:flex}
+.qs-num{font-size:1.9rem;font-weight:800;line-height:1}
+.qs-sub{font-size:.65rem;opacity:.6;margin-top:2px}
+.qs-msg{font-size:.85rem;font-weight:600}
+.qitem{margin-bottom:24px}
+.qitem:last-child{margin-bottom:0}
+.qlbl{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--p500);margin-bottom:4px}
+.qtext{font-size:.88rem;font-weight:600;color:var(--g900);line-height:1.5;margin-bottom:10px}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1.5px solid var(--g200);border-radius:var(--rs);cursor:pointer;font-size:.83rem;font-weight:500;background:var(--w);color:var(--g700);transition:all .14s}
+.qopt:hover{border-color:var(--p300);background:var(--p50);color:var(--p800)}
+.qltr{width:21px;height:21px;border-radius:50%;background:var(--g100);border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:800;color:var(--g500);flex-shrink:0;transition:all .14s}
+.qopt.cor{background:var(--ok-lt);border-color:#86efac;color:#14532d}
+.qopt.cor .qltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.qopt.wrg{background:var(--err-lt);border-color:#fca5a5;color:#7f1d1d}
+.qopt.wrg .qltr{background:var(--err);border-color:var(--err);color:#fff}
+.qopt.lock{cursor:default;pointer-events:none}
+.qopt.lock:not(.cor):not(.wrg):hover{border-color:var(--g200);background:var(--w);color:var(--g700)}
+</style>
 </head>
 <body>
 
-    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/1jAMnkkFwWWw_sDPrDwzHLB2oH6qoGopJ/preview', 'Syllabus')">
-        📄 DOWNLOAD MICROBIOLOGY SYLLABUS
+<header class="topbar">
+  <button class="tb-back" onclick="goBackToApp()" aria-label="Back">&#8592;</button>
+  <div class="tb-info">
+    <div class="tb-title">Microbiology</div>
+    <div class="tb-sub">Nursing · Syllabus & Quizzes</div>
+  </div>
+  <div class="tb-chip">11 Units</div>
+</header>
+
+<section class="hero">
+  <div class="hero-dot-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>Nursing · Syllabus & Quizzes</div>
+    <h1>Microbiology</h1>
+    <p class="hero-desc">Interactive syllabus, unit notes, video lectures, and quizzes for your exams.</p>
+    <button class="hero-cta" onclick="openPDF('https://drive.google.com/file/d/1jAMnkkFwWWw_sDPrDwzHLB2oH6qoGopJ/view')">
+      📄 &nbsp;Download Syllabus
+    </button>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-n">11</div><div class="hs-l">Units</div></div>
+      <div class="hs"><div class="hs-n">110</div><div class="hs-l">Questions</div></div>
+      <div class="hs"><div class="hs-n">1</div><div class="hs-l">PYQ</div></div>
     </div>
-    <div class="syllabus-btn secondary" onclick="openResource('notes', 'https://drive.google.com/file/d/1Pzq-ucUgNEYNHPOmA4YBwZOtGsXUlbkG/preview', 'Previous Year Q&A')">
-        ❓ PREVIOUS YEAR QUESTIONS & ANSWERS
+  </div>
+</section>
+
+<main class="main">
+  
+  <div class="divider"><span>Course Units</span></div>
+
+  <div class="uc" id="u1" data-open="false">
+    <button class="ubtn" onclick="tog('u1')">
+      <div class="upill"><span>Unit 01</span></div>
+      <div class="uinfo"><div class="uname">Structure & Classification</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u1">
+      <div class="img-tag-container">
+
+[Image of prokaryotic versus eukaryotic cell structure]
+</div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1BhtGLc78MbXtH4ZSTYFL36QIBHPwzXEz/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1hQDStwTctGwSyIfflSu1qG6i8WDLk9LF/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1gS9O50v2BdnyCmy9DLXUDi1yUl7RQ2IQ/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn video disabled" onclick="alert('Content Coming Soon')">
+          <div class="rico">▶️</div><div class="rtxt">Structure<small>Coming Soon</small></div>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(1)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 1 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
     </div>
-    
-    <div id="units">
-        
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 1 - STRUCTURE AND CLASSIFICATION <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
+  </div>
 
-[Image of prokaryotic vs eukaryotic cell structure]
+  <div class="uc" id="u2" data-open="false">
+    <button class="ubtn" onclick="tog('u2')">
+      <div class="upill"><span>Unit 02</span></div>
+      <div class="uinfo"><div class="uname">Identification of Microorganisms</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u2">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1TgXeV4ziUyWMCTE4DJrnJ4FJ6oaJosWl/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1hZF5SIpOoy2pCPxqaiaHWl0bYsDVdIcN/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1dwgEV50POV5PKD_Rfq7xe3TC01pN-ME2/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn video disabled" onclick="alert('Content Coming Soon')">
+          <div class="rico">▶️</div><div class="rtxt">ID & Diagnosis<small>Coming Soon</small></div>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(2)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 2 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1BhtGLc78MbXtH4ZSTYFL36QIBHPwzXEz/preview', 'Detailed Notes: Structure')">
-                        <span class="icon">📚</span><span>Detailed Notes: Structure & Classification</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1gS9O50v2BdnyCmy9DLXUDi1yUl7RQ2IQ/preview', 'Intro Video')">
-                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
-                    </div>
-                    <div class="resource-btn disabled" onclick="alert('Content Coming Soon')">
-                        <span class="icon video-icon">▶️</span><span>Structure & Classification (Coming Soon)</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1hQDStwTctGwSyIfflSu1qG6i8WDLk9LF/preview', 'Lecture Notes: Intro')">
-                        <span class="icon">📄</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(1)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 2 - IDENTIFICATION OF MICROORGANISMS <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1TgXeV4ziUyWMCTE4DJrnJ4FJ6oaJosWl/preview', 'Detailed Notes: ID')">
-                        <span class="icon">📚</span><span>Detailed Notes: Identification</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1dwgEV50POV5PKD_Rfq7xe3TC01pN-ME2/preview', 'Intro Video: ID')">
-                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
-                    </div>
-                    <div class="resource-btn disabled" onclick="alert('Content Coming Soon')">
-                        <span class="icon video-icon">▶️</span><span>ID & Diagnosis (Coming Soon)</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1hZF5SIpOoy2pCPxqaiaHWl0bYsDVdIcN/preview', 'Lecture Notes: ID')">
-                        <span class="icon">📄</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(2)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 3 - GROWTH AND NUTRITION <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
+  <div class="uc" id="u3" data-open="false">
+    <button class="ubtn" onclick="tog('u3')">
+      <div class="upill"><span>Unit 03</span></div>
+      <div class="uinfo"><div class="uname">Growth and Nutrition</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u3">
+      <div class="img-tag-container">
 
 [Image of bacterial growth curve phases]
-
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/17grWxgEaHjP-X2OcoA3v-eDS1tN7ix3c/preview', 'Detailed Notes: Growth')">
-                        <span class="icon">📚</span><span>Detailed Notes: Growth & Nutrition</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1TDEM-Rms2a9USLMF0-iXQJzMyIiOP_Up/preview', 'Intro Video: Growth')">
-                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/12QizxSgME6JSJlyFMacGeVeepQPuOtUf/preview', 'Growth Video')">
-                        <span class="icon video-icon">▶️</span><span>Growth & Nutrition of Microbes</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Tor6KkwPITrthRndar2DE8ar2R9OVt7p/preview', 'Lecture Notes: Growth')">
-                        <span class="icon">📄</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(3)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 4 - DESTRUCTION OF MICROORGANISMS <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1J9L2nM-BH5yg-RuBu0pVz_yex4I2-7Nd/preview', 'Detailed Notes: Destruction')">
-                        <span class="icon">📚</span><span>Detailed Notes: Destruction</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1EGlf74shgVqcy1gYT6ncHrZAa6kFc3d9/preview', 'Intro Video: Destruction')">
-                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1O8ELVn-75TTNrVV41gyBmb4B2eR31PTP/preview', 'Destruction Video')">
-                        <span class="icon video-icon">▶️</span><span>Destruction of Microorganisms</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1aUnsZs_TUQk7jbmgX2ZXPLvbYriN0onj/preview', 'Lecture Notes: Destruction')">
-                        <span class="icon">📄</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(4)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 5 - DISEASE PRODUCING MICROBES <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/10lb80uiRWoWQ5lCzRQMwmeFVDTKD9BBp/preview', 'Detailed Notes: Disease')">
-                        <span class="icon">📚</span><span>Detailed Notes: Disease Producing</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1W9x1GY9omVvvywHxRI27k8nw_pk1QuGx/preview', 'Intro Video: Disease')">
-                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/18cIgHzjlLmXakPxfDXpY11iksNqhyxE-/preview', 'Disease Video')">
-                        <span class="icon video-icon">▶️</span><span>Disease Producing Microorganisms</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1GCTWh1zH6UYkUC572gVuD3Z4Gf97N_iB/preview', 'Lecture Notes: Disease')">
-                        <span class="icon">📄</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(5)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 6 - PATHOGENIC FUNGI <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1GeIJYUgYxZOZJ3XQtmw_J89gX0-gCAh4/preview', 'Detailed Notes: Fungi')">
-                        <span class="icon">📚</span><span>Detailed Notes: Pathogenic Fungi</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/19pkTvvHqipOlEz7YUot_OSusJMxihAkZ/preview', 'Intro Video: Fungi')">
-                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1fVVDbrKP_qha1P5aMpTDmkJ3MbAhxXIC/preview', 'Fungi Video')">
-                        <span class="icon video-icon">▶️</span><span>Dermatophytes</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1kEwOdQxrndHzS4c-XNZ0gedqqCnFAP-M/preview', 'Lecture Notes: Fungi')">
-                        <span class="icon">📄</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(6)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 7 - IMMUNITY <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-
-[Image of antibody structure and function]
-
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/15OQB5Q8cBjSpWXgQW_YgwCnnXWf6E5-G/preview', 'Detailed Notes: Immunity')">
-                        <span class="icon">📚</span><span>Detailed Notes: Immunity</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1g-JJKsd23CP-t5TEy3V4gDXaqhXH4tii/preview', 'Intro Video: Immunity')">
-                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1xGYowvjy_wMr3ltnyH_Tny5KZXCr8iO_/preview', 'Immunity Video')">
-                        <span class="icon video-icon">▶️</span><span>Immunity Concepts</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1zPlVMz2boG-OCzDsNu8tZmT4zs5lZir9/preview', 'Lecture Notes: Immunity')">
-                        <span class="icon">📄</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(7)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 8 - PARASITES AND VECTORS <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-
-[Image of malaria life cycle]
-
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1BxZbpbJlABKjaoV2bZgTgJCY3eh7XfqA/preview', 'Detailed Notes: Parasites')">
-                        <span class="icon">📚</span><span>Detailed Notes: Parasites</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Cc14AJBWokxz-YbibCR-frC6qqsqJv0l/preview', 'Intro Video: Parasites')">
-                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1axhgk872-vXUj41pK3JXhRuep1vaN6wb/preview', 'Parasites Video')">
-                        <span class="icon video-icon">▶️</span><span>Parasites And Vectors</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1LgFA2Rs-IsZmqQneH8IvzAd46vJw_qXI/preview', 'Lecture Notes: Parasites')">
-                        <span class="icon">📄</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(8)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 8 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 9 - VIRUSES <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-
-[Image of viral structure diagram]
-
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1jltTDMNGCCJPGx9OcXSrZUzODG3PeWNv/preview', 'Detailed Notes: Viruses')">
-                        <span class="icon">📚</span><span>Detailed Notes: Viruses</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1k3Ja8_dtp-X512Utr68jsw26SlD8njIZ/preview', 'Intro Video: Viruses')">
-                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/10X5ogh2qKp5guE6RhnvM74zuM95TOB_N/preview', 'Viruses Video')">
-                        <span class="icon video-icon">▶️</span><span>Viruses</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1RMsnlu4fX9GwkWs9VXuGwlk0h_Vhg4q-/preview', 'Lecture Notes: Viruses')">
-                        <span class="icon">📄</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(9)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 9 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 10 - FOOD MICROBIOLOGY <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1RgM6ROSnsPjraC5OrN7a5uZa3bTNt_C-/preview', 'Detailed Notes: Food')">
-                        <span class="icon">📚</span><span>Detailed Notes: Food Microbiology</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1c5Hxwgzd8Y2mIKXyI6XnGXXPGYC2CC11/preview', 'Intro Video: Food')">
-                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/12wVs8Tid3zo00NoKgq30sJOAdvouD0IA/preview', 'Food Video')">
-                        <span class="icon video-icon">▶️</span><span>Food Poisoning & Infections</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1m4VQAL_mFM-aAHMcXbHlaFhyWjvWT6su/preview', 'Lecture Notes: Food')">
-                        <span class="icon">📄</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(10)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 10 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 11 - BIOMEDICAL WASTE <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1zkwV27bRbDpJNdAHrZr_XbNti2YI8uSH/preview', 'Detailed Notes: Waste')">
-                        <span class="icon">📚</span><span>Detailed Notes: Waste Management</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Lk3yV7m3sEr82U8aNYFThlENPfKVpEgm/preview', 'Intro Video: Waste')">
-                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1PgX4Fu0LOhrctEnZbm7R5fATGBDu3Zm6/preview', 'Waste Video')">
-                        <span class="icon video-icon">▶️</span><span>Biomedical Waste Management</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1E6VOOYTzvp2hN2SvJI9C49pSOr_xJ_ju/preview', 'Lecture Notes: Waste')">
-                        <span class="icon">📄</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(11)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 11 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+</div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/17grWxgEaHjP-X2OcoA3v-eDS1tN7ix3c/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Tor6KkwPITrthRndar2DE8ar2R9OVt7p/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1TDEM-Rms2a9USLMF0-iXQJzMyIiOP_Up/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/12QizxSgME6JSJlyFMacGeVeepQPuOtUf/view')">
+          <div class="rico">▶️</div><div class="rtxt">Growth Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(3)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 3 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
     </div>
+  </div>
 
-    <div id="app-modal" class="modal-overlay">
-        <div class="modal-header">
-            <div id="modal-title" class="modal-title">Resource</div>
-            <button class="btn-close" onclick="closeModal()">Close X</button>
-        </div>
-        <div id="modal-body" class="modal-body"></div>
+  <div class="uc" id="u4" data-open="false">
+    <button class="ubtn" onclick="tog('u4')">
+      <div class="upill"><span>Unit 04</span></div>
+      <div class="uinfo"><div class="uname">Destruction of Microorganisms</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u4">
+      <div class="img-tag-container">
+
+[Image of autoclave machine diagram]
+</div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1J9L2nM-BH5yg-RuBu0pVz_yex4I2-7Nd/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1aUnsZs_TUQk7jbmgX2ZXPLvbYriN0onj/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1EGlf74shgVqcy1gYT6ncHrZAa6kFc3d9/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1O8ELVn-75TTNrVV41gyBmb4B2eR31PTP/view')">
+          <div class="rico">▶️</div><div class="rtxt">Destruction<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(4)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 4 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
     </div>
+  </div>
 
-    <script>
-        const QUIZ_DATA = {
-            1: [
-                { q: "Who is known as the Father of Microbiology?", o: ["Louis Pasteur", "Robert Koch", "Antonie van Leeuwenhoek", "Joseph Lister"], a: 2 },
-                { q: "Prokaryotic cells differ from eukaryotic cells by lacking:", o: ["Ribosomes", "Cell wall", "True Nucleus", "Cell membrane"], a: 2 },
-                { q: "Which shape refers to rod-shaped bacteria?", o: ["Cocci", "Bacilli", "Spirilla", "Vibrio"], a: 1 },
-                { q: "The cell wall of bacteria is primarily made of:", o: ["Cellulose", "Chitin", "Peptidoglycan", "Lipids"], a: 2 }
-            ],
-            2: [
-                { q: "Gram staining differentiates bacteria based on:", o: ["Cell membrane", "Cell wall thickness", "Nucleus", "Flagella"], a: 1 },
-                { q: "In Acid-Fast staining, Mycobacteria appear:", o: ["Blue", "Red", "Green", "Purple"], a: 1 },
-                { q: "Gram-positive bacteria stain which color?", o: ["Pink", "Purple/Violet", "Green", "Red"], a: 1 },
-                { q: "Which microscopy is best for viewing live, unstained spirochetes?", o: ["Bright-field", "Dark-field", "Electron", "Fluorescence"], a: 1 }
-            ],
-            3: [
-                { q: "In which phase of the bacterial growth curve is division rate highest?", o: ["Lag phase", "Log (Exponential) phase", "Stationary phase", "Decline phase"], a: 1 },
-                { q: "Bacteria that thrive in oxygen-free environments are:", o: ["Aerobes", "Anaerobes", "Microaerophiles", "Facultative anaerobes"], a: 1 },
-                { q: "Enriched media like Blood Agar is used for:", o: ["General growth", "Fastidious organisms", "Inhibiting growth", "Transport"], a: 1 },
-                { q: "The optimal temperature for mesophiles (human pathogens) is:", o: ["10-20°C", "37°C", "55°C", "0°C"], a: 1 }
-            ],
-            4: [
-                { q: "Which method is most effective for sterilization of surgical instruments?", o: ["Boiling", "Pasteurization", "Autoclaving", "Alcohol wipe"], a: 2 },
-                { q: "Autoclaving uses:", o: ["Dry heat", "Moist heat under pressure", "UV radiation", "Chemical gas"], a: 1 },
-                { q: "Pasteurization is primarily used for:", o: ["Water", "Milk", "Surgical tools", "Wounds"], a: 1 },
-                { q: "Which chemical agent is commonly used as an antiseptic on skin?", o: ["Glutaraldehyde", "70% Alcohol", "Formaldehyde", "Chlorine gas"], a: 1 }
-            ],
-            5: [
-                { q: "Which of the following is a Gram-Positive Bacillus?", o: ["E. coli", "Bacillus anthracis", "Salmonella", "Neisseria"], a: 1 },
-                { q: "Clostridium tetani causes:", o: ["Botulism", "Tetanus (Lockjaw)", "Gangrene", "Food poisoning"], a: 1 },
-                { q: "Corynebacterium diphtheriae is the causative agent of:", o: ["Tuberculosis", "Diphtheria", "Leprosy", "Pneumonia"], a: 1 },
-                { q: "Staphylococcus aureus is typically:", o: ["Gram + Cocci", "Gram - Rod", "Gram + Rod", "Spiral"], a: 0 }
-            ],
-            6: [
-                { q: "Dermatophytes primarily infect:", o: ["Blood", "Lungs", "Skin, Hair, Nails", "Liver"], a: 2 },
-                { q: "Candida albicans is an example of:", o: ["Mold", "Yeast", "Bacteria", "Virus"], a: 1 },
-                { q: "Tinea pedis is commonly known as:", o: ["Ringworm", "Athlete's foot", "Jock itch", "Oral thrush"], a: 1 },
-                { q: "Fungal cell walls are composed of:", o: ["Peptidoglycan", "Chitin", "Cellulose", "Lipid A"], a: 1 }
-            ],
-            7: [
-                { q: "Which antibody can cross the placenta?", o: ["IgM", "IgA", "IgG", "IgE"], a: 2 },
-                { q: "Innate immunity refers to:", o: ["Immunity acquired after infection", "Immunity from vaccination", "Non-specific defense present at birth", "Antibody production"], a: 2 },
-                { q: "The first antibody produced during an acute infection is:", o: ["IgG", "IgM", "IgA", "IgD"], a: 1 },
-                { q: "Active immunity is acquired through:", o: ["Breast milk", "Antivenom injection", "Vaccination or Infection", "Placental transfer"], a: 2 }
-            ],
-            8: [
-                { q: "The vector for Malaria is:", o: ["Aedes mosquito", "Anopheles mosquito", "Culex mosquito", "Tsetse fly"], a: 1 },
-                { q: "Entamoeba histolytica causes:", o: ["Malaria", "Amoebic Dysentery", "Sleeping sickness", "Giardiasis"], a: 1 },
-                { q: "The definitive host for Plasmodium (Malaria) is:", o: ["Human", "Mosquito", "Pig", "Snail"], a: 1 },
-                { q: "Ascaris lumbricoides is a type of:", o: ["Protozoa", "Roundworm (Nematode)", "Tapeworm", "Fluke"], a: 1 }
-            ],
-            9: [
-                { q: "Viruses require what to replicate?", o: ["Nutrient agar", "Sunlight", "A living host cell", "Water"], a: 2 },
-                { q: "HIV targets which specific cells?", o: ["Red blood cells", "CD4+ T cells", "Neurons", "Liver cells"], a: 1 },
-                { q: "Which virus causes Hepatitis B?", o: ["HAV", "HBV", "HCV", "HIV"], a: 1 },
-                { q: "The protein coat of a virus is called:", o: ["Capsule", "Capsid", "Envelope", "Spike"], a: 1 }
-            ],
-            10: [
-                { q: "Which bacteria is commonly associated with food poisoning from rice?", o: ["Salmonella", "Bacillus cereus", "E. coli", "Listeria"], a: 1 },
-                { q: "Botulism is caused by a toxin produced by:", o: ["Staphylococcus", "Clostridium botulinum", "Salmonella", "Shigella"], a: 1 },
-                { q: "Salmonella typhi causes:", o: ["Cholera", "Typhoid Fever", "Dysentery", "Gastritis"], a: 1 },
-                { q: "Which is a food-borne virus?", o: ["Influenza", "Norovirus", "HIV", "Herpes"], a: 1 }
-            ],
-            11: [
-                { q: "In biomedical waste management, sharps (needles) go in which bin?", o: ["Yellow", "Red", "White (Translucent)", "Blue"], a: 2 },
-                { q: "Anatomical waste (human tissues) belongs in the:", o: ["Red bin", "Yellow bin", "Black bin", "Blue bin"], a: 1 },
-                { q: "Plastic waste like IV tubes and catheters go in:", o: ["Yellow bin", "Red bin", "White bin", "Blue bin"], a: 1 },
-                { q: "The symbol for biohazard is typically:", o: ["Green square", "Red circle", "Three interlocked circles", "Skull and bones"], a: 2 }
-            ]
-        };
+  <div class="uc" id="u5" data-open="false">
+    <button class="ubtn" onclick="tog('u5')">
+      <div class="upill"><span>Unit 05</span></div>
+      <div class="uinfo"><div class="uname">Disease Producing Microbes</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u5">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/10lb80uiRWoWQ5lCzRQMwmeFVDTKD9BBp/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1GCTWh1zH6UYkUC572gVuD3Z4Gf97N_iB/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1W9x1GY9omVvvywHxRI27k8nw_pk1QuGx/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/18cIgHzjlLmXakPxfDXpY11iksNqhyxE-/view')">
+          <div class="rico">▶️</div><div class="rtxt">Disease Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(5)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 5 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        let currentQuizUnit = 1;
-        let currentQuestionIndex = 0;
-        let score = 0;
+  <div class="uc" id="u6" data-open="false">
+    <button class="ubtn" onclick="tog('u6')">
+      <div class="upill"><span>Unit 06</span></div>
+      <div class="uinfo"><div class="uname">Pathogenic Fungi</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u6">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1GeIJYUgYxZOZJ3XQtmw_J89gX0-gCAh4/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1kEwOdQxrndHzS4c-XNZ0gedqqCnFAP-M/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/19pkTvvHqipOlEz7YUot_OSusJMxihAkZ/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1fVVDbrKP_qha1P5aMpTDmkJ3MbAhxXIC/view')">
+          <div class="rico">▶️</div><div class="rtxt">Fungi Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(6)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 6 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        function toggleUnit(header) {
-            const content = header.nextElementSibling;
-            const isExpanded = header.getAttribute('aria-expanded') === 'true';
-            header.setAttribute('aria-expanded', !isExpanded);
-            content.classList.toggle('active');
-        }
+  <div class="uc" id="u7" data-open="false">
+    <button class="ubtn" onclick="tog('u7')">
+      <div class="upill"><span>Unit 07</span></div>
+      <div class="uinfo"><div class="uname">Immunity</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u7">
+      <div class="img-tag-container">
 
-        function openResource(type, url, title) {
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            document.getElementById('modal-title').textContent = title;
-            modal.style.display = 'flex';
-            let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
-            body.innerHTML = `<iframe class="iframe-res" src="${cleanUrl}"></iframe>`;
-        }
+[Image of antibody molecular structure]
+</div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/15OQB5Q8cBjSpWXgQW_YgwCnnXWf6E5-G/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1zPlVMz2boG-OCzDsNu8tZmT4zs5lZir9/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1g-JJKsd23CP-t5TEy3V4gDXaqhXH4tii/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1xGYowvjy_wMr3ltnyH_Tny5KZXCr8iO_/view')">
+          <div class="rico">▶️</div><div class="rtxt">Immunity Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(7)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 7 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        function startQuiz(unitId) {
-            currentQuizUnit = unitId;
-            currentQuestionIndex = 0;
-            score = 0;
-            const modal = document.getElementById('app-modal');
-            document.getElementById('modal-title').textContent = `Unit ${unitId} Quiz`;
-            modal.style.display = 'flex';
-            renderQuizQuestion();
-        }
+  <div class="uc" id="u8" data-open="false">
+    <button class="ubtn" onclick="tog('u8')">
+      <div class="upill"><span>Unit 08</span></div>
+      <div class="uinfo"><div class="uname">Parasites and Vectors</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u8">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1BxZbpbJlABKjaoV2bZgTgJCY3eh7XfqA/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1LgFA2Rs-IsZmqQneH8IvzAd46vJw_qXI/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Cc14AJBWokxz-YbibCR-frC6qqsqJv0l/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1axhgk872-vXUj41pK3JXhRuep1vaN6wb/view')">
+          <div class="rico">▶️</div><div class="rtxt">Parasites Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(8)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 8 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        function renderQuizQuestion() {
-            const body = document.getElementById('modal-body');
-            const questions = QUIZ_DATA[currentQuizUnit];
-            
-            if (!questions || currentQuestionIndex >= questions.length) {
-                body.innerHTML = `
-                    <div class="quiz-container" style="text-align:center;">
-                        <h2>Quiz Complete! 🎉</h2>
-                        <p style="font-size:1.2rem; margin:20px 0;">You scored <strong>${score} / ${questions.length}</strong></p>
-                        <button class="btn-quiz" onclick="closeModal()">Close Quiz</button>
-                    </div>`;
-                return;
-            }
+  <div class="uc" id="u9" data-open="false">
+    <button class="ubtn" onclick="tog('u9')">
+      <div class="upill"><span>Unit 09</span></div>
+      <div class="uinfo"><div class="uname">Viruses</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u9">
+      <div class="img-tag-container"></div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1jltTDMNGCCJPGx9OcXSrZUzODG3PeWNv/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1RMsnlu4fX9GwkWs9VXuGwlk0h_Vhg4q-/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1k3Ja8_dtp-X512Utr68jsw26SlD8njIZ/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/10X5ogh2qKp5guE6RhnvM74zuM95TOB_N/view')">
+          <div class="rico">▶️</div><div class="rtxt">Viruses Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(9)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 9 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-            const q = questions[currentQuestionIndex];
-            body.innerHTML = `
-                <div class="quiz-container">
-                    <p class="quiz-question-text">Q${currentQuestionIndex + 1}: ${q.q}</p>
-                    <div>
-                        ${q.o.map((opt, i) => `
-                            <div class="quiz-option" onclick="checkAnswer(this, ${i}, ${q.a})">${opt}</div>
-                        `).join('')}
-                    </div>
-                    <div class="quiz-nav">
-                        <span>Question ${currentQuestionIndex + 1} of ${questions.length}</span>
-                        <button id="next-btn" class="btn-quiz" style="display:none;" onclick="nextQuestion()">Next ➡</button>
-                    </div>
-                </div>`;
-        }
+  <div class="uc" id="u10" data-open="false">
+    <button class="ubtn" onclick="tog('u10')">
+      <div class="upill"><span>Unit 10</span></div>
+      <div class="uinfo"><div class="uname">Food Microbiology</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u10">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1RgM6ROSnsPjraC5OrN7a5uZa3bTNt_C-/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1m4VQAL_mFM-aAHMcXbHlaFhyWjvWT6su/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1c5Hxwgzd8Y2mIKXyI6XnGXXPGYC2CC11/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/12wVs8Tid3zo00NoKgq30sJOAdvouD0IA/view')">
+          <div class="rico">▶️</div><div class="rtxt">Food Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(10)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 10 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        function checkAnswer(element, selectedIndex, correctIndex) {
-            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+  <div class="uc" id="u11" data-open="false">
+    <button class="ubtn" onclick="tog('u11')">
+      <div class="upill"><span>Unit 11</span></div>
+      <div class="uinfo"><div class="uname">Biomedical Waste</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u11">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1zkwV27bRbDpJNdAHrZr_XbNti2YI8uSH/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1E6VOOYTzvp2hN2SvJI9C49pSOr_xJ_ju/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Lk3yV7m3sEr82U8aNYFThlENPfKVpEgm/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1PgX4Fu0LOhrctEnZbm7R5fATGBDu3Zm6/view')">
+          <div class="rico">▶️</div><div class="rtxt">Waste Mgmt<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(11)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 11 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-            if (selectedIndex === correctIndex) {
-                element.classList.add('correct');
-                score++;
-            } else {
-                element.classList.add('wrong');
-                element.parentElement.children[correctIndex].classList.add('correct');
-            }
-            document.getElementById('next-btn').style.display = 'block';
-        }
+  <div class="divider" style="margin-top:20px"><span>Previous Year Questions</span></div>
+  <div class="uc" id="upyq" data-open="false">
+    <button class="ubtn" onclick="tog('upyq')">
+      <div class="upill"><span style="font-size:.58rem">PYQ</span></div>
+      <div class="uinfo"><div class="uname">Previous Year Papers</div><div class="umeta">1 exam paper</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-upyq">
+      <div class="pyq-grid">
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1Pzq-ucUgNEYNHPOmA4YBwZOtGsXUlbkG/view')">
+          <div class="rico">📄</div><div class="rtxt">PYQ Paper<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        function nextQuestion() {
-            currentQuestionIndex++;
-            renderQuizQuestion();
-        }
+</main>
 
-        function closeModal() { 
-            document.getElementById('app-modal').style.display = 'none'; 
-            document.getElementById('modal-body').innerHTML = ""; 
-        }
-    </script>
+<div class="qoverlay" id="qmodal">
+  <div class="qscrim" onclick="closeQuiz()"></div>
+  <div class="qpanel">
+    <div class="qhead">
+      <div class="qhead-top">
+        <div class="qtitle" id="qtitle">Quiz</div>
+        <button class="qclose" onclick="closeQuiz()">✕</button>
+      </div>
+      <div class="qpips" id="qpips"></div>
+    </div>
+    <div class="qbody" id="qbody"></div>
+  </div>
+</div>
+
+<script>
+function goBackToApp() {
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage({ action: 'goBack' }, '*');
+  } else {
+    history.back();
+  }
+}
+
+function openPDF(url) {
+  const clean = url.replace(/\/preview.*$/,'').replace(/\/view.*$/,'') + '/view';
+  window.open(clean, '_blank');
+}
+
+function tog(id) {
+  const card = document.getElementById(id);
+  const body = document.getElementById('b-' + id);
+  const open = card.dataset.open === 'true';
+  card.dataset.open = String(!open);
+  body.classList.toggle('open', !open);
+}
+
+const QD = {
+1:[
+  {q:"Who is known as the Father of Microbiology?",o:["Louis Pasteur","Robert Koch","Antonie van Leeuwenhoek","Joseph Lister"],a:2},
+  {q:"Prokaryotic cells differ from eukaryotic cells by lacking:",o:["Ribosomes","Cell wall","A true membrane-bound Nucleus","Cell membrane"],a:2},
+  {q:"Which term describes rod-shaped bacteria?",o:["Cocci","Bacilli","Spirilla","Vibrio"],a:1},
+  {q:"The cell wall of most bacteria is primarily composed of:",o:["Cellulose","Chitin","Peptidoglycan","Lipids"],a:2},
+  {q:"Which bacterial structure is primarily responsible for motility?",o:["Pili","Fimbriae","Capsule","Flagella"],a:3},
+  {q:"Bacterial endospores function primarily for:",o:["Reproduction","Survival in harsh environmental conditions","Attachment to host cells","Protein synthesis"],a:1},
+  {q:"Small, circular, extrachromosomal DNA molecules in bacteria are called:",o:["Plasmids","Ribosomes","Mesosomes","Nucleoids"],a:0},
+  {q:"Which of the following is an example of a eukaryotic microorganism?",o:["Bacteria","Virus","Fungi","Prion"],a:2},
+  {q:"Koch's postulates were developed to establish:",o:["The structure of DNA","A causal relationship between a specific microbe and a disease","The process of fermentation","The first vaccine"],a:1},
+  {q:"Microorganisms that normally live on or in the human body without causing disease are called:",o:["Pathogens","Normal flora (microbiota)","Parasites","Viruses"],a:1}
+],
+2:[
+  {q:"Gram staining differentiates bacteria primarily based on the structure of their:",o:["Cell membrane","Cell wall thickness and composition","Nucleus","Flagella"],a:1},
+  {q:"In Acid-Fast staining (Ziehl-Neelsen), Mycobacteria appear:",o:["Blue","Red/Pink","Green","Purple"],a:1},
+  {q:"Gram-positive bacteria retain the primary stain and appear which color under the microscope?",o:["Pink","Purple/Violet","Green","Red"],a:1},
+  {q:"Which type of microscopy is best for viewing live, unstained, thin spirochetes like Treponema pallidum?",o:["Bright-field","Dark-field","Electron","Fluorescence"],a:1},
+  {q:"What is the primary stain used in the Gram stain procedure?",o:["Crystal Violet","Safranin","Methylene Blue","Carbol Fuchsin"],a:0},
+  {q:"In the Gram stain, Iodine acts as a:",o:["Decolorizer","Counterstain","Mordant","Primary stain"],a:2},
+  {q:"The 'Hanging Drop' preparation is commonly used in the lab to observe:",o:["Bacterial spores","Bacterial motility","Capsule size","DNA structure"],a:1},
+  {q:"MacConkey agar is a differential medium that distinguishes bacteria based on their ability to ferment:",o:["Glucose","Lactose","Sucrose","Maltose"],a:1},
+  {q:"The Catalase test is used to differentiate Staphylococci from:",o:["Escherichia","Streptococci","Mycobacteria","Neisseria"],a:1},
+  {q:"The Coagulase test is a definitive test to identify which highly pathogenic bacteria?",o:["Staphylococcus epidermidis","Streptococcus pneumoniae","Staphylococcus aureus","Bacillus anthracis"],a:2}
+],
+3:[
+  {q:"In which phase of the bacterial growth curve is the rate of cell division highest?",o:["Lag phase","Log (Exponential) phase","Stationary phase","Decline (Death) phase"],a:1},
+  {q:"Bacteria that thrive ONLY in oxygen-free environments are called:",o:["Obligate aerobes","Obligate anaerobes","Microaerophiles","Facultative anaerobes"],a:1},
+  {q:"Enriched media, such as Blood Agar, are primarily used to grow:",o:["All normal flora","Fastidious organisms (requiring special nutrients)","Only viruses","Only fungi"],a:1},
+  {q:"The optimal temperature for mesophiles (which include most human pathogens) is:",o:["10-20°C","37°C","55-65°C","0-5°C"],a:1},
+  {q:"The time required for a bacterial cell to divide into two is known as the:",o:["Incubation period","Generation (doubling) time","Lag time","Death rate"],a:1},
+  {q:"Microorganisms that require a reduced level of oxygen to grow are termed:",o:["Anaerobes","Aerobes","Microaerophiles","Capnophiles"],a:2},
+  {q:"Bacteria that obtain their carbon from organic compounds are classified as:",o:["Autotrophs","Heterotrophs","Phototrophs","Lithotrophs"],a:1},
+  {q:"Capnophilic bacteria require an environment enriched with:",o:["Oxygen","Nitrogen","Carbon dioxide","Hydrogen"],a:2},
+  {q:"During the stationary phase of bacterial growth:",o:["Cells die rapidly","Cell division equals the rate of cell death","Cells increase in size but do not divide","Spores germinate"],a:1},
+  {q:"Obligate aerobes require which of the following for cellular respiration?",o:["Nitrogen","Carbon dioxide","Oxygen","Methane"],a:2}
+],
+4:[
+  {q:"Which method is most effective and widely used for the sterilization of surgical instruments?",o:["Boiling","Pasteurization","Autoclaving (Steam under pressure)","Alcohol wipe"],a:2},
+  {q:"The standard temperature and pressure for an autoclave are usually:",o:["100°C at 10 psi for 10 mins","121°C at 15 psi for 15-20 mins","160°C at 20 psi for 60 mins","60°C at 5 psi for 30 mins"],a:1},
+  {q:"Pasteurization is a process primarily used to reduce microbial load in:",o:["Water","Milk and beverages","Surgical tools","Open wounds"],a:1},
+  {q:"Which chemical agent is commonly used as an effective skin antiseptic?",o:["2% Glutaraldehyde","70% Isopropyl Alcohol","Formaldehyde gas","Chlorine gas"],a:1},
+  {q:"Sterilization is defined as the process that:",o:["Reduces the number of pathogens to a safe level","Kills all forms of microbial life, including bacterial spores","Cleans visible dirt from surfaces","Stops bacteria from reproducing without killing them"],a:1},
+  {q:"An antiseptic differs from a disinfectant in that an antiseptic is:",o:["Used on inanimate objects (surfaces)","Used safely on living tissues (skin/wounds)","A physical method of killing","Only used for viruses"],a:1},
+  {q:"Fumigation of operation theaters is traditionally done using the gas of:",o:["Alcohol","Hydrogen peroxide","Formaldehyde","Iodine"],a:2},
+  {q:"HEPA filters are used in operation rooms and laminar flow hoods to sterilize:",o:["Water","Liquid medications","Air","Surgical instruments"],a:2},
+  {q:"Ethylene oxide (ETO) is a highly penetrating gas primarily used to sterilize:",o:["Heat-sensitive plastics and medical equipment","Bed linens","Hospital food","Human skin before surgery"],a:0},
+  {q:"Glutaraldehyde (Cidex) is commonly used as a high-level disinfectant for:",o:["Floors and walls","Endoscopes and respiratory therapy equipment","Wound cleaning","Hand washing"],a:1}
+],
+5:[
+  {q:"Which of the following is a Gram-Positive spore-forming Bacillus?",o:["Escherichia coli","Bacillus anthracis","Salmonella typhi","Neisseria gonorrhoeae"],a:1},
+  {q:"Clostridium tetani produces a potent neurotoxin that causes:",o:["Botulism","Tetanus (Lockjaw)","Gas Gangrene","Food poisoning"],a:1},
+  {q:"Corynebacterium diphtheriae is the causative agent of:",o:["Tuberculosis","Diphtheria","Leprosy","Pneumonia"],a:1},
+  {q:"Under a microscope, Staphylococcus aureus typically appears as:",o:["Gram-negative rods","Gram-positive cocci in grape-like clusters","Gram-positive cocci in chains","Spiral shaped bacteria"],a:1},
+  {q:"Streptococcus pyogenes is the primary cause of 'Strep throat' and can lead to post-infectious complications such as:",o:["Tuberculosis","Rheumatic fever","Syphilis","Gonorrhea"],a:1},
+  {q:"The most common bacterial cause of uncomplicated Urinary Tract Infections (UTIs) is:",o:["Staphylococcus aureus","Escherichia coli (E. coli)","Pseudomonas aeruginosa","Vibrio cholerae"],a:1},
+  {q:"Treponema pallidum is a spirochete responsible for causing:",o:["Lyme disease","Syphilis","Cholera","Tuberculosis"],a:1},
+  {q:"Mycobacterium tuberculosis is unique because its cell wall has a high content of:",o:["Peptidoglycan","Mycolic acid (lipids)","Chitin","Cellulose"],a:1},
+  {q:"Vibrio cholerae causes severe, watery diarrhea (rice-water stools) primarily through:",o:["Invading the bloodstream","Producing an enterotoxin that alters intestinal permeability","Destroying the liver","Causing severe ulcers in the stomach"],a:1},
+  {q:"Neisseria gonorrhoeae is characterized microscopically as a:",o:["Gram-positive rod","Gram-positive coccus","Gram-negative diplococcus","Acid-fast bacillus"],a:2}
+],
+6:[
+  {q:"Dermatophytes are a group of fungi that primarily infect:",o:["The bloodstream","The lungs","Keratinized tissues (Skin, Hair, Nails)","The liver"],a:2},
+  {q:"Candida albicans is a common opportunistic pathogen classified as a:",o:["Mold","Yeast","Bacteria","Virus"],a:1},
+  {q:"Tinea pedis is a fungal infection commonly known as:",o:["Ringworm of the scalp","Athlete's foot","Jock itch","Oral thrush"],a:1},
+  {q:"Unlike bacterial cell walls, fungal cell walls are primarily composed of:",o:["Peptidoglycan","Chitin","Cellulose","Lipopolysaccharide"],a:1},
+  {q:"Dimorphic fungi have the unique ability to exist as:",o:["Both viruses and bacteria","Both molds (at room temp) and yeasts (at body temp)","Both plants and animals","Both aerobic and anaerobic"],a:1},
+  {q:"Cryptococcus neoformans is an encapsulated yeast that frequently causes severe meningitis in patients with:",o:["Diabetes","Hypertension","Advanced HIV/AIDS","Asthma"],a:2},
+  {q:"Aspergillus is a mold that can cause opportunistic lung infections, especially in patients with:",o:["Healthy immune systems","Pre-existing lung cavities (e.g., from prior TB)","Skin abrasions","Food poisoning"],a:1},
+  {q:"Which culture medium is most routinely used to isolate and grow fungi in the lab?",o:["MacConkey Agar","Blood Agar","Sabouraud Dextrose Agar (SDA)","Nutrient Broth"],a:2},
+  {q:"Histoplasmosis is a systemic fungal infection most commonly transmitted by:",o:["Tick bites","Inhaling spores from bird or bat droppings","Drinking contaminated water","Sexual contact"],a:1},
+  {q:"Most systemic antifungal medications (like Amphotericin B) target which specific component of the fungal cell membrane?",o:["Cholesterol","Ergosterol","Peptidoglycan","Phospholipids"],a:1}
+],
+7:[
+  {q:"Which class of antibody is the only one capable of crossing the placenta to protect the fetus?",o:["IgM","IgA","IgG","IgE"],a:2},
+  {q:"Innate immunity refers to:",o:["Immunity acquired after a severe infection","Immunity derived from vaccination","The non-specific, natural defense mechanisms present at birth","Antibody production by B-cells"],a:2},
+  {q:"The first antibody produced by the body in response to an acute, primary infection is:",o:["IgG","IgM","IgA","IgD"],a:1},
+  {q:"Active artificial immunity is acquired through:",o:["Drinking breast milk","Receiving an antivenom injection","Administration of a vaccine","Placental transfer of antibodies"],a:2},
+  {q:"Which antibody is primarily found in mucosal secretions like saliva, tears, and breast milk?",o:["IgG","IgA","IgE","IgM"],a:1},
+  {q:"IgE antibodies play a primary role in the body's response to:",o:["Viral infections","Bacterial pneumonia","Allergic reactions and parasitic worm infections","Fungal skin infections"],a:2},
+  {q:"Cell-mediated immunity is primarily controlled by:",o:["B-lymphocytes","T-lymphocytes","Erythrocytes","Platelets"],a:1},
+  {q:"Phagocytosis is the process by which:",o:["Viruses replicate","Antibodies neutralize toxins","White blood cells engulf and destroy pathogens","Bacteria form spores"],a:2},
+  {q:"Administering tetanus antitoxin (immunoglobulins) provides the patient with:",o:["Natural active immunity","Artificial active immunity","Artificial passive immunity","Natural passive immunity"],a:2},
+  {q:"A foreign substance that induces an immune response and the production of antibodies is called an:",o:["Antibiotic","Antigen","Analgesic","Enzyme"],a:1}
+],
+8:[
+  {q:"The specific vector that transmits the Malaria parasite to humans is the:",o:["Aedes mosquito","Female Anopheles mosquito","Culex mosquito","Tsetse fly"],a:1},
+  {q:"Entamoeba histolytica is an intestinal parasite that causes:",o:["Malaria","Amoebic Dysentery","Sleeping sickness","Giardiasis"],a:1},
+  {q:"The definitive host (where sexual reproduction occurs) for the Plasmodium (Malaria) parasite is the:",o:["Human","Female Anopheles Mosquito","Pig","Freshwater Snail"],a:1},
+  {q:"Ascaris lumbricoides is a large intestinal parasite classified as a:",o:["Protozoan","Roundworm (Nematode)","Tapeworm (Cestode)","Fluke (Trematode)"],a:1},
+  {q:"Taenia solium is commonly known as the:",o:["Beef tapeworm","Pork tapeworm","Pinworm","Hookworm"],a:1},
+  {q:"Leishmaniasis (Kala-azar) is a parasitic disease transmitted by the bite of infected:",o:["Sandflies","Ticks","Fleas","Lice"],a:0},
+  {q:"Which species of Plasmodium causes the most severe and fatal form of Malaria?",o:["Plasmodium vivax","Plasmodium malariae","Plasmodium falciparum","Plasmodium ovale"],a:2},
+  {q:"Giardia lamblia is a flagellated protozoan that primarily causes:",o:["Severe liver damage","Prolonged, foul-smelling diarrhea","Brain inflammation","Skin ulcers"],a:1},
+  {q:"Lymphatic filariasis (Elephantiasis) is caused by the parasite Wuchereria bancrofti, which blocks the:",o:["Blood vessels","Lymphatic vessels","Intestines","Bile ducts"],a:1},
+  {q:"Hookworms (like Ancylostoma duodenale) typically enter the human host by:",o:["Ingestion of undercooked meat","Drinking contaminated water","Direct skin penetration, usually through bare feet","Mosquito bites"],a:2}
+],
+9:[
+  {q:"Viruses are unique among infectious agents because they are obligate intracellular parasites, meaning they require:",o:["Nutrient agar to grow","Sunlight for energy","A living host cell to replicate","A water-based environment"],a:2},
+  {q:"The Human Immunodeficiency Virus (HIV) specifically targets and destroys:",o:["Red blood cells","CD4+ T-helper cells","Motor neurons","Liver hepatocytes"],a:1},
+  {q:"Which virus is a major cause of serum hepatitis and is primarily transmitted through blood and body fluids?",o:["Hepatitis A Virus (HAV)","Hepatitis B Virus (HBV)","Hepatitis E Virus (HEV)","Rotavirus"],a:1},
+  {q:"The protective protein coat surrounding the viral genetic material is called the:",o:["Capsule","Capsid","Envelope","Spike"],a:1},
+  {q:"Unlike cellular organisms, viruses contain:",o:["Both DNA and RNA simultaneously","Only a nucleus without genetic material","Either DNA or RNA, but never both","Only ribosomes"],a:2},
+  {q:"The Rabies virus, usually transmitted via animal bites, has a distinct predilection for infecting:",o:["The respiratory tract","The central nervous system (Brain)","The gastrointestinal tract","The skeletal muscles"],a:1},
+  {q:"The phenomena of 'antigenic shift' and 'antigenic drift' are characteristic of which highly mutable virus?",o:["Measles virus","Herpes Simplex virus","Influenza virus","Poliovirus"],a:2},
+  {q:"The Poliovirus primarily enters the body through which route?",o:["Respiratory droplet","Fecal-oral route","Blood transfusion","Mosquito bite"],a:1},
+  {q:"Dengue fever is a viral infection transmitted to humans by the bite of the:",o:["Anopheles mosquito","Aedes mosquito","Culex mosquito","Tick"],a:1},
+  {q:"The Varicella-Zoster virus is responsible for causing both Chickenpox and, later in life:",o:["Smallpox","Shingles (Herpes Zoster)","Measles","Mumps"],a:1}
+],
+10:[
+  {q:"Which bacteria is a common cause of food poisoning associated with reheated fried rice?",o:["Salmonella typhi","Bacillus cereus","Escherichia coli","Listeria monocytogenes"],a:1},
+  {q:"Botulism, a severe and often fatal form of food poisoning, is caused by a neurotoxin produced by:",o:["Staphylococcus aureus","Clostridium botulinum","Salmonella enteritidis","Shigella dysenteriae"],a:1},
+  {q:"Salmonella typhi is a food and waterborne pathogen that causes:",o:["Cholera","Typhoid Fever","Amoebic Dysentery","Gastric ulcers"],a:1},
+  {q:"Which highly contagious virus is a leading cause of gastroenteritis outbreaks on cruise ships and in food service?",o:["Influenza","Norovirus","HIV","Herpes Simplex"],a:1},
+  {q:"The primary public health purpose of pasteurizing milk is to:",o:["Make it taste better","Kill all beneficial bacteria","Destroy pathogenic microorganisms like Mycobacterium bovis","Turn milk into cheese"],a:2},
+  {q:"Staphylococcal food poisoning is unique because the illness is caused by:",o:["An active viral infection","Ingesting a preformed heat-stable enterotoxin in the food","A parasitic worm","Fungal overgrowth"],a:1},
+  {q:"Listeria monocytogenes is particularly dangerous because it can grow at refrigerator temperatures and heavily affects:",o:["Healthy teenagers","Pregnant women and immunocompromised individuals","Adult men","Only animals"],a:1},
+  {q:"Campylobacter jejuni is a major cause of foodborne illness often linked to the consumption of raw or undercooked:",o:["Beef","Poultry (chicken)","Fish","Vegetables"],a:1},
+  {q:"Common physical methods for food preservation to inhibit microbial growth include all EXCEPT:",o:["Refrigeration and freezing","Dehydration (drying)","Adding high amounts of sugar/salt","Leaving food uncovered at room temperature"],a:3},
+  {q:"Non-typhoidal Salmonella is most frequently transmitted to humans through contaminated:",o:["Eggs and poultry","Canned vegetables","Bottled water","Baked bread"],a:0}
+],
+11:[
+  {q:"According to Biomedical Waste Management guidelines, sharps (needles, scalpels) must be disposed of in a:",o:["Yellow bag","Red bag","White (Translucent) puncture-proof container","Blue cardboard box"],a:2},
+  {q:"Human anatomical waste (tissues, organs, body parts) belongs in the:",o:["Red bin","Yellow bin","Black bin","Blue bin"],a:1},
+  {q:"Contaminated recyclable plastic waste, such as IV tubes, syringes (without needles), and catheters, go in the:",o:["Yellow bin","Red bin","White bin","Black bin"],a:1},
+  {q:"The universal symbol for biohazard consists of:",o:["A green square","A red cross","Three interlocked circles","A skull and crossbones"],a:2},
+  {q:"Broken glass ampoules and metallic body implants should be discarded in:",o:["Yellow bags","Red bags","Cardboard boxes with Blue markings","White containers"],a:2},
+  {q:"Expired or discarded cytotoxic drugs and chemical waste must be disposed of in:",o:["Red bags","Yellow bags (specifically marked)","Black bags","Green bins"],a:1},
+  {q:"The most appropriate and recommended final treatment for highly infectious anatomical waste (Yellow Category) is:",o:["Dumping in a landfill","Incineration or deep burial","Recycling","Washing with soap"],a:1},
+  {q:"Waste placed in Red bags is typically treated prior to recycling via:",o:["Incineration","Autoclaving or microwaving","Composting","Burning openly"],a:1},
+  {q:"The primary rationale for strict segregation of biomedical waste at the source of generation is to:",o:["Make the hospital look clean","Reduce the volume of infectious waste requiring special treatment and prevent cross-contamination","Provide jobs for sanitation workers","Increase hospital revenue"],a:1},
+  {q:"By law, untreated biomedical waste generally should not be stored on hospital premises for longer than:",o:["12 hours","24 hours","48 hours","7 days"],a:2}
+]
+};
+
+let curQuiz=null, answered=[];
+
+function openQuiz(id){
+  curQuiz=id;
+  const qs=QD[id]||[];
+  answered=new Array(qs.length).fill(null);
+  
+  document.getElementById('qtitle').textContent = id < 10 ? `Unit 0${id} Quiz` : `Unit ${id} Quiz`;
+  
+  document.getElementById('qpips').innerHTML=qs.map((_,i)=>`<div class="pip" id="pip${i}"></div>`).join('');
+  let html=`<div class="qscore" id="qscore"><div><div class="qs-num" id="qsnum">—</div><div class="qs-sub">Score</div></div><div class="qs-msg" id="qsmsg"></div></div>`;
+  qs.forEach((q,qi)=>{
+    html+=`<div class="qitem" id="qi${qi}"><div class="qlbl">Question ${qi+1} of ${qs.length}</div><div class="qtext">${q.q}</div><div class="qopts">${q.o.map((opt,oi)=>`<button class="qopt" id="opt${qi}_${oi}" onclick="ans(${qi},${oi},${q.a})"><span class="qltr">${['A','B','C','D'][oi]}</span>${opt}</button>`).join('')}</div></div>`;
+  });
+  document.getElementById('qbody').innerHTML=html;
+  document.getElementById('qmodal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function ans(qi,oi,correct){
+  if(answered[qi]!==null)return;
+  answered[qi]=oi;
+  const opts=document.querySelectorAll(`#qi${qi} .qopt`);
+  opts.forEach(b=>b.classList.add('lock'));
+  opts[correct].classList.add('cor');
+  if(oi!==correct)opts[oi].classList.add('wrg');
+  const pip=document.getElementById('pip'+qi);
+  pip.classList.add('ans',oi===correct?'cor':'wrg');
+  if(answered.every(a=>a!==null)){
+    const score=answered.filter((a,i)=>a===QD[curQuiz][i].a).length;
+    const total=QD[curQuiz].length;
+    const pct=Math.round(score/total*100);
+    const msgs=['📚 Keep Studying!','👍 Good Effort!','🎉 Well Done!','🏆 Perfect!'];
+    const mi=pct<50?0:pct<70?1:pct<100?2:3;
+    document.getElementById('qsnum').textContent=score+'/'+total;
+    document.getElementById('qsmsg').textContent=msgs[mi];
+    const sc=document.getElementById('qscore');
+    sc.classList.add('show');
+    sc.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+
+function closeQuiz(){
+  document.getElementById('qmodal').classList.remove('open');
+  document.body.style.overflow='';
+  curQuiz=null;
+}
+
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQuiz();});
+</script>
 </body>
 </html>
