@@ -1,458 +1,433 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nutrition and Dietetics - Syllabus & Quizzes</title>
-    <meta name="description" content="Interactive syllabus with internal quizzes for Nutrition and Dietetics." />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <style>
-        :root {
-            --brand: #003B82; 
-            --accent: #00B9F2;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-700: #374151;
-            --gray-900: #111827;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-            --danger: #ef4444;
-            --success: #10b981;
-            --warning: #f59e0b;
-        }
-
-        * { box-sizing: border-box; }
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: white;
-            color: var(--gray-900);
-            line-height: 1.6;
-            padding: 24px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .syllabus-btn, .unit-header {
-            display: block;
-            width: 100%;
-            padding: 18px 24px;
-            margin: 12px 0;
-            background: var(--brand);
-            color: white;
-            font-weight: 600;
-            font-size: 16px;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.2s ease;
-        }
-        .syllabus-btn:hover, .unit-header:hover {
-            background: #002d63;
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
-        
-        .syllabus-btn.secondary { background: var(--accent); }
-        .syllabus-btn.secondary:hover { background: #009yc0; }
-
-        .unit-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-align: left;
-            margin: 16px 0;
-        }
-        .unit-header span:last-child {
-            transition: transform 0.3s ease;
-            color: #FFA500;
-        }
-        .unit-header[aria-expanded="true"] span:last-child {
-            transform: rotate(180deg);
-        }
-
-        .unit-content {
-            padding: 0 12px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.3s ease;
-        }
-        .unit-content.active {
-            padding: 24px 12px;
-            max-height: none; 
-        }
-
-        .subsection {
-            margin: 16px 0;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            border: 1px solid var(--gray-200);
-            box-shadow: var(--shadow-sm);
-            transition: box-shadow 0.2s ease;
-        }
-
-        .resource-btn {
-            display: flex;
-            align-items: flex-start;
-            width: 100%;
-            padding: 14px 18px;
-            margin: 8px 0;
-            background: var(--gray-50);
-            color: var(--gray-900);
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
-            border: 1px solid var(--gray-200);
-            transition: all 0.2s ease;
-            gap: 12px;
-            cursor: pointer;
-        }
-        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
-        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
-        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
-        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
-
-        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
-        .icon.video-icon { color: #8b5cf6; }
-        .icon.quiz-icon { color: #f59e0b; }
-
-        /* --- MODAL --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-        }
-
-        .modal-header {
-            height: 60px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            flex-shrink: 0;
-        }
-
-        .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; }
-        
-        .btn-close {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            flex: 1;
-            background: #f3f4f6;
-            position: relative;
-            overflow-y: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .iframe-res {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #fff;
-            display: block;
-        }
-
-        /* --- QUIZ STYLES --- */
-        .quiz-container {
-            background: white;
-            width: 100%;
-            max-width: 600px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            padding: 30px;
-        }
-        .quiz-question-text {
-            font-size: 1.15rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: var(--gray-900);
-        }
-        .quiz-option {
-            padding: 15px;
-            border: 2px solid var(--gray-200);
-            border-radius: 8px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-weight: 500;
-        }
-        .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
-        
-        .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; position: relative; }
-        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
-        
-        .quiz-nav { display: flex; justify-content: space-between; margin-top: 20px; }
-        .btn-quiz { background: var(--brand); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
-
-        @media (max-width: 768px) {
-            body { padding: 16px; }
-            .unit-header, .resource-btn { font-size: 15px; }
-            .modal-body { padding: 0; }
-            .quiz-container { height: 100%; border-radius: 0; max-width: 100%; padding: 20px; }
-        }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nutrition and Dietetics</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --p50:#faf5ff;--p100:#f3e8ff;--p200:#e9d5ff;--p300:#d8b4fe;
+  --p400:#c084fc;--p500:#a855f7;--p600:#9333ea;--p700:#7e22ce;
+  --p800:#6b21a8;--p900:#581c87;
+  --w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;
+  --g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;
+  --ok:#16a34a;--ok-lt:#dcfce7;--err:#dc2626;--err-lt:#fee2e2;
+  --warn:#d97706;--warn-lt:#fef3c7;
+  --r:12px;--rs:8px;
+  --s1:0 1px 3px rgba(109,40,217,.08);
+  --s2:0 4px 12px rgba(109,40,217,.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:90;background:var(--w);border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 16px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-back{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:var(--p100);color:var(--p700);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;margin-right:12px}
+.tb-back:hover{background:var(--p200)}
+.tb-info{flex:1;min-width:0}
+.tb-title{font-size:.88rem;font-weight:700;color:var(--g900);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb-sub{font-size:.65rem;color:var(--g400);font-weight:500;margin-top:1px}
+.tb-chip{background:var(--p100);color:var(--p700);border:1px solid var(--p200);font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
+.hero{background:linear-gradient(145deg,var(--p900),var(--p700) 55%,var(--p500));padding:28px 18px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.08),transparent 50%),radial-gradient(circle at 10% 85%,rgba(255,255,255,.05),transparent 40%)}
+.hero::after{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-dot-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:.65rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border-radius:30px;margin-bottom:12px}
+.hero-eyebrow-dot{width:5px;height:5px;background:#c4b5fd;border-radius:50%}
+.hero h1{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:7px}
+.hero h1 em{color:rgba(255,255,255,.45);font-style:italic;font-weight:300}
+.hero-desc{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:18px}
+.hero-cta{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.28);color:#fff;font-size:.8rem;font-weight:700;padding:9px 16px;border-radius:9px;cursor:pointer;transition:all .2s;backdrop-filter:blur(6px)}
+.hero-cta:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
+.hero-stats{display:flex;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+.hs{flex:1;text-align:center}
+.hs+.hs{border-left:1px solid rgba(255,255,255,.1)}
+.hs-n{font-size:1.35rem;font-weight:800;color:#fff;line-height:1}
+.hs-l{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
+.main{padding:16px 14px 56px}
+.divider{display:flex;align-items:center;gap:8px;margin-bottom:12px;margin-top:2px}
+.divider span{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g400)}
+.divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+.uc{background:var(--w);border:1.5px solid var(--g200);border-radius:var(--r);margin-bottom:9px;overflow:hidden;box-shadow:var(--s1);transition:border-color .2s,box-shadow .2s}
+.uc:hover{border-color:var(--p300);box-shadow:var(--s2)}
+.uc[data-open=true]{border-color:var(--p400);box-shadow:var(--s2)}
+.ubtn{width:100%;display:flex;align-items:center;padding:14px 15px;gap:12px;background:none;border:none;cursor:pointer;text-align:left}
+.upill{width:36px;height:36px;border-radius:9px;flex-shrink:0;background:var(--p100);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.upill span{font-size:.67rem;font-weight:800;color:var(--p700);letter-spacing:-.01em}
+.uc[data-open=true] .upill{background:var(--p700)}
+.uc[data-open=true] .upill span{color:#fff}
+.uinfo{flex:1;min-width:0}
+.uname{font-size:.85rem;font-weight:700;color:var(--g900);line-height:1.3}
+.umeta{font-size:.66rem;color:var(--g400);margin-top:2px;font-weight:500}
+.uright{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.uchev{width:16px;height:16px;color:var(--g300);transition:transform .3s,color .2s}
+.uc[data-open=true] .uchev{transform:rotate(180deg);color:var(--p500)}
+.ubody{display:none;background:var(--p50);border-top:1.5px solid var(--p200);padding:12px 13px 14px}
+.ubody.open{display:block;animation:bodyIn .2s ease}
+@keyframes bodyIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.rrow{display:flex;gap:9px}
+@media(max-width:380px){.rrow{flex-direction:column}}
+.rbtn{flex:1;display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .17s;background:var(--w);text-decoration:none}
+.rbtn .rico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.rbtn .rtxt{line-height:1.25}
+.rbtn .rtxt small{display:block;font-size:.62rem;font-weight:400;opacity:.5;margin-top:1px}
+.rbtn .rarr{margin-left:auto;opacity:0;font-size:.7rem;color:var(--g400);transition:opacity .15s}
+.rbtn:hover .rarr{opacity:1}
+.rbtn.notes{border-color:var(--p200);color:var(--p800)}
+.rbtn.notes .rico{background:var(--p100)}
+.rbtn.notes:hover{background:var(--p50);border-color:var(--p500);box-shadow:var(--s2);transform:translateY(-1px)}
+.rbtn.quiz{border-color:#fde68a;color:#78350f}
+.rbtn.quiz .rico{background:var(--warn-lt)}
+.rbtn.quiz:hover{background:#fffbeb;border-color:var(--warn);box-shadow:0 3px 10px rgba(217,119,6,.12);transform:translateY(-1px)}
+.rbtn.pyq{border-color:#bbf7d0;color:#14532d}
+.rbtn.pyq .rico{background:var(--ok-lt)}
+.rbtn.pyq:hover{background:#f0fdf4;border-color:var(--ok);box-shadow:0 3px 10px rgba(22,163,74,.12);transform:translateY(-1px)}
+.qoverlay{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end}
+.qoverlay.open{display:flex}
+.qscrim{position:absolute;inset:0;background:rgba(15,10,40,.55);backdrop-filter:blur(3px)}
+.qpanel{position:relative;z-index:1;background:var(--w);width:100%;max-width:580px;margin:0 auto;border-radius:18px 18px 0 0;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 -10px 50px rgba(109,40,217,.2);animation:panelUp .3s cubic-bezier(.32,.72,0,1)}
+@keyframes panelUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.qhead{padding:16px 18px 12px;border-bottom:1px solid var(--g100);flex-shrink:0}
+.qhead-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.qtitle{font-size:1rem;font-weight:800;color:var(--p800)}
+.qclose{width:28px;height:28px;border-radius:50%;background:var(--g100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--g500);transition:all .15s}
+.qclose:hover{background:var(--err-lt);color:var(--err)}
+.qpips{display:flex;gap:3px}
+.pip{flex:1;height:4px;border-radius:4px;background:var(--g100);transition:background .3s}
+.pip.ans{background:var(--p300)}.pip.cor{background:var(--ok)}.pip.wrg{background:var(--err)}
+.qbody{overflow-y:auto;padding:14px 18px 28px;flex:1}
+.qscore{display:none;background:linear-gradient(135deg,var(--p800),var(--p500));color:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;align-items:center;gap:14px}
+.qscore.show{display:flex}
+.qs-num{font-size:1.9rem;font-weight:800;line-height:1}
+.qs-sub{font-size:.65rem;opacity:.6;margin-top:2px}
+.qs-msg{font-size:.85rem;font-weight:600}
+.qitem{margin-bottom:24px}
+.qitem:last-child{margin-bottom:0}
+.qlbl{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--p500);margin-bottom:4px}
+.qtext{font-size:.88rem;font-weight:600;color:var(--g900);line-height:1.5;margin-bottom:10px}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1.5px solid var(--g200);border-radius:var(--rs);cursor:pointer;font-size:.83rem;font-weight:500;background:var(--w);color:var(--g700);transition:all .14s}
+.qopt:hover{border-color:var(--p300);background:var(--p50);color:var(--p800)}
+.qltr{width:21px;height:21px;border-radius:50%;background:var(--g100);border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:800;color:var(--g500);flex-shrink:0;transition:all .14s}
+.qopt.cor{background:var(--ok-lt);border-color:#86efac;color:#14532d}
+.qopt.cor .qltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.qopt.wrg{background:var(--err-lt);border-color:#fca5a5;color:#7f1d1d}
+.qopt.wrg .qltr{background:var(--err);border-color:var(--err);color:#fff}
+.qopt.lock{cursor:default;pointer-events:none}
+.qopt.lock:not(.cor):not(.wrg):hover{border-color:var(--g200);background:var(--w);color:var(--g700)}
+</style>
 </head>
 <body>
 
-    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/1mti1vwj8iRLseEnNhMd3ABFQFdHH0NwQ/preview', 'Syllabus')">
-        📄 DOWNLOAD NUTRITION & DIETETICS SYLLABUS
+<header class="topbar">
+  <button class="tb-back" onclick="goBackToApp()" aria-label="Back">&#8592;</button>
+  <div class="tb-info">
+    <div class="tb-title">Nutrition and Dietetics</div>
+    <div class="tb-sub">PBBSc Nursing · First Year</div>
+  </div>
+  <div class="tb-chip">4 Units</div>
+</header>
+
+<section class="hero">
+  <div class="hero-dot-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>PBBSc Nursing · First Year</div>
+    <h1>Nutrition &<br/><em>Dietetics</em></h1>
+    <p class="hero-desc">Unit notes, videos, quizzes & previous year papers — everything you need for your exams.</p>
+    <button class="hero-cta" onclick="openPDF('https://drive.google.com/file/d/1mti1vwj8iRLseEnNhMd3ABFQFdHH0NwQ/view')">
+      📄 &nbsp;Download Syllabus
+    </button>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-n">4</div><div class="hs-l">Units</div></div>
+      <div class="hs"><div class="hs-n">40</div><div class="hs-l">Quizzes</div></div>
+      <div class="hs"><div class="hs-n">1</div><div class="hs-l">PYQ</div></div>
     </div>
-    <div class="syllabus-btn secondary" onclick="openResource('notes', 'https://drive.google.com/file/d/1xbiqMZStaz0yMITH4jI15NxwTtXtTWnm/preview', 'Previous Year Q&A')">
-        ❓ PREVIOUS YEAR QUESTIONS & ANSWERS
+  </div>
+</section>
+
+<main class="main">
+  <div class="divider"><span>Course Units</span></div>
+
+  <!-- U1 -->
+  <div class="uc" id="u1" data-open="false">
+    <button class="ubtn" onclick="tog('u1')">
+      <div class="upill"><span>01</span></div>
+      <div class="uinfo"><div class="uname">Introduction to Nutrition</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u1">
+      <div class="rrow" style="margin-bottom:9px">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1OP4ZW8ZBg-pYOxb-fJ6Iby1uwji_zwPN/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1FPf2KmVydewMxWOnzOxBPYieaGqBVBOa/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow" style="margin-bottom:9px">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1oOS06Ie1tcoxFXlAGUl69wqqfcdNOBn6/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Open video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1bYydVEh60cj9ojoPtfhw3gqSayMfbTm3/view')">
+          <div class="rico">▶️</div><div class="rtxt">Balanced Diet Video<small>Open video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(1)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
     </div>
-    
-    <div id="units">
-        
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 1 - INTRODUCTION TO NUTRITION <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
+  </div>
 
-[Image of balanced diet food pyramid]
-
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1OP4ZW8ZBg-pYOxb-fJ6Iby1uwji_zwPN/preview', 'Detailed Notes: Intro')">
-                        <span class="icon">📚</span><span>Detailed Notes: Introduction</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1oOS06Ie1tcoxFXlAGUl69wqqfcdNOBn6/preview', 'Intro Video')">
-                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1bYydVEh60cj9ojoPtfhw3gqSayMfbTm3/preview', 'Balanced Diet')">
-                        <span class="icon video-icon">▶️</span><span>Balanced Diet & Planning Factors</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1FPf2KmVydewMxWOnzOxBPYieaGqBVBOa/preview', 'Lecture Notes: Intro')">
-                        <span class="icon">📄</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(1)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 2 - DIET THERAPY <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_MW1vV4gIn-JuABI4B2ja7f48swDePUf/preview', 'Detailed Notes: Diet Therapy')">
-                        <span class="icon">📚</span><span>Detailed Notes: Diet Therapy</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1NEVAA1yYUOFzJO0wNEHPYCAnk3KH1tYX/preview', 'Intro Video: Therapy')">
-                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1xIW7dvNGf13tSJpZR6Ojp-lvBOskQoht/preview', 'Hospital Diets')">
-                        <span class="icon video-icon">▶️</span><span>Routine Hospital Diets</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1KsRZ2o02usqi7WQC223pzM6xOMq0jZ2g/preview', 'Lecture Notes: Therapy')">
-                        <span class="icon">📄</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(2)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 3 - INFANT AND CHILD NUTRITION <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1V8Xlv2AVBlAIeGk4JOOjXOWRs1ymmt6O/preview', 'Detailed Notes: Child Nutrition')">
-                        <span class="icon">📚</span><span>Detailed Notes: Infant & Child</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/16snal0-Qbw_Dh2mx0Dozo37ARuCamZK-/preview', 'Intro Video: Child')">
-                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1DMXnhBDnL7Pf3c_wqs5J9F3TuNA0aAZ4/preview', 'Child Nutrition')">
-                        <span class="icon video-icon">▶️</span><span>Infant and Child Nutrition</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1JT7LJc1awfC08V2zlGal21ysPU7RUZoc/preview', 'Lecture Notes: Child')">
-                        <span class="icon">📄</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(3)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 4 - COMMUNITY NUTRITION <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1zzn1LqmZ3YV4Ok1YMmRKaLuvmBSHJKg0/preview', 'Detailed Notes: Community')">
-                        <span class="icon">📚</span><span>Detailed Notes: Community Nutrition</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1bYWOH_lLoobm6ZzYn7QfBuTVc7xyYKPY/preview', 'Intro Video: Community')">
-                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1l6DbL_oxziLty47KgrVU3aH1p8uTFRgf/preview', 'Community Programmes')">
-                        <span class="icon video-icon">▶️</span><span>Need for Community Nutrition Programme</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/12WVxhqDi1Uh3JXOmXsJ9AtXInUw-VSa_/preview', 'Lecture Notes: Community')">
-                        <span class="icon">📄</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(4)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+  <!-- U2 -->
+  <div class="uc" id="u2" data-open="false">
+    <button class="ubtn" onclick="tog('u2')">
+      <div class="upill"><span>02</span></div>
+      <div class="uinfo"><div class="uname">Diet Therapy</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u2">
+      <div class="rrow" style="margin-bottom:9px">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1_MW1vV4gIn-JuABI4B2ja7f48swDePUf/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1KsRZ2o02usqi7WQC223pzM6xOMq0jZ2g/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow" style="margin-bottom:9px">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1NEVAA1yYUOFzJO0wNEHPYCAnk3KH1tYX/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Open video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1xIW7dvNGf13tSJpZR6Ojp-lvBOskQoht/view')">
+          <div class="rico">▶️</div><div class="rtxt">Hospital Diets Video<small>Open video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(2)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
     </div>
+  </div>
 
-    <div id="app-modal" class="modal-overlay">
-        <div class="modal-header">
-            <div id="modal-title" class="modal-title">Resource</div>
-            <button class="btn-close" onclick="closeModal()">Close X</button>
-        </div>
-        <div id="modal-body" class="modal-body"></div>
+  <!-- U3 -->
+  <div class="uc" id="u3" data-open="false">
+    <button class="ubtn" onclick="tog('u3')">
+      <div class="upill"><span>03</span></div>
+      <div class="uinfo"><div class="uname">Infant and Child Nutrition</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u3">
+      <div class="rrow" style="margin-bottom:9px">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1V8Xlv2AVBlAIeGk4JOOjXOWRs1ymmt6O/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1JT7LJc1awfC08V2zlGal21ysPU7RUZoc/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow" style="margin-bottom:9px">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/16snal0-Qbw_Dh2mx0Dozo37ARuCamZK-/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Open video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1DMXnhBDnL7Pf3c_wqs5J9F3TuNA0aAZ4/view')">
+          <div class="rico">▶️</div><div class="rtxt">Child Nutrition Video<small>Open video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(3)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
     </div>
+  </div>
 
-    <script>
-        const QUIZ_DATA = {
-            1: [
-                { q: "Which of the following is a Macronutrient?", o: ["Vitamin A", "Calcium", "Protein", "Zinc"], a: 2 },
-                { q: "A 'Balanced Diet' provides:", o: ["Only protein", "All nutrients in correct proportion", "Only vitamins and minerals", "Excess calories"], a: 1 },
-                { q: "1 gram of Carbohydrate provides how many calories?", o: ["4 kcal", "9 kcal", "7 kcal", "2 kcal"], a: 0 },
-                { q: "Which factor least affects meal planning?", o: ["Age", "Socio-economic status", "Eye color", "Occupation"], a: 2 }
-            ],
-            2: [
-                { q: "A 'Therapeutic Diet' is modified to:", o: ["Reduce cost only", "Treat a disease or condition", "Increase taste only", "Decrease cooking time"], a: 1 },
-                { q: "Which of the following is allowed on a Clear Liquid Diet?", o: ["Milk", "Apple juice", "Oatmeal", "Scrambled eggs"], a: 1 },
-                { q: "A Soft Diet is typically prescribed for patients with:", o: ["High blood pressure", "Chewing or swallowing difficulties", "Kidney stones", "Obesity"], a: 1 },
-                { q: "Enteral nutrition refers to feeding via:", o: ["Veins", "Gastrointestinal tract", "Inhalation", "Skin patch"], a: 1 }
-            ],
-            3: [
-                { q: "Exclusive breastfeeding is recommended for the first:", o: ["3 months", "6 months", "9 months", "12 months"], a: 1 },
-                { q: "The process of introducing solid foods to an infant is called:", o: ["Lactation", "Weaning", "Gestation", "Digestion"], a: 1 },
-                { q: "Colostrum is rich in:", o: ["Fat", "Antibodies (IgA)", "Water", "Sugar"], a: 1 },
-                { q: "Deficiency of Vitamin D in children causes:", o: ["Scurvy", "Rickets", "Beriberi", "Night blindness"], a: 1 }
-            ],
-            4: [
-                { q: "Which method is used to assess nutritional status in a community?", o: ["Anthropometry", "Psychometry", "Audiometry", "Spirometry"], a: 0 },
-                { q: "ICDS stands for:", o: ["International Child Development Services", "Integrated Child Development Services", "Indian Child Diet System", "Integrated Care Delivery System"], a: 1 },
-                { q: "The Mid-Day Meal Programme primarily targets:", o: ["Pregnant women", "School-going children", "Elderly", "Infants"], a: 1 },
-                { q: "Night blindness is a clinical sign of which deficiency?", o: ["Vitamin C", "Vitamin A", "Iron", "Iodine"], a: 1 }
-            ]
-        };
+  <!-- U4 -->
+  <div class="uc" id="u4" data-open="false">
+    <button class="ubtn" onclick="tog('u4')">
+      <div class="upill"><span>04</span></div>
+      <div class="uinfo"><div class="uname">Community Nutrition</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u4">
+      <div class="rrow" style="margin-bottom:9px">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1zzn1LqmZ3YV4Ok1YMmRKaLuvmBSHJKg0/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/12WVxhqDi1Uh3JXOmXsJ9AtXInUw-VSa_/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow" style="margin-bottom:9px">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1bYWOH_lLoobm6ZzYn7QfBuTVc7xyYKPY/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Open video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1l6DbL_oxziLty47KgrVU3aH1p8uTFRgf/view')">
+          <div class="rico">▶️</div><div class="rtxt">Community Programmes<small>Open video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(4)">
+          <div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        let currentQuizUnit = 1;
-        let currentQuestionIndex = 0;
-        let score = 0;
+  <!-- PYQ -->
+  <div class="divider" style="margin-top:20px"><span>Previous Year Questions</span></div>
+  <div class="uc" id="upyq" data-open="false">
+    <button class="ubtn" onclick="tog('upyq')">
+      <div class="upill"><span style="font-size:.58rem">PYQ</span></div>
+      <div class="uinfo"><div class="uname">Previous Year Papers</div><div class="umeta">1 exam paper</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-upyq">
+      <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1xbiqMZStaz0yMITH4jI15NxwTtXtTWnm/view')">
+        <div class="rico">📄</div><div class="rtxt">Previous Year Q&A<small>Open PDF</small></div><span class="rarr">↗</span>
+      </button>
+    </div>
+  </div>
 
-        function toggleUnit(header) {
-            const content = header.nextElementSibling;
-            const isExpanded = header.getAttribute('aria-expanded') === 'true';
-            header.setAttribute('aria-expanded', !isExpanded);
-            content.classList.toggle('active');
-        }
+</main>
 
-        function openResource(type, url, title) {
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            document.getElementById('modal-title').textContent = title;
-            modal.style.display = 'flex';
-            let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
-            body.innerHTML = `<iframe class="iframe-res" src="${cleanUrl}"></iframe>`;
-        }
+<!-- QUIZ BOTTOM SHEET -->
+<div class="qoverlay" id="qmodal">
+  <div class="qscrim" onclick="closeQuiz()"></div>
+  <div class="qpanel">
+    <div class="qhead">
+      <div class="qhead-top">
+        <div class="qtitle" id="qtitle">Quiz</div>
+        <button class="qclose" onclick="closeQuiz()">✕</button>
+      </div>
+      <div class="qpips" id="qpips"></div>
+    </div>
+    <div class="qbody" id="qbody"></div>
+  </div>
+</div>
 
-        function startQuiz(unitId) {
-            currentQuizUnit = unitId;
-            currentQuestionIndex = 0;
-            score = 0;
-            const modal = document.getElementById('app-modal');
-            document.getElementById('modal-title').textContent = `Unit ${unitId} Quiz`;
-            modal.style.display = 'flex';
-            renderQuizQuestion();
-        }
+<script>
+function goBackToApp() {
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage({ action: 'goBack' }, '*');
+  } else { history.back(); }
+}
 
-        function renderQuizQuestion() {
-            const body = document.getElementById('modal-body');
-            const questions = QUIZ_DATA[currentQuizUnit];
-            
-            if (!questions || currentQuestionIndex >= questions.length) {
-                body.innerHTML = `
-                    <div class="quiz-container" style="text-align:center;">
-                        <h2>Quiz Complete! 🎉</h2>
-                        <p style="font-size:1.2rem; margin:20px 0;">You scored <strong>${score} / ${questions.length}</strong></p>
-                        <button class="btn-quiz" onclick="closeModal()">Close Quiz</button>
-                    </div>`;
-                return;
-            }
+function openPDF(url) {
+  const clean = url.replace(/\/preview.*$/,'').replace(/\/view.*$/,'') + '/view';
+  window.open(clean, '_blank');
+}
 
-            const q = questions[currentQuestionIndex];
-            body.innerHTML = `
-                <div class="quiz-container">
-                    <p class="quiz-question-text">Q${currentQuestionIndex + 1}: ${q.q}</p>
-                    <div>
-                        ${q.o.map((opt, i) => `
-                            <div class="quiz-option" onclick="checkAnswer(this, ${i}, ${q.a})">${opt}</div>
-                        `).join('')}
-                    </div>
-                    <div class="quiz-nav">
-                        <span>Question ${currentQuestionIndex + 1} of ${questions.length}</span>
-                        <button id="next-btn" class="btn-quiz" style="display:none;" onclick="nextQuestion()">Next ➡</button>
-                    </div>
-                </div>`;
-        }
+function tog(id) {
+  const card = document.getElementById(id);
+  const body = document.getElementById('b-' + id);
+  const open = card.dataset.open === 'true';
+  card.dataset.open = String(!open);
+  body.classList.toggle('open', !open);
+}
 
-        function checkAnswer(element, selectedIndex, correctIndex) {
-            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+const QD = {
+1:[
+  {q:"Which of the following is a Macronutrient?",o:["Vitamin A","Calcium","Protein","Zinc"],a:2},
+  {q:"A 'Balanced Diet' provides:",o:["Only protein","All nutrients in correct proportion","Only vitamins and minerals","Excess calories"],a:1},
+  {q:"1 gram of Carbohydrate provides how many calories?",o:["4 kcal","9 kcal","7 kcal","2 kcal"],a:0},
+  {q:"Which factor least affects meal planning?",o:["Age","Socio-economic status","Eye color","Occupation"],a:2},
+  {q:"The Food Pyramid recommends the largest portion from:",o:["Proteins","Cereals and grains","Fats and oils","Dairy products"],a:1},
+  {q:"Nutrition is defined as:",o:["Eating food","The science of food and its relationship to health","Cooking techniques","Calorie counting only"],a:1},
+  {q:"Malnutrition refers to:",o:["Only undernutrition","Both undernutrition and overnutrition","Only obesity","Only vitamin deficiencies"],a:1},
+  {q:"Recommended Dietary Allowance (RDA) is defined for:",o:["Individual needs","Meeting the nutrient requirements of healthy individuals in a population group","Athletes only","Sick patients"],a:1},
+  {q:"Basal Metabolic Rate (BMR) is:",o:["Calories burned during exercise","Energy required for basic body functions at rest","Calories from food","Activity expenditure"],a:1},
+  {q:"Water is considered an essential nutrient because:",o:["It tastes good","The body cannot survive without adequate water intake","It contains vitamins","It has calories"],a:1}
+],
+2:[
+  {q:"A 'Therapeutic Diet' is modified to:",o:["Reduce cost only","Treat a disease or condition","Increase taste only","Decrease cooking time"],a:1},
+  {q:"Which of the following is allowed on a Clear Liquid Diet?",o:["Milk","Apple juice","Oatmeal","Scrambled eggs"],a:1},
+  {q:"A Soft Diet is typically prescribed for patients with:",o:["High blood pressure","Chewing or swallowing difficulties","Kidney stones","Obesity"],a:1},
+  {q:"Enteral nutrition refers to feeding via:",o:["Veins","Gastrointestinal tract","Inhalation","Skin patch"],a:1},
+  {q:"Parenteral nutrition (TPN) bypasses the:",o:["Cardiovascular system","Gastrointestinal tract and delivers nutrients intravenously","Respiratory system","Urinary system"],a:1},
+  {q:"A low-residue diet restricts:",o:["Protein","Fiber and foods that increase stool bulk","Fat","Carbohydrates"],a:1},
+  {q:"Diabetic diet management focuses on:",o:["Eliminating all carbohydrates","Consistent carbohydrate intake and glycemic control","High sugar foods","Only insulin therapy"],a:1},
+  {q:"Renal diet for chronic kidney disease typically restricts:",o:["Water only","Protein, sodium, potassium and phosphorus","Carbohydrates","Fat"],a:1},
+  {q:"A high-protein diet is indicated in:",o:["Kidney failure","Wound healing, burns and malnutrition","Liver cirrhosis","Acute renal failure"],a:1},
+  {q:"Low-sodium diet is prescribed for management of:",o:["Diabetes","Hypertension, heart failure and oedema","Anaemia","Hypoglycaemia"],a:1}
+],
+3:[
+  {q:"Exclusive breastfeeding is recommended for the first:",o:["3 months","6 months","9 months","12 months"],a:1},
+  {q:"The process of introducing solid foods to an infant is called:",o:["Lactation","Weaning","Gestation","Digestion"],a:1},
+  {q:"Colostrum is rich in:",o:["Fat","Antibodies (IgA)","Water","Sugar"],a:1},
+  {q:"Deficiency of Vitamin D in children causes:",o:["Scurvy","Rickets","Beriberi","Night blindness"],a:1},
+  {q:"Complementary feeding should ideally begin at:",o:["2 months","6 months","9 months","12 months"],a:1},
+  {q:"Iron deficiency anaemia in children is commonly caused by:",o:["Excess milk consumption","Insufficient dietary iron and delayed complementary feeding","Too many vegetables","Excessive water intake"],a:1},
+  {q:"Protein-Energy Malnutrition (PEM) in children includes:",o:["Only marasmus","Kwashiorkor and marasmus","Only obesity","Only vitamin deficiencies"],a:1},
+  {q:"Growth monitoring in children is done using:",o:["Blood tests only","Growth charts plotting weight-for-age, height-for-age","X-rays","Urine tests"],a:1},
+  {q:"Nutritional requirements in adolescence increase due to:",o:["Decreased activity","Rapid growth spurt and hormonal changes","Reduced appetite","Lower metabolic rate"],a:1},
+  {q:"The first food to be introduced during weaning is typically:",o:["Meat","Iron-fortified cereals or mashed fruits/vegetables","Whole milk","Eggs"],a:1}
+],
+4:[
+  {q:"Which method is used to assess nutritional status in a community?",o:["Anthropometry","Psychometry","Audiometry","Spirometry"],a:0},
+  {q:"ICDS stands for:",o:["International Child Development Services","Integrated Child Development Services","Indian Child Diet System","Integrated Care Delivery System"],a:1},
+  {q:"The Mid-Day Meal Programme primarily targets:",o:["Pregnant women","School-going children","Elderly","Infants"],a:1},
+  {q:"Night blindness is a clinical sign of which deficiency?",o:["Vitamin C","Vitamin A","Iron","Iodine"],a:1},
+  {q:"Iodine deficiency in a community leads to:",o:["Scurvy","Goitre and cretinism","Rickets","Anaemia"],a:1},
+  {q:"Protein-Energy Malnutrition (PEM) in communities is assessed by:",o:["Blood pressure","Anthropometric measurements like weight-for-height and mid-upper arm circumference","Only laboratory tests","X-rays"],a:1},
+  {q:"National Nutritional Anaemia Prophylaxis Programme provides:",o:["Vitamin A supplements","Iron and folic acid supplements","Calcium tablets","Vitamin D"],a:1},
+  {q:"Food fortification means:",o:["Cooking food","Adding essential nutrients to food to improve nutritional value","Making food expensive","Increasing calories only"],a:1},
+  {q:"Nutrition surveillance in a community involves:",o:["One-time survey","Continuous monitoring of nutritional status to detect problems early","Only hospital-based care","Laboratory testing only"],a:1},
+  {q:"The target group for Vitamin A supplementation programme is:",o:["Adult men","Children 6 months to 5 years and postpartum mothers","Only pregnant women","Elderly"],a:1}
+]
+};
 
-            if (selectedIndex === correctIndex) {
-                element.classList.add('correct');
-                score++;
-            } else {
-                element.classList.add('wrong');
-                element.parentElement.children[correctIndex].classList.add('correct');
-            }
-            document.getElementById('next-btn').style.display = 'block';
-        }
+const LTRS=['A','B','C','D'];
+let curQuiz=null, answered=[];
 
-        function nextQuestion() {
-            currentQuestionIndex++;
-            renderQuizQuestion();
-        }
+function openQuiz(id){
+  curQuiz=id;
+  const qs=QD[id]||[];
+  answered=new Array(qs.length).fill(null);
+  document.getElementById('qtitle').textContent='Unit '+id+' Quiz';
+  document.getElementById('qpips').innerHTML=qs.map((_,i)=>`<div class="pip" id="pip${i}"></div>`).join('');
+  let html=`<div class="qscore" id="qscore"><div><div class="qs-num" id="qsnum">—</div><div class="qs-sub">Score</div></div><div class="qs-msg" id="qsmsg"></div></div>`;
+  qs.forEach((q,qi)=>{
+    html+=`<div class="qitem" id="qi${qi}"><div class="qlbl">Question ${qi+1} of ${qs.length}</div><div class="qtext">${q.q}</div><div class="qopts">${q.o.map((opt,oi)=>`<button class="qopt" id="opt${qi}_${oi}" onclick="ans(${qi},${oi},${q.a})"><span class="qltr">${LTRS[oi]}</span>${opt}</button>`).join('')}</div></div>`;
+  });
+  document.getElementById('qbody').innerHTML=html;
+  document.getElementById('qmodal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
 
-        function closeModal() { 
-            document.getElementById('app-modal').style.display = 'none'; 
-            document.getElementById('modal-body').innerHTML = ""; 
-        }
-    </script>
+function ans(qi,oi,correct){
+  if(answered[qi]!==null)return;
+  answered[qi]=oi;
+  const opts=document.querySelectorAll(`#qi${qi} .qopt`);
+  opts.forEach(b=>b.classList.add('lock'));
+  opts[correct].classList.add('cor');
+  if(oi!==correct)opts[oi].classList.add('wrg');
+  const pip=document.getElementById('pip'+qi);
+  pip.classList.add('ans',oi===correct?'cor':'wrg');
+  if(answered.every(a=>a!==null)){
+    const score=answered.filter((a,i)=>a===QD[curQuiz][i].a).length;
+    const total=QD[curQuiz].length;
+    const pct=Math.round(score/total*100);
+    const msgs=['📚 Keep Studying!','👍 Good Effort!','🎉 Well Done!','🏆 Perfect!'];
+    const mi=pct<50?0:pct<70?1:pct<100?2:3;
+    document.getElementById('qsnum').textContent=score+'/'+total;
+    document.getElementById('qsmsg').textContent=msgs[mi];
+    const sc=document.getElementById('qscore');
+    sc.classList.add('show');
+    sc.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+
+function closeQuiz(){
+  document.getElementById('qmodal').classList.remove('open');
+  document.body.style.overflow='';
+  curQuiz=null;
+}
+
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQuiz();});
+</script>
 </body>
 </html>
