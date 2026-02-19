@@ -1,587 +1,628 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nursing Education - Syllabus & Quizzes</title>
-    <meta name="description" content="Interactive syllabus with internal quizzes for Nursing Education." />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <style>
-        :root {
-            --brand: #003B82; 
-            --accent: #00B9F2;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-700: #374151;
-            --gray-900: #111827;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-            --danger: #ef4444;
-            --success: #10b981;
-            --warning: #f59e0b;
-        }
-
-        * { box-sizing: border-box; }
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: white;
-            color: var(--gray-900);
-            line-height: 1.6;
-            padding: 24px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .syllabus-btn, .unit-header {
-            display: block;
-            width: 100%;
-            padding: 18px 24px;
-            margin: 12px 0;
-            background: var(--brand);
-            color: white;
-            font-weight: 600;
-            font-size: 16px;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.2s ease;
-        }
-        .syllabus-btn:hover, .unit-header:hover {
-            background: #002d63;
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
-        
-        .syllabus-btn.secondary { background: var(--accent); }
-        .syllabus-btn.secondary:hover { background: #009yc0; }
-
-        .unit-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-align: left;
-            margin: 16px 0;
-        }
-        .unit-header span:last-child {
-            transition: transform 0.3s ease;
-            color: #FFA500;
-        }
-        .unit-header[aria-expanded="true"] span:last-child {
-            transform: rotate(180deg);
-        }
-
-        .unit-content {
-            padding: 0 12px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.3s ease;
-        }
-        .unit-content.active {
-            padding: 24px 12px;
-            max-height: none; 
-        }
-
-        .subsection {
-            margin: 16px 0;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            border: 1px solid var(--gray-200);
-            box-shadow: var(--shadow-sm);
-            transition: box-shadow 0.2s ease;
-        }
-
-        .resource-btn {
-            display: flex;
-            align-items: flex-start;
-            width: 100%;
-            padding: 14px 18px;
-            margin: 8px 0;
-            background: var(--gray-50);
-            color: var(--gray-900);
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
-            border: 1px solid var(--gray-200);
-            transition: all 0.2s ease;
-            gap: 12px;
-            cursor: pointer;
-        }
-        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
-        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
-        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
-        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
-        .resource-btn.disabled { opacity: 0.6; cursor: not-allowed; background: #f3f4f6; color: #9ca3af; border-color: #e5e7eb; }
-
-        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
-        .icon.video-icon { color: #8b5cf6; }
-        .icon.quiz-icon { color: #f59e0b; }
-
-        /* --- MODAL --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-        }
-
-        .modal-header {
-            height: 60px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            flex-shrink: 0;
-        }
-
-        .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; }
-        
-        .btn-close {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            flex: 1;
-            background: #f3f4f6;
-            position: relative;
-            overflow-y: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .iframe-res {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #fff;
-            display: block;
-        }
-
-        /* --- QUIZ STYLES --- */
-        .quiz-container {
-            background: white;
-            width: 100%;
-            max-width: 600px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            padding: 30px;
-        }
-        .quiz-question-text {
-            font-size: 1.15rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: var(--gray-900);
-        }
-        .quiz-option {
-            padding: 15px;
-            border: 2px solid var(--gray-200);
-            border-radius: 8px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-weight: 500;
-        }
-        .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
-        
-        .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; position: relative; }
-        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
-        
-        .quiz-nav { display: flex; justify-content: space-between; margin-top: 20px; }
-        .btn-quiz { background: var(--brand); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
-
-        @media (max-width: 768px) {
-            body { padding: 16px; }
-            .unit-header, .resource-btn { font-size: 15px; }
-            .modal-body { padding: 0; }
-            .quiz-container { height: 100%; border-radius: 0; max-width: 100%; padding: 20px; }
-        }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nursing Education</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --p50:#faf5ff;--p100:#f3e8ff;--p200:#e9d5ff;--p300:#d8b4fe;
+  --p400:#c084fc;--p500:#a855f7;--p600:#9333ea;--p700:#7e22ce;
+  --p800:#6b21a8;--p900:#581c87;
+  --w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;
+  --g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;
+  --ok:#16a34a;--ok-lt:#dcfce7;--err:#dc2626;--err-lt:#fee2e2;
+  --warn:#d97706;--warn-lt:#fef3c7;
+  --r:12px;--rs:8px;
+  --s1:0 1px 3px rgba(109,40,217,.08);
+  --s2:0 4px 12px rgba(109,40,217,.12);
+  --s3:0 8px 30px rgba(109,40,217,.16);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:90;background:var(--w);border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 16px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-back{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:var(--p100);color:var(--p700);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;margin-right:12px}
+.tb-back:hover{background:var(--p200)}
+.tb-info{flex:1;min-width:0}
+.tb-title{font-size:.88rem;font-weight:700;color:var(--g900);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb-sub{font-size:.65rem;color:var(--g400);font-weight:500;margin-top:1px}
+.tb-chip{background:var(--p100);color:var(--p700);border:1px solid var(--p200);font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
+.hero{background:linear-gradient(145deg,var(--p900),var(--p700) 55%,var(--p500));padding:28px 18px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.08),transparent 50%),radial-gradient(circle at 10% 85%,rgba(255,255,255,.05),transparent 40%)}
+.hero::after{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-dot-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:.65rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border-radius:30px;margin-bottom:12px}
+.hero-eyebrow-dot{width:5px;height:5px;background:#c4b5fd;border-radius:50%}
+.hero h1{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:7px}
+.hero h1 em{color:rgba(255,255,255,.45);font-style:italic;font-weight:300}
+.hero-desc{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:18px}
+.hero-cta{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.28);color:#fff;font-size:.8rem;font-weight:700;padding:9px 16px;border-radius:9px;cursor:pointer;transition:all .2s;backdrop-filter:blur(6px)}
+.hero-cta:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
+.hero-stats{display:flex;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+.hs{flex:1;text-align:center}
+.hs+.hs{border-left:1px solid rgba(255,255,255,.1)}
+.hs-n{font-size:1.35rem;font-weight:800;color:#fff;line-height:1}
+.hs-l{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
+.main{padding:16px 14px 56px}
+.divider{display:flex;align-items:center;gap:8px;margin-bottom:12px;margin-top:2px}
+.divider span{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g400)}
+.divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+.uc{background:var(--w);border:1.5px solid var(--g200);border-radius:var(--r);margin-bottom:9px;overflow:hidden;box-shadow:var(--s1);transition:border-color .2s,box-shadow .2s}
+.uc:hover{border-color:var(--p300);box-shadow:var(--s2)}
+.uc[data-open=true]{border-color:var(--p400);box-shadow:var(--s2)}
+.ubtn{width:100%;display:flex;align-items:center;padding:14px 15px;gap:12px;background:none;border:none;cursor:pointer;text-align:left}
+.upill{height:36px;padding:0 12px;border-radius:9px;flex-shrink:0;background:var(--p100);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.upill span{font-size:.67rem;font-weight:800;color:var(--p700);letter-spacing:-.01em;white-space:nowrap}
+.uc[data-open=true] .upill{background:var(--p700)}
+.uc[data-open=true] .upill span{color:#fff}
+.uinfo{flex:1;min-width:0}
+.uname{font-size:.85rem;font-weight:700;color:var(--g900);line-height:1.3}
+.umeta{font-size:.66rem;color:var(--g400);margin-top:2px;font-weight:500}
+.uright{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.uchev{width:16px;height:16px;color:var(--g300);transition:transform .3s,color .2s}
+.uc[data-open=true] .uchev{transform:rotate(180deg);color:var(--p500)}
+.ubody{display:none;background:var(--p50);border-top:1.5px solid var(--p200);padding:12px 13px 14px}
+.ubody.open{display:block;animation:bodyIn .2s ease}
+@keyframes bodyIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.img-tag-container{margin-bottom:12px;font-size:0.75rem;font-weight:700;color:var(--p700);background:var(--p100);padding:10px 12px;border-radius:var(--rs);border:1px dashed var(--p300);text-align:center;}
+.rrow{display:flex;gap:9px;margin-bottom:9px}
+.rrow:last-child{margin-bottom:0}
+@media(max-width:380px){.rrow{flex-direction:column}}
+.rbtn{flex:1;display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .17s;background:var(--w);text-decoration:none}
+.rbtn[disabled], .rbtn.disabled {opacity:0.6; cursor:not-allowed; background:var(--g100); border-color:var(--g200); color:var(--g500);}
+.rbtn[disabled] .rico, .rbtn.disabled .rico {background:var(--g200); color:var(--g500);}
+.rbtn .rico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.rbtn .rtxt{line-height:1.25}
+.rbtn .rtxt small{display:block;font-size:.62rem;font-weight:400;opacity:.5;margin-top:1px}
+.rbtn .rarr{margin-left:auto;opacity:0;font-size:.7rem;color:var(--g400);transition:opacity .15s}
+.rbtn:not(.disabled):hover .rarr{opacity:1}
+.rbtn.notes{border-color:var(--p200);color:var(--p800)}
+.rbtn.notes .rico{background:var(--p100)}
+.rbtn.notes:not(.disabled):hover{background:var(--p50);border-color:var(--p500);box-shadow:var(--s2);transform:translateY(-1px)}
+.rbtn.video{border-color:var(--p300);color:var(--p900)}
+.rbtn.video .rico{background:var(--p100);color:var(--p700)}
+.rbtn.video:not(.disabled):hover{background:var(--p50);border-color:var(--p600);box-shadow:var(--s2);transform:translateY(-1px)}
+.rbtn.quiz{border-color:#fde68a;color:#78350f}
+.rbtn.quiz .rico{background:var(--warn-lt)}
+.rbtn.quiz:not(.disabled):hover{background:#fffbeb;border-color:var(--warn);box-shadow:0 3px 10px rgba(217,119,6,.12);transform:translateY(-1px)}
+.rbtn.pyq{border-color:#bbf7d0;color:#14532d}
+.rbtn.pyq .rico{background:var(--ok-lt)}
+.rbtn.pyq:not(.disabled):hover{background:#f0fdf4;border-color:var(--ok);box-shadow:0 3px 10px rgba(22,163,74,.12);transform:translateY(-1px)}
+.pyq-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:380px){.pyq-grid{grid-template-columns:1fr}}
+.qoverlay{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end}
+.qoverlay.open{display:flex}
+.qscrim{position:absolute;inset:0;background:rgba(15,10,40,.55);backdrop-filter:blur(3px)}
+.qpanel{position:relative;z-index:1;background:var(--w);width:100%;max-width:580px;margin:0 auto;border-radius:18px 18px 0 0;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 -10px 50px rgba(109,40,217,.2);animation:panelUp .3s cubic-bezier(.32,.72,0,1)}
+@keyframes panelUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.qhead{padding:16px 18px 12px;border-bottom:1px solid var(--g100);flex-shrink:0}
+.qhead-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.qtitle{font-size:1rem;font-weight:800;color:var(--p800)}
+.qclose{width:28px;height:28px;border-radius:50%;background:var(--g100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--g500);transition:all .15s}
+.qclose:hover{background:var(--err-lt);color:var(--err)}
+.qpips{display:flex;gap:3px}
+.pip{flex:1;height:4px;border-radius:4px;background:var(--g100);transition:background .3s}
+.pip.ans{background:var(--p300)}.pip.cor{background:var(--ok)}.pip.wrg{background:var(--err)}
+.qbody{overflow-y:auto;padding:14px 18px 28px;flex:1}
+.qscore{display:none;background:linear-gradient(135deg,var(--p800),var(--p500));color:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;align-items:center;gap:14px}
+.qscore.show{display:flex}
+.qs-num{font-size:1.9rem;font-weight:800;line-height:1}
+.qs-sub{font-size:.65rem;opacity:.6;margin-top:2px}
+.qs-msg{font-size:.85rem;font-weight:600}
+.qitem{margin-bottom:24px}
+.qitem:last-child{margin-bottom:0}
+.qlbl{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--p500);margin-bottom:4px}
+.qtext{font-size:.88rem;font-weight:600;color:var(--g900);line-height:1.5;margin-bottom:10px}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1.5px solid var(--g200);border-radius:var(--rs);cursor:pointer;font-size:.83rem;font-weight:500;background:var(--w);color:var(--g700);transition:all .14s}
+.qopt:hover{border-color:var(--p300);background:var(--p50);color:var(--p800)}
+.qltr{width:21px;height:21px;border-radius:50%;background:var(--g100);border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:800;color:var(--g500);flex-shrink:0;transition:all .14s}
+.qopt.cor{background:var(--ok-lt);border-color:#86efac;color:#14532d}
+.qopt.cor .qltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.qopt.wrg{background:var(--err-lt);border-color:#fca5a5;color:#7f1d1d}
+.qopt.wrg .qltr{background:var(--err);border-color:var(--err);color:#fff}
+.qopt.lock{cursor:default;pointer-events:none}
+.qopt.lock:not(.cor):not(.wrg):hover{border-color:var(--g200);background:var(--w);color:var(--g700)}
+</style>
 </head>
 <body>
 
-    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/1YVfqEwUyQbVZQ-4dDUvdXhMTb_HgZvAx/preview', 'Syllabus')">
-        📄 DOWNLOAD NURSING EDUCATION SYLLABUS
+<header class="topbar">
+  <button class="tb-back" onclick="goBackToApp()" aria-label="Back">&#8592;</button>
+  <div class="tb-info">
+    <div class="tb-title">Nursing Education</div>
+    <div class="tb-sub">Nursing · Syllabus & Quizzes</div>
+  </div>
+  <div class="tb-chip">8 Units</div>
+</header>
+
+<section class="hero">
+  <div class="hero-dot-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>Nursing · Syllabus & Quizzes</div>
+    <h1>Nursing<br/><em>Education</em></h1>
+    <p class="hero-desc">Interactive syllabus, unit notes, video lectures, and quizzes for your exams.</p>
+    <button class="hero-cta" onclick="openPDF('https://drive.google.com/file/d/1YVfqEwUyQbVZQ-4dDUvdXhMTb_HgZvAx/view')">
+      📄 &nbsp;Download Syllabus
+    </button>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-n">8</div><div class="hs-l">Units</div></div>
+      <div class="hs"><div class="hs-n">80</div><div class="hs-l">Questions</div></div>
+      <div class="hs"><div class="hs-n">1</div><div class="hs-l">PYQ</div></div>
     </div>
-    <div class="syllabus-btn secondary" onclick="openResource('notes', 'https://drive.google.com/file/d/1_suvlfoYbEGmAlIxmeKx-PRLhlTlHkE0/preview', 'Previous Year Q&A')">
-        ❓ PREVIOUS YEAR QUESTIONS & ANSWERS
+  </div>
+</section>
+
+<main class="main">
+  
+  <div class="divider"><span>Course Units</span></div>
+
+  <div class="uc" id="u1" data-open="false">
+    <button class="ubtn" onclick="tog('u1')">
+      <div class="upill"><span>Unit 01</span></div>
+      <div class="uinfo"><div class="uname">Introduction to Nursing Ed.</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u1">
+      <div class="img-tag-container"></div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1-qB7H0KFwhlYTXsKbrF_GXpakQAU9ay/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1kyl7HICaXFdxpXjbeXEEa7YWAIwa9uEk/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1P1pZYgU4TKIVO_bf7xMM-TZyJTd8qrkG/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1i3AyBGWfIYN5qcEwsByjIZ_IM4HF_UV7/view')">
+          <div class="rico">▶️</div><div class="rtxt">Education Intro<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(1)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 1 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
     </div>
-    
-    <div id="units">
-        
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 1 - INTRODUCTION TO NURSING EDUCATION <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1-qB7H0KFwhlYTXsKbrF_GXpakQAU9ay/preview', 'Detailed Notes: Intro')">
-                        <span class="icon">📚</span><span>Detailed Notes: Introduction</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1P1pZYgU4TKIVO_bf7xMM-TZyJTd8qrkG/preview', 'Intro Video')">
-                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1i3AyBGWfIYN5qcEwsByjIZ_IM4HF_UV7/preview', 'Education Intro')">
-                        <span class="icon video-icon">▶️</span><span>Introduction to Nursing Education</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1kyl7HICaXFdxpXjbeXEEa7YWAIwa9uEk/preview', 'Lecture Notes: Intro')">
-                        <span class="icon">📄</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(1)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  </div>
 
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 2 - TEACHING LEARNING PROCESS <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1n735xWNAw55cqjR_T9ngnba0nOIp-M_2/preview', 'Detailed Notes: Teaching')">
-                        <span class="icon">📚</span><span>Detailed Notes: Teaching Learning Process</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1stdgagDieXLTWnBhwEl4nDG-7iLlIpKH/preview', 'Intro Video: Teaching')">
-                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/14BpSIlOwCe3AH3_WWAnQU-JDq0u94CKs/preview', 'Process Video')">
-                        <span class="icon video-icon">▶️</span><span>Learning Process & Lesson Planning</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1dtLvr39TusBrrUm3utw8Eo3EtyYZbWCt/preview', 'Lecture Notes: Teaching')">
-                        <span class="icon">📄</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(2)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="uc" id="u2" data-open="false">
+    <button class="ubtn" onclick="tog('u2')">
+      <div class="upill"><span>Unit 02</span></div>
+      <div class="uinfo"><div class="uname">Teaching Learning Process</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u2">
+      <div class="img-tag-container">
 
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 3 - METHODS OF TEACHING <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_KBwU0pszgBaVh7gIPMzK1darm1ivlbM/preview', 'Detailed Notes: Methods')">
-                        <span class="icon">📚</span><span>Detailed Notes: Teaching Methods</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/16SKHVPOIe0ZK1EuHO8lQct4zY4yAjngu/preview', 'Intro Video: Methods')">
-                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1P_d53rayE7zevripdibMoFNepdi1IqPX/preview', 'Methods Video')">
-                        <span class="icon video-icon">▶️</span><span>Methods of Teaching</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1btqVoCyUqT8Mp6c7sxbmz9C38XhfK5aZ/preview', 'Lecture Notes: Methods')">
-                        <span class="icon">📄</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(3)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+[Image of domains of learning cognitive affective psychomotor]
+</div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1n735xWNAw55cqjR_T9ngnba0nOIp-M_2/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1dtLvr39TusBrrUm3utw8Eo3EtyYZbWCt/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1stdgagDieXLTWnBhwEl4nDG-7iLlIpKH/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/14BpSIlOwCe3AH3_WWAnQU-JDq0u94CKs/view')">
+          <div class="rico">▶️</div><div class="rtxt">Process Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(2)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 2 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 4 - EDUCATIONAL MEDIA <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Hl8aMV872O_-6KtEFu8WOGy_DSOeix6i/preview', 'Detailed Notes: Media')">
-                        <span class="icon">📚</span><span>Detailed Notes: Educational Media</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1RdrPf2vyaFciRuBFO-Y5S1ZP6tuQlYSS/preview', 'Intro Video: Media')">
-                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1QkltKqw-vnCZK4F408FP8kzu5GsDWQFF/preview', 'Media Video')">
-                        <span class="icon video-icon">▶️</span><span>Enhancing Learning with Media</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/196s5mr8UXL_40ryjyACEtULxbux6njlZ/preview', 'Lecture Notes: Media')">
-                        <span class="icon">📄</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(4)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="uc" id="u3" data-open="false">
+    <button class="ubtn" onclick="tog('u3')">
+      <div class="upill"><span>Unit 03</span></div>
+      <div class="uinfo"><div class="uname">Methods of Teaching</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u3">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1_KBwU0pszgBaVh7gIPMzK1darm1ivlbM/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1btqVoCyUqT8Mp6c7sxbmz9C38XhfK5aZ/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/16SKHVPOIe0ZK1EuHO8lQct4zY4yAjngu/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1P_d53rayE7zevripdibMoFNepdi1IqPX/view')">
+          <div class="rico">▶️</div><div class="rtxt">Methods Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(3)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 3 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 5 - ASSESSMENT & EVALUATION <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
+  <div class="uc" id="u4" data-open="false">
+    <button class="ubtn" onclick="tog('u4')">
+      <div class="upill"><span>Unit 04</span></div>
+      <div class="uinfo"><div class="uname">Educational Media</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u4">
+      <div class="img-tag-container">
+
+[Image of Edgar Dale's cone of experience]
+</div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Hl8aMV872O_-6KtEFu8WOGy_DSOeix6i/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/196s5mr8UXL_40ryjyACEtULxbux6njlZ/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1RdrPf2vyaFciRuBFO-Y5S1ZP6tuQlYSS/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1QkltKqw-vnCZK4F408FP8kzu5GsDWQFF/view')">
+          <div class="rico">▶️</div><div class="rtxt">Media Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(4)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 4 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u5" data-open="false">
+    <button class="ubtn" onclick="tog('u5')">
+      <div class="upill"><span>Unit 05</span></div>
+      <div class="uinfo"><div class="uname">Assessment & Evaluation</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u5">
+      <div class="img-tag-container">
 
 [Image of Bloom's taxonomy pyramid]
-
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/11M5wmWvoB2eyYmwsxzK4oR_fTF64zm4e/preview', 'Detailed Notes: Assessment')">
-                        <span class="icon">📚</span><span>Detailed Notes: Assessment Methods</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1l4iz9IMsJV5XueU4dhZCSE4rPWLNavvD/preview', 'Intro Video: Assessment')">
-                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/17YKDxyarrgSj0vkfeLiFJ15TFnO2oQgD/preview', 'Evaluation Video')">
-                        <span class="icon video-icon">▶️</span><span>Assessment and Evaluation</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1u7dMglaopN7YSm998WUjaQwuE17lTxIO/preview', 'Lecture Notes: Assessment')">
-                        <span class="icon">📄</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(5)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 6 - MANAGEMENT OF SCHOOL OF NURSING <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1lhi4nitKvkfHc6POGVk6y-aCPLtPvbsL/preview', 'Detailed Notes: Management')">
-                        <span class="icon">📚</span><span>Detailed Notes: School Management</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/15SFRqaDY0LDeZdbiyopuBTmjq8r0phDc/preview', 'Intro Video: Management')">
-                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1_y_1xzIsrQkUPxw8nLotzIyaHn3djOWh/preview', 'Planning Video')">
-                        <span class="icon video-icon">▶️</span><span>Planning, Budgeting & Facilities</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1PzBKQaoskn1kvWQykuDBySxx-ddOhak0/preview', 'Lecture Notes: Management')">
-                        <span class="icon">📄</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(6)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 7 - GUIDANCE AND COUNSELLING <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Bgm7ejbEh9HEmx7YWkeQ-j-bcrgxcjl7/preview', 'Detailed Notes: Guidance')">
-                        <span class="icon">📚</span><span>Detailed Notes: Guidance & Counselling</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/17e00BItMEaMU-A_mxL12FktyAuQhEzOF/preview', 'Intro Video: Guidance')">
-                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
-                    </div>
-                    <div class="resource-btn disabled" onclick="alert('Content Coming Soon')">
-                        <span class="icon video-icon">▶️</span><span>Guidance in Schools (Coming Soon)</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ZhxYeBhNOaoTTAasWdnltmn1osO2drAv/preview', 'Lecture Notes: Guidance')">
-                        <span class="icon">📄</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(7)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 8 - IN-SERVICE EDUCATION <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1s95rCr449n7JRaoTJqk0WMYDKxnwoSQq/preview', 'Detailed Notes: In-Service')">
-                        <span class="icon">📚</span><span>Detailed Notes: In-Service Education</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1cVxbS5dC8PE40ozVt68NWaUEa0kJZLZC/preview', 'Intro Video: In-Service')">
-                        <span class="icon video-icon">▶️</span><span>Introduction Video</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/103urF8DMGS6chnSIwgSZTtKxzCeTbXJI/preview', 'In-Service Video')">
-                        <span class="icon video-icon">▶️</span><span>In-Service Education in Nursing</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1KMqc0NCqm887X60R9prYYQX7REtn3fPT/preview', 'Lecture Notes: In-Service')">
-                        <span class="icon">📄</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(8)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 8 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+</div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/11M5wmWvoB2eyYmwsxzK4oR_fTF64zm4e/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1u7dMglaopN7YSm998WUjaQwuE17lTxIO/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1l4iz9IMsJV5XueU4dhZCSE4rPWLNavvD/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/17YKDxyarrgSj0vkfeLiFJ15TFnO2oQgD/view')">
+          <div class="rico">▶️</div><div class="rtxt">Eval Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(5)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 5 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
     </div>
+  </div>
 
-    <div id="app-modal" class="modal-overlay">
-        <div class="modal-header">
-            <div id="modal-title" class="modal-title">Resource</div>
-            <button class="btn-close" onclick="closeModal()">Close X</button>
-        </div>
-        <div id="modal-body" class="modal-body"></div>
+  <div class="uc" id="u6" data-open="false">
+    <button class="ubtn" onclick="tog('u6')">
+      <div class="upill"><span>Unit 06</span></div>
+      <div class="uinfo"><div class="uname">Management of Nursing School</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u6">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1lhi4nitKvkfHc6POGVk6y-aCPLtPvbsL/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1PzBKQaoskn1kvWQykuDBySxx-ddOhak0/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/15SFRqaDY0LDeZdbiyopuBTmjq8r0phDc/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1_y_1xzIsrQkUPxw8nLotzIyaHn3djOWh/view')">
+          <div class="rico">▶️</div><div class="rtxt">Planning<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(6)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 6 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
     </div>
+  </div>
 
-    <script>
-        const QUIZ_DATA = {
-            1: [
-                { q: "Education is a process of changing:", o: ["Books", "Behavior", "Classrooms", "Grades"], a: 1 },
-                { q: "The primary aim of nursing education is to prepare nurses to:", o: ["Earn money", "Pass exams", "Provide comprehensive nursing care", "Become doctors"], a: 2 },
-                { q: "Which philosophy emphasizes 'learning by doing'?", o: ["Idealism", "Pragmatism", "Naturalism", "Realism"], a: 1 },
-                { q: "Who is considered the founder of modern nursing education?", o: ["Florence Nightingale", "Virginia Henderson", "Dorothea Orem", "Peplau"], a: 0 }
-            ],
-            2: [
-                { q: "The three domains of learning are:", o: ["Cognitive, Affective, Psychomotor", "Knowledge, Skill, Attitude", "Thinking, Feeling, Doing", "All of the above"], a: 3 },
-                { q: "A lesson plan is best described as a:", o: ["Teacher's diary", "Blueprint for teaching", "Student record", "Time table"], a: 1 },
-                { q: "Maxims of teaching include proceeding from:", o: ["Complex to Simple", "Unknown to Known", "Simple to Complex", "Abstract to Concrete"], a: 2 },
-                { q: "The first step in lesson planning is:", o: ["Selecting content", "Formulating objectives", "Choosing AV aids", "Evaluation"], a: 1 }
-            ],
-            3: [
-                { q: "Which method is best for teaching a large group of students?", o: ["Demonstration", "Lecture", "Role Play", "Tutorial"], a: 1 },
-                { q: "Micro-teaching focuses on:", o: ["Teaching a full lesson", "Mastering a specific teaching skill", "Teaching for one hour", "Teaching without aids"], a: 1 },
-                { q: "A clinical teaching method where students discuss a patient case is:", o: ["Bedside clinic", "Nursing rounds", "Case presentation", "All of the above"], a: 3 },
-                { q: "Role play is primarily effective for developing:", o: ["Knowledge", "Psychomotor skills", "Communication and empathy", "Writing skills"], a: 2 }
-            ],
-            4: [
-                { q: "Which is a projected AV aid?", o: ["Blackboard", "Overhead Projector (OHP)", "Chart", "Model"], a: 1 },
-                { q: "The 'Cone of Experience' was developed by:", o: ["Edgar Dale", "B.F. Skinner", "John Dewey", "Bloom"], a: 0 },
-                { q: "A three-dimensional representation of a real object is called a:", o: ["Chart", "Graph", "Model", "Flashcard"], a: 2 },
-                { q: "The most commonly used non-projected visual aid in classrooms is:", o: ["Chalkboard", "Filmstrip", "Slide", "Computer"], a: 0 }
-            ],
-            5: [
-                { q: "Evaluation that occurs at the end of a course is called:", o: ["Formative", "Summative", "Diagnostic", "Placement"], a: 1 },
-                { q: "OSCE stands for:", o: ["Objective Structured Clinical Examination", "Oral Structured Clinical Exam", "Overall Student Clinical Eval", "None"], a: 0 },
-                { q: "Multiple Choice Questions (MCQs) are an example of:", o: ["Essay type test", "Objective type test", "Projective test", "Oral test"], a: 1 },
-                { q: "The reliability of a test refers to its:", o: ["Consistency", "Validity", "Difficulty", "Length"], a: 0 }
-            ],
-            6: [
-                { q: "The apex body controlling nursing education in India is:", o: ["TNAI", "SNC", "INC (Indian Nursing Council)", "MOHFW"], a: 2 },
-                { q: "Recruitment of teaching staff depends primarily on:", o: ["Budget", "Student-teacher ratio norms", "Building size", "Location"], a: 1 },
-                { q: "A master rotation plan shows the plan for:", o: ["One week", "One month", "The entire academic year", "One day"], a: 2 },
-                { q: "Budgeting in a nursing school is essentially:", o: ["Spending money", "Financial planning of income and expenditure", "Collecting fees", "Paying salaries"], a: 1 }
-            ],
-            7: [
-                { q: "Guidance is best described as:", o: ["Giving advice", "Solving problems for others", "Helping individuals to help themselves", "Disciplining students"], a: 2 },
-                { q: "Counselling is a relationship between:", o: ["Two friends", "A trained counsellor and a counselee", "Teacher and whole class", "Doctor and nurse"], a: 1 },
-                { q: "Which is NOT a principle of guidance?", o: ["It is a continuous process", "It is for all students", "It solves problems instantly", "It respects individual differences"], a: 2 },
-                { q: "Career guidance helps students to:", o: ["Pass exams", "Choose a suitable profession", "Make friends", "Find housing"], a: 1 }
-            ],
-            8: [
-                { q: "In-service education is meant for:", o: ["Students", "Employed professionals", "Retired staff", "Public"], a: 1 },
-                { q: "The main goal of in-service education is to:", o: ["Increase salary", "Improve professional competence and patient care", "Get a promotion", "Socialize"], a: 1 },
-                { q: "Orientation programs are for:", o: ["Old staff", "New staff", "All staff", "Management"], a: 1 },
-                { q: "Continuing nursing education (CNE) helps nurses to:", o: ["Forget old skills", "Stay updated with current trends", "Work less hours", "Avoid work"], a: 1 }
-            ]
-        };
+  <div class="uc" id="u7" data-open="false">
+    <button class="ubtn" onclick="tog('u7')">
+      <div class="upill"><span>Unit 07</span></div>
+      <div class="uinfo"><div class="uname">Guidance and Counselling</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u7">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Bgm7ejbEh9HEmx7YWkeQ-j-bcrgxcjl7/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1ZhxYeBhNOaoTTAasWdnltmn1osO2drAv/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/17e00BItMEaMU-A_mxL12FktyAuQhEzOF/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn video disabled" onclick="alert('Content Coming Soon')">
+          <div class="rico">▶️</div><div class="rtxt">Guidance<small>Coming Soon</small></div>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(7)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 7 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        let currentQuizUnit = 1;
-        let currentQuestionIndex = 0;
-        let score = 0;
+  <div class="uc" id="u8" data-open="false">
+    <button class="ubtn" onclick="tog('u8')">
+      <div class="upill"><span>Unit 08</span></div>
+      <div class="uinfo"><div class="uname">In-Service Education</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u8">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1s95rCr449n7JRaoTJqk0WMYDKxnwoSQq/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1KMqc0NCqm887X60R9prYYQX7REtn3fPT/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1cVxbS5dC8PE40ozVt68NWaUEa0kJZLZC/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/103urF8DMGS6chnSIwgSZTtKxzCeTbXJI/view')">
+          <div class="rico">▶️</div><div class="rtxt">In-Service<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(8)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 8 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        function toggleUnit(header) {
-            const content = header.nextElementSibling;
-            const isExpanded = header.getAttribute('aria-expanded') === 'true';
-            header.setAttribute('aria-expanded', !isExpanded);
-            content.classList.toggle('active');
-        }
+  <div class="divider" style="margin-top:20px"><span>Previous Year Questions</span></div>
+  <div class="uc" id="upyq" data-open="false">
+    <button class="ubtn" onclick="tog('upyq')">
+      <div class="upill"><span style="font-size:.58rem">PYQ</span></div>
+      <div class="uinfo"><div class="uname">Previous Year Papers</div><div class="umeta">1 exam paper</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-upyq">
+      <div class="pyq-grid">
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1_suvlfoYbEGmAlIxmeKx-PRLhlTlHkE0/view')">
+          <div class="rico">📄</div><div class="rtxt">PYQ Paper<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
-        function openResource(type, url, title) {
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            document.getElementById('modal-title').textContent = title;
-            modal.style.display = 'flex';
-            let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
-            body.innerHTML = `<iframe class="iframe-res" src="${cleanUrl}"></iframe>`;
-        }
+</main>
 
-        function startQuiz(unitId) {
-            currentQuizUnit = unitId;
-            currentQuestionIndex = 0;
-            score = 0;
-            const modal = document.getElementById('app-modal');
-            document.getElementById('modal-title').textContent = `Unit ${unitId} Quiz`;
-            modal.style.display = 'flex';
-            renderQuizQuestion();
-        }
+<div class="qoverlay" id="qmodal">
+  <div class="qscrim" onclick="closeQuiz()"></div>
+  <div class="qpanel">
+    <div class="qhead">
+      <div class="qhead-top">
+        <div class="qtitle" id="qtitle">Quiz</div>
+        <button class="qclose" onclick="closeQuiz()">✕</button>
+      </div>
+      <div class="qpips" id="qpips"></div>
+    </div>
+    <div class="qbody" id="qbody"></div>
+  </div>
+</div>
 
-        function renderQuizQuestion() {
-            const body = document.getElementById('modal-body');
-            const questions = QUIZ_DATA[currentQuizUnit];
-            
-            if (!questions || currentQuestionIndex >= questions.length) {
-                body.innerHTML = `
-                    <div class="quiz-container" style="text-align:center;">
-                        <h2>Quiz Complete! 🎉</h2>
-                        <p style="font-size:1.2rem; margin:20px 0;">You scored <strong>${score} / ${questions.length}</strong></p>
-                        <button class="btn-quiz" onclick="closeModal()">Close Quiz</button>
-                    </div>`;
-                return;
-            }
+<script>
+function goBackToApp() {
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage({ action: 'goBack' }, '*');
+  } else {
+    history.back();
+  }
+}
 
-            const q = questions[currentQuestionIndex];
-            body.innerHTML = `
-                <div class="quiz-container">
-                    <p class="quiz-question-text">Q${currentQuestionIndex + 1}: ${q.q}</p>
-                    <div>
-                        ${q.o.map((opt, i) => `
-                            <div class="quiz-option" onclick="checkAnswer(this, ${i}, ${q.a})">${opt}</div>
-                        `).join('')}
-                    </div>
-                    <div class="quiz-nav">
-                        <span>Question ${currentQuestionIndex + 1} of ${questions.length}</span>
-                        <button id="next-btn" class="btn-quiz" style="display:none;" onclick="nextQuestion()">Next ➡</button>
-                    </div>
-                </div>`;
-        }
+function openPDF(url) {
+  const clean = url.replace(/\/preview.*$/,'').replace(/\/view.*$/,'') + '/view';
+  window.open(clean, '_blank');
+}
 
-        function checkAnswer(element, selectedIndex, correctIndex) {
-            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+function tog(id) {
+  const card = document.getElementById(id);
+  const body = document.getElementById('b-' + id);
+  const open = card.dataset.open === 'true';
+  card.dataset.open = String(!open);
+  body.classList.toggle('open', !open);
+}
 
-            if (selectedIndex === correctIndex) {
-                element.classList.add('correct');
-                score++;
-            } else {
-                element.classList.add('wrong');
-                element.parentElement.children[correctIndex].classList.add('correct');
-            }
-            document.getElementById('next-btn').style.display = 'block';
-        }
+const QD = {
+1:[
+  {q:"Education is best defined as a continuous process of changing:",o:["Textbooks","Human Behavior and Knowledge","Classroom sizes","Grading systems"],a:1},
+  {q:"The primary aim of nursing education is to prepare nursing students to:",o:["Earn a high salary","Pass international exams","Provide safe, competent, and comprehensive nursing care","Replace medical doctors"],a:2},
+  {q:"Which philosophy of education strongly emphasizes 'learning by doing' and practical experience?",o:["Idealism","Pragmatism","Naturalism","Realism"],a:1},
+  {q:"Who is internationally considered the founder of modern secular nursing education?",o:["Florence Nightingale","Virginia Henderson","Dorothea Orem","Hildegard Peplau"],a:0},
+  {q:"The philosophy of 'Naturalism' in education suggests that learning should be:",o:["Strictly disciplined by the teacher","Based on rigid religious texts","Child-centered and allow natural development","Confined to closed classrooms"],a:2},
+  {q:"Which of the following is a primary objective of basic nursing education?",o:["To teach advanced surgical techniques","To develop the cognitive, affective, and psychomotor skills of the nurse","To train hospital administrators","To prepare nurses for immediate retirement"],a:1},
+  {q:"The term 'Pedagogy' traditionally refers to the art and science of teaching:",o:["Adults","Animals","Children","Disabled individuals"],a:2},
+  {q:"'Andragogy' is the educational approach specifically focused on how:",o:["Children learn","Adults learn","Computers learn","Toddlers learn"],a:1},
+  {q:"A nursing curriculum is essentially a:",o:["List of required textbooks","Student attendance register","Comprehensive blueprint of all educational experiences provided to the student","Hospital duty roster"],a:2},
+  {q:"The philosophy of 'Idealism' asserts that true reality lies in:",o:["Physical matter","Ideas, the mind, and spiritual values","Scientific experiments","Social interactions"],a:1}
+],
+2:[
+  {q:"According to Bloom's Taxonomy, the three main domains of learning are:",o:["Cognitive, Affective, Psychomotor","Knowledge, Skill, Attitude","Thinking, Feeling, Doing","All of the above essentially describe the same three domains"],a:3},
+  {q:"A lesson plan is best described for a teacher as a:",o:["Personal diary","Written blueprint and guide for teaching a specific topic","Student attendance record","Yearly time table"],a:1},
+  {q:"A widely accepted 'Maxim of Teaching' is that instruction should naturally proceed from:",o:["Complex to Simple","Unknown to Known","Simple to Complex","Abstract to Concrete"],a:2},
+  {q:"The crucial FIRST step in developing an effective lesson plan is:",o:["Selecting the audio-visual aids","Formulating clear, measurable educational objectives","Evaluating the students","Handing out notes"],a:1},
+  {q:"The 'Cognitive' domain of learning primarily deals with:",o:["Emotions and values","Physical and motor skills","Intellectual skills and knowledge acquisition","Social interactions"],a:2},
+  {q:"The 'Psychomotor' domain involves learning that requires:",o:["Memorizing dates","Physical movement, coordination, and manual skills","Changing a belief","Solving a math equation"],a:1},
+  {q:"Which of the following is an example of an objective in the 'Affective' domain?",o:["The student will list 5 symptoms of fever.","The student will correctly demonstrate an IM injection.","The student will express empathy toward grieving families.","The student will define hypertension."],a:2},
+  {q:"The Law of Readiness, Law of Exercise, and Law of Effect are primary laws of learning proposed by:",o:["Ivan Pavlov","Edward Thorndike","B.F. Skinner","John Dewey"],a:1},
+  {q:"Thorndike's 'Law of Effect' essentially states that learning is strengthened when it is accompanied by:",o:["A pleasant or satisfying feeling (reward)","Strict punishment","Boredom","Physical exhaustion"],a:0},
+  {q:"When a teacher relates new information to what the students already know, they are using the maxim of:",o:["Abstract to concrete","General to specific","Known to unknown","Difficult to easy"],a:2}
+],
+3:[
+  {q:"Which teaching method is generally considered the most economical for transmitting factual information to a very large group of students?",o:["Demonstration","Lecture Method","Role Play","Clinical Tutorial"],a:1},
+  {q:"Micro-teaching is a specialized teacher-training technique that focuses on:",o:["Teaching a full 60-minute lesson","Mastering one specific teaching skill at a time (e.g., questioning) in a scaled-down encounter","Teaching without any AV aids","Teaching a massive audience"],a:1},
+  {q:"A clinical teaching method where students actively discuss a real patient's condition near the patient's area is called a:",o:["Bedside clinic","Formal lecture","Panel discussion","Symposium"],a:0},
+  {q:"Role play is an educational method primarily effective for developing:",o:["Rote memorization of facts","Psychomotor surgical skills","Communication, empathy, and human relations skills","Essay writing skills"],a:2},
+  {q:"The 'Demonstration' method is most highly suitable for teaching:",o:["Historical theories","Psychomotor skills and clinical procedures","Abstract philosophical concepts","Statistical formulas"],a:1},
+  {q:"A 'Symposium' is a teaching method that involves:",o:["A single speaker talking for 3 hours","A series of short speeches on various aspects of a single topic by several experts","Students acting out a scenario","A completely unstructured open debate"],a:1},
+  {q:"In nursing education, the 'Case Study' method helps students primarily develop:",o:["Physical stamina","Critical thinking and problem-solving skills based on real-life scenarios","Speed in writing","Vocal projection"],a:1},
+  {q:"A 'Panel Discussion' differs from a symposium mainly because a panel involves:",o:["No audience participation","A conversational, interactive discussion among 4-8 experts in front of an audience","Only one expert speaking","Reading directly from a textbook"],a:1},
+  {q:"The 'Project Method' of teaching is highly student-centered and emphasizes:",o:["Passive listening","Independent investigation, practical work, and self-directed learning","Strict teacher control","Memorizing facts for an exam"],a:1},
+  {q:"OSCE (Objective Structured Clinical Examination) is primarily used as a method to:",o:["Teach theoretical concepts","Evaluate practical clinical skills and competencies objectively","Punish students","Deliver mass lectures"],a:1}
+],
+4:[
+  {q:"Which of the following is an example of a 'Projected' audio-visual aid?",o:["Blackboard","Overhead Projector (OHP) / LCD Projector","Wall Chart","Anatomical Model"],a:1},
+  {q:"The famous 'Cone of Experience', which illustrates that people remember more of what they DO versus what they HEAR, was developed by:",o:["Edgar Dale","B.F. Skinner","John Dewey","Benjamin Bloom"],a:0},
+  {q:"A recognizable, three-dimensional representation of a real object used for teaching (like a plastic heart) is called a:",o:["Flat Chart","Graph","Model","Flashcard"],a:2},
+  {q:"The most universally available and commonly used non-projected visual aid in traditional classrooms is the:",o:["Chalkboard / Whiteboard","Filmstrip","Slide projector","Computer monitor"],a:0},
+  {q:"A 'Mock-up' differs from a regular model in that a mock-up usually:",o:["Is a flat 2D drawing","Highlights or isolates specific functional parts of a complex system (often working parts)","Is always smaller than the real object","Is made only of paper"],a:1},
+  {q:"Flashcards are best utilized in education for:",o:["Showing a 2-hour movie","Drilling, reviewing, and flashing small bits of information sequentially","Demonstrating a complex surgery","Displaying massive amounts of text"],a:1},
+  {q:"A 'Bulletin Board' is primarily used in a nursing school to:",o:["Project videos","Display announcements, educational clippings, and student work","Test clinical skills","Store student records"],a:1},
+  {q:"According to Edgar Dale's Cone of Experience, which activity provides the most direct, concrete learning experience?",o:["Reading a textbook","Listening to a podcast","Looking at a photograph","Participating in a real-life direct, purposeful experience (like clinical practice)"],a:3},
+  {q:"When using a chalkboard/whiteboard, the teacher should:",o:["Write across the entire board without erasing","Talk to the board with their back entirely to the students","Write legibly, concisely, and stand to the side to maintain eye contact","Use only one color for everything"],a:2},
+  {q:"The primary purpose of using Audio-Visual (AV) aids in nursing education is to:",o:["Entertain the students so they don't get bored","Replace the teacher entirely","Enhance comprehension, clarify concepts, and improve retention of learning","Make the classroom look modern"],a:2}
+],
+5:[
+  {q:"Evaluation that occurs continuously DURING the learning process to provide feedback and improve teaching is called:",o:["Formative evaluation","Summative evaluation","Diagnostic evaluation","Placement evaluation"],a:0},
+  {q:"Evaluation that occurs at the END of a course or unit to assign grades and certify competency is called:",o:["Formative evaluation","Summative evaluation","Diagnostic evaluation","Continuous evaluation"],a:1},
+  {q:"Multiple Choice Questions (MCQs) and True/False questions are classic examples of:",o:["Essay type tests","Objective type tests","Projective tests","Oral tests"],a:1},
+  {q:"The 'Reliability' of an assessment tool refers strictly to its:",o:["Consistency in producing the same results over time","Ability to measure exactly what it intends to measure","Difficulty level","Length and format"],a:0},
+  {q:"The 'Validity' of an assessment tool refers to:",o:["How consistent the scores are","Whether the test actually measures what it claims to measure","How easy the test is to grade","How many students pass"],a:1},
+  {q:"Essay-type examinations are generally best suited for assessing a student's ability to:",o:["Guess the right answer quickly","Organize, synthesize, and express complex ideas deeply","Perform a physical motor skill","Recall a single specific date"],a:1},
+  {q:"A major disadvantage of traditional Essay-type questions is that they:",o:["Are very easy to grade objectively","Have high subjectivity and lack reliability in scoring among different examiners","Test a very wide range of content","Are impossible to write"],a:1},
+  {q:"An 'Anecdotal Record' in clinical evaluation is defined as:",o:["A formal multiple-choice exam","A brief, objective written description of a specific, significant observed student behavior or incident","A student's daily diary","A final grade sheet"],a:1},
+  {q:"A 'Rating Scale' is an evaluation tool used primarily to:",o:["Measure intelligence","Assess the degree or quality of a student's performance on a specific continuum (e.g., 1 to 5)","Test theoretical knowledge","Punish poor performance"],a:1},
+  {q:"In nursing, an OSCE (Objective Structured Clinical Examination) is highly valued because it evaluates:",o:["Only theoretical knowledge","Clinical skills and competencies in a controlled, standardized, and objective manner","A student's ability to write long essays","The teacher's performance"],a:1}
+],
+6:[
+  {q:"The apex statutory body responsible for establishing and maintaining uniform standards of nursing education across India is the:",o:["Trained Nurses Association of India (TNAI)","State Nursing Council (SNC)","Indian Nursing Council (INC)","Ministry of Health and Family Welfare"],a:2},
+  {q:"Recruitment of teaching staff for a nursing school must primarily adhere to:",o:["The principal's personal budget","Student-teacher ratio norms mandated by the INC","The size of the school building","The geographical location"],a:1},
+  {q:"A 'Master Rotation Plan' in a nursing school is a comprehensive document that shows the plan for:",o:["One week of classes","One month of clinicals","The entire academic year, detailing both theory blocks and clinical postings for all batches","Just the teachers' holidays"],a:2},
+  {q:"Budgeting in the administration of a nursing school is essentially:",o:["Just spending money quickly","The systematic financial planning of estimated income and proposed expenditures for a given period","Collecting student fees only","Paying staff salaries only"],a:1},
+  {q:"The 'Clinical Rotation Plan' specifically ensures that nursing students:",o:["Attend all theory classes","Get equal, planned exposure to various required clinical areas and specialties","Get enough sleep","Stay in one ward for the whole year"],a:1},
+  {q:"Which of the following is considered vital physical infrastructure for a standard School of Nursing?",o:["A shopping mall","Adequate classrooms, nursing arts labs, a library, and hostel facilities","A massive sports stadium","A cinema hall"],a:1},
+  {q:"The process of officially evaluating a nursing school to ensure it meets predetermined standards of quality is known as:",o:["Budgeting","Accreditation / Affiliation","Recruitment","Curriculum design"],a:1},
+  {q:"Effective administration of a nursing educational institution relies heavily on 'Delegation', which means:",o:["Doing all the work oneself","Assigning responsibility and authority to subordinates while retaining ultimate accountability","Ignoring problems","Firing staff"],a:1},
+  {q:"A key responsibility of the Principal of a Nursing School is:",o:["Cleaning the wards","Overall academic and administrative leadership of the institution","Only teaching first-year students","Managing hospital patient admissions"],a:1},
+  {q:"Records and reports in a nursing school are essential for:",o:["Taking up space","Legal documentation, tracking student progress, and maintaining accreditation","Providing reading material for students","Nothing important"],a:1}
+],
+7:[
+  {q:"Guidance in an educational setting is best described conceptually as:",o:["Giving strict advice and orders","Solving all problems for the students","A continuous process of helping individuals to understand themselves and make their own choices","Disciplining unruly students"],a:2},
+  {q:"Counselling is formally defined as a deeply interactive and therapeutic relationship between:",o:["Two casual friends","A trained, professional counsellor and a counselee seeking help","A teacher and an entire class of 50 students","A doctor and a surgical nurse"],a:1},
+  {q:"Which of the following is NOT a core principle of effective guidance?",o:["It is a continuous, lifelong process","It is meant for all students, not just 'problem' students","It forces instant solutions on the student","It respects individual differences and dignity"],a:2},
+  {q:"Vocational (Career) guidance specifically helps students to:",o:["Pass their final exams","Choose, prepare for, and progress in a suitable profession or career","Make friends in school","Find affordable housing"],a:1},
+  {q:"'Directive Counselling' (often associated with E.G. Williamson) is heavily:",o:["Client-centered","Counsellor-centered (the counsellor plays the major role in identifying the problem and solutions)","Group-centered","Unstructured"],a:1},
+  {q:"'Non-Directive Counselling' (developed by Carl Rogers) strongly emphasizes that:",o:["The counsellor knows best","The client has the innate capacity to solve their own problems with a supportive facilitator","Advice must be given immediately","Tests must be administered"],a:1},
+  {q:"In the counselling process, establishing 'Rapport' refers to:",o:["Ending the session","Building a climate of trust, understanding, and mutual respect","Giving the client a diagnosis","Billing the client"],a:1},
+  {q:"A nursing student experiencing severe test anxiety and personal stress would benefit most from:",o:["Vocational guidance","Personal/Psychological counselling","A disciplinary warning","More homework"],a:1},
+  {q:"Confidentiality in counselling means that the counsellor must:",o:["Share the student's issues with all teachers","Keep the student's disclosures private, except in specific legal or life-threatening situations","Publish the cases for research","Tell the student's parents everything"],a:1},
+  {q:"The Student Health Service in a nursing school acts as a form of guidance by:",o:["Providing physical care and psychological support to maintain student well-being","Forcing students to exercise","Only treating serious diseases","Expelling sick students"],a:0}
+],
+8:[
+  {q:"In-service education is specifically designed and meant for:",o:["New undergraduate students","Currently employed professionals within an organization","Retired hospital staff","The general public"],a:1},
+  {q:"The primary, overarching goal of in-service education in a hospital is to:",o:["Increase baseline salaries","Improve professional competence, keep staff updated, and ultimately enhance patient care quality","Ensure staff get promotions quickly","Provide a place for staff to socialize"],a:1},
+  {q:"An 'Orientation Program' is a specific type of in-service education intended for:",o:["Staff who have been working for 10 years","Newly hired staff to introduce them to the organization's policies, environment, and expectations","All staff members simultaneously","Hospital management only"],a:1},
+  {q:"Continuing Nursing Education (CNE) is crucial because it helps nurses to:",o:["Forget their old foundational skills","Stay systematically updated with rapidly changing medical trends, technologies, and evidence-based practices","Work fewer hours on the ward","Avoid patient care entirely"],a:1},
+  {q:"'Skill Training' in an in-service program might involve teaching nurses how to:",o:["Use a newly purchased advanced cardiac monitor or ventilator","Write a basic essay","Calculate their taxes","Communicate with their family"],a:0},
+  {q:"Which of the following is a common method used to deliver in-service education?",o:["Firing incompetent staff","Workshops, seminars, and clinical demonstrations","Sending staff back to college for 4 years","Hiding the training manuals"],a:1},
+  {q:"Adult learners (Andragogy) typically learn best when the training is:",o:["Highly theoretical and abstract","Relevant, practical, and immediately applicable to their daily clinical work","Forced upon them without explanation","Conducted entirely through reading"],a:1},
+  {q:"A major barrier to effective in-service education in busy hospitals is often:",o:["Too much free time","Lack of staff motivation, severe staff shortages, and heavy clinical workloads","An overabundance of training funds","Nurses knowing everything already"],a:1},
+  {q:"When a hospital introduces a new electronic health record (EHR) software, the staff must undergo:",o:["Orientation training","In-service education/training specifically on the new system","Continuing formal education","Basic nursing training"],a:1},
+  {q:"The success of an in-service education program is ultimately evaluated by observing:",o:["How much the trainer was paid","Positive changes in staff behavior, skills, and improved patient health outcomes","How many snacks were eaten","The length of the presentation"],a:1}
+]
+};
 
-        function nextQuestion() {
-            currentQuestionIndex++;
-            renderQuizQuestion();
-        }
+let curQuiz=null, answered=[];
 
-        function closeModal() { 
-            document.getElementById('app-modal').style.display = 'none'; 
-            document.getElementById('modal-body').innerHTML = ""; 
-        }
-    </script>
+function openQuiz(id){
+  curQuiz=id;
+  const qs=QD[id]||[];
+  answered=new Array(qs.length).fill(null);
+  
+  document.getElementById('qtitle').textContent = `Unit 0${id} Quiz`;
+  
+  document.getElementById('qpips').innerHTML=qs.map((_,i)=>`<div class="pip" id="pip${i}"></div>`).join('');
+  let html=`<div class="qscore" id="qscore"><div><div class="qs-num" id="qsnum">—</div><div class="qs-sub">Score</div></div><div class="qs-msg" id="qsmsg"></div></div>`;
+  qs.forEach((q,qi)=>{
+    html+=`<div class="qitem" id="qi${qi}"><div class="qlbl">Question ${qi+1} of ${qs.length}</div><div class="qtext">${q.q}</div><div class="qopts">${q.o.map((opt,oi)=>`<button class="qopt" id="opt${qi}_${oi}" onclick="ans(${qi},${oi},${q.a})"><span class="qltr">${['A','B','C','D'][oi]}</span>${opt}</button>`).join('')}</div></div>`;
+  });
+  document.getElementById('qbody').innerHTML=html;
+  document.getElementById('qmodal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function ans(qi,oi,correct){
+  if(answered[qi]!==null)return;
+  answered[qi]=oi;
+  const opts=document.querySelectorAll(`#qi${qi} .qopt`);
+  opts.forEach(b=>b.classList.add('lock'));
+  opts[correct].classList.add('cor');
+  if(oi!==correct)opts[oi].classList.add('wrg');
+  const pip=document.getElementById('pip'+qi);
+  pip.classList.add('ans',oi===correct?'cor':'wrg');
+  if(answered.every(a=>a!==null)){
+    const score=answered.filter((a,i)=>a===QD[curQuiz][i].a).length;
+    const total=QD[curQuiz].length;
+    const pct=Math.round(score/total*100);
+    const msgs=['📚 Keep Studying!','👍 Good Effort!','🎉 Well Done!','🏆 Perfect!'];
+    const mi=pct<50?0:pct<70?1:pct<100?2:3;
+    document.getElementById('qsnum').textContent=score+'/'+total;
+    document.getElementById('qsmsg').textContent=msgs[mi];
+    const sc=document.getElementById('qscore');
+    sc.classList.add('show');
+    sc.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+
+function closeQuiz(){
+  document.getElementById('qmodal').classList.remove('open');
+  document.body.style.overflow='';
+  curQuiz=null;
+}
+
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQuiz();});
+</script>
 </body>
 </html>
