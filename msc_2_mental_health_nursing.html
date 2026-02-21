@@ -1,1073 +1,645 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mental Health Nursing II - Syllabus</title>
-    <meta name="description" content="Comprehensive syllabus with detailed notes and quizzes for Mental Health Nursing II." />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <style>
-        :root {
-            --brand: #003B82; 
-            --accent: #00B9F2;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-700: #374151;
-            --gray-900: #111827;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-            --danger: #ef4444;
-            --success: #10b981;
-        }
-
-        * { box-sizing: border-box; }
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: white;
-            color: var(--gray-900);
-            line-height: 1.6;
-            padding: 24px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .syllabus-btn, .unit-header {
-            display: block;
-            width: 100%;
-            padding: 18px 24px;
-            margin: 24px 0;
-            background: var(--brand);
-            color: white;
-            font-weight: 600;
-            font-size: 16px;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.2s ease;
-        }
-        .syllabus-btn:hover, .unit-header:hover {
-            background: #002d63;
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .unit-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-align: left;
-            margin: 16px 0;
-        }
-        .unit-header span:last-child {
-            transition: transform 0.3s ease;
-            color: #FFA500;
-        }
-        .unit-header[aria-expanded="true"] span:last-child {
-            transform: rotate(180deg);
-        }
-
-        .unit-content {
-            padding: 0 12px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.3s ease;
-        }
-        .unit-content.active {
-            padding: 24px 12px;
-            max-height: none; 
-        }
-
-        .subsection {
-            margin: 16px 0;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            border: 1px solid var(--gray-200);
-            box-shadow: var(--shadow-sm);
-            transition: box-shadow 0.2s ease;
-        }
-        .subsection:hover { box-shadow: var(--shadow-md); }
-
-        .resource-btn {
-            display: flex;
-            align-items: flex-start;
-            width: 100%;
-            padding: 14px 18px;
-            margin: 8px 0;
-            background: var(--gray-50);
-            color: var(--gray-900);
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
-            border: 1px solid var(--gray-200);
-            transition: all 0.2s ease;
-            gap: 12px;
-            flex-wrap: wrap;
-            min-height: 50px;
-            cursor: pointer;
-        }
-        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
-        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
-        .resource-btn.quiz { background: #fff5e8; border-color: #ffd8a8; color: #8c5e08; }
-        .resource-btn:hover { background: #f9fafb; transform: translateY(-1px); }
-        .resource-btn.notes:hover { background: #e0f2fe; }
-        .resource-btn.video:hover { background: #ede9fe; }
-        .resource-btn.quiz:hover { background: #ffead1; }
-
-        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
-        .icon.video-icon { color: #8b5cf6; }
-        .icon.quiz-icon { color: #FFA500; }
-
-        /* --- MODAL --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-        }
-
-        .modal-header {
-            height: 60px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            flex-shrink: 0;
-        }
-
-        .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-        
-        .btn-close {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            flex: 1;
-            background: #000;
-            position: relative;
-            overflow-y: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* --- FIXED IFRAME STYLES --- */
-        .iframe-video {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16 / 9;
-            border: none;
-            background: #000;
-            display: block;
-        }
-
-        .iframe-doc {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #fff;
-            display: block;
-        }
-
-        /* --- QUIZ STYLES --- */
-        .quiz-container {
-            background: white;
-            width: 100%;
-            min-height: 100%;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .quiz-question { margin-bottom: 20px; font-size: 1.1rem; font-weight: 600; }
-        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
-        .quiz-option {
-            padding: 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        .quiz-option:hover { background: #f0f9ff; border-color: var(--accent); }
-        .quiz-option.correct { background: var(--success); color: white; border-color: var(--success); }
-        .quiz-option.correct::after { content: '✓'; position: absolute; right: 15px; font-weight: bold; }
-        .quiz-option.wrong { background: var(--danger); color: white; border-color: var(--danger); }
-        .quiz-option.wrong::after { content: '✗'; position: absolute; right: 15px; font-weight: bold; }
-
-        @media (max-width: 768px) {
-            body { padding: 16px; }
-            .syllabus-btn, .unit-header, .resource-btn { font-size: 15px; padding: 14px 16px; }
-            .resource-btn { font-size: 14px; }
-            .subsection { padding: 16px; }
-            .unit-content.active { padding: 16px 8px; }
-        }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mental Health Nursing II</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --p50:#faf5ff;--p100:#f3e8ff;--p200:#e9d5ff;--p300:#d8b4fe;
+  --p400:#c084fc;--p500:#a855f7;--p600:#9333ea;--p700:#7e22ce;
+  --p800:#6b21a8;--p900:#581c87;
+  --w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;
+  --g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;
+  --ok:#16a34a;--ok-lt:#dcfce7;--err:#dc2626;--err-lt:#fee2e2;
+  --warn:#d97706;--warn-lt:#fef3c7;
+  --r:12px;--rs:8px;
+  --s1:0 1px 3px rgba(109,40,217,.08);
+  --s2:0 4px 12px rgba(109,40,217,.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:90;background:var(--w);border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 16px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-back{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:var(--p100);color:var(--p700);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;margin-right:12px}
+.tb-back:hover{background:var(--p200)}
+.tb-info{flex:1;min-width:0}
+.tb-title{font-size:.88rem;font-weight:700;color:var(--g900);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb-sub{font-size:.65rem;color:var(--g400);font-weight:500;margin-top:1px}
+.tb-chip{background:var(--p100);color:var(--p700);border:1px solid var(--p200);font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
+.hero{background:linear-gradient(145deg,var(--p900),var(--p700) 55%,var(--p500));padding:28px 18px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.08),transparent 50%),radial-gradient(circle at 10% 85%,rgba(255,255,255,.05),transparent 40%)}
+.hero::after{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-dot-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:.65rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border-radius:30px;margin-bottom:12px}
+.hero-eyebrow-dot{width:5px;height:5px;background:#c4b5fd;border-radius:50%}
+.hero h1{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:7px}
+.hero h1 em{color:rgba(255,255,255,.45);font-style:italic;font-weight:300}
+.hero-desc{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:18px}
+.hero-cta{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.28);color:#fff;font-size:.8rem;font-weight:700;padding:9px 16px;border-radius:9px;cursor:pointer;transition:all .2s;backdrop-filter:blur(6px)}
+.hero-cta:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
+.hero-stats{display:flex;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+.hs{flex:1;text-align:center}
+.hs+.hs{border-left:1px solid rgba(255,255,255,.1)}
+.hs-n{font-size:1.35rem;font-weight:800;color:#fff;line-height:1}
+.hs-l{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
+.main{padding:16px 14px 56px}
+.divider{display:flex;align-items:center;gap:8px;margin-bottom:12px;margin-top:2px}
+.divider span{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g400)}
+.divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+.uc{background:var(--w);border:1.5px solid var(--g200);border-radius:var(--r);margin-bottom:9px;overflow:hidden;box-shadow:var(--s1);transition:border-color .2s,box-shadow .2s}
+.uc:hover{border-color:var(--p300);box-shadow:var(--s2)}
+.uc[data-open=true]{border-color:var(--p400);box-shadow:var(--s2)}
+.ubtn{width:100%;display:flex;align-items:center;padding:14px 15px;gap:12px;background:none;border:none;cursor:pointer;text-align:left}
+.upill{width:36px;height:36px;border-radius:9px;flex-shrink:0;background:var(--p100);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.upill span{font-size:.67rem;font-weight:800;color:var(--p700);letter-spacing:-.01em}
+.uc[data-open=true] .upill{background:var(--p700)}
+.uc[data-open=true] .upill span{color:#fff}
+.uinfo{flex:1;min-width:0}
+.uname{font-size:.85rem;font-weight:700;color:var(--g900);line-height:1.3}
+.umeta{font-size:.66rem;color:var(--g400);margin-top:2px;font-weight:500}
+.uright{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.uchev{width:16px;height:16px;color:var(--g300);transition:transform .3s,color .2s}
+.uc[data-open=true] .uchev{transform:rotate(180deg);color:var(--p500)}
+.ubody{display:none;background:var(--p50);border-top:1.5px solid var(--p200);padding:12px 13px 14px}
+.ubody.open{display:block;animation:bodyIn .2s ease}
+@keyframes bodyIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.rrow{display:flex;gap:9px}
+@media(max-width:380px){.rrow{flex-direction:column}}
+.rbtn{flex:1;display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .17s;background:var(--w);text-decoration:none}
+.rbtn .rico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.rbtn .rtxt{line-height:1.25}
+.rbtn .rtxt small{display:block;font-size:.62rem;font-weight:400;opacity:.5;margin-top:1px}
+.rbtn .rarr{margin-left:auto;opacity:0;font-size:.7rem;color:var(--g400);transition:opacity .15s}
+.rbtn:hover .rarr{opacity:1}
+.rbtn.notes{border-color:var(--p200);color:var(--p800)}
+.rbtn.notes .rico{background:var(--p100)}
+.rbtn.notes:hover{background:var(--p50);border-color:var(--p500);box-shadow:var(--s2);transform:translateY(-1px)}
+.rbtn.quiz{border-color:#fde68a;color:#78350f}
+.rbtn.quiz .rico{background:var(--warn-lt)}
+.rbtn.quiz:hover{background:#fffbeb;border-color:var(--warn);box-shadow:0 3px 10px rgba(217,119,6,.12);transform:translateY(-1px)}
+.rbtn.pyq{border-color:#bbf7d0;color:#14532d}
+.rbtn.pyq .rico{background:var(--ok-lt)}
+.rbtn.pyq:hover{background:#f0fdf4;border-color:var(--ok);box-shadow:0 3px 10px rgba(22,163,74,.12);transform:translateY(-1px)}
+.pyq-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:380px){.pyq-grid{grid-template-columns:1fr}}
+.qoverlay{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end}
+.qoverlay.open{display:flex}
+.qscrim{position:absolute;inset:0;background:rgba(15,10,40,.55);backdrop-filter:blur(3px)}
+.qpanel{position:relative;z-index:1;background:var(--w);width:100%;max-width:580px;margin:0 auto;border-radius:18px 18px 0 0;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 -10px 50px rgba(109,40,217,.2);animation:panelUp .3s cubic-bezier(.32,.72,0,1)}
+@keyframes panelUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.qhead{padding:16px 18px 12px;border-bottom:1px solid var(--g100);flex-shrink:0}
+.qhead-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.qtitle{font-size:1rem;font-weight:800;color:var(--p800)}
+.qclose{width:28px;height:28px;border-radius:50%;background:var(--g100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--g500);transition:all .15s}
+.qclose:hover{background:var(--err-lt);color:var(--err)}
+.qpips{display:flex;gap:3px}
+.pip{flex:1;height:4px;border-radius:4px;background:var(--g100);transition:background .3s}
+.pip.ans{background:var(--p300)}.pip.cor{background:var(--ok)}.pip.wrg{background:var(--err)}
+.qbody{overflow-y:auto;padding:14px 18px 28px;flex:1}
+.qscore{display:none;background:linear-gradient(135deg,var(--p800),var(--p500));color:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;align-items:center;gap:14px}
+.qscore.show{display:flex}
+.qs-num{font-size:1.9rem;font-weight:800;line-height:1}
+.qs-sub{font-size:.65rem;opacity:.6;margin-top:2px}
+.qs-msg{font-size:.85rem;font-weight:600}
+.qitem{margin-bottom:24px}
+.qitem:last-child{margin-bottom:0}
+.qlbl{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--p500);margin-bottom:4px}
+.qtext{font-size:.88rem;font-weight:600;color:var(--g900);line-height:1.5;margin-bottom:10px}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1.5px solid var(--g200);border-radius:var(--rs);cursor:pointer;font-size:.83rem;font-weight:500;background:var(--w);color:var(--g700);transition:all .14s}
+.qopt:hover{border-color:var(--p300);background:var(--p50);color:var(--p800)}
+.qltr{width:21px;height:21px;border-radius:50%;background:var(--g100);border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:800;color:var(--g500);flex-shrink:0;transition:all .14s}
+.qopt.cor{background:var(--ok-lt);border-color:#86efac;color:#14532d}
+.qopt.cor .qltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.qopt.wrg{background:var(--err-lt);border-color:#fca5a5;color:#7f1d1d}
+.qopt.wrg .qltr{background:var(--err);border-color:var(--err);color:#fff}
+.qopt.lock{cursor:default;pointer-events:none}
+.qopt.lock:not(.cor):not(.wrg):hover{border-color:var(--g200);background:var(--w);color:var(--g700)}
+.udgm{font-size:.8rem;font-weight:600;color:var(--p600);text-align:center;padding:4px 0 16px;opacity:0.9;}
+</style>
 </head>
 <body>
 
-    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/1l2-yxOzIO4fsqpUV7a8jHxmjhY-PHRKG/preview', 'Mental Health Nursing II Syllabus')">
-        📄 DOWNLOAD SYLLABUS
+<header class="topbar">
+  <button class="tb-back" onclick="goBackToApp()" aria-label="Back">&#8592;</button>
+  <div class="tb-info">
+    <div class="tb-title">Mental Health Nursing II</div>
+    <div class="tb-sub">Nursing Program</div>
+  </div>
+  <div class="tb-chip">26 Units</div>
+</header>
+
+<section class="hero">
+  <div class="hero-dot-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>Nursing Program</div>
+    <h1>Mental Health<br/><em>Nursing II</em></h1>
+    <p class="hero-desc">Unit notes, quizzes & previous year papers — everything you need for your exams.</p>
+    <button class="hero-cta" onclick="openPDF('https://drive.google.com/file/d/1l2-yxOzIO4fsqpUV7a8jHxmjhY-PHRKG/view')">
+      📄 &nbsp;Download Syllabus
+    </button>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-n">26</div><div class="hs-l">Units</div></div>
+      <div class="hs"><div class="hs-n">260</div><div class="hs-l">Quizzes</div></div>
+      <div class="hs"><div class="hs-n">8</div><div class="hs-l">PYQs</div></div>
     </div>
-    
-    <div id="units">
-        
-        <div class="unit-container" id="unit1">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="true" onclick="toggleUnit(this)">
-                UNIT 1 - PRINCIPLES & PRACTICE
-                <span>🔽</span>
-            </div>
-            <div class="unit-content active">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1p8UclvLjR4gnAOFZUZKiiq-5kSHsQDOl/preview', 'Detailed Notes: Principles')">
-                        <span class="icon">📚</span><span>Detailed Notes: Principles and Practice</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(1)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  </div>
+</section>
 
-        <div class="unit-container" id="unit2">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 2 - CRISIS INTERVENTION
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
+<main class="main">
+  <div class="divider"><span>Course Units</span></div>
 
-[Image of Crisis Intervention Model]
+  <div class="uc" id="u1" data-open="false"><button class="ubtn" onclick="tog('u1')"><div class="upill"><span>U01</span></div><div class="uinfo"><div class="uname">Principles & Practice</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u1"><div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1p8UclvLjR4gnAOFZUZKiiq-5kSHsQDOl/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(1)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1wGz-0ELqBTmlsVoufrGVcA1gIsAcKiHT/preview', 'Detailed Notes: Crisis')">
-                        <span class="icon">📚</span><span>Detailed Notes: Crisis Intervention</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(2)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="uc" id="u2" data-open="false"><button class="ubtn" onclick="tog('u2')"><div class="upill"><span>U02</span></div><div class="uinfo"><div class="uname">Crisis Intervention</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u2">
+    <div class="udgm"></div>
+    <div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1wGz-0ELqBTmlsVoufrGVcA1gIsAcKiHT/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(2)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-        <div class="unit-container" id="unit3">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 3 - ANGER/AGGRESSION MANAGEMENT
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
+  <div class="uc" id="u3" data-open="false"><button class="ubtn" onclick="tog('u3')"><div class="upill"><span>U03</span></div><div class="uinfo"><div class="uname">Anger/Aggression Management</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u3">
+    <div class="udgm">
 
 [Image of Anger Management Cycle]
+</div>
+    <div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1c0SNDlq36I6tvKKL2PS0D96VNHbZ_c18/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(3)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1c0SNDlq36I6tvKKL2PS0D96VNHbZ_c18/preview', 'Detailed Notes: Anger Management')">
-                        <span class="icon">📚</span><span>Detailed Notes: Anger/Aggression Management</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(3)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="uc" id="u4" data-open="false"><button class="ubtn" onclick="tog('u4')"><div class="upill"><span>U04</span></div><div class="uinfo"><div class="uname">The Suicidal Client</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u4"><div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1f99aFd2y0X0Hi4HdRejocJV5RYxHclQ3/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(4)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-        <div class="unit-container" id="unit4">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 4 - THE SUICIDAL CLIENT
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1f99aFd2y0X0Hi4HdRejocJV5RYxHclQ3/preview', 'Detailed Notes: Suicide')">
-                        <span class="icon">📚</span><span>Detailed Notes: The Suicidal Client</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(4)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="uc" id="u5" data-open="false"><button class="ubtn" onclick="tog('u5')"><div class="upill"><span>U05</span></div><div class="uinfo"><div class="uname">Disorders of Infancy/Childhood</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u5">
+    <div class="udgm"></div>
+    <div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/13RjOCcU-lReDsvUzCysAQltFb24yo3Uj/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(5)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-        <div class="unit-container" id="unit5">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 5 - DISORDERS OF INFANCY/CHILDHOOD
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
+  <div class="uc" id="u6" data-open="false"><button class="ubtn" onclick="tog('u6')"><div class="upill"><span>U06</span></div><div class="uinfo"><div class="uname">Delirium & Dementia</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u6">
+    <div class="udgm"></div>
+    <div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1-H8ZfQClozeeRLd_HsPMpKHEeN7A1RIb/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(6)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-[Image of ADHD vs Autism Symptoms]
-
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/13RjOCcU-lReDsvUzCysAQltFb24yo3Uj/preview', 'Detailed Notes: Childhood Disorders')">
-                        <span class="icon">📚</span><span>Detailed Notes: Disorders of Infancy & Childhood</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(5)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit6">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 6 - DELIRIUM & DEMENTIA
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-
-[Image of Differences between Delirium and Dementia]
-
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1-H8ZfQClozeeRLd_HsPMpKHEeN7A1RIb/preview', 'Detailed Notes: Cognitive Disorders')">
-                        <span class="icon">📚</span><span>Detailed Notes: Delirium, Dementia, Amnestic Disorders</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(6)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit7">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 7 - SUBSTANCE-RELATED DISORDERS
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
+  <div class="uc" id="u7" data-open="false"><button class="ubtn" onclick="tog('u7')"><div class="upill"><span>U07</span></div><div class="uinfo"><div class="uname">Substance-Related Disorders</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u7">
+    <div class="udgm">
 
 [Image of Cycle of Addiction]
+</div>
+    <div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1IrzdHXeJoZREBZ1FEnJ3PfmNwieO9Lmf/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(7)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1IrzdHXeJoZREBZ1FEnJ3PfmNwieO9Lmf/preview', 'Detailed Notes: Substance Disorders')">
-                        <span class="icon">📚</span><span>Detailed Notes: Substance-Related Disorders</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(7)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="uc" id="u8" data-open="false"><button class="ubtn" onclick="tog('u8')"><div class="upill"><span>U08</span></div><div class="uinfo"><div class="uname">Schizophrenia</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u8">
+    <div class="udgm"></div>
+    <div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1utWbw7t8D6V1CgqHtLcTGKgSH2gCVlc2/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(8)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-        <div class="unit-container" id="unit8">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 8 - SCHIZOPHRENIA
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
+  <div class="uc" id="u9" data-open="false"><button class="ubtn" onclick="tog('u9')"><div class="upill"><span>U09</span></div><div class="uinfo"><div class="uname">Mood Disorders</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u9">
+    <div class="udgm"></div>
+    <div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1vCbXQwUf3l1eLU-SkonRINmxBzrt3NXn/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(9)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-[Image of Schizophrenia Positive vs Negative Symptoms]
+  <div class="uc" id="u10" data-open="false"><button class="ubtn" onclick="tog('u10')"><div class="upill"><span>U10</span></div><div class="uinfo"><div class="uname">Anxiety Disorders</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u10">
+    <div class="udgm"></div>
+    <div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1WOs_LU-D8lNP_HUA0yTaV70EVUnrBdqa/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(10)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1utWbw7t8D6V1CgqHtLcTGKgSH2gCVlc2/preview', 'Detailed Notes: Schizophrenia')">
-                        <span class="icon">📚</span><span>Detailed Notes: Schizophrenia & Psychotic Disorders</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(8)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 8 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="uc" id="u11" data-open="false"><button class="ubtn" onclick="tog('u11')"><div class="upill"><span>U11</span></div><div class="uinfo"><div class="uname">Somatoform & Sleep Disorders</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u11"><div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1iEkADibdG2Vn7Rt1Z0R9YQ_XHu65TSMC/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(11)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-        <div class="unit-container" id="unit9">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 9 - MOOD DISORDERS
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
+  <div class="uc" id="u12" data-open="false"><button class="ubtn" onclick="tog('u12')"><div class="upill"><span>U12</span></div><div class="uinfo"><div class="uname">Dissociative Disorders</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u12">
+    <div class="udgm"></div>
+    <div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1aHa_Z_3PitGpnFULA7L2aai2f4e_t7OR/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(12)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-[Image of Bipolar Disorder Mood Swing Chart]
+  <div class="uc" id="u13" data-open="false"><button class="ubtn" onclick="tog('u13')"><div class="upill"><span>U13</span></div><div class="uinfo"><div class="uname">Sexual & Gender Identity</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u13"><div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1fm0x65cKFo8yPq21oMDFyZAMNrV1KnCd/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(13)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1vCbXQwUf3l1eLU-SkonRINmxBzrt3NXn/preview', 'Detailed Notes: Mood Disorders')">
-                        <span class="icon">📚</span><span>Detailed Notes: Mood Disorders</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(9)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 9 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="uc" id="u14" data-open="false"><button class="ubtn" onclick="tog('u14')"><div class="upill"><span>U14</span></div><div class="uinfo"><div class="uname">Eating Disorders</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u14">
+    <div class="udgm"></div>
+    <div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1R1jx8cu-dmk4C3jWrEn7DE1FJTchH7SS/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(14)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-        <div class="unit-container" id="unit10">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 10 - ANXIETY DISORDERS
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
+  <div class="uc" id="u15" data-open="false"><button class="ubtn" onclick="tog('u15')"><div class="upill"><span>U15</span></div><div class="uinfo"><div class="uname">Adjustment & Impulse Control</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u15"><div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1V0WRmNaVXKIZ9RosGbiwHGObMfR2Fiml/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(15)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-[Image of Anxiety Disorders Spectrum]
+  <div class="uc" id="u16" data-open="false"><button class="ubtn" onclick="tog('u16')"><div class="upill"><span>U16</span></div><div class="uinfo"><div class="uname">Psych Factors in Medical Conditions</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u16"><div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1eguuGXNZL1HuBTHbMOEp7Sg1M22p-9fX/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(16)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1WOs_LU-D8lNP_HUA0yTaV70EVUnrBdqa/preview', 'Detailed Notes: Anxiety')">
-                        <span class="icon">📚</span><span>Detailed Notes: Anxiety Disorders</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(10)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 10 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="uc" id="u17" data-open="false"><button class="ubtn" onclick="tog('u17')"><div class="upill"><span>U17</span></div><div class="uinfo"><div class="uname">Personality Disorders</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u17">
+    <div class="udgm"></div>
+    <div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/15BRmRio0FcSyOhAiwDWg5bcS6-NR4QM_/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(17)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-        <div class="unit-container" id="unit11">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 11 - SOMATOFORM & SLEEP DISORDERS
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1iEkADibdG2Vn7Rt1Z0R9YQ_XHu65TSMC/preview', 'Detailed Notes: Somatoform')">
-                        <span class="icon">📚</span><span>Detailed Notes: Somatoform & Sleep Disorders</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(11)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 11 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="uc" id="u18" data-open="false"><button class="ubtn" onclick="tog('u18')"><div class="upill"><span>U18</span></div><div class="uinfo"><div class="uname">The Aging Individual</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u18"><div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1VsTsKSdvWygij3-CfDneQx0c8tkybxbA/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(18)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-        <div class="unit-container" id="unit12">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 12 - DISSOCIATIVE DISORDERS
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
+  <div class="uc" id="u19" data-open="false"><button class="ubtn" onclick="tog('u19')"><div class="upill"><span>U19</span></div><div class="uinfo"><div class="uname">HIV & Mental Health</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u19"><div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1rb6dHhplIfoLNUtOJeYPbFMemKhBZwLP/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(19)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-[Image of Dissociative Disorders Types]
-
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1aHa_Z_3PitGpnFULA7L2aai2f4e_t7OR/preview', 'Detailed Notes: Dissociative')">
-                        <span class="icon">📚</span><span>Detailed Notes: Dissociative Disorders</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(12)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 12 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit13">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 13 - SEXUAL & GENDER IDENTITY
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1fm0x65cKFo8yPq21oMDFyZAMNrV1KnCd/preview', 'Detailed Notes: Sexual Disorders')">
-                        <span class="icon">📚</span><span>Detailed Notes: Sexual & Gender Identity Disorders</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(13)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 13 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit14">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 14 - EATING DISORDERS
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-
-[Image of Anorexia vs Bulimia Nervosa Signs]
-
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1R1jx8cu-dmk4C3jWrEn7DE1FJTchH7SS/preview', 'Detailed Notes: Eating Disorders')">
-                        <span class="icon">📚</span><span>Detailed Notes: Eating Disorders</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(14)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 14 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit15">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 15 - ADJUSTMENT & IMPULSE CONTROL
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1V0WRmNaVXKIZ9RosGbiwHGObMfR2Fiml/preview', 'Detailed Notes: Impulse Control')">
-                        <span class="icon">📚</span><span>Detailed Notes: Adjustment & Impulse Control</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(15)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 15 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit16">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 16 - PSYCHOLOGICAL FACTORS IN MEDICAL CONDITIONS
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1eguuGXNZL1HuBTHbMOEp7Sg1M22p-9fX/preview', 'Detailed Notes: Psych Factors')">
-                        <span class="icon">📚</span><span>Detailed Notes: Medical Conditions due to Psych Factors</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(16)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 16 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit17">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 17 - PERSONALITY DISORDERS
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-
-[Image of Personality Disorder Clusters A B C]
-
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/15BRmRio0FcSyOhAiwDWg5bcS6-NR4QM_/preview', 'Detailed Notes: Personality Disorders')">
-                        <span class="icon">📚</span><span>Detailed Notes: Personality Disorders</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(17)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 17 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit18">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 18 - THE AGING INDIVIDUAL
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1VsTsKSdvWygij3-CfDneQx0c8tkybxbA/preview', 'Detailed Notes: Aging')">
-                        <span class="icon">📚</span><span>Detailed Notes: The Aging Individual</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(18)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 18 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit19">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 19 - HIV & MENTAL HEALTH
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1rb6dHhplIfoLNUtOJeYPbFMemKhBZwLP/preview', 'Detailed Notes: HIV')">
-                        <span class="icon">📚</span><span>Detailed Notes: Person Living with HIV Disease</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(19)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 19 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit20">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 20 - ABUSE & NEGLECT
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
+  <div class="uc" id="u20" data-open="false"><button class="ubtn" onclick="tog('u20')"><div class="upill"><span>U20</span></div><div class="uinfo"><div class="uname">Abuse & Neglect</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u20">
+    <div class="udgm">
 
 [Image of Cycle of Domestic Violence]
+</div>
+    <div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1mmsvTmhT0lrbmtsdh5V4pbrhRzfaBVfm/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(20)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1mmsvTmhT0lrbmtsdh5V4pbrhRzfaBVfm/preview', 'Detailed Notes: Abuse')">
-                        <span class="icon">📚</span><span>Detailed Notes: Problems Related to Abuse/Neglect</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(20)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 20 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="uc" id="u21" data-open="false"><button class="ubtn" onclick="tog('u21')"><div class="upill"><span>U21</span></div><div class="uinfo"><div class="uname">Community Mental Health Nursing</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u21"><div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1U0GgDcBVh1BoA5YsE3sfiffv81A6cAFG/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(21)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-        <div class="unit-container" id="unit21">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 21 - COMMUNITY MENTAL HEALTH NURSING
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1U0GgDcBVh1BoA5YsE3sfiffv81A6cAFG/preview', 'Detailed Notes: Community')">
-                        <span class="icon">📚</span><span>Detailed Notes: Community Mental Health Nursing</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(21)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 21 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="uc" id="u22" data-open="false"><button class="ubtn" onclick="tog('u22')"><div class="upill"><span>U22</span></div><div class="uinfo"><div class="uname">Ethical & Legal Issues</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u22">
+    <div class="udgm"></div>
+    <div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1U_kQUwkwoRCkMuyN6AS_1Sbsghh73UzK/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(22)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-        <div class="unit-container" id="unit22">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 22 - ETHICAL & LEGAL ISSUES
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
+  <div class="uc" id="u23" data-open="false"><button class="ubtn" onclick="tog('u23')"><div class="upill"><span>U23</span></div><div class="uinfo"><div class="uname">Psychosocial Rehabilitation</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u23"><div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1rydaFjwWnnw6HJOlD-QTLYY_qLmfAmZA/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(23)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-[Image of Rights of Psychiatric Patients]
+  <div class="uc" id="u24" data-open="false"><button class="ubtn" onclick="tog('u24')"><div class="upill"><span>U24</span></div><div class="uinfo"><div class="uname">Counseling</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u24"><div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1BhChASXUGi244AFvCEAdoyQmwf_aYHY9/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(24)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1U_kQUwkwoRCkMuyN6AS_1Sbsghh73UzK/preview', 'Detailed Notes: Ethical/Legal')">
-                        <span class="icon">📚</span><span>Detailed Notes: Ethical and Legal Issues</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(22)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 22 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="uc" id="u25" data-open="false"><button class="ubtn" onclick="tog('u25')"><div class="upill"><span>U25</span></div><div class="uinfo"><div class="uname">Administration & Management</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u25"><div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1D0dqx9F0thZJ05Ke9fe_RSqrtIicnRMS/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(25)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-        <div class="unit-container" id="unit23">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 23 - PSYCHOSOCIAL REHABILITATION
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1rydaFjwWnnw6HJOlD-QTLYY_qLmfAmZA/preview', 'Detailed Notes: Rehabilitation')">
-                        <span class="icon">📚</span><span>Detailed Notes: Psychosocial Rehabilitation</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(23)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 23 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="uc" id="u26" data-open="false"><button class="ubtn" onclick="tog('u26')"><div class="upill"><span>U26</span></div><div class="uinfo"><div class="uname">Education & Training</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div><div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div></button><div class="ubody" id="b-u26"><div class="rrow"><button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1m34v0M6n_-Xm-EhEidrmu28JVgj2z_hm/view')"><div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span></button><button class="rbtn quiz" onclick="openQuiz(26)"><div class="rico">✍️</div><div class="rtxt">Quiz<small>10 questions</small></div></button></div></div></div>
 
-        <div class="unit-container" id="unit24">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 24 - COUNSELING
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1BhChASXUGi244AFvCEAdoyQmwf_aYHY9/preview', 'Detailed Notes: Counseling')">
-                        <span class="icon">📚</span><span>Detailed Notes: Counseling</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(24)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 24 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit25">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 25 - ADMINISTRATION & MANAGEMENT
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1D0dqx9F0thZJ05Ke9fe_RSqrtIicnRMS/preview', 'Detailed Notes: Administration')">
-                        <span class="icon">📚</span><span>Detailed Notes: Administration of Psychiatric Units</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(25)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 25 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit26">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 26 - EDUCATION & TRAINING
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1m34v0M6n_-Xm-EhEidrmu28JVgj2z_hm/preview', 'Detailed Notes: Education')">
-                        <span class="icon">📚</span><span>Detailed Notes: Education and Training</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(26)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 26 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="pyq">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                PREVIOUS YEAR QUESTIONS
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1doflMKAnD_Xi0pM2I4hJ1jd-s8p6h42P/preview', 'PYQ May 2022')">
-                        <span class="icon">📄</span><span>PYQ - May 2022</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ySleNiGMFXp54KD3IvMkN4ytlKHrBvKM/preview', 'PYQ Nov 2021')">
-                        <span class="icon">📄</span><span>PYQ - November 2021</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1lbEdB35Qdjo1M52prcarYbSXItkBLX47/preview', 'PYQ Nov 2020')">
-                        <span class="icon">📄</span><span>PYQ - November 2020</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1TyPTjrP9xUZYQBxRtbbR89Ur7-1Gb9Vd/preview', 'PYQ Sept 2020')">
-                        <span class="icon">📄</span><span>PYQ - September 2020</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1NupZhDbV4c_CEnrUX5zCjreyVH1XGSi4/preview', 'PYQ Oct 2019')">
-                        <span class="icon">📄</span><span>PYQ - October 2019</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1-Nnek_dhnZnslPrGDimS8qxSS5gn-8Cw/preview', 'PYQ Sept 2018')">
-                        <span class="icon">📄</span><span>PYQ - September 2018</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/17EUokJMYPh0g6IxB8xqunLTkcUKMVBEw/preview', 'PYQ Oct 2016')">
-                        <span class="icon">📄</span><span>PYQ - October 2016</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1HQpJ2uc19_Z-3rGjWtCk3eP8ThnkyqEp/preview', 'PYQ April 2017')">
-                        <span class="icon">📄</span><span>PYQ - April 2017</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+  <div class="divider" style="margin-top:20px"><span>Previous Year Questions</span></div>
+  <div class="uc" id="upyq" data-open="false">
+    <button class="ubtn" onclick="tog('upyq')">
+      <div class="upill"><span style="font-size:.58rem">PYQ</span></div>
+      <div class="uinfo"><div class="uname">Previous Year Papers</div><div class="umeta">8 exam papers</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-upyq">
+      <div class="pyq-grid">
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1doflMKAnD_Xi0pM2I4hJ1jd-s8p6h42P/view')"><div class="rico">📄</div><div class="rtxt">May 2022<small>Open PDF</small></div><span class="rarr">↗</span></button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1ySleNiGMFXp54KD3IvMkN4ytlKHrBvKM/view')"><div class="rico">📄</div><div class="rtxt">Nov 2021<small>Open PDF</small></div><span class="rarr">↗</span></button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1lbEdB35Qdjo1M52prcarYbSXItkBLX47/view')"><div class="rico">📄</div><div class="rtxt">Nov 2020<small>Open PDF</small></div><span class="rarr">↗</span></button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1TyPTjrP9xUZYQBxRtbbR89Ur7-1Gb9Vd/view')"><div class="rico">📄</div><div class="rtxt">Sept 2020<small>Open PDF</small></div><span class="rarr">↗</span></button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1NupZhDbV4c_CEnrUX5zCjreyVH1XGSi4/view')"><div class="rico">📄</div><div class="rtxt">Oct 2019<small>Open PDF</small></div><span class="rarr">↗</span></button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1-Nnek_dhnZnslPrGDimS8qxSS5gn-8Cw/view')"><div class="rico">📄</div><div class="rtxt">Sept 2018<small>Open PDF</small></div><span class="rarr">↗</span></button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1HQpJ2uc19_Z-3rGjWtCk3eP8ThnkyqEp/view')"><div class="rico">📄</div><div class="rtxt">April 2017<small>Open PDF</small></div><span class="rarr">↗</span></button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/17EUokJMYPh0g6IxB8xqunLTkcUKMVBEw/view')"><div class="rico">📄</div><div class="rtxt">Oct 2016<small>Open PDF</small></div><span class="rarr">↗</span></button>
+      </div>
     </div>
+  </div>
+</main>
 
-    <div id="app-modal" class="modal-overlay">
-        <div class="modal-header">
-            <div id="modal-title" class="modal-title">Resource</div>
-            <button class="btn-close" onclick="closeModal()">Close X</button>
-        </div>
-        <div id="modal-body" class="modal-body"></div>
+<div class="qoverlay" id="qmodal">
+  <div class="qscrim" onclick="closeQuiz()"></div>
+  <div class="qpanel">
+    <div class="qhead">
+      <div class="qhead-top"><div class="qtitle" id="qtitle">Quiz</div><button class="qclose" onclick="closeQuiz()">✕</button></div>
+      <div class="qpips" id="qpips"></div>
     </div>
+    <div class="qbody" id="qbody"></div>
+  </div>
+</div>
 
-    <script>
-        // --- 1. QUIZ DATA ---
-        const QUIZ_DATA = {
-            1: [
-                { q: "A core principle of psychiatric nursing is:", o: ["Judging the patient", "Accepting the patient as a human being", "Controlling the patient", "Avoiding the patient"], a: 1 },
-                { q: "Primary prevention in psychiatry involves:", o: ["Rehabilitation", "Health promotion and specific protection", "Early diagnosis", "Crisis intervention"], a: 1 },
-                { q: "Which tool is essential for psychiatric nursing practice?", o: ["Stethoscope", "Self-awareness", "Thermometer", "Syringe"], a: 1 },
-                { q: "Holistic care considers:", o: ["Only physical health", "Only mental health", "Physical, mental, social, and spiritual aspects", "Only medications"], a: 2 },
-                { q: "The nurse-patient relationship should be:", o: ["Social", "Therapeutic", "Casual", "Authoritative"], a: 1 }
-            ],
-            2: [
-                { q: "A crisis is best defined as:", o: ["A mental illness", "A state of disequilibrium/severe emotional disturbance", "A bad mood", "A chronic problem"], a: 1 },
-                { q: "The goal of crisis intervention is:", o: ["Psychotherapy", "Restore pre-crisis functioning", "Sedation", "Hospitalization"], a: 1 },
-                { q: "A situational crisis is caused by:", o: ["Puberty", "Unexpected external events (e.g., job loss, death)", "Aging", "Menopause"], a: 1 },
-                { q: "Crisis intervention is typically:", o: ["Long term", "Short term and focused", "Life-long", "Unnecessary"], a: 1 },
-                { q: "The first phase of crisis is:", o: ["Depression", "Rise in tension/anxiety", "Resolution", "Denial"], a: 1 }
-            ],
-            3: [
-                { q: "A sign of impending aggression is:", o: ["Sleeping", "Pacing, clenched fists, loud voice", "Smiling", "Reading"], a: 1 },
-                { q: "The first step in managing aggression is:", o: ["Restraint", "Verbal de-escalation", "Seclusion", "Medication"], a: 1 },
-                { q: "Restraints should be used:", o: ["As punishment", "As a last resort for safety", "For convenience", "Whenever patient is loud"], a: 1 },
-                { q: "Catharsis refers to:", o: ["Suppressing anger", "Healthy release of emotional tension", "Ignoring feelings", "Medicating anger"], a: 1 },
-                { q: "Which medication is often used for acute aggression?", o: ["Antibiotic", "Haloperidol + Lorazepam", "Vitamin B", "Aspirin"], a: 1 }
-            ],
-            4: [
-                { q: "Which is a major warning sign of suicide?", o: ["Giving away prized possessions", "Eating well", "Sleeping 8 hours", "Socializing"], a: 0 },
-                { q: "When a patient expresses suicidal thoughts, the nurse should:", o: ["Ignore it", "Ask directly about a plan", "Change the subject", "Laugh it off"], a: 1 },
-                { q: "Which group is at highest risk for suicide?", o: ["Children", "Elderly white males living alone", "Married women", "Teenagers with support"], a: 1 },
-                { q: "Safety precautions for a suicidal client include:", o: ["1:1 observation", "Removing sharp objects", "Checking continuously", "All of the above"], a: 3 },
-                { q: "Ambivalence in suicide means:", o: ["Wanting to die only", "Wanting to live only", "Conflicting feelings about living and dying", "Not caring"], a: 2 }
-            ],
-            5: [
-                { q: "ADHD is characterized by:", o: ["Depression", "Inattention, Hyperactivity, Impulsivity", "Hallucinations", "Low IQ"], a: 1 },
-                { q: "Autism Spectrum Disorder primarily affects:", o: ["Social interaction and communication", "Walking", "Hearing", "Digestion"], a: 0 },
-                { q: "Enuresis refers to:", o: ["Bed wetting", "Fecal soiling", "Stuttering", "Tics"], a: 0 },
-                { q: "Separation Anxiety Disorder is common in:", o: ["Elderly", "School-age children", "Adults", "Newborns"], a: 1 },
-                { q: "Conduct disorder involves:", o: ["Shyness", "Violating rights of others/rules", "Fear of school", "Sleep walking"], a: 1 }
-            ],
-            6: [
-                { q: "Delirium is characterized by:", o: ["Chronic memory loss", "Acute onset, fluctuating consciousness", "Personality change", "Intact attention"], a: 1 },
-                { q: "Dementia is:", o: ["Reversible", "Progressive decline in cognitive function", "Sudden onset", "Caused by fever"], a: 1 },
-                { q: "Alzheimer's disease is a type of:", o: ["Delirium", "Dementia", "Psychosis", "Mood disorder"], a: 1 },
-                { q: "Confabulation is:", o: ["Lying", "Filling memory gaps with imaginary details", "Forgetting names", "Hallucinating"], a: 1 },
-                { q: "Sundowning syndrome refers to:", o: ["Worsening of symptoms in late afternoon/evening", "Sleeping all day", "Waking up early", "Morning confusion"], a: 0 }
-            ],
-            7: [
-                { q: "Withdrawal symptoms occur when:", o: ["Drug intake increases", "Substance use is stopped or reduced", "Drug is started", "Tolerance develops"], a: 1 },
-                { q: "Tolerance means:", o: ["Needing less drug", "Needing more drug for same effect", "Allergic reaction", "Disliking the drug"], a: 1 },
-                { q: "Alcohol withdrawal delirium is also known as:", o: ["Korsakoff's syndrome", "Delirium Tremens (DTs)", "Wernicke's encephalopathy", "Dementia"], a: 1 },
-                { q: "Disulfiram (Antabuse) is used for:", o: ["Alcohol aversion therapy", "Sedation", "Pain relief", "Anxiety"], a: 0 },
-                { q: "Wernicke-Korsakoff syndrome is caused by deficiency of:", o: ["Vitamin C", "Thiamine (Vitamin B1)", "Iron", "Calcium"], a: 1 }
-            ],
-            8: [
-                { q: "Positive symptoms of schizophrenia include:", o: ["Apathy", "Hallucinations and Delusions", "Social withdrawal", "Anhedonia"], a: 1 },
-                { q: "A false fixed belief is called:", o: ["Illusion", "Delusion", "Hallucination", "Obsession"], a: 1 },
-                { q: "Hearing voices that are not there is:", o: ["Visual hallucination", "Auditory hallucination", "Illusion", "Delusion"], a: 1 },
-                { q: "Neologism means:", o: ["Repeating words", "Coining new words/phrases", "Muteness", "Flight of ideas"], a: 1 },
-                { q: "Clozapine is an:", o: ["Antidepressant", "Antipsychotic", "Mood stabilizer", "Anxiolytic"], a: 1 }
-            ],
-            9: [
-                { q: "Bipolar disorder involves:", o: ["Depression only", "Mania only", "Episodes of Mania and Depression", "Anxiety"], a: 2 },
-                { q: "Mania is characterized by:", o: ["Sadness", "Elevated mood, hyperactivity, grandiosity", "Sleepiness", "Guilt"], a: 1 },
-                { q: "Dysthymia is:", o: ["Severe depression", "Chronic mild depression", "Acute mania", "Normal mood"], a: 1 },
-                { q: "The drug of choice for Bipolar Disorder is:", o: ["Prozac", "Lithium Carbonate", "Valium", "Haldol"], a: 1 },
-                { q: "Anhedonia means:", o: ["Excessive pleasure", "Inability to experience pleasure", "Fear of height", "Memory loss"], a: 1 }
-            ],
-            10: [
-                { q: "Panic disorder is characterized by:", o: ["Worry about future", "Recurrent unexpected panic attacks", "Fear of spiders", "Obsessions"], a: 1 },
-                { q: "Agoraphobia is fear of:", o: ["Heights", "Open/public places where escape is difficult", "Spiders", "Water"], a: 1 },
-                { q: "OCD involves:", o: ["Hallucinations", "Obsessions (thoughts) and Compulsions (actions)", "Mood swings", "Memory loss"], a: 1 },
-                { q: "PTSD occurs after:", o: ["A traumatic event", "A bad meal", "A minor injury", "A cold"], a: 0 },
-                { q: "Systematic desensitization is used to treat:", o: ["Schizophrenia", "Phobias", "Depression", "Mania"], a: 1 }
-            ],
-            11: [
-                { q: "Hypochondriasis involves:", o: ["Fear of illness despite reassurance", "Paralysis", "Blindness", "Faking illness"], a: 0 },
-                { q: "Conversion disorder presents as:", o: ["Pain", "Neurological symptoms (blindness/paralysis) without organic cause", "Anxiety", "Depression"], a: 1 },
-                { q: "Narcolepsy is:", o: ["Insomnia", "Uncontrollable sleep attacks", "Sleep walking", "Nightmares"], a: 1 },
-                { q: "Insomnia is:", o: ["Excessive sleep", "Difficulty falling or staying asleep", "Sleep talking", "Bed wetting"], a: 1 },
-                { q: "Body Dysmorphic Disorder involves:", o: ["Preoccupation with an imagined defect in appearance", "Fear of weight gain", "Pain", "Fatigue"], a: 0 }
-            ],
-            12: [
-                { q: "Dissociative Amnesia is:", o: ["Normal forgetting", "Inability to recall important personal information (usually traumatic)", "Head injury", "Dementia"], a: 1 },
-                { q: "Dissociative Identity Disorder (DID) was formerly called:", o: ["Schizophrenia", "Multiple Personality Disorder", "Bipolar", "Fugue"], a: 1 },
-                { q: "Dissociative Fugue involves:", o: ["Sudden travel away from home with amnesia", "Sleep walking", "Fainting", "Seizures"], a: 0 },
-                { q: "Depersonalization is:", o: ["Feeling detached from one's body/self", "Feeling the world is unreal", "Hallucinating", "Delusional"], a: 0 },
-                { q: "The primary defense mechanism in dissociative disorders is:", o: ["Projection", "Repression/Dissociation", "Denial", "Rationalization"], a: 1 }
-            ],
-            13: [
-                { q: "Gender Identity Disorder involves:", o: ["Sexual dysfunction", "Discomfort with assigned gender/identifying as opposite gender", "Paraphilia", "Infertility"], a: 1 },
-                { q: "Paraphilias are:", o: ["Normal sexual behaviors", "Sexual arousal from atypical objects/situations", "Lack of desire", "Pain during sex"], a: 1 },
-                { q: "Dyspareunia means:", o: ["Lack of orgasm", "Genital pain during intercourse", "Premature ejaculation", "Low libido"], a: 1 },
-                { q: "Exhibitionism is:", o: ["Spying on others", "Exposing genitals to strangers", "Rubbing against others", "Cross-dressing"], a: 1 },
-                { q: "Vaginismus is:", o: ["Infection", "Involuntary spasm of vaginal muscles", "Pain", "Dryness"], a: 1 }
-            ],
-            14: [
-                { q: "Anorexia Nervosa is characterized by:", o: ["Binge eating", "Refusal to maintain body weight/Fear of gaining weight", "Overeating", "Normal weight"], a: 1 },
-                { q: "Bulimia Nervosa involves:", o: ["Starvation", "Binge eating followed by purging", "Obesity", "Pica"], a: 1 },
-                { q: "Lanugo (fine hair) is seen in:", o: ["Bulimia", "Anorexia Nervosa", "Obesity", "Depression"], a: 1 },
-                { q: "A serious physical complication of eating disorders is:", o: ["Electrolyte imbalance", "Headache", "Cough", "Rash"], a: 0 },
-                { q: "Refeeding syndrome can occur during treatment of:", o: ["Obesity", "Severe malnutrition/Anorexia", "Flu", "Anxiety"], a: 1 }
-            ],
-            15: [
-                { q: "Kleptomania is the impulse to:", o: ["Set fires", "Steal unneeded items", "Pull hair", "Gamble"], a: 1 },
-                { q: "Pyromania involves:", o: ["Stealing", "Deliberate fire setting", "Hair pulling", "Explosive anger"], a: 1 },
-                { q: "Trichotillomania is:", o: ["Skin picking", "Hair pulling", "Nail biting", "Head banging"], a: 1 },
-                { q: "Adjustment disorder occurs:", o: ["Without a stressor", "In response to an identifiable stressor within 3 months", "Years later", "From birth"], a: 1 },
-                { q: "Intermittent Explosive Disorder involves:", o: ["Sadness", "Aggressive outbursts disproportionate to provocation", "Stealing", "Setting fires"], a: 1 }
-            ],
-            16: [
-                { q: "Psychosomatic disorders are:", o: ["Fake illnesses", "Physical symptoms exacerbated by psychological factors", "Mental illnesses only", "Surgical problems"], a: 1 },
-                { q: "Type A personality (competitive, hostile) is linked to:", o: ["Cancer", "Coronary Heart Disease", "Asthma", "Ulcers"], a: 1 },
-                { q: "Stress can worsen:", o: ["Asthma", "Hypertension", "Ulcers", "All of the above"], a: 3 },
-                { q: "Biofeedback is used to:", o: ["Measure height", "Gain voluntary control over physiological processes", "Test blood", "Scan brain"], a: 1 },
-                { q: "Peptic ulcer is often associated with:", o: ["Happiness", "Stress/Anxiety", "Exercise", "Sleep"], a: 1 }
-            ],
-            17: [
-                { q: "Borderline Personality Disorder is characterized by:", o: ["Stability", "Instability in relationships, self-image, and affects", "Shyness", "Perfectionism"], a: 1 },
-                { q: "Antisocial Personality Disorder involves:", o: ["Disregard for rights of others/Lack of remorse", "Fear of people", "Obsession with order", "Dependency"], a: 0 },
-                { q: "Obsessive-Compulsive Personality Disorder (OCPD) involves:", o: ["Rituals", "Preoccupation with orderliness and perfectionism", "Hallucinations", "Suspicion"], a: 1 },
-                { q: "Paranoid Personality Disorder involves:", o: ["Trust", "Pervasive distrust and suspiciousness", "Shyness", "Drama"], a: 1 },
-                { q: "Narcissistic Personality Disorder involves:", o: ["Humility", "Grandiosity and need for admiration", "Fear", "Isolation"], a: 1 }
-            ],
-            18: [
-                { q: "Depression in the elderly is often mistaken for:", o: ["Mania", "Dementia", "Delirium", "Schizophrenia"], a: 1 },
-                { q: "The most common mental health problem in the elderly is:", o: ["Schizophrenia", "Depression", "Bipolar", "Phobia"], a: 1 },
-                { q: "Reminiscence therapy uses:", o: ["Future planning", "Recall of past events/memories", "Medication", "Exercise"], a: 1 },
-                { q: "Polypharmacy in elderly increases risk of:", o: ["Health", "Drug interactions and toxicity", "Wealth", "Memory"], a: 1 },
-                { q: "Elder abuse can be:", o: ["Physical", "Financial", "Neglect", "All of the above"], a: 3 }
-            ],
-            19: [
-                { q: "HIV-associated neurocognitive disorder (HAND) affects:", o: ["Lungs", "Memory, attention, and motor function", "Stomach", "Bones"], a: 1 },
-                { q: "Depression in HIV patients is:", o: ["Rare", "Common", "Impossible", "Unimportant"], a: 1 },
-                { q: "Psychiatric side effects of antiretrovirals can include:", o: ["Happy mood", "Vivid dreams, anxiety, depression", "Improved memory", "None"], a: 1 },
-                { q: "Pre-test counseling for HIV is:", o: ["Optional", "Mandatory/Essential", "Useless", "Illegal"], a: 1 },
-                { q: "Stigma related to HIV can lead to:", o: ["Better adherence", "Social isolation and depression", "Faster cure", "Happiness"], a: 1 }
-            ],
-            20: [
-                { q: "Child abuse includes:", o: ["Physical", "Sexual", "Emotional/Neglect", "All of the above"], a: 3 },
-                { q: "Munchausen Syndrome by Proxy is:", o: ["Real illness", "Caregiver fabricating illness in a child", "Genetic disorder", "Infection"], a: 1 },
-                { q: "The cycle of violence typically includes:", o: ["Tension-building, Incident, Honeymoon phase", "Anger only", "Peace only", "Constant fighting"], a: 0 },
-                { q: "Neglect refers to:", o: ["Hitting", "Failure to provide basic needs", "Yelling", "Sexual act"], a: 1 },
-                { q: "Mandatory reporting applies to:", o: ["Suspected child/elder abuse", "Bad grades", "Flu", "Arguments"], a: 0 }
-            ],
-            21: [
-                { q: "Community Mental Health focuses on:", o: ["Institutional care", "Prevention and care within the community", "Surgery", "Isolation"], a: 1 },
-                { q: "Deinstitutionalization led to:", o: ["More hospitals", "Shift of care to community settings", "More nurses", "Less patients"], a: 1 },
-                { q: "Primary care in mental health includes:", o: ["Rehab", "Mental health promotion", "ECT", "Long term care"], a: 1 },
-                { q: "A halfway house is:", o: ["A prison", "Transitional living facility", "Hospital ward", "School"], a: 1 },
-                { q: "The District Mental Health Programme (DMHP) aims to:", o: ["Centralize care", "Integrate mental health into general health services", "Ignore rural areas", "Build asylums"], a: 1 }
-            ],
-            22: [
-                { q: "Involuntary admission is done when:", o: ["Patient wants it", "Patient is dangerous to self or others", "Family is tired", "Doctor is busy"], a: 1 },
-                { q: "Confidentiality can be breached if:", o: ["Nurse wants to share", "Duty to warn (Tarasoff rule) applies", "Never", "Neighbors ask"], a: 1 },
-                { q: "Informed consent requires:", o: ["Signature only", "Understanding of risks, benefits, and alternatives", "Force", "Money"], a: 1 },
-                { q: "Restraints require:", o: ["Nurse's decision", "Physician's order and monitoring", "Patient consent", "No rules"], a: 1 },
-                { q: "The Mental Healthcare Act 2017 decriminalized:", o: ["Theft", "Suicide attempt", "Violence", "Drug use"], a: 1 }
-            ],
-            23: [
-                { q: "Psychosocial rehabilitation aims to:", o: ["Cure illness", "Improve functioning and quality of life", "Sedate patient", "Isolate patient"], a: 1 },
-                { q: "Vocational training helps patients:", o: ["Sleep", "Gain employment skills", "Eat better", "Take meds"], a: 1 },
-                { q: "Social skills training teaches:", o: ["Math", "Communication and interaction", "Cooking", "Driving"], a: 1 },
-                { q: "Day care centers provide:", o: ["24-hour care", "Activities during the day", "Surgery", "Emergency care"], a: 1 },
-                { q: "Family psychoeducation helps family to:", o: ["Ignore patient", "Understand illness and support patient", "Leave patient", "Blame patient"], a: 1 }
-            ],
-            24: [
-                { q: "Counseling is:", o: ["Giving advice", "A professional relationship to help solve problems", "Chatting", "Judging"], a: 1 },
-                { q: "Active listening involves:", o: ["Talking constantly", "Paying full attention and understanding", "Ignoring", "Writing only"], a: 1 },
-                { q: "Non-judgmental attitude means:", o: ["Accepting client without criticism", "Agreeing with everything", "Disliking client", "Ignoring bad behavior"], a: 0 },
-                { q: "Empathy is:", o: ["Feeling sorry", "Understanding client's world", "Crying", "Sympathy"], a: 1 },
-                { q: "Confidentiality in counseling is:", o: ["Optional", "Essential trust builder", "Not needed", "Rare"], a: 1 }
-            ],
-            25: [
-                { q: "A psychiatric emergency is:", o: ["Medication refill", "Situation requiring immediate intervention (e.g., suicide, violence)", "Mild anxiety", "Insomnia"], a: 1 },
-                { q: "Triage in psychiatry assesses:", o: ["Money", "Urgency of risk", "Clothing", "Education"], a: 1 },
-                { q: "Therapeutic milieu refers to:", o: ["Medication", "A structured, healing environment", "Isolation room", "Doctors office"], a: 1 },
-                { q: "Team meeting in a psych unit is for:", o: ["Gossip", "Collaborative care planning", "Lunch", "Rest"], a: 1 },
-                { q: "Documentation should be:", o: ["Vague", "Accurate, objective, and timely", "Subjective", "Rare"], a: 1 }
-            ],
-            26: [
-                { q: "Continuing Nursing Education (CNE) helps to:", o: ["Pass time", "Update knowledge and skills", "Earn money", "Socialize"], a: 1 },
-                { q: "In-service education is for:", o: ["Students", "Working staff", "Patients", "Public"], a: 1 },
-                { q: "Clinical supervision provides:", o: ["Punishment", "Support and professional growth", "More work", "Stress"], a: 1 },
-                { q: "Role play is a method of:", o: ["Lecture", "Teaching/Practicing skills", "Reading", "Writing"], a: 1 },
-                { q: "Reflective practice involves:", o: ["Ignoring mistakes", "Analyzing one's own actions to learn", "Blaming others", "Forgetting"], a: 1 }
-            ]
-        };
+<script>
+function goBackToApp(){if(window.parent&&window.parent!==window){window.parent.postMessage({action:'goBack'},'*');}else{history.back();}}
+function openPDF(url){const clean=url.replace(/\/preview.*$/,'').replace(/\/view.*$/,'')+'/view';window.open(clean,'_blank');}
+function tog(id){const card=document.getElementById(id);const body=document.getElementById('b-'+id);const open=card.dataset.open==='true';card.dataset.open=String(!open);body.classList.toggle('open',!open);}
 
-        // --- 2. LOGIC ---
-        function toggleUnit(header) {
-            const content = header.nextElementSibling;
-            const isExpanded = header.getAttribute('aria-expanded') === 'true';
-            header.setAttribute('aria-expanded', !isExpanded);
-            content.classList.toggle('active');
-        }
+const QD={
+1:[
+  {q:"A core principle of psychiatric nursing is:",o:["Judging the patient","Accepting the patient as a human being","Controlling the patient","Avoiding the patient"],a:1},
+  {q:"Primary prevention in psychiatry involves:",o:["Rehabilitation","Health promotion and specific protection","Early diagnosis","Crisis intervention"],a:1},
+  {q:"Which tool is essential for psychiatric nursing practice?",o:["Stethoscope","Self-awareness","Thermometer","Syringe"],a:1},
+  {q:"Holistic care considers:",o:["Only physical health","Only mental health","Physical, mental, social, and spiritual aspects","Only medications"],a:2},
+  {q:"The nurse-patient relationship should be:",o:["Social","Therapeutic","Casual","Authoritative"],a:1},
+  {q:"Which model of care focuses on replacing symptoms with an improved quality of life?",o:["Medical Model","Recovery Model","Behavioral Model","Psychoanalytic Model"],a:1},
+  {q:"Hildegard Peplau is best known for developing the theory of:",o:["Interpersonal Relations","Self-Care Deficit","Adaptation","Transcultural Nursing"],a:0},
+  {q:"The Mental Healthcare Act in India was most recently revised in:",o:["1987","2005","2017","2020"],a:2},
+  {q:"Which of the following is an example of non-verbal communication?",o:["Stating feelings","Open body posture","Asking open-ended questions","Reflecting"],a:1},
+  {q:"A fundamental aspect of the therapeutic relationship is:",o:["Sympathy","Empathy","Giving advice","Socializing"],a:1}
+],
+2:[
+  {q:"A crisis is best defined as:",o:["A mental illness","A state of disequilibrium/severe emotional disturbance","A bad mood","A chronic problem"],a:1},
+  {q:"The goal of crisis intervention is:",o:["Psychotherapy","Restore pre-crisis functioning","Sedation","Hospitalization"],a:1},
+  {q:"A situational crisis is caused by:",o:["Puberty","Unexpected external events (e.g., job loss, death)","Aging","Menopause"],a:1},
+  {q:"Crisis intervention is typically:",o:["Long term","Short term and focused","Life-long","Unnecessary"],a:1},
+  {q:"The first phase of crisis is:",o:["Depression","Rise in tension/anxiety","Resolution","Denial"],a:1},
+  {q:"A maturational crisis occurs during:",o:["Natural disasters","Normal life stage transitions (e.g., marriage, retirement)","Sudden job loss","Physical illness"],a:1},
+  {q:"An adventitious crisis refers to:",o:["Divorce","Disasters or events of severe trauma (e.g., earthquake, rape)","Retirement","Mid-life crisis"],a:1},
+  {q:"Crisis intervention generally resolves within:",o:["1-2 days","4-6 weeks","6 months","1 year"],a:1},
+  {q:"Which coping mechanism is commonly seen initially in a crisis?",o:["Acceptance","Denial or disbelief","Sublimation","Intellectualization"],a:1},
+  {q:"In crisis intervention, the nurse should be:",o:["Passive and listening only","Active and directive","Judgmental","Aloof"],a:1}
+],
+3:[
+  {q:"A sign of impending aggression is:",o:["Sleeping","Pacing, clenched fists, loud voice","Smiling","Reading"],a:1},
+  {q:"The first step in managing aggression is:",o:["Restraint","Verbal de-escalation","Seclusion","Medication"],a:1},
+  {q:"Restraints should be used:",o:["As punishment","As a last resort for safety","For convenience","Whenever patient is loud"],a:1},
+  {q:"Catharsis refers to:",o:["Suppressing anger","Healthy release of emotional tension","Ignoring feelings","Medicating anger"],a:1},
+  {q:"Which medication is often used for acute aggression?",o:["Antibiotic","Haloperidol + Lorazepam","Vitamin B","Aspirin"],a:1},
+  {q:"The assault cycle begins with which phase?",o:["Escalation phase","Triggering phase","Crisis phase","Recovery phase"],a:1},
+  {q:"When a patient becomes physically violent, the nursing priority is:",o:["Administering oral medication","Ensuring safety of patient, staff, and others","Taking vital signs","Documenting the incident"],a:1},
+  {q:"A patient in seclusion must be monitored:",o:["Once a shift","Every 1-2 hours","Continuously or every 15 minutes","Only when they call for help"],a:2},
+  {q:"Which body language helps de-escalate an angry client?",o:["Standing over them","Crossing arms","Maintaining a relaxed, open posture at a safe distance","Staring intensely"],a:2},
+  {q:"Countertransference during aggression management refers to:",o:["Patient projecting anger onto the nurse","Nurse reacting emotionally to the patient's behavior","Using physical restraints","Transferring patient to another ward"],a:1}
+],
+4:[
+  {q:"Which is a major warning sign of suicide?",o:["Giving away prized possessions","Eating well","Sleeping 8 hours","Socializing"],a:0},
+  {q:"When a patient expresses suicidal thoughts, the nurse should:",o:["Ignore it","Ask directly about a plan","Change the subject","Laugh it off"],a:1},
+  {q:"Which group is at highest risk for suicide?",o:["Children","Elderly white males living alone","Married women","Teenagers with support"],a:1},
+  {q:"Safety precautions for a suicidal client include:",o:["1:1 observation","Removing sharp objects","Checking continuously","All of the above"],a:3},
+  {q:"Ambivalence in suicide means:",o:["Wanting to die only","Wanting to live only","Conflicting feelings about living and dying","Not caring"],a:2},
+  {q:"The lethality of a suicide plan depends on:",o:["How detailed it is","The method's effectiveness and availability","The time of day","The patient's age"],a:1},
+  {q:"A protective factor against suicide is:",o:["Previous attempts","Strong social support and religious beliefs","Unemployment","Substance abuse"],a:1},
+  {q:"A no-suicide contract is:",o:["A legal document","A guarantee that the patient won't self-harm","An agreement to reach out for help before acting on thoughts","A punishment for suicidal thoughts"],a:2},
+  {q:"Postvention refers to:",o:["Preventing a first attempt","Interventions with family and friends after a completed suicide","Restraining a patient","Medicating a suicidal patient"],a:1},
+  {q:"Which psychological factor strongly correlates with suicidal intent?",o:["Euphoria","Severe hopelessness","Mild anxiety","Obsessive thoughts"],a:1}
+],
+5:[
+  {q:"ADHD is characterized by:",o:["Depression","Inattention, Hyperactivity, Impulsivity","Hallucinations","Low IQ"],a:1},
+  {q:"Autism Spectrum Disorder primarily affects:",o:["Social interaction and communication","Walking","Hearing","Digestion"],a:0},
+  {q:"Enuresis refers to:",o:["Bed wetting","Fecal soiling","Stuttering","Tics"],a:0},
+  {q:"Separation Anxiety Disorder is common in:",o:["Elderly","School-age children","Adults","Newborns"],a:1},
+  {q:"Conduct disorder involves:",o:["Shyness","Violating rights of others/rules","Fear of school","Sleep walking"],a:1},
+  {q:"Tourette's syndrome is characterized by:",o:["Memory loss","Multiple motor tics and one or more vocal tics","Blindness","Paralysis"],a:1},
+  {q:"Oppositional Defiant Disorder (ODD) differs from Conduct Disorder because ODD:",o:["Is more severe","Does not involve serious violation of societal norms or rights of others","Involves hallucinations","Only occurs in adults"],a:1},
+  {q:"Mild Intellectual Disability corresponds to an IQ range of approximately:",o:["70-85","50-70","35-49","Below 20"],a:1},
+  {q:"A common stimulant medication prescribed for ADHD is:",o:["Haloperidol","Methylphenidate (Ritalin)","Lithium","Diazepam"],a:1},
+  {q:"Echolalia, often seen in autism, means:",o:["Repeating what others say","Refusing to speak","Inventing new words","Speaking very loudly"],a:0}
+],
+6:[
+  {q:"Delirium is characterized by:",o:["Chronic memory loss","Acute onset, fluctuating consciousness","Personality change","Intact attention"],a:1},
+  {q:"Dementia is:",o:["Reversible","Progressive decline in cognitive function","Sudden onset","Caused by fever"],a:1},
+  {q:"Alzheimer's disease is a type of:",o:["Delirium","Dementia","Psychosis","Mood disorder"],a:1},
+  {q:"Confabulation is:",o:["Lying","Filling memory gaps with imaginary details","Forgetting names","Hallucinating"],a:1},
+  {q:"Sundowning syndrome refers to:",o:["Worsening of symptoms in late afternoon/evening","Sleeping all day","Waking up early","Morning confusion"],a:0},
+  {q:"Donepezil (Aricept) is commonly used to treat:",o:["Schizophrenia","Mild to moderate Alzheimer's disease","Severe depression","Acute mania"],a:1},
+  {q:"Agnosia in dementia refers to:",o:["Inability to speak","Inability to recognize familiar objects or people","Loss of motor skills","Memory loss"],a:1},
+  {q:"Apraxia refers to:",o:["Inability to carry out purposeful motor activities despite intact motor function","Refusal to eat","Hearing voices","Wandering behavior"],a:0},
+  {q:"Validation therapy for dementia patients focuses on:",o:["Correcting their false beliefs","Accepting and validating their feelings and reality","Forcing them to remember facts","Isolating them"],a:1},
+  {q:"Which is a primary nursing intervention for a wandering dementia patient?",o:["Applying physical restraints","Providing a safe, enclosed environment","Giving heavy sedation","Scolding the patient"],a:1}
+],
+7:[
+  {q:"Withdrawal symptoms occur when:",o:["Drug intake increases","Substance use is stopped or reduced","Drug is started","Tolerance develops"],a:1},
+  {q:"Tolerance means:",o:["Needing less drug","Needing more drug for same effect","Allergic reaction","Disliking the drug"],a:1},
+  {q:"Alcohol withdrawal delirium is also known as:",o:["Korsakoff's syndrome","Delirium Tremens (DTs)","Wernicke's encephalopathy","Dementia"],a:1},
+  {q:"Disulfiram (Antabuse) is used for:",o:["Alcohol aversion therapy","Sedation","Pain relief","Anxiety"],a:0},
+  {q:"Wernicke-Korsakoff syndrome is caused by deficiency of:",o:["Vitamin C","Thiamine (Vitamin B1)","Iron","Calcium"],a:1},
+  {q:"Signs of opioid withdrawal include:",o:["Pinpoint pupils and bradycardia","Dilated pupils, goosebumps (piloerection), and runny nose","Deep sleep","Constipation"],a:1},
+  {q:"Naltrexone is used in substance abuse treatment to:",o:["Cause severe vomiting","Block the euphoric effects and reduce cravings for alcohol/opioids","Sedate the patient","Cure depression"],a:1},
+  {q:"Alcoholics Anonymous (AA) is based on a:",o:["Medical model","12-step peer support program","Psychiatric evaluation","Surgical intervention"],a:1},
+  {q:"Cannabis use is most commonly associated with which short-term effect?",o:["Extreme aggression","Increased appetite and altered time perception","Respiratory depression","Pinpoint pupils"],a:1},
+  {q:"Dual diagnosis (co-occurring disorders) means the patient has:",o:["Two medical illnesses","A psychiatric disorder and a substance use disorder simultaneously","Two substance addictions","Both HIV and TB"],a:1}
+],
+8:[
+  {q:"Positive symptoms of schizophrenia include:",o:["Apathy","Hallucinations and Delusions","Social withdrawal","Anhedonia"],a:1},
+  {q:"A false fixed belief is called:",o:["Illusion","Delusion","Hallucination","Obsession"],a:1},
+  {q:"Hearing voices that are not there is:",o:["Visual hallucination","Auditory hallucination","Illusion","Delusion"],a:1},
+  {q:"Neologism means:",o:["Repeating words","Coining new words/phrases","Muteness","Flight of ideas"],a:1},
+  {q:"Clozapine is an:",o:["Antidepressant","Antipsychotic","Mood stabilizer","Anxiolytic"],a:1},
+  {q:"Extrapyramidal symptoms (EPS) are common side effects of:",o:["Antidepressants","Typical antipsychotics (e.g., Haloperidol)","Benzodiazepines","Lithium"],a:1},
+  {q:"Akathisia, a type of EPS, is characterized by:",o:["Muscle stiffness","Severe inner restlessness and inability to sit still","Tremors","Spasms of the neck"],a:1},
+  {q:"Tardive Dyskinesia involves:",o:["Acute muscle spasms","Involuntary, repetitive facial and tongue movements","High fever","Severe depression"],a:1},
+  {q:"Neuroleptic Malignant Syndrome (NMS) is a life-threatening condition characterized by:",o:["Low blood pressure and hypothermia","Muscle rigidity, high fever, and altered mental status","Excessive sleeping","Diarrhea and vomiting"],a:1},
+  {q:"Avolition, a negative symptom of schizophrenia, means:",o:["Lack of speech","Lack of motivation or goal-directed behavior","Lack of emotion","Inability to feel pleasure"],a:1}
+],
+9:[
+  {q:"Bipolar disorder involves:",o:["Depression only","Mania only","Episodes of Mania and Depression","Anxiety"],a:2},
+  {q:"Mania is characterized by:",o:["Sadness","Elevated mood, hyperactivity, grandiosity","Sleepiness","Guilt"],a:1},
+  {q:"Dysthymia is:",o:["Severe depression","Chronic mild depression","Acute mania","Normal mood"],a:1},
+  {q:"The drug of choice for Bipolar Disorder is:",o:["Prozac","Lithium Carbonate","Valium","Haldol"],a:1},
+  {q:"Anhedonia means:",o:["Excessive pleasure","Inability to experience pleasure","Fear of height","Memory loss"],a:1},
+  {q:"Electroconvulsive Therapy (ECT) is primarily indicated for:",o:["Mild anxiety","Severe, treatment-resistant depression","Simple phobias","Substance abuse"],a:1},
+  {q:"A patient on Lithium should be monitored for toxicity if their serum level exceeds:",o:["0.5 mEq/L","1.0 mEq/L","1.5 mEq/L","2.5 mEq/L"],a:2},
+  {q:"Patients taking MAOI antidepressants must avoid foods containing:",o:["Vitamin C","Tyramine (e.g., aged cheese, wine)","Calcium","Gluten"],a:1},
+  {q:"A common side effect of SSRI antidepressants (like Fluoxetine) is:",o:["Hypertensive crisis","Sexual dysfunction and GI upset","Severe weight loss","Hair loss"],a:1},
+  {q:"Cyclothymic disorder involves:",o:["Severe mania and severe depression","Alternating hypomanic symptoms and mild depressive symptoms for at least 2 years","Only depressive episodes","Psychotic features"],a:1}
+],
+10:[
+  {q:"Panic disorder is characterized by:",o:["Worry about future","Recurrent unexpected panic attacks","Fear of spiders","Obsessions"],a:1},
+  {q:"Agoraphobia is fear of:",o:["Heights","Open/public places where escape is difficult","Spiders","Water"],a:1},
+  {q:"OCD involves:",o:["Hallucinations","Obsessions (thoughts) and Compulsions (actions)","Mood swings","Memory loss"],a:1},
+  {q:"PTSD occurs after:",o:["A traumatic event","A bad meal","A minor injury","A cold"],a:0},
+  {q:"Systematic desensitization is used to treat:",o:["Schizophrenia","Phobias","Depression","Mania"],a:1},
+  {q:"Generalized Anxiety Disorder (GAD) is diagnosed when excessive worry lasts for at least:",o:["1 week","1 month","6 months","2 years"],a:2},
+  {q:"During a severe panic attack, the nurse's priority is to:",o:["Teach relaxation techniques","Leave the patient alone to calm down","Stay with the patient and provide a calm, safe environment","Ask the patient to explain their fear"],a:2},
+  {q:"Social Anxiety Disorder (Social Phobia) is a severe fear of:",o:["Enclosed spaces","Being evaluated or scrutinized by others","Spiders and snakes","Blood and injections"],a:1},
+  {q:"Flooding as a behavioral therapy involves:",o:["Gradual exposure to a fear","Immediate, prolonged exposure to the feared object until anxiety decreases","Avoiding the fear completely","Using water therapy"],a:1},
+  {q:"Benzodiazepines (like Alprazolam) are prescribed for anxiety primarily for:",o:["Long-term cure","Short-term, rapid relief of acute anxiety","Treating depression","Preventing hallucinations"],a:1}
+],
+11:[
+  {q:"Hypochondriasis involves:",o:["Fear of illness despite reassurance","Paralysis","Blindness","Faking illness"],a:0},
+  {q:"Conversion disorder presents as:",o:["Pain","Neurological symptoms (blindness/paralysis) without organic cause","Anxiety","Depression"],a:1},
+  {q:"Narcolepsy is:",o:["Insomnia","Uncontrollable sleep attacks","Sleep walking","Nightmares"],a:1},
+  {q:"Insomnia is:",o:["Excessive sleep","Difficulty falling or staying asleep","Sleep talking","Bed wetting"],a:1},
+  {q:"Body Dysmorphic Disorder involves:",o:["Preoccupation with an imagined defect in appearance","Fear of weight gain","Pain","Fatigue"],a:0},
+  {q:"Primary gain in somatoform disorders refers to:",o:["Getting financial compensation","The relief of internal anxiety through physical symptoms","Receiving attention from family","Avoiding work"],a:1},
+  {q:"Secondary gain refers to:",o:["Internal conflict resolution","External benefits received from being sick (e.g., attention, missing work)","Curing the illness","Becoming a doctor"],a:1},
+  {q:"Factitious disorder (Munchausen syndrome) differs from somatoform disorders because:",o:["Symptoms are unconscious","Symptoms are intentionally produced to assume the sick role","It only affects children","It is purely organic"],a:1},
+  {q:"Obstructive sleep apnea is primarily treated with:",o:["Sleeping pills","CPAP (Continuous Positive Airway Pressure) machine","Antidepressants","Caffeine"],a:1},
+  {q:"Good sleep hygiene includes:",o:["Drinking coffee before bed","Exercising vigorously right before sleep","Maintaining a consistent sleep schedule and cool, dark room","Watching TV in bed"],a:2}
+],
+12:[
+  {q:"Dissociative Amnesia is:",o:["Normal forgetting","Inability to recall important personal information (usually traumatic)","Head injury","Dementia"],a:1},
+  {q:"Dissociative Identity Disorder (DID) was formerly called:",o:["Schizophrenia","Multiple Personality Disorder","Bipolar","Fugue"],a:1},
+  {q:"Dissociative Fugue involves:",o:["Sudden travel away from home with amnesia","Sleep walking","Fainting","Seizures"],a:0},
+  {q:"Depersonalization is:",o:["Feeling detached from one's body/self","Feeling the world is unreal","Hallucinating","Delusional"],a:0},
+  {q:"The primary defense mechanism in dissociative disorders is:",o:["Projection","Repression/Dissociation","Denial","Rationalization"],a:1},
+  {q:"Dissociative Identity Disorder is strongly linked to a history of:",o:["Substance abuse","Severe childhood trauma and abuse","Head trauma","Genetics only"],a:1},
+  {q:"An 'alter' in DID refers to:",o:["A change in medication","An alternate personality state","A hallucination","A physical symptom"],a:1},
+  {q:"The ultimate goal of therapy for DID is:",o:["To ignore the alters","Integration of all alters into one cohesive personality","To keep the alters separated","To medicate the alters away"],a:1},
+  {q:"Derealization is defined as:",o:["Feeling one's own body is unreal","Feeling that the external environment/surroundings are unreal or dreamlike","Hearing voices","Having multiple personalities"],a:1},
+  {q:"Grounding techniques are used to help a dissociating patient by:",o:["Putting them to sleep","Connecting them to the present reality through sensory input","Exploring their past trauma immediately","Hypnotizing them"],a:1}
+],
+13:[
+  {q:"Gender Identity Disorder involves:",o:["Sexual dysfunction","Discomfort with assigned gender/identifying as opposite gender","Paraphilia","Infertility"],a:1},
+  {q:"Paraphilias are:",o:["Normal sexual behaviors","Sexual arousal from atypical objects/situations","Lack of desire","Pain during sex"],a:1},
+  {q:"Dyspareunia means:",o:["Lack of orgasm","Genital pain during intercourse","Premature ejaculation","Low libido"],a:1},
+  {q:"Exhibitionism is:",o:["Spying on others","Exposing genitals to strangers","Rubbing against others","Cross-dressing"],a:1},
+  {q:"Vaginismus is:",o:["Infection","Involuntary spasm of vaginal muscles","Pain","Dryness"],a:1},
+  {q:"Voyeurism is defined as deriving sexual arousal from:",o:["Being humiliated","Secretly observing an unsuspecting person who is naked or undressing","Wearing clothes of the opposite sex","Exposing oneself"],a:1},
+  {q:"Sexual sadism involves:",o:["Being hurt for pleasure","Deriving sexual pleasure from inflicting pain or humiliation on others","Cross-dressing","Watching others"],a:1},
+  {q:"Transvestic disorder involves sexual arousal primarily from:",o:["Changing gender permanently","Cross-dressing in attire of the opposite sex","Inflicting pain","Exposing oneself"],a:1},
+  {q:"Sensate focus therapy is commonly used to treat:",o:["Paraphilias","Gender dysphoria","Sexual dysfunctions by reducing performance anxiety","Schizophrenia"],a:2},
+  {q:"When discussing sexual health, the nurse's most important attribute is:",o:["Being embarrassed","Using complex medical jargon","Maintaining an objective, non-judgmental, and comfortable attitude","Avoiding the topic"],a:2}
+],
+14:[
+  {q:"Anorexia Nervosa is characterized by:",o:["Binge eating","Refusal to maintain body weight/Fear of gaining weight","Overeating","Normal weight"],a:1},
+  {q:"Bulimia Nervosa involves:",o:["Starvation","Binge eating followed by purging","Obesity","Pica"],a:1},
+  {q:"Lanugo (fine hair) is seen in:",o:["Bulimia","Anorexia Nervosa","Obesity","Depression"],a:1},
+  {q:"A serious physical complication of eating disorders is:",o:["Electrolyte imbalance","Headache","Cough","Rash"],a:0},
+  {q:"Refeeding syndrome can occur during treatment of:",o:["Obesity","Severe malnutrition/Anorexia","Flu","Anxiety"],a:1},
+  {q:"Russell's sign, common in bulimia, refers to:",o:["Hair loss","Calluses on the knuckles from self-induced vomiting","Yellow teeth","Swollen feet"],a:1},
+  {q:"A critical electrolyte imbalance caused by frequent purging is:",o:["Hypercalcemia","Hypokalemia (low potassium)","Hypernatremia","High iron"],a:1},
+  {q:"Amenorrhea in anorexia nervosa is primarily caused by:",o:["Stress","Severe weight loss and lack of body fat disrupting hormones","Overeating","Vomiting"],a:1},
+  {q:"Cognitive Behavioral Therapy (CBT) for eating disorders focuses on:",o:["Only monitoring weight","Changing distorted thoughts about body shape and weight","Forcing the patient to eat","Family counseling only"],a:1},
+  {q:"In family dynamics of a client with anorexia, 'enmeshment' refers to:",o:["Strict boundaries","Lack of clear boundaries and over-involvement among family members","Neglect","Physical abuse"],a:1}
+],
+15:[
+  {q:"Kleptomania is the impulse to:",o:["Set fires","Steal unneeded items","Pull hair","Gamble"],a:1},
+  {q:"Pyromania involves:",o:["Stealing","Deliberate fire setting","Hair pulling","Explosive anger"],a:1},
+  {q:"Trichotillomania is:",o:["Skin picking","Hair pulling","Nail biting","Head banging"],a:1},
+  {q:"Adjustment disorder occurs:",o:["Without a stressor","In response to an identifiable stressor within 3 months","Years later","From birth"],a:1},
+  {q:"Intermittent Explosive Disorder involves:",o:["Sadness","Aggressive outbursts disproportionate to provocation","Stealing","Setting fires"],a:1},
+  {q:"A key feature of impulse control disorders is:",o:["Pre-planning the act for weeks","A buildup of tension before the act and relief/gratification afterward","Doing it for financial gain","Hallucinating during the act"],a:1},
+  {q:"Pyromania differs from arson in that pyromania is done:",o:["For insurance money","For the relief of tension and fascination with fire, not financial gain","To cover up a crime","Only by children"],a:1},
+  {q:"Habit Reversal Training is highly effective for:",o:["Schizophrenia","Trichotillomania (hair-pulling)","Bipolar disorder","Anorexia"],a:1},
+  {q:"Which class of medications is sometimes used off-label to help control impulses?",o:["Antibiotics","SSRIs (Antidepressants)","Vitamins","Antihistamines"],a:1},
+  {q:"An adjustment disorder usually resolves within how many months after the stressor terminates?",o:["1 month","6 months","2 years","Never resolves"],a:1}
+],
+16:[
+  {q:"Psychosomatic disorders are:",o:["Fake illnesses","Physical symptoms exacerbated by psychological factors","Mental illnesses only","Surgical problems"],a:1},
+  {q:"Type A personality (competitive, hostile) is linked to:",o:["Cancer","Coronary Heart Disease","Asthma","Ulcers"],a:1},
+  {q:"Stress can worsen:",o:["Asthma","Hypertension","Ulcers","All of the above"],a:3},
+  {q:"Biofeedback is used to:",o:["Measure height","Gain voluntary control over physiological processes","Test blood","Scan brain"],a:1},
+  {q:"Peptic ulcer is often associated with:",o:["Happiness","Stress/Anxiety","Exercise","Sleep"],a:1},
+  {q:"The body's primary stress hormone, which suppresses the immune system over time, is:",o:["Melatonin","Cortisol","Insulin","Thyroxine"],a:1},
+  {q:"Psychoneuroimmunology studies the interaction between:",o:["Psychology and bones","The central nervous system, endocrine system, and immune system","Heart and lungs","Digestion and sleep"],a:1},
+  {q:"'La belle indifference' (lack of concern about a severe symptom) is often seen in:",o:["Conversion disorder","Panic disorder","Major depression","Asthma"],a:0},
+  {q:"Irritable Bowel Syndrome (IBS) is an example of a condition greatly affected by:",o:["Genetics only","Diet only","Psychological stress and emotional factors","Lack of exercise"],a:2},
+  {q:"A holistic nursing assessment for a medical patient must include evaluating their:",o:["Financial status only","Emotional state, coping skills, and support systems","Dietary preferences only","Clothing style"],a:1}
+],
+17:[
+  {q:"Borderline Personality Disorder is characterized by:",o:["Stability","Instability in relationships, self-image, and affects","Shyness","Perfectionism"],a:1},
+  {q:"Antisocial Personality Disorder involves:",o:["Disregard for rights of others/Lack of remorse","Fear of people","Obsession with order","Dependency"],a:0},
+  {q:"Obsessive-Compulsive Personality Disorder (OCPD) involves:",o:["Rituals","Preoccupation with orderliness and perfectionism","Hallucinations","Suspicion"],a:1},
+  {q:"Paranoid Personality Disorder involves:",o:["Trust","Pervasive distrust and suspiciousness","Shyness","Drama"],a:1},
+  {q:"Narcissistic Personality Disorder involves:",o:["Humility","Grandiosity and need for admiration","Fear","Isolation"],a:1},
+  {q:"'Splitting'—viewing people as entirely good or entirely bad—is a defense mechanism typical of:",o:["Dependent Personality","Borderline Personality Disorder","Schizoid Personality","Avoidant Personality"],a:1},
+  {q:"Dialectical Behavior Therapy (DBT) is specifically designed to treat:",o:["Schizophrenia","Borderline Personality Disorder","Panic disorder","Insomnia"],a:1},
+  {q:"To be diagnosed with Antisocial Personality Disorder, the individual must have a history of which childhood disorder?",o:["Autism","Conduct Disorder","Separation Anxiety","ADHD"],a:1},
+  {q:"Schizoid Personality Disorder is characterized by:",o:["Magical thinking","A profound defect in the ability to form personal relationships (loners)","Extreme drama and attention-seeking","Fear of abandonment"],a:1},
+  {q:"Avoidant Personality Disorder differs from Social Phobia primarily in that Avoidant Personality is:",o:["Temporary","A pervasive pattern of social inhibition and feelings of inadequacy","Treated with surgery","Caused by hallucinations"],a:1}
+],
+18:[
+  {q:"Depression in the elderly is often mistaken for:",o:["Mania","Dementia","Delirium","Schizophrenia"],a:1},
+  {q:"The most common mental health problem in the elderly is:",o:["Schizophrenia","Depression","Bipolar","Phobia"],a:1},
+  {q:"Reminiscence therapy uses:",o:["Future planning","Recall of past events/memories","Medication","Exercise"],a:1},
+  {q:"Polypharmacy in elderly increases risk of:",o:["Health","Drug interactions and toxicity","Wealth","Memory"],a:1},
+  {q:"Elder abuse can be:",o:["Physical","Financial","Neglect","All of the above"],a:3},
+  {q:"Pseudodementia refers to:",o:["Fake dementia","Cognitive impairment that is actually secondary to severe depression","Early-onset Alzheimer's","Vascular dementia"],a:1},
+  {q:"Complicated grief differs from normal grief in that it:",o:["Lasts only a week","Is prolonged, significantly impairs functioning, and prevents acceptance","Does not involve sadness","Only happens in youth"],a:1},
+  {q:"Reality orientation therapy is best used for:",o:["Patients with schizophrenia","Confused/disoriented elderly patients to reinforce time, place, and person","Depressed patients","Manic patients"],a:1},
+  {q:"Due to changes in liver and kidney function, elderly patients generally require:",o:["Higher doses of psychiatric medications","Lower starting doses of psychiatric medications ('start low, go slow')","No medications at all","Only liquid medications"],a:1},
+  {q:"Which of the following is true regarding suicide in the elderly?",o:["They rarely attempt suicide.","They have a higher rate of completed suicides compared to younger populations.","They only use pills.","They always warn someone first."],a:1}
+],
+19:[
+  {q:"HIV-associated neurocognitive disorder (HAND) affects:",o:["Lungs","Memory, attention, and motor function","Stomach","Bones"],a:1},
+  {q:"Depression in HIV patients is:",o:["Rare","Common","Impossible","Unimportant"],a:1},
+  {q:"Psychiatric side effects of antiretrovirals can include:",o:["Happy mood","Vivid dreams, anxiety, depression","Improved memory","None"],a:1},
+  {q:"Pre-test counseling for HIV is:",o:["Optional","Mandatory/Essential","Useless","Illegal"],a:1},
+  {q:"Stigma related to HIV can lead to:",o:["Better adherence","Social isolation and depression","Faster cure","Happiness"],a:1},
+  {q:"AIDS Dementia Complex (ADC) is caused by:",o:["A secondary bacterial infection","Direct infection of the brain tissue by the HIV virus","Vitamin deficiency","Poor diet"],a:1},
+  {q:"When caring for an HIV-positive psychiatric patient, the nurse should use:",o:["Airborne precautions","Standard precautions for all blood and body fluids","Contact precautions always","No precautions"],a:1},
+  {q:"Grief in HIV/AIDS patients is often complex because it involves:",o:["Only loss of health","Multiple losses including health, relationships, job, and facing one's mortality","Financial gain","Gaining new friends"],a:1},
+  {q:"Zidovudine (AZT) can occasionally cause which psychiatric side effect?",o:["Euphoria","Mania or severe depression","Blindness","Deafness"],a:1},
+  {q:"In post-test HIV counseling for a positive result, the immediate priority is:",o:["Financial planning","Assessing suicide risk and providing emotional support","Blaming the patient","Recommending diet changes"],a:1}
+],
+20:[
+  {q:"Child abuse includes:",o:["Physical","Sexual","Emotional/Neglect","All of the above"],a:3},
+  {q:"Munchausen Syndrome by Proxy is:",o:["Real illness","Caregiver fabricating illness in a child","Genetic disorder","Infection"],a:1},
+  {q:"The cycle of violence typically includes:",o:["Tension-building, Incident, Honeymoon phase","Anger only","Peace only","Constant fighting"],a:0},
+  {q:"Neglect refers to:",o:["Hitting","Failure to provide basic needs","Yelling","Sexual act"],a:1},
+  {q:"Mandatory reporting applies to:",o:["Suspected child/elder abuse","Bad grades","Flu","Arguments"],a:0},
+  {q:"A common emotional response in a victim of intimate partner violence (IPV) is:",o:["Extreme arrogance","Low self-esteem, self-blame, and depression","Overconfidence","Lack of empathy"],a:1},
+  {q:"Which is a physical indicator of possible child sexual abuse?",o:["A scraped knee","Unexplained genital trauma or sexually transmitted infections in a child","A broken arm from falling","Frequent colds"],a:1},
+  {q:"When an abused patient returns to the abuser, the nurse should:",o:["Get angry at the patient","Refuse to treat them next time","Remain non-judgmental and keep the door open for future support","Force them into a shelter"],a:2},
+  {q:"Survivor's guilt is often experienced by:",o:["The abuser","Individuals who survived a trauma where others died or suffered","The police","The medical staff"],a:1},
+  {q:"In trauma-informed care, the focus shifts from 'What is wrong with you?' to:",o:["'Why did you do this?'","'What happened to you?'","'How can we fix you?'","'Who did this?'"],a:1}
+],
+21:[
+  {q:"Community Mental Health focuses on:",o:["Institutional care","Prevention and care within the community","Surgery","Isolation"],a:1},
+  {q:"Deinstitutionalization led to:",o:["More hospitals","Shift of care to community settings","More nurses","Less patients"],a:1},
+  {q:"Primary care in mental health includes:",o:["Rehab","Mental health promotion","ECT","Long term care"],a:1},
+  {q:"A halfway house is:",o:["A prison","Transitional living facility","Hospital ward","School"],a:1},
+  {q:"The District Mental Health Programme (DMHP) aims to:",o:["Centralize care","Integrate mental health into general health services","Ignore rural areas","Build asylums"],a:1},
+  {q:"Secondary prevention in community mental health focuses on:",o:["Promoting general health","Early detection and prompt intervention (e.g., crisis lines)","Rehabilitation","Long-term housing"],a:1},
+  {q:"Assertive Community Treatment (ACT) is designed to:",o:["Keep patients in the hospital","Provide comprehensive, team-based community care to those with severe mental illness","Force medication compliance","Offer purely online therapy"],a:1},
+  {q:"A key role of a community mental health nurse is:",o:["Surgeon","Case management and coordinating resources","Performing ECT alone","Arresting patients"],a:1},
+  {q:"A quarterway house provides:",o:["No supervision","More intensive clinical supervision than a halfway house","Only meals","Only job training"],a:1},
+  {q:"The National Mental Health Programme (NMHP) in India was launched in:",o:["1947","1982","2000","2015"],a:1}
+],
+22:[
+  {q:"Involuntary admission is done when:",o:["Patient wants it","Patient is dangerous to self or others","Family is tired","Doctor is busy"],a:1},
+  {q:"Confidentiality can be breached if:",o:["Nurse wants to share","Duty to warn (Tarasoff rule) applies","Never","Neighbors ask"],a:1},
+  {q:"Informed consent requires:",o:["Signature only","Understanding of risks, benefits, and alternatives","Force","Money"],a:1},
+  {q:"Restraints require:",o:["Nurse's decision","Physician's order and monitoring","Patient consent","No rules"],a:1},
+  {q:"The Mental Healthcare Act 2017 decriminalized:",o:["Theft","Suicide attempt","Violence","Drug use"],a:1},
+  {q:"The ethical principle of 'Autonomy' refers to:",o:["Doing good","The patient's right to make their own decisions","Being fair","Telling the truth"],a:1},
+  {q:"'Beneficence' in nursing ethics means:",o:["Doing no harm","Acting in the best interest of the patient (doing good)","Treating everyone equally","Keeping secrets"],a:1},
+  {q:"'Veracity' is the ethical principle of:",o:["Loyalty","Telling the truth","Doing no harm","Fairness"],a:1},
+  {q:"A writ of Habeas Corpus in psychiatry is used to:",o:["Force medication","Challenge a patient's involuntary, unlawful detention in a hospital","Apply restraints","Transfer a patient"],a:1},
+  {q:"Malpractice is a specific type of negligence that occurs when:",o:["A patient refuses care","A professional fails to meet the standard of care, causing harm","A nurse is late to work","A doctor misplaces a file"],a:1}
+],
+23:[
+  {q:"Psychosocial rehabilitation aims to:",o:["Cure illness","Improve functioning and quality of life","Sedate patient","Isolate patient"],a:1},
+  {q:"Vocational training helps patients:",o:["Sleep","Gain employment skills","Eat better","Take meds"],a:1},
+  {q:"Social skills training teaches:",o:["Math","Communication and interaction","Cooking","Driving"],a:1},
+  {q:"Day care centers provide:",o:["24-hour care","Activities during the day","Surgery","Emergency care"],a:1},
+  {q:"Family psychoeducation helps family to:",o:["Ignore patient","Understand illness and support patient","Leave patient","Blame patient"],a:1},
+  {q:"The Recovery Model emphasizes that:",o:["Recovery means being completely symptom-free","Recovery is a personal journey of living a meaningful life despite the illness","Medication is the only treatment","Hospitals are the best place to live"],a:1},
+  {q:"The Clubhouse Model is a program that provides:",o:["Medical treatment only","A community center offering socialization, meaningful work, and peer support","Surgical rehab","Strict lock-down care"],a:1},
+  {q:"Supported Employment emphasizes:",o:["Pre-vocational training forever","Rapid job placement in competitive jobs with ongoing support","Working only in sheltered workshops","Not working at all"],a:1},
+  {q:"A Token Economy is a behavioral rehabilitation strategy based on:",o:["Punishment","Rewarding positive behaviors with tokens that can be exchanged for privileges","Psychoanalysis","Electroconvulsive therapy"],a:1},
+  {q:"A major barrier to successful psychosocial rehabilitation is:",o:["Too much family support","Societal stigma and lack of community resources","Excessive funding","Too many jobs available"],a:1}
+],
+24:[
+  {q:"Counseling is:",o:["Giving advice","A professional relationship to help solve problems","Chatting","Judging"],a:1},
+  {q:"Active listening involves:",o:["Talking constantly","Paying full attention and understanding","Ignoring","Writing only"],a:1},
+  {q:"Non-judgmental attitude means:",o:["Accepting client without criticism","Agreeing with everything","Disliking client","Ignoring bad behavior"],a:0},
+  {q:"Empathy is:",o:["Feeling sorry","Understanding client's world","Crying","Sympathy"],a:1},
+  {q:"Confidentiality in counseling is:",o:["Optional","Essential trust builder","Not needed","Rare"],a:1},
+  {q:"The orientation phase of counseling primarily involves:",o:["Solving the problem","Establishing trust and setting goals","Saying goodbye","Confrontation"],a:1},
+  {q:"The working phase of counseling involves:",o:["Initial introductions","Exploring issues, developing insights, and practicing new behaviors","Summarizing the relationship","Terminating the contract"],a:1},
+  {q:"Transference occurs when:",o:["The nurse projects feelings onto the client","The client unconsciously transfers feelings about a past figure onto the counselor","The counselor gives advice","The session ends"],a:1},
+  {q:"Professional boundaries in counseling protect:",o:["Only the nurse","Only the hospital","Both the client and the counselor","The insurance company"],a:2},
+  {q:"Termination phase tasks include:",o:["Setting new major goals","Reviewing progress and managing feelings of loss/goodbye","Starting a new therapy","Ignoring the client"],a:1}
+],
+25:[
+  {q:"A psychiatric emergency is:",o:["Medication refill","Situation requiring immediate intervention (e.g., suicide, violence)","Mild anxiety","Insomnia"],a:1},
+  {q:"Triage in psychiatry assesses:",o:["Money","Urgency of risk","Clothing","Education"],a:1},
+  {q:"Therapeutic milieu refers to:",o:["Medication","A structured, healing environment","Isolation room","Doctors office"],a:1},
+  {q:"Team meeting in a psych unit is for:",o:["Gossip","Collaborative care planning","Lunch","Rest"],a:1},
+  {q:"Documentation should be:",o:["Vague","Accurate, objective, and timely","Subjective","Rare"],a:1},
+  {q:"A democratic leadership style in a nursing unit involves:",o:["One person making all decisions","Including staff in decision-making and encouraging input","No leadership or direction","Punishing staff members"],a:1},
+  {q:"Laissez-faire leadership means:",o:["Strict control","Hands-off, leaving staff to make their own decisions","Democratic voting","Micromanagement"],a:1},
+  {q:"Quality Assurance (QA) in nursing ensures that:",o:["Costs are high","Care provided meets established standards of excellence","Staff get more holidays","Patients stay longer"],a:1},
+  {q:"A Nursing Audit is a process used to:",o:["Fire staff","Evaluate clinical records to assess the quality of nursing care","Count medications","Check the budget"],a:1},
+  {q:"Staff burnout in a psychiatric unit can be mitigated by:",o:["Increasing overtime","Providing regular clinical supervision and debriefing sessions","Ignoring complaints","Reducing pay"],a:1}
+],
+26:[
+  {q:"Continuing Nursing Education (CNE) helps to:",o:["Pass time","Update knowledge and skills","Earn money","Socialize"],a:1},
+  {q:"In-service education is for:",o:["Students","Working staff","Patients","Public"],a:1},
+  {q:"Clinical supervision provides:",o:["Punishment","Support and professional growth","More work","Stress"],a:1},
+  {q:"Role play is a method of:",o:["Lecture","Teaching/Practicing skills","Reading","Writing"],a:1},
+  {q:"Reflective practice involves:",o:["Ignoring mistakes","Analyzing one's own actions to learn","Blaming others","Forgetting"],a:1},
+  {q:"Andragogy is the study of:",o:["Child learning","Adult learning principles","Animal behavior","Elderly physical decline"],a:1},
+  {q:"Formative evaluation occurs:",o:["Only at the end of the course","Continuously during the learning process to provide feedback","Never","Before the course begins"],a:1},
+  {q:"Summative evaluation is used to:",o:["Provide daily feedback","Assess overall learning at the end of a unit or course","Plan the syllabus","Entertain students"],a:1},
+  {q:"OSCE (Objective Structured Clinical Examination) is used primarily to assess:",o:["Theoretical knowledge","Practical clinical skills in a controlled setting","Reading speed","Typing skills"],a:1},
+  {q:"Microteaching is a technique used to:",o:["Teach 100 students at once","Focus on mastering one specific teaching skill in a short session","Teach microscopy","Avoid teaching altogether"],a:1}
+]
+};
 
-        function openResource(type, url, title) {
-            if(type === 'coming-soon') {
-                alert('This resource is under development.');
-                return;
-            }
+const LTRS=['A','B','C','D'];
+let curQuiz=null,answered=[];
 
-            history.pushState({ modalOpen: true }, null, '#resource');
+function openQuiz(id){
+  curQuiz=id;
+  const qs=QD[id]||[];
+  answered=new Array(qs.length).fill(null);
+  document.getElementById('qtitle').textContent='Unit '+id+' Quiz';
+  document.getElementById('qpips').innerHTML=qs.map((_,i)=>`<div class="pip" id="pip${i}"></div>`).join('');
+  let html=`<div class="qscore" id="qscore"><div><div class="qs-num" id="qsnum">—</div><div class="qs-sub">Score</div></div><div class="qs-msg" id="qsmsg"></div></div>`;
+  qs.forEach((q,qi)=>{
+    html+=`<div class="qitem" id="qi${qi}"><div class="qlbl">Question ${qi+1} of ${qs.length}</div><div class="qtext">${q.q}</div><div class="qopts">${q.o.map((opt,oi)=>`<button class="qopt" id="opt${qi}_${oi}" onclick="ans(${qi},${oi},${q.a})"><span class="qltr">${LTRS[oi]}</span>${opt}</button>`).join('')}</div></div>`;
+  });
+  document.getElementById('qbody').innerHTML=html;
+  document.getElementById('qmodal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
 
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = title;
-            modal.style.display = 'flex';
-            body.innerHTML = ''; 
-            body.style.display = 'flex'; 
+function ans(qi,oi,correct){
+  if(answered[qi]!==null)return;
+  answered[qi]=oi;
+  const opts=document.querySelectorAll(`#qi${qi} .qopt`);
+  opts.forEach(b=>b.classList.add('lock'));
+  opts[correct].classList.add('cor');
+  if(oi!==correct)opts[oi].classList.add('wrg');
+  const pip=document.getElementById('pip'+qi);
+  pip.classList.add('ans',oi===correct?'cor':'wrg');
+  if(answered.every(a=>a!==null)){
+    const score=answered.filter((a,i)=>a===QD[curQuiz][i].a).length;
+    const total=QD[curQuiz].length;
+    const pct=Math.round(score/total*100);
+    const msgs=['📚 Keep Studying!','👍 Good Effort!','🎉 Well Done!','🏆 Perfect!'];
+    const mi=pct<50?0:pct<70?1:pct<100?2:3;
+    document.getElementById('qsnum').textContent=score+'/'+total;
+    document.getElementById('qsmsg').textContent=msgs[mi];
+    const sc=document.getElementById('qscore');
+    sc.classList.add('show');
+    sc.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
 
-            if (type === 'quiz') {
-                // Handled by openQuiz
-            }
-            else {
-                let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
-                let className = (type === 'video') ? 'iframe-video' : 'iframe-doc';
+function closeQuiz(){
+  document.getElementById('qmodal').classList.remove('open');
+  document.body.style.overflow='';
+  curQuiz=null;
+}
 
-                body.innerHTML = `<iframe 
-                    class="${className}" 
-                    src="${cleanUrl}" 
-                    sandbox="allow-scripts allow-same-origin allow-presentation"
-                    allow="autoplay; encrypted-media; fullscreen">
-                </iframe>`;
-            }
-        }
-
-        function openQuiz(unitId) {
-            history.pushState({ modalOpen: true }, null, '#quiz');
-
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = `Quiz: Unit ${unitId}`;
-            modal.style.display = 'flex';
-            
-            body.style.display = 'block';
-            body.scrollTop = 0; 
-            
-            const questions = QUIZ_DATA[unitId] || [];
-            
-            let quizHtml = `<div class="quiz-container">`;
-            questions.forEach((q, idx) => {
-                quizHtml += `
-                    <div class="quiz-question">${idx + 1}. ${q.q}</div>
-                    <div class="quiz-options" id="q-${idx}">
-                        ${q.o.map((opt, oIdx) => `
-                            <div class="quiz-option" onclick="checkAnswer(this, ${idx}, ${oIdx}, ${q.a})">${opt}</div>
-                        `).join('')}
-                    </div>
-                `;
-            });
-            
-            if(questions.length === 0) quizHtml += `<p>Quiz coming soon!</p>`;
-            
-            quizHtml += `</div>`;
-            body.innerHTML = quizHtml;
-        }
-
-        function checkAnswer(el, qIdx, oIdx, correctIdx) {
-            const parent = document.getElementById(`q-${qIdx}`);
-            const opts = parent.children;
-            for(let opt of opts) opt.style.pointerEvents = 'none';
-
-            if(oIdx === correctIdx) {
-                el.classList.add('correct');
-            } else {
-                el.classList.add('wrong');
-                opts[correctIdx].classList.add('correct');
-            }
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            modal.style.display = 'none';
-            body.innerHTML = ''; 
-            
-            if (history.state && history.state.modalOpen) {
-                history.back();
-            }
-        }
-
-        window.onpopstate = function(event) {
-            const modal = document.getElementById('app-modal');
-            if (modal.style.display === 'flex') {
-                modal.style.display = 'none';
-                document.getElementById('modal-body').innerHTML = '';
-            }
-        };
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const firstUnitHeader = document.querySelector('.unit-header');
-            if(firstUnitHeader) {
-                // toggleUnit(firstUnitHeader);
-            }
-        });
-    </script>
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQuiz();});
+</script>
 </body>
 </html>
