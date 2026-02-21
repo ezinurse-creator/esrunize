@@ -1,860 +1,1044 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nursing Management & Leadership Syllabus</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <style>
-        /* --- MODERN THEME --- */
-        :root {
-            --primary: #01b9f1;
-            --primary-dark: #003b80;
-            --bg-card: #ffffff;
-            --bg-body: #f1f5f9;
-            --text-main: #003b80;
-            --text-muted: #64748b;
-            --accent: #f59e0b;
-            --danger: #ef4444;
-            --success: #10b981;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
-            --radius-md: 12px;
-        }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nursing Management & Leadership</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --p50:#faf5ff;--p100:#f3e8ff;--p200:#e9d5ff;--p300:#d8b4fe;
+  --p400:#c084fc;--p500:#a855f7;--p600:#9333ea;--p700:#7e22ce;
+  --p800:#6b21a8;--p900:#581c87;
+  --w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;
+  --g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;
+  --ok:#16a34a;--ok-lt:#dcfce7;--err:#dc2626;--err-lt:#fee2e2;
+  --warn:#d97706;--warn-lt:#fef3c7;
+  --r:12px;--rs:8px;
+  --s1:0 1px 3px rgba(109,40,217,.08);
+  --s2:0 4px 12px rgba(109,40,217,.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:90;background:var(--w);border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 16px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-back{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:var(--p100);color:var(--p700);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;margin-right:12px}
+.tb-back:hover{background:var(--p200)}
+.tb-info{flex:1;min-width:0}
+.tb-title{font-size:.88rem;font-weight:700;color:var(--g900);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb-sub{font-size:.65rem;color:var(--g400);font-weight:500;margin-top:1px}
+.tb-chip{background:var(--p100);color:var(--p700);border:1px solid var(--p200);font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
+.hero{background:linear-gradient(145deg,var(--p900),var(--p700) 55%,var(--p500));padding:28px 18px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.08),transparent 50%),radial-gradient(circle at 10% 85%,rgba(255,255,255,.05),transparent 40%)}
+.hero::after{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-dot-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:.65rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border-radius:30px;margin-bottom:12px}
+.hero-eyebrow-dot{width:5px;height:5px;background:#c4b5fd;border-radius:50%}
+.hero h1{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:7px}
+.hero h1 em{color:rgba(255,255,255,.45);font-style:italic;font-weight:300}
+.hero-desc{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:18px}
+.hero-cta{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.28);color:#fff;font-size:.8rem;font-weight:700;padding:9px 16px;border-radius:9px;cursor:pointer;transition:all .2s;backdrop-filter:blur(6px)}
+.hero-cta:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
+.hero-stats{display:flex;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+.hs{flex:1;text-align:center}
+.hs+.hs{border-left:1px solid rgba(255,255,255,.1)}
+.hs-n{font-size:1.35rem;font-weight:800;color:#fff;line-height:1}
+.hs-l{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
+.main{padding:16px 14px 56px}
+.divider{display:flex;align-items:center;gap:8px;margin-bottom:12px;margin-top:2px}
+.divider span{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g400)}
+.divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+.uc{background:var(--w);border:1.5px solid var(--g200);border-radius:var(--r);margin-bottom:9px;overflow:hidden;box-shadow:var(--s1);transition:border-color .2s,box-shadow .2s}
+.uc:hover{border-color:var(--p300);box-shadow:var(--s2)}
+.uc[data-open=true]{border-color:var(--p400);box-shadow:var(--s2)}
+.ubtn{width:100%;display:flex;align-items:center;padding:14px 15px;gap:12px;background:none;border:none;cursor:pointer;text-align:left}
+.upill{min-width:54px;padding:0 8px;height:36px;border-radius:9px;flex-shrink:0;background:var(--p100);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.upill span{font-size:.65rem;font-weight:800;color:var(--p700);letter-spacing:-.01em;white-space:nowrap}
+.uc[data-open=true] .upill{background:var(--p700)}
+.uc[data-open=true] .upill span{color:#fff}
+.uinfo{flex:1;min-width:0}
+.uname{font-size:.85rem;font-weight:700;color:var(--g900);line-height:1.3}
+.umeta{font-size:.66rem;color:var(--g400);margin-top:2px;font-weight:500}
+.uright{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.uchev{width:16px;height:16px;color:var(--g300);transition:transform .3s,color .2s}
+.uc[data-open=true] .uchev{transform:rotate(180deg);color:var(--p500)}
+.ubody{display:none;background:var(--p50);border-top:1.5px solid var(--p200);padding:12px 13px 14px}
+.ubody.open{display:block;animation:bodyIn .2s ease}
+@keyframes bodyIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.rrow{display:flex;gap:9px;margin-bottom: 8px;}
+.rrow:last-child { margin-bottom: 0; }
+@media(max-width:380px){.rrow{flex-direction:column}}
+.rbtn{flex:1;display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .17s;background:var(--w);text-decoration:none}
+.rbtn .rico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.rbtn .rtxt{line-height:1.25}
+.rbtn .rtxt small{display:block;font-size:.62rem;font-weight:400;opacity:.5;margin-top:1px}
+.rbtn .rarr{margin-left:auto;opacity:0;font-size:.7rem;color:var(--g400);transition:opacity .15s}
+.rbtn:hover .rarr{opacity:1}
 
-        * { box-sizing: border-box; }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-        } 
+/* Types */
+.rbtn.notes{border-color:var(--p200);color:var(--p800)}
+.rbtn.notes .rico{background:var(--p100)}
+.rbtn.notes:hover{background:var(--p50);border-color:var(--p500);box-shadow:var(--s2);transform:translateY(-1px)}
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding-bottom: 80px;
-        }
+.rbtn.video{border-color:#bae6fd;color:#0369a1}
+.rbtn.video .rico{background:#e0f2fe}
+.rbtn.video:hover{background:#f0f9ff;border-color:#38bdf8;box-shadow:0 3px 10px rgba(56,189,248,.12);transform:translateY(-1px)}
 
-        /* --- HEADER & SYLLABUS --- */
-        .page-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .page-title {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--primary-dark);
-            margin-bottom: 10px;
-        }
+.rbtn.imp{border-color:#fecdd3;color:#be123c}
+.rbtn.imp .rico{background:#ffe4e6}
+.rbtn.imp:hover{background:#fff1f2;border-color:#fb7185;box-shadow:0 3px 10px rgba(251,113,133,.12);transform:translateY(-1px)}
 
-        .syllabus-card {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-            color: white;
-            padding: 20px;
-            border-radius: var(--radius-md);
-            text-align: center;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: var(--shadow-md);
-            margin-bottom: 30px;
-            display: block;
-            text-decoration: none;
-            transition: transform 0.2s;
-        }
-        .syllabus-card:active { transform: scale(0.98); }
+.rbtn.quiz{border-color:#fde68a;color:#78350f}
+.rbtn.quiz .rico{background:var(--warn-lt)}
+.rbtn.quiz:hover{background:#fffbeb;border-color:var(--warn);box-shadow:0 3px 10px rgba(217,119,6,.12);transform:translateY(-1px)}
 
-        /* --- UNITS (ACCORDION STYLE) --- */
-        .unit-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-md);
-            margin-bottom: 16px;
-            box-shadow: var(--shadow-sm);
-            overflow: hidden;
-            border: 1px solid #e2e8f0;
-        }
-
-        .unit-header {
-            padding: 20px;
-            background: var(--bg-card);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            font-weight: 700;
-            color: var(--primary-dark);
-            border-bottom: 1px solid transparent;
-            transition: background 0.2s;
-        }
-        
-        .unit-header:hover { background: #f8fafc; }
-        
-        .unit-header.active {
-            border-bottom-color: #e2e8f0;
-            background: #f0f9ff;
-            color: var(--primary);
-        }
-
-        .unit-content {
-            display: none;
-            padding: 20px;
-            background: #fdfdfd;
-        }
-        .unit-content.show { display: block; }
-
-        /* --- RESOURCES LIST --- */
-        .resource-list {
-            display: grid;
-            gap: 12px;
-        }
-
-        .resource-btn {
-            display: flex;
-            align-items: center;
-            padding: 16px;
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            text-decoration: none;
-            color: var(--text-main);
-            font-weight: 500;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-
-        .resource-btn:hover {
-            border-color: var(--primary);
-            transform: translateX(4px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        /* Color coding by type */
-        .type-notes { border-left: 4px solid #0ea5e9; }
-        .type-video { border-left: 4px solid #8b5cf6; }
-        .type-model { border-left: 4px solid #10b981; }
-        .type-quiz  { border-left: 4px solid #f59e0b; background: #fffbeb; }
-
-        .icon {
-            margin-right: 12px;
-            font-size: 1.2rem;
-            width: 30px;
-            text-align: center;
-        }
-
-        /* --- MODAL (The "Close Button" Wrapper) --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95); /* Darker background for focus */
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-        }
-
-        .modal-header {
-            height: 60px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            flex-shrink: 0;
-        }
-
-        .modal-title { font-weight: 700; color: var(--primary-dark); font-size: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-        
-        .btn-close {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            flex: 1;
-            background: #000;
-            position: relative;
-            overflow-y: auto; /* Allow scrolling */
-            /* Default display is flexible to center videos */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* --- FIXED IFRAME STYLES --- */
-        
-        /* 1. For Videos (Keeps 16:9 Aspect Ratio) */
-        .iframe-video {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16 / 9;
-            border: none;
-            background: #000;
-            display: block;
-        }
-
-        /* 2. For Notes & Models (Fills the screen vertically) */
-        .iframe-doc {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #fff;
-            display: block;
-        }
-
-        /* --- QUIZ STYLES (Inside Modal) --- */
-        .quiz-container {
-            background: white;
-            width: 100%;
-            min-height: 100%; /* Ensures it fills screen if short */
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .quiz-question { margin-bottom: 20px; font-size: 1.1rem; font-weight: 600; }
-        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
-        .quiz-option {
-            padding: 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        .quiz-option:hover { background: #f0f9ff; border-color: var(--primary); }
-        .quiz-option.selected { background: var(--primary); color: white; border-color: var(--primary); }
-        
-        /* Visual Indicators for Tick/Cross */
-        .quiz-option.correct { 
-            background: var(--success); 
-            color: white; 
-            border-color: var(--success); 
-        }
-        .quiz-option.correct::after {
-            content: '✓';
-            position: absolute;
-            right: 15px;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .quiz-option.wrong { 
-            background: var(--danger); 
-            color: white; 
-            border-color: var(--danger); 
-        }
-        .quiz-option.wrong::after {
-            content: '✗';
-            position: absolute;
-            right: 15px;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-        
-        .quiz-score { text-align: center; font-size: 1.5rem; color: var(--primary-dark); padding: 40px; }
-
-    </style>
+.qoverlay{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end}
+.qoverlay.open{display:flex}
+.qscrim{position:absolute;inset:0;background:rgba(15,10,40,.55);backdrop-filter:blur(3px)}
+.qpanel{position:relative;z-index:1;background:var(--w);width:100%;max-width:580px;margin:0 auto;border-radius:18px 18px 0 0;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 -10px 50px rgba(109,40,217,.2);animation:panelUp .3s cubic-bezier(.32,.72,0,1)}
+@keyframes panelUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.qhead{padding:16px 18px 12px;border-bottom:1px solid var(--g100);flex-shrink:0}
+.qhead-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.qtitle{font-size:1rem;font-weight:800;color:var(--p800)}
+.qclose{width:28px;height:28px;border-radius:50%;background:var(--g100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--g500);transition:all .15s}
+.qclose:hover{background:var(--err-lt);color:var(--err)}
+.qpips{display:flex;gap:3px}
+.pip{flex:1;height:4px;border-radius:4px;background:var(--g100);transition:background .3s}
+.pip.ans{background:var(--p300)}.pip.cor{background:var(--ok)}.pip.wrg{background:var(--err)}
+.qbody{overflow-y:auto;padding:14px 18px 28px;flex:1}
+.qscore{display:none;background:linear-gradient(135deg,var(--p800),var(--p500));color:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;align-items:center;gap:14px}
+.qscore.show{display:flex}
+.qs-num{font-size:1.9rem;font-weight:800;line-height:1}
+.qs-sub{font-size:.65rem;opacity:.6;margin-top:2px}
+.qs-msg{font-size:.85rem;font-weight:600}
+.qitem{margin-bottom:24px}
+.qitem:last-child{margin-bottom:0}
+.qlbl{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--p500);margin-bottom:4px}
+.qtext{font-size:.88rem;font-weight:600;color:var(--g900);line-height:1.5;margin-bottom:10px}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1.5px solid var(--g200);border-radius:var(--rs);cursor:pointer;font-size:.83rem;font-weight:500;background:var(--w);color:var(--g700);transition:all .14s}
+.qopt:hover{border-color:var(--p300);background:var(--p50);color:var(--p800)}
+.qltr{width:21px;height:21px;border-radius:50%;background:var(--g100);border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:800;color:var(--g500);flex-shrink:0;transition:all .14s}
+.qopt.cor{background:var(--ok-lt);border-color:#86efac;color:#14532d}
+.qopt.cor .qltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.qopt.wrg{background:var(--err-lt);border-color:#fca5a5;color:#7f1d1d}
+.qopt.wrg .qltr{background:var(--err);border-color:var(--err);color:#fff}
+.qopt.lock{cursor:default;pointer-events:none}
+.qopt.lock:not(.cor):not(.wrg):hover{border-color:var(--g200);background:var(--w);color:var(--g700)}
+.udgm{font-size:.8rem;font-weight:600;color:var(--p600);text-align:center;padding:4px 0 16px;opacity:0.9;}
+</style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="page-header">
-            <div class="page-title">Nursing Management & Leadership</div>
-            <p style="color: var(--text-muted);">BSc Semester</p>
-        </div>
+<header class="topbar">
+  <button class="tb-back" onclick="goBackToApp()" aria-label="Back">&#8592;</button>
+  <div class="tb-info">
+    <div class="tb-title">Nursing Management & Leadership</div>
+    <div class="tb-sub">BSc Semester</div>
+  </div>
+  <div class="tb-chip">18 Units</div>
+</header>
 
-        <div class="syllabus-card" onclick="openResource('Syllabus', 'https://drive.google.com/file/d/1kQhfTD5Ou7E5d8VyS89HyNB8b6ch2G7n/preview')">
-            📄 View Full Syllabus
-        </div>
-
-        <div id="units-container">
-            </div>
+<section class="hero">
+  <div class="hero-dot-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>BSc Semester</div>
+    <h1>Nursing Management<br/><em>& Leadership</em></h1>
+    <p class="hero-desc">Interactive syllabus, detailed notes, video lectures & internal quizzes.</p>
+    <button class="hero-cta" onclick="openPDF('https://drive.google.com/file/d/1kQhfTD5Ou7E5d8VyS89HyNB8b6ch2G7n/view')">
+      📄 &nbsp;Download Syllabus
+    </button>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-n">18</div><div class="hs-l">Units</div></div>
+      <div class="hs"><div class="hs-n">180</div><div class="hs-l">Quizzes</div></div>
     </div>
+  </div>
+</section>
 
-    <div id="app-modal" class="modal-overlay">
-        <div class="modal-header">
-            <div id="modal-title" class="modal-title">Resource</div>
-            <button class="btn-close" onclick="closeModal()">Close X</button>
-        </div>
-        <div id="modal-body" class="modal-body">
-            </div>
+<main class="main">
+  <div class="divider"><span>Course Units</span></div>
+
+  <div class="uc" id="u1" data-open="false">
+    <button class="ubtn" onclick="tog('u1')">
+      <div class="upill"><span>Unit 1</span></div>
+      <div class="uinfo"><div class="uname">Health Care Development</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u1">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1JLmgfF7MAj3xJzmJ5-g_TjZe7RjcVe4M/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Health Care Dev</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1wUhDrbeQs2elwGBPXRxvrlixYIGd4c5S/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Health Care Dev</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Q51peFzsZsFWLnWqWcduorj0F0u8Pouy/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Health Care</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/17OIHznSBXOvG9wyo9lpGu3dscLjKzmlJ/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1p6CLOPoFCyhiIFevuL8k0kboVjjjKM6p/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(1)"><div class="rico">✍️</div><div class="rtxt">Unit 1 Quiz<small>10 questions</small></div></button>
+      </div>
     </div>
+  </div>
 
-    <script>
-        // --- 1. DUMMY 3D MODEL CODES (Placeholder) ---
-        const MODEL_CODE_A = `<div><p>Model Loading...</p></div>`;
-        const MODEL_CODE_B = `<div><p>Model Loading...</p></div>`;
+  <div class="uc" id="u2" data-open="false">
+    <button class="ubtn" onclick="tog('u2')">
+      <div class="upill"><span>Unit 2</span></div>
+      <div class="uinfo"><div class="uname">Management Basics</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u2">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1nkYIIfa1pCH1TpSDmeYMBXeFg64tsO5H/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Mgmt Basics</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/14wMZ0ZEubl7WUP7nGt4C5ndP6qZ49CvF/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Basics Applied</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1I8w9ys-CSjZpOxuCh8EoxcOnuaZCBVMq/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Mgmt Basics</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1UxSMJl7Z6gT9HCuSxaYP9YE-ePuUeutu/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Mgmt Process</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1wEm_h2Oo8AMObKkxwPw9jl4etkzlRRhS/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Process</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/19-0avq66ieKtqcUpfG4qoe8mov_OJ7kO/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Staff/Direct/Control</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1EALTj-j0gwXgWoVZwumkvVugIMfwos72/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Functions</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1e_PcGxXPvo-UBKh1u0IZIdSVZcqTQkUo/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1RBncWVvOkvT3KfCY1c1ok3H422YxVImd/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(2)"><div class="rico">✍️</div><div class="rtxt">Unit 2 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        // --- 2. QUIZ DATA (5 Questions each) ---
-        const QUIZ_DATA = {
-            1: [ // Health Care Development
-                { q: "The Bhore Committee was established in:", o: ["1943", "1946", "1952", "1960"], a: 0 },
-                { q: "Which committee is known as the 'Health Survey and Development Committee'?", o: ["Mudaliar", "Bhore", "Kartar Singh", "Srivastava"], a: 1 },
-                { q: "The goal 'Health for All' was adopted at:", o: ["Alma Ata", "Geneva", "Delhi", "New York"], a: 0 },
-                { q: "Which is a major trend in nursing services in India?", o: ["Reduction in education", "Specialization", "Decreased technology", "None"], a: 1 },
-                { q: "TNAI stands for:", o: ["Trained Nurses Association of India", "Technical Nursing Authority of India", "Total Nursing Assessment of India", "None"], a: 0 }
-            ],
-            2: [ // Management Basics
-                { q: "POSDCORB was coined by:", o: ["Henry Fayol", "Luther Gulick", "F.W. Taylor", "Peter Drucker"], a: 1 },
-                { q: "The 'S' in POSDCORB stands for:", o: ["Supervision", "Staffing", "System", "Strategy"], a: 1 },
-                { q: "Which is NOT a function of management?", o: ["Planning", "Organizing", "Gossiping", "Controlling"], a: 2 },
-                { q: "Scientific Management theory was proposed by:", o: ["F.W. Taylor", "Max Weber", "Elton Mayo", "Maslow"], a: 0 },
-                { q: "The ability to influence others is called:", o: ["Power", "Leadership", "Management", "Authority"], a: 1 }
-            ],
-            3: [ // Planning
-                { q: "The first step in the planning process is:", o: ["Setting objectives", "Analyzing data", "Implementing", "Evaluation"], a: 0 },
-                { q: "A Gantt chart is used for:", o: ["Budgeting", "Scheduling activities", "Staffing", "Recruitment"], a: 1 },
-                { q: "MBO stands for:", o: ["Management By Objectives", "Management By Order", "Management By Organization", "None"], a: 0 },
-                { q: "Which budget deals with day-to-day expenses?", o: ["Capital budget", "Operational budget", "Personnel budget", "Zero-based budget"], a: 1 },
-                { q: "Disaster planning is primarily:", o: ["Reactive", "Proactive", "Unnecessary", "Expensive"], a: 1 }
-            ],
-            4: [ // Organizing
-                { q: "The graphical representation of an organization's structure is:", o: ["Gantt Chart", "Organizational Chart", "Flow Chart", "Pie Chart"], a: 1 },
-                { q: "Span of control refers to:", o: ["Number of subordinates a manager supervises", "Total employees", "Office size", "Salary limit"], a: 0 },
-                { q: "Line authority flows:", o: ["Bottom to top", "Top to bottom", "Horizontally", "Diagonally"], a: 1 },
-                { q: "Which delivery system assigns one nurse to one patient?", o: ["Functional", "Team", "Case Method", "Primary"], a: 2 },
-                { q: "Unity of Command means:", o: ["One boss for one person", "Everyone is a boss", "No boss", "Multiple bosses"], a: 0 }
-            ],
-            5: [ // Staffing
-                { q: "The process of searching for prospective employees is:", o: ["Selection", "Recruitment", "Training", "Induction"], a: 1 },
-                { q: "Which is a method of patient classification?", o: ["Acuity based", "Height based", "Weight based", "Age based"], a: 0 },
-                { q: "Orientation of new staff is also called:", o: ["Termination", "Induction", "Promotion", "Transfer"], a: 1 },
-                { q: "Attrition refers to:", o: ["Hiring", "Reduction in workforce", "Promotion", "Training"], a: 1 },
-                { q: "Functional nursing emphasizes:", o: ["Holistic care", "Task completion", "Patient satisfaction", "Primary care"], a: 1 }
-            ],
-            6: [ // Directing & Leading
-                { q: "Directing involves:", o: ["Planning", "Budgeting", "Guiding and supervising", "Recruiting"], a: 2 },
-                { q: "Which is a key element of directing?", o: ["Motivation", "Sleep", "Isolation", "Ignoring"], a: 0 },
-                { q: "Communication flows from subordinate to superior is:", o: ["Downward", "Upward", "Horizontal", "Diagonal"], a: 1 },
-                { q: "Supervision should be:", o: ["Autocratic", "Democratic and guiding", "Punitive", "Absent"], a: 1 },
-                { q: "The rotation plan ensures:", o: ["Equal exposure to clinical areas", "Fixed duty", "No duty", "Only night shifts"], a: 0 }
-            ],
-            7: [ // Leadership
-                { q: "Which leadership style involves group decision making?", o: ["Autocratic", "Democratic", "Laissez-faire", "Bureaucratic"], a: 1 },
-                { q: "The 'Great Man Theory' assumes leaders are:", o: ["Made", "Born", "Trained", "Selected"], a: 1 },
-                { q: "Laissez-faire leadership is also known as:", o: ["Free-rein", "Dictatorial", "Participative", "Strict"], a: 0 },
-                { q: "Power derived from position is:", o: ["Expert power", "Legitimate power", "Referent power", "Coercive power"], a: 1 },
-                { q: "Transformational leadership focuses on:", o: ["Status quo", "Change and vision", "Rewards only", "Punishment"], a: 1 }
-            ],
-            8: [ // Controlling
-                { q: "The last step of the management process is:", o: ["Planning", "Controlling", "Organizing", "Staffing"], a: 1 },
-                { q: "Performance appraisal evaluates:", o: ["Patient health", "Employee performance", "Hospital building", "Budget"], a: 1 },
-                { q: "Nursing Audit is a tool for:", o: ["Quality assurance", "Staffing", "Recruitment", "Budgeting"], a: 0 },
-                { q: "PERT stands for:", o: ["Program Evaluation and Review Technique", "Patient Emergency Response Team", "Program Efficiency Review Tool", "None"], a: 0 },
-                { q: "Standards of nursing care are set by:", o: ["INC", "Individual nurse", "Patient", "Technician"], a: 0 }
-            ],
-            9: [ // Org Behavior
-                { q: "Group dynamics refers to:", o: ["Force operating within a group", "Individual behavior", "Hospital policy", "Machine work"], a: 0 },
-                { q: "Collective bargaining is typically conducted by:", o: ["Individual nurses", "Unions/Associations", "Patients", "Doctors"], a: 1 },
-                { q: "Maslow's hierarchy places self-actualization at the:", o: ["Bottom", "Middle", "Top", "Nowhere"], a: 2 },
-                { q: "Johari window is used to improve:", o: ["Self-awareness", "Budgeting", "Staffing", "Equipment"], a: 0 },
-                { q: "Burnout is a result of:", o: ["High motivation", "Chronic workplace stress", "Adequate rest", "Good salary"], a: 1 }
-            ],
-            10: [ // Financial Mgmt
-                { q: "A financial plan for a defined period is called:", o: ["Audit", "Budget", "Ledger", "Balance sheet"], a: 1 },
-                { q: "Zero-based budgeting starts from:", o: ["Last year's budget", "Scratch/Zero", "Average of 5 years", "Random number"], a: 1 },
-                { q: "Cost-benefit analysis compares:", o: ["Cost and outcome", "Staff and patients", "Doctors and nurses", "Time and space"], a: 0 },
-                { q: "Auditing is:", o: ["Spending money", "Verifying financial records", "Planning budget", "Hiring staff"], a: 1 },
-                { q: "Capital expenditure refers to:", o: ["Day to day items", "Major assets/equipment", "Salaries", "Stationery"], a: 1 }
-            ],
-            11: [ // Informatics
-                { q: "EHR stands for:", o: ["Electronic Health Record", "Emergency Hospital Room", "Electric Heart Rate", "None"], a: 0 },
-                { q: "Telemedicine uses technology to:", o: ["Clean floors", "Provide remote clinical care", "Cook food", "Transport patients"], a: 1 },
-                { q: "Telenursing allows nurses to:", o: ["Perform surgery", "Monitor patients remotely", "Prescribe drugs", "Do physical exam"], a: 1 },
-                { q: "A key benefit of nursing informatics is:", o: ["Increased paper use", "Improved data management", "Slower workflow", "More errors"], a: 1 },
-                { q: "NIS stands for:", o: ["Nursing Information System", "New Injection Site", "Nurse In Surgery", "None"], a: 0 }
-            ],
-            12: [ // Personal Mgmt
-                { q: "Emotional Intelligence involves:", o: ["IQ only", "Understanding own and others' emotions", "Being emotionless", "Ignoring feelings"], a: 1 },
-                { q: "Resilience is the ability to:", o: ["Avoid stress", "Bounce back from adversity", "Complain", "Quit"], a: 1 },
-                { q: "Time management relies on:", o: ["Procrastination", "Prioritization", "Doing everything at once", "Sleeping"], a: 1 },
-                { q: "Career planning is:", o: ["Employer's responsibility", "Individual's continuous process", "One time event", "Not necessary"], a: 1 },
-                { q: "Stress management technique includes:", o: ["Overworking", "Meditation/Relaxation", "Smoking", "Caffeine"], a: 1 }
-            ],
-            13: [ // Establishment
-                { q: "The apex body for nursing education in India is:", o: ["MCI", "INC", "UGC", "AICTE"], a: 1 },
-                { q: "SNC stands for:", o: ["State Nursing Council", "School Nursing Centre", "Student Nurse Club", "None"], a: 0 },
-                { q: "Accreditation ensures:", o: ["Quality standards", "Low fees", "More holidays", "Easy exams"], a: 0 },
-                { q: "To start a nursing college, permission is needed from:", o: ["State Govt, SNC, INC", "Only INC", "Only State Govt", "Local Panchayat"], a: 0 },
-                { q: "INC was established in:", o: ["1947", "1949", "1950", "1960"], a: 0 }
-            ],
-            14: [ // Planning Education
-                { q: "Master Rotation Plan shows:", o: ["Daily menu", "Overall curriculum plan for the year", "Staff salary", "Exam results"], a: 1 },
-                { q: "Clinical rotation plan focuses on:", o: ["Theory classes", "Clinical postings", "Vacation", "Library hours"], a: 1 },
-                { q: "Curriculum planning is primarily based on:", o: ["Student interest only", "Educational objectives", "Teacher convenience", "Available rooms"], a: 1 },
-                { q: "The curriculum committee is responsible for:", o: ["Planning and evaluating curriculum", "Cleaning college", "Cooking food", "Paying fees"], a: 0 },
-                { q: "Budgeting for a college includes:", o: ["Only salaries", "Recurring and Non-recurring expenses", "Only equipment", "Student pocket money"], a: 1 }
-            ],
-            15: [ // Staffing Education
-                { q: "Student selection should be based on:", o: ["Merit and aptitude", "Bribe", "Random choice", "Looks"], a: 0 },
-                { q: "Staff development programs aim to:", o: ["Punish staff", "Improve professional knowledge/skills", "Reduce salary", "Increase work hours"], a: 1 },
-                { q: "Performance appraisal of teachers includes:", o: ["Teaching effectiveness", "Personal life", "Political views", "Dress code only"], a: 0 },
-                { q: "SNA stands for:", o: ["Student Nurses Association", "Staff Nurse Agency", "School Nurse Authority", "None"], a: 0 },
-                { q: "Teacher-student ratio for BSc Nursing is typically:", o: ["1:10", "1:20", "1:50", "1:100"], a: 0 }
-            ],
-            16: [ // Directing Education
-                { q: "Guidance and counseling helps students to:", o: ["Solve problems and develop", "Pass exams without studying", "Get money", "Avoid classes"], a: 0 },
-                { q: "Discipline in a college should be:", o: ["Constructive", "Destructive", "Physical punishment", "Ignored"], a: 0 },
-                { q: "Quality assurance in education ensures:", o: ["Standard of education", "High profits", "Low attendance", "Easy syllabus"], a: 0 },
-                { q: "Educational audit assesses:", o: ["Academic performance and facilities", "Financial fraud only", "Student health", "Sports only"], a: 0 },
-                { q: "Effective counseling requires:", o: ["Talking only", "Active listening", "Judging", "Scolding"], a: 1 }
-            ],
-            17: [ // Professional Considerations
-                { q: "Code of Ethics for nurses provides:", o: ["Legal rules", "Guidelines for professional conduct", "Salary structure", "Exam patterns"], a: 1 },
-                { q: "Malpractice refers to:", o: ["Professional negligence", "Good practice", "Documentation", "Research"], a: 0 },
-                { q: "Informed consent is necessary for:", o: ["Routine care", "Invasive procedures/Surgery", "Talking", "Eating"], a: 1 },
-                { q: "The Consumer Protection Act applies to medical services:", o: ["True", "False", "Only private", "Only govt"], a: 0 },
-                { q: "Advocacy in nursing means:", o: ["Speaking for the patient", "Fighting with doctors", "Ignoring patient", "Following orders blindly"], a: 0 }
-            ],
-            18: [ // Professional Advancement
-                { q: "CNE stands for:", o: ["Continuing Nursing Education", "Central Nursing Exam", "Clinical Nursing Expert", "None"], a: 0 },
-                { q: "Evidence-Based Practice (EBP) integrates:", o: ["Research evidence, expertise, patient values", "Tradition only", "Doctor's orders", "Textbooks only"], a: 0 },
-                { q: "Nursing research aims to:", o: ["Improve patient care", "Increase paperwork", "Waste time", "Confuse students"], a: 0 },
-                { q: "Publication of research is important for:", o: ["Disseminating knowledge", "Earning money", "Showing off", "Hiding data"], a: 0 },
-                { q: "Professional organizations like TNAI promote:", o: ["Professional growth", "Strikes only", "Social gatherings", "Politics"], a: 0 }
-            ]
-        };
+  <div class="uc" id="u3" data-open="false">
+    <button class="ubtn" onclick="tog('u3')">
+      <div class="upill"><span>Unit 3</span></div>
+      <div class="uinfo"><div class="uname">Planning Nursing Services</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u3">
+      <div class="udgm">
 
-        // --- 3. COURSE DATA ---
-        const UNITS = [
-            {
-                id: 1, title: "HEALTH CARE DEVELOPMENT",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1JLmgfF7MAj3xJzmJ5-g_TjZe7RjcVe4M/preview' },
-                    { type: 'video', title: 'Health Care & Development', url: 'https://drive.google.com/file/d/1wUhDrbeQs2elwGBPXRxvrlixYIGd4c5S/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1Q51peFzsZsFWLnWqWcduorj0F0u8Pouy/preview' },
-                    { type: 'video', title: 'Important Questions Discussion', url: 'https://drive.google.com/file/d/17OIHznSBXOvG9wyo9lpGu3dscLjKzmlJ/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/1p6CLOPoFCyhiIFevuL8k0kboVjjjKM6p/preview' }
-                ]
-            },
-            {
-                id: 2, title: "MANAGEMENT BASICS",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1nkYIIfa1pCH1TpSDmeYMBXeFg64tsO5H/preview' },
-                    { type: 'video', title: 'Management Basics Applied', url: 'https://drive.google.com/file/d/14wMZ0ZEubl7WUP7nGt4C5ndP6qZ49CvF/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1I8w9ys-CSjZpOxuCh8EoxcOnuaZCBVMq/preview' },
-                    { type: 'video', title: 'Intro to Mgmt Process', url: 'https://drive.google.com/file/d/1UxSMJl7Z6gT9HCuSxaYP9YE-ePuUeutu/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1wEm_h2Oo8AMObKkxwPw9jl4etkzlRRhS/preview' },
-                    { type: 'video', title: 'Staffing, Directing, Controlling', url: 'https://drive.google.com/file/d/19-0avq66ieKtqcUpfG4qoe8mov_OJ7kO/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1EALTj-j0gwXgWoVZwumkvVugIMfwos72/preview' },
-                    { type: 'video', title: 'Important Questions Discussion', url: 'https://drive.google.com/file/d/1e_PcGxXPvo-UBKh1u0IZIdSVZcqTQkUo/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/1RBncWVvOkvT3KfCY1c1ok3H422YxVImd/preview' }
-                ]
-            },
-            {
-                id: 3, title: "PLANNING NURSING SERVICES",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1BCvq6AlNc4cvmocga5HqlfSbiCcUsabw/preview' },
-                    { type: 'video', title: 'Planning Nursing Services', url: 'https://drive.google.com/file/d/1AfXWPtCREs2gpZHV1wPGM3e9N6I2rjaf/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1JllYTIfD8Bx02NS16aBhvd0Oq1Die7d3/preview' },
-                    { type: 'video', title: 'Gantt Chart & Budgeting', url: 'https://drive.google.com/file/d/1ByuSl6x6wsKGOsT6-ELDaDcbk1qHr_Vm/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1uTj03pGAwnip2POA6DNESJjxrkKwZOPV/preview' },
-                    { type: 'video', title: 'Cost-Benefit & Disaster Planning', url: 'https://drive.google.com/file/d/1D_VPrR5Yslc5fVuTCq2XoA8OCUk2a8FH/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1AZroh7475Kj5_aIrE8X7eoh3UzLGIhcp/preview' },
-                    { type: 'video', title: 'Important Questions Discussion', url: 'https://drive.google.com/file/d/1jtGy4ZNA7KGn2HCb9mhZfubyXQsemcEo/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/1aMXUiZ3xsp3QlkSUgYV5RZYJtro3Ca5Z/preview' }
-                ]
-            },
-            {
-                id: 4, title: "ORGANIZING",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1Hn87weGD3_0JxUIb0TVCQa8QMx7S8VZ_/preview' },
-                    { type: 'video', title: 'Org Process & Types', url: 'https://drive.google.com/file/d/1sV8TTcUmc4I9J6Ik300Mgmki4KITDO7d/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1pR2sbXzdT1hp-IS5nW2AuALLt3kUjmW2/preview' },
-                    { type: 'video', title: 'Structure & Effectiveness', url: 'https://drive.google.com/file/d/1QbDQLH9RHDuP5qvviZZxWD3T56BHUqrL/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/10eT9NYVx0tN4qwc98uNgpg6tmPbobeM7/preview' },
-                    { type: 'video', title: 'Hospital Stats & Delivery Systems', url: 'https://drive.google.com/file/d/1G-akfkPNlK6DYnsngZ9stzvx-1L9mThp/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1OjR6J4DAp82-7m2zy8g2nVTXkXQkmxVe/preview' },
-                    { type: 'video', title: 'Important Questions Discussion', url: 'https://drive.google.com/file/d/1e8oPjlw7-xTjl-Sy6Od7paK7eHT6eI6N/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/153V1Y21DjKhLsxg9s25c2JkGmWD_Kr7b/preview' }
-                ]
-            },
-            {
-                id: 5, title: "STAFFING (HRM)",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1JQIywZbuzOS7XIQPVFBWs7ThmIdDdE_M/preview' },
-                    { type: 'video', title: 'Recruitment & Selection', url: 'https://drive.google.com/file/d/1tChcmP8UsnfIqr8PdJqdYOVz7db0zjME/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1XlWb2l3bQmZHYNBiPPOUwqOw95Gv2bMn/preview' },
-                    { type: 'video', title: 'Training & Development', url: 'https://drive.google.com/file/d/1JSPfZf0ybVHK0NR3_r463zaHE7Myx-8Y/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1iZl7MJVznF0H-s_kfPe7_klv3EkoSyiU/preview' },
-                    { type: 'video', title: 'Promotion & Patient Classification', url: 'https://drive.google.com/file/d/17Y1UkOd7nHNAE3NqH0zX0mzGwEIFmHtX/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1lw9I-qcdjEsXG-9t_6VCYTaSO0hMjiN1/preview' },
-                    { type: 'video', title: 'Nursing Director Roles', url: 'https://drive.google.com/file/d/1R8bQ0WWKyoTmqSoZPFj63mg4gNdzqj9G/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1de0r3B7OUJRo7g8fFGjXMxes2kBjMmdq/preview' },
-                    { type: 'video', title: 'Nursing Care Methods', url: 'https://drive.google.com/file/d/1O1bYOTrKRB_yXorsMnFrlj8LOQylobsF/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1SCksVS1SnnQyTwlwndTAOycRZX_Mwf6H/preview' },
-                    { type: 'video', title: 'Turnover & Absenteeism', url: 'https://drive.google.com/file/d/1FG973oPzRlV0kGJnPfUjdH6BZP4U6dyw/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1kuRcXL4Kqyd8AZvdaGOMvQ2BaErXOS_1/preview' },
-                    { type: 'video', title: 'Adult Education', url: 'https://drive.google.com/file/d/1jngxmQX_b-0HaXdZRXhsQml7IPGsCEOQ/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1x69xbMUfEu9WUAitZPJ3qgofTDpRvErB/preview' },
-                    { type: 'video', title: 'Important Questions Discussion', url: 'https://drive.google.com/file/d/1Mktsi-VtNW5cocU2vfzCOmNDAdF5XeBZ/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/18dcEYgo4GJomv0eVAVZ3Fjmkee2wdLZU/preview' }
-                ]
-            },
-            {
-                id: 6, title: "DIRECTING & LEADING",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1zxUw66Qx8cwWQuc18rlLi709zikfJnWB/preview' },
-                    { type: 'video', title: 'Directing Principles', url: 'https://drive.google.com/file/d/1-deKThuZFDmYDF0ro61ICM2ff3h46rYN/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/12nlVh1Md6QxAfV9kNCEBkumd2IxsMYJ7/preview' },
-                    { type: 'notes', title: 'Lecture Notes (Supervision)', url: 'https://drive.google.com/file/d/1fadfheeyhpqjQS6sxJqtHa60L_Y36YOV/preview' },
-                    { type: 'video', title: 'Collaboration & MBO', url: 'https://drive.google.com/file/d/1mmmYMTTRmSXR7V2G6_Qf-nWhh6jVkmo_/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1xqGUmTbcueHVcHKeaiwZjoNXnwZiUoAR/preview' },
-                    { type: 'video', title: 'Team Management', url: 'https://drive.google.com/file/d/1lPWUrIxqifKkANVC_-SwksRsj1j6yoRN/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1wjEtAbY9F3a6GgIDZ9cBvP4v0x1zX50x/preview' },
-                    { type: 'video', title: 'Rotation & Discipline', url: 'https://drive.google.com/file/d/1Oz0AnXlN8kn76LYXiI3mNAB8Df-lK2j8/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1Y0MwIMccs084fqJY6U2Pks3JxDT8ZRe4/preview' },
-                    { type: 'video', title: 'Important Questions Discussion', url: 'https://drive.google.com/file/d/11kdFIk0xSXyu7S6JEoduItE0ANs1BvHQ/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/1KG2_px53CHijkuRor50zOsysmBrpj1cI/preview' }
-                ]
-            },
-            {
-                id: 7, title: "LEADERSHIP",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1LsQ6k4hwKcI-Rlt5ESFYglw5xDw2EpKL/preview' },
-                    { type: 'video', title: 'Leadership Concepts', url: 'https://drive.google.com/file/d/1kiIPamAX1uLn41A7DSdJVLMBofgQsR9_/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1UsUnNckI9vAEUyw7G2Kc4Jqr0MR2fB77/preview' },
-                    { type: 'video', title: 'Leadership Styles', url: 'https://drive.google.com/file/d/1pp1cokheHh8eFkH7pY0uIxecwvUqbbN9/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1ESK13guImalQXFIMsw1Ncq-x8nXazq-A/preview' },
-                    { type: 'video', title: 'Leadership Development', url: 'https://drive.google.com/file/d/1LZraQ-K5oRwxSbVunSkjUe5lsJb7w-CD/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1L6Jax4riy7aoR620EwDf46RJa5lxTuRw/preview' },
-                    { type: 'video', title: 'Delegation & Power', url: 'https://drive.google.com/file/d/1PmUONsIXVf9ymMQCdW4AF1PvDrM-h_ig/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/19OCzwsKJOrrsUkmqv-jJwEjkHmAp_xk1/preview' },
-                    { type: 'video', title: 'Empowerment & Coaching', url: 'https://drive.google.com/file/d/1gi4gPiIGchWNSGMZJMAZe45tjSOJodKD/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1bwa_AQHEv3bPd3mWDNPkcYPWMfoDeygo/preview' },
-                    { type: 'video', title: 'Decision Making & Conflict', url: 'https://drive.google.com/file/d/1MRRurLTfbQ1eb_gKFRbwNRteXQ82sV3g/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1C-LXh-1qczCEalPBbDOam8V85qPs6KGh/preview' },
-                    { type: 'video', title: 'Negotiation & Change', url: 'https://drive.google.com/file/d/1RO7j2GMIbvXt3Zu-GBIYODfTXH9v5ark/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1ozYp_QRrU8lfSJV9mkK5yG4QqsmKXVWg/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/1djH7DSQeEXlEX_MT4Q98olZOhq-5zFXs/preview' }
-                ]
-            },
-            {
-                id: 8, title: "CONTROLLING",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1p14fkjbzAGkUjIGC1LGQTSx6Akr7C_QH/preview' },
-                    { type: 'video', title: 'Nursing Audit & Appraisal', url: 'https://drive.google.com/file/d/1zySg7-fqI9AFKJcSA17-fYnjdE6OZeOl/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1Mjz9E7UKv14DPBdTEAsf4Odu8fAh0Wod/preview' },
-                    { type: 'video', title: 'Rounds & Quality Assurance', url: 'https://drive.google.com/file/d/1Ym3JTCMMFWoGRRSMK7WLm2kvymVd5_-g/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1eicaBOgoRuarPZLCyRgYMXZMGJwbPvEX/preview' },
-                    { type: 'video', title: 'PERT', url: 'https://drive.google.com/file/d/1aKli9eaAvLgRUt3BQwt0dPfed5YuZ6YQ/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1sLs0KCCyXswUaoi2Vi27GNaRQZsr4bQm/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/1BcRjoX2HVl6g3wrUqyrEuH8NC9NUr-Fp/preview' }
-                ]
-            },
-            {
-                id: 9, title: "ORGANIZATIONAL BEHAVIOUR",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1dG9_TKwuWIaMip8SJlGPi-BKAOlG8Iw3/preview' },
-                    { type: 'video', title: 'Org Behavior & Groups', url: 'https://drive.google.com/file/d/1h2BzAK-gxrwF9EAHibKZ4MYvCTW0jYGP/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1cUuHRpnjOwqCVV-O12yE1D7bDxEefSwd/preview' },
-                    { type: 'video', title: 'Human & Public Relations', url: 'https://drive.google.com/file/d/1_-2LQrucx_BtQjY3KMOky85kEa7ahwbQ/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1pktCANdIXt7a9lCHgej7pDAr6Nhr3Xd3/preview' },
-                    { type: 'video', title: 'Collective Bargaining', url: 'https://drive.google.com/file/d/1GBUUC12vpZbTFbn8ShU3D6osuv3Q5Akg/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1z3wfzV7mdV8uaoQx7foGGaKFm57VwVRL/preview' },
-                    { type: 'video', title: 'Motivation & Morale', url: 'https://drive.google.com/file/d/1IfSCP4c20YOLGsN7opF3v0l6FDofXwgC/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1_bIz0FsmAiTSE1biH-AMdGRRbtkyVYuc/preview' },
-                    { type: 'video', title: 'Communication & Committees', url: 'https://drive.google.com/file/d/1DzPtJTeYmKpC_Pf2vDI11Ry48HNsLi86/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1_hRpO-GltPG62kgVrzlwziFB7hfug9B4/preview' },
-                    { type: 'video', title: 'Important Questions Discussion', url: 'https://drive.google.com/file/d/16230RSflGYbaokBlf2ZrKLdnQRgycnk6/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/16230RSflGYbaokBlf2ZrKLdnQRgycnk6/preview' }
-                ]
-            },
-            {
-                id: 10, title: "FINANCIAL MANAGEMENT",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/18KvRloE3wgVIjKoYyExezo2T9yixJZlF/preview' },
-                    { type: 'video', title: 'Financial Management', url: 'https://drive.google.com/file/d/1CG7GEYL5X8BDWnWp4xNZBjNeaJGmbu7A/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1U07sxGlEdcDjHk28HvCFz_Ln0vX-woLw/preview' },
-                    { type: 'video', title: 'Financial Planning', url: 'https://drive.google.com/file/d/1qyV_0Fs6K18H49UgLcj0-d8r8ivygcsu/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1Vsszr5YCvYeanMAbzZDD0ugj9p-boF1D/preview' },
-                    { type: 'video', title: 'Budget & Audit', url: 'https://drive.google.com/file/d/1jlqFaZP4-9b4jSG2GBipdcgXzogxSXsM/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1-tXcCuegcOFv3qkqSaBxsWVbtiHb16UO/preview' },
-                    { type: 'video', title: 'Important Questions Discussion', url: 'https://drive.google.com/file/d/1WhfOKtaY9OtSr6rnTPH0e44A8xdr_N4D/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/1bnZkXcbuSPYFral4eLRHnUwzUgGdZ80K/preview' }
-                ]
-            },
-            {
-                id: 11, title: "NURSING INFORMATICS",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1GHky3pufYa0lDRB2br0wIsFCFbc14r8Y/preview' },
-                    { type: 'video', title: 'Informatics & Records', url: 'https://drive.google.com/file/d/1roztfJVfvR7vurPVuhA56trU2zp954Et/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1I8VH34tE5u4Vnme0fmqlGuQMh_KStssV/preview' },
-                    { type: 'video', title: 'Telemedicine', url: 'https://drive.google.com/file/d/1gta8vxTfi9pUXfkHFa1MEMIREPeRbePH/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1fXtJ6vuQdEs3CQs_C0YwbXSXtV1GFZTj/preview' },
-                    { type: 'video', title: 'Telenursing & EMR/EHR', url: 'https://drive.google.com/file/d/1sr89KejiznqSayJIfL3UgRhtYLXl_nZK/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1xjcL9Og1KgGeiQ6aN1j2aazFKQhIj5vx/preview' },
-                    { type: 'video', title: 'Important Questions Discussion', url: 'https://drive.google.com/file/d/1zwbb1EJZSpW5ruxRX08WtroTQEwhw43n/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/1p1IEdi8ZXH-bua7LMcNRVDTOsZE1ED3T/preview' }
-                ]
-            },
-            {
-                id: 12, title: "PERSONNEL MANAGEMENT",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1sW_TthudKiWztKoeERFrjGjwmtKshGAV/preview' },
-                    { type: 'video', title: 'EI & Resilience', url: 'https://drive.google.com/file/d/1OFc7bgfJ4_KPuBv3ZNeqwxDr7uIo1h39/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1kai9lAoOeu9jkKFVaRRYR1Cx85XKn5Qb/preview' },
-                    { type: 'video', title: 'Stress & Time Mgmt', url: 'https://drive.google.com/file/d/1nwdS6IMN4mr5doe7nhSqN1jTWtSn9CMo/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1Jp3gfaSonva4Ucruuev75wc5AEcR1RDk/preview' },
-                    { type: 'video', title: 'Career Planning', url: 'https://drive.google.com/file/d/1pvR-RGiKNxmSLblpwRsSsXkne4GUcVpv/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1QgKEb2UVMc-_Z0TSwKHGbN3VFX-7ITzG/preview' },
-                    { type: 'video', title: 'Important Questions Discussion', url: 'https://drive.google.com/file/d/1DVAiOHnI6yZRl47Se6Lqzp0ttLH2po_1/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/1zqqBdSAoAjBpbzyaivTvhZuXeMCcubIX/preview' }
-                ]
-            },
-            {
-                id: 13, title: "ESTABLISHMENT OF INSTITUTIONS",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1k91bIZTfyn2e5GDJK1ZMNP7acSezC0OB/preview' },
-                    { type: 'video', title: 'INC Norms', url: 'https://drive.google.com/file/d/12ZgawgbdICqqNRPUppN3yTZNkPo29e_J/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1tuZHX1zu0N6ow0Iay7aDFbQa9QTzwGaD/preview' },
-                    { type: 'video', title: 'Accreditation & Councils', url: 'https://drive.google.com/file/d/1hEo-vqNjfXEA_UJ-1Eau8abjOjEH3xYY/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1KlS0xUgKkP_EBRFKMK1ce_c0pZ02w23T/preview' },
-                    { type: 'video', title: 'Important Questions Discussion', url: 'https://drive.google.com/file/d/15xcHH5h2yPyszt6r7ppB7oxGOu-142AS/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/1CoGTYlBLcu1I95ohYtEG1KxABCBu2bdh/preview' }
-                ]
-            },
-            {
-                id: 14, title: "PLANNING EDUCATION",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/13hDkZHyhlZqgrkqMcmYf_fO_fd4Hapbq/preview' },
-                    { type: 'video', title: 'Philosophy & Curriculum', url: 'https://drive.google.com/file/d/1jYMCqgEhDMR9-iOT2eNWe3LALptMtjnL/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1LD0wiVKZw8Xb-pNFeNS5Hte0qjes1ct0/preview' },
-                    { type: 'video', title: 'INC Facilities', url: 'https://drive.google.com/file/d/1BasN_n67gIw7kKSzX1zjUvsu1NLbQZzU/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1nNkco-ITkysPi2uFdcfnLkSCAT3vbqZv/preview' },
-                    { type: 'video', title: 'Rotation Plans & Budget', url: 'https://drive.google.com/file/d/1G9hpm5KDoyekHowJZDLsmMCfCF1T1HtP/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1BZT8hhawJu4CSCqhHuMjGE_IULacD46W/preview' },
-                    { type: 'video', title: 'Expenditure & Budget Types', url: 'https://drive.google.com/file/d/1a17oGytU9fjCd2H7Z-NpJBgtoLzvArj8/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1T6I1AZVtyo8BbharXxFTQ85NJ7mLG0N9/preview' },
-                    { type: 'video', title: 'Committees', url: 'https://drive.google.com/file/d/1nRitGbCwb3pA2mrExGAjrf280z_V4qzI/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1qcQM9WiAaHLUFl41T5xmURFNuOh_la9h/preview' },
-                    { type: 'video', title: 'Important Questions Discussion', url: 'https://drive.google.com/file/d/1-THNxQ20T12HICjgHbKxkYQn_cqCgNVU/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/1DsMBwQLe7Ky5uakIgLXorjQZKrlRDRsj/preview' }
-                ]
-            },
-            {
-                id: 15, title: "STAFFING & STUDENT SELECTION",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1D0ffCOwh7onBTnMYWgJqJbG1VTiG09Gy/preview' },
-                    { type: 'video', title: 'Performance Appraisal', url: 'https://drive.google.com/file/d/1mh9gKiHO56_QbYhPZ6PIgHGnhjXvm-DP/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1aJ4oN92pdInIF1m1xMH_R6SIXJ_O6Krx/preview' },
-                    { type: 'video', title: 'Staff Development & Welfare', url: 'https://drive.google.com/file/d/1DR_0FrI2XsdsPfgvczh9h9vD55vJGQZs/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1TtBq4e6uJShTqT7YsI9XbbD6FsTN0U8C/preview' },
-                    { type: 'video', title: 'Important Questions Discussion', url: 'https://drive.google.com/file/d/1s7jEJ9cuxMwh5C23DIMavv4uMLZxsei2/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/1ih4OK6kxDE-awUlMLAzyaSRoeZpodLgo/preview' }
-                ]
-            },
-            {
-                id: 16, title: "DIRECTING & CONTROLLING (EDU)",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1_oNHfz9gRhyuykLNBVMGvJIG06q-LlFN/preview' },
-                    { type: 'video', title: 'Curriculum Implementation', url: 'https://drive.google.com/file/d/10UQkN1_MnbqbBs90bvgYLebpoZZOZsTK/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1PZABLSxUoki4enZYGuGlizwTdSEpFeDS/preview' },
-                    { type: 'video', title: 'Counselling', url: 'https://drive.google.com/file/d/1YIAt24gjQlO1TuEcxQPkb_SsX9e-8den/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1hnIeWIbt-Gt3YId2Pwr7ed--i5IWbIU7/preview' },
-                    { type: 'video', title: 'Quality Mgmt & Audit', url: 'https://drive.google.com/file/d/1Trev3g8oFiYUSZ0_cfrqHgxKt8_inJbU/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1dE6y3kTXBkwqCMsibvOSZ8-PhobWy81f/preview' },
-                    { type: 'video', title: 'Maintaining Discipline', url: 'https://drive.google.com/file/d/1VfQrTCKcc7bSw13ELuNKXG-PUTFgfFRN/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1VralBKCaIoZh2tVM8I0YzYLqChH-J2ZT/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/1iEmgaTSDWm66DP6s3ejC84Hxv8x0eaOR/preview' }
-                ]
-            },
-            {
-                id: 17, title: "PROFESSIONAL CONSIDERATIONS",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1KC_ZCw1MLl2dj8JIOsCKImTxzyJNIVAT/preview' },
-                    { type: 'video', title: 'Professional Considerations', url: 'https://drive.google.com/file/d/1YBDlUId8Xfkl4j4XqXAcKRqCwvTX3cyy/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1xnDb-NGOQD8zvAoOGVuoDz9r5JhaZfJP/preview' },
-                    { type: 'video', title: 'Legal Aspects & Rights', url: 'https://drive.google.com/file/d/1kjobiyVUV2fa41UZxURuE_PuJbabJgw6/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1Zs8eNXChzMuHuMOoZnENQubg8E0EGEdE/preview' },
-                    { type: 'video', title: 'Important Questions Discussion', url: 'https://drive.google.com/file/d/12usDFr9dbdSXMJlxuxNkfIseEtbEe99K/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/1sK-sJYgMkevHZhLvSddc_lrBaoovf0oD/preview' }
-                ]
-            },
-            {
-                id: 18, title: "PROFESSIONAL ADVANCEMENT",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1cVmTPHha2TG5YKhkqTyReFlymPRuwhPc/preview' },
-                    { type: 'video', title: 'Continuing Nursing Edu', url: 'https://drive.google.com/file/d/1A8XBs1bvzziKqbba5wDO8KdJnEeXobtr/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1nEPkV69xUCPvKhyIlzq3GYGufE-UGvVD/preview' },
-                    { type: 'video', title: 'Research Activities', url: 'https://drive.google.com/file/d/1f_NjY4CqtxJfN-Q4FOii0v5IzWYCnNKu/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1fe656iZnnwjZDKMG4zMzSD4toH6TbO-J/preview' },
-                    { type: 'video', title: 'Writing for Publications', url: 'https://drive.google.com/file/d/1Hl4ZracC5iVul4NXLHoDQQ_7D_7rARgY/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1hiRUOwNKi5rGJ7vQnwz59ZLRVkPs_d7C/preview' },
-                    { type: 'video', title: 'Important Questions Discussion', url: 'https://drive.google.com/file/d/1xUXk-hLYq2MOHV68PXd8ITadTxkHWJ_l/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/1eXN6mifqVCTnxtKpfsqbGiJiZ3OXpmd_/preview' }
-                ]
-            }
-        ];
+[Image of Gantt chart project schedule]
+</div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1BCvq6AlNc4cvmocga5HqlfSbiCcUsabw/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Planning</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1AfXWPtCREs2gpZHV1wPGM3e9N6I2rjaf/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Planning Services</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1JllYTIfD8Bx02NS16aBhvd0Oq1Die7d3/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Planning</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1ByuSl6x6wsKGOsT6-ELDaDcbk1qHr_Vm/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Gantt Chart & Budget</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1uTj03pGAwnip2POA6DNESJjxrkKwZOPV/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Tools</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1D_VPrR5Yslc5fVuTCq2XoA8OCUk2a8FH/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cost-Benefit/Disaster</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1AZroh7475Kj5_aIrE8X7eoh3UzLGIhcp/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Cost-Benefit</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1jtGy4ZNA7KGn2HCb9mhZfubyXQsemcEo/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1aMXUiZ3xsp3QlkSUgYV5RZYJtro3Ca5Z/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(3)"><div class="rico">✍️</div><div class="rtxt">Unit 3 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        // --- 4. RENDER LOGIC ---
-        function renderPage() {
-            const container = document.getElementById('units-container');
-            
-            UNITS.forEach(unit => {
-                const unitHtml = `
-                    <div class="unit-card">
-                        <div class="unit-header" onclick="toggleUnit(this)">
-                            UNIT ${unit.id} - ${unit.title}
-                            <span>🔽</span>
-                        </div>
-                        <div class="unit-content">
-                            <div class="resource-list">
-                                ${unit.resources.map(res => `
-                                    <div class="resource-btn type-${res.type}" onclick="openResource('${res.type}', '${res.url || ''}', '${res.title}')">
-                                        <div class="icon">${getIcon(res.type)}</div>
-                                        <div>${res.title}</div>
-                                    </div>
-                                `).join('')}
-                                <div class="resource-btn type-quiz" onclick="openQuiz(${unit.id})">
-                                    <div class="icon">✍️</div>
-                                    <div>Take Unit ${unit.id} Quiz</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += unitHtml;
-            });
-        }
+  <div class="uc" id="u4" data-open="false">
+    <button class="ubtn" onclick="tog('u4')">
+      <div class="upill"><span>Unit 4</span></div>
+      <div class="uinfo"><div class="uname">Organizing</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u4">
+      <div class="udgm">
 
-        function getIcon(type) {
-            if(type === 'notes') return '📚';
-            if(type === 'video') return '▶️';
-            if(type === 'model') return '🧊';
-            return '📄';
-        }
+[Image of organizational structure chart in hospitals]
+</div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Hn87weGD3_0JxUIb0TVCQa8QMx7S8VZ_/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Organizing</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1sV8TTcUmc4I9J6Ik300Mgmki4KITDO7d/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Org Process & Types</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1pR2sbXzdT1hp-IS5nW2AuALLt3kUjmW2/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Org Types</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1QbDQLH9RHDuP5qvviZZxWD3T56BHUqrL/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Structure & Effectiveness</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/10eT9NYVx0tN4qwc98uNgpg6tmPbobeM7/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Effectiveness</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1G-akfkPNlK6DYnsngZ9stzvx-1L9mThp/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Delivery Systems</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1OjR6J4DAp82-7m2zy8g2nVTXkXQkmxVe/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Delivery</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1e8oPjlw7-xTjl-Sy6Od7paK7eHT6eI6N/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/153V1Y21DjKhLsxg9s25c2JkGmWD_Kr7b/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(4)"><div class="rico">✍️</div><div class="rtxt">Unit 4 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        function toggleUnit(header) {
-            header.classList.toggle('active');
-            const content = header.nextElementSibling;
-            content.classList.toggle('show');
-            const arrow = header.querySelector('span');
-            arrow.innerText = content.classList.contains('show') ? '🔼' : '🔽';
-        }
+  <div class="uc" id="u5" data-open="false">
+    <button class="ubtn" onclick="tog('u5')">
+      <div class="upill"><span>Unit 5</span></div>
+      <div class="uinfo"><div class="uname">Staffing (HRM)</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u5">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1JQIywZbuzOS7XIQPVFBWs7ThmIdDdE_M/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>HRM</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1tChcmP8UsnfIqr8PdJqdYOVz7db0zjME/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Recruitment</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1XlWb2l3bQmZHYNBiPPOUwqOw95Gv2bMn/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Recruitment</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1JSPfZf0ybVHK0NR3_r463zaHE7Myx-8Y/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Training</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1iZl7MJVznF0H-s_kfPe7_klv3EkoSyiU/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Training</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/17Y1UkOd7nHNAE3NqH0zX0mzGwEIFmHtX/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Promotion & Acuity</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1lw9I-qcdjEsXG-9t_6VCYTaSO0hMjiN1/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Promotion</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1R8bQ0WWKyoTmqSoZPFj63mg4gNdzqj9G/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Nursing Director Roles</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1de0r3B7OUJRo7g8fFGjXMxes2kBjMmdq/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Roles</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1O1bYOTrKRB_yXorsMnFrlj8LOQylobsF/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Care Methods</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1SCksVS1SnnQyTwlwndTAOycRZX_Mwf6H/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Care Methods</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1FG973oPzRlV0kGJnPfUjdH6BZP4U6dyw/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Turnover/Absenteeism</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1kuRcXL4Kqyd8AZvdaGOMvQ2BaErXOS_1/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Turnover</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1jngxmQX_b-0HaXdZRXhsQml7IPGsCEOQ/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Adult Education</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1x69xbMUfEu9WUAitZPJ3qgofTDpRvErB/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Adult Edu</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1Mktsi-VtNW5cocU2vfzCOmNDAdF5XeBZ/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/18dcEYgo4GJomv0eVAVZ3Fjmkee2wdLZU/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(5)"><div class="rico">✍️</div><div class="rtxt">Unit 5 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        // --- 5. MODAL LOGIC & NAVIGATION CONTROL ---
-        let modelToggle = false; 
+  <div class="uc" id="u6" data-open="false">
+    <button class="ubtn" onclick="tog('u6')">
+      <div class="upill"><span>Unit 6</span></div>
+      <div class="uinfo"><div class="uname">Directing & Leading</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u6">
+      <div class="udgm">
 
-        function openResource(type, url, title) {
-            // PUSH STATE: Create a history entry so Back button closes modal
-            history.pushState({ modalOpen: true }, null, '#resource');
+[Image of Maslow's hierarchy of needs pyramid]
+</div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1zxUw66Qx8cwWQuc18rlLi709zikfJnWB/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Directing</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1-deKThuZFDmYDF0ro61ICM2ff3h46rYN/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Directing Principles</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/12nlVh1Md6QxAfV9kNCEBkumd2IxsMYJ7/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Directing</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1mmmYMTTRmSXR7V2G6_Qf-nWhh6jVkmo_/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Collaboration & MBO</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1xqGUmTbcueHVcHKeaiwZjoNXnwZiUoAR/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>MBO</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1lPWUrIxqifKkANVC_-SwksRsj1j6yoRN/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Team Management</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1wjEtAbY9F3a6GgIDZ9cBvP4v0x1zX50x/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Team Mgmt</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Oz0AnXlN8kn76LYXiI3mNAB8Df-lK2j8/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Rotation & Discipline</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Y0MwIMccs084fqJY6U2Pks3JxDT8ZRe4/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Rotation</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/11kdFIk0xSXyu7S6JEoduItE0ANs1BvHQ/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1KG2_px53CHijkuRor50zOsysmBrpj1cI/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(6)"><div class="rico">✍️</div><div class="rtxt">Unit 6 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = title;
-            modal.style.display = 'flex';
-            body.innerHTML = ''; 
-            
-            // FIX: Restore flex centering for Video/Model (looks better centered)
-            body.style.display = 'flex';
+  <div class="uc" id="u7" data-open="false">
+    <button class="ubtn" onclick="tog('u7')">
+      <div class="upill"><span>Unit 7</span></div>
+      <div class="uinfo"><div class="uname">Leadership</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u7">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1LsQ6k4hwKcI-Rlt5ESFYglw5xDw2EpKL/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Leadership</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1kiIPamAX1uLn41A7DSdJVLMBofgQsR9_/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Leadership Concepts</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1UsUnNckI9vAEUyw7G2Kc4Jqr0MR2fB77/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Concepts</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1pp1cokheHh8eFkH7pY0uIxecwvUqbbN9/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Styles</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1ESK13guImalQXFIMsw1Ncq-x8nXazq-A/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Styles</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1LZraQ-K5oRwxSbVunSkjUe5lsJb7w-CD/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Development</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1L6Jax4riy7aoR620EwDf46RJa5lxTuRw/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Development</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1PmUONsIXVf9ymMQCdW4AF1PvDrM-h_ig/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Delegation/Power</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/19OCzwsKJOrrsUkmqv-jJwEjkHmAp_xk1/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Delegation</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1gi4gPiIGchWNSGMZJMAZe45tjSOJodKD/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Empower/Coaching</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1bwa_AQHEv3bPd3mWDNPkcYPWMfoDeygo/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Empowerment</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1MRRurLTfbQ1eb_gKFRbwNRteXQ82sV3g/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Decision/Conflict</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1C-LXh-1qczCEalPBbDOam8V85qPs6KGh/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Conflict</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1RO7j2GMIbvXt3Zu-GBIYODfTXH9v5ark/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Negotiation/Change</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1ozYp_QRrU8lfSJV9mkK5yG4QqsmKXVWg/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Negotiation</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1djH7DSQeEXlEX_MT4Q98olZOhq-5zFXs/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(7)"><div class="rico">✍️</div><div class="rtxt">Unit 7 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-            if (type === 'model') {
-                modelToggle = !modelToggle;
-                body.innerHTML = modelToggle ? MODEL_CODE_A : MODEL_CODE_B;
-            } 
-            else if (type === 'quiz') {
-                openQuiz(url); 
-            }
-            else {
-                // Ensure drive links are in preview mode
-                let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
-                
-                // FIX: Apply correct class based on type
-                let className = (type === 'video') ? 'iframe-video' : 'iframe-doc';
+  <div class="uc" id="u8" data-open="false">
+    <button class="ubtn" onclick="tog('u8')">
+      <div class="upill"><span>Unit 8</span></div>
+      <div class="uinfo"><div class="uname">Controlling</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u8">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1p14fkjbzAGkUjIGC1LGQTSx6Akr7C_QH/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Controlling</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1zySg7-fqI9AFKJcSA17-fYnjdE6OZeOl/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Audit & Appraisal</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Mjz9E7UKv14DPBdTEAsf4Odu8fAh0Wod/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Audit</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Ym3JTCMMFWoGRRSMK7WLm2kvymVd5_-g/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Rounds & QA</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1eicaBOgoRuarPZLCyRgYMXZMGJwbPvEX/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>QA</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1aKli9eaAvLgRUt3BQwt0dPfed5YuZ6YQ/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>PERT</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1sLs0KCCyXswUaoi2Vi27GNaRQZsr4bQm/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>PERT</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1BcRjoX2HVl6g3wrUqyrEuH8NC9NUr-Fp/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(8)"><div class="rico">✍️</div><div class="rtxt">Unit 8 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-                body.innerHTML = `<iframe 
-                    class="${className}" 
-                    src="${cleanUrl}" 
-                    sandbox="allow-scripts allow-same-origin allow-presentation"
-                    allow="autoplay; encrypted-media; fullscreen">
-                </iframe>`;
-            }
-        }
+  <div class="uc" id="u9" data-open="false">
+    <button class="ubtn" onclick="tog('u9')">
+      <div class="upill"><span>Unit 9</span></div>
+      <div class="uinfo"><div class="uname">Organizational Behaviour</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u9">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1dG9_TKwuWIaMip8SJlGPi-BKAOlG8Iw3/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Org Behavior</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1h2BzAK-gxrwF9EAHibKZ4MYvCTW0jYGP/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Behavior & Groups</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1cUuHRpnjOwqCVV-O12yE1D7bDxEefSwd/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Groups</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1_-2LQrucx_BtQjY3KMOky85kEa7ahwbQ/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Human Relations</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1pktCANdIXt7a9lCHgej7pDAr6Nhr3Xd3/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Relations</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1GBUUC12vpZbTFbn8ShU3D6osuv3Q5Akg/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Collective Bargaining</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1z3wfzV7mdV8uaoQx7foGGaKFm57VwVRL/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Bargaining</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1IfSCP4c20YOLGsN7opF3v0l6FDofXwgC/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Motivation/Morale</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1_bIz0FsmAiTSE1biH-AMdGRRbtkyVYuc/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Motivation</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1DzPtJTeYmKpC_Pf2vDI11Ry48HNsLi86/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Communication</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1_hRpO-GltPG62kgVrzlwziFB7hfug9B4/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Communication</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/16230RSflGYbaokBlf2ZrKLdnQRgycnk6/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/16230RSflGYbaokBlf2ZrKLdnQRgycnk6/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(9)"><div class="rico">✍️</div><div class="rtxt">Unit 9 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        function openQuiz(unitId) {
-            history.pushState({ modalOpen: true }, null, '#quiz');
+  <div class="uc" id="u10" data-open="false">
+    <button class="ubtn" onclick="tog('u10')">
+      <div class="upill"><span>Unit 10</span></div>
+      <div class="uinfo"><div class="uname">Financial Management</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u10">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/18KvRloE3wgVIjKoYyExezo2T9yixJZlF/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Financial Mgmt</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1CG7GEYL5X8BDWnWp4xNZBjNeaJGmbu7A/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Financial Mgmt</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1U07sxGlEdcDjHk28HvCFz_Ln0vX-woLw/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Financial Mgmt</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1qyV_0Fs6K18H49UgLcj0-d8r8ivygcsu/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Financial Planning</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Vsszr5YCvYeanMAbzZDD0ugj9p-boF1D/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Planning</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1jlqFaZP4-9b4jSG2GBipdcgXzogxSXsM/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Budget & Audit</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1-tXcCuegcOFv3qkqSaBxsWVbtiHb16UO/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Budget/Audit</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1WhfOKtaY9OtSr6rnTPH0e44A8xdr_N4D/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1bnZkXcbuSPYFral4eLRHnUwzUgGdZ80K/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(10)"><div class="rico">✍️</div><div class="rtxt">Unit 10 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = `Quiz: Unit ${unitId}`;
-            modal.style.display = 'flex';
-            
-            // FIX: Remove flex centering for Quiz so it starts at the top
-            body.style.display = 'block';
-            body.scrollTop = 0; // Ensure we start at the top
-            
-            const questions = QUIZ_DATA[unitId] || [];
-            
-            let quizHtml = `<div class="quiz-container">`;
-            questions.forEach((q, idx) => {
-                quizHtml += `
-                    <div class="quiz-question">${idx + 1}. ${q.q}</div>
-                    <div class="quiz-options" id="q-${idx}">
-                        ${q.o.map((opt, oIdx) => `
-                            <div class="quiz-option" onclick="checkAnswer(this, ${idx}, ${oIdx}, ${q.a})">${opt}</div>
-                        `).join('')}
-                    </div>
-                `;
-            });
-            
-            if(questions.length === 0) quizHtml += `<p>Quiz coming soon!</p>`;
-            
-            quizHtml += `</div>`;
-            body.innerHTML = quizHtml;
-        }
+  <div class="uc" id="u11" data-open="false">
+    <button class="ubtn" onclick="tog('u11')">
+      <div class="upill"><span>Unit 11</span></div>
+      <div class="uinfo"><div class="uname">Nursing Informatics</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u11">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1GHky3pufYa0lDRB2br0wIsFCFbc14r8Y/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Informatics</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1roztfJVfvR7vurPVuhA56trU2zp954Et/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Records</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1I8VH34tE5u4Vnme0fmqlGuQMh_KStssV/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Records</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1gta8vxTfi9pUXfkHFa1MEMIREPeRbePH/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Telemedicine</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1fXtJ6vuQdEs3CQs_C0YwbXSXtV1GFZTj/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Telemedicine</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1sr89KejiznqSayJIfL3UgRhtYLXl_nZK/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Telenursing & EHR</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1xjcL9Og1KgGeiQ6aN1j2aazFKQhIj5vx/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>EHR</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1zwbb1EJZSpW5ruxRX08WtroTQEwhw43n/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1p1IEdi8ZXH-bua7LMcNRVDTOsZE1ED3T/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(11)"><div class="rico">✍️</div><div class="rtxt">Unit 11 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        function checkAnswer(el, qIdx, oIdx, correctIdx) {
-            const parent = document.getElementById(`q-${qIdx}`);
-            const opts = parent.children;
-            for(let opt of opts) opt.style.pointerEvents = 'none';
+  <div class="uc" id="u12" data-open="false">
+    <button class="ubtn" onclick="tog('u12')">
+      <div class="upill"><span>Unit 12</span></div>
+      <div class="uinfo"><div class="uname">Personnel Management</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u12">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1sW_TthudKiWztKoeERFrjGjwmtKshGAV/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Personnel Mgmt</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1OFc7bgfJ4_KPuBv3ZNeqwxDr7uIo1h39/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>EI & Resilience</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1kai9lAoOeu9jkKFVaRRYR1Cx85XKn5Qb/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Resilience</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1nwdS6IMN4mr5doe7nhSqN1jTWtSn9CMo/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Stress & Time Mgmt</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Jp3gfaSonva4Ucruuev75wc5AEcR1RDk/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Time Mgmt</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1pvR-RGiKNxmSLblpwRsSsXkne4GUcVpv/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Career Planning</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1QgKEb2UVMc-_Z0TSwKHGbN3VFX-7ITzG/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Career Planning</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1DVAiOHnI6yZRl47Se6Lqzp0ttLH2po_1/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1zqqBdSAoAjBpbzyaivTvhZuXeMCcubIX/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(12)"><div class="rico">✍️</div><div class="rtxt">Unit 12 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-            if(oIdx === correctIdx) {
-                el.classList.add('correct');
-            } else {
-                el.classList.add('wrong');
-                opts[correctIdx].classList.add('correct');
-            }
-        }
+  <div class="uc" id="u13" data-open="false">
+    <button class="ubtn" onclick="tog('u13')">
+      <div class="upill"><span>Unit 13</span></div>
+      <div class="uinfo"><div class="uname">Establishment of Institutions</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u13">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1k91bIZTfyn2e5GDJK1ZMNP7acSezC0OB/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Establishment</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/12ZgawgbdICqqNRPUppN3yTZNkPo29e_J/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>INC Norms</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1tuZHX1zu0N6ow0Iay7aDFbQa9QTzwGaD/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>INC Norms</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1hEo-vqNjfXEA_UJ-1Eau8abjOjEH3xYY/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Accreditation/Councils</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1KlS0xUgKkP_EBRFKMK1ce_c0pZ02w23T/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Councils</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/15xcHH5h2yPyszt6r7ppB7oxGOu-142AS/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1CoGTYlBLcu1I95ohYtEG1KxABCBu2bdh/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(13)"><div class="rico">✍️</div><div class="rtxt">Unit 13 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        function closeModal() {
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            modal.style.display = 'none';
-            body.innerHTML = ''; 
-            
-            if (history.state && history.state.modalOpen) {
-                history.back();
-            }
-        }
+  <div class="uc" id="u14" data-open="false">
+    <button class="ubtn" onclick="tog('u14')">
+      <div class="upill"><span>Unit 14</span></div>
+      <div class="uinfo"><div class="uname">Planning Education</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u14">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/13hDkZHyhlZqgrkqMcmYf_fO_fd4Hapbq/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Planning Edu</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1jYMCqgEhDMR9-iOT2eNWe3LALptMtjnL/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Curriculum</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1LD0wiVKZw8Xb-pNFeNS5Hte0qjes1ct0/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Curriculum</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1BasN_n67gIw7kKSzX1zjUvsu1NLbQZzU/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>INC Facilities</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1nNkco-ITkysPi2uFdcfnLkSCAT3vbqZv/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Facilities</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1G9hpm5KDoyekHowJZDLsmMCfCF1T1HtP/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Rotation Plans</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1BZT8hhawJu4CSCqhHuMjGE_IULacD46W/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Rotation Plans</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1a17oGytU9fjCd2H7Z-NpJBgtoLzvArj8/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Budget Types</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1T6I1AZVtyo8BbharXxFTQ85NJ7mLG0N9/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Budget</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1nRitGbCwb3pA2mrExGAjrf280z_V4qzI/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Committees</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1qcQM9WiAaHLUFl41T5xmURFNuOh_la9h/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Committees</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1-THNxQ20T12HICjgHbKxkYQn_cqCgNVU/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1DsMBwQLe7Ky5uakIgLXorjQZKrlRDRsj/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(14)"><div class="rico">✍️</div><div class="rtxt">Unit 14 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        // --- 6. HANDLE BACK BUTTON ---
-        window.onpopstate = function(event) {
-            const modal = document.getElementById('app-modal');
-            if (modal.style.display === 'flex') {
-                modal.style.display = 'none';
-                document.getElementById('modal-body').innerHTML = '';
-            }
-        };
+  <div class="uc" id="u15" data-open="false">
+    <button class="ubtn" onclick="tog('u15')">
+      <div class="upill"><span>Unit 15</span></div>
+      <div class="uinfo"><div class="uname">Staffing & Student Selection</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u15">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1D0ffCOwh7onBTnMYWgJqJbG1VTiG09Gy/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Staffing & Selection</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1mh9gKiHO56_QbYhPZ6PIgHGnhjXvm-DP/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Appraisal</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1aJ4oN92pdInIF1m1xMH_R6SIXJ_O6Krx/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Appraisal</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1DR_0FrI2XsdsPfgvczh9h9vD55vJGQZs/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Staff Dev & Welfare</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1TtBq4e6uJShTqT7YsI9XbbD6FsTN0U8C/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Dev & Welfare</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1s7jEJ9cuxMwh5C23DIMavv4uMLZxsei2/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1ih4OK6kxDE-awUlMLAzyaSRoeZpodLgo/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(15)"><div class="rico">✍️</div><div class="rtxt">Unit 15 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        // Initialize
-        renderPage();
+  <div class="uc" id="u16" data-open="false">
+    <button class="ubtn" onclick="tog('u16')">
+      <div class="upill"><span>Unit 16</span></div>
+      <div class="uinfo"><div class="uname">Directing & Controlling (Edu)</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u16">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1_oNHfz9gRhyuykLNBVMGvJIG06q-LlFN/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Directing Edu</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/10UQkN1_MnbqbBs90bvgYLebpoZZOZsTK/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Curriculum Implement</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1PZABLSxUoki4enZYGuGlizwTdSEpFeDS/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Implementation</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1YIAt24gjQlO1TuEcxQPkb_SsX9e-8den/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Counselling</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1hnIeWIbt-Gt3YId2Pwr7ed--i5IWbIU7/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Counselling</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Trev3g8oFiYUSZ0_cfrqHgxKt8_inJbU/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Quality Mgmt & Audit</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1dE6y3kTXBkwqCMsibvOSZ8-PhobWy81f/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Audit</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1VfQrTCKcc7bSw13ELuNKXG-PUTFgfFRN/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Maintaining Discipline</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1VralBKCaIoZh2tVM8I0YzYLqChH-J2ZT/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Discipline</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1iEmgaTSDWm66DP6s3ejC84Hxv8x0eaOR/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(16)"><div class="rico">✍️</div><div class="rtxt">Unit 16 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-    </script>
+  <div class="uc" id="u17" data-open="false">
+    <button class="ubtn" onclick="tog('u17')">
+      <div class="upill"><span>Unit 17</span></div>
+      <div class="uinfo"><div class="uname">Professional Considerations</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u17">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1KC_ZCw1MLl2dj8JIOsCKImTxzyJNIVAT/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Prof Considerations</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1YBDlUId8Xfkl4j4XqXAcKRqCwvTX3cyy/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Prof Considerations</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1xnDb-NGOQD8zvAoOGVuoDz9r5JhaZfJP/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Considerations</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1kjobiyVUV2fa41UZxURuE_PuJbabJgw6/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Legal Aspects</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Zs8eNXChzMuHuMOoZnENQubg8E0EGEdE/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Legal Aspects</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/12usDFr9dbdSXMJlxuxNkfIseEtbEe99K/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1sK-sJYgMkevHZhLvSddc_lrBaoovf0oD/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(17)"><div class="rico">✍️</div><div class="rtxt">Unit 17 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u18" data-open="false">
+    <button class="ubtn" onclick="tog('u18')">
+      <div class="upill"><span>Unit 18</span></div>
+      <div class="uinfo"><div class="uname">Professional Advancement</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u18">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1cVmTPHha2TG5YKhkqTyReFlymPRuwhPc/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Advancement</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1A8XBs1bvzziKqbba5wDO8KdJnEeXobtr/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>CNE</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1nEPkV69xUCPvKhyIlzq3GYGufE-UGvVD/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>CNE</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1f_NjY4CqtxJfN-Q4FOii0v5IzWYCnNKu/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Research Activities</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1fe656iZnnwjZDKMG4zMzSD4toH6TbO-J/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Research</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Hl4ZracC5iVul4NXLHoDQQ_7D_7rARgY/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Publications</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1hiRUOwNKi5rGJ7vQnwz59ZLRVkPs_d7C/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Publications</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1xUXk-hLYq2MOHV68PXd8ITadTxkHWJ_l/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1eXN6mifqVCTnxtKpfsqbGiJiZ3OXpmd_/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(18)"><div class="rico">✍️</div><div class="rtxt">Unit 18 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div class="qoverlay" id="qmodal">
+  <div class="qscrim" onclick="closeQuiz()"></div>
+  <div class="qpanel">
+    <div class="qhead">
+      <div class="qhead-top"><div class="qtitle" id="qtitle">Quiz</div><button class="qclose" onclick="closeQuiz()">✕</button></div>
+      <div class="qpips" id="qpips"></div>
+    </div>
+    <div class="qbody" id="qbody"></div>
+  </div>
+</div>
+
+<script>
+function goBackToApp(){if(window.parent&&window.parent!==window){window.parent.postMessage({action:'goBack'},'*');}else{history.back();}}
+function openPDF(url){
+  if(!url || url==='COMING SOON'){ alert('This resource is coming soon!'); return; }
+  const clean=url.replace(/\/preview.*$/,'').replace(/\/view.*$/,'')+'/view';
+  window.open(clean,'_blank');
+}
+function tog(id){const card=document.getElementById(id);const body=document.getElementById('b-'+id);const open=card.dataset.open==='true';card.dataset.open=String(!open);body.classList.toggle('open',!open);}
+
+const QD={
+1:[
+  {q:"The Bhore Committee was established in:",o:["1943","1946","1952","1960"],a:0},
+  {q:"Which committee is known as the 'Health Survey and Development Committee'?",o:["Mudaliar","Bhore","Kartar Singh","Srivastava"],a:1},
+  {q:"The goal 'Health for All' was adopted at:",o:["Alma Ata","Geneva","Delhi","New York"],a:0},
+  {q:"Which is a major trend in nursing services in India?",o:["Reduction in education","Specialization","Decreased technology","None"],a:1},
+  {q:"TNAI stands for:",o:["Trained Nurses Association of India","Technical Nursing Authority of India","Total Nursing Assessment of India","None"],a:0},
+  {q:"The WHO definition of health was established in the year:",o:["1940","1948","1955","1978"],a:1},
+  {q:"Primary Health Care relies on principles including all EXCEPT:",o:["Equitable distribution","Community participation","Intersectoral coordination","Centralized urban care only"],a:3},
+  {q:"The latest National Health Policy of India was formulated in:",o:["1983","2002","2017","2020"],a:2},
+  {q:"The Millennium Development Goals (MDGs) were succeeded by:",o:["Sustainable Development Goals (SDGs)","Global Health Goals","Health for All 2020","National Rural Health Mission"],a:0},
+  {q:"A key recommendation of the Bhore Committee was:",o:["Privatization of health care","Integration of preventive and curative services","Reducing the number of doctors","Abolishing nursing councils"],a:1}
+],
+2:[
+  {q:"POSDCORB was coined by:",o:["Henry Fayol","Luther Gulick","F.W. Taylor","Peter Drucker"],a:1},
+  {q:"The 'S' in POSDCORB stands for:",o:["Supervision","Staffing","System","Strategy"],a:1},
+  {q:"Which is NOT a function of management?",o:["Planning","Organizing","Gossiping","Controlling"],a:2},
+  {q:"Scientific Management theory was proposed by:",o:["F.W. Taylor","Max Weber","Elton Mayo","Maslow"],a:0},
+  {q:"The ability to influence others is called:",o:["Power","Leadership","Management","Authority"],a:1},
+  {q:"Which level of management focuses primarily on day-to-day operations?",o:["Top-level management","Middle management","First-line/Lower management","Board of Directors"],a:2},
+  {q:"Management is widely considered to be:",o:["Only a science","Only an art","Both an art and a science","Neither art nor science"],a:2},
+  {q:"Max Weber is most closely associated with which management theory?",o:["Scientific Management","Bureaucratic Management","Human Relations","Systems Theory"],a:1},
+  {q:"The father of the 'Human Relations' movement in management is:",o:["F.W. Taylor","Elton Mayo","Henry Fayol","Mary Parker Follett"],a:1},
+  {q:"Replacing the 'rule of thumb' with true science is a core principle of:",o:["Administrative Management","Scientific Management","Bureaucracy","Contingency Theory"],a:1}
+],
+3:[
+  {q:"The first step in the planning process is:",o:["Setting objectives","Analyzing data","Implementing","Evaluation"],a:0},
+  {q:"A Gantt chart is used for:",o:["Budgeting","Scheduling activities","Staffing","Recruitment"],a:1},
+  {q:"MBO stands for:",o:["Management By Objectives","Management By Order","Management By Organization","None"],a:0},
+  {q:"Which budget deals with day-to-day expenses?",o:["Capital budget","Operational budget","Personnel budget","Zero-based budget"],a:1},
+  {q:"Disaster planning is primarily:",o:["Reactive","Proactive","Unnecessary","Expensive"],a:1},
+  {q:"Strategic planning typically has a time frame of:",o:["Daily","Weekly","Short-term (1 year)","Long-term (3-5+ years)"],a:3},
+  {q:"PERT stands for:",o:["Program Evaluation and Review Technique","Patient Evaluation and Response Tool","Personnel Efficiency Rating Test","None of the above"],a:0},
+  {q:"Policies in an organization are best described as:",o:["Strict rules with penalties","General guidelines for decision making","Chronological steps","Financial boundaries"],a:1},
+  {q:"Operational plans are generally made by:",o:["The CEO","The Board of Directors","Lower/Middle management for short-term goals","Government agencies"],a:2},
+  {q:"A budget can be defined as:",o:["A list of staff names","A numerical expression of a plan","A past performance review","A vision statement"],a:1}
+],
+4:[
+  {q:"The graphical representation of an organization's structure is:",o:["Gantt Chart","Organizational Chart","Flow Chart","Pie Chart"],a:1},
+  {q:"Span of control refers to:",o:["Number of subordinates a manager supervises","Total employees","Office size","Salary limit"],a:0},
+  {q:"Line authority flows:",o:["Bottom to top","Top to bottom","Horizontally","Diagonally"],a:1},
+  {q:"Which delivery system assigns one nurse to one patient?",o:["Functional","Team","Case Method","Primary"],a:2},
+  {q:"Unity of Command means:",o:["One boss for one person","Everyone is a boss","No boss","Multiple bosses"],a:0},
+  {q:"A matrix organization structure combines:",o:["Line and staff","Functional and project/product structures","Centralized and decentralized","Formal and informal"],a:1},
+  {q:"Staff authority refers to:",o:["Giving direct orders","Advisory, supportive, or specialized roles","Controlling the budget","Hiring and firing"],a:1},
+  {q:"Decentralization is most effective and necessary for:",o:["Small clinics","Large, complex organizations","Organizations with unskilled workers","Military operations"],a:1},
+  {q:"A Patient Classification System (PCS) helps in:",o:["Billing patients","Determining staffing needs based on patient acuity","Ordering food","Discharging patients"],a:1},
+  {q:"Functional nursing focuses primarily on:",o:["Total holistic care","Task completion (e.g., medication nurse, dressing nurse)","Case management","Patient education"],a:1}
+],
+5:[
+  {q:"The process of searching for prospective employees is:",o:["Selection","Recruitment","Training","Induction"],a:1},
+  {q:"Which is a method of patient classification?",o:["Acuity based","Height based","Weight based","Age based"],a:0},
+  {q:"Orientation of new staff is also called:",o:["Termination","Induction","Promotion","Transfer"],a:1},
+  {q:"Attrition refers to:",o:["Hiring","Reduction in workforce","Promotion","Training"],a:1},
+  {q:"Functional nursing emphasizes:",o:["Holistic care","Task completion","Patient satisfaction","Primary care"],a:1},
+  {q:"The staffing process sequence generally includes:",o:["Training, selection, recruitment","Recruitment, selection, placement, orientation","Orientation, recruitment, selection","Placement, training, recruitment"],a:1},
+  {q:"Job analysis consists of two main components:",o:["Job satisfaction and job rotation","Job description and job specification","Job design and job evaluation","Job enlargement and job enrichment"],a:1},
+  {q:"The main purpose of induction/orientation is to:",o:["Test the employee's limits","Introduce new employees to the organization and their job","Fire underperforming staff","Calculate salary"],a:1},
+  {q:"Turnover rate in an organization measures:",o:["Daily patient admissions","The number of employees leaving the organization and being replaced","The speed of task completion","Profit margins"],a:1},
+  {q:"In-service education is defined as:",o:["Education before getting a degree","Training provided while the employee is working to upgrade skills","Education for patients","Education for doctors only"],a:1}
+],
+6:[
+  {q:"Directing involves:",o:["Planning","Budgeting","Guiding and supervising","Recruiting"],a:2},
+  {q:"Which is a key element of directing?",o:["Motivation","Sleep","Isolation","Ignoring"],a:0},
+  {q:"Communication flows from subordinate to superior is:",o:["Downward","Upward","Horizontal","Diagonal"],a:1},
+  {q:"Supervision should be:",o:["Autocratic","Democratic and guiding","Punitive","Absent"],a:1},
+  {q:"The rotation plan ensures:",o:["Equal exposure to clinical areas","Fixed duty","No duty","Only night shifts"],a:0},
+  {q:"Directing relies heavily on two components:",o:["Budgeting and auditing","Communication and leadership","Hiring and firing","Research and development"],a:1},
+  {q:"Downward communication in a hospital typically flows from:",o:["Staff nurses to head nurse","Superiors to subordinates (e.g., policies, directives)","Peers to peers","Patients to nurses"],a:1},
+  {q:"The 'Grapevine' is a term used to describe:",o:["Formal communication","Informal communication networks","Written policies","Annual reports"],a:1},
+  {q:"The Two-Factor Motivation Theory (Hygiene and Motivators) was proposed by:",o:["Maslow","Frederick Herzberg","McGregor","Skinner"],a:1},
+  {q:"Supervision is considered most effective when it is:",o:["Authoritarian","Democratic, supportive, and educational","Laissez-faire","Fault-finding"],a:1}
+],
+7:[
+  {q:"Which leadership style involves group decision making?",o:["Autocratic","Democratic","Laissez-faire","Bureaucratic"],a:1},
+  {q:"The 'Great Man Theory' assumes leaders are:",o:["Made","Born","Trained","Selected"],a:1},
+  {q:"Laissez-faire leadership is also known as:",o:["Free-rein","Dictatorial","Participative","Strict"],a:0},
+  {q:"Power derived from position is:",o:["Expert power","Legitimate power","Referent power","Coercive power"],a:1},
+  {q:"Transformational leadership focuses on:",o:["Status quo","Change and vision","Rewards only","Punishment"],a:1},
+  {q:"Autocratic leadership is generally most effective in:",o:["Research labs","Routine office work","Emergency situations requiring quick decisions","Creative brainstorming"],a:2},
+  {q:"Transactional leaders focus primarily on:",o:["Inspiring followers to change","Rewards and punishments to achieve compliance","Giving absolute freedom","Building emotional connections"],a:1},
+  {q:"Emotional intelligence in leadership crucially involves:",o:["High technical skills","Self-awareness, self-regulation, and empathy","Strict discipline","High IQ scores"],a:1},
+  {q:"Charismatic leaders primarily influence their followers through:",o:["Strict rules","Financial rewards","Their personality, charm, and vision","Fear of punishment"],a:2},
+  {q:"Situational leadership theory proposes that:",o:["Leaders should use one style forever","Leadership style must adapt to the readiness of followers and the task","Leaders are born with a fixed style","Management is not leadership"],a:1}
+],
+8:[
+  {q:"The last step of the management process is:",o:["Planning","Controlling","Organizing","Staffing"],a:1},
+  {q:"Performance appraisal evaluates:",o:["Patient health","Employee performance","Hospital building","Budget"],a:1},
+  {q:"Nursing Audit is a tool for:",o:["Quality assurance","Staffing","Recruitment","Budgeting"],a:0},
+  {q:"PERT stands for:",o:["Program Evaluation and Review Technique","Patient Emergency Response Team","Program Efficiency Review Tool","None"],a:0},
+  {q:"Standards of nursing care are set by:",o:["INC","Individual nurse","Patient","Technician"],a:0},
+  {q:"The first essential step in the control process is:",o:["Taking corrective action","Establishing standards of performance","Measuring actual performance","Comparing results"],a:1},
+  {q:"A nursing audit specifically evaluates:",o:["The financial budget","The quality of nursing care provided to patients","The number of hospital beds","Doctor's attendance"],a:1},
+  {q:"Concurrent audit is conducted:",o:["Years after discharge","While the patient is currently receiving care","Before the patient is admitted","By financial auditors"],a:1},
+  {q:"A retrospective audit relies heavily on evaluating:",o:["Patient interviews","Patient closed records and charts after discharge","Live observation","Staff feedback"],a:1},
+  {q:"Quality Assurance (QA) in healthcare aims to:",o:["Maximize hospital profits","Ensure that a minimum standard of care is consistently met","Decrease staff salaries","Increase patient admission rates"],a:1}
+],
+9:[
+  {q:"Group dynamics refers to:",o:["Force operating within a group","Individual behavior","Hospital policy","Machine work"],a:0},
+  {q:"Collective bargaining is typically conducted by:",o:["Individual nurses","Unions/Associations","Patients","Doctors"],a:1},
+  {q:"Maslow's hierarchy places self-actualization at the:",o:["Bottom","Middle","Top","Nowhere"],a:2},
+  {q:"Johari window is used to improve:",o:["Self-awareness","Budgeting","Staffing","Equipment"],a:0},
+  {q:"Burnout is a result of:",o:["High motivation","Chronic workplace stress","Adequate rest","Good salary"],a:1},
+  {q:"The Johari Window helps individuals improve their:",o:["Financial skills","Interpersonal communication and self-awareness","Surgical skills","Typing speed"],a:1},
+  {q:"Group dynamics specifically studies:",o:["Individual psychology","How people interact and behave within a group","Hospital finances","Inventory control"],a:1},
+  {q:"Which conflict resolution strategy is considered a 'Win-Win' approach?",o:["Avoidance","Accommodation","Competition","Collaboration"],a:3},
+  {q:"Collective bargaining is a process used by:",o:["Patients negotiating bills","Trade unions and management to negotiate working conditions","Nurses to get good shifts from peers","Students to get higher grades"],a:1},
+  {q:"Burnout in nursing is characterized by:",o:["High energy levels","Emotional exhaustion, depersonalization, and reduced personal accomplishment","Rapid career advancement","Strong team spirit"],a:1}
+],
+10:[
+  {q:"A financial plan for a defined period is called:",o:["Audit","Budget","Ledger","Balance sheet"],a:1},
+  {q:"Zero-based budgeting starts from:",o:["Last year's budget","Scratch/Zero","Average of 5 years","Random number"],a:1},
+  {q:"Cost-benefit analysis compares:",o:["Cost and outcome","Staff and patients","Doctors and nurses","Time and space"],a:0},
+  {q:"Auditing is:",o:["Spending money","Verifying financial records","Planning budget","Hiring staff"],a:1},
+  {q:"Capital expenditure refers to:",o:["Day to day items","Major assets/equipment","Salaries","Stationery"],a:1},
+  {q:"A Capital budget typically covers:",o:["Daily nursing supplies","Expensive equipment and long-term renovations","Nurses' monthly salaries","Patient food costs"],a:1},
+  {q:"Zero-based budgeting requires managers to:",o:["Use last year's numbers automatically","Justify every expense from scratch annually","Only report zero errors","Spend zero money"],a:1},
+  {q:"Direct costs in a nursing unit include:",o:["Hospital security","Electricity for the entire building","Nursing salaries and direct medical supplies","CEO's salary"],a:2},
+  {q:"Cost-benefit analysis is a technique that compares:",o:["Two different employees","The costs of a project to its expected financial benefits","Doctors and nurses","Different hospitals"],a:1},
+  {q:"An audit of financial statements is primarily designed to ensure:",o:["Medical correctness","Accuracy, transparency, and legal compliance","Fast spending","High profits"],a:1}
+],
+11:[
+  {q:"EHR stands for:",o:["Electronic Health Record","Emergency Hospital Room","Electric Heart Rate","None"],a:0},
+  {q:"Telemedicine uses technology to:",o:["Clean floors","Provide remote clinical care","Cook food","Transport patients"],a:1},
+  {q:"Telenursing allows nurses to:",o:["Perform surgery","Monitor patients remotely","Prescribe drugs","Do physical exam"],a:1},
+  {q:"A key benefit of nursing informatics is:",o:["Increased paper use","Improved data management","Slower workflow","More errors"],a:1},
+  {q:"NIS stands for:",o:["Nursing Information System","New Injection Site","Nurse In Surgery","None"],a:0},
+  {q:"Electronic Health Records (EHR) differ from EMRs because EHRs:",o:["Are paper-based","Can be shared across different healthcare organizations","Are only for doctors","Delete data after 1 year"],a:1},
+  {q:"Tele-nursing utilizes:",o:["In-person visits only","Telecommunications technology to provide nursing care remotely","Mail-order medications","Robotic surgery exclusively"],a:1},
+  {q:"A major ethical challenge in nursing informatics is:",o:["Internet speed","Ensuring data privacy and cybersecurity","Computer hardware cost","Typing errors"],a:1},
+  {q:"Clinical Decision Support Systems (CDSS) help nurses by:",o:["Providing computerized alerts, guidelines, and evidence-based knowledge","Cleaning the ward","Automatically dispensing drugs","Writing physical notes"],a:0},
+  {q:"To maintain cybersecurity, a nurse's password should be:",o:["Written on the computer monitor","Shared with colleagues covering their shift","Kept strictly confidential and changed regularly","Their first name"],a:2}
+],
+12:[
+  {q:"Emotional Intelligence involves:",o:["IQ only","Understanding own and others' emotions","Being emotionless","Ignoring feelings"],a:1},
+  {q:"Resilience is the ability to:",o:["Avoid stress","Bounce back from adversity","Complain","Quit"],a:1},
+  {q:"Time management relies on:",o:["Procrastination","Prioritization","Doing everything at once","Sleeping"],a:1},
+  {q:"Career planning is:",o:["Employer's responsibility","Individual's continuous process","One time event","Not necessary"],a:1},
+  {q:"Stress management technique includes:",o:["Overworking","Meditation/Relaxation","Smoking","Caffeine"],a:1},
+  {q:"Career planning is primarily the responsibility of:",o:["The head nurse","The hospital administration","The individual nurse","The nursing council"],a:2},
+  {q:"Effective stress management techniques include:",o:["Ignoring the stressor","Time management, relaxation exercises, and seeking support","Working more hours","Drinking more caffeine"],a:1},
+  {q:"According to Daniel Goleman, Emotional Intelligence includes all EXCEPT:",o:["Self-awareness","Empathy","High IQ scores","Social skills"],a:3},
+  {q:"Resilience in nursing refers to:",o:["Never feeling stressed","The ability to bounce back and adapt well in the face of adversity","Quitting when things get hard","Refusing to change"],a:1},
+  {q:"The first essential step in effective time management is:",o:["Delegating everything","Assessing how you currently spend your time","Working faster","Skipping breaks"],a:1}
+],
+13:[
+  {q:"The apex body for nursing education in India is:",o:["MCI","INC","UGC","AICTE"],a:1},
+  {q:"SNC stands for:",o:["State Nursing Council","School Nursing Centre","Student Nurse Club","None"],a:0},
+  {q:"Accreditation ensures:",o:["Quality standards","Low fees","More holidays","Easy exams"],a:0},
+  {q:"To start a nursing college, permission is needed from:",o:["State Govt, SNC, INC","Only INC","Only State Govt","Local Panchayat"],a:0},
+  {q:"INC was established in:",o:["1947","1949","1950","1960"],a:0},
+  {q:"The Indian Nursing Council (INC) Act was passed in the year:",o:["1920","1947","1955","1968"],a:1},
+  {q:"An essential pre-requisite document from the State Government to open a nursing college is the:",o:["Birth certificate","Essentiality Certificate (NOC)","Marriage certificate","Passport"],a:1},
+  {q:"According to general INC norms, the parent hospital for a BSc Nursing college should ideally have at least:",o:["50 beds","100 beds","300 beds","1000 beds"],a:2},
+  {q:"State Nursing Councils (SNC) are primarily responsible for:",o:["Funding hospitals","Registration of nurses and midwives in their respective states","Setting global standards","Manufacturing drugs"],a:1},
+  {q:"The process of formal recognition that an educational institution meets specific quality standards is called:",o:["Licensing","Accreditation","Registration","Affiliation"],a:1}
+],
+14:[
+  {q:"Master Rotation Plan shows:",o:["Daily menu","Overall curriculum plan for the year","Staff salary","Exam results"],a:1},
+  {q:"Clinical rotation plan focuses on:",o:["Theory classes","Clinical postings","Vacation","Library hours"],a:1},
+  {q:"Curriculum planning is primarily based on:",o:["Student interest only","Educational objectives","Teacher convenience","Available rooms"],a:1},
+  {q:"The curriculum committee is responsible for:",o:["Planning and evaluating curriculum","Cleaning college","Cooking food","Paying fees"],a:0},
+  {q:"Budgeting for a college includes:",o:["Only salaries","Recurring and Non-recurring expenses","Only equipment","Student pocket money"],a:1},
+  {q:"A Master Rotation Plan is essential because it provides:",o:["Only the exam schedule","A comprehensive overview of theory and clinical postings for the entire academic year","The daily lunch menu","Staff vacation dates"],a:1},
+  {q:"A curriculum is best defined as:",o:["A single textbook","The total planned learning experiences provided by an educational institution","Only the practical exams","The building infrastructure"],a:1},
+  {q:"Formative evaluation in education occurs:",o:["Only at the end of the final year","Continuously during the learning process to monitor progress","Before the student enrolls","Only by external examiners"],a:1},
+  {q:"Clinical rotation plans must be designed to ensure:",o:["Students only work night shifts","Equal and adequate clinical exposure for all students in various specialties","Students replace staff nurses","Teachers don't have to go to wards"],a:1},
+  {q:"The primary responsibility of a curriculum committee is to:",o:["Collect fees","Develop, implement, and review the educational curriculum","Maintain the hostel","Manage transport"],a:1}
+],
+15:[
+  {q:"Student selection should be based on:",o:["Merit and aptitude","Bribe","Random choice","Looks"],a:0},
+  {q:"Staff development programs aim to:",o:["Punish staff","Improve professional knowledge/skills","Reduce salary","Increase work hours"],a:1},
+  {q:"Performance appraisal of teachers includes:",o:["Teaching effectiveness","Personal life","Political views","Dress code only"],a:0},
+  {q:"SNA stands for:",o:["Student Nurses Association","Staff Nurse Agency","School Nurse Authority","None"],a:0},
+  {q:"Teacher-student ratio for BSc Nursing is typically:",o:["1:10","1:20","1:50","1:100"],a:0},
+  {q:"The recommended student-teacher ratio for MSc Nursing programs (as a general standard) is:",o:["1:3","1:10","1:20","1:50"],a:1},
+  {q:"An important, objective criterion for selecting nursing students is:",o:["Their financial wealth","Aptitude, academic merit, and entrance test scores","Their physical height","Their social media following"],a:1},
+  {q:"Staff development in an educational institution includes:",o:["Firing old staff","Orientation, in-service training, and continuing education","Reducing salaries","Increasing student fees"],a:1},
+  {q:"The Student Nurses Association (SNA) primarily aims to:",o:["Form labor unions","Promote leadership, professional development, and social activities among students","Provide loans","Manage hospital wards"],a:1},
+  {q:"A structured performance appraisal for faculty helps to:",o:["Determine promotions and identify training needs","Invade their privacy","Reduce their confidence","Force them to resign"],a:0}
+],
+16:[
+  {q:"Guidance and counseling helps students to:",o:["Solve problems and develop","Pass exams without studying","Get money","Avoid classes"],a:0},
+  {q:"Discipline in a college should be:",o:["Constructive","Destructive","Physical punishment","Ignored"],a:0},
+  {q:"Quality assurance in education ensures:",o:["Standard of education","High profits","Low attendance","Easy syllabus"],a:0},
+  {q:"Educational audit assesses:",o:["Academic performance and facilities","Financial fraud only","Student health","Sports only"],a:0},
+  {q:"Effective counseling requires:",o:["Talking only","Active listening","Judging","Scolding"],a:1},
+  {q:"Counseling is a dynamic process primarily designed to:",o:["Give direct advice and orders","Help students understand themselves and solve their own problems","Punish students","Provide financial aid"],a:1},
+  {q:"An educational audit involves evaluating:",o:["Hospital patient records","The overall quality of the educational program, curriculum, and facilities","The stock market","The transport department"],a:1},
+  {q:"Good discipline in a nursing college should primarily be:",o:["Punitive and harsh","Constructive, corrective, and aimed at self-discipline","Ignored completely","Enforced by police"],a:1},
+  {q:"Clinical supervision of nursing students requires the educator to:",o:["Sit in the office","Guide, observe, and support students directly at the patient's bedside","Do the procedures for them","Ignore minor errors"],a:1},
+  {q:"A well-functioning grievance handling procedure in an institution must be:",o:["Secretive","Transparent, fair, and timely","Biased towards management","Costly"],a:1}
+],
+17:[
+  {q:"Code of Ethics for nurses provides:",o:["Legal rules","Guidelines for professional conduct","Salary structure","Exam patterns"],a:1},
+  {q:"Malpractice refers to:",o:["Professional negligence","Good practice","Documentation","Research"],a:0},
+  {q:"Informed consent is necessary for:",o:["Routine care","Invasive procedures/Surgery","Talking","Eating"],a:1},
+  {q:"The Consumer Protection Act applies to medical services:",o:["True","False","Only private","Only govt"],a:0},
+  {q:"Advocacy in nursing means:",o:["Speaking for the patient","Fighting with doctors","Ignoring patient","Following orders blindly"],a:0},
+  {q:"Informed consent requires that the patient is:",o:["Sleeping","Fully informed, mentally competent, and acting voluntarily","Coerced into signing","Under 18 years old"],a:1},
+  {q:"Defamation communicated through written words is legally termed:",o:["Slander","Libel","Assault","Battery"],a:1},
+  {q:"The ethical principle of 'Beneficence' obligates the nurse to:",o:["Do no harm","Tell the truth","Act in the best interest of the patient (do good)","Treat everyone equally"],a:2},
+  {q:"The ethical principle of 'Non-maleficence' means:",o:["Do good","Do no harm","Keep promises","Provide justice"],a:1},
+  {q:"If an unusual event or error occurs, the nurse must:",o:["Hide it","Immediately inform the supervisor, document it, and file an incident report","Wait until the end of the week to report","Tell the media"],a:1}
+],
+18:[
+  {q:"CNE stands for:",o:["Continuing Nursing Education","Central Nursing Exam","Clinical Nursing Expert","None"],a:0},
+  {q:"Evidence-Based Practice (EBP) integrates:",o:["Research evidence, expertise, patient values","Tradition only","Doctor's orders","Textbooks only"],a:0},
+  {q:"Nursing research aims to:",o:["Improve patient care","Increase paperwork","Waste time","Confuse students"],a:0},
+  {q:"Publication of research is important for:",o:["Disseminating knowledge","Earning money","Showing off","Hiding data"],a:0},
+  {q:"Professional organizations like TNAI promote:",o:["Professional growth","Strikes only","Social gatherings","Politics"],a:0},
+  {q:"Continuing Nursing Education (CNE) is vital because it helps nurses:",o:["Take longer vacations","Update their knowledge and maintain clinical competence","Avoid hospital shifts","Retire early"],a:1},
+  {q:"Evidence-Based Practice (EBP) relies on the integration of:",o:["Textbooks and tradition","Best research evidence, clinical expertise, and patient values","Doctor's orders and nursing intuition","Internet searches and peer opinions"],a:1},
+  {q:"The primary purpose of conducting nursing research is to:",o:["Make the nurse famous","Improve patient care outcomes and expand the nursing body of knowledge","Use up hospital budgets","Increase patient bills"],a:1},
+  {q:"Writing for publication in nursing journals is important primarily to:",o:["Get promoted immediately","Share findings and innovations with the broader professional community","Earn extra money","Fulfill a hobby"],a:1},
+  {q:"Professional organizations such as TNAI (Trained Nurses Association of India) exist to:",o:["Run hospitals","Uphold the dignity, standards, and professional growth of nurses","Collect taxes","Train doctors"],a:1}
+]
+};
+
+let curQuiz=null,answered=[];
+
+function openQuiz(id){
+  curQuiz=id;
+  const qs=QD[id]||[];
+  answered=new Array(qs.length).fill(null);
+  document.getElementById('qtitle').textContent='Unit '+id+' Quiz';
+  document.getElementById('qpips').innerHTML=qs.map((_,i)=>`<div class="pip" id="pip${i}"></div>`).join('');
+  let html=`<div class="qscore" id="qscore"><div><div class="qs-num" id="qsnum">—</div><div class="qs-sub">Score</div></div><div class="qs-msg" id="qsmsg"></div></div>`;
+  qs.forEach((q,qi)=>{
+    html+=`<div class="qitem" id="qi${qi}"><div class="qlbl">Question ${qi+1} of ${qs.length}</div><div class="qtext">${q.q}</div><div class="qopts">${q.o.map((opt,oi)=>`<button class="qopt" id="opt${qi}_${oi}" onclick="ans(${qi},${oi},${q.a})"><span class="qltr">${['A','B','C','D'][oi]}</span>${opt}</button>`).join('')}</div></div>`;
+  });
+  document.getElementById('qbody').innerHTML=html;
+  document.getElementById('qmodal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function ans(qi,oi,correct){
+  if(answered[qi]!==null)return;
+  answered[qi]=oi;
+  const opts=document.querySelectorAll(`#qi${qi} .qopt`);
+  opts.forEach(b=>b.classList.add('lock'));
+  opts[correct].classList.add('cor');
+  if(oi!==correct)opts[oi].classList.add('wrg');
+  const pip=document.getElementById('pip'+qi);
+  pip.classList.add('ans',oi===correct?'cor':'wrg');
+  if(answered.every(a=>a!==null)){
+    const score=answered.filter((a,i)=>a===QD[curQuiz][i].a).length;
+    const total=QD[curQuiz].length;
+    const pct=Math.round(score/total*100);
+    const msgs=['📚 Keep Studying!','👍 Good Effort!','🎉 Well Done!','🏆 Perfect!'];
+    const mi=pct<50?0:pct<70?1:pct<100?2:3;
+    document.getElementById('qsnum').textContent=score+'/'+total;
+    document.getElementById('qsmsg').textContent=msgs[mi];
+    const sc=document.getElementById('qscore');
+    sc.classList.add('show');
+    sc.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+
+function closeQuiz(){
+  document.getElementById('qmodal').classList.remove('open');
+  document.body.style.overflow='';
+  curQuiz=null;
+}
+
+function goBackToApp(){if(window.parent&&window.parent!==window){window.parent.postMessage({action:'goBack'},'*');}else{history.back();}}
+function openPDF(url){
+  if(!url || url==='COMING SOON' || url===''){ alert('This resource is coming soon!'); return; }
+  const clean=url.replace(/\/preview.*$/,'').replace(/\/view.*$/,'')+'/view';
+  window.open(clean,'_blank');
+}
+function tog(id){const card=document.getElementById(id);const body=document.getElementById('b-'+id);const open=card.dataset.open==='true';card.dataset.open=String(!open);body.classList.toggle('open',!open);}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQuiz();});
+</script>
 </body>
 </html>
