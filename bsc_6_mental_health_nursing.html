@@ -1,639 +1,602 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mental Health Nursing II Syllabus</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <style>
-        /* --- MODERN THEME --- */
-        :root {
-            --primary: #01b9f1;
-            --primary-dark: #003b80;
-            --bg-card: #ffffff;
-            --bg-body: #f1f5f9;
-            --text-main: #003b80;
-            --text-muted: #64748b;
-            --accent: #f59e0b;
-            --danger: #ef4444;
-            --success: #10b981;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
-            --radius-md: 12px;
-        }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mental Health Nursing II</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --p50:#faf5ff;--p100:#f3e8ff;--p200:#e9d5ff;--p300:#d8b4fe;
+  --p400:#c084fc;--p500:#a855f7;--p600:#9333ea;--p700:#7e22ce;
+  --p800:#6b21a8;--p900:#581c87;
+  --w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;
+  --g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;
+  --ok:#16a34a;--ok-lt:#dcfce7;--err:#dc2626;--err-lt:#fee2e2;
+  --warn:#d97706;--warn-lt:#fef3c7;
+  --r:12px;--rs:8px;
+  --s1:0 1px 3px rgba(109,40,217,.08);
+  --s2:0 4px 12px rgba(109,40,217,.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:90;background:var(--w);border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 16px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-back{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:var(--p100);color:var(--p700);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;margin-right:12px}
+.tb-back:hover{background:var(--p200)}
+.tb-info{flex:1;min-width:0}
+.tb-title{font-size:.88rem;font-weight:700;color:var(--g900);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb-sub{font-size:.65rem;color:var(--g400);font-weight:500;margin-top:1px}
+.tb-chip{background:var(--p100);color:var(--p700);border:1px solid var(--p200);font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
+.hero{background:linear-gradient(145deg,var(--p900),var(--p700) 55%,var(--p500));padding:28px 18px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.08),transparent 50%),radial-gradient(circle at 10% 85%,rgba(255,255,255,.05),transparent 40%)}
+.hero::after{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-dot-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:.65rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border-radius:30px;margin-bottom:12px}
+.hero-eyebrow-dot{width:5px;height:5px;background:#c4b5fd;border-radius:50%}
+.hero h1{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:7px}
+.hero h1 em{color:rgba(255,255,255,.45);font-style:italic;font-weight:300}
+.hero-desc{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:18px}
+.hero-cta{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.28);color:#fff;font-size:.8rem;font-weight:700;padding:9px 16px;border-radius:9px;cursor:pointer;transition:all .2s;backdrop-filter:blur(6px)}
+.hero-cta:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
+.hero-stats{display:flex;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+.hs{flex:1;text-align:center}
+.hs+.hs{border-left:1px solid rgba(255,255,255,.1)}
+.hs-n{font-size:1.35rem;font-weight:800;color:#fff;line-height:1}
+.hs-l{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
+.main{padding:16px 14px 56px}
+.divider{display:flex;align-items:center;gap:8px;margin-bottom:12px;margin-top:2px}
+.divider span{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g400)}
+.divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+.uc{background:var(--w);border:1.5px solid var(--g200);border-radius:var(--r);margin-bottom:9px;overflow:hidden;box-shadow:var(--s1);transition:border-color .2s,box-shadow .2s}
+.uc:hover{border-color:var(--p300);box-shadow:var(--s2)}
+.uc[data-open=true]{border-color:var(--p400);box-shadow:var(--s2)}
+.ubtn{width:100%;display:flex;align-items:center;padding:14px 15px;gap:12px;background:none;border:none;cursor:pointer;text-align:left}
+/* Adjusted upill to gracefully hold "Unit X" */
+.upill{min-width:54px;padding:0 8px;height:36px;border-radius:9px;flex-shrink:0;background:var(--p100);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.upill span{font-size:.65rem;font-weight:800;color:var(--p700);letter-spacing:-.01em;white-space:nowrap}
+.uc[data-open=true] .upill{background:var(--p700)}
+.uc[data-open=true] .upill span{color:#fff}
+.uinfo{flex:1;min-width:0}
+.uname{font-size:.85rem;font-weight:700;color:var(--g900);line-height:1.3}
+.umeta{font-size:.66rem;color:var(--g400);margin-top:2px;font-weight:500}
+.uright{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.uchev{width:16px;height:16px;color:var(--g300);transition:transform .3s,color .2s}
+.uc[data-open=true] .uchev{transform:rotate(180deg);color:var(--p500)}
+.ubody{display:none;background:var(--p50);border-top:1.5px solid var(--p200);padding:12px 13px 14px}
+.ubody.open{display:block;animation:bodyIn .2s ease}
+@keyframes bodyIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.rrow{display:flex;gap:9px;margin-bottom: 8px;}
+.rrow:last-child { margin-bottom: 0; }
+@media(max-width:380px){.rrow{flex-direction:column}}
+.rbtn{flex:1;display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .17s;background:var(--w);text-decoration:none}
+.rbtn .rico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.rbtn .rtxt{line-height:1.25}
+.rbtn .rtxt small{display:block;font-size:.62rem;font-weight:400;opacity:.5;margin-top:1px}
+.rbtn .rarr{margin-left:auto;opacity:0;font-size:.7rem;color:var(--g400);transition:opacity .15s}
+.rbtn:hover .rarr{opacity:1}
 
-        * { box-sizing: border-box; }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-        } 
+/* Types */
+.rbtn.notes{border-color:var(--p200);color:var(--p800)}
+.rbtn.notes .rico{background:var(--p100)}
+.rbtn.notes:hover{background:var(--p50);border-color:var(--p500);box-shadow:var(--s2);transform:translateY(-1px)}
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding-bottom: 80px;
-        }
+.rbtn.video{border-color:#bae6fd;color:#0369a1}
+.rbtn.video .rico{background:#e0f2fe}
+.rbtn.video:hover{background:#f0f9ff;border-color:#38bdf8;box-shadow:0 3px 10px rgba(56,189,248,.12);transform:translateY(-1px)}
 
-        /* --- HEADER & SYLLABUS --- */
-        .page-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .page-title {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--primary-dark);
-            margin-bottom: 10px;
-        }
+.rbtn.imp{border-color:#fecdd3;color:#be123c}
+.rbtn.imp .rico{background:#ffe4e6}
+.rbtn.imp:hover{background:#fff1f2;border-color:#fb7185;box-shadow:0 3px 10px rgba(251,113,133,.12);transform:translateY(-1px)}
 
-        .syllabus-card {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-            color: white;
-            padding: 20px;
-            border-radius: var(--radius-md);
-            text-align: center;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: var(--shadow-md);
-            margin-bottom: 30px;
-            display: block;
-            text-decoration: none;
-            transition: transform 0.2s;
-        }
-        .syllabus-card:active { transform: scale(0.98); }
+.rbtn.quiz{border-color:#fde68a;color:#78350f}
+.rbtn.quiz .rico{background:var(--warn-lt)}
+.rbtn.quiz:hover{background:#fffbeb;border-color:var(--warn);box-shadow:0 3px 10px rgba(217,119,6,.12);transform:translateY(-1px)}
 
-        /* --- UNITS (ACCORDION STYLE) --- */
-        .unit-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-md);
-            margin-bottom: 16px;
-            box-shadow: var(--shadow-sm);
-            overflow: hidden;
-            border: 1px solid #e2e8f0;
-        }
+.rbtn.pyq{border-color:#bbf7d0;color:#14532d}
+.rbtn.pyq .rico{background:var(--ok-lt)}
+.rbtn.pyq:hover{background:#f0fdf4;border-color:var(--ok);box-shadow:0 3px 10px rgba(22,163,74,.12);transform:translateY(-1px)}
 
-        .unit-header {
-            padding: 20px;
-            background: var(--bg-card);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            font-weight: 700;
-            color: var(--primary-dark);
-            border-bottom: 1px solid transparent;
-            transition: background 0.2s;
-        }
-        
-        .unit-header:hover { background: #f8fafc; }
-        
-        .unit-header.active {
-            border-bottom-color: #e2e8f0;
-            background: #f0f9ff;
-            color: var(--primary);
-        }
-
-        .unit-content {
-            display: none;
-            padding: 20px;
-            background: #fdfdfd;
-        }
-        .unit-content.show { display: block; }
-
-        /* --- RESOURCES LIST --- */
-        .resource-list {
-            display: grid;
-            gap: 12px;
-        }
-
-        .resource-btn {
-            display: flex;
-            align-items: center;
-            padding: 16px;
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            text-decoration: none;
-            color: var(--text-main);
-            font-weight: 500;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-
-        .resource-btn:hover {
-            border-color: var(--primary);
-            transform: translateX(4px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        /* Color coding by type */
-        .type-notes { border-left: 4px solid #0ea5e9; }
-        .type-video { border-left: 4px solid #8b5cf6; }
-        .type-model { border-left: 4px solid #10b981; }
-        .type-quiz  { border-left: 4px solid #f59e0b; background: #fffbeb; }
-
-        .icon {
-            margin-right: 12px;
-            font-size: 1.2rem;
-            width: 30px;
-            text-align: center;
-        }
-
-        /* --- MODAL (The "Close Button" Wrapper) --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95); /* Darker background for focus */
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-        }
-
-        .modal-header {
-            height: 60px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            flex-shrink: 0;
-        }
-
-        .modal-title { font-weight: 700; color: var(--primary-dark); font-size: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-        
-        .btn-close {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            flex: 1;
-            background: #000;
-            position: relative;
-            overflow-y: auto; /* Allow scrolling */
-            /* Default display is flexible to center videos */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* --- FIXED IFRAME STYLES --- */
-        
-        /* 1. For Videos (Keeps 16:9 Aspect Ratio) */
-        .iframe-video {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16 / 9;
-            border: none;
-            background: #000;
-            display: block;
-        }
-
-        /* 2. For Notes & Models (Fills the screen vertically) */
-        .iframe-doc {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #fff;
-            display: block;
-        }
-
-        /* --- QUIZ STYLES (Inside Modal) --- */
-        .quiz-container {
-            background: white;
-            width: 100%;
-            min-height: 100%; /* Ensures it fills screen if short */
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .quiz-question { margin-bottom: 20px; font-size: 1.1rem; font-weight: 600; }
-        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
-        .quiz-option {
-            padding: 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        .quiz-option:hover { background: #f0f9ff; border-color: var(--primary); }
-        .quiz-option.selected { background: var(--primary); color: white; border-color: var(--primary); }
-        
-        /* Visual Indicators for Tick/Cross */
-        .quiz-option.correct { 
-            background: var(--success); 
-            color: white; 
-            border-color: var(--success); 
-        }
-        .quiz-option.correct::after {
-            content: '✓';
-            position: absolute;
-            right: 15px;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .quiz-option.wrong { 
-            background: var(--danger); 
-            color: white; 
-            border-color: var(--danger); 
-        }
-        .quiz-option.wrong::after {
-            content: '✗';
-            position: absolute;
-            right: 15px;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-        
-        .quiz-score { text-align: center; font-size: 1.5rem; color: var(--primary-dark); padding: 40px; }
-
-    </style>
+.pyq-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:380px){.pyq-grid{grid-template-columns:1fr}}
+.qoverlay{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end}
+.qoverlay.open{display:flex}
+.qscrim{position:absolute;inset:0;background:rgba(15,10,40,.55);backdrop-filter:blur(3px)}
+.qpanel{position:relative;z-index:1;background:var(--w);width:100%;max-width:580px;margin:0 auto;border-radius:18px 18px 0 0;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 -10px 50px rgba(109,40,217,.2);animation:panelUp .3s cubic-bezier(.32,.72,0,1)}
+@keyframes panelUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.qhead{padding:16px 18px 12px;border-bottom:1px solid var(--g100);flex-shrink:0}
+.qhead-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.qtitle{font-size:1rem;font-weight:800;color:var(--p800)}
+.qclose{width:28px;height:28px;border-radius:50%;background:var(--g100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--g500);transition:all .15s}
+.qclose:hover{background:var(--err-lt);color:var(--err)}
+.qpips{display:flex;gap:3px}
+.pip{flex:1;height:4px;border-radius:4px;background:var(--g100);transition:background .3s}
+.pip.ans{background:var(--p300)}.pip.cor{background:var(--ok)}.pip.wrg{background:var(--err)}
+.qbody{overflow-y:auto;padding:14px 18px 28px;flex:1}
+.qscore{display:none;background:linear-gradient(135deg,var(--p800),var(--p500));color:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;align-items:center;gap:14px}
+.qscore.show{display:flex}
+.qs-num{font-size:1.9rem;font-weight:800;line-height:1}
+.qs-sub{font-size:.65rem;opacity:.6;margin-top:2px}
+.qs-msg{font-size:.85rem;font-weight:600}
+.qitem{margin-bottom:24px}
+.qitem:last-child{margin-bottom:0}
+.qlbl{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--p500);margin-bottom:4px}
+.qtext{font-size:.88rem;font-weight:600;color:var(--g900);line-height:1.5;margin-bottom:10px}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1.5px solid var(--g200);border-radius:var(--rs);cursor:pointer;font-size:.83rem;font-weight:500;background:var(--w);color:var(--g700);transition:all .14s}
+.qopt:hover{border-color:var(--p300);background:var(--p50);color:var(--p800)}
+.qltr{width:21px;height:21px;border-radius:50%;background:var(--g100);border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:800;color:var(--g500);flex-shrink:0;transition:all .14s}
+.qopt.cor{background:var(--ok-lt);border-color:#86efac;color:#14532d}
+.qopt.cor .qltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.qopt.wrg{background:var(--err-lt);border-color:#fca5a5;color:#7f1d1d}
+.qopt.wrg .qltr{background:var(--err);border-color:var(--err);color:#fff}
+.qopt.lock{cursor:default;pointer-events:none}
+.qopt.lock:not(.cor):not(.wrg):hover{border-color:var(--g200);background:var(--w);color:var(--g700)}
+.udgm{font-size:.8rem;font-weight:600;color:var(--p600);text-align:center;padding:4px 0 16px;opacity:0.9;}
+</style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="page-header">
-            <div class="page-title">Mental Health Nursing II</div>
-            <p style="color: var(--text-muted);">BSc Sixth Semester</p>
-        </div>
+<header class="topbar">
+  <button class="tb-back" onclick="goBackToApp()" aria-label="Back">&#8592;</button>
+  <div class="tb-info">
+    <div class="tb-title">Mental Health Nursing II</div>
+    <div class="tb-sub">BSc Sixth Semester</div>
+  </div>
+  <div class="tb-chip">7 Units</div>
+</header>
 
-        <div class="syllabus-card" onclick="openResource('Syllabus', 'https://drive.google.com/file/d/1cVXX0MdfmXTU5Exki00nmnJzI5WNg7u9/preview')">
-            📄 View Full Syllabus
-        </div>
-
-        <div id="units-container">
-            </div>
+<section class="hero">
+  <div class="hero-dot-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>BSc Sixth Semester</div>
+    <h1>Mental Health<br/><em>Nursing II</em></h1>
+    <p class="hero-desc">Interactive syllabus, detailed notes, video lectures & internal quizzes.</p>
+    <button class="hero-cta" onclick="openPDF('https://drive.google.com/file/d/1cVXX0MdfmXTU5Exki00nmnJzI5WNg7u9/view')">
+      📄 &nbsp;Download Syllabus
+    </button>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-n">7</div><div class="hs-l">Units</div></div>
+      <div class="hs"><div class="hs-n">70</div><div class="hs-l">Quizzes</div></div>
     </div>
+  </div>
+</section>
 
-    <div id="app-modal" class="modal-overlay">
-        <div class="modal-header">
-            <div id="modal-title" class="modal-title">Resource</div>
-            <button class="btn-close" onclick="closeModal()">Close X</button>
-        </div>
-        <div id="modal-body" class="modal-body">
-            </div>
+<main class="main">
+  <div class="divider"><span>Course Units</span></div>
+
+  <div class="uc" id="u1" data-open="false">
+    <button class="ubtn" onclick="tog('u1')">
+      <div class="upill"><span>Unit 1</span></div>
+      <div class="uinfo"><div class="uname">Substance Use Disorders</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u1">
+      <div class="udgm">
+
+[Image of Cycle of Addiction]
+</div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/13ivjNuXCsFW23FKI4ZSbmjhejVTzm7VU/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Substance Use</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1BlPeKxBK_6LRwdE5ctldrinGFvtfj7dP/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Terminologies & ICD</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1ZrPm9ZpZkaabropX4MUOb0M08QxK6lSB/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Terminologies</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1dbWne-vj71RkJp5L_PRbGLts5TDAvJnm/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Substances & Etiology</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1pvAW4WjVVGT2qLYSP22RVoGOrcl-ST01/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Etiology</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Z8B5JUG5fXfvjZWaQPPgIvvyuY4VX_8a/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Signs & Symptoms</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1wMRySD55iTZNchTFVqGTV8W1YGunMyJL/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Criteria</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1t58TVNfOXnbNAsqqPvej7dH00Gbbx5ua/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Alcohol & Opioids</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1IOMLOFEJyuD3uElekHKVVo88_-Couh7X/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Alcohol</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1416vNF9ApKc6CwrfQKBorUJJi_QDDNoR/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Opioid Mgmt</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1qBSse53rS0yw2WyUHNMN7S2BDXSYtu-L/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Opioids/Sedatives</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Drj_zygJkWoOEbBa2OqYbuQKpR1YeEjp/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cocaine & Stimulants</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1TrEILqUIbsdGqKbo9li9UqL8zNyfmB4Z/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Stimulants</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1GCKgYEh-7utP51UVlt4E4bupqct5p-KW/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Caffeine/Nicotine</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1dekC_9BMlN_wLfuU1RRzRG2PFq0WPvda/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Nicotine</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1FBIODDGGlt9n3PUiFA8ONjFPZIuBlWur/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Volatile Inhalants</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Xtpf659jVog7JIahzyYvZIygPdrReCC4/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Inhalants</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1ai_wyPQAH9rB7ACHIs_JwZQrmwjY7PBv/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Prevention & Rehab</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1F8V0oZtO3wd8ZSIWN7fmFs_ud0NhFmM2/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Rehab & Laws</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/19MZJ8_bXFHtvolcBKyo89XMQ0sVzdg_W/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1HsGAuzDSsSoIeFw7D5dlk0jdW-07jobx/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(1)"><div class="rico">✍️</div><div class="rtxt">Unit 1 Quiz<small>10 questions</small></div></button>
+      </div>
     </div>
+  </div>
 
-    <script>
-        // --- 1. DUMMY 3D MODEL CODES (Placeholder) ---
-        const MODEL_CODE_A = `<div><p>Model Loading...</p></div>`;
-        const MODEL_CODE_B = `<div><p>Model Loading...</p></div>`;
+  <div class="uc" id="u2" data-open="false">
+    <button class="ubtn" onclick="tog('u2')">
+      <div class="upill"><span>Unit 2</span></div>
+      <div class="uinfo"><div class="uname">Personality & Sexual Disorders</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u2">
+      <div class="udgm"></div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1e5YfasAa8hOwJpLQt0wdMMF_uLX_l-8F/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Personality Disorders</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1v7Qoe4f1VglL09aqDlt0mIZJQEfCdhkG/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Personality Disorders</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1ybwDEUHin0GJimD_zogkTZPjMPA5-T_U/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Personality</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/11R0Tvyy9do5ejAOWCYIes-Br9F8Q2R7E/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Sexual Disorders</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1i0JpODlLTd9BcIKAqQw9Y8Xi2pM-vTUb/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Sexual Disorders</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1ChjFTcYUvOKMC8hti2ZM9YfXdkMQgOIW/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1y1JEu7Mo22G5PqBW3jsC5cQuDAqPZ4EO/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(2)"><div class="rico">✍️</div><div class="rtxt">Unit 2 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        // --- 2. QUIZ DATA (5 Questions each) ---
-        const QUIZ_DATA = {
-            1: [ // Substance Use Disorders
-                { q: "Wernicke's Encephalopathy is caused by deficiency of:", o: ["Vitamin B1 (Thiamine)", "Vitamin C", "Vitamin B12", "Iron"], a: 0 },
-                { q: "The antidote for opioid overdose is:", o: ["Flumazenil", "Naloxone", "Disulfiram", "Methadone"], a: 1 },
-                { q: "Disulfiram is used in the treatment of:", o: ["Opioid dependence", "Alcohol dependence", "Cannabis abuse", "Tobacco cessation"], a: 1 },
-                { q: "Delirium Tremens is a withdrawal symptom of:", o: ["Cocaine", "Alcohol", "Nicotine", "Caffeine"], a: 1 },
-                { q: "The active psychoactive constituent in Cannabis is:", o: ["Nicotine", "Ethanol", "THC (Tetrahydrocannabinol)", "Opium"], a: 2 }
-            ],
-            2: [ // Personality & Sexual Disorders
-                { q: "Which is a Cluster A personality disorder?", o: ["Antisocial", "Borderline", "Paranoid", "Avoidant"], a: 2 },
-                { q: "Lack of remorse and disregard for others is typical of:", o: ["Antisocial Personality Disorder", "Dependent Personality Disorder", "OCD", "Schizoid Personality Disorder"], a: 0 },
-                { q: "Dyspareunia refers to:", o: ["Fear of sex", "Painful sexual intercourse", "Involuntary spasm", "Lack of desire"], a: 1 },
-                { q: "Vaginismus is a:", o: ["Sexual pain disorder", "Desire disorder", "Arousal disorder", "Orgasmic disorder"], a: 0 },
-                { q: "Instability in mood, relationships, and self-image characterizes:", o: ["Narcissistic PD", "Borderline PD", "Histrionic PD", "Avoidant PD"], a: 1 }
-            ],
-            3: [ // Child & Adolescent Disorders
-                { q: "ADHD stands for:", o: ["Attention Deficit Hyperactivity Disorder", "Autism Development Health Disorder", "Acute Depression Hyperactivity Disease", "Attention Disorder Health Deficit"], a: 0 },
-                { q: "Enuresis is defined as:", o: ["Involuntary passage of stool", "Involuntary voiding of urine", "Bed wetting after 5 years", "Both B & C"], a: 3 },
-                { q: "Pica involves:", o: ["Binge eating", "Eating non-nutritive substances", "Refusal to eat", "Regurgitation"], a: 1 },
-                { q: "Impairment in social interaction and communication is core to:", o: ["ADHD", "Autism Spectrum Disorder", "Dyslexia", "Conduct Disorder"], a: 1 },
-                { q: "Bulimia Nervosa is characterized by:", o: ["Starvation", "Binge eating followed by purging", "Obesity", "Loss of appetite"], a: 1 }
-            ],
-            4: [ // Organic Brain Disorders
-                { q: "A distinguishing feature of Delirium vs Dementia is:", o: ["Memory loss", "Clouding of consciousness", "Hallucinations", "Age of onset"], a: 1 },
-                { q: "The most common cause of Dementia is:", o: ["Vascular disease", "Alzheimer's Disease", "Head trauma", "Alcohol"], a: 1 },
-                { q: "Confabulation is seen in:", o: ["Korsakoff's Syndrome", "Schizophrenia", "Depression", "Anxiety"], a: 0 },
-                { q: "Alzheimer's disease is associated with:", o: ["Dopamine excess", "Beta-amyloid plaques", "Serotonin deficiency", "GABA excess"], a: 1 },
-                { q: "Sundowning syndrome refers to:", o: ["Improvement at night", "Worsening of symptoms in evening/night", "Sleepwalking", "Early morning awakening"], a: 1 }
-            ],
-            5: [ // Psychiatric Emergencies
-                { q: "The priority nursing intervention for a suicidal patient is:", o: ["Sedation", "Ensuring safety", "Counselling", "Family therapy"], a: 1 },
-                { q: "Lithium toxicity is indicated by:", o: ["Fine tremors", "Coarse tremors and ataxia", "Weight gain", "Dry mouth"], a: 1 },
-                { q: "Crisis intervention focuses on:", o: ["Restoring pre-crisis functioning", "Deep psychoanalysis", "Curing personality disorders", "Long-term therapy"], a: 0 },
-                { q: "Neuroleptic Malignant Syndrome is a complication of:", o: ["Antidepressants", "Antipsychotics", "Mood stabilizers", "Anxiolytics"], a: 1 },
-                { q: "The first stage of grief according to Kubler-Ross is:", o: ["Anger", "Denial", "Bargaining", "Acceptance"], a: 1 }
-            ],
-            6: [ // Legal Issues
-                { q: "The Mental Healthcare Act was passed in India in:", o: ["1987", "2017", "2020", "1912"], a: 1 },
-                { q: "POCSO Act protects children from:", o: ["Child Labor", "Sexual Offences", "Domestic Violence", "Drug Abuse"], a: 1 },
-                { q: "Forensic Psychiatry deals with:", o: ["Old age mental health", "Legal aspects of mental health", "Child psychology", "Community health"], a: 1 },
-                { q: "Admission of a minor with mental illness requires consent from:", o: ["The minor", "Nominated Representative/Guardian", "Police", "Magistrate only"], a: 1 },
-                { q: "Advance Directive is a feature of:", o: ["MHA 1987", "MHCA 2017", "NDPS Act", "Lunacy Act"], a: 1 }
-            ],
-            7: [ // Community Mental Health
-                { q: "Deinstitutionalization means:", o: ["Building more hospitals", "Moving care from hospitals to community", "Locking patients in rooms", "Stopping medication"], a: 1 },
-                { q: "Primary prevention in mental health includes:", o: ["Rehabilitation", "Health education and promotion", "Treatment of disease", "Crisis management"], a: 1 },
-                { q: "The National Mental Health Program (NMHP) was launched in:", o: ["1982", "1987", "2000", "1947"], a: 0 },
-                { q: "A 'Halfway Home' is a:", o: ["Jail", "Rehabilitation facility", "Acute care ward", "School"], a: 1 },
-                { q: "Tertiary prevention aims to:", o: ["Prevent onset", "Early diagnosis", "Reduce disability and rehabilitate", "Screen populations"], a: 2 }
-            ]
-        };
+  <div class="uc" id="u3" data-open="false">
+    <button class="ubtn" onclick="tog('u3')">
+      <div class="upill"><span>Unit 3</span></div>
+      <div class="uinfo"><div class="uname">Child & Adolescent Disorders</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u3">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1VFVf1Mi7g2OtXkiaiMRMpi11VHsiSjnh/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Child Disorders</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1WpNSMf4L__vFVWLxRQ2TZbYQcHHJS9rw/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Intro & Epidemiology</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1RNIoHUQ2wUm-qUapwJo5Lu5UxMTkSCDG/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Intro</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Eq35TIGYowr0gD8LT885pP-bxu7oYkfg/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Speech/Language & Autism</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Oi4uJeINREK3NinJNv75UhaZ2rVOLOZo/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Autism</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1HVGAK4rJbZvXW-Tq7eHsUamUEij23gvr/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Learning & ADHD</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1tzg_1i7nq9ypotesCaMv28lCkuPge7D1/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>ADHD</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1S0SiUhjmVknUqH9B7vYvnhidtncXLH7R/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Conduct Disorder</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1M6eR39gIa3zSl5XHKutx9u54DQoombnI/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Conduct</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/18mzMU-8k4cc-IWP2bDyMb4dPg1Rvd1ck/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Elimination & Eating</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1EQ8nQYIaz5xy-6yzLgNUR6xOB2b9s5OL/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Eating</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1iBI0mf9E5VcTs_jWadWVdNezSiCBCs2r/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Bulimia & Rehab</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1WqIKMjEHI_Ge-qehujguNl7dKg3WMDTC/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Bulimia</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1QRTdt_zqP1yt0EWb-TzyqAZzfbmwodWM/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1w9ILYMsRyo_KnRIEYVdL-8stkRTCKljy/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(3)"><div class="rico">✍️</div><div class="rtxt">Unit 3 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        // --- 3. COURSE DATA ---
-        const UNITS = [
-            {
-                id: 1, title: "SUBSTANCE USE DISORDERS",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/13ivjNuXCsFW23FKI4ZSbmjhejVTzm7VU/preview' },
-                    { type: 'video', title: 'Terminologies & ICD 11', url: 'https://drive.google.com/file/d/1BlPeKxBK_6LRwdE5ctldrinGFvtfj7dP/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1ZrPm9ZpZkaabropX4MUOb0M08QxK6lSB/preview' },
-                    { type: 'video', title: 'Common Substances & Etiology', url: 'https://drive.google.com/file/d/1dbWne-vj71RkJp5L_PRbGLts5TDAvJnm/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1pvAW4WjVVGT2qLYSP22RVoGOrcl-ST01/preview' },
-                    { type: 'video', title: 'Signs, Symptoms & Criteria', url: 'https://drive.google.com/file/d/1Z8B5JUG5fXfvjZWaQPPgIvvyuY4VX_8a/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1wMRySD55iTZNchTFVqGTV8W1YGunMyJL/preview' },
-                    { type: 'video', title: 'Alcohol, Cannabis, Opioids', url: 'https://drive.google.com/file/d/1t58TVNfOXnbNAsqqPvej7dH00Gbbx5ua/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1IOMLOFEJyuD3uElekHKVVo88_-Couh7X/preview' },
-                    { type: 'video', title: 'Opioid Mgmt & Sedatives', url: 'https://drive.google.com/file/d/1416vNF9ApKc6CwrfQKBorUJJi_QDDNoR/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1qBSse53rS0yw2WyUHNMN7S2BDXSYtu-L/preview' },
-                    { type: 'video', title: 'Cocaine & Stimulants', url: 'https://drive.google.com/file/d/1Drj_zygJkWoOEbBa2OqYbuQKpR1YeEjp/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1TrEILqUIbsdGqKbo9li9UqL8zNyfmB4Z/preview' },
-                    { type: 'video', title: 'Caffeine, Hallucinogens, Nicotine', url: 'https://drive.google.com/file/d/1GCKgYEh-7utP51UVlt4E4bupqct5p-KW/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1dekC_9BMlN_wLfuU1RRzRG2PFq0WPvda/preview' },
-                    { type: 'video', title: 'Volatile Inhalants', url: 'https://drive.google.com/file/d/1FBIODDGGlt9n3PUiFA8ONjFPZIuBlWur/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1Xtpf659jVog7JIahzyYvZIygPdrReCC4/preview' },
-                    { type: 'video', title: 'Prevention, Rehab & Laws', url: 'https://drive.google.com/file/d/1ai_wyPQAH9rB7ACHIs_JwZQrmwjY7PBv/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1F8V0oZtO3wd8ZSIWN7fmFs_ud0NhFmM2/preview' },
-                    { type: 'video', title: 'Important Questions Discussion', url: 'https://drive.google.com/file/d/19MZJ8_bXFHtvolcBKyo89XMQ0sVzdg_W/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/1HsGAuzDSsSoIeFw7D5dlk0jdW-07jobx/preview' }
-                ]
-            },
-            {
-                id: 2, title: "PERSONALITY & SEXUAL DISORDERS",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1e5YfasAa8hOwJpLQt0wdMMF_uLX_l-8F/preview' },
-                    { type: 'video', title: 'Personality Disorders', url: 'https://drive.google.com/file/d/1v7Qoe4f1VglL09aqDlt0mIZJQEfCdhkG/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1ybwDEUHin0GJimD_zogkTZPjMPA5-T_U/preview' },
-                    { type: 'video', title: 'Sexual Disorders', url: 'https://drive.google.com/file/d/11R0Tvyy9do5ejAOWCYIes-Br9F8Q2R7E/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1i0JpODlLTd9BcIKAqQw9Y8Xi2pM-vTUb/preview' },
-                    { type: 'video', title: 'Important Questions Discussion', url: 'https://drive.google.com/file/d/1ChjFTcYUvOKMC8hti2ZM9YfXdkMQgOIW/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/1y1JEu7Mo22G5PqBW3jsC5cQuDAqPZ4EO/preview' }
-                ]
-            },
-            {
-                id: 3, title: "CHILD & ADOLESCENT DISORDERS",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1VFVf1Mi7g2OtXkiaiMRMpi11VHsiSjnh/preview' },
-                    { type: 'video', title: 'Intro, ID & Epidemiology', url: 'https://drive.google.com/file/d/1WpNSMf4L__vFVWLxRQ2TZbYQcHHJS9rw/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1RNIoHUQ2wUm-qUapwJo5Lu5UxMTkSCDG/preview' },
-                    { type: 'video', title: 'Speech/Language & Autism', url: 'https://drive.google.com/file/d/1Eq35TIGYowr0gD8LT885pP-bxu7oYkfg/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1Oi4uJeINREK3NinJNv75UhaZ2rVOLOZo/preview' },
-                    { type: 'video', title: 'Learning/Motor & ADHD', url: 'https://drive.google.com/file/d/1HVGAK4rJbZvXW-Tq7eHsUamUEij23gvr/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1tzg_1i7nq9ypotesCaMv28lCkuPge7D1/preview' },
-                    { type: 'video', title: 'ADHD Types & Conduct Disorder', url: 'https://drive.google.com/file/d/1S0SiUhjmVknUqH9B7vYvnhidtncXLH7R/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1M6eR39gIa3zSl5XHKutx9u54DQoombnI/preview' },
-                    { type: 'video', title: 'Elimination & Eating Disorders', url: 'https://drive.google.com/file/d/18mzMU-8k4cc-IWP2bDyMb4dPg1Rvd1ck/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1EQ8nQYIaz5xy-6yzLgNUR6xOB2b9s5OL/preview' },
-                    { type: 'video', title: 'Bulimia & Rehabilitation', url: 'https://drive.google.com/file/d/1iBI0mf9E5VcTs_jWadWVdNezSiCBCs2r/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1WqIKMjEHI_Ge-qehujguNl7dKg3WMDTC/preview' },
-                    { type: 'video', title: 'Important Questions Discussion', url: 'https://drive.google.com/file/d/1QRTdt_zqP1yt0EWb-TzyqAZzfbmwodWM/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/1w9ILYMsRyo_KnRIEYVdL-8stkRTCKljy/preview' }
-                ]
-            },
-            {
-                id: 4, title: "ORGANIC BRAIN DISORDERS",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/13PevrbRMageUobaSyUAIky-Fg6OzJMWQ/preview' },
-                    { type: 'video', title: 'Alzheimer\'s Disease', url: 'https://drive.google.com/file/d/1ksZT-vWk5JiCmWzhHQ33m6gRwv_RcQhC/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1MJUY6e_69nSYZKQYwW3Pc18-efR1SWmw/preview' },
-                    { type: 'video', title: 'Delirium', url: 'https://drive.google.com/file/d/1OCRu_rfVI8NZ2jH5-RgVaejexinE9718/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1X1hnNTOGrIh_fx-7I0d4JWX59zLTdtcS/preview' },
-                    { type: 'video', title: 'Organic Amnestic Syndrome', url: 'https://drive.google.com/file/d/1cplkqSMHKtPa5t57DTZwzJE8cJvR7rIe/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1gsbroj9Cj_rQOEQPBFfQ257hEhVK0K0_/preview' },
-                    { type: 'video', title: 'Dementia', url: 'https://drive.google.com/file/d/1-gOkTvGsdE-9ylJY0bSRt6LhkxMygY5L/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1zM8oKPFTtjgSxUdRq5dO9gFlR7P_pynv/preview' },
-                    { type: 'video', title: 'Important Questions Discussion', url: 'https://drive.google.com/file/d/1Poe4ZDENXwSW8wE9XFHa53x53LZ9ujvk/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/1Gbs5QkHRVlJWNURUNOLM6SaZigCYCHUk/preview' }
-                ]
-            },
-            {
-                id: 5, title: "PSYCH EMERGENCIES & CRISIS",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/199tS7hisRIp7CyM1od_8TSHrTl7MgmF7/preview' },
-                    { type: 'video', title: 'Minor Emergencies', url: 'https://drive.google.com/file/d/1q2TD5YhRlxpkPm76Q5gBgkzxOWJzaqcY/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1yz0BzXvFTbylvZaOlyxLOThnkCmkEe7J/preview' },
-                    { type: 'video', title: 'Medical Psych Emergencies', url: 'https://drive.google.com/file/d/1CXV_hBZVH0ffN29UWNwOeKuz6kM5Nifi/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1qTKUA2SNlsj_G5OqlSjraPI3UzVIm252/preview' },
-                    { type: 'video', title: 'Strategies for Maladaptive Behavior', url: 'https://drive.google.com/file/d/11hVTY8UieBhMSmay91jZXfJHIMPKe5RL/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1kNfRpwwELJZaBXGVDHV6PAI9ooFxKxBL/preview' },
-                    { type: 'video', title: 'Crisis Mgmt & Stress Model', url: 'https://drive.google.com/file/d/1dEs8udsbTIzXLdRisf3xggzDlKOi-wzr/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/134ASy0jnGhUXoY2Ct56D6UX8tKPba4em/preview' },
-                    { type: 'video', title: 'Coping & Counselling', url: 'https://drive.google.com/file/d/1NwAGa3wkR2KW3QEIcwGIXJxiXFzgcWwB/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1t6oFgRscjOCdEbB1Nt2n3wtm2RpwPHwQ/preview' },
-                    { type: 'video', title: 'Important Questions Discussion', url: 'https://drive.google.com/file/d/1lrZUXgn1hklzW_v3Hl_u3Tz-qBB62vGI/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/1OleDctFPR0q5faOsuW0cE6Cu4Vjv68NN/preview' }
-                ]
-            },
-            {
-                id: 6, title: "LEGAL ISSUES",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/16caG4oSIrI63sU59Xu9wCOn5txTFiYP_/preview' },
-                    { type: 'video', title: 'Lunacy/MHA/POCSO', url: 'https://drive.google.com/file/d/1InTr1WSnyOaao2cCQKQjDu8KH_8zyEUU/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/10jzqMQUqCFAeJAvAeL_cKMFBMKufpffj/preview' },
-                    { type: 'video', title: 'Forensic Psych & Civil Resp', url: 'https://drive.google.com/file/d/1irN38I8rjUzxTaps5Z6pkKiuIdteucfu/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1xpEr2OasY4-e8QKZYbHgqOqcDISMBiwI/preview' },
-                    { type: 'video', title: 'MHCA 2017 & Admission', url: 'https://drive.google.com/file/d/1SR2Rtw8HwKuQPYciSecLFbACNOFX4V9w/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1SPBKQJiOgJra9TjUR8sPoEbbTlD6SWAu/preview' },
-                    { type: 'video', title: 'Narcotic & Psychotropic Acts', url: 'https://drive.google.com/file/d/1WNgi41yYkZO3IEn3m1tnfxbpxTF5QnvR/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1eo9c5WZWc3oltXlKq2O6w8ekneT6-BBL/preview' },
-                    { type: 'video', title: 'Important Questions Discussion', url: 'https://drive.google.com/file/d/1tymyqqgpBgNcB-wyoZjMxBA9GcMilVfh/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/1qfIPKtyMo-r0DzjtJSGRKxMhXI1vqiaT/preview' }
-                ]
-            },
-            {
-                id: 7, title: "COMMUNITY MENTAL HEALTH",
-                resources: [
-                    { type: 'notes', title: 'Detailed Notes', url: 'https://drive.google.com/file/d/1ydXJA8s21GBMD_M4DICXYDyVi4HrURXk/preview' },
-                    { type: 'video', title: 'NMHP & Development', url: 'https://drive.google.com/file/d/1o4e7tVUcLCxtCt46T5oYhUV-pVD70ncY/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/18ncVV38clJk0kuaPlL3Lkji8rpnmPLB9/preview' },
-                    { type: 'video', title: 'Institutionalization', url: 'https://drive.google.com/file/d/1GHJeoXbRbVDgxHql6VmTZPc9_q2uqBo_/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1xXGSj8ReCHtILOQFMDHrBj-MXp9huIuw/preview' },
-                    { type: 'video', title: 'Voluntary & Intl Agencies', url: 'https://drive.google.com/file/d/1HVXZD8CIJpiVYy4_UqS0hGa4BB0hBIdO/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/13iAX_ZYSNZr2Rm_ede5B5Xgf5_zqRIIl/preview' },
-                    { type: 'video', title: 'Issues for Special Populations', url: 'https://drive.google.com/file/d/1a-aMfVqZnurNvFUcfgk29cnrSezzR_KP/preview' },
-                    { type: 'notes', title: 'Lecture Notes', url: 'https://drive.google.com/file/d/1YMIDG1DSv6cD0-XJJAYMzehbEI7LnkbA/preview' },
-                    { type: 'video', title: 'Important Questions Discussion', url: 'https://drive.google.com/file/d/1rdnTM0TODBg6yUuyryCWem9lX5RKRhVo/preview' },
-                    { type: 'notes', title: 'Important Questions PDF', url: 'https://drive.google.com/file/d/1fXThNAGmtfbF0whor6Fk9r-bedYOpQWV/preview' }
-                ]
-            }
-        ];
+  <div class="uc" id="u4" data-open="false">
+    <button class="ubtn" onclick="tog('u4')">
+      <div class="upill"><span>Unit 4</span></div>
+      <div class="uinfo"><div class="uname">Organic Brain Disorders</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u4">
+      <div class="udgm"></div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/13PevrbRMageUobaSyUAIky-Fg6OzJMWQ/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Brain Disorders</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1ksZT-vWk5JiCmWzhHQ33m6gRwv_RcQhC/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Alzheimer's Disease</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1MJUY6e_69nSYZKQYwW3Pc18-efR1SWmw/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Alzheimer's</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1OCRu_rfVI8NZ2jH5-RgVaejexinE9718/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Delirium</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1X1hnNTOGrIh_fx-7I0d4JWX59zLTdtcS/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Delirium</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1cplkqSMHKtPa5t57DTZwzJE8cJvR7rIe/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Amnestic Syndrome</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1gsbroj9Cj_rQOEQPBFfQ257hEhVK0K0_/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Amnestic Syndrome</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1-gOkTvGsdE-9ylJY0bSRt6LhkxMygY5L/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Dementia</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1zM8oKPFTtjgSxUdRq5dO9gFlR7P_pynv/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Dementia</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1Poe4ZDENXwSW8wE9XFHa53x53LZ9ujvk/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1Gbs5QkHRVlJWNURUNOLM6SaZigCYCHUk/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(4)"><div class="rico">✍️</div><div class="rtxt">Unit 4 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        // --- 4. RENDER LOGIC ---
-        function renderPage() {
-            const container = document.getElementById('units-container');
-            
-            UNITS.forEach(unit => {
-                const unitHtml = `
-                    <div class="unit-card">
-                        <div class="unit-header" onclick="toggleUnit(this)">
-                            UNIT ${unit.id} - ${unit.title}
-                            <span>🔽</span>
-                        </div>
-                        <div class="unit-content">
-                            <div class="resource-list">
-                                ${unit.resources.map(res => `
-                                    <div class="resource-btn type-${res.type}" onclick="openResource('${res.type}', '${res.url || ''}', '${res.title}')">
-                                        <div class="icon">${getIcon(res.type)}</div>
-                                        <div>${res.title}</div>
-                                    </div>
-                                `).join('')}
-                                <div class="resource-btn type-quiz" onclick="openQuiz(${unit.id})">
-                                    <div class="icon">✍️</div>
-                                    <div>Take Unit ${unit.id} Quiz</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += unitHtml;
-            });
-        }
+  <div class="uc" id="u5" data-open="false">
+    <button class="ubtn" onclick="tog('u5')">
+      <div class="upill"><span>Unit 5</span></div>
+      <div class="uinfo"><div class="uname">Psych Emergencies & Crisis</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u5">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/199tS7hisRIp7CyM1od_8TSHrTl7MgmF7/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Emergencies</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1q2TD5YhRlxpkPm76Q5gBgkzxOWJzaqcY/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Minor Emergencies</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1yz0BzXvFTbylvZaOlyxLOThnkCmkEe7J/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Minor Emergencies</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1CXV_hBZVH0ffN29UWNwOeKuz6kM5Nifi/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Medical Psych Emergencies</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1qTKUA2SNlsj_G5OqlSjraPI3UzVIm252/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Medical</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/11hVTY8UieBhMSmay91jZXfJHIMPKe5RL/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Maladaptive Behavior</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1kNfRpwwELJZaBXGVDHV6PAI9ooFxKxBL/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Maladaptive</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1dEs8udsbTIzXLdRisf3xggzDlKOi-wzr/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Crisis Mgmt & Stress</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/134ASy0jnGhUXoY2Ct56D6UX8tKPba4em/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Crisis Mgmt</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1NwAGa3wkR2KW3QEIcwGIXJxiXFzgcWwB/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Coping & Counselling</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1t6oFgRscjOCdEbB1Nt2n3wtm2RpwPHwQ/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Counselling</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1lrZUXgn1hklzW_v3Hl_u3Tz-qBB62vGI/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1OleDctFPR0q5faOsuW0cE6Cu4Vjv68NN/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(5)"><div class="rico">✍️</div><div class="rtxt">Unit 5 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        function getIcon(type) {
-            if(type === 'notes') return '📚';
-            if(type === 'video') return '▶️';
-            if(type === 'model') return '🧊';
-            return '📄';
-        }
+  <div class="uc" id="u6" data-open="false">
+    <button class="ubtn" onclick="tog('u6')">
+      <div class="upill"><span>Unit 6</span></div>
+      <div class="uinfo"><div class="uname">Legal Issues</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u6">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/16caG4oSIrI63sU59Xu9wCOn5txTFiYP_/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Legal Issues</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1InTr1WSnyOaao2cCQKQjDu8KH_8zyEUU/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Lunacy/MHA/POCSO</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/10jzqMQUqCFAeJAvAeL_cKMFBMKufpffj/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>MHA/POCSO</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1irN38I8rjUzxTaps5Z6pkKiuIdteucfu/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Forensic Psych</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1xpEr2OasY4-e8QKZYbHgqOqcDISMBiwI/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Forensic Psych</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1SR2Rtw8HwKuQPYciSecLFbACNOFX4V9w/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>MHCA 2017 & Admission</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1SPBKQJiOgJra9TjUR8sPoEbbTlD6SWAu/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>MHCA 2017</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1WNgi41yYkZO3IEn3m1tnfxbpxTF5QnvR/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Narcotic & Psychotropic</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1eo9c5WZWc3oltXlKq2O6w8ekneT6-BBL/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Narcotic Acts</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1tymyqqgpBgNcB-wyoZjMxBA9GcMilVfh/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1qfIPKtyMo-r0DzjtJSGRKxMhXI1vqiaT/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(6)"><div class="rico">✍️</div><div class="rtxt">Unit 6 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        function toggleUnit(header) {
-            header.classList.toggle('active');
-            const content = header.nextElementSibling;
-            content.classList.toggle('show');
-            const arrow = header.querySelector('span');
-            arrow.innerText = content.classList.contains('show') ? '🔼' : '🔽';
-        }
+  <div class="uc" id="u7" data-open="false">
+    <button class="ubtn" onclick="tog('u7')">
+      <div class="upill"><span>Unit 7</span></div>
+      <div class="uinfo"><div class="uname">Community Mental Health</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u7">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1ydXJA8s21GBMD_M4DICXYDyVi4HrURXk/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Community MH</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1o4e7tVUcLCxtCt46T5oYhUV-pVD70ncY/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>NMHP & Development</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/18ncVV38clJk0kuaPlL3Lkji8rpnmPLB9/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>NMHP</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1GHJeoXbRbVDgxHql6VmTZPc9_q2uqBo_/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Institutionalization</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1xXGSj8ReCHtILOQFMDHrBj-MXp9huIuw/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Institutionalization</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1HVXZD8CIJpiVYy4_UqS0hGa4BB0hBIdO/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Voluntary & Intl Agencies</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/13iAX_ZYSNZr2Rm_ede5B5Xgf5_zqRIIl/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Agencies</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1a-aMfVqZnurNvFUcfgk29cnrSezzR_KP/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Issues for Special Pop.</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1YMIDG1DSv6cD0-XJJAYMzehbEI7LnkbA/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Special Populations</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1rdnTM0TODBg6yUuyryCWem9lX5RKRhVo/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1fXThNAGmtfbF0whor6Fk9r-bedYOpQWV/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(7)"><div class="rico">✍️</div><div class="rtxt">Unit 7 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        // --- 5. MODAL LOGIC & NAVIGATION CONTROL ---
-        let modelToggle = false; 
+</main>
 
-        function openResource(type, url, title) {
-            // PUSH STATE: Create a history entry so Back button closes modal
-            history.pushState({ modalOpen: true }, null, '#resource');
+<div class="qoverlay" id="qmodal">
+  <div class="qscrim" onclick="closeQuiz()"></div>
+  <div class="qpanel">
+    <div class="qhead">
+      <div class="qhead-top"><div class="qtitle" id="qtitle">Quiz</div><button class="qclose" onclick="closeQuiz()">✕</button></div>
+      <div class="qpips" id="qpips"></div>
+    </div>
+    <div class="qbody" id="qbody"></div>
+  </div>
+</div>
 
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = title;
-            modal.style.display = 'flex';
-            body.innerHTML = ''; 
-            
-            // FIX: Restore flex centering for Video/Model (looks better centered)
-            body.style.display = 'flex';
+<script>
+function goBackToApp(){if(window.parent&&window.parent!==window){window.parent.postMessage({action:'goBack'},'*');}else{history.back();}}
+function openPDF(url){
+  if(!url || url==='COMING SOON' || url===''){ alert('This resource is coming soon!'); return; }
+  const clean=url.replace(/\/preview.*$/,'').replace(/\/view.*$/,'')+'/view';
+  window.open(clean,'_blank');
+}
+function tog(id){const card=document.getElementById(id);const body=document.getElementById('b-'+id);const open=card.dataset.open==='true';card.dataset.open=String(!open);body.classList.toggle('open',!open);}
 
-            if (type === 'model') {
-                modelToggle = !modelToggle;
-                body.innerHTML = modelToggle ? MODEL_CODE_A : MODEL_CODE_B;
-            } 
-            else if (type === 'quiz') {
-                openQuiz(url); 
-            }
-            else {
-                // Ensure drive links are in preview mode
-                let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
-                
-                // FIX: Apply correct class based on type
-                let className = (type === 'video') ? 'iframe-video' : 'iframe-doc';
+const QD={
+1:[
+  {q:"Wernicke's Encephalopathy is a severe neurological disorder caused by deficiency of:",o:["Vitamin B1 (Thiamine)","Vitamin C","Vitamin B12","Iron"],a:0},
+  {q:"The life-saving antidote for an acute opioid overdose is:",o:["Flumazenil","Naloxone","Disulfiram","Methadone"],a:1},
+  {q:"Disulfiram (Antabuse) is used in the treatment of:",o:["Opioid dependence","Alcohol dependence by causing aversion therapy","Cannabis abuse","Tobacco cessation"],a:1},
+  {q:"Delirium Tremens (DTs) is a severe, life-threatening withdrawal symptom of:",o:["Cocaine","Alcohol","Nicotine","Caffeine"],a:1},
+  {q:"The active psychoactive constituent responsible for the 'high' in Cannabis is:",o:["Nicotine","Ethanol","THC (Tetrahydrocannabinol)","Opium"],a:2},
+  {q:"A common physiological sign of acute opioid withdrawal is:",o:["Pinpoint pupils","Dilated pupils, goosebumps, and rhinorrhea","Deep sleep","Bradycardia"],a:1},
+  {q:"Korsakoff's psychosis is characterized primarily by:",o:["Severe hallucinations","Anterograde amnesia and confabulation","Extreme aggression","Hyperactivity"],a:1},
+  {q:"Methadone is primarily used as a substitute therapy for addiction to:",o:["Alcohol","Opioids (like Heroin)","Cocaine","Amphetamines"],a:1},
+  {q:"Dual diagnosis (co-occurring disorders) refers to a patient having:",o:["Two physical illnesses","A substance use disorder along with another psychiatric disorder","An addiction to two different drugs","Both HIV and TB"],a:1},
+  {q:"The primary nursing intervention during acute alcohol withdrawal is:",o:["Confronting the patient's behavior","Monitoring vital signs and administering prescribed Benzodiazepines (e.g., Diazepam)","Encouraging vigorous exercise","Isolating the patient completely"],a:1}
+],
+2:[
+  {q:"Which of the following is classified as a Cluster A (odd/eccentric) personality disorder?",o:["Antisocial","Borderline","Paranoid","Avoidant"],a:2},
+  {q:"A pervasive pattern of disregard for the rights of others and lack of remorse is typical of:",o:["Antisocial Personality Disorder","Dependent Personality Disorder","Obsessive-Compulsive Personality Disorder","Schizoid Personality Disorder"],a:0},
+  {q:"Dyspareunia is a sexual dysfunction referring to:",o:["Fear of sex","Painful sexual intercourse","Involuntary vaginal spasm","Lack of sexual desire"],a:1},
+  {q:"Vaginismus is defined as:",o:["A sexual pain disorder characterized by involuntary muscle spasms","A desire disorder","An arousal disorder","An orgasmic disorder"],a:0},
+  {q:"Instability in mood, intense interpersonal relationships, and self-harming behavior characterizes:",o:["Narcissistic Personality Disorder","Borderline Personality Disorder","Histrionic Personality Disorder","Avoidant Personality Disorder"],a:1},
+  {q:"A person with Histrionic Personality Disorder typically displays:",o:["Extreme shyness and fear of rejection","Excessive emotionality and attention-seeking behavior","A lack of interest in social relationships","Preoccupation with order and perfection"],a:1},
+  {q:"Dialectical Behavior Therapy (DBT) is the specific treatment of choice for:",o:["Schizophrenia","Borderline Personality Disorder","Narcolepsy","Erectile Dysfunction"],a:1},
+  {q:"Voyeurism, a type of paraphilia, involves sexual arousal from:",o:["Exposing oneself","Secretly observing an unsuspecting person who is naked or undressing","Inflicting pain on others","Cross-dressing"],a:1},
+  {q:"Gender Dysphoria is characterized by:",o:["A paraphilia involving objects","Significant distress resulting from a mismatch between one's assigned sex and gender identity","A lack of sexual desire","Physical pain during intercourse"],a:1},
+  {q:"Which nursing approach is most effective when caring for a patient with Antisocial Personality Disorder?",o:["Being extremely flexible with rules","Setting clear, firm, and consistent limits on behavior","Arguing with the patient","Ignoring manipulative behavior entirely"],a:1}
+],
+3:[
+  {q:"ADHD stands for:",o:["Attention Deficit Hyperactivity Disorder","Autism Development Health Disorder","Acute Depression Hyperactivity Disease","Attention Disorder Health Deficit"],a:0},
+  {q:"Enuresis is defined clinically as:",o:["Involuntary passage of stool","Involuntary voiding of urine (bedwetting) usually after age 5","Sleep walking","Both B & C"],a:1},
+  {q:"Pica is an eating disorder that involves:",o:["Binge eating","Eating non-nutritive, non-food substances (e.g., dirt, chalk)","Refusal to eat","Regurgitation of food"],a:1},
+  {q:"Severe impairment in social interaction, communication deficits, and repetitive behaviors are core to:",o:["ADHD","Autism Spectrum Disorder (ASD)","Dyslexia","Conduct Disorder"],a:1},
+  {q:"Bulimia Nervosa is characterized by:",o:["Starvation and severe weight loss","Episodes of binge eating followed by compensatory purging behaviors","Obesity only","Total loss of appetite"],a:1},
+  {q:"A common stimulant medication prescribed to improve focus in children with ADHD is:",o:["Haloperidol","Methylphenidate (Ritalin)","Lithium","Diazepam"],a:1},
+  {q:"Conduct Disorder in adolescents often precedes the adult diagnosis of:",o:["Borderline Personality Disorder","Antisocial Personality Disorder","Schizophrenia","Bipolar Disorder"],a:1},
+  {q:"Anorexia Nervosa carries a high risk of which life-threatening physical complication?",o:["Hyperglycemia","Severe electrolyte imbalances (e.g., Hypokalemia) and cardiac arrhythmias","High blood pressure","Obesity"],a:1},
+  {q:"Encopresis refers to:",o:["Bedwetting","The repeated, usually involuntary, passage of feces in inappropriate places","Stuttering","Hair pulling"],a:1},
+  {q:"Separation Anxiety Disorder is considered developmentally inappropriate and a disorder typically after the age of:",o:["6 months","1 year","Preschool/School age","18 years"],a:2}
+],
+4:[
+  {q:"A key distinguishing feature of Delirium compared to Dementia is that Delirium is:",o:["Chronic and irreversible","Acute in onset with a fluctuating level of consciousness","A normal part of aging","Primarily a personality disorder"],a:1},
+  {q:"The most common cause of Dementia in the elderly is:",o:["Vascular disease","Alzheimer's Disease","Head trauma","Alcohol abuse"],a:1},
+  {q:"Confabulation (filling memory gaps with fabricated stories) is classically seen in:",o:["Korsakoff's Syndrome","Schizophrenia","Severe Depression","General Anxiety"],a:0},
+  {q:"The pathophysiology of Alzheimer's disease is strongly associated with the accumulation of:",o:["Dopamine excess","Beta-amyloid plaques and neurofibrillary tangles","Serotonin deficiency","GABA excess"],a:1},
+  {q:"Sundowning syndrome in dementia patients refers to:",o:["Improvement of symptoms at night","Worsening of confusion and agitation in the late afternoon/evening","Sleepwalking","Waking up extremely early"],a:1},
+  {q:"Agnosia, a symptom of dementia, is the inability to:",o:["Speak properly","Recognize familiar objects or people despite intact senses","Carry out motor tasks","Remember childhood events"],a:1},
+  {q:"The primary medication class used to temporarily improve cognitive symptoms in Alzheimer's Disease is:",o:["Antipsychotics","Cholinesterase inhibitors (e.g., Donepezil)","Beta-blockers","Benzodiazepines"],a:1},
+  {q:"Which of the following is a common, reversible cause of Delirium in the elderly?",o:["Alzheimer's disease","Urinary tract infections (UTIs) or medication toxicity","Schizophrenia","Genetics"],a:1},
+  {q:"When caring for a wandering dementia patient, the priority nursing intervention is:",o:["Applying physical restraints immediately","Providing a safe, secure environment and frequent monitoring","Giving heavy sedation","Arguing with the patient to stay in bed"],a:1},
+  {q:"Apraxia refers to:",o:["Inability to formulate words","Inability to perform purposeful motor actions despite intact motor function","Blindness","Deafness"],a:1}
+],
+5:[
+  {q:"The absolute priority nursing intervention for a patient expressing suicidal thoughts is:",o:["Giving sedation to induce sleep","Ensuring immediate physical safety and maintaining continuous observation","Providing deep counselling","Calling the family to take them home"],a:1},
+  {q:"Lithium toxicity (a medical emergency) is indicated by symptoms such as:",o:["Fine resting tremors","Coarse tremors, severe nausea/vomiting, ataxia, and confusion","Mild weight gain","Dry mouth"],a:1},
+  {q:"Crisis intervention is a short-term therapy that primarily focuses on:",o:["Restoring the patient to their pre-crisis level of functioning","Deep psychoanalysis of childhood trauma","Curing personality disorders","Long-term housing"],a:0},
+  {q:"Neuroleptic Malignant Syndrome (NMS) is a life-threatening complication of:",o:["Antidepressants","Antipsychotic medications (Neuroleptics)","Mood stabilizers","Anxiolytics"],a:1},
+  {q:"The first stage of the grief process according to Dr. Elisabeth Kübler-Ross is:",o:["Anger","Denial","Bargaining","Acceptance"],a:1},
+  {q:"A patient experiencing a severe panic attack should be managed by:",o:["Leaving them alone to calm down","Staying with the patient, using a calm voice, and encouraging slow breathing","Asking them to explain exactly why they are scared","Giving them a detailed educational pamphlet"],a:1},
+  {q:"Extrapyramidal Symptoms (EPS) such as acute dystonia (muscle spasms) are treated urgently with:",o:["Lithium","Anticholinergic drugs (e.g., Benztropine) or Antihistamines (e.g., Diphenhydramine)","More antipsychotics","Aspirin"],a:1},
+  {q:"Which of the following is the most lethal method of suicide and requires immediate high-level precautions?",o:["Threatening to overdose on vitamins","Hanging or using a firearm","Refusing to eat one meal","Superficial scratching of the wrist"],a:1},
+  {q:"Serotonin Syndrome is a dangerous crisis caused by:",o:["Withdrawal from alcohol","Taking too many antipsychotics","Combining multiple serotonergic drugs (e.g., SSRIs + MAOIs)","Low blood pressure"],a:2},
+  {q:"During a violent psychiatric emergency, if verbal de-escalation fails, the next step according to protocol is:",o:["Discharging the patient","Calling for security/team assistance and considering chemical or physical restraint as a last resort","Running away","Ignoring the behavior"],a:1}
+],
+6:[
+  {q:"The Mental Healthcare Act (MHCA), which decriminalized suicide attempts and focused on patient rights, was passed in India in:",o:["1987","2017","2020","1912"],a:1},
+  {q:"The POCSO Act is a specific Indian law designed to protect children from:",o:["Child Labor","Sexual Offences","Domestic Violence","Drug Abuse"],a:1},
+  {q:"Forensic Psychiatry specifically deals with:",o:["Old age mental health","The intersection of mental health and legal/criminal issues","Child psychology","Community health promotion"],a:1},
+  {q:"Under the MHCA 2017, the admission of a minor with mental illness requires the consent of:",o:["The minor alone","The Nominated Representative / Legal Guardian","The local Police","A Magistrate only"],a:1},
+  {q:"An 'Advance Directive' in the context of the MHCA 2017 allows a person to:",o:["Give away their property","Specify how they wish to be treated for mental illness if they lose capacity to decide","Refuse all medical help permanently","Demand illegal substances"],a:1},
+  {q:"The legal principle of 'Testamentary Capacity' assesses a person's mental ability to:",o:["Stand trial in a criminal court","Make a valid Will","Get married","Sign a consent form for ECT"],a:1},
+  {q:"According to the Tarasoff ruling (Duty to Warn), a psychiatrist/nurse must breach confidentiality if:",o:["The patient confesses to a past minor crime","The patient makes a credible, specific threat to harm a specific third party","The police ask for general records","The patient is famous"],a:1},
+  {q:"The Narcotic Drugs and Psychotropic Substances (NDPS) Act primarily aims to:",o:["Promote drug use","Regulate and stringently control the manufacture, sale, and use of narcotic drugs","Provide free alcohol","Legalize all drugs"],a:1},
+  {q:"Malingering in a forensic context refers to:",o:["A genuine mental illness","Intentionally faking or exaggerating symptoms for external secondary gain (e.g., avoiding prison)","A sleep disorder","A side effect of medication"],a:1},
+  {q:"Under the MHCA 2017, the use of Electroconvulsive Therapy (ECT) without muscle relaxants and anesthesia (Direct ECT) is:",o:["Highly recommended","Absolutely prohibited/Banned","Allowed only for minors","Allowed only in rural areas"],a:1}
+],
+7:[
+  {q:"Deinstitutionalization in mental health refers to:",o:["Building larger mental hospitals","The shift of psychiatric care from large psychiatric hospitals to community-based settings","Locking patients in solitary rooms","Stopping all psychiatric medication"],a:1},
+  {q:"Primary prevention in community mental health focuses on:",o:["Rehabilitating chronic patients","Health education, stress management, and preventing the onset of illness","Treating acute schizophrenia","Managing crisis situations"],a:1},
+  {q:"The National Mental Health Programme (NMHP) of India was originally launched in:",o:["1982","1987","2000","1947"],a:0},
+  {q:"A 'Halfway Home' is an essential community mental health service that acts as a:",o:["Maximum security prison","Transitional rehabilitation facility bridging the hospital and independent community living","Acute care intensive ward","Kindergarten school"],a:1},
+  {q:"Tertiary prevention in mental health aims to:",o:["Prevent the illness from ever occurring","Ensure early diagnosis","Reduce residual disability, prevent relapse, and rehabilitate the patient","Screen large populations"],a:2},
+  {q:"The District Mental Health Programme (DMHP) was integrated into the NMHP to:",o:["Centralize all care in the capital city","Decentralize care and integrate mental health services with general healthcare at the district level","Build new asylums","Provide only surgical care"],a:1},
+  {q:"Secondary prevention in mental health primarily involves:",o:["Vocational training","Early detection, screening, and prompt treatment to shorten illness duration","Promoting general well-being","Providing long-term housing"],a:1},
+  {q:"Which organization plays a major global role in defining mental health standards and policies?",o:["The World Bank","World Health Organization (WHO)","UNESCO","Red Cross"],a:1},
+  {q:"A major barrier to community mental health care in developing countries is:",o:["Too many psychiatrists","Social stigma and lack of awareness about mental illness","Excessive funding","Over-availability of psychiatric beds"],a:1},
+  {q:"Community-Based Rehabilitation (CBR) focuses on:",o:["Keeping patients hospitalized for life","Empowering and integrating persons with mental illness into their own communities","Isolating patients for safety","Providing solely financial loans"],a:1}
+]
+};
 
-                body.innerHTML = `<iframe 
-                    class="${className}" 
-                    src="${cleanUrl}" 
-                    sandbox="allow-scripts allow-same-origin allow-presentation"
-                    allow="autoplay; encrypted-media; fullscreen">
-                </iframe>`;
-            }
-        }
+let curQuiz=null,answered=[];
 
-        function openQuiz(unitId) {
-            history.pushState({ modalOpen: true }, null, '#quiz');
+function openQuiz(id){
+  curQuiz=id;
+  const qs=QD[id]||[];
+  answered=new Array(qs.length).fill(null);
+  document.getElementById('qtitle').textContent='Unit '+id+' Quiz';
+  document.getElementById('qpips').innerHTML=qs.map((_,i)=>`<div class="pip" id="pip${i}"></div>`).join('');
+  let html=`<div class="qscore" id="qscore"><div><div class="qs-num" id="qsnum">—</div><div class="qs-sub">Score</div></div><div class="qs-msg" id="qsmsg"></div></div>`;
+  qs.forEach((q,qi)=>{
+    html+=`<div class="qitem" id="qi${qi}"><div class="qlbl">Question ${qi+1} of ${qs.length}</div><div class="qtext">${q.q}</div><div class="qopts">${q.o.map((opt,oi)=>`<button class="qopt" id="opt${qi}_${oi}" onclick="ans(${qi},${oi},${q.a})"><span class="qltr">${['A','B','C','D'][oi]}</span>${opt}</button>`).join('')}</div></div>`;
+  });
+  document.getElementById('qbody').innerHTML=html;
+  document.getElementById('qmodal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
 
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = `Quiz: Unit ${unitId}`;
-            modal.style.display = 'flex';
-            
-            // FIX: Remove flex centering for Quiz so it starts at the top
-            body.style.display = 'block';
-            body.scrollTop = 0; // Ensure we start at the top
-            
-            const questions = QUIZ_DATA[unitId] || [];
-            
-            let quizHtml = `<div class="quiz-container">`;
-            questions.forEach((q, idx) => {
-                quizHtml += `
-                    <div class="quiz-question">${idx + 1}. ${q.q}</div>
-                    <div class="quiz-options" id="q-${idx}">
-                        ${q.o.map((opt, oIdx) => `
-                            <div class="quiz-option" onclick="checkAnswer(this, ${idx}, ${oIdx}, ${q.a})">${opt}</div>
-                        `).join('')}
-                    </div>
-                `;
-            });
-            
-            if(questions.length === 0) quizHtml += `<p>Quiz coming soon!</p>`;
-            
-            quizHtml += `</div>`;
-            body.innerHTML = quizHtml;
-        }
+function ans(qi,oi,correct){
+  if(answered[qi]!==null)return;
+  answered[qi]=oi;
+  const opts=document.querySelectorAll(`#qi${qi} .qopt`);
+  opts.forEach(b=>b.classList.add('lock'));
+  opts[correct].classList.add('cor');
+  if(oi!==correct)opts[oi].classList.add('wrg');
+  const pip=document.getElementById('pip'+qi);
+  pip.classList.add('ans',oi===correct?'cor':'wrg');
+  if(answered.every(a=>a!==null)){
+    const score=answered.filter((a,i)=>a===QD[curQuiz][i].a).length;
+    const total=QD[curQuiz].length;
+    const pct=Math.round(score/total*100);
+    const msgs=['📚 Keep Studying!','👍 Good Effort!','🎉 Well Done!','🏆 Perfect!'];
+    const mi=pct<50?0:pct<70?1:pct<100?2:3;
+    document.getElementById('qsnum').textContent=score+'/'+total;
+    document.getElementById('qsmsg').textContent=msgs[mi];
+    const sc=document.getElementById('qscore');
+    sc.classList.add('show');
+    sc.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
 
-        function checkAnswer(el, qIdx, oIdx, correctIdx) {
-            const parent = document.getElementById(`q-${qIdx}`);
-            const opts = parent.children;
-            for(let opt of opts) opt.style.pointerEvents = 'none';
+function closeQuiz(){
+  document.getElementById('qmodal').classList.remove('open');
+  document.body.style.overflow='';
+  curQuiz=null;
+}
 
-            if(oIdx === correctIdx) {
-                el.classList.add('correct');
-            } else {
-                el.classList.add('wrong');
-                opts[correctIdx].classList.add('correct');
-            }
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            modal.style.display = 'none';
-            body.innerHTML = ''; 
-            
-            if (history.state && history.state.modalOpen) {
-                history.back();
-            }
-        }
-
-        // --- 6. HANDLE BACK BUTTON ---
-        window.onpopstate = function(event) {
-            const modal = document.getElementById('app-modal');
-            if (modal.style.display === 'flex') {
-                modal.style.display = 'none';
-                document.getElementById('modal-body').innerHTML = '';
-            }
-        };
-
-        // Initialize
-        renderPage();
-
-    </script>
+function goBackToApp(){if(window.parent&&window.parent!==window){window.parent.postMessage({action:'goBack'},'*');}else{history.back();}}
+function openPDF(url){
+  if(!url || url==='COMING SOON' || url===''){ alert('This resource is coming soon!'); return; }
+  const clean=url.replace(/\/preview.*$/,'').replace(/\/view.*$/,'')+'/view';
+  window.open(clean,'_blank');
+}
+function tog(id){const card=document.getElementById(id);const body=document.getElementById('b-'+id);const open=card.dataset.open==='true';card.dataset.open=String(!open);body.classList.toggle('open',!open);}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQuiz();});
+</script>
 </body>
 </html>
