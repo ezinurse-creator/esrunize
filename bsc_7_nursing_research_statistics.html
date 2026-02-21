@@ -1,727 +1,517 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nursing Research & Statistics - Syllabus & Quizzes</title>
-    <meta name="description" content="Interactive syllabus with internal quizzes for Nursing Research and Statistics." />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <style>
-        :root {
-            /* ORIGINAL BLUE COLOR SCHEME */
-            --brand: #003B82; 
-            --accent: #00B9F2;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-700: #374151;
-            --gray-900: #111827;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-            --danger: #ef4444;
-            --success: #10b981;
-            --warning: #f59e0b;
-        }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nursing Research & Statistics</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --p50:#faf5ff;--p100:#f3e8ff;--p200:#e9d5ff;--p300:#d8b4fe;
+  --p400:#c084fc;--p500:#a855f7;--p600:#9333ea;--p700:#7e22ce;
+  --p800:#6b21a8;--p900:#581c87;
+  --w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;
+  --g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;
+  --ok:#16a34a;--ok-lt:#dcfce7;--err:#dc2626;--err-lt:#fee2e2;
+  --warn:#d97706;--warn-lt:#fef3c7;
+  --r:12px;--rs:8px;
+  --s1:0 1px 3px rgba(109,40,217,.08);
+  --s2:0 4px 12px rgba(109,40,217,.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:90;background:var(--w);border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 16px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-back{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:var(--p100);color:var(--p700);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;margin-right:12px}
+.tb-back:hover{background:var(--p200)}
+.tb-info{flex:1;min-width:0}
+.tb-title{font-size:.88rem;font-weight:700;color:var(--g900);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb-sub{font-size:.65rem;color:var(--g400);font-weight:500;margin-top:1px}
+.tb-chip{background:var(--p100);color:var(--p700);border:1px solid var(--p200);font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
+.hero{background:linear-gradient(145deg,var(--p900),var(--p700) 55%,var(--p500));padding:28px 18px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.08),transparent 50%),radial-gradient(circle at 10% 85%,rgba(255,255,255,.05),transparent 40%)}
+.hero::after{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-dot-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:.65rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border-radius:30px;margin-bottom:12px}
+.hero-eyebrow-dot{width:5px;height:5px;background:#c4b5fd;border-radius:50%}
+.hero h1{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:7px}
+.hero h1 em{color:rgba(255,255,255,.45);font-style:italic;font-weight:300}
+.hero-desc{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:18px}
+.hero-cta{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.28);color:#fff;font-size:.8rem;font-weight:700;padding:9px 16px;border-radius:9px;cursor:pointer;transition:all .2s;backdrop-filter:blur(6px)}
+.hero-cta:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
+.hero-stats{display:flex;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+.hs{flex:1;text-align:center}
+.hs+.hs{border-left:1px solid rgba(255,255,255,.1)}
+.hs-n{font-size:1.35rem;font-weight:800;color:#fff;line-height:1}
+.hs-l{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
+.main{padding:16px 14px 56px}
+.divider{display:flex;align-items:center;gap:8px;margin-bottom:12px;margin-top:2px}
+.divider span{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g400)}
+.divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+.uc{background:var(--w);border:1.5px solid var(--g200);border-radius:var(--r);margin-bottom:9px;overflow:hidden;box-shadow:var(--s1);transition:border-color .2s,box-shadow .2s}
+.uc:hover{border-color:var(--p300);box-shadow:var(--s2)}
+.uc[data-open=true]{border-color:var(--p400);box-shadow:var(--s2)}
+.ubtn{width:100%;display:flex;align-items:center;padding:14px 15px;gap:12px;background:none;border:none;cursor:pointer;text-align:left}
+/* Adjusted upill to gracefully hold "Unit X" */
+.upill{min-width:54px;padding:0 8px;height:36px;border-radius:9px;flex-shrink:0;background:var(--p100);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.upill span{font-size:.65rem;font-weight:800;color:var(--p700);letter-spacing:-.01em;white-space:nowrap}
+.uc[data-open=true] .upill{background:var(--p700)}
+.uc[data-open=true] .upill span{color:#fff}
+.uinfo{flex:1;min-width:0}
+.uname{font-size:.85rem;font-weight:700;color:var(--g900);line-height:1.3}
+.umeta{font-size:.66rem;color:var(--g400);margin-top:2px;font-weight:500}
+.uright{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.uchev{width:16px;height:16px;color:var(--g300);transition:transform .3s,color .2s}
+.uc[data-open=true] .uchev{transform:rotate(180deg);color:var(--p500)}
+.ubody{display:none;background:var(--p50);border-top:1.5px solid var(--p200);padding:12px 13px 14px}
+.ubody.open{display:block;animation:bodyIn .2s ease}
+@keyframes bodyIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.rrow{display:flex;gap:9px;margin-bottom: 8px;}
+.rrow:last-child { margin-bottom: 0; }
+@media(max-width:380px){.rrow{flex-direction:column}}
+.rbtn{flex:1;display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .17s;background:var(--w);text-decoration:none}
+.rbtn .rico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.rbtn .rtxt{line-height:1.25}
+.rbtn .rtxt small{display:block;font-size:.62rem;font-weight:400;opacity:.5;margin-top:1px}
+.rbtn .rarr{margin-left:auto;opacity:0;font-size:.7rem;color:var(--g400);transition:opacity .15s}
+.rbtn:hover .rarr{opacity:1}
 
-        * { box-sizing: border-box; }
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: white;
-            color: var(--gray-900);
-            line-height: 1.6;
-            padding: 24px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
+.rbtn.notes{border-color:var(--p200);color:var(--p800)}
+.rbtn.notes .rico{background:var(--p100)}
+.rbtn.notes:hover{background:var(--p50);border-color:var(--p500);box-shadow:var(--s2);transform:translateY(-1px)}
 
-        .syllabus-btn, .unit-header {
-            display: block;
-            width: 100%;
-            padding: 18px 24px;
-            margin: 12px 0;
-            background: var(--brand);
-            color: white;
-            font-weight: 600;
-            font-size: 16px;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.2s ease;
-        }
-        .syllabus-btn:hover, .unit-header:hover {
-            background: #002d63;
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
-        
-        .unit-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-align: left;
-            margin: 16px 0;
-        }
-        .unit-header span:last-child {
-            transition: transform 0.3s ease;
-            color: #FFA500;
-        }
-        .unit-header[aria-expanded="true"] span:last-child {
-            transform: rotate(180deg);
-        }
+.rbtn.video{border-color:#bae6fd;color:#0369a1}
+.rbtn.video .rico{background:#e0f2fe}
+.rbtn.video:hover{background:#f0f9ff;border-color:#38bdf8;box-shadow:0 3px 10px rgba(56,189,248,.12);transform:translateY(-1px)}
 
-        .unit-content {
-            padding: 0 12px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.3s ease;
-        }
-        .unit-content.active {
-            padding: 24px 12px;
-            max-height: none; 
-        }
+.rbtn.imp{border-color:#fecdd3;color:#be123c}
+.rbtn.imp .rico{background:#ffe4e6}
+.rbtn.imp:hover{background:#fff1f2;border-color:#fb7185;box-shadow:0 3px 10px rgba(251,113,133,.12);transform:translateY(-1px)}
 
-        .subsection {
-            margin: 16px 0;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            border: 1px solid var(--gray-200);
-            box-shadow: var(--shadow-sm);
-            transition: box-shadow 0.2s ease;
-        }
+.rbtn.quiz{border-color:#fde68a;color:#78350f}
+.rbtn.quiz .rico{background:var(--warn-lt)}
+.rbtn.quiz:hover{background:#fffbeb;border-color:var(--warn);box-shadow:0 3px 10px rgba(217,119,6,.12);transform:translateY(-1px)}
 
-        .sub-title {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--gray-700);
-            margin: 15px 0 8px 0;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
+.rbtn.pyq{border-color:#bbf7d0;color:#14532d}
+.rbtn.pyq .rico{background:var(--ok-lt)}
+.rbtn.pyq:hover{background:#f0fdf4;border-color:var(--ok);box-shadow:0 3px 10px rgba(22,163,74,.12);transform:translateY(-1px)}
 
-        .resource-btn {
-            display: flex;
-            align-items: flex-start;
-            width: 100%;
-            padding: 14px 18px;
-            margin: 6px 0;
-            background: var(--gray-50);
-            color: var(--gray-900);
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
-            border: 1px solid var(--gray-200);
-            transition: all 0.2s ease;
-            gap: 12px;
-            cursor: pointer;
-        }
-        /* Adjusted colors to match original blue theme context */
-        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
-        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
-        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
-        .resource-btn.imp { background: #fff1f2; border-color: #fecdd3; color: #be123c; }
-        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
-
-        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
-        .icon.video-icon { color: #8b5cf6; }
-        .icon.quiz-icon { color: #f59e0b; }
-        .icon.imp-icon { color: #be123c; }
-
-        /* --- MODAL --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-        }
-
-        .modal-header {
-            height: 60px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            flex-shrink: 0;
-        }
-
-        .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; }
-        
-        .btn-close {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            flex: 1;
-            background: #f3f4f6;
-            position: relative;
-            overflow-y: auto; 
-            padding: 20px;
-        }
-
-        .iframe-res {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #fff;
-            display: block;
-            border-radius: 8px;
-            min-height: 80vh; 
-        }
-
-        /* --- QUIZ SPECIFIC STYLES --- */
-        .quiz-wrapper {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-        .question-block {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--gray-200);
-        }
-        .q-text {
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            color: var(--brand);
-        }
-        .q-options label {
-            display: block;
-            padding: 10px 15px;
-            margin: 8px 0;
-            background: var(--gray-50);
-            border: 1px solid var(--gray-200);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .q-options label:hover {
-            background: #e0f2fe; /* Light blue hover */
-            border-color: var(--accent);
-        }
-        .q-options input[type="radio"] {
-            margin-right: 10px;
-            transform: scale(1.2);
-        }
-        .feedback {
-            margin-top: 10px;
-            font-weight: 600;
-            display: none;
-            padding: 10px;
-            border-radius: 6px;
-        }
-        .feedback.correct {
-            display: block;
-            background: #d1fae5;
-            color: #065f46;
-            border: 1px solid #34d399;
-        }
-        .feedback.incorrect {
-            display: block;
-            background: #fee2e2;
-            color: #991b1b;
-            border: 1px solid #f87171;
-        }
-        .submit-container {
-            text-align: center;
-            margin-top: 30px;
-        }
-        .btn-submit {
-            background: var(--success);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.1rem;
-            border-radius: 8px;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .btn-submit:hover { background: #059669; }
-        .btn-submit:disabled { background: #9ca3af; cursor: not-allowed; }
-        .score-card {
-            text-align: center;
-            margin-bottom: 20px;
-            padding: 20px;
-            background: var(--brand);
-            color: white;
-            border-radius: 8px;
-            display: none;
-        }
-
-        @media (max-width: 768px) {
-            body { padding: 16px; }
-            .unit-header, .resource-btn { font-size: 15px; }
-            .modal-body { padding: 10px; }
-            .quiz-wrapper { padding: 15px; }
-        }
-    </style>
+.pyq-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:380px){.pyq-grid{grid-template-columns:1fr}}
+.qoverlay{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end}
+.qoverlay.open{display:flex}
+.qscrim{position:absolute;inset:0;background:rgba(15,10,40,.55);backdrop-filter:blur(3px)}
+.qpanel{position:relative;z-index:1;background:var(--w);width:100%;max-width:580px;margin:0 auto;border-radius:18px 18px 0 0;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 -10px 50px rgba(109,40,217,.2);animation:panelUp .3s cubic-bezier(.32,.72,0,1)}
+@keyframes panelUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.qhead{padding:16px 18px 12px;border-bottom:1px solid var(--g100);flex-shrink:0}
+.qhead-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.qtitle{font-size:1rem;font-weight:800;color:var(--p800)}
+.qclose{width:28px;height:28px;border-radius:50%;background:var(--g100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--g500);transition:all .15s}
+.qclose:hover{background:var(--err-lt);color:var(--err)}
+.qpips{display:flex;gap:3px}
+.pip{flex:1;height:4px;border-radius:4px;background:var(--g100);transition:background .3s}
+.pip.ans{background:var(--p300)}.pip.cor{background:var(--ok)}.pip.wrg{background:var(--err)}
+.qbody{overflow-y:auto;padding:14px 18px 28px;flex:1}
+.qscore{display:none;background:linear-gradient(135deg,var(--p800),var(--p500));color:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;align-items:center;gap:14px}
+.qscore.show{display:flex}
+.qs-num{font-size:1.9rem;font-weight:800;line-height:1}
+.qs-sub{font-size:.65rem;opacity:.6;margin-top:2px}
+.qs-msg{font-size:.85rem;font-weight:600}
+.qitem{margin-bottom:24px}
+.qitem:last-child{margin-bottom:0}
+.qlbl{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--p500);margin-bottom:4px}
+.qtext{font-size:.88rem;font-weight:600;color:var(--g900);line-height:1.5;margin-bottom:10px}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1.5px solid var(--g200);border-radius:var(--rs);cursor:pointer;font-size:.83rem;font-weight:500;background:var(--w);color:var(--g700);transition:all .14s}
+.qopt:hover{border-color:var(--p300);background:var(--p50);color:var(--p800)}
+.qltr{width:21px;height:21px;border-radius:50%;background:var(--g100);border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:800;color:var(--g500);flex-shrink:0;transition:all .14s}
+.qopt.cor{background:var(--ok-lt);border-color:#86efac;color:#14532d}
+.qopt.cor .qltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.qopt.wrg{background:var(--err-lt);border-color:#fca5a5;color:#7f1d1d}
+.qopt.wrg .qltr{background:var(--err);border-color:var(--err);color:#fff}
+.qopt.lock{cursor:default;pointer-events:none}
+.qopt.lock:not(.cor):not(.wrg):hover{border-color:var(--g200);background:var(--w);color:var(--g700)}
+</style>
 </head>
 <body>
 
-    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/1j-6fD6-41lyAJ0UXQdyKD1S0MIuyL6G7/preview', 'Syllabus')">
-        📄 DOWNLOAD RESEARCH SYLLABUS
+<header class="topbar">
+  <button class="tb-back" onclick="goBackToApp()" aria-label="Back">&#8592;</button>
+  <div class="tb-info">
+    <div class="tb-title">Nursing Research & Statistics</div>
+    <div class="tb-sub">Nursing Program</div>
+  </div>
+  <div class="tb-chip">6 Units</div>
+</header>
+
+<section class="hero">
+  <div class="hero-dot-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>Nursing Program</div>
+    <h1>Nursing Research<br/><em>& Statistics</em></h1>
+    <p class="hero-desc">Interactive syllabus, detailed notes, video lectures & internal quizzes.</p>
+    <button class="hero-cta" onclick="openPDF('https://drive.google.com/file/d/1j-6fD6-41lyAJ0UXQdyKD1S0MIuyL6G7/view')">
+      📄 &nbsp;Download Syllabus
+    </button>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-n">6</div><div class="hs-l">Units</div></div>
+      <div class="hs"><div class="hs-n">60</div><div class="hs-l">Quizzes</div></div>
+      <div class="hs"><div class="hs-n">7</div><div class="hs-l">PYQs</div></div>
     </div>
-    
-    <div id="units">
-        
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 1 - RESEARCH PROCESS <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1fpfn7fhCh-LpgalQ8UZynKbVoTsNyRzy/preview', 'Unit 1 Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes: Research Process</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/19NDvJxMf9X0Og4fJx8WT3a9dtrLBQzRb/preview', 'Research Process Video')">
-                        <span class="icon video-icon">▶️</span><span>Research and Research Process</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/10GAUVfihL8wPMokTtgKLo5yUM0HWQMJl/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes: Research Process</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1p78-BsUs8ObR85ZkynoukfXuXvyyAenX/preview', 'Qual/Quant Video')">
-                        <span class="icon video-icon">▶️</span><span>Quant/Qual Research & EBP</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1nyd0uRvSuWw09SGm90pSN7PVtk4_Pzvh/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes: EBP & Types</span>
-                    </div>
-                    <div class="resource-btn imp" onclick="openResource('video', 'https://drive.google.com/file/d/19sNa3N-3hblr-13fOztAMCyNPbl2GE6U/preview', 'Imp Qs Discussion')">
-                        <span class="icon imp-icon">🔥</span><span>Important Questions Discussion</span>
-                    </div>
-                    <div class="resource-btn imp" onclick="openResource('notes', 'https://drive.google.com/file/d/1fU_8v2-vmKUVSGwzECeToGSkmRWTGrIO/preview', 'Imp Qs PDF')">
-                        <span class="icon imp-icon">📄</span><span>Important Questions PDF</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="loadQuiz(1)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz (Interactive)</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  </div>
+</section>
 
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 2 - RESEARCH PROBLEM <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1UYau_QelusSpzVFUzx3QKPhGVB2jKR4Q/preview', 'Unit 2 Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes: Problem & Hypothesis</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1qQ7ZJBDDMftu1iV300V0M1lx3QubmmFq/preview', 'Problem/Variables Video')">
-                        <span class="icon video-icon">▶️</span><span>Research Problem, Statement, Variables</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1gse0PXOkjAxMLOOsszkUJntX7KLSTUtf/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes: Variables</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1mNX1c6foleVwv426YsFh6UhduormkgEd/preview', 'Objectives/Hypothesis Video')">
-                        <span class="icon video-icon">▶️</span><span>Research Objectives & Hypothesis</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1HedSK5SQ4a0HJoTSzJiCoLc2470K18xU/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes: Hypothesis</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/15Li_QKMbY8Ojg8TDxc-eA_Emm0vrqUz-/preview', 'Assumptions Video')">
-                        <span class="icon video-icon">▶️</span><span>Assumptions in Research</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1oEf534IodlT3aQei2FulF5Ya4lgy4bgh/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes: Assumptions</span>
-                    </div>
-                    <div class="resource-btn imp" onclick="openResource('video', 'https://drive.google.com/file/d/1qMVGbOwsRH_6LVQaYCt224Jz8dr5xdX3/preview', 'Imp Qs Discussion')">
-                        <span class="icon imp-icon">🔥</span><span>Important Questions Discussion</span>
-                    </div>
-                    <div class="resource-btn imp" onclick="openResource('notes', 'https://drive.google.com/file/d/1zFbsCYM3oGo8Kv_d3d0VuaN0UP23JB7B/preview', 'Imp Qs PDF')">
-                        <span class="icon imp-icon">📄</span><span>Important Questions PDF</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="loadQuiz(2)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz (Interactive)</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+<main class="main">
+  <div class="divider"><span>Course Units</span></div>
 
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 3 - REVIEW OF LITERATURE <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1JovxN9YeZKu57HSfcZZeUQyZJkcfdv-h/preview', 'Unit 3 Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes: Literature Review</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1BPsG1vIsJs_18QEaW6yn9Jt4URMivLRD/preview', 'Review of Lit Video')">
-                        <span class="icon video-icon">▶️</span><span>Review of Literature & Sources</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1dtpnkrunUy0AxECb6Fz91ACTS6oK_UE6/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes: Sources</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1lZu7FVQmF46Rg7a42ICfCGTZFHAH8M_A/preview', 'Online Sources Video')">
-                        <span class="icon video-icon">▶️</span><span>Online Sources & Annotated Bibliography</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/17onlXrICxMgm2BiK725nBDU6ffAncC0g/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes: Annotated Bibl.</span>
-                    </div>
-                    <div class="resource-btn imp" onclick="openResource('video', 'https://drive.google.com/file/d/1A2dXzmYbcTbuezu5QrR9osn-unz9RT3R/preview', 'Imp Qs Discussion')">
-                        <span class="icon imp-icon">🔥</span><span>Important Questions Discussion</span>
-                    </div>
-                    <div class="resource-btn imp" onclick="openResource('notes', 'https://drive.google.com/file/d/1eqb4rv6A4KZntDSYSYmfZspwlJ8r0wGk/preview', 'Imp Qs PDF')">
-                        <span class="icon imp-icon">📄</span><span>Important Questions PDF</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="loadQuiz(3)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz (Interactive)</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 4 - APPROACHES & DESIGNS <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1vyA-ECiXKZcM4ZOwK5_3G4ZGy2FnH6do/preview', 'Unit 4 Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes: Research Designs</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'COMING SOON', 'Research Designs Video')">
-                        <span class="icon video-icon">▶️</span><span>Research Designs (Coming Soon)</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/138ZqAj_ZAMYfYxM6g1n-RlBW_j3P_EC1/preview', 'True Experimental Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes: True Experimental</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1PNIlHm6w8Ard_K2QeNlufL_O9mT3TNQt/preview', 'Quasi Experimental Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes: Quasi-Experimental</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1CwjujASGynPODjCfLTwVDGW_CEAsPght/preview', 'Historical Design Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes: Historical Design</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1NouiQC_VPnRaAXDkj1ioFQKdoHQGSzj2/preview', 'Qualitative Design Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes: Qualitative Designs</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Ry5g9Pl8tSCXRal_drOnWyec2BNwtxD5/preview', 'Design Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes: Additional Designs</span>
-                    </div>
-                    <div class="resource-btn imp" onclick="openResource('video', 'COMING SOON', 'Imp Qs Discussion')">
-                        <span class="icon imp-icon">🔥</span><span>Imp Qs Discussion (Coming Soon)</span>
-                    </div>
-                    <div class="resource-btn imp" onclick="openResource('notes', 'https://drive.google.com/file/d/1r8s4K-btoP_h8wSTUQJKZQM4YEwcrEfJ/preview', 'Imp Qs PDF')">
-                        <span class="icon imp-icon">📄</span><span>Important Questions PDF</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="loadQuiz(4)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz (Interactive)</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 5 - SAMPLING & DATA COLLECTION <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1cA_zyU9SHTpUSIUSXRXWIjarnufd8-rj/preview', 'Unit 5 Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes: Sampling & Data</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1rmqmCKrFHO3sknCleHTC1cJGoYO7gNEg/preview', 'Sampling Process Video')">
-                        <span class="icon video-icon">▶️</span><span>Population, Sampling, Sample Process</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1s_lST-wiHBmHi2nW0CUtd5b_QYaY-UQR/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes: Sampling Process</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1VCcV72G-ncEzexi9QAXtKMjTooCTlW94/preview', 'Random Sampling Video')">
-                        <span class="icon video-icon">▶️</span><span>Random & Sequential Sampling</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/16-V_6sMIxWUvv9Yw9oOJtf07fb2KubAo/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes: Sampling Techniques</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1O2yebhY-vg5ZJG5YGXChX7C_cvMypez2/preview', 'Non-Probability Video')">
-                        <span class="icon video-icon">▶️</span><span>Non-Probability Sampling</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1zVFQCpjcvnFoNRB1TDBmKf5qvbLVPunA/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes: Non-Probability</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1gRG0vG6_ZFMV99T-p-LfqAWW7XuDbydV/preview', 'Data Collection Video')">
-                        <span class="icon video-icon">▶️</span><span>Data Sources & Collection Tools</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/13WY7HGWG7abMLJUdsoGzTcowDP0VHsbL/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes: Data Collection</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1C0GkhCywrCmv2FyVIXYID66TRSom76fu/preview', 'Interview Video')">
-                        <span class="icon video-icon">▶️</span><span>Interviewing Process</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/11-xElleVKdXxrwlUeKRnZTtedgJpsHK2/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes: Interviews</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1OJpoMNnPogC_hRkRjm9PvB08OzI0-RfQ/preview', 'Questionnaire Video')">
-                        <span class="icon video-icon">▶️</span><span>Questionnaire Administration</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/13Wz9aEViaVoyO0FUZRdJMhrzkXlyzXIo/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes: Questionnaires</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1GC6UTdkTDS7rYyg37YdzG9JSuOxtRhNC/preview', 'Scales Video')">
-                        <span class="icon video-icon">▶️</span><span>Likert Scale, VAS, Rating Scale</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1zxg0hNMuhsE2zvUnYYSklWSbU-70j0dm/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes: Scales</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1H8HpLLyUmtp0vobUYFqe0F29dCZtFh17/preview', 'Observation Video')">
-                        <span class="icon video-icon">▶️</span><span>Observations, Validity & Reliability</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1bu0Nqj_QaIA-6gMsstX7VQi7nA7Aapdl/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes: Validity/Reliability</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/129GSyZrUgnydhAFPp5pA7KnApn3wVaqo/preview', 'Ethics Video')">
-                        <span class="icon video-icon">▶️</span><span>Research Ethics & Pilot Study</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1D_lJXX7-B_RM8kjaNJxW7lsei07Cwhuh/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes: Ethics</span>
-                    </div>
-                    <div class="resource-btn imp" onclick="openResource('video', 'COMING SOON', 'Imp Qs Discussion')">
-                        <span class="icon imp-icon">🔥</span><span>Imp Qs Discussion (Coming Soon)</span>
-                    </div>
-                    <div class="resource-btn imp" onclick="openResource('notes', 'https://drive.google.com/file/d/1MxSlxbic9sKNaTFrf3GitI8j1ltGS522/preview', 'Imp Qs PDF')">
-                        <span class="icon imp-icon">📄</span><span>Important Questions PDF</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="loadQuiz(5)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz (Interactive)</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 6 - ANALYSIS OF DATA <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ieOq7B5Y7tj3yFPw0VReNZi4mPTZdRhq/preview', 'Unit 6 Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes: Data Analysis</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'COMING SOON', 'Analysis Video')">
-                        <span class="icon video-icon">▶️</span><span>Measurement Scales & Analysis (Coming Soon)</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1A89XqPN6on8rdGzFZ1eav1VPB2INUHdn/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes: Analysis</span>
-                    </div>
-                    <div class="resource-btn imp" onclick="openResource('video', 'COMING SOON', 'Imp Qs Discussion')">
-                        <span class="icon imp-icon">🔥</span><span>Imp Qs Discussion (Coming Soon)</span>
-                    </div>
-                    <div class="resource-btn imp" onclick="openResource('notes', 'https://drive.google.com/file/d/1zelnU0n1JWhPNUuILYDQsy4-XZ6x6xf0/preview', 'Imp Qs PDF')">
-                        <span class="icon imp-icon">📄</span><span>Important Questions PDF</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="loadQuiz(6)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz (Interactive)</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+  <div class="uc" id="u1" data-open="false">
+    <button class="ubtn" onclick="tog('u1')">
+      <div class="upill"><span>Unit 1</span></div>
+      <div class="uinfo"><div class="uname">Research Process</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u1">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1fpfn7fhCh-LpgalQ8UZynKbVoTsNyRzy/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Research Process</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/19NDvJxMf9X0Og4fJx8WT3a9dtrLBQzRb/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Research Process</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/10GAUVfihL8wPMokTtgKLo5yUM0HWQMJl/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Process</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1p78-BsUs8ObR85ZkynoukfXuXvyyAenX/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Quant/Qual & EBP</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1nyd0uRvSuWw09SGm90pSN7PVtk4_Pzvh/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>EBP & Types</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/19sNa3N-3hblr-13fOztAMCyNPbl2GE6U/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1fU_8v2-vmKUVSGwzECeToGSkmRWTGrIO/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(1)"><div class="rico">✍️</div><div class="rtxt">Unit 1 Quiz<small>10 questions</small></div></button>
+      </div>
     </div>
+  </div>
 
-    <div id="app-modal" class="modal-overlay">
-        <div class="modal-header">
-            <div id="modal-title" class="modal-title">Resource</div>
-            <button class="btn-close" onclick="closeModal()">Close X</button>
-        </div>
-        <div id="modal-body" class="modal-body"></div>
+  <div class="uc" id="u2" data-open="false">
+    <button class="ubtn" onclick="tog('u2')">
+      <div class="upill"><span>Unit 2</span></div>
+      <div class="uinfo"><div class="uname">Research Problem</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u2">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1UYau_QelusSpzVFUzx3QKPhGVB2jKR4Q/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Problem & Hypo</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1qQ7ZJBDDMftu1iV300V0M1lx3QubmmFq/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Problem & Variables</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1gse0PXOkjAxMLOOsszkUJntX7KLSTUtf/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Variables</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1mNX1c6foleVwv426YsFh6UhduormkgEd/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Obj & Hypothesis</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1HedSK5SQ4a0HJoTSzJiCoLc2470K18xU/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Hypothesis</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/15Li_QKMbY8Ojg8TDxc-eA_Emm0vrqUz-/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Assumptions</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1oEf534IodlT3aQei2FulF5Ya4lgy4bgh/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Assumptions</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1qMVGbOwsRH_6LVQaYCt224Jz8dr5xdX3/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1zFbsCYM3oGo8Kv_d3d0VuaN0UP23JB7B/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(2)"><div class="rico">✍️</div><div class="rtxt">Unit 2 Quiz<small>10 questions</small></div></button>
+      </div>
     </div>
+  </div>
 
-    <script>
-        function toggleUnit(header) {
-            const content = header.nextElementSibling;
-            const isExpanded = header.getAttribute('aria-expanded') === 'true';
-            header.setAttribute('aria-expanded', !isExpanded);
-            content.classList.toggle('active');
-        }
+  <div class="uc" id="u3" data-open="false">
+    <button class="ubtn" onclick="tog('u3')">
+      <div class="upill"><span>Unit 3</span></div>
+      <div class="uinfo"><div class="uname">Review of Literature</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u3">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1JovxN9YeZKu57HSfcZZeUQyZJkcfdv-h/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Literature Review</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1BPsG1vIsJs_18QEaW6yn9Jt4URMivLRD/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Review & Sources</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1dtpnkrunUy0AxECb6Fz91ACTS6oK_UE6/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Sources</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1lZu7FVQmF46Rg7a42ICfCGTZFHAH8M_A/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Online Sources</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/17onlXrICxMgm2BiK725nBDU6ffAncC0g/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Annotated Bibl.</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1A2dXzmYbcTbuezu5QrR9osn-unz9RT3R/view')"><div class="rico">🔥</div><div class="rtxt">Important Qs<small>Video Discussion</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1eqb4rv6A4KZntDSYSYmfZspwlJ8r0wGk/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(3)"><div class="rico">✍️</div><div class="rtxt">Unit 3 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        function openResource(type, url, title) {
-            if (url === 'COMING SOON') {
-                alert('This resource is coming soon!');
-                return;
-            }
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            document.getElementById('modal-title').textContent = title;
-            modal.style.display = 'flex';
-            
-            // Clean URL to ensure preview mode for Drive files
-            let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
-            body.innerHTML = `<iframe class="iframe-res" src="${cleanUrl}" allow="autoplay"></iframe>`;
-        }
+  <div class="uc" id="u4" data-open="false">
+    <button class="ubtn" onclick="tog('u4')">
+      <div class="upill"><span>Unit 4</span></div>
+      <div class="uinfo"><div class="uname">Approaches & Designs</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u4">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1vyA-ECiXKZcM4ZOwK5_3G4ZGy2FnH6do/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Research Designs</small></div></button>
+        <button class="rbtn video" onclick="alert('This video is coming soon!')"><div class="rico" style="opacity:0.5">▶️</div><div class="rtxt">Video Lecture<small>Coming Soon</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/138ZqAj_ZAMYfYxM6g1n-RlBW_j3P_EC1/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>True Experimental</small></div></button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1PNIlHm6w8Ard_K2QeNlufL_O9mT3TNQt/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Quasi-Experimental</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1CwjujASGynPODjCfLTwVDGW_CEAsPght/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Historical Design</small></div></button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1NouiQC_VPnRaAXDkj1ioFQKdoHQGSzj2/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Qualitative</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Ry5g9Pl8tSCXRal_drOnWyec2BNwtxD5/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Additional Designs</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1r8s4K-btoP_h8wSTUQJKZQM4YEwcrEfJ/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(4)"><div class="rico">✍️</div><div class="rtxt">Unit 4 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        function closeModal() { 
-            document.getElementById('app-modal').style.display = 'none'; 
-            document.getElementById('modal-body').innerHTML = ""; 
-        }
+  <div class="uc" id="u5" data-open="false">
+    <button class="ubtn" onclick="tog('u5')">
+      <div class="upill"><span>Unit 5</span></div>
+      <div class="uinfo"><div class="uname">Sampling & Data Collection</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u5">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1cA_zyU9SHTpUSIUSXRXWIjarnufd8-rj/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Sampling & Data</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1rmqmCKrFHO3sknCleHTC1cJGoYO7gNEg/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Sampling Process</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1s_lST-wiHBmHi2nW0CUtd5b_QYaY-UQR/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Sampling Process</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1VCcV72G-ncEzexi9QAXtKMjTooCTlW94/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Random Sampling</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/16-V_6sMIxWUvv9Yw9oOJtf07fb2KubAo/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Sampling Techs</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1O2yebhY-vg5ZJG5YGXChX7C_cvMypez2/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Non-Probability</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1zVFQCpjcvnFoNRB1TDBmKf5qvbLVPunA/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Non-Probability</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1gRG0vG6_ZFMV99T-p-LfqAWW7XuDbydV/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Data Collection</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/13WY7HGWG7abMLJUdsoGzTcowDP0VHsbL/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Data Collection</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1C0GkhCywrCmv2FyVIXYID66TRSom76fu/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Interviews</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/11-xElleVKdXxrwlUeKRnZTtedgJpsHK2/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Interviews</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1OJpoMNnPogC_hRkRjm9PvB08OzI0-RfQ/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Questionnaires</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/13Wz9aEViaVoyO0FUZRdJMhrzkXlyzXIo/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Questionnaires</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1GC6UTdkTDS7rYyg37YdzG9JSuOxtRhNC/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Scales</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1zxg0hNMuhsE2zvUnYYSklWSbU-70j0dm/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Scales</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1H8HpLLyUmtp0vobUYFqe0F29dCZtFh17/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Observations</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1bu0Nqj_QaIA-6gMsstX7VQi7nA7Aapdl/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Validity/Reliability</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/129GSyZrUgnydhAFPp5pA7KnApn3wVaqo/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Ethics & Pilot</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1D_lJXX7-B_RM8kjaNJxW7lsei07Cwhuh/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Ethics</small></div></button>
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1MxSlxbic9sKNaTFrf3GitI8j1ltGS522/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(5)"><div class="rico">✍️</div><div class="rtxt">Unit 5 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        // --- QUIZ DATABASE (60 Questions) ---
-        const quizData = {
-            1: [ // Research Process
-                { q: "What is the primary goal of nursing research?", options: ["To define nursing administration", "To develop EBP and improve patient care", "To increase hospital revenue", "To hire more staff"], answer: 1 },
-                { q: "Evidence-Based Practice (EBP) integrates:", options: ["Clinical expertise, patient values, and best research evidence", "Only doctor's orders", "Only textbook knowledge", "Only statistical data"], answer: 0 },
-                { q: "Which of the following is a characteristic of qualitative research?", options: ["Uses numbers and statistics", "Subjective and narrative data", "Large sample size", "Generalizable findings"], answer: 1 },
-                { q: "The first step in the research process is:", options: ["Review of literature", "Defining the research problem", "Collecting data", "Formulating hypothesis"], answer: 1 },
-                { q: "A 'Pilot Study' is defined as:", options: ["A study done on pilots", "A small scale preliminary study", "The final data analysis", "Writing the research report"], answer: 1 },
-                { q: "Basic Research is also known as:", options: ["Applied Research", "Pure or Fundamental Research", "Action Research", "Clinical Research"], answer: 1 },
-                { q: "Quantitative research usually involves:", options: ["Interviews and themes", "Deductive reasoning and numbers", "Lived experiences", "Small sample sizes"], answer: 1 },
-                { q: "Which role of a nurse researcher involves using findings in practice?", options: ["Consumer of research", "Principal investigator", "Data collector", "Subject"], answer: 0 },
-                { q: "Inductive reasoning is associated with:", options: ["Qualitative research", "Quantitative research", "Experimental design", "Survey method"], answer: 0 },
-                { q: "Abstract in a research report is:", options: ["The conclusion", "A brief summary of the study", "The bibliography", "The questionnaire"], answer: 1 }
-            ],
-            2: [ // Research Problem & Hypothesis
-                { q: "A research problem is a:", options: ["Situation that needs a solution or improvement", "Statement of fact", "Known scientific law", "Personal opinion"], answer: 0 },
-                { q: "The variable that is manipulated by the researcher is the:", options: ["Dependent variable", "Independent variable", "Extraneous variable", "Demographic variable"], answer: 1 },
-                { q: "The 'outcome' variable is also called the:", options: ["Independent variable", "Dependent variable", "Confounding variable", "Predictor variable"], answer: 1 },
-                { q: "A Null Hypothesis states that:", options: ["There is a relationship between variables", "There is NO relationship between variables", "The intervention is effective", "The results are significant"], answer: 1 },
-                { q: "Which of the following is a directional hypothesis?", options: ["Alcohol affects reaction time", "Alcohol decreases reaction time", "There is a difference in reaction time", "Reaction time varies with alcohol"], answer: 1 },
-                { q: "Operational definition refers to:", options: ["Dictionary meaning", "How a variable is measured in the study", "Theoretical meaning", "Medical definition"], answer: 1 },
-                { q: "An assumption in research is:", options: ["A fact proven by the study", "A basic principle believed to be true without proof", "A statistical test", "A limitation of the study"], answer: 1 },
-                { q: "Delimitations are:", options: ["Weaknesses of the study", "Boundaries set by the researcher", "Unexpected results", "Errors in data"], answer: 1 },
-                { q: "Feasibility of a research problem depends on:", options: ["Time, Money, and Availability of subjects", "The researcher's mood", "The library size", "The font size of the report"], answer: 0 },
-                { q: "The 'PICO' format is used for:", options: ["Statistical analysis", "Formulating clinical questions", "Writing references", "Designing questionnaires"], answer: 1 }
-            ],
-            3: [ // Review of Literature
-                { q: "A primary source of literature is:", options: ["A textbook", "An original research article written by the researcher", "A systematic review", "An encyclopedia"], answer: 1 },
-                { q: "A secondary source of literature is:", options: ["A description of a study by someone other than the original researcher", "The original thesis", "Raw data", "Lab report"], answer: 0 },
-                { q: "The main purpose of a literature review is to:", options: ["Copy text", "Identify gaps in existing knowledge", "Increase page count", "Show off vocabulary"], answer: 1 },
-                { q: "CINAHL stands for:", options: ["Cumulative Index to Nursing and Allied Health Literature", "Central Index of Nursing and Health", "Computerized Index of Nursing And Hospital Literature", "Care in Nursing and Health Literature"], answer: 0 },
-                { q: "Plagiarism is:", options: ["Citing sources correctly", "Using someone else's work without credit", "Paraphrasing with citation", "Writing original ideas"], answer: 1 },
-                { q: "An annotated bibliography includes:", options: ["Only the reference list", "Reference list with a brief summary of each source", "Full text of articles", "Just the authors' names"], answer: 1 },
-                { q: "MEDLINE is a database primarily for:", options: ["Engineering", "Biomedical and life sciences", "Law", "Arts"], answer: 1 },
-                { q: "A theoretical framework provides:", options: ["The statistical formulas", "The conceptual underpinnings of a study", "The budget", "The timeline"], answer: 1 },
-                { q: "Which boolean operator narrows a search?", options: ["OR", "AND", "NOT", "Both B and C"], answer: 3 },
-                { q: "Grey literature refers to:", options: ["Published books", "Unpublished or non-commercial materials (reports, thesis)", "Old newspapers", "Black and white photos"], answer: 1 }
-            ],
-            4: [ // Research Designs
-                { q: "Three characteristics of a true experimental design are:", options: ["Manipulation, Control, Randomization", "Observation, Description, Analysis", "Survey, Interview, Data", "Pre-test, Post-test, Survey"], answer: 0 },
-                { q: "Quasi-experimental design lacks:", options: ["Manipulation", "Randomization or Control group", "Data collection", "Hypothesis"], answer: 1 },
-                { q: "Phenomenology focuses on:", options: ["Culture of a group", "Lived experience of individuals", "Statistical trends", "Historical events"], answer: 1 },
-                { q: "Ethnography is the study of:", options: ["Lived experience", "Culture and lifestyle of a group", "Cause and effect", "Past events"], answer: 1 },
-                { q: "A retrospective study looks:", options: ["Forward in time", "Backward in time", "At a single point in time", "At future trends"], answer: 1 },
-                { q: "The Hawthorne Effect refers to:", options: ["Subjects changing behavior because they are being observed", "Effect of medication", "Researcher bias", "Sampling error"], answer: 0 },
-                { q: "Longitudinal design involves:", options: ["Data collection at one point", "Data collection over an extended period", "Data collection from different groups at once", "No data collection"], answer: 1 },
-                { q: "Which is a non-experimental design?", options: ["RCT", "Descriptive design", "Pretest-posttest control group", "Solomon four-group"], answer: 1 },
-                { q: "Internal validity refers to:", options: ["Generalizability of results", "Accuracy of the instrument to measure what it claims", "Whether the independent variable actually caused the change", "The sample size"], answer: 2 },
-                { q: "RCT stands for:", options: ["Randomized Clinical Trial", "Research Control Test", "Randomized Control Trial", "Rapid Clinical Test"], answer: 2 }
-            ],
-            5: [ // Sampling & Data Collection
-                { q: "Probability sampling means:", options: ["Every member has an equal chance of selection", "Selection is based on convenience", "Selection is purposive", "Only volunteers are selected"], answer: 0 },
-                { q: "Simple Random Sampling is a type of:", options: ["Non-probability sampling", "Probability sampling", "Quota sampling", "Purposive sampling"], answer: 1 },
-                { q: "Purposive sampling involves:", options: ["Random selection", "Researcher selecting subjects based on specific criteria", "Selecting whoever is available", "Lottery method"], answer: 1 },
-                { q: "A Likert scale is commonly used to measure:", options: ["Temperature", "Attitudes or opinions", "Blood pressure", "Height"], answer: 1 },
-                { q: "Reliability of a tool refers to:", options: ["Accuracy", "Consistency", "Feasibility", "Length"], answer: 1 },
-                { q: "Validity of a tool refers to:", options: ["Consistency", "Whether it measures what it is intended to measure", "Cost", "Ease of use"], answer: 1 },
-                { q: "Which is a method of data collection?", options: ["Sampling", "Questionnaire", "Variables", "Hypothesis"], answer: 1 },
-                { q: "Snowball sampling is useful for:", options: ["Large populations", "Hard-to-reach populations", "Hospital patients", "School children"], answer: 1 },
-                { q: "An interview schedule is filled by:", options: ["The respondent", "The interviewer/researcher", "A computer", "The ethics committee"], answer: 1 },
-                { q: "Informed consent ensures:", options: ["The subject is paid", "Voluntary participation and understanding of risks", " The researcher wins", "The study is published"], answer: 1 }
-            ],
-            6: [ // Analysis of Data
-                { q: "Which of the following is a measure of central tendency?", options: ["Range", "Standard Deviation", "Mean", "Variance"], answer: 2 },
-                { q: "The most frequent score in a distribution is the:", options: ["Mean", "Median", "Mode", "Average"], answer: 2 },
-                { q: "Standard Deviation measures:", options: ["Central tendency", "Dispersion or spread of data", "Relationship", "Probability"], answer: 1 },
-                { q: "Nominal scale data refers to:", options: ["Ranked data", "Named categories (e.g., Gender)", "Interval data", "Ratio data"], answer: 1 },
-                { q: "Inferential statistics are used to:", options: ["Describe the sample", "Draw conclusions about a population from a sample", "Calculate the mean", "Organize data"], answer: 1 },
-                { q: "A p-value of < 0.05 usually indicates:", options: ["Statistical significance", "No significance", "Error in calculation", "High probability of chance"], answer: 0 },
-                { q: "Which test is used to compare means of two groups?", options: ["Chi-square", "T-test", "ANOVA", "Correlation"], answer: 1 },
-                { q: "Chi-square test is used for:", options: ["Comparing means", "Testing association between categorical variables", "Predicting future trends", "Measuring consistency"], answer: 1 },
-                { q: "Ordinal scale data implies:", options: ["Equal intervals", "Absolute zero", "Order or rank", "No order"], answer: 2 },
-                { q: "A Type I error occurs when:", options: ["Null hypothesis is rejected when it is true", "Null hypothesis is accepted when false", "Data is lost", "Sample is too small"], answer: 0 }
-            ]
-        };
+  <div class="uc" id="u6" data-open="false">
+    <button class="ubtn" onclick="tog('u6')">
+      <div class="upill"><span>Unit 6</span></div>
+      <div class="uinfo"><div class="uname">Analysis of Data</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u6">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1ieOq7B5Y7tj3yFPw0VReNZi4mPTZdRhq/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Data Analysis</small></div></button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1A89XqPN6on8rdGzFZ1eav1VPB2INUHdn/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Analysis</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn imp" onclick="openPDF('https://drive.google.com/file/d/1zelnU0n1JWhPNUuILYDQsy4-XZ6x6xf0/view')"><div class="rico">📄</div><div class="rtxt">Important Qs<small>PDF Document</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(6)"><div class="rico">✍️</div><div class="rtxt">Unit 6 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        // --- QUIZ FUNCTIONS ---
-        function loadQuiz(unitId) {
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            document.getElementById('modal-title').textContent = `Unit ${unitId} Quiz`;
-            modal.style.display = 'flex';
+  <div class="divider" style="margin-top:20px"><span>Previous Year Questions</span></div>
+  <div class="uc" id="upyq" data-open="false">
+    <button class="ubtn" onclick="tog('upyq')">
+      <div class="upill"><span style="font-size:.58rem">PYQ</span></div>
+      <div class="uinfo"><div class="uname">Previous Year Papers</div><div class="umeta">7 exam papers</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-upyq">
+      <div style="font-size: .75rem; font-weight: 700; color: var(--p600); margin: 0 0 8px 4px; text-transform: uppercase; letter-spacing: 0.05em;">Nursing Research</div>
+      <div class="pyq-grid" style="margin-bottom: 16px;">
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1PSXTR3STr87Ukr14v-41uSwNHI4GTh0I/view')"><div class="rico">📄</div><div class="rtxt">Feb 2023<small>Research PDF</small></div><span class="rarr">↗</span></button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/11vjNBQhF5e5jvFKZfirMET24_2tpIeV2/view')"><div class="rico">📄</div><div class="rtxt">Feb 2022<small>Research PDF</small></div><span class="rarr">↗</span></button>
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1cohiN_lX57Yqun923JkxugSagoClruUK/view')"><div class="rico">📄</div><div class="rtxt">July 2021<small>Research PDF</small></div><span class="rarr">↗</span></button>
+      </div>
+      
+      <div style="font-size: .75rem; font-weight: 700; color: var(--warn); margin: 0 0 8px 4px; text-transform: uppercase; letter-spacing: 0.05em;">Nursing Statistics</div>
+      <div class="pyq-grid">
+        <button class="rbtn pyq" style="border-color:#fde68a; color:#78350f;" onmouseover="this.style.background='#fffbeb'; this.style.borderColor='var(--warn)';" onmouseout="this.style.background='var(--w)'; this.style.borderColor='#fde68a';" onclick="openPDF('https://drive.google.com/file/d/1t-hfLwdpyh7VOgQDjyZwvE2F5meVS6pQ/view')"><div class="rico" style="background:var(--warn-lt);">📊</div><div class="rtxt">July 2021<small>Statistics PDF</small></div><span class="rarr">↗</span></button>
+        <button class="rbtn pyq" style="border-color:#fde68a; color:#78350f;" onmouseover="this.style.background='#fffbeb'; this.style.borderColor='var(--warn)';" onmouseout="this.style.background='var(--w)'; this.style.borderColor='#fde68a';" onclick="openPDF('https://drive.google.com/file/d/1cP89Oq9TWxRm0RhkAg6dnY5Z9zcpiUUf/view')"><div class="rico" style="background:var(--warn-lt);">📊</div><div class="rtxt">Nov 2020<small>Statistics PDF</small></div><span class="rarr">↗</span></button>
+        <button class="rbtn pyq" style="border-color:#fde68a; color:#78350f;" onmouseover="this.style.background='#fffbeb'; this.style.borderColor='var(--warn)';" onmouseout="this.style.background='var(--w)'; this.style.borderColor='#fde68a';" onclick="openPDF('https://drive.google.com/file/d/165ymKNSU-yPsUqZrCx8dPC6DG9-VkkID/view')"><div class="rico" style="background:var(--warn-lt);">📊</div><div class="rtxt">Nov 2020 (2)<small>Statistics PDF</small></div><span class="rarr">↗</span></button>
+        <button class="rbtn pyq" style="border-color:#fde68a; color:#78350f;" onmouseover="this.style.background='#fffbeb'; this.style.borderColor='var(--warn)';" onmouseout="this.style.background='var(--w)'; this.style.borderColor='#fde68a';" onclick="openPDF('https://drive.google.com/file/d/1EwC_JlX-ViDT2Z47SO9dU-4_pMNdWuFD/view')"><div class="rico" style="background:var(--warn-lt);">📊</div><div class="rtxt">Sept 2020<small>Statistics PDF</small></div><span class="rarr">↗</span></button>
+      </div>
+    </div>
+  </div>
+</main>
 
-            let questions = quizData[unitId];
-            
-            let quizHTML = `<div class="quiz-wrapper">`;
-            
-            questions.forEach((q, index) => {
-                quizHTML += `
-                    <div class="question-block" id="q-block-${index}">
-                        <div class="q-text">${index + 1}. ${q.q}</div>
-                        <div class="q-options">
-                            ${q.options.map((opt, i) => `
-                                <label>
-                                    <input type="radio" name="q${index}" value="${i}"> ${opt}
-                                </label>
-                            `).join('')}
-                        </div>
-                        <div class="feedback" id="feedback-${index}"></div>
-                    </div>
-                `;
-            });
+<div class="qoverlay" id="qmodal">
+  <div class="qscrim" onclick="closeQuiz()"></div>
+  <div class="qpanel">
+    <div class="qhead">
+      <div class="qhead-top"><div class="qtitle" id="qtitle">Quiz</div><button class="qclose" onclick="closeQuiz()">✕</button></div>
+      <div class="qpips" id="qpips"></div>
+    </div>
+    <div class="qbody" id="qbody"></div>
+  </div>
+</div>
 
-            quizHTML += `
-                <div class="score-card" id="score-card"></div>
-                <div class="submit-container">
-                    <button class="btn-submit" onclick="submitQuiz(${unitId})">Submit Quiz</button>
-                </div>
-            </div>`;
+<script>
+function goBackToApp(){if(window.parent&&window.parent!==window){window.parent.postMessage({action:'goBack'},'*');}else{history.back();}}
+function openPDF(url){const clean=url.replace(/\/preview.*$/,'').replace(/\/view.*$/,'')+'/view';window.open(clean,'_blank');}
+function tog(id){const card=document.getElementById(id);const body=document.getElementById('b-'+id);const open=card.dataset.open==='true';card.dataset.open=String(!open);body.classList.toggle('open',!open);}
 
-            body.innerHTML = quizHTML;
-        }
+const QD={
+1:[
+  {q:"What is the primary goal of nursing research?",o:["To gain prestige","To develop EBP and improve patient care","To increase hospital revenue","To hire more staff"],a:1},
+  {q:"Evidence-Based Practice (EBP) integrates:",o:["Clinical expertise, patient values, and best research evidence","Only doctor's orders","Only textbook knowledge","Only statistical data"],a:0},
+  {q:"Which of the following is a characteristic of qualitative research?",o:["Uses numbers and statistics","Subjective and narrative data","Large sample size","Generalizable findings"],a:1},
+  {q:"The first step in the research process is:",o:["Review of literature","Defining the research problem","Collecting data","Formulating hypothesis"],a:1},
+  {q:"A 'Pilot Study' is defined as:",o:["A study done on pilots","A small scale preliminary study","The final data analysis","Writing the research report"],a:1},
+  {q:"Basic Research is also known as:",o:["Applied Research","Pure or Fundamental Research","Action Research","Clinical Research"],a:1},
+  {q:"Quantitative research usually involves:",o:["Interviews and themes","Deductive reasoning and numbers","Lived experiences","Small sample sizes"],a:1},
+  {q:"Which role of a nurse researcher involves using findings in practice?",o:["Consumer of research","Principal investigator","Data collector","Subject"],a:0},
+  {q:"Inductive reasoning is associated with:",o:["Qualitative research","Quantitative research","Experimental design","Survey method"],a:0},
+  {q:"Abstract in a research report is:",o:["The conclusion","A brief summary of the study","The bibliography","The questionnaire"],a:1}
+],
+2:[
+  {q:"A research problem is a:",o:["Situation that needs a solution or improvement","Statement of fact","Known scientific law","Personal opinion"],a:0},
+  {q:"The variable that is manipulated by the researcher is the:",o:["Dependent variable","Independent variable","Extraneous variable","Demographic variable"],a:1},
+  {q:"The 'outcome' variable is also called the:",o:["Independent variable","Dependent variable","Confounding variable","Predictor variable"],a:1},
+  {q:"A Null Hypothesis states that:",o:["There is a relationship between variables","There is NO relationship between variables","The intervention is effective","The results are significant"],a:1},
+  {q:"Which of the following is a directional hypothesis?",o:["Alcohol affects reaction time","Alcohol decreases reaction time","There is a difference in reaction time","Reaction time varies with alcohol"],a:1},
+  {q:"Operational definition refers to:",o:["Dictionary meaning","How a variable is measured in the study","Theoretical meaning","Medical definition"],a:1},
+  {q:"An assumption in research is:",o:["A fact proven by the study","A basic principle believed to be true without proof","A statistical test","A limitation of the study"],a:1},
+  {q:"Delimitations are:",o:["Weaknesses of the study","Boundaries set by the researcher","Unexpected results","Errors in data"],a:1},
+  {q:"Feasibility of a research problem depends on:",o:["Time, Money, and Availability of subjects","The researcher's mood","The library size","The font size of the report"],a:0},
+  {q:"The 'PICO' format is used for:",o:["Statistical analysis","Formulating clinical questions","Writing references","Designing questionnaires"],a:1}
+],
+3:[
+  {q:"A primary source of literature is:",o:["A textbook","An original research article written by the researcher","A systematic review","An encyclopedia"],a:1},
+  {q:"A secondary source of literature is:",o:["A description of a study by someone other than the original researcher","The original thesis","Raw data","Lab report"],a:0},
+  {q:"The main purpose of a literature review is to:",o:["Copy text","Identify gaps in existing knowledge","Increase page count","Show off vocabulary"],a:1},
+  {q:"CINAHL stands for:",o:["Cumulative Index to Nursing and Allied Health Literature","Central Index of Nursing and Health","Computerized Index of Nursing And Hospital Literature","Care in Nursing and Health Literature"],a:0},
+  {q:"Plagiarism is:",o:["Citing sources correctly","Using someone else's work without credit","Paraphrasing with citation","Writing original ideas"],a:1},
+  {q:"An annotated bibliography includes:",o:["Only the reference list","Reference list with a brief summary of each source","Full text of articles","Just the authors' names"],a:1},
+  {q:"MEDLINE is a database primarily for:",o:["Engineering","Biomedical and life sciences","Law","Arts"],a:1},
+  {q:"A theoretical framework provides:",o:["The statistical formulas","The conceptual underpinnings of a study","The budget","The timeline"],a:1},
+  {q:"Which boolean operator narrows a search?",o:["OR","AND","NOT","Both B and C"],a:3},
+  {q:"Grey literature refers to:",o:["Published books","Unpublished or non-commercial materials (reports, thesis)","Old newspapers","Black and white photos"],a:1}
+],
+4:[
+  {q:"Three characteristics of a true experimental design are:",o:["Manipulation, Control, Randomization","Observation, Description, Analysis","Survey, Interview, Data","Pre-test, Post-test, Survey"],a:0},
+  {q:"Quasi-experimental design lacks:",o:["Manipulation","Randomization or Control group","Data collection","Hypothesis"],a:1},
+  {q:"Phenomenology focuses on:",o:["Culture of a group","Lived experience of individuals","Statistical trends","Historical events"],a:1},
+  {q:"Ethnography is the study of:",o:["Lived experience","Culture and lifestyle of a group","Cause and effect","Past events"],a:1},
+  {q:"A retrospective study looks:",o:["Forward in time","Backward in time","At a single point in time","At future trends"],a:1},
+  {q:"The Hawthorne Effect refers to:",o:["Subjects changing behavior because they are being observed","Effect of medication","Researcher bias","Sampling error"],a:0},
+  {q:"Longitudinal design involves:",o:["Data collection at one point","Data collection over an extended period","Data collection from different groups at once","No data collection"],a:1},
+  {q:"Which is a non-experimental design?",o:["RCT","Descriptive design","Pretest-posttest control group","Solomon four-group"],a:1},
+  {q:"Internal validity refers to:",o:["Generalizability of results","Accuracy of the instrument to measure what it claims","Whether the independent variable actually caused the change","The sample size"],a:2},
+  {q:"RCT stands for:",o:["Randomized Clinical Trial","Research Control Test","Randomized Control Trial","Rapid Clinical Test"],a:2}
+],
+5:[
+  {q:"Probability sampling means:",o:["Every member has an equal chance of selection","Selection is based on convenience","Selection is purposive","Only volunteers are selected"],a:0},
+  {q:"Simple Random Sampling is a type of:",o:["Non-probability sampling","Probability sampling","Quota sampling","Purposive sampling"],a:1},
+  {q:"Purposive sampling involves:",o:["Random selection","Researcher selecting subjects based on specific criteria","Selecting whoever is available","Lottery method"],a:1},
+  {q:"A Likert scale is commonly used to measure:",o:["Temperature","Attitudes or opinions","Blood pressure","Height"],a:1},
+  {q:"Reliability of a tool refers to:",o:["Accuracy","Consistency","Feasibility","Length"],a:1},
+  {q:"Validity of a tool refers to:",o:["Consistency","Whether it measures what it is intended to measure","Cost","Ease of use"],a:1},
+  {q:"Which is a method of data collection?",o:["Sampling","Questionnaire","Variables","Hypothesis"],a:1},
+  {q:"Snowball sampling is useful for:",o:["Large populations","Hard-to-reach populations","Hospital patients","School children"],a:1},
+  {q:"An interview schedule is filled by:",o:["The respondent","The interviewer/researcher","A computer","The ethics committee"],a:1},
+  {q:"Informed consent ensures:",o:["The subject is paid","Voluntary participation and understanding of risks"," The researcher wins","The study is published"],a:1}
+],
+6:[
+  {q:"Which of the following is a measure of central tendency?",o:["Range","Standard Deviation","Mean","Variance"],a:2},
+  {q:"The most frequent score in a distribution is the:",o:["Mean","Median","Mode","Average"],a:2},
+  {q:"Standard Deviation measures:",o:["Central tendency","Dispersion or spread of data","Relationship","Probability"],a:1},
+  {q:"Nominal scale data refers to:",o:["Ranked data","Named categories (e.g., Gender)","Interval data","Ratio data"],a:1},
+  {q:"Inferential statistics are used to:",o:["Describe the sample","Draw conclusions about a population from a sample","Calculate the mean","Organize data"],a:1},
+  {q:"A p-value of < 0.05 usually indicates:",o:["Statistical significance","No significance","Error in calculation","High probability of chance"],a:0},
+  {q:"Which test is used to compare means of two groups?",o:["Chi-square","T-test","ANOVA","Correlation"],a:1},
+  {q:"Chi-square test is used for:",o:["Comparing means","Testing association between categorical variables","Predicting future trends","Measuring consistency"],a:1},
+  {q:"Ordinal scale data implies:",o:["Equal intervals","Absolute zero","Order or rank","No order"],a:2},
+  {q:"A Type I error occurs when:",o:["Null hypothesis is rejected when it is true","Null hypothesis is accepted when false","Data is lost","Sample is too small"],a:0}
+]
+};
 
-        function submitQuiz(unitId) {
-            let questions = quizData[unitId];
-            let score = 0;
-            let total = questions.length;
+const LTRS=['A','B','C','D'];
+let curQuiz=null,answered=[];
 
-            questions.forEach((q, index) => {
-                const selected = document.querySelector(`input[name="q${index}"]:checked`);
-                const feedbackEl = document.getElementById(`feedback-${index}`);
-                
-                if (selected) {
-                    const val = parseInt(selected.value);
-                    if (val === q.answer) {
-                        score++;
-                        feedbackEl.textContent = "Correct! ✅";
-                        feedbackEl.className = "feedback correct";
-                    } else {
-                        feedbackEl.textContent = `Incorrect ❌. The correct answer was: ${q.options[q.answer]}`;
-                        feedbackEl.className = "feedback incorrect";
-                    }
-                } else {
-                    feedbackEl.textContent = `Not Attempted. Correct answer: ${q.options[q.answer]}`;
-                    feedbackEl.className = "feedback incorrect";
-                }
-            });
+function openQuiz(id){
+  curQuiz=id;
+  const qs=QD[id]||[];
+  answered=new Array(qs.length).fill(null);
+  document.getElementById('qtitle').textContent='Unit '+id+' Quiz';
+  document.getElementById('qpips').innerHTML=qs.map((_,i)=>`<div class="pip" id="pip${i}"></div>`).join('');
+  let html=`<div class="qscore" id="qscore"><div><div class="qs-num" id="qsnum">—</div><div class="qs-sub">Score</div></div><div class="qs-msg" id="qsmsg"></div></div>`;
+  qs.forEach((q,qi)=>{
+    html+=`<div class="qitem" id="qi${qi}"><div class="qlbl">Question ${qi+1} of ${qs.length}</div><div class="qtext">${q.q}</div><div class="qopts">${q.o.map((opt,oi)=>`<button class="qopt" id="opt${qi}_${oi}" onclick="ans(${qi},${oi},${q.a})"><span class="qltr">${LTRS[oi]}</span>${opt}</button>`).join('')}</div></div>`;
+  });
+  document.getElementById('qbody').innerHTML=html;
+  document.getElementById('qmodal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
 
-            const scoreCard = document.getElementById('score-card');
-            scoreCard.style.display = 'block';
-            scoreCard.innerHTML = `<h2>You Scored: ${score} / ${total}</h2>`;
-            
-            document.getElementById('modal-body').scrollTop = 0;
-            const submitBtn = document.querySelector('.btn-submit');
-            submitBtn.disabled = true;
-            submitBtn.textContent = "Quiz Completed";
-        }
-    </script>
+function ans(qi,oi,correct){
+  if(answered[qi]!==null)return;
+  answered[qi]=oi;
+  const opts=document.querySelectorAll(`#qi${qi} .qopt`);
+  opts.forEach(b=>b.classList.add('lock'));
+  opts[correct].classList.add('cor');
+  if(oi!==correct)opts[oi].classList.add('wrg');
+  const pip=document.getElementById('pip'+qi);
+  pip.classList.add('ans',oi===correct?'cor':'wrg');
+  if(answered.every(a=>a!==null)){
+    const score=answered.filter((a,i)=>a===QD[curQuiz][i].a).length;
+    const total=QD[curQuiz].length;
+    const pct=Math.round(score/total*100);
+    const msgs=['📚 Keep Studying!','👍 Good Effort!','🎉 Well Done!','🏆 Perfect!'];
+    const mi=pct<50?0:pct<70?1:pct<100?2:3;
+    document.getElementById('qsnum').textContent=score+'/'+total;
+    document.getElementById('qsmsg').textContent=msgs[mi];
+    const sc=document.getElementById('qscore');
+    sc.classList.add('show');
+    sc.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+
+function closeQuiz(){
+  document.getElementById('qmodal').classList.remove('open');
+  document.body.style.overflow='';
+  curQuiz=null;
+}
+
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQuiz();});
+</script>
 </body>
 </html>
