@@ -1,1042 +1,774 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Applied Microbiology & Infection Control</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>APPLIED MICROBIOLOGY & INFECTION CONTROL</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-    :root {
-        /* ORIGINAL BLUE COLOR SCHEME */
-        --brand: #003B82; 
-        --accent: #00B9F2;
-        --gray-50: #f9fafb;
-        --gray-100: #f3f4f6;
-        --gray-200: #e5e7eb;
-        --gray-700: #374151;
-        --gray-900: #111827;
-        --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-        --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-        --danger: #ef4444;
-        --success: #10b981;
-        --warning: #f59e0b;
-    }
-
-    * { box-sizing: border-box; }
-    body {
-        font-family: 'Inter', system-ui, sans-serif;
-        background: white;
-        color: var(--gray-900);
-        line-height: 1.6;
-        padding: 24px;
-        max-width: 1000px;
-        margin: 0 auto;
-    }
-
-    /* --- BUTTONS & HEADERS SHARED STYLES --- */
-    .syllabus-btn, .unit-header {
-        display: block;
-        width: 100%;
-        padding: 18px 24px;
-        margin: 12px 0;
-        font-weight: 600;
-        font-size: 16px;
-        text-decoration: none;
-        border-radius: 12px;
-        cursor: pointer;
-        box-shadow: var(--shadow-sm);
-        transition: all 0.2s ease;
-    }
-
-    /* --- SPECIFIC: SYLLABUS BUTTON --- */
-    .syllabus-btn {
-        background: white;
-        color: var(--brand);
-        border: 2px solid var(--brand);
-        text-align: center;
-    }
-
-    .syllabus-btn:hover {
-        background: #f0f9ff;
-        transform: translateY(-1px);
-        box-shadow: var(--shadow-md);
-    }
-    
-    /* --- SPECIFIC: UNIT HEADER --- */
-    .unit-header {
-        background: var(--brand);
-        color: white;
-        border: none;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        text-align: left;
-        margin: 16px 0;
-    }
-
-    .unit-header:hover {
-        background: #002d63;
-        transform: translateY(-1px);
-        box-shadow: var(--shadow-md);
-    }
-
-    /* Unit Header Arrow Animation */
-    .unit-header span:last-child {
-        transition: transform 0.3s ease;
-        color: #FFA500;
-    }
-    .unit-header[aria-expanded="true"] span:last-child {
-        transform: rotate(180deg);
-    }
-
-    /* --- UNIT CONTENT & RESOURCES --- */
-    .unit-content {
-        padding: 0 12px;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.4s ease, padding 0.3s ease;
-    }
-    .unit-content.active {
-        padding: 24px 12px;
-        max-height: none; 
-    }
-
-    .subsection {
-        margin: 16px 0;
-        padding: 20px;
-        background: white;
-        border-radius: 12px;
-        border: 1px solid var(--gray-200);
-        box-shadow: var(--shadow-sm);
-        transition: box-shadow 0.2s ease;
-    }
-
-    .section-header {
-        background: #e0f2fe; /* Light Blue Background */
-        color: var(--brand);
-        padding: 10px 15px;
-        border-radius: 8px;
-        font-weight: 700;
-        margin-bottom: 15px;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        font-size: 0.9rem;
-        border-left: 5px solid var(--accent);
-    }
-
-    .resource-btn {
-        display: flex;
-        align-items: flex-start;
-        width: 100%;
-        padding: 14px 18px;
-        margin: 6px 0;
-        background: var(--gray-50);
-        color: var(--gray-900);
-        text-decoration: none;
-        border-radius: 8px;
-        font-weight: 500;
-        border: 1px solid var(--gray-200);
-        transition: all 0.2s ease;
-        gap: 12px;
-        cursor: pointer;
-    }
-    .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
-    .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
-    .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
-    .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
-
-    .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
-    .icon.video-icon { color: #8b5cf6; }
-    .icon.quiz-icon { color: #f59e0b; }
-
-    /* --- MODAL --- */
-    .modal-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.85);
-        z-index: 1000;
-        display: none;
-        flex-direction: column;
-    }
-
-    .modal-header {
-        height: 60px;
-        background: white;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 20px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        flex-shrink: 0;
-    }
-
-    .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; }
-    
-    .btn-close {
-        background: var(--danger);
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 6px;
-        font-weight: 600;
-        cursor: pointer;
-    }
-
-    .modal-body {
-        flex: 1;
-        background: #f3f4f6;
-        position: relative;
-        overflow-y: auto;
-        display: flex;
-        align-items: flex-start;
-        justify-content: center;
-        padding: 20px;
-    }
-
-    .iframe-res {
-        width: 100%;
-        height: 100%;
-        border: none;
-        background: #fff;
-        display: block;
-    }
-
-    /* --- QUIZ STYLES --- */
-    .quiz-container {
-        background: white;
-        width: 100%;
-        max-width: 800px;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        padding: 30px;
-        margin-bottom: 40px;
-    }
-    .quiz-header-sticky {
-        position: sticky;
-        top: 0;
-        background: white;
-        z-index: 10;
-        padding-bottom: 10px;
-        border-bottom: 2px solid var(--gray-100);
-        margin-bottom: 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .score-badge {
-        background: var(--brand);
-        color: white;
-        padding: 5px 15px;
-        border-radius: 20px;
-        font-weight: 700;
-    }
-    .question-block {
-        margin-bottom: 30px;
-        padding-bottom: 20px;
-        border-bottom: 1px solid var(--gray-200);
-    }
-    .question-block:last-child { border-bottom: none; }
-    
-    .quiz-question-text {
-        font-size: 1.15rem;
-        font-weight: 600;
-        margin-bottom: 15px;
-        color: var(--gray-900);
-    }
-    .quiz-option {
-        padding: 12px 15px;
-        border: 2px solid var(--gray-200);
-        border-radius: 8px;
-        margin-bottom: 10px;
-        cursor: pointer;
-        transition: all 0.2s;
-        font-weight: 500;
-    }
-    .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
-    
-    .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; }
-    .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
-    
-    .btn-quiz { background: var(--brand); color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 16px; width: 100%; margin-top: 20px; }
-
-    @media (max-width: 768px) {
-        body { padding: 16px; }
-        .unit-header, .resource-btn { font-size: 15px; }
-        .modal-body { padding: 0; }
-        .quiz-container { height: auto; border-radius: 0; max-width: 100%; padding: 20px; min-height: 100%; }
-    }
+:root{
+  --p50:#faf5ff;--p100:#f3e8ff;--p200:#e9d5ff;--p300:#d8b4fe;
+  --p400:#c084fc;--p500:#a855f7;--p600:#9333ea;--p700:#7e22ce;
+  --p800:#6b21a8;--p900:#581c87;
+  --w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;
+  --g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;
+  --ok:#16a34a;--ok-lt:#dcfce7;--err:#dc2626;--err-lt:#fee2e2;
+  --warn:#d97706;--warn-lt:#fef3c7;
+  --r:12px;--rs:8px;
+  --s1:0 1px 3px rgba(109,40,217,.08);
+  --s2:0 4px 12px rgba(109,40,217,.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:90;background:var(--w);border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 16px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-back{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:var(--p100);color:var(--p700);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;margin-right:12px}
+.tb-back:hover{background:var(--p200)}
+.tb-info{flex:1;min-width:0}
+.tb-title{font-size:.88rem;font-weight:700;color:var(--g900);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb-sub{font-size:.65rem;color:var(--g400);font-weight:500;margin-top:1px}
+.tb-chip{background:var(--p100);color:var(--p700);border:1px solid var(--p200);font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
+.hero{background:linear-gradient(145deg,var(--p900),var(--p700) 55%,var(--p500));padding:28px 18px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.08),transparent 50%),radial-gradient(circle at 10% 85%,rgba(255,255,255,.05),transparent 40%)}
+.hero::after{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-dot-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:.65rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border-radius:30px;margin-bottom:12px}
+.hero-eyebrow-dot{width:5px;height:5px;background:#c4b5fd;border-radius:50%}
+.hero h1{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:7px}
+.hero h1 em{color:rgba(255,255,255,.45);font-style:italic;font-weight:300}
+.hero-desc{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:18px}
+.hero-cta{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.28);color:#fff;font-size:.8rem;font-weight:700;padding:9px 16px;border-radius:9px;cursor:pointer;transition:all .2s;backdrop-filter:blur(6px)}
+.hero-cta:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
+.hero-stats{display:flex;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+.hs{flex:1;text-align:center}
+.hs+.hs{border-left:1px solid rgba(255,255,255,.1)}
+.hs-n{font-size:1.35rem;font-weight:800;color:#fff;line-height:1}
+.hs-l{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
+.main{padding:16px 14px 56px}
+.divider{display:flex;align-items:center;gap:8px;margin-bottom:12px;margin-top:2px}
+.divider span{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g400)}
+.divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+.uc{background:var(--w);border:1.5px solid var(--g200);border-radius:var(--r);margin-bottom:9px;overflow:hidden;box-shadow:var(--s1);transition:border-color .2s,box-shadow .2s}
+.uc:hover{border-color:var(--p300);box-shadow:var(--s2)}
+.uc[data-open=true]{border-color:var(--p400);box-shadow:var(--s2)}
+.ubtn{width:100%;display:flex;align-items:center;padding:14px 15px;gap:12px;background:none;border:none;cursor:pointer;text-align:left}
+.upill{min-width:54px;padding:0 8px;height:36px;border-radius:9px;flex-shrink:0;background:var(--p100);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.upill span{font-size:.65rem;font-weight:800;color:var(--p700);letter-spacing:-.01em;white-space:nowrap}
+.uc[data-open=true] .upill{background:var(--p700)}
+.uc[data-open=true] .upill span{color:#fff}
+.uinfo{flex:1;min-width:0}
+.uname{font-size:.85rem;font-weight:700;color:var(--g900);line-height:1.3}
+.umeta{font-size:.66rem;color:var(--g400);margin-top:2px;font-weight:500}
+.uright{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.uchev{width:16px;height:16px;color:var(--g300);transition:transform .3s,color .2s}
+.uc[data-open=true] .uchev{transform:rotate(180deg);color:var(--p500)}
+.ubody{display:none;background:var(--p50);border-top:1.5px solid var(--p200);padding:12px 13px 14px}
+.ubody.open{display:block;animation:bodyIn .2s ease}
+@keyframes bodyIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.rrow{display:flex;gap:9px;margin-bottom:8px}
+.rrow:last-child{margin-bottom:0}
+@media(max-width:380px){.rrow{flex-direction:column}}
+.rbtn{flex:1;display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .17s;background:var(--w);text-decoration:none}
+.rbtn .rico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.rbtn .rtxt{line-height:1.25}
+.rbtn .rtxt small{display:block;font-size:.62rem;font-weight:400;opacity:.5;margin-top:1px}
+.rbtn .rarr{margin-left:auto;opacity:0;font-size:.7rem;color:var(--g400);transition:opacity .15s}
+.rbtn:hover .rarr{opacity:1}
+.rbtn.notes{border-color:var(--p200);color:var(--p800)}
+.rbtn.notes .rico{background:var(--p100)}
+.rbtn.notes:hover{background:var(--p50);border-color:var(--p500);box-shadow:var(--s2);transform:translateY(-1px)}
+.rbtn.video{border-color:#bae6fd;color:#0369a1}
+.rbtn.video .rico{background:#e0f2fe}
+.rbtn.video:hover{background:#f0f9ff;border-color:#38bdf8;box-shadow:0 3px 10px rgba(56,189,248,.12);transform:translateY(-1px)}
+.rbtn.quiz{border-color:#fde68a;color:#78350f}
+.rbtn.quiz .rico{background:var(--warn-lt)}
+.rbtn.quiz:hover{background:#fffbeb;border-color:var(--warn);box-shadow:0 3px 10px rgba(217,119,6,.12);transform:translateY(-1px)}
+.qoverlay{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end}
+.qoverlay.open{display:flex}
+.qscrim{position:absolute;inset:0;background:rgba(15,10,40,.55);backdrop-filter:blur(3px)}
+.qpanel{position:relative;z-index:1;background:var(--w);width:100%;max-width:580px;margin:0 auto;border-radius:18px 18px 0 0;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 -10px 50px rgba(109,40,217,.2);animation:panelUp .3s cubic-bezier(.32,.72,0,1)}
+@keyframes panelUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.qhead{padding:16px 18px 12px;border-bottom:1px solid var(--g100);flex-shrink:0}
+.qhead-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.qtitle{font-size:1rem;font-weight:800;color:var(--p800)}
+.qclose{width:28px;height:28px;border-radius:50%;background:var(--g100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--g500);transition:all .15s}
+.qclose:hover{background:var(--err-lt);color:var(--err)}
+.qpips{display:flex;gap:3px}
+.pip{flex:1;height:4px;border-radius:4px;background:var(--g100);transition:background .3s}
+.pip.ans{background:var(--p300)}.pip.cor{background:var(--ok)}.pip.wrg{background:var(--err)}
+.qbody{overflow-y:auto;padding:14px 18px 28px;flex:1}
+.qscore{display:none;background:linear-gradient(135deg,var(--p800),var(--p500));color:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;align-items:center;gap:14px}
+.qscore.show{display:flex}
+.qs-num{font-size:1.9rem;font-weight:800;line-height:1}
+.qs-sub{font-size:.65rem;opacity:.6;margin-top:2px}
+.qs-msg{font-size:.85rem;font-weight:600}
+.qitem{margin-bottom:24px}
+.qitem:last-child{margin-bottom:0}
+.qlbl{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--p500);margin-bottom:4px}
+.qtext{font-size:.88rem;font-weight:600;color:var(--g900);line-height:1.5;margin-bottom:10px}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1.5px solid var(--g200);border-radius:var(--rs);cursor:pointer;font-size:.83rem;font-weight:500;background:var(--w);color:var(--g700);transition:all .14s}
+.qopt:hover{border-color:var(--p300);background:var(--p50);color:var(--p800)}
+.qltr{width:21px;height:21px;border-radius:50%;background:var(--g100);border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:800;color:var(--g500);flex-shrink:0;transition:all .14s}
+.qopt.cor{background:var(--ok-lt);border-color:#86efac;color:#14532d}
+.qopt.cor .qltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.qopt.wrg{background:var(--err-lt);border-color:#fca5a5;color:#7f1d1d}
+.qopt.wrg .qltr{background:var(--err);border-color:var(--err);color:#fff}
+.qopt.lock{cursor:default;pointer-events:none}
+.qopt.lock:not(.cor):not(.wrg):hover{border-color:var(--g200);background:var(--w);color:var(--g700)}
+.subsection-title{font-size:.75rem;font-weight:700;color:var(--p600);margin:12px 0 6px;text-transform:uppercase;letter-spacing:.08em}
 </style>
 </head>
 <body>
-
-    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/14VZ3brthlUjws9b3ozOANxkZTLQxFgT4/preview', 'Syllabus')">
-        📄 DOWNLOAD MICROBIOLOGY & INFECTION CONTROL SYLLABUS
+<header class="topbar">
+  <button class="tb-back" onclick="goBackToApp()" aria-label="Back">&#8592;</button>
+  <div class="tb-info">
+    <div class="tb-title">Applied Microbiology & Infection Control</div>
+    <div class="tb-sub">Nursing Program</div>
+  </div>
+  <div class="tb-chip">15 Units</div>
+</header>
+<section class="hero">
+  <div class="hero-dot-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>Nursing Program</div>
+    <h1>APPLIED MICROBIOLOGY<br/><em>& Infection Control</em></h1>
+    <p class="hero-desc">Interactive syllabus, detailed notes, video lectures & internal quizzes on microbiology fundamentals, infection prevention & patient safety.</p>
+    <button class="hero-cta" onclick="openPDF('https://drive.google.com/file/d/14VZ3brthlUjws9b3ozOANxkZTLQxFgT4/view')">
+      📄 &nbsp;Download Syllabus
+    </button>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-n">15</div><div class="hs-l">Units</div></div>
+      <div class="hs"><div class="hs-n">150</div><div class="hs-l">Quizzes</div></div>
     </div>
-    
-    <div id="units">
-        
-        <div class="section-header">SECTION A: APPLIED MICROBIOLOGY</div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 1 - INTRODUCTION TO MICROBIOLOGY <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ivpOICYcFdYxTo8O1Dm7hfXz0zKfO_iE/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1VQjMg12eqSvo8VuBRSJHmkCBqxQKQIPF/preview', 'Introduction & History')">
-                        <span class="icon video-icon">▶️</span><span>Introduction, Definition, History of Microbiology</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1qDGatSpcuRvha7kRsjc4NhW7lBhQyq5H/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz('M1')">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 2 - GENERAL CHARACTERISTICS OF MICROBES <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1acm4BEOQxK34WQkakVJ7S7_iVdfGZ2Is/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1NJSGWt-7y-TDeay8uRipdnN7rR5ZdJc2/preview', 'Classification')">
-                        <span class="icon video-icon">▶️</span><span>Classification of Bacteria</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1xWanwUFVnK_T2MdEo3wUWjVB-1KBzTNr/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1UFspi0JCzimr9Fa6VKs6DoyCVeXeZ8qs/preview', 'Structure')">
-                        <span class="icon video-icon">▶️</span><span>Ultra Structure of Bacterial Cell & Cell Wall</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1EDsgWI82n6s-V-UEnNJQPhrmQMeF-34p/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Dio8KBMBKpwWSUWJ-LU9rn9xxDZ3E6Nb/preview', 'Growth Curve')">
-                        <span class="icon video-icon">▶️</span><span>Growth Curve & Factors Affecting Growth</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1FuY-Hnz-rlrvZLmHVCTDp9rbqavVA48D/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1NJ7qNs8rR-xOo1bc7UCLGelAYP-moZTz/preview', 'Staining')">
-                        <span class="icon video-icon">▶️</span><span>Staining Techniques</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1X6ehAFeHfFV7jLvuoRz5-cbZ9F6hmYoX/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ykFeLFdPgEQvt8bqaYsCv1QnY93bpN0r/preview', 'Culture Methods')">
-                        <span class="icon video-icon">▶️</span><span>Culture Methods</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1HMvgO3JLae-a6YTB4UvEWOyDOW_2vPLY/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz('M2')">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 3 - PATHOGENIC ORGANISMS <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1XeN3qoW_bg_szoY5FUqC-IawgdHvHQci/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1oaBmJbfUzugBhHDPqvYQ4AIiV67OoCOl/preview', 'Bacteria')">
-                        <span class="icon video-icon">▶️</span><span>Microorganism & Bacteria</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1hDPeQCggTO1ms50TcbMJbdlRTs1syJJt/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Oph24WX3gjV5hgIOzQl1MEkHCB4_Eq6o/preview', 'Parasites')">
-                        <span class="icon video-icon">▶️</span><span>Parasite, Vector and Rodents</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1rZLf5CliLt2j8nZhE9kWW-YfIMwPgTtw/preview', 'Vectors')">
-                        <span class="icon video-icon">▶️</span><span>Vectors, Rodents & Sources</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1SKRv8p0-CChqtNzngEELbe-y-iIOjo07/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz('M3')">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 4 - IMMUNITY <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1sMvClYYuI3EGbsePvJyycqg-gwBTnZ10/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ODv6HroXDQknbJt42PYhbZOUh2iR_Xw4/preview', 'Immunity')">
-                        <span class="icon video-icon">▶️</span><span>Immunity, Antigen-Antibody Reaction</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1AtWGs2PN3R9WVWZgzETy25DJ_0qf7u1h/preview', 'Hypersensitivity')">
-                        <span class="icon video-icon">▶️</span><span>Hypersensitivity (Type 1-4)</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/124loH6HCG9EUzJIhHXbG84Bs5oZ0z6iz/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1FEyturu2BmtDGVeuxmoiGlKqu51Iyojg/preview', 'Serology')">
-                        <span class="icon video-icon">▶️</span><span>Serological Tests</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1zAiwgEDhF2OT_XDUE_nOECFu9EVPu8Ta/preview', 'Immunoglobulin')">
-                        <span class="icon video-icon">▶️</span><span>Immunoglobulin</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1PkrO4stHg0-Bb7V_rdF9vz7LpNu6Hi95/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1sNTp0W6idWfhqXuuEdHMApaR6twni4zP/preview', 'Vaccines')">
-                        <span class="icon video-icon">▶️</span><span>Vaccines</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1jAmwATi5Q2-o-MAgx6qWzhmkhlYZwQYn/preview', 'Cold Chain')">
-                        <span class="icon video-icon">▶️</span><span>Nucleic Acid Vaccines, Cold Chain & Schedule</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1i62HzO-LrB6cuMH7eIqQDZnQfoqPCl8B/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz('M4')">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="section-header" style="margin-top: 40px;">SECTION B: INFECTION CONTROL & SAFETY</div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 1 - HAI (HOSPITAL ACQUIRED INFECTION) <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1hXSWi41OkfFixOnbI-vyDI6jeGXh_7Z3/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1RiRi7SU4pl3IB5i447w0aDi6wBh78gbF/preview', 'HAI Basics')">
-                        <span class="icon video-icon">▶️</span><span>Def, Classification, Mode of Transmission</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1jkXdKs0ua98CgybiwkY8xlYwD7ju-oqS/preview', 'HAI Management')">
-                        <span class="icon video-icon">▶️</span><span>Pathophysiology, Symptoms & Management</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/12hSH1N-NsEFdjcwuuNwxBJEhpKnp7jkV/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1y9j16dzxCn9_vf3D9mCRcWoMeJp1w2a0/preview', 'VAI & CLABSI 1')">
-                        <span class="icon video-icon">▶️</span><span>VAIs & CLABSI (Part 1)</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/17TFz_UP4fv2wgz9T6VAARepSI5ovHkEL/preview', 'VAI & CLABSI 2')">
-                        <span class="icon video-icon">▶️</span><span>VAIs, CLABSI & Infection Control Team (Part 2)</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1P_cUbJfCQsLHCWb4j8kAyeZx1X3EMLVQ/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz('I1')">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 2 - ISOLATION PRECAUTIONS & PPE <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1cwaHiL-3HH_kfXNt_vfrGiijED6JFO6X/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/150t_Hmvje1cGfny4-I3r7V3xzzLb6B7G/preview', 'Isolation Types')">
-                        <span class="icon video-icon">▶️</span><span>Types of Isolation System</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1mh06yrdXvPy27AA_fUiZGuYIwAWOM9Xq/preview', 'Precautions & PPE')">
-                        <span class="icon video-icon">▶️</span><span>Precautions (Airborne/Droplet), CDC Guidelines & PPE</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/12cBRdd0S-n5_tnrzPrmc_VFq3NB7QviB/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz('I2')">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 3 - HAND HYGIENE <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/11TWE0cCHuLwQENIegMxKycH49sYIrplH/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1cMUEEZh3s-MK3Cm19R1-UDG7U6Ei9RKs/preview', 'Hand Hygiene')">
-                        <span class="icon video-icon">▶️</span><span>Definition, Types & Moments of Hand Hygiene</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1GW9bJ5lVoRPUyMZBlaW-rdycKV3UcyJn/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz('I3')">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 4 - DISINFECTION AND STERILIZATION <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1xDFiuJOWGVCxE4_riPA5Uzr-FrYujcrD/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1bXX7Axx6Qkn7WIUqFcnEalDESU2Iuzdl/preview', 'Physical Methods')">
-                        <span class="icon video-icon">▶️</span><span>Sterilization, Disinfection & Physical Methods</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Ms43n_KJKqvqdlakodD6-gnWvKZ2UJn4/preview', 'Chemical Methods')">
-                        <span class="icon video-icon">▶️</span><span>Filtration, Radiation & Chemical Agents</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ElCxU2QZ3mNhJL3PnriGe8k9JdczAT7q/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1H_wEqzbsLpQPSI8Fh7lgVFb4lZ7f_SU9/preview', 'Disinfectants')">
-                        <span class="icon video-icon">▶️</span><span>Surfactants & Use of Disinfectants</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1VFBJ_7wFujb02MYO4dMgeppYIC5irfBx/preview', 'Spaulding Principle')">
-                        <span class="icon video-icon">▶️</span><span>Spaulding Principle & Critical Items</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1MYR_SPHph665gedp4k2GGH7aa_RssLYK/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz('I4')">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 5 - SPECIMEN COLLECTION <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1aZg5oPzznvebPpTP8Vwkk5xDDb5ByYVE/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1yTan5kIWnav_eKLgDQC3w2bArohIwMbn/preview', 'Specimen Collection')">
-                        <span class="icon video-icon">▶️</span><span>Techniques: CSF, Sputum, Swab, Transport</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/15vEmrFEL-o0mEolRqQevqZIqYIC9U6cH/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz('I5')">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 6 - BIO MEDICAL WASTE (BMW) <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1t3rRIFHVg-3hbrR0PlSXsM5FvtCwXbdy/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/19ubCye0Os6j-f40ollw5I3aK_2ivBhF9/preview', 'BMW Management')">
-                        <span class="icon video-icon">▶️</span><span>BMW: Classification, Treatment & Disposal</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1dDpnw_lFWQlgducd9a-gmSNPcHAHMajD/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1P1Jm1nG0MOLXW6dAb-9XHGUVX3ijZLRV/preview', 'Laundry Management')">
-                        <span class="icon video-icon">▶️</span><span>Laundry Management & Infection Control</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1oCgi8D4grp1C1uTWjGm2GG2XuSx864Bn/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz('I6')">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 7 - ANTIBIOTIC STEWARDSHIP <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1eUXV9sPaOGVsCleRCZQy6D8Hencm02pM/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Cq1PtiOOY5yfEzy_9tTHlJ-BiAd--U9W/preview', 'AMR & Stewardship')">
-                        <span class="icon video-icon">▶️</span><span>Antibiotic Stewardship & AMR</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1hR4ad6uF9v_ezaAetkOGn2zphVKg9HHS/preview', 'MRSA & MDRO')">
-                        <span class="icon video-icon">▶️</span><span>MRSA & MDRO Diagnosis & Prevention</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1N2YpZy-5pu9n8dWrdJk939HfB_jLDbTJ/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz('I7')">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 8 - PATIENT SAFETY INDICATORS <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1jwBVW-KH6JPTI6tlWHwGBgk9VVKl2b2z/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1nMWtlBEXCykH0nCH5dsyvmE21DeKLczn/preview', 'Vulnerable Patients')">
-                        <span class="icon video-icon">▶️</span><span>Care of Vulnerable Patients, Lines & Drains</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1C2e8-KARSCOa53N4ottvu9-zpOBNYr4j/preview', 'Restraints & Falls')">
-                        <span class="icon video-icon">▶️</span><span>Restraints, Blood Policy & Fall Prevention</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1qg-GtwSX1lUuLg1C1O0VK8XpS7iQh9dO/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1PgjY5JE3MNYGgQGu8KCgk4yHzHdoHBa8/preview', 'DVT & Surgical Safety')">
-                        <span class="icon video-icon">▶️</span><span>Prevention of DVT & Surgical Safety</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1rZ_-i-T47_5dIZZi9nSdSYusG633oFmE/preview', 'Medication Safety')">
-                        <span class="icon video-icon">▶️</span><span>Medication Errors & Communication</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1nawAtEJPkxoQpuwsP-Api6Ou3IHLhtl2/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1z9_i7Vggv0qst5joDH3WGTlzpoFPMK8C/preview', 'RCA & CAPA')">
-                        <span class="icon video-icon">▶️</span><span>Incidents, RCA, CAPA & Reporting</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1H-WizdHE0Cq0DUtjNSrdC2HBFU44Z-cF/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz('I8')">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 8 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 9 - INTERNATIONAL PATIENT SAFETY GOALS (IPSG) <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1J40wzpmHIhmCvqb7GBN41GmTKhnDZgsR/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1rlFWH7z6mgPXx_yMLeYnorVZoWxUbLaH/preview', 'IPSG Goals')">
-                        <span class="icon video-icon">▶️</span><span>International Patient Safety Goals</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1cZgQcPLrY9r2F7EjVIaRzQx_Q5pehWOe/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz('I9')">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 9 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 10 - SAFETY PROTOCOLS <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Uls_asVn6CSZoi-rwf63PUYTXGf1AGVZ/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1FqrK3n-dU_xrjHSbURQA7iqcatKvO7eR/preview', 'Safety Types')">
-                        <span class="icon video-icon">▶️</span><span>5S, Radiation, Laser, Fire & Hazmat Safety</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ftx0xSMa6Ks_MiLzCVccbhAonDbjILbm/preview', 'Spills & Codes')">
-                        <span class="icon video-icon">▶️</span><span>Spill Management, MSDS & Emergency Codes</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1GKTM3o-97x_pcMf3JCq3RNK_3BW_sntK/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz('I10')">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 10 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 11 - EMPLOYEE SAFETY INDICATORS <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1vE39pZGUUXrLiLMA8hLwHHkuvGk61-b8/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1mRpVeylz3EU1SgJvhF61vzs6k23uKVNu/preview', 'Vaccination & NSI')">
-                        <span class="icon video-icon">▶️</span><span>Employee Vaccination & Needle Stick Injury</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1SyKrdFsvemrtvNvbUbqzIuuMUT_UhP6s/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1L4zh2Vx7fa86slZ5iJrQ0sl0qj_HwL16/preview', 'Health Check & Falls')">
-                        <span class="icon video-icon">▶️</span><span>Fall Prevention & Annual Health Check</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Megb1yuGoxrScS-32XQ98adYgs07FCPk/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz('I11')">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 11 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+  </div>
+</section>
+<main class="main">
+  <div class="divider"><span>Section A: Applied Microbiology</span></div>
+  
+  <!-- UNIT M1: INTRODUCTION TO MICROBIOLOGY -->
+  <div class="uc" id="uM1" data-open="false">
+    <button class="ubtn" onclick="tog('uM1')">
+      <div class="upill"><span>Unit M1</span></div>
+      <div class="uinfo"><div class="uname">Introduction to Microbiology</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-uM1">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1ivpOICYcFdYxTo8O1Dm7hfXz0zKfO_iE/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Introduction to Microbiology</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1VQjMg12eqSvo8VuBRSJHmkCBqxQKQIPF/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Introduction, Definition & History</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1qDGatSpcuRvha7kRsjc4NhW7lBhQyq5H/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Microbiology Basics</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz('M1')"><div class="rico">✍️</div><div class="rtxt">Unit M1 Quiz<small>10 questions</small></div></button>
+      </div>
     </div>
+  </div>
 
-    <div id="app-modal" class="modal-overlay">
-        <div class="modal-header">
-            <div id="modal-title" class="modal-title">Resource</div>
-            <button class="btn-close" onclick="closeModal()">Close X</button>
-        </div>
-        <div id="modal-body" class="modal-body"></div>
+  <!-- UNIT M2: GENERAL CHARACTERISTICS OF MICROBES -->
+  <div class="uc" id="uM2" data-open="false">
+    <button class="ubtn" onclick="tog('uM2')">
+      <div class="upill"><span>Unit M2</span></div>
+      <div class="uinfo"><div class="uname">General Characteristics of Microbes</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-uM2">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1acm4BEOQxK34WQkakVJ7S7_iVdfGZ2Is/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Characteristics of Microbes</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1NJSGWt-7y-TDeay8uRipdnN7rR5ZdJc2/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Classification of Bacteria</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1xWanwUFVnK_T2MdEo3wUWjVB-1KBzTNr/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Bacteria Classification</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1UFspi0JCzimr9Fa6VKs6DoyCVeXeZ8qs/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Ultra Structure of Bacterial Cell</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1EDsgWI82n6s-V-UEnNJQPhrmQMeF-34p/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Cell Structure</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Dio8KBMBKpwWSUWJ-LU9rn9xxDZ3E6Nb/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Growth Curve & Factors</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1FuY-Hnz-rlrvZLmHVCTDp9rbqavVA48D/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Growth Factors</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1NJ7qNs8rR-xOo1bc7UCLGelAYP-moZTz/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Staining Techniques</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1X6ehAFeHfFV7jLvuoRz5-cbZ9F6hmYoX/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Staining</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1ykFeLFdPgEQvt8bqaYsCv1QnY93bpN0r/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Culture Methods</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1HMvgO3JLae-a6YTB4UvEWOyDOW_2vPLY/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Culture Methods</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz('M2')"><div class="rico">✍️</div><div class="rtxt">Unit M2 Quiz<small>10 questions</small></div></button>
+      </div>
     </div>
+  </div>
 
-    <script>
-        const QUIZ_DATA = {
-            // --- SECTION A: MICROBIOLOGY ---
-            M1: [
-                { q: "Who is known as the 'Father of Microbiology'?", o: ["Robert Koch", "Louis Pasteur", "Alexander Fleming", "Edward Jenner"], a: 1 },
-                { q: "Who is considered the father of medical microbiology?", o: ["Louis Pasteur", "Robert Koch", "Joseph Lister", "Paul Ehrlich"], a: 1 },
-                { q: "Which of the following is NOT a postulate of Koch?", o: ["Organism must be present in every case", "Organism must be isolated in pure culture", "Organism must cause disease in healthy host", "Organism must be a virus"], a: 3 },
-                { q: "Which microscope is used to view live, unstained organisms?", o: ["Electron microscope", "Bright field microscope", "Dark field microscope", "Fluorescent microscope"], a: 2 },
-                { q: "The process of pasteurization was developed by:", o: ["Koch", "Pasteur", "Lister", "Fleming"], a: 1 },
-                { q: "Spontaneous generation theory was disproved by:", o: ["Redi", "Pasteur", "Needham", "Spallanzani"], a: 1 },
-                { q: "Which scientist discovered Penicillin?", o: ["Fleming", "Florey", "Chain", "Waksman"], a: 0 },
-                { q: "The first vaccine was developed against:", o: ["Rabies", "Smallpox", "Anthrax", "Polio"], a: 1 },
-                { q: "Who introduced antiseptic surgery?", o: ["Lister", "Koch", "Pasteur", "Semmelweis"], a: 0 },
-                { q: "The term 'Microbiology' refers to the study of:", o: ["Large animals", "Plants", "Microorganisms", "Insects"], a: 2 }
-            ],
-            M2: [
-                { q: "Gram positive bacteria appear ___ under microscope.", o: ["Pink", "Purple/Blue", "Green", "Colorless"], a: 1 },
-                { q: "Which structure is responsible for bacterial motility?", o: ["Pili", "Flagella", "Capsule", "Ribosome"], a: 1 },
-                { q: "In which phase of growth do bacteria divide most rapidly?", o: ["Lag phase", "Log phase", "Stationary phase", "Decline phase"], a: 1 },
-                { q: "The cell wall of bacteria is made of:", o: ["Cellulose", "Peptidoglycan", "Chitin", "Lipid"], a: 1 },
-                { q: "Which media is used to grow specific bacteria while inhibiting others?", o: ["Basal media", "Selective media", "Enriched media", "Transport media"], a: 1 },
-                { q: "Bacteria that require oxygen for growth are called:", o: ["Anaerobes", "Aerobes", "Facultative anaerobes", "Microaerophiles"], a: 1 },
-                { q: "The primary stain in Gram staining is:", o: ["Safranin", "Crystal Violet", "Iodine", "Alcohol"], a: 1 },
-                { q: "Spores help bacteria to:", o: ["Reproduce", "Survive harsh conditions", "Move", "Eat"], a: 1 },
-                { q: "The structure involved in bacterial conjugation is:", o: ["Pili", "Flagella", "Capsule", "Mesosome"], a: 0 },
-                { q: "Enriched media contains:", o: ["Inhibitors", "Blood/Serum/Egg", "Sugars only", "Salts only"], a: 1 }
-            ],
-            M3: [
-                { q: "Which of the following is a Gram-negative bacteria?", o: ["Staphylococcus aureus", "Escherichia coli", "Streptococcus pyogenes", "Clostridium tetani"], a: 1 },
-                { q: "Malaria is caused by a:", o: ["Virus", "Bacteria", "Protozoa", "Fungi"], a: 2 },
-                { q: "A vector that transmits disease biologically is:", o: ["Housefly", "Mosquito", "Cockroach", "Ant"], a: 1 },
-                { q: "Which bacteria causes Tuberculosis?", o: ["Mycobacterium tuberculosis", "Salmonella typhi", "Vibrio cholerae", "E. coli"], a: 0 },
-                { q: "The vector for Dengue fever is:", o: ["Anopheles", "Culex", "Aedes", "Tick"], a: 2 },
-                { q: "Ringworm is caused by:", o: ["Worm", "Virus", "Fungus", "Bacteria"], a: 2 },
-                { q: "Entamoeba histolytica causes:", o: ["Malaria", "Amoebiasis", "Giardiasis", "Sleeping sickness"], a: 1 },
-                { q: "Which of these is a viral disease?", o: ["Typhoid", "Cholera", "Rabies", "Tetanus"], a: 2 },
-                { q: "Syphilis is caused by:", o: ["Treponema pallidum", "Neisseria gonorrhoeae", "HIV", "Chlamydia"], a: 0 },
-                { q: "Zoonotic diseases are transmitted from:", o: ["Humans to humans", "Animals to humans", "Plants to humans", "Soil to humans"], a: 1 }
-            ],
-            M4: [
-                { q: "Which antibody crosses the placenta?", o: ["IgM", "IgA", "IgG", "IgE"], a: 2 },
-                { q: "The first antibody produced during an infection is:", o: ["IgG", "IgM", "IgA", "IgD"], a: 1 },
-                { q: "Type I Hypersensitivity is mediated by:", o: ["IgG", "IgM", "IgE", "IgA"], a: 2 },
-                { q: "BCG vaccine protects against:", o: ["Polio", "Tuberculosis", "Measles", "Hepatitis"], a: 1 },
-                { q: "The recommended temperature for vaccine storage in an ILR is:", o: ["-20°C", "2°C to 8°C", "0°C", "Room temp"], a: 1 },
-                { q: "Innate immunity is:", o: ["Specific", "Non-specific/Present at birth", "Acquired later", "Short lived"], a: 1 },
-                { q: "Passive immunity involves:", o: ["Producing own antibodies", "Receiving readymade antibodies", "Vaccination", "Infection"], a: 1 },
-                { q: "Widal test is used for:", o: ["Malaria", "Typhoid", "Syphilis", "HIV"], a: 1 },
-                { q: "Anaphylaxis is a severe form of:", o: ["Infection", "Hypersensitivity", "Immunity", "Tolerance"], a: 1 },
-                { q: "Live attenuated vaccines include:", o: ["Tetanus", "Measles/MMR", "Hepatitis B", "Diphtheria"], a: 1 }
-            ],
+  <!-- UNIT M3: PATHOGENIC ORGANISMS -->
+  <div class="uc" id="uM3" data-open="false">
+    <button class="ubtn" onclick="tog('uM3')">
+      <div class="upill"><span>Unit M3</span></div>
+      <div class="uinfo"><div class="uname">Pathogenic Organisms</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-uM3">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1XeN3qoW_bg_szoY5FUqC-IawgdHvHQci/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Pathogenic Organisms</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1oaBmJbfUzugBhHDPqvYQ4AIiV67OoCOl/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Microorganism & Bacteria</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1hDPeQCggTO1ms50TcbMJbdlRTs1syJJt/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Bacteria</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Oph24WX3gjV5hgIOzQl1MEkHCB4_Eq6o/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Parasite, Vector and Rodents</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1rZLf5CliLt2j8nZhE9kWW-YfIMwPgTtw/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Vectors, Rodents & Sources</small></div></button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1SKRv8p0-CChqtNzngEELbe-y-iIOjo07/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Vectors & Sources</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz('M3')"><div class="rico">✍️</div><div class="rtxt">Unit M3 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-            // --- SECTION B: INFECTION CONTROL ---
-            I1: [
-                { q: "HAI stands for:", o: ["Health Association of India", "Hospital Acquired Infection", "Health Awareness Initiative", "Home Acquired Infection"], a: 1 },
-                { q: "An infection acquired 48 hours after admission is called:", o: ["Community acquired", "Nosocomial/HAI", "Congenital", "Chronic"], a: 1 },
-                { q: "VAP stands for:", o: ["Viral Associated Pneumonia", "Ventilator Associated Pneumonia", "Vein Access Procedure", "None"], a: 1 },
-                { q: "The most common mode of transmission for HAI is:", o: ["Air", "Contact (Hands)", "Water", "Food"], a: 1 },
-                { q: "CLABSI is related to:", o: ["Urinary catheter", "Central venous line", "Ventilator", "Surgical wound"], a: 1 },
-                { q: "CAUTI prevention involves:", o: ["Frequent catheter changes", "Removing catheter ASAP", "Antibiotics", "Bed rest"], a: 1 },
-                { q: "Iatrogenic infection is caused by:", o: ["Patient's own flora", "Diagnostic/Therapeutic procedures", "Visitors", "Food"], a: 1 },
-                { q: "The Infection Control Team usually includes:", o: ["Microbiologist & Nurse", "Pharmacist only", "HR Manager", "Security Guard"], a: 0 },
-                { q: "Surgical Site Infection (SSI) occurs within:", o: ["30 days of surgery", "24 hours", "1 year", "1 week"], a: 0 },
-                { q: "Endogenous infection comes from:", o: ["Environment", "Patient's own flora", "Other patients", "Staff"], a: 1 }
-            ],
-            I2: [
-                { q: "Tuberculosis requires which type of isolation?", o: ["Contact", "Droplet", "Airborne", "Standard"], a: 2 },
-                { q: "N95 masks are essential for:", o: ["Contact precautions", "Airborne precautions", "Droplet precautions", "Standard precautions"], a: 1 },
-                { q: "PPE stands for:", o: ["Personal Protective Equipment", "Private Patient Entry", "Primary Prevention Exam", "None"], a: 0 },
-                { q: "The correct order for doffing (removing) PPE usually starts with:", o: ["Mask", "Gloves", "Gown", "Goggles"], a: 1 },
-                { q: "Standard precautions apply to:", o: ["Only HIV patients", "Only Respiratory patients", "All patients", "Only ICU patients"], a: 2 },
-                { q: "Droplet precautions are used for:", o: ["Measles", "Influenza", "Chickenpox", "Scabies"], a: 1 },
-                { q: "A negative pressure room is required for:", o: ["Contact isolation", "Airborne isolation", "Protective isolation", "Standard care"], a: 1 },
-                { q: "Protective (Reverse) isolation is for:", o: ["Infectious patients", "Immunocompromised patients", "Aggressive patients", "Surgical patients"], a: 1 },
-                { q: "Gloves should be changed:", o: ["Between patients", "Every hour", "Once a shift", "Only if torn"], a: 0 },
-                { q: "Which is NOT part of PPE?", o: ["Gown", "Mask", "Uniform", "Goggles"], a: 2 }
-            ],
-            I3: [
-                { q: "How many moments of hand hygiene are defined by WHO?", o: ["3", "5", "7", "10"], a: 1 },
-                { q: "The minimum duration for hand rub is:", o: ["10-15 sec", "20-30 sec", "40-60 sec", "1 minute"], a: 1 },
-                { q: "The minimum duration for hand wash with soap and water is:", o: ["20-30 sec", "40-60 sec", "10 sec", "2 minutes"], a: 1 },
-                { q: "Hand hygiene should be performed:", o: ["Before touching patient", "After touching patient", "After fluid exposure", "All of the above"], a: 3 },
-                { q: "Which is more effective for visibly soiled hands?", o: ["Alcohol rub", "Soap and water", "Water only", "Paper towel"], a: 1 },
-                { q: "The most missed area during hand washing is:", o: ["Palms", "Thumbs and fingertips", "Back of hand", "Wrists"], a: 1 },
-                { q: "Surgical hand wash duration is approximately:", o: ["1 minute", "3-5 minutes", "10 minutes", "30 seconds"], a: 1 },
-                { q: "Hand rub is effective against:", o: ["Spores", "Most vegetative bacteria/viruses", "Dirt", "Grease"], a: 1 },
-                { q: "Alcohol concentration in hand rub should be:", o: ["<50%", "60-80%", "100%", "10%"], a: 1 },
-                { q: "Nails should be:", o: ["Long and painted", "Short and clean", "Artificial", "Any length"], a: 1 }
-            ],
-            I4: [
-                { q: "The process that kills all microorganisms including spores is:", o: ["Cleaning", "Disinfection", "Sterilization", "Washing"], a: 2 },
-                { q: "According to Spaulding's classification, surgical instruments are:", o: ["Critical", "Semi-critical", "Non-critical", "General"], a: 0 },
-                { q: "The standard temperature for autoclaving is:", o: ["100°C", "121°C", "134°C", "150°C"], a: 1 },
-                { q: "Which method is used for heat-sensitive items?", o: ["Autoclave", "Hot air oven", "ETO (Ethylene Oxide)", "Boiling"], a: 2 },
-                { q: "High-level disinfection is required for:", o: ["Endoscopes", "Bedpans", "Stethoscopes", "Floors"], a: 0 },
-                { q: "Glutaraldehyde (Cidex) is a:", o: ["Sterilant/High-level disinfectant", "Soap", "Low-level disinfectant", "Antiseptic"], a: 0 },
-                { q: "Autoclave works on the principle of:", o: ["Dry heat", "Moist heat under pressure", "Radiation", "Filtration"], a: 1 },
-                { q: "Biological indicator for autoclave is:", o: ["Bacillus subtilis", "Geobacillus stearothermophilus", "E. coli", "Staph aureus"], a: 1 },
-                { q: "Non-critical items contact:", o: ["Intact skin", "Mucous membranes", "Sterile tissue", "Blood"], a: 0 },
-                { q: "Sodium Hypochlorite is used for:", o: ["Skin", "Spill management/Surfaces", "Instruments", "Air"], a: 1 }
-            ],
-            I5: [
-                { q: "Sputum for culture should ideally be collected:", o: ["After eating", "Early morning", "Before sleep", "Any time"], a: 1 },
-                { q: "Urine for culture is best collected via:", o: ["Random sample", "Mid-stream clean catch", "First void", "Catheter bag"], a: 1 },
-                { q: "Blood culture samples should be taken:", o: ["Before antibiotics", "After antibiotics", "During fever spike", "A and C"], a: 3 },
-                { q: "CSF is collected by:", o: ["Nurse", "Lab technician", "Physician (Lumbar puncture)", "Ward boy"], a: 2 },
-                { q: "Specimens should be transported to the lab:", o: ["Within 24 hours", "As soon as possible", "Next day", "Weekly"], a: 1 },
-                { q: "A wound swab should be taken from:", o: ["The skin around wound", "Deep in the wound/Purulent area", "The dressing", "The air"], a: 1 },
-                { q: "Anaerobic cultures require:", o: ["Oxygen", "Oxygen-free transport", "Sunlight", "Freezing"], a: 1 },
-                { q: "Labeling of specimen must happen:", o: ["Before collection", "Immediately after collection", "In the lab", "Later"], a: 1 },
-                { q: "Standard precautions apply to specimen handling:", o: ["Always", "Never", "Sometimes", "Only for blood"], a: 0 },
-                { q: "Stool sample is used to detect:", o: ["Parasites/Ova", "Bacteria", "Viruses", "All of above"], a: 3 }
-            ],
-            I6: [
-                { q: "Anatomical waste (human tissue) goes in which bag?", o: ["Red", "Yellow", "Blue", "Black"], a: 1 },
-                { q: "Plastic waste like IV bottles and catheters goes in:", o: ["Red", "Yellow", "Blue", "White"], a: 0 },
-                { q: "Sharps (needles, blades) go in:", o: ["Red bag", "Yellow bag", "White puncture-proof container", "Blue box"], a: 2 },
-                { q: "Broken glass ampoules go in:", o: ["Red", "Yellow", "Blue (Cardboard box)", "Black"], a: 2 },
-                { q: "General waste (food, paper) goes in:", o: ["Red", "Yellow", "Black/Green", "White"], a: 2 },
-                { q: "Treatment for Yellow bag waste is usually:", o: ["Recycling", "Incineration/Deep burial", "Autoclaving", "Shredding"], a: 1 },
-                { q: "Cytotoxic drugs are disposed of in:", o: ["Red bag", "Yellow bag (with cytotoxic label)", "Black bag", "Blue bag"], a: 1 },
-                { q: "Biohazard symbol is:", o: ["Three circles", "Skull and bones", "Green triangle", "Red cross"], a: 0 },
-                { q: "Liquid waste should be:", o: ["Thrown in bin", "Treated chemically then drained", "Buried", "Ignored"], a: 1 },
-                { q: "Maximum storage time for BMW in hospital is:", o: ["24 hours", "48 hours", "1 week", "1 month"], a: 1 }
-            ],
-            I7: [
-                { q: "AMR stands for:", o: ["Anti-Malaria Resistance", "Antimicrobial Resistance", "Acute Medical Response", "None"], a: 1 },
-                { q: "Antibiotic Stewardship aims to:", o: ["Sell more drugs", "Optimize antibiotic use", "Stop all antibiotics", "Increase dosage"], a: 1 },
-                { q: "MRSA is resistant to:", o: ["Penicillin", "Methicillin", "Vancomycin", "All drugs"], a: 1 },
-                { q: "A key strategy in preventing AMR is:", o: ["Prescribing broad-spectrum first", "De-escalation based on culture", "Prescribing for viral infections", "Self-medication"], a: 1 },
-                { q: "MDRO stands for:", o: ["Multi-Drug Resistant Organism", "Medical Doctor Registered", "Major Disease Risk", "None"], a: 0 },
-                { q: "Contact precautions are vital for:", o: ["MRSA/VRE", "Flu", "TB", "HIV"], a: 0 },
-                { q: "The 'Right Drug' refers to:", o: ["Cheapest drug", "Most expensive drug", "Drug matched to pathogen", "Newest drug"], a: 2 },
-                { q: "Patient education on antibiotics includes:", o: ["Stop when feeling better", "Complete the full course", "Share with family", "Save for later"], a: 1 },
-                { q: "Empiric therapy is:", o: ["Treatment after culture results", "Initial treatment before culture results", "No treatment", "Alternative medicine"], a: 1 },
-                { q: "Carbapenem-resistant Enterobacteriaceae (CRE) is a type of:", o: ["Virus", "Fungus", "MDRO Bacteria", "Parasite"], a: 2 }
-            ],
-            I8: [
-                { q: "Which is a scale used to assess fall risk?", o: ["Braden Scale", "Morse Fall Scale", "Glasgow Coma Scale", "Apgar Score"], a: 1 },
-                { q: "RCA stands for:", o: ["Random Care Audit", "Root Cause Analysis", "Rapid Care Action", "Routine Checkup"], a: 1 },
-                { q: "Restraints should be checked/released every:", o: ["24 hours", "2 hours", "8 hours", "Never"], a: 1 },
-                { q: "DVT prevention includes:", o: ["Immobility", "Compression stockings/Early ambulation", "Bed rest", "Dehydration"], a: 1 },
-                { q: "Surgical safety checklist was developed by:", o: ["CDC", "WHO", "NABH", "FDA"], a: 1 },
-                { q: "Braden scale assesses risk for:", o: ["Falls", "Pressure Ulcers", "Pain", "Confusion"], a: 1 },
-                { q: "CAPA stands for:", o: ["Corrective and Preventive Action", "Care Plan Assessment", "Critical Acute Patient", "None"], a: 0 },
-                { q: "Incident reporting is:", o: ["Punitive", "Non-punitive/Learning tool", "Useless", "Optional"], a: 1 },
-                { q: "Vulnerable patients include:", o: ["Children", "Elderly", "Unconscious", "All of above"], a: 3 },
-                { q: "Documentation of an incident helps in:", o: ["Quality improvement", "Blaming staff", "Hiding errors", "Billing"], a: 0 }
-            ],
-            I9: [
-                { q: "IPSG Goal 1 refers to:", o: ["Safe Surgery", "Identify Patient Correctly", "Medication Safety", "Hand Hygiene"], a: 1 },
-                { q: "The 'Time Out' procedure is part of:", o: ["Goal 1", "Goal 2", "Goal 4 (Safe Surgery)", "Goal 6"], a: 2 },
-                { q: "High-alert medications require:", o: ["Double check", "Single check", "No check", "Self administration"], a: 0 },
-                { q: "Goal 2 focuses on:", o: ["Effective Communication", "Falls", "Infection", "Surgery"], a: 0 },
-                { q: "Read-back policy applies to:", o: ["Verbal/Telephone orders", "Written orders", "Emails", "Texts"], a: 0 },
-                { q: "Goal 5 aims to reduce:", o: ["Patient falls", "HAI risks (Hand hygiene)", "Medication errors", "Surgery errors"], a: 1 },
-                { q: "Identifying a patient requires how many identifiers?", o: ["1", "2 (Name & UHID)", "3", "None"], a: 1 },
-                { q: "Concentrated electrolytes are examples of:", o: ["High-alert medications", "Safe drugs", "Vitamins", "Placebos"], a: 0 },
-                { q: "Goal 6 focuses on reducing harm from:", o: ["Falls", "Fire", "Infection", "Surgery"], a: 0 },
-                { q: "Marking the surgical site involves:", o: ["Surgeon", "Nurse", "Patient", "All of above (verification)"], a: 3 }
-            ],
-            I10: [
-                { q: "Code RED usually signifies:", o: ["Cardiac Arrest", "Fire", "Disaster", "Combative person"], a: 1 },
-                { q: "Code BLUE signifies:", o: ["Fire", "Cardiac/Respiratory Arrest", "Spill", "Missing child"], a: 1 },
-                { q: "PASS in fire safety stands for:", o: ["Pull, Aim, Squeeze, Sweep", "Push, Ask, See, Stop", "Pull, Act, Save, Stay", "None"], a: 0 },
-                { q: "Mercury spill management involves:", o: ["Vacuum cleaner", "Sweeping", "Scooping with card/sheet", "Washing with water"], a: 2 },
-                { q: "MSDS stands for:", o: ["Medical Safety Data Sheet", "Material Safety Data Sheet", "Master Safety Document", "None"], a: 1 },
-                { q: "Code PINK usually signifies:", o: ["Child Abduction", "Fire", "Bomb Threat", "Disaster"], a: 0 },
-                { q: "RACE stands for:", o: ["Run, Act, Call, End", "Rescue, Alarm, Contain, Extinguish", "Read, Ask, Care, Exit", "None"], a: 1 },
-                { q: "Blood spill management requires:", o: ["Soap only", "Hypochlorite solution/Spill kit", "Water", "Alcohol"], a: 1 },
-                { q: "Radiation safety involves:", o: ["Time, Distance, Shielding", "Gloves only", "Running", "Heat"], a: 0 },
-                { q: "Hazmat refers to:", o: ["Hazardous Materials", "Hospital Materials", "Health Matters", "None"], a: 0 }
-            ],
-            I11: [
-                { q: "Immediate action after a needle stick injury is:", o: ["Squeeze the wound", "Wash with soap and water", "Put finger in mouth", "Apply bandage tightly"], a: 1 },
-                { q: "Hepatitis B vaccination consists of how many doses?", o: ["1", "2", "3", "5"], a: 2 },
-                { q: "NSI stands for:", o: ["No Safety Issue", "Needle Stick Injury", "Nurse Safety Index", "New Surgical Instrument"], a: 1 },
-                { q: "Post Exposure Prophylaxis (PEP) is vital for:", o: ["HIV/Hepatitis exposure", "Cold/Flu", "Headache", "Back pain"], a: 0 },
-                { q: "Annual health checks for staff help in:", o: ["Reducing salary", "Early detection of illness", "Wasting time", "Paperwork"], a: 1 },
-                { q: "If exposed to HIV+, PEP should ideally start within:", o: ["2 hours (max 72hrs)", "1 week", "1 month", "24 days"], a: 0 },
-                { q: "Recapping needles is:", o: ["Recommended", "Prohibited/Discouraged", "Mandatory", "Safe"], a: 1 },
-                { q: "Ergonomics helps prevent:", o: ["Infection", "Musculoskeletal injuries", "Fire", "NSI"], a: 1 },
-                { q: "Vaccination recommended for healthcare workers includes:", o: ["Hep B, Flu, MMR", "Malaria", "Dengue", "None"], a: 0 },
-                { q: "Reporting an NSI is:", o: ["Optional", "Mandatory", "Embarrassing", "Illegal"], a: 1 }
-            ]
-        };
+  <!-- UNIT M4: IMMUNITY -->
+  <div class="uc" id="uM4" data-open="false">
+    <button class="ubtn" onclick="tog('uM4')">
+      <div class="upill"><span>Unit M4</span></div>
+      <div class="uinfo"><div class="uname">Immunity</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-uM4">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1sMvClYYuI3EGbsePvJyycqg-gwBTnZ10/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Immunity</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1ODv6HroXDQknbJt42PYhbZOUh2iR_Xw4/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Immunity & Antigen-Antibody Reaction</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1AtWGs2PN3R9WVWZgzETy25DJ_0qf7u1h/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hypersensitivity (Type 1-4)</small></div></button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/124loH6HCG9EUzJIhHXbG84Bs5oZ0z6iz/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Hypersensitivity</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1FEyturu2BmtDGVeuxmoiGlKqu51Iyojg/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Serological Tests</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1zAiwgEDhF2OT_XDUE_nOECFu9EVPu8Ta/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Immunoglobulin</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1PkrO4stHg0-Bb7V_rdF9vz7LpNu6Hi95/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Immunoglobulin</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1sNTp0W6idWfhqXuuEdHMApaR6twni4zP/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Vaccines</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1jAmwATi5Q2-o-MAgx6qWzhmkhlYZwQYn/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Nucleic Acid Vaccines, Cold Chain & Schedule</small></div></button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1i62HzO-LrB6cuMH7eIqQDZnQfoqPCl8B/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Vaccines</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz('M4')"><div class="rico">✍️</div><div class="rtxt">Unit M4 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        let currentQuizUnit = 'M1';
-        let score = 0;
+  <div class="divider" style="margin-top:24px"><span>Section B: Infection Control & Safety</span></div>
 
-        function toggleUnit(header) {
-            const content = header.nextElementSibling;
-            const isExpanded = header.getAttribute('aria-expanded') === 'true';
-            header.setAttribute('aria-expanded', !isExpanded);
-            content.classList.toggle('active');
-        }
+  <!-- UNIT I1: HAI (HOSPITAL ACQUIRED INFECTION) -->
+  <div class="uc" id="uI1" data-open="false">
+    <button class="ubtn" onclick="tog('uI1')">
+      <div class="upill"><span>Unit I1</span></div>
+      <div class="uinfo"><div class="uname">HAI (Hospital Acquired Infection)</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-uI1">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1hXSWi41OkfFixOnbI-vyDI6jeGXh_7Z3/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>HAI</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1RiRi7SU4pl3IB5i447w0aDi6wBh78gbF/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Def, Classification, Mode of Transmission</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1jkXdKs0ua98CgybiwkY8xlYwD7ju-oqS/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pathophysiology, Symptoms & Management</small></div></button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/12hSH1N-NsEFdjcwuuNwxBJEhpKnp7jkV/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>HAI Management</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1y9j16dzxCn9_vf3D9mCRcWoMeJp1w2a0/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>VAIs & CLABSI (Part 1)</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/17TFz_UP4fv2wgz9T6VAARepSI5ovHkEL/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>VAIs, CLABSI & Infection Control Team (Part 2)</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1P_cUbJfCQsLHCWb4j8kAyeZx1X3EMLVQ/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Infection Control</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz('I1')"><div class="rico">✍️</div><div class="rtxt">Unit I1 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        function openResource(type, url, title) {
-            // 1. PUSH HISTORY STATE
-            history.pushState({ modalOpen: true }, null, '#resource');
+  <!-- UNIT I2: ISOLATION PRECAUTIONS & PPE -->
+  <div class="uc" id="uI2" data-open="false">
+    <button class="ubtn" onclick="tog('uI2')">
+      <div class="upill"><span>Unit I2</span></div>
+      <div class="uinfo"><div class="uname">Isolation Precautions & PPE</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-uI2">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1cwaHiL-3HH_kfXNt_vfrGiijED6JFO6X/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Isolation & PPE</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/150t_Hmvje1cGfny4-I3r7V3xzzLb6B7G/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Types of Isolation System</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1mh06yrdXvPy27AA_fUiZGuYIwAWOM9Xq/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Precautions, CDC Guidelines & PPE</small></div></button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/12cBRdd0S-n5_tnrzPrmc_VFq3NB7QviB/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Isolation Precautions</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz('I2')"><div class="rico">✍️</div><div class="rtxt">Unit I2 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            document.getElementById('modal-title').textContent = title;
-            modal.style.display = 'flex';
-            
-            // Clean URL Logic
-            let finalUrl = url;
-            if (url.includes('drive.google.com')) { 
-                finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview'); 
-            }
-            
-            // 2. VIDEO SECURITY FIX
-            body.innerHTML = `
-                <iframe 
-                    class="iframe-res" 
-                    src="${finalUrl}" 
-                    width="100%" 
-                    height="100%" 
-                    frameborder="0"
-                    sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-presentation"
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen">
-                </iframe>`;
-        }
+  <!-- UNIT I3: HAND HYGIENE -->
+  <div class="uc" id="uI3" data-open="false">
+    <button class="ubtn" onclick="tog('uI3')">
+      <div class="upill"><span>Unit I3</span></div>
+      <div class="uinfo"><div class="uname">Hand Hygiene</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-uI3">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/11TWE0cCHuLwQENIegMxKycH49sYIrplH/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Hand Hygiene</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1cMUEEZh3s-MK3Cm19R1-UDG7U6Ei9RKs/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Definition, Types & Moments</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1GW9bJ5lVoRPUyMZBlaW-rdycKV3UcyJn/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Hand Hygiene</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz('I3')"><div class="rico">✍️</div><div class="rtxt">Unit I3 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        function startQuiz(unitId) {
-            // PUSH HISTORY STATE
-            history.pushState({ modalOpen: true }, null, '#quiz');
+  <!-- UNIT I4: DISINFECTION AND STERILIZATION -->
+  <div class="uc" id="uI4" data-open="false">
+    <button class="ubtn" onclick="tog('uI4')">
+      <div class="upill"><span>Unit I4</span></div>
+      <div class="uinfo"><div class="uname">Disinfection and Sterilization</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-uI4">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1xDFiuJOWGVCxE4_riPA5Uzr-FrYujcrD/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Disinfection & Sterilization</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1bXX7Axx6Qkn7WIUqFcnEalDESU2Iuzdl/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Sterilization, Disinfection & Physical Methods</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Ms43n_KJKqvqdlakodD6-gnWvKZ2UJn4/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Filtration, Radiation & Chemical Agents</small></div></button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1ElCxU2QZ3mNhJL3PnriGe8k9JdczAT7q/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Sterilization Methods</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1H_wEqzbsLpQPSI8Fh7lgVFb4lZ7f_SU9/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Surfactants & Use of Disinfectants</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1VFBJ_7wFujb02MYO4dMgeppYIC5irfBx/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Spaulding Principle & Critical Items</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1MYR_SPHph665gedp4k2GGH7aa_RssLYK/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Spaulding Principle</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz('I4')"><div class="rico">✍️</div><div class="rtxt">Unit I4 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-            currentQuizUnit = unitId;
-            score = 0;
-            const questions = QUIZ_DATA[unitId];
-            
-            let html = `
-                <div class="quiz-container">
-                    <div class="quiz-header-sticky">
-                        <h2 style="margin:0; color:var(--brand);">Unit ${unitId} Quiz</h2>
-                        <div id="score-display" class="score-badge">Score: 0 / ${questions.length}</div>
-                    </div>
-            `;
-            
-            questions.forEach((q, index) => {
-                html += `
-                    <div class="question-block">
-                        <p class="quiz-question-text">${index + 1}. ${q.q}</p>
-                        <div class="options-container">
-                            ${q.o.map((opt, optIndex) => `
-                                <div class="quiz-option" onclick="checkAnswer(this, '${unitId}', ${optIndex}, ${q.a})">${opt}</div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            });
-            
-            html += `
-                    <button class="btn-quiz" onclick="closeModal()">Close Quiz</button>
-                </div>
-            `;
-            
-            document.getElementById('modal-body').innerHTML = html;
-            document.getElementById('modal-title').textContent = `Unit ${unitId} Quiz`;
-            document.getElementById('app-modal').style.display = 'flex';
-        }
+  <!-- UNIT I5: SPECIMEN COLLECTION -->
+  <div class="uc" id="uI5" data-open="false">
+    <button class="ubtn" onclick="tog('uI5')">
+      <div class="upill"><span>Unit I5</span></div>
+      <div class="uinfo"><div class="uname">Specimen Collection</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-uI5">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1aZg5oPzznvebPpTP8Vwkk5xDDb5ByYVE/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Specimen Collection</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1yTan5kIWnav_eKLgDQC3w2bArohIwMbn/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Techniques: CSF, Sputum, Swab, Transport</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/15vEmrFEL-o0mEolRqQevqZIqYIC9U6cH/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Specimen Collection</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz('I5')"><div class="rico">✍️</div><div class="rtxt">Unit I5 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        function checkAnswer(element, unitId, selectedIndex, correctIndex) {
-            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+  <!-- UNIT I6: BIO MEDICAL WASTE (BMW) -->
+  <div class="uc" id="uI6" data-open="false">
+    <button class="ubtn" onclick="tog('uI6')">
+      <div class="upill"><span>Unit I6</span></div>
+      <div class="uinfo"><div class="uname">Bio Medical Waste (BMW)</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-uI6">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1t3rRIFHVg-3hbrR0PlSXsM5FvtCwXbdy/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>BMW Management</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/19ubCye0Os6j-f40ollw5I3aK_2ivBhF9/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>BMW: Classification, Treatment & Disposal</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1dDpnw_lFWQlgducd9a-gmSNPcHAHMajD/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>BMW</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1P1Jm1nG0MOLXW6dAb-9XHGUVX3ijZLRV/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Laundry Management & Infection Control</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1oCgi8D4grp1C1uTWjGm2GG2XuSx864Bn/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Laundry Management</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz('I6')"><div class="rico">✍️</div><div class="rtxt">Unit I6 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-            if (selectedIndex === correctIndex) {
-                element.classList.add('correct');
-                score++;
-            } else {
-                element.classList.add('wrong');
-                element.parentElement.children[correctIndex].classList.add('correct');
-            }
-            document.getElementById('score-display').textContent = `Score: ${score} / ${QUIZ_DATA[unitId].length}`;
-        }
+  <!-- UNIT I7: ANTIBIOTIC STEWARDSHIP -->
+  <div class="uc" id="uI7" data-open="false">
+    <button class="ubtn" onclick="tog('uI7')">
+      <div class="upill"><span>Unit I7</span></div>
+      <div class="uinfo"><div class="uname">Antibiotic Stewardship</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-uI7">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1eUXV9sPaOGVsCleRCZQy6D8Hencm02pM/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Antibiotic Stewardship</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Cq1PtiOOY5yfEzy_9tTHlJ-BiAd--U9W/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Antibiotic Stewardship & AMR</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1hR4ad6uF9v_ezaAetkOGn2zphVKg9HHS/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>MRSA & MDRO Diagnosis & Prevention</small></div></button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1N2YpZy-5pu9n8dWrdJk939HfB_jLDbTJ/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>AMR & Stewardship</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz('I7')"><div class="rico">✍️</div><div class="rtxt">Unit I7 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        function closeModal() { 
-            const modal = document.getElementById('app-modal');
-            modal.style.display = 'none'; 
-            document.getElementById('modal-body').innerHTML = ""; 
-            
-            // LOGIC: If we have a history state (meaning the modal is open),
-            // we manually go 'Back' to remove that state so the user doesn't get stuck.
-            if ((history.state && history.state.modalOpen) || window.location.hash === '#resource' || window.location.hash === '#quiz') {
-                history.back();
-            }
-        }
+  <!-- UNIT I8: PATIENT SAFETY INDICATORS -->
+  <div class="uc" id="uI8" data-open="false">
+    <button class="ubtn" onclick="tog('uI8')">
+      <div class="upill"><span>Unit I8</span></div>
+      <div class="uinfo"><div class="uname">Patient Safety Indicators</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-uI8">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1jwBVW-KH6JPTI6tlWHwGBgk9VVKl2b2z/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Patient Safety</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1nMWtlBEXCykH0nCH5dsyvmE21DeKLczn/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Care of Vulnerable Patients, Lines & Drains</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1C2e8-KARSCOa53N4ottvu9-zpOBNYr4j/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Restraints, Blood Policy & Fall Prevention</small></div></button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1qg-GtwSX1lUuLg1C1O0VK8XpS7iQh9dO/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Patient Safety</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1PgjY5JE3MNYGgQGu8KCgk4yHzHdoHBa8/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Prevention of DVT & Surgical Safety</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1rZ_-i-T47_5dIZZi9nSdSYusG633oFmE/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Medication Errors & Communication</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1nawAtEJPkxoQpuwsP-Api6Ou3IHLhtl2/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Medication Safety</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1z9_i7Vggv0qst5joDH3WGTlzpoFPMK8C/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Incidents, RCA, CAPA & Reporting</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1H-WizdHE0Cq0DUtjNSrdC2HBFU44Z-cF/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>RCA & CAPA</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz('I8')"><div class="rico">✍️</div><div class="rtxt">Unit I8 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        // LISTENER FOR HARDWARE BACK BUTTON
-        window.onpopstate = function(event) {
-            const modal = document.getElementById('app-modal');
-            // If the modal is currently visible, hide it.
-            if (modal.style.display === 'flex') {
-                modal.style.display = 'none';
-                document.getElementById('modal-body').innerHTML = '';
-            }
-        };
-    </script>
+  <!-- UNIT I9: INTERNATIONAL PATIENT SAFETY GOALS (IPSG) -->
+  <div class="uc" id="uI9" data-open="false">
+    <button class="ubtn" onclick="tog('uI9')">
+      <div class="upill"><span>Unit I9</span></div>
+      <div class="uinfo"><div class="uname">International Patient Safety Goals (IPSG)</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-uI9">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1J40wzpmHIhmCvqb7GBN41GmTKhnDZgsR/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>IPSG</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1rlFWH7z6mgPXx_yMLeYnorVZoWxUbLaH/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>International Patient Safety Goals</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1cZgQcPLrY9r2F7EjVIaRzQx_Q5pehWOe/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>IPSG Goals</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz('I9')"><div class="rico">✍️</div><div class="rtxt">Unit I9 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- UNIT I10: SAFETY PROTOCOLS -->
+  <div class="uc" id="uI10" data-open="false">
+    <button class="ubtn" onclick="tog('uI10')">
+      <div class="upill"><span>Unit I10</span></div>
+      <div class="uinfo"><div class="uname">Safety Protocols</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-uI10">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Uls_asVn6CSZoi-rwf63PUYTXGf1AGVZ/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Safety Protocols</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1FqrK3n-dU_xrjHSbURQA7iqcatKvO7eR/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>5S, Radiation, Laser, Fire & Hazmat Safety</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1ftx0xSMa6Ks_MiLzCVccbhAonDbjILbm/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Spill Management, MSDS & Emergency Codes</small></div></button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1GKTM3o-97x_pcMf3JCq3RNK_3BW_sntK/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Safety Protocols</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz('I10')"><div class="rico">✍️</div><div class="rtxt">Unit I10 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- UNIT I11: EMPLOYEE SAFETY INDICATORS -->
+  <div class="uc" id="uI11" data-open="false">
+    <button class="ubtn" onclick="tog('uI11')">
+      <div class="upill"><span>Unit I11</span></div>
+      <div class="uinfo"><div class="uname">Employee Safety Indicators</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-uI11">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1vE39pZGUUXrLiLMA8hLwHHkuvGk61-b8/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Employee Safety</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1mRpVeylz3EU1SgJvhF61vzs6k23uKVNu/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Employee Vaccination & Needle Stick Injury</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1SyKrdFsvemrtvNvbUbqzIuuMUT_UhP6s/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Employee Safety</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1L4zh2Vx7fa86slZ5iJrQ0sl0qj_HwL16/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Fall Prevention & Annual Health Check</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Megb1yuGoxrScS-32XQ98adYgs07FCPk/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Health Check</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz('I11')"><div class="rico">✍️</div><div class="rtxt">Unit I11 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- QUIZ MODAL OVERLAY -->
+<div class="qoverlay" id="qmodal">
+  <div class="qscrim" onclick="closeQuiz()"></div>
+  <div class="qpanel">
+    <div class="qhead">
+      <div class="qhead-top"><div class="qtitle" id="qtitle">Quiz</div><button class="qclose" onclick="closeQuiz()">✕</button></div>
+      <div class="qpips" id="qpips"></div>
+    </div>
+    <div class="qbody" id="qbody"></div>
+  </div>
+</div>
+
+<script>
+function goBackToApp(){if(window.parent&&window.parent!==window){window.parent.postMessage({action:'goBack'},'*');}else{history.back();}}
+function openPDF(url){
+  if(!url || url==='COMING SOON' || url===''){ alert('This resource is coming soon!'); return; }
+  const clean=url.replace(/\/preview.*$/,'').replace(/\/view.*$/,'')+'/view';
+  window.open(clean,'_blank');
+}
+function tog(id){const card=document.getElementById(id);const body=document.getElementById('b-'+id);const open=card.dataset.open==='true';card.dataset.open=String(!open);body.classList.toggle('open',!open);}
+
+// QUIZ DATA - Each unit has exactly 10 MCQs
+const QD={
+// SECTION A: MICROBIOLOGY
+M1:[
+  {q:"Who is known as the 'Father of Microbiology'?",o:["Robert Koch","Louis Pasteur","Alexander Fleming","Edward Jenner"],a:1},
+  {q:"Who is considered the father of medical microbiology?",o:["Louis Pasteur","Robert Koch","Joseph Lister","Paul Ehrlich"],a:1},
+  {q:"Which of the following is NOT a postulate of Koch?",o:["Organism must be present in every case","Organism must be isolated in pure culture","Organism must cause disease in healthy host","Organism must be a virus"],a:3},
+  {q:"Which microscope is used to view live, unstained organisms?",o:["Electron microscope","Bright field microscope","Dark field microscope","Fluorescent microscope"],a:2},
+  {q:"The process of pasteurization was developed by:",o:["Koch","Pasteur","Lister","Fleming"],a:1},
+  {q:"Spontaneous generation theory was disproved by:",o:["Redi","Pasteur","Needham","Spallanzani"],a:1},
+  {q:"Which scientist discovered Penicillin?",o:["Fleming","Florey","Chain","Waksman"],a:0},
+  {q:"The first vaccine was developed against:",o:["Rabies","Smallpox","Anthrax","Polio"],a:1},
+  {q:"Who introduced antiseptic surgery?",o:["Lister","Koch","Pasteur","Semmelweis"],a:0},
+  {q:"The term 'Microbiology' refers to the study of:",o:["Large animals","Plants","Microorganisms","Insects"],a:2}
+],
+M2:[
+  {q:"Gram positive bacteria appear ___ under microscope.",o:["Pink","Purple/Blue","Green","Colorless"],a:1},
+  {q:"Which structure is responsible for bacterial motility?",o:["Pili","Flagella","Capsule","Ribosome"],a:1},
+  {q:"In which phase of growth do bacteria divide most rapidly?",o:["Lag phase","Log phase","Stationary phase","Decline phase"],a:1},
+  {q:"The cell wall of bacteria is made of:",o:["Cellulose","Peptidoglycan","Chitin","Lipid"],a:1},
+  {q:"Which media is used to grow specific bacteria while inhibiting others?",o:["Basal media","Selective media","Enriched media","Transport media"],a:1},
+  {q:"Bacteria that require oxygen for growth are called:",o:["Anaerobes","Aerobes","Facultative anaerobes","Microaerophiles"],a:1},
+  {q:"The primary stain in Gram staining is:",o:["Safranin","Crystal Violet","Iodine","Alcohol"],a:1},
+  {q:"Spores help bacteria to:",o:["Reproduce","Survive harsh conditions","Move","Eat"],a:1},
+  {q:"The structure involved in bacterial conjugation is:",o:["Pili","Flagella","Capsule","Mesosome"],a:0},
+  {q:"Enriched media contains:",o:["Inhibitors","Blood/Serum/Egg","Sugars only","Salts only"],a:1}
+],
+M3:[
+  {q:"Which of the following is a Gram-negative bacteria?",o:["Staphylococcus aureus","Escherichia coli","Streptococcus pyogenes","Clostridium tetani"],a:1},
+  {q:"Malaria is caused by a:",o:["Virus","Bacteria","Protozoa","Fungi"],a:2},
+  {q:"A vector that transmits disease biologically is:",o:["Housefly","Mosquito","Cockroach","Ant"],a:1},
+  {q:"Which bacteria causes Tuberculosis?",o:["Mycobacterium tuberculosis","Salmonella typhi","Vibrio cholerae","E. coli"],a:0},
+  {q:"The vector for Dengue fever is:",o:["Anopheles","Culex","Aedes","Tick"],a:2},
+  {q:"Ringworm is caused by:",o:["Worm","Virus","Fungus","Bacteria"],a:2},
+  {q:"Entamoeba histolytica causes:",o:["Malaria","Amoebiasis","Giardiasis","Sleeping sickness"],a:1},
+  {q:"Which of these is a viral disease?",o:["Typhoid","Cholera","Rabies","Tetanus"],a:2},
+  {q:"Syphilis is caused by:",o:["Treponema pallidum","Neisseria gonorrhoeae","HIV","Chlamydia"],a:0},
+  {q:"Zoonotic diseases are transmitted from:",o:["Humans to humans","Animals to humans","Plants to humans","Soil to humans"],a:1}
+],
+M4:[
+  {q:"Which antibody crosses the placenta?",o:["IgM","IgA","IgG","IgE"],a:2},
+  {q:"The first antibody produced during an infection is:",o:["IgG","IgM","IgA","IgD"],a:1},
+  {q:"Type I Hypersensitivity is mediated by:",o:["IgG","IgM","IgE","IgA"],a:2},
+  {q:"BCG vaccine protects against:",o:["Polio","Tuberculosis","Measles","Hepatitis"],a:1},
+  {q:"The recommended temperature for vaccine storage in an ILR is:",o:["-20°C","2°C to 8°C","0°C","Room temp"],a:1},
+  {q:"Innate immunity is:",o:["Specific","Non-specific/Present at birth","Acquired later","Short lived"],a:1},
+  {q:"Passive immunity involves:",o:["Producing own antibodies","Receiving readymade antibodies","Vaccination","Infection"],a:1},
+  {q:"Widal test is used for:",o:["Malaria","Typhoid","Syphilis","HIV"],a:1},
+  {q:"Anaphylaxis is a severe form of:",o:["Infection","Hypersensitivity","Immunity","Tolerance"],a:1},
+  {q:"Live attenuated vaccines include:",o:["Tetanus","Measles/MMR","Hepatitis B","Diphtheria"],a:1}
+],
+// SECTION B: INFECTION CONTROL
+I1:[
+  {q:"HAI stands for:",o:["Health Association of India","Hospital Acquired Infection","Health Awareness Initiative","Home Acquired Infection"],a:1},
+  {q:"An infection acquired 48 hours after admission is called:",o:["Community acquired","Nosocomial/HAI","Congenital","Chronic"],a:1},
+  {q:"VAP stands for:",o:["Viral Associated Pneumonia","Ventilator Associated Pneumonia","Vein Access Procedure","None"],a:1},
+  {q:"The most common mode of transmission for HAI is:",o:["Air","Contact (Hands)","Water","Food"],a:1},
+  {q:"CLABSI is related to:",o:["Urinary catheter","Central venous line","Ventilator","Surgical wound"],a:1},
+  {q:"CAUTI prevention involves:",o:["Frequent catheter changes","Removing catheter ASAP","Antibiotics","Bed rest"],a:1},
+  {q:"Iatrogenic infection is caused by:",o:["Patient's own flora","Diagnostic/Therapeutic procedures","Visitors","Food"],a:1},
+  {q:"The Infection Control Team usually includes:",o:["Microbiologist & Nurse","Pharmacist only","HR Manager","Security Guard"],a:0},
+  {q:"Surgical Site Infection (SSI) occurs within:",o:["30 days of surgery","24 hours","1 year","1 week"],a:0},
+  {q:"Endogenous infection comes from:",o:["Environment","Patient's own flora","Other patients","Staff"],a:1}
+],
+I2:[
+  {q:"Tuberculosis requires which type of isolation?",o:["Contact","Droplet","Airborne","Standard"],a:2},
+  {q:"N95 masks are essential for:",o:["Contact precautions","Airborne precautions","Droplet precautions","Standard precautions"],a:1},
+  {q:"PPE stands for:",o:["Personal Protective Equipment","Private Patient Entry","Primary Prevention Exam","None"],a:0},
+  {q:"The correct order for doffing (removing) PPE usually starts with:",o:["Mask","Gloves","Gown","Goggles"],a:1},
+  {q:"Standard precautions apply to:",o:["Only HIV patients","Only Respiratory patients","All patients","Only ICU patients"],a:2},
+  {q:"Droplet precautions are used for:",o:["Measles","Influenza","Chickenpox","Scabies"],a:1},
+  {q:"A negative pressure room is required for:",o:["Contact isolation","Airborne isolation","Protective isolation","Standard care"],a:1},
+  {q:"Protective (Reverse) isolation is for:",o:["Infectious patients","Immunocompromised patients","Aggressive patients","Surgical patients"],a:1},
+  {q:"Gloves should be changed:",o:["Between patients","Every hour","Once a shift","Only if torn"],a:0},
+  {q:"Which is NOT part of PPE?",o:["Gown","Mask","Uniform","Goggles"],a:2}
+],
+I3:[
+  {q:"How many moments of hand hygiene are defined by WHO?",o:["3","5","7","10"],a:1},
+  {q:"The minimum duration for hand rub is:",o:["10-15 sec","20-30 sec","40-60 sec","1 minute"],a:1},
+  {q:"The minimum duration for hand wash with soap and water is:",o:["20-30 sec","40-60 sec","10 sec","2 minutes"],a:1},
+  {q:"Hand hygiene should be performed:",o:["Before touching patient","After touching patient","After fluid exposure","All of the above"],a:3},
+  {q:"Which is more effective for visibly soiled hands?",o:["Alcohol rub","Soap and water","Water only","Paper towel"],a:1},
+  {q:"The most missed area during hand washing is:",o:["Palms","Thumbs and fingertips","Back of hand","Wrists"],a:1},
+  {q:"Surgical hand wash duration is approximately:",o:["1 minute","3-5 minutes","10 minutes","30 seconds"],a:1},
+  {q:"Hand rub is effective against:",o:["Spores","Most vegetative bacteria/viruses","Dirt","Grease"],a:1},
+  {q:"Alcohol concentration in hand rub should be:",o:["<50%","60-80%","100%","10%"],a:1},
+  {q:"Nails should be:",o:["Long and painted","Short and clean","Artificial","Any length"],a:1}
+],
+I4:[
+  {q:"The process that kills all microorganisms including spores is:",o:["Cleaning","Disinfection","Sterilization","Washing"],a:2},
+  {q:"According to Spaulding's classification, surgical instruments are:",o:["Critical","Semi-critical","Non-critical","General"],a:0},
+  {q:"The standard temperature for autoclaving is:",o:["100°C","121°C","134°C","150°C"],a:1},
+  {q:"Which method is used for heat-sensitive items?",o:["Autoclave","Hot air oven","ETO (Ethylene Oxide)","Boiling"],a:2},
+  {q:"High-level disinfection is required for:",o:["Endoscopes","Bedpans","Stethoscopes","Floors"],a:0},
+  {q:"Glutaraldehyde (Cidex) is a:",o:["Sterilant/High-level disinfectant","Soap","Low-level disinfectant","Antiseptic"],a:0},
+  {q:"Autoclave works on the principle of:",o:["Dry heat","Moist heat under pressure","Radiation","Filtration"],a:1},
+  {q:"Biological indicator for autoclave is:",o:["Bacillus subtilis","Geobacillus stearothermophilus","E. coli","Staph aureus"],a:1},
+  {q:"Non-critical items contact:",o:["Intact skin","Mucous membranes","Sterile tissue","Blood"],a:0},
+  {q:"Sodium Hypochlorite is used for:",o:["Skin","Spill management/Surfaces","Instruments","Air"],a:1}
+],
+I5:[
+  {q:"Sputum for culture should ideally be collected:",o:["After eating","Early morning","Before sleep","Any time"],a:1},
+  {q:"Urine for culture is best collected via:",o:["Random sample","Mid-stream clean catch","First void","Catheter bag"],a:1},
+  {q:"Blood culture samples should be taken:",o:["Before antibiotics","After antibiotics","During fever spike","A and C"],a:3},
+  {q:"CSF is collected by:",o:["Nurse","Lab technician","Physician (Lumbar puncture)","Ward boy"],a:2},
+  {q:"Specimens should be transported to the lab:",o:["Within 24 hours","As soon as possible","Next day","Weekly"],a:1},
+  {q:"A wound swab should be taken from:",o:["The skin around wound","Deep in the wound/Purulent area","The dressing","The air"],a:1},
+  {q:"Anaerobic cultures require:",o:["Oxygen","Oxygen-free transport","Sunlight","Freezing"],a:1},
+  {q:"Labeling of specimen must happen:",o:["Before collection","Immediately after collection","In the lab","Later"],a:1},
+  {q:"Standard precautions apply to specimen handling:",o:["Always","Never","Sometimes","Only for blood"],a:0},
+  {q:"Stool sample is used to detect:",o:["Parasites/Ova","Bacteria","Viruses","All of above"],a:3}
+],
+I6:[
+  {q:"Anatomical waste (human tissue) goes in which bag?",o:["Red","Yellow","Blue","Black"],a:1},
+  {q:"Plastic waste like IV bottles and catheters goes in:",o:["Red","Yellow","Blue","White"],a:0},
+  {q:"Sharps (needles, blades) go in:",o:["Red bag","Yellow bag","White puncture-proof container","Blue box"],a:2},
+  {q:"Broken glass ampoules go in:",o:["Red","Yellow","Blue (Cardboard box)","Black"],a:2},
+  {q:"General waste (food, paper) goes in:",o:["Red","Yellow","Black/Green","White"],a:2},
+  {q:"Treatment for Yellow bag waste is usually:",o:["Recycling","Incineration/Deep burial","Autoclaving","Shredding"],a:1},
+  {q:"Cytotoxic drugs are disposed of in:",o:["Red bag","Yellow bag (with cytotoxic label)","Black bag","Blue bag"],a:1},
+  {q:"Biohazard symbol is:",o:["Three circles","Skull and bones","Green triangle","Red cross"],a:0},
+  {q:"Liquid waste should be:",o:["Thrown in bin","Treated chemically then drained","Buried","Ignored"],a:1},
+  {q:"Maximum storage time for BMW in hospital is:",o:["24 hours","48 hours","1 week","1 month"],a:1}
+],
+I7:[
+  {q:"AMR stands for:",o:["Anti-Malaria Resistance","Antimicrobial Resistance","Acute Medical Response","None"],a:1},
+  {q:"Antibiotic Stewardship aims to:",o:["Sell more drugs","Optimize antibiotic use","Stop all antibiotics","Increase dosage"],a:1},
+  {q:"MRSA is resistant to:",o:["Penicillin","Methicillin","Vancomycin","All drugs"],a:1},
+  {q:"A key strategy in preventing AMR is:",o:["Prescribing broad-spectrum first","De-escalation based on culture","Prescribing for viral infections","Self-medication"],a:1},
+  {q:"MDRO stands for:",o:["Multi-Drug Resistant Organism","Medical Doctor Registered","Major Disease Risk","None"],a:0},
+  {q:"Contact precautions are vital for:",o:["MRSA/VRE","Flu","TB","HIV"],a:0},
+  {q:"The 'Right Drug' refers to:",o:["Cheapest drug","Most expensive drug","Drug matched to pathogen","Newest drug"],a:2},
+  {q:"Patient education on antibiotics includes:",o:["Stop when feeling better","Complete the full course","Share with family","Save for later"],a:1},
+  {q:"Empiric therapy is:",o:["Treatment after culture results","Initial treatment before culture results","No treatment","Alternative medicine"],a:1},
+  {q:"Carbapenem-resistant Enterobacteriaceae (CRE) is a type of:",o:["Virus","Fungus","MDRO Bacteria","Parasite"],a:2}
+],
+I8:[
+  {q:"Which is a scale used to assess fall risk?",o:["Braden Scale","Morse Fall Scale","Glasgow Coma Scale","Apgar Score"],a:1},
+  {q:"RCA stands for:",o:["Random Care Audit","Root Cause Analysis","Rapid Care Action","Routine Checkup"],a:1},
+  {q:"Restraints should be checked/released every:",o:["24 hours","2 hours","8 hours","Never"],a:1},
+  {q:"DVT prevention includes:",o:["Immobility","Compression stockings/Early ambulation","Bed rest","Dehydration"],a:1},
+  {q:"Surgical safety checklist was developed by:",o:["CDC","WHO","NABH","FDA"],a:1},
+  {q:"Braden scale assesses risk for:",o:["Falls","Pressure Ulcers","Pain","Confusion"],a:1},
+  {q:"CAPA stands for:",o:["Corrective and Preventive Action","Care Plan Assessment","Critical Acute Patient","None"],a:0},
+  {q:"Incident reporting is:",o:["Punitive","Non-punitive/Learning tool","Useless","Optional"],a:1},
+  {q:"Vulnerable patients include:",o:["Children","Elderly","Unconscious","All of above"],a:3},
+  {q:"Documentation of an incident helps in:",o:["Quality improvement","Blaming staff","Hiding errors","Billing"],a:0}
+],
+I9:[
+  {q:"IPSG Goal 1 refers to:",o:["Safe Surgery","Identify Patient Correctly","Medication Safety","Hand Hygiene"],a:1},
+  {q:"The 'Time Out' procedure is part of:",o:["Goal 1","Goal 2","Goal 4 (Safe Surgery)","Goal 6"],a:2},
+  {q:"High-alert medications require:",o:["Double check","Single check","No check","Self administration"],a:0},
+  {q:"Goal 2 focuses on:",o:["Effective Communication","Falls","Infection","Surgery"],a:0},
+  {q:"Read-back policy applies to:",o:["Verbal/Telephone orders","Written orders","Emails","Texts"],a:0},
+  {q:"Goal 5 aims to reduce:",o:["Patient falls","HAI risks (Hand hygiene)","Medication errors","Surgery errors"],a:1},
+  {q:"Identifying a patient requires how many identifiers?",o:["1","2 (Name & UHID)","3","None"],a:1},
+  {q:"Concentrated electrolytes are examples of:",o:["High-alert medications","Safe drugs","Vitamins","Placebos"],a:0},
+  {q:"Goal 6 focuses on reducing harm from:",o:["Falls","Fire","Infection","Surgery"],a:0},
+  {q:"Marking the surgical site involves:",o:["Surgeon","Nurse","Patient","All of above (verification)"],a:3}
+],
+I10:[
+  {q:"Code RED usually signifies:",o:["Cardiac Arrest","Fire","Disaster","Combative person"],a:1},
+  {q:"Code BLUE signifies:",o:["Fire","Cardiac/Respiratory Arrest","Spill","Missing child"],a:1},
+  {q:"PASS in fire safety stands for:",o:["Pull, Aim, Squeeze, Sweep","Push, Ask, See, Stop","Pull, Act, Save, Stay","None"],a:0},
+  {q:"Mercury spill management involves:",o:["Vacuum cleaner","Sweeping","Scooping with card/sheet","Washing with water"],a:2},
+  {q:"MSDS stands for:",o:["Medical Safety Data Sheet","Material Safety Data Sheet","Master Safety Document","None"],a:1},
+  {q:"Code PINK usually signifies:",o:["Child Abduction","Fire","Bomb Threat","Disaster"],a:0},
+  {q:"RACE stands for:",o:["Run, Act, Call, End","Rescue, Alarm, Contain, Extinguish","Read, Ask, Care, Exit","None"],a:1},
+  {q:"Blood spill management requires:",o:["Soap only","Hypochlorite solution/Spill kit","Water","Alcohol"],a:1},
+  {q:"Radiation safety involves:",o:["Time, Distance, Shielding","Gloves only","Running","Heat"],a:0},
+  {q:"Hazmat refers to:",o:["Hazardous Materials","Hospital Materials","Health Matters","None"],a:0}
+],
+I11:[
+  {q:"Immediate action after a needle stick injury is:",o:["Squeeze the wound","Wash with soap and water","Put finger in mouth","Apply bandage tightly"],a:1},
+  {q:"Hepatitis B vaccination consists of how many doses?",o:["1","2","3","5"],a:2},
+  {q:"NSI stands for:",o:["No Safety Issue","Needle Stick Injury","Nurse Safety Index","New Surgical Instrument"],a:1},
+  {q:"Post Exposure Prophylaxis (PEP) is vital for:",o:["HIV/Hepatitis exposure","Cold/Flu","Headache","Back pain"],a:0},
+  {q:"Annual health checks for staff help in:",o:["Reducing salary","Early detection of illness","Wasting time","Paperwork"],a:1},
+  {q:"If exposed to HIV+, PEP should ideally start within:",o:["2 hours (max 72hrs)","1 week","1 month","24 days"],a:0},
+  {q:"Recapping needles is:",o:["Recommended","Prohibited/Discouraged","Mandatory","Safe"],a:1},
+  {q:"Ergonomics helps prevent:",o:["Infection","Musculoskeletal injuries","Fire","NSI"],a:1},
+  {q:"Vaccination recommended for healthcare workers includes:",o:["Hep B, Flu, MMR","Malaria","Dengue","None"],a:0},
+  {q:"Reporting an NSI is:",o:["Optional","Mandatory","Embarrassing","Illegal"],a:1}
+]
+};
+
+let curQuiz=null,answered=[];
+function openQuiz(id){
+  curQuiz=id;
+  const qs=QD[id]||[];
+  answered=new Array(qs.length).fill(null);
+  document.getElementById('qtitle').textContent='Unit '+id+' Quiz';
+  document.getElementById('qpips').innerHTML=qs.map((_,i)=>`<div class="pip" id="pip${i}"></div>`).join('');
+  let html=`<div class="qscore" id="qscore"><div><div class="qs-num" id="qsnum">—</div><div class="qs-sub">Score</div></div><div class="qs-msg" id="qsmsg"></div></div>`;
+  qs.forEach((q,qi)=>{
+    html+=`<div class="qitem" id="qi${qi}"><div class="qlbl">Question ${qi+1} of ${qs.length}</div><div class="qtext">${q.q}</div><div class="qopts">${q.o.map((opt,oi)=>`<button class="qopt" id="opt${qi}_${oi}" onclick="ans(${qi},${oi},${q.a})"><span class="qltr">${['A','B','C','D'][oi]}</span>${opt}</button>`).join('')}</div></div>`;
+  });
+  document.getElementById('qbody').innerHTML=html;
+  document.getElementById('qmodal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function ans(qi,oi,correct){
+  if(answered[qi]!==null)return;
+  answered[qi]=oi;
+  const opts=document.querySelectorAll(`#qi${qi} .qopt`);
+  opts.forEach(b=>b.classList.add('lock'));
+  opts[correct].classList.add('cor');
+  if(oi!==correct)opts[oi].classList.add('wrg');
+  const pip=document.getElementById('pip'+qi);
+  pip.classList.add('ans',oi===correct?'cor':'wrg');
+  if(answered.every(a=>a!==null)){
+    const score=answered.filter((a,i)=>a===QD[curQuiz][i].a).length;
+    const total=QD[curQuiz].length;
+    const pct=Math.round(score/total*100);
+    const msgs=['📚 Keep Studying!','👍 Good Effort!','🎉 Well Done!','🏆 Perfect!'];
+    const mi=pct<50?0:pct<70?1:pct<100?2:3;
+    document.getElementById('qsnum').textContent=score+'/'+total;
+    document.getElementById('qsmsg').textContent=msgs[mi];
+    const sc=document.getElementById('qscore');
+    sc.classList.add('show');
+    sc.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+function closeQuiz(){
+  document.getElementById('qmodal').classList.remove('open');
+  document.body.style.overflow='';
+  curQuiz=null;
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQuiz();});
+</script>
 </body>
 </html>
