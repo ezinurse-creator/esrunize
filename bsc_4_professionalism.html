@@ -1,540 +1,454 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Professionalism, Professional Values - Syllabus</title>
-    <meta name="description" content="Comprehensive syllabus with detailed notes, video lectures, and quizzes for Professionalism and Professional Values." />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <style>
-        :root {
-            --brand: #003B82;
-            --accent: #00B9F2;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-700: #374151;
-            --gray-900: #111827;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-            --danger: #ef4444;
-            --success: #10b981;
-        }
-
-        * { box-sizing: border-box; }
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: white;
-            color: var(--gray-900);
-            line-height: 1.6;
-            padding: 24px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .syllabus-btn, .unit-header {
-            display: block;
-            width: 100%;
-            padding: 18px 24px;
-            margin: 24px 0;
-            background: var(--brand);
-            color: white;
-            font-weight: 600;
-            font-size: 16px;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.2s ease;
-        }
-        .syllabus-btn:hover, .unit-header:hover {
-            background: #002d63;
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .unit-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-align: left;
-            margin: 16px 0;
-        }
-        .unit-header span:last-child {
-            transition: transform 0.3s ease;
-            color: #FFA500;
-        }
-        .unit-header[aria-expanded="true"] span:last-child {
-            transform: rotate(180deg);
-        }
-
-        .unit-content {
-            padding: 0 12px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.3s ease;
-        }
-        .unit-content.active {
-            padding: 24px 12px;
-            max-height: none;
-        }
-
-        .subsection {
-            margin: 16px 0;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            border: 1px solid var(--gray-200);
-            box-shadow: var(--shadow-sm);
-            transition: box-shadow 0.2s ease;
-        }
-        .subsection:hover { box-shadow: var(--shadow-md); }
-
-        .resource-btn {
-            display: flex;
-            align-items: flex-start;
-            width: 100%;
-            padding: 14px 18px;
-            margin: 8px 0;
-            background: var(--gray-50);
-            color: var(--gray-900);
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
-            border: 1px solid var(--gray-200);
-            transition: all 0.2s ease;
-            gap: 12px;
-            flex-wrap: wrap;
-            min-height: 50px;
-            cursor: pointer;
-        }
-        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
-        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
-        .resource-btn.quiz { background: #fff5e8; border-color: #ffd8a8; color: #8c5e08; }
-        .resource-btn:hover { background: #f9fafb; transform: translateY(-1px); }
-        .resource-btn.notes:hover { background: #e0f2fe; }
-        .resource-btn.video:hover { background: #ede9fe; }
-        .resource-btn.quiz:hover { background: #ffead1; }
-        .resource-btn.coming-soon { 
-            background: #e5e7eb;
-            color: #6b7280;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
-        .icon.video-icon { color: #8b5cf6; }
-        .icon.quiz-icon { color: #FFA500; }
-        .icon.coming-soon-icon { color: #9ca3af; }
-
-        /* --- MODAL --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-        }
-
-        .modal-header {
-            height: 60px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            flex-shrink: 0;
-        }
-
-        .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-        
-        .btn-close {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            flex: 1;
-            background: #000;
-            position: relative;
-            overflow-y: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* --- FIXED IFRAME STYLES --- */
-        .iframe-video {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16 / 9;
-            border: none;
-            background: #000;
-            display: block;
-        }
-
-        .iframe-doc {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #fff;
-            display: block;
-        }
-
-        /* --- QUIZ STYLES --- */
-        .quiz-container {
-            background: white;
-            width: 100%;
-            min-height: 100%;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .quiz-question { margin-bottom: 20px; font-size: 1.1rem; font-weight: 600; }
-        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
-        .quiz-option {
-            padding: 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        .quiz-option:hover { background: #f0f9ff; border-color: var(--accent); }
-        .quiz-option.correct { background: var(--success); color: white; border-color: var(--success); }
-        .quiz-option.correct::after { content: '✓'; position: absolute; right: 15px; font-weight: bold; }
-        .quiz-option.wrong { background: var(--danger); color: white; border-color: var(--danger); }
-        .quiz-option.wrong::after { content: '✗'; position: absolute; right: 15px; font-weight: bold; }
-
-        @media (max-width: 768px) {
-            body { padding: 16px; }
-            .syllabus-btn, .unit-header, .resource-btn { font-size: 15px; padding: 14px 16px; }
-            .resource-btn { font-size: 14px; }
-            .subsection { padding: 16px; }
-            .unit-content.active { padding: 16px 8px; }
-        }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Professionalism & Professional Values</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --p50:#faf5ff;--p100:#f3e8ff;--p200:#e9d5ff;--p300:#d8b4fe;
+  --p400:#c084fc;--p500:#a855f7;--p600:#9333ea;--p700:#7e22ce;
+  --p800:#6b21a8;--p900:#581c87;
+  --w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;
+  --g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;
+  --ok:#16a34a;--ok-lt:#dcfce7;--err:#dc2626;--err-lt:#fee2e2;
+  --warn:#d97706;--warn-lt:#fef3c7;
+  --r:12px;--rs:8px;
+  --s1:0 1px 3px rgba(109,40,217,.08);
+  --s2:0 4px 12px rgba(109,40,217,.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:90;background:var(--w);border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 16px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-back{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:var(--p100);color:var(--p700);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;margin-right:12px}
+.tb-back:hover{background:var(--p200)}
+.tb-info{flex:1;min-width:0}
+.tb-title{font-size:.88rem;font-weight:700;color:var(--g900);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb-sub{font-size:.65rem;color:var(--g400);font-weight:500;margin-top:1px}
+.tb-chip{background:var(--p100);color:var(--p700);border:1px solid var(--p200);font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
+.hero{background:linear-gradient(145deg,var(--p900),var(--p700) 55%,var(--p500));padding:28px 18px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.08),transparent 50%),radial-gradient(circle at 10% 85%,rgba(255,255,255,.05),transparent 40%)}
+.hero::after{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-dot-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:.65rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border-radius:30px;margin-bottom:12px}
+.hero-eyebrow-dot{width:5px;height:5px;background:#c4b5fd;border-radius:50%}
+.hero h1{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:7px}
+.hero h1 em{color:rgba(255,255,255,.45);font-style:italic;font-weight:300}
+.hero-desc{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:18px}
+.hero-cta{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.28);color:#fff;font-size:.8rem;font-weight:700;padding:9px 16px;border-radius:9px;cursor:pointer;transition:all .2s;backdrop-filter:blur(6px)}
+.hero-cta:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
+.hero-stats{display:flex;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+.hs{flex:1;text-align:center}
+.hs+.hs{border-left:1px solid rgba(255,255,255,.1)}
+.hs-n{font-size:1.35rem;font-weight:800;color:#fff;line-height:1}
+.hs-l{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
+.main{padding:16px 14px 56px}
+.divider{display:flex;align-items:center;gap:8px;margin-bottom:12px;margin-top:2px}
+.divider span{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g400)}
+.divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+.uc{background:var(--w);border:1.5px solid var(--g200);border-radius:var(--r);margin-bottom:9px;overflow:hidden;box-shadow:var(--s1);transition:border-color .2s,box-shadow .2s}
+.uc:hover{border-color:var(--p300);box-shadow:var(--s2)}
+.uc[data-open=true]{border-color:var(--p400);box-shadow:var(--s2)}
+.ubtn{width:100%;display:flex;align-items:center;padding:14px 15px;gap:12px;background:none;border:none;cursor:pointer;text-align:left}
+.upill{min-width:54px;padding:0 8px;height:36px;border-radius:9px;flex-shrink:0;background:var(--p100);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.upill span{font-size:.65rem;font-weight:800;color:var(--p700);letter-spacing:-.01em;white-space:nowrap}
+.uc[data-open=true] .upill{background:var(--p700)}
+.uc[data-open=true] .upill span{color:#fff}
+.uinfo{flex:1;min-width:0}
+.uname{font-size:.85rem;font-weight:700;color:var(--g900);line-height:1.3}
+.umeta{font-size:.66rem;color:var(--g400);margin-top:2px;font-weight:500}
+.uright{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.uchev{width:16px;height:16px;color:var(--g300);transition:transform .3s,color .2s}
+.uc[data-open=true] .uchev{transform:rotate(180deg);color:var(--p500)}
+.ubody{display:none;background:var(--p50);border-top:1.5px solid var(--p200);padding:12px 13px 14px}
+.ubody.open{display:block;animation:bodyIn .2s ease}
+@keyframes bodyIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.rrow{display:flex;gap:9px;margin-bottom: 8px;}
+.rrow:last-child { margin-bottom: 0; }
+@media(max-width:380px){.rrow{flex-direction:column}}
+.rbtn{flex:1;display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .17s;background:var(--w);text-decoration:none}
+.rbtn .rico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.rbtn .rtxt{line-height:1.25}
+.rbtn .rtxt small{display:block;font-size:.62rem;font-weight:400;opacity:.5;margin-top:1px}
+.rbtn .rarr{margin-left:auto;opacity:0;font-size:.7rem;color:var(--g400);transition:opacity .15s}
+.rbtn:hover .rarr{opacity:1}
+.rbtn.notes{border-color:var(--p200);color:var(--p800)}
+.rbtn.notes .rico{background:var(--p100)}
+.rbtn.notes:hover{background:var(--p50);border-color:var(--p500);box-shadow:var(--s2);transform:translateY(-1px)}
+.rbtn.video{border-color:#bae6fd;color:#0369a1}
+.rbtn.video .rico{background:#e0f2fe}
+.rbtn.video:hover{background:#f0f9ff;border-color:#38bdf8;box-shadow:0 3px 10px rgba(56,189,248,.12);transform:translateY(-1px)}
+.rbtn.imp{border-color:#fecdd3;color:#be123c}
+.rbtn.imp .rico{background:#ffe4e6}
+.rbtn.imp:hover{background:#fff1f2;border-color:#fb7185;box-shadow:0 3px 10px rgba(251,113,133,.12);transform:translateY(-1px)}
+.rbtn.quiz{border-color:#fde68a;color:#78350f}
+.rbtn.quiz .rico{background:var(--warn-lt)}
+.rbtn.quiz:hover{background:#fffbeb;border-color:var(--warn);box-shadow:0 3px 10px rgba(217,119,6,.12);transform:translateY(-1px)}
+.rbtn.pyq{border-color:#bbf7d0;color:#14532d}
+.rbtn.pyq .rico{background:var(--ok-lt)}
+.rbtn.pyq:hover{background:#f0fdf4;border-color:var(--ok);box-shadow:0 3px 10px rgba(22,163,74,.12);transform:translateY(-1px)}
+.pyq-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:380px){.pyq-grid{grid-template-columns:1fr}}
+.qoverlay{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end}
+.qoverlay.open{display:flex}
+.qscrim{position:absolute;inset:0;background:rgba(15,10,40,.55);backdrop-filter:blur(3px)}
+.qpanel{position:relative;z-index:1;background:var(--w);width:100%;max-width:580px;margin:0 auto;border-radius:18px 18px 0 0;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 -10px 50px rgba(109,40,217,.2);animation:panelUp .3s cubic-bezier(.32,.72,0,1)}
+@keyframes panelUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.qhead{padding:16px 18px 12px;border-bottom:1px solid var(--g100);flex-shrink:0}
+.qhead-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.qtitle{font-size:1rem;font-weight:800;color:var(--p800)}
+.qclose{width:28px;height:28px;border-radius:50%;background:var(--g100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--g500);transition:all .15s}
+.qclose:hover{background:var(--err-lt);color:var(--err)}
+.qpips{display:flex;gap:3px}
+.pip{flex:1;height:4px;border-radius:4px;background:var(--g100);transition:background .3s}
+.pip.ans{background:var(--p300)}.pip.cor{background:var(--ok)}.pip.wrg{background:var(--err)}
+.qbody{overflow-y:auto;padding:14px 18px 28px;flex:1}
+.qscore{display:none;background:linear-gradient(135deg,var(--p800),var(--p500));color:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;align-items:center;gap:14px}
+.qscore.show{display:flex}
+.qs-num{font-size:1.9rem;font-weight:800;line-height:1}
+.qs-sub{font-size:.65rem;opacity:.6;margin-top:2px}
+.qs-msg{font-size:.85rem;font-weight:600}
+.qitem{margin-bottom:24px}
+.qitem:last-child{margin-bottom:0}
+.qlbl{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--p500);margin-bottom:4px}
+.qtext{font-size:.88rem;font-weight:600;color:var(--g900);line-height:1.5;margin-bottom:10px}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1.5px solid var(--g200);border-radius:var(--rs);cursor:pointer;font-size:.83rem;font-weight:500;background:var(--w);color:var(--g700);transition:all .14s}
+.qopt:hover{border-color:var(--p300);background:var(--p50);color:var(--p800)}
+.qltr{width:21px;height:21px;border-radius:50%;background:var(--g100);border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:800;color:var(--g500);flex-shrink:0;transition:all .14s}
+.qopt.cor{background:var(--ok-lt);border-color:#86efac;color:#14532d}
+.qopt.cor .qltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.qopt.wrg{background:var(--err-lt);border-color:#fca5a5;color:#7f1d1d}
+.qopt.wrg .qltr{background:var(--err);border-color:var(--err);color:#fff}
+.qopt.lock{cursor:default;pointer-events:none}
+.qopt.lock:not(.cor):not(.wrg):hover{border-color:var(--g200);background:var(--w);color:var(--g700)}
+.udgm{font-size:.8rem;font-weight:600;color:var(--p600);text-align:center;padding:4px 0 16px;opacity:0.9;}
+</style>
 </head>
 <body>
-
-    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/19QgOfLBg_B0DwUiFrmfAu9ttaJyNE8D3/preview', 'Syllabus')">
-        📄 PROFESSIONALISM, PROFESSIONAL VALUES - SYLLABUS
+<header class="topbar">
+  <button class="tb-back" onclick="goBackToApp()" aria-label="Back">&#8592;</button>
+  <div class="tb-info">
+    <div class="tb-title">Professionalism & Values</div>
+    <div class="tb-sub">Nursing Program</div>
+  </div>
+  <div class="tb-chip">4 Units</div>
+</header>
+<section class="hero">
+  <div class="hero-dot-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>Nursing Program</div>
+    <h1>Professionalism<br/><em>& Professional Values</em></h1>
+    <p class="hero-desc">Interactive syllabus, detailed notes, video lectures & internal quizzes on professional conduct and ethical practice.</p>
+    <button class="hero-cta" onclick="openPDF('https://drive.google.com/file/d/19QgOfLBg_B0DwUiFrmfAu9ttaJyNE8D3/view')">
+      📄 &nbsp;Download Syllabus
+    </button>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-n">4</div><div class="hs-l">Units</div></div>
+      <div class="hs"><div class="hs-n">40</div><div class="hs-l">Quizzes</div></div>
     </div>
-    
-    <div id="units">
-        <div class="unit-container" id="unit1">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="true" onclick="toggleUnit(this)">
-                UNIT 1 - PROFESSIONALISM
-                <span>🔽</span>
-            </div>
-            <div class="unit-content active">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1FJwzqB3SpSkBqSxdMZJvNjLRC7S6fK77/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes: Professionalism</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Mdd0A15cGHYLjiidDr3WygyxaHhs281W/preview', 'Profession')">
-                        <span class="icon video-icon">▶️</span><span>Profession: Definition & Characteristics</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1xqiIwnVoFnczRJoSdmdjHR8maaJlO5Dk/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes: Profession</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1kobjpBc5nXhi3-pxwVHVlFLWI6bVRAi3/preview', 'Professionalism')">
-                        <span class="icon video-icon">▶️</span><span>Professionalism in Nursing</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1rGPi5cTz7cZpjuWTk_9cU1I4F9jF_Rl-/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes: Professionalism</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/10ag4_HfpVlsycTie_eFBo9Hfu3I4UxS9/preview', 'Identity')">
-                        <span class="icon video-icon">▶️</span><span>Personal vs Professional Identity</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1tVMTndIvhCGCluf9LNuWi07-wcXrjdD4/preview', 'Relationships')">
-                        <span class="icon video-icon">▶️</span><span>Relationship with Team, Patients & Society</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/177UMDFYOHXhvGgT3xMxbhrx_06bdyi-M/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes: Identity & Relationships</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1GBT_ai4vZJ2xi80RZe_OXh0J3Y59Y0Ag/preview', 'Conduct')">
-                        <span class="icon video-icon">▶️</span><span>Professional Conduct</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1jZfcl2DCeS8AzJJtcJ219vRIWuGe7Age/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes: Professional Conduct</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1TL228SAtllwbWEeQDZwEJoULZqUR-qnd/preview', 'Regulatory Bodies')">
-                        <span class="icon video-icon">▶️</span><span>Regulatory Bodies: INC & SNC</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1SCPOoBnK84EEzPDivFNCxxNcfHjPHyV3/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes: Regulatory Bodies</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1uX2-4vWHje6wPo-AbMm9R7r_wQ7OTyLV/preview', 'Organizations 1')">
-                        <span class="icon video-icon">▶️</span><span>TNAI & SNA</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1LKWqhPeQJcocOl4LOXTztPjgD4uBaW6s/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes: TNAI & SNA</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/129bdvNCHMVUtmBAF9GMqBFEkprdH96QR/preview', 'Organizations 2')">
-                        <span class="icon video-icon">▶️</span><span>CMAI, ICN & ICM</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/14G2CvJ8913MLsQkYzxpYeb3TGo5pFpcS/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes: CMAI, ICN & ICM</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(1)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit2">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 2 - PROFESSIONAL VALUES
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Xy6gL9Vcg2vWt6B4GRKmY2RuDP4-a7KS/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes: Professional Values</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1WM3-Z1YON3509mbE1aB3n50Xje9xVNw0/preview', 'Values Intro')">
-                        <span class="icon video-icon">▶️</span><span>Introduction & Characteristics of Values</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1xDLvW5G-buED3TpdHQAnKfMyFIgCZnqV/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes: Introduction to Values</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1iZo6tjgRBKt5TfITPr8eWM0E4H8VESAr/preview', 'Values in Nursing')">
-                        <span class="icon video-icon">▶️</span><span>Professional Values in Nursing</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/13EsUAq9oZ0_bvWosrAZjlCe0UTC7pzdI/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes: Nursing Values</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Qbbz1UIg59SShbXqXZBgPD20k8gcRVY2/preview', 'Human Dignity')">
-                        <span class="icon video-icon">▶️</span><span>Human Dignity</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/11Xt0z031hs6-ENJRuQJ3mGR1_MDfB2u3/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes: Human Dignity</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(2)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container" id="unit3">
-            <div class="unit-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 3 - ETHICS AND BIOETHICS
-                <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1tXUZYUyKaE48gFrV4QmJbeA3QT3_EgTC/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes: Ethics & Bioethics</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1-z6MdjW7zVKHixFqeQK7ZI3GK_2xRXzG/preview', 'Ethics Definitions')">
-                        <span class="icon video-icon">▶️</span><span>Definition of Ethics & Bioethics</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1vwVxVyU-IzWOnoVz7KUPJmb-RteT1jmK/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes: Definitions</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1cgwSc4KYfXmLr6wojpfgOjOsCfGaAUmK/preview', 'Ethical Issues')">
-                        <span class="icon video-icon">▶️</span><span>Ethical Issues, Dilemmas & Privacy</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1IyXTITpQuMBKPOUKx6VaU5P9w_8luWc4/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes: Issues & Dilemmas</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1EcFk0O_CJhmeAaptN2NlKzREVbYnOSTv/preview', 'Beginning of Life')">
-                        <span class="icon video-icon">▶️</span><span>Beginning of Life Issues</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Igjb3tBhMATRPLlbBFyvtfgXzgYIzDfE/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes: Beginning of Life</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1b1c9Pf56LFhvqttEJHY7QEpTgNPJmdPk/preview', 'End of Life')">
-                        <span class="icon video-icon">▶️</span><span>End of Life Issues & Euthanasia</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1oo_O9k2odSHIs9bqkdPpeFAlITQW7PLJ/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes: End of Life</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1B7Z346JuoaZ78S3ZuHHrYfF5utXUTXJG/preview', 'Decision Making')">
-                        <span class="icon video-icon">▶️</span><span>Ethical Decision Making & Committees</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1fG_izzjHdmnhhN_pXZ0Z-q-4BB4EaiWL/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes: Decision Making</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1sHhapyr-YKzMwHpzksFxSf_HizfpyiMy/preview', 'INC Code')">
-                        <span class="icon video-icon">▶️</span><span>INC Code of Ethics & Patient's Rights</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1z0e1RF4H3JqAxqgj63CEkM-VCnHy1ds3/preview', 'Lecture Notes')">
-                        <span class="icon">📚</span><span>Lecture Notes: Code of Ethics</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="openQuiz(3)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+  </div>
+</section>
+<main class="main">
+  <div class="divider"><span>Course Units</span></div>
+  
+  <!-- UNIT 1: PROFESSIONALISM -->
+  <div class="uc" id="u1" data-open="false">
+    <button class="ubtn" onclick="tog('u1')">
+      <div class="upill"><span>Unit 1</span></div>
+      <div class="uinfo"><div class="uname">Professionalism</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u1">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1FJwzqB3SpSkBqSxdMZJvNjLRC7S6fK77/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Professionalism</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Mdd0A15cGHYLjiidDr3WygyxaHhs281W/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Profession Definition</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1xqiIwnVoFnczRJoSdmdjHR8maaJlO5Dk/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Profession</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1kobjpBc5nXhi3-pxwVHVlFLWI6bVRAi3/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Professionalism in Nursing</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1rGPi5cTz7cZpjuWTk_9cU1I4F9jF_Rl-/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Professionalism</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/10ag4_HfpVlsycTie_eFBo9Hfu3I4UxS9/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Personal vs Professional Identity</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/177UMDFYOHXhvGgT3xMxbhrx_06bdyi-M/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Identity & Relationships</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1tVMTndIvhCGCluf9LNuWi07-wcXrjdD4/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Team & Patient Relationships</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1jZfcl2DCeS8AzJJtcJ219vRIWuGe7Age/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Professional Conduct</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1GBT_ai4vZJ2xi80RZe_OXh0J3Y59Y0Ag/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Professional Conduct</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1SCPOoBnK84EEzPDivFNCxxNcfHjPHyV3/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Regulatory Bodies</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1TL228SAtllwbWEeQDZwEJoULZqUR-qnd/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>INC & SNC Overview</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1LKWqhPeQJcocOl4LOXTztPjgD4uBaW6s/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>TNAI & SNA</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1uX2-4vWHje6wPo-AbMm9R7r_wQ7OTyLV/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>TNAI & SNA Functions</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/14G2CvJ8913MLsQkYzxpYeb3TGo5pFpcS/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>CMAI, ICN & ICM</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/129bdvNCHMVUtmBAF9GMqBFEkprdH96QR/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>International Organizations</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1FJwzqB3SpSkBqSxdMZJvNjLRC7S6fK77/view')"><div class="rico">📝</div><div class="rtxt">Review Notes<small>Unit 1 Summary</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(1)"><div class="rico">✍️</div><div class="rtxt">Unit 1 Quiz<small>10 questions</small></div></button>
+      </div>
     </div>
+  </div>
 
-    <div id="app-modal" class="modal-overlay">
-        <div class="modal-header">
-            <div id="modal-title" class="modal-title">Resource</div>
-            <button class="btn-close" onclick="closeModal()">Close X</button>
-        </div>
-        <div id="modal-body" class="modal-body"></div>
+  <!-- UNIT 2: PROFESSIONAL VALUES -->
+  <div class="uc" id="u2" data-open="false">
+    <button class="ubtn" onclick="tog('u2')">
+      <div class="upill"><span>Unit 2</span></div>
+      <div class="uinfo"><div class="uname">Professional Values</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u2">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Xy6gL9Vcg2vWt6B4GRKmY2RuDP4-a7KS/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Professional Values</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1WM3-Z1YON3509mbE1aB3n50Xje9xVNw0/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Values Introduction</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1xDLvW5G-buED3TpdHQAnKfMyFIgCZnqV/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Introduction to Values</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1iZo6tjgRBKt5TfITPr8eWM0E4H8VESAr/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Values in Nursing</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/13EsUAq9oZ0_bvWosrAZjlCe0UTC7pzdI/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Nursing Values</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Qbbz1UIg59SShbXqXZBgPD20k8gcRVY2/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Human Dignity</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/11Xt0z031hs6-ENJRuQJ3mGR1_MDfB2u3/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Human Dignity</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1WM3-Z1YON3509mbE1aB3n50Xje9xVNw0/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Altruism & Caring</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Xy6gL9Vcg2vWt6B4GRKmY2RuDP4-a7KS/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Altruism</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1iZo6tjgRBKt5TfITPr8eWM0E4H8VESAr/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Autonomy in Practice</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1xDLvW5G-buED3TpdHQAnKfMyFIgCZnqV/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Autonomy</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Qbbz1UIg59SShbXqXZBgPD20k8gcRVY2/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Integrity & Honesty</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/13EsUAq9oZ0_bvWosrAZjlCe0UTC7pzdI/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Integrity</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1WM3-Z1YON3509mbE1aB3n50Xje9xVNw0/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Justice</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/11Xt0z031hs6-ENJRuQJ3mGR1_MDfB2u3/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Social Justice</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(2)"><div class="rico">✍️</div><div class="rtxt">Unit 2 Quiz<small>10 questions</small></div></button>
+      </div>
     </div>
+  </div>
 
-    <script>
-        // --- 1. QUIZ DATA (3 Units) ---
-        const QUIZ_DATA = {
-            1: [ // Unit 1: Professionalism
-                { q: "The regulatory body responsible for nursing education standards in India is:", o: ["TNAI", "INC", "SNA", "ICN"], a: 1 },
-                { q: "Which organization focuses on student nurses in India?", o: ["CMAI", "ICM", "SNA", "WHO"], a: 2 },
-                { q: "Professionalism involves:", o: ["Technical skills only", "Accountability, Ethics & Competence", "Wearing a uniform only", "High salary"], a: 1 },
-                { q: "The ICN Code of Ethics has how many principal elements?", o: ["2", "4", "6", "10"], a: 1 },
-                { q: "Which creates a professional identity?", o: ["Values & Beliefs", "Hobbies", "Family background", "Height"], a: 0 }
-            ],
-            2: [ // Unit 2: Values
-                { q: "Altruism refers to:", o: ["Selfishness", "Concern for the welfare of others", "Honesty", "Fairness"], a: 1 },
-                { q: "Autonomy in nursing means:", o: ["Working alone", "Respecting patient's right to self-determination", "Following orders blindly", "Ignoring rules"], a: 1 },
-                { q: "Integrity involves:", o: ["Acting in accordance with code of ethics", "Being rich", "Being famous", "Working fast"], a: 0 },
-                { q: "Social justice relates to:", o: ["Upholding moral & legal principles", "Socializing", "Judging patients", "Avoiding conflict"], a: 0 },
-                { q: "Human dignity implies:", o: ["Respect for inherent worth of every individual", "Dressing well", "Speaking loudly", "Having power"], a: 0 }
-            ],
-            3: [ // Unit 3: Ethics
-                { q: "Beneficence means:", o: ["Do no harm", "To do good", "To tell the truth", "To be fair"], a: 1 },
-                { q: "Non-maleficence means:", o: ["To do good", "To avoid doing harm", "To be honest", "To keep promises"], a: 1 },
-                { q: "Veracity refers to:", o: ["Telling the truth", "Being faithful", "Being fair", "Being kind"], a: 0 },
-                { q: "An ethical dilemma occurs when:", o: ["There is a clear right answer", "Two conflicting moral choices exist", "The patient is angry", "The nurse is tired"], a: 1 },
-                { q: "Informed consent is based on the principle of:", o: ["Justice", "Autonomy", "Beneficence", "Non-maleficence"], a: 1 }
-            ]
-        };
+  <!-- UNIT 3: ETHICS AND BIOETHICS -->
+  <div class="uc" id="u3" data-open="false">
+    <button class="ubtn" onclick="tog('u3')">
+      <div class="upill"><span>Unit 3</span></div>
+      <div class="uinfo"><div class="uname">Ethics & Bioethics</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u3">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1tXUZYUyKaE48gFrV4QmJbeA3QT3_EgTC/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Ethics & Bioethics</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1-z6MdjW7zVKHixFqeQK7ZI3GK_2xRXzG/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Ethics Definitions</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1vwVxVyU-IzWOnoVz7KUPJmb-RteT1jmK/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Definitions</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1cgwSc4KYfXmLr6wojpfgOjOsCfGaAUmK/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Ethical Issues & Dilemmas</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1IyXTITpQuMBKPOUKx6VaU5P9w_8luWc4/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Issues & Dilemmas</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1EcFk0O_CJhmeAaptN2NlKzREVbYnOSTv/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Beginning of Life Issues</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Igjb3tBhMATRPLlbBFyvtfgXzgYIzDfE/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Beginning of Life</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1b1c9Pf56LFhvqttEJHY7QEpTgNPJmdPk/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>End of Life & Euthanasia</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1oo_O9k2odSHIs9bqkdPpeFAlITQW7PLJ/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>End of Life</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1B7Z346JuoaZ78S3ZuHHrYfF5utXUTXJG/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Ethical Decision Making</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1fG_izzjHdmnhhN_pXZ0Z-q-4BB4EaiWL/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Decision Making</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1sHhapyr-YKzMwHpzksFxSf_HizfpyiMy/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>INC Code of Ethics</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1z0e1RF4H3JqAxqgj63CEkM-VCnHy1ds3/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Code of Ethics</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1sHhapyr-YKzMwHpzksFxSf_HizfpyiMy/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Patient Rights</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1tXUZYUyKaE48gFrV4QmJbeA3QT3_EgTC/view')"><div class="rico">📝</div><div class="rtxt">Review Notes<small>Unit 3 Summary</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(3)"><div class="rico">✍️</div><div class="rtxt">Unit 3 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        // --- 2. MODAL LOGIC & NAVIGATION CONTROL ---
-        function toggleUnit(header) {
-            const content = header.nextElementSibling;
-            const isExpanded = header.getAttribute('aria-expanded') === 'true';
-            header.setAttribute('aria-expanded', !isExpanded);
-            content.classList.toggle('active');
-        }
+  <!-- UNIT 4: PROFESSIONAL CONDUCT & FRAMEWORK -->
+  <div class="uc" id="u4" data-open="false">
+    <button class="ubtn" onclick="tog('u4')">
+      <div class="upill"><span>Unit 4</span></div>
+      <div class="uinfo"><div class="uname">Professional Conduct & Framework</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u4">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1jZfcl2DCeS8AzJJtcJ219vRIWuGe7Age/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Professional Conduct</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1GBT_ai4vZJ2xi80RZe_OXh0J3Y59Y0Ag/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Conduct Standards</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1SCPOoBnK84EEzPDivFNCxxNcfHjPHyV3/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Standards of Practice</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1TL228SAtllwbWEeQDZwEJoULZqUR-qnd/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Accountability</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1LKWqhPeQJcocOl4LOXTztPjgD4uBaW6s/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Accountability</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1uX2-4vWHje6wPo-AbMm9R7r_wQ7OTyLV/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Confidentiality</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/14G2CvJ8913MLsQkYzxpYeb3TGo5pFpcS/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Confidentiality</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/129bdvNCHMVUtmBAF9GMqBFEkprdH96QR/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Documentation Standards</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1jZfcl2DCeS8AzJJtcJ219vRIWuGe7Age/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Documentation</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1GBT_ai4vZJ2xi80RZe_OXh0J3Y59Y0Ag/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Legal Aspects</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1SCPOoBnK84EEzPDivFNCxxNcfHjPHyV3/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Legal Aspects</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1TL228SAtllwbWEeQDZwEJoULZqUR-qnd/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Malpractice Prevention</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1LKWqhPeQJcocOl4LOXTztPjgD4uBaW6s/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Malpractice</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1uX2-4vWHje6wPo-AbMm9R7r_wQ7OTyLV/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Continuing Education</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/14G2CvJ8913MLsQkYzxpYeb3TGo5pFpcS/view')"><div class="rico">📝</div><div class="rtxt">Review Notes<small>Unit 4 Summary</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(4)"><div class="rico">✍️</div><div class="rtxt">Unit 4 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
 
-        function openResource(type, url, title) {
-            if(type === 'coming-soon') return;
+</main>
 
-            history.pushState({ modalOpen: true }, null, '#resource');
+<!-- QUIZ MODAL OVERLAY -->
+<div class="qoverlay" id="qmodal">
+  <div class="qscrim" onclick="closeQuiz()"></div>
+  <div class="qpanel">
+    <div class="qhead">
+      <div class="qhead-top"><div class="qtitle" id="qtitle">Quiz</div><button class="qclose" onclick="closeQuiz()">✕</button></div>
+      <div class="qpips" id="qpips"></div>
+    </div>
+    <div class="qbody" id="qbody"></div>
+  </div>
+</div>
 
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = title;
-            modal.style.display = 'flex';
-            body.innerHTML = ''; 
-            body.style.display = 'flex'; // Default flex for centering
+<script>
+function goBackToApp(){if(window.parent&&window.parent!==window){window.parent.postMessage({action:'goBack'},'*');}else{history.back();}}
+function openPDF(url){
+  if(!url || url==='COMING SOON' || url===''){ alert('This resource is coming soon!'); return; }
+  const clean=url.replace(/\/preview.*$/,'').replace(/\/view.*$/,'')+'/view';
+  window.open(clean,'_blank');
+}
+function tog(id){const card=document.getElementById(id);const body=document.getElementById('b-'+id);const open=card.dataset.open==='true';card.dataset.open=String(!open);body.classList.toggle('open',!open);}
 
-            // FIX: Restore flex centering for Video/Doc
-            if (type === 'quiz') {
-                // Handled by openQuiz
-            }
-            else {
-                let cleanUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
-                
-                // Videos get 16:9, Notes get full height
-                let className = (type === 'video') ? 'iframe-video' : 'iframe-doc';
+// QUIZ DATA - Each unit has exactly 10 MCQs
+const QD={
+1:[ // Unit 1: Professionalism
+  {q:"The regulatory body responsible for nursing education standards in India is:",o:["TNAI","INC","SNA","ICN"],a:1},
+  {q:"Which organization focuses specifically on student nurses in India?",o:["CMAI","ICM","SNA","WHO"],a:2},
+  {q:"Professionalism in nursing primarily involves:",o:["Technical skills only","Accountability, ethics & competence","Wearing a uniform only","High salary expectations"],a:1},
+  {q:"The ICN Code of Ethics for Nurses has how many principal elements?",o:["2","4","6","10"],a:1},
+  {q:"Which factor primarily creates a professional identity in nursing?",o:["Personal values & beliefs","Hobbies and interests","Family background","Physical appearance"],a:0},
+  {q:"The Indian Nursing Council (INC) was established in which year?",o:["1947","1950","1962","1975"],a:1},
+  {q:"TNAI stands for:",o:["Total Nursing Association of India","Trained Nurses Association of India","Technical Nursing Alliance India","Traditional Nurses Association International"],a:1},
+  {q:"Professional conduct in nursing does NOT include:",o:["Maintaining patient confidentiality","Accepting gifts from patients","Demonstrating compassion","Following evidence-based practice"],a:1},
+  {q:"Which is a key characteristic of a profession?",o:["No formal education required","Self-regulation through a code of ethics","Work done for free","No accountability to public"],a:1},
+  {q:"The State Nursing Council (SNC) primarily handles:",o:["International nursing standards","Registration and licensing of nurses within the state","Medical research funding","Hospital administration"],a:1}
+],
+2:[ // Unit 2: Professional Values
+  {q:"Altruism in nursing refers to:",o:["Selfishness and self-promotion","Concern for the welfare of others above self","Strict adherence to rules","Financial gain from practice"],a:1},
+  {q:"Autonomy in nursing ethics means:",o:["Working completely alone","Respecting patient's right to self-determination","Following orders without question","Ignoring institutional policies"],a:1},
+  {q:"Integrity in professional practice involves:",o:["Acting in accordance with ethical codes","Being wealthy and successful","Having many social connections","Working the fastest"],a:0},
+  {q:"Social justice in healthcare relates to:",o:["Upholding moral and legal principles of fairness","Socializing with colleagues","Judging patients' lifestyles","Avoiding difficult conversations"],a:0},
+  {q:"Human dignity implies:",o:["Respect for inherent worth of every individual","Dressing in expensive clothing","Speaking with authority","Having administrative power"],a:0},
+  {q:"The value of 'caring' in nursing is best demonstrated by:",o:["Completing tasks quickly","Showing empathy and compassion","Following protocols rigidly","Documenting extensively"],a:1},
+  {q:"Which value supports truth-telling in nurse-patient communication?",o:["Beneficence","Veracity","Justice","Non-maleficence"],a:1},
+  {q:"Professional values are primarily developed through:",o:["Genetic inheritance","Education, experience & reflection","Social media influence","Financial incentives"],a:1},
+  {q:"When professional values conflict, nurses should first:",o:["Follow personal preferences","Consult the code of ethics & seek guidance","Ignore the conflict","Ask the patient to decide"],a:1},
+  {q:"The value of 'excellence' in nursing practice emphasizes:",o:["Perfection in every task","Continuous improvement & quality care","Working longer hours","Avoiding mistakes at all costs"],a:1}
+],
+3:[ // Unit 3: Ethics & Bioethics
+  {q:"Beneficence in ethical principles means:",o:["Do no harm","To actively do good","To tell the truth","To be fair to all"],a:1},
+  {q:"Non-maleficence requires healthcare providers to:",o:["Maximize profits","Avoid causing intentional harm","Always agree with patients","Work only in hospitals"],a:1},
+  {q:"Veracity in nursing ethics refers to:",o:["Telling the truth to patients","Being faithful to employers","Being fair in resource allocation","Being kind to colleagues"],a:0},
+  {q:"An ethical dilemma occurs when:",o:["There is one clear correct answer","Two or more conflicting moral choices exist","The patient is uncooperative","The nurse is fatigued"],a:1},
+  {q:"Informed consent is primarily based on the ethical principle of:",o:["Justice","Autonomy","Beneficence","Confidentiality"],a:1},
+  {q:"The principle of justice in healthcare emphasizes:",o:["Treating wealthy patients preferentially","Fair and equitable distribution of resources","Following tradition always","Avoiding legal liability"],a:1},
+  {q:"Euthanasia debates primarily involve conflicts between:",o:["Autonomy and non-maleficence","Beneficence and veracity","Justice and confidentiality","Fidelity and accountability"],a:0},
+  {q:"A nurse's ethical obligation regarding patient confidentiality:",o:["Ends when the shift ends","Continues even after patient discharge","Applies only to medical records","Is optional in emergencies"],a:1},
+  {q:"The INC Code of Ethics for Nurses in India was first adopted in:",o:["1947","1962","1975","1990"],a:1},
+  {q:"When facing an ethical conflict, the FIRST step should be to:",o:["Make an immediate decision","Gather relevant facts & identify stakeholders","Consult social media","Ignore personal values"],a:1}
+],
+4:[ // Unit 4: Professional Conduct & Framework
+  {q:"Professional accountability in nursing means:",o:["Blaming others for errors","Taking responsibility for one's actions and decisions","Following orders without question","Working only under supervision"],a:1},
+  {q:"Maintaining patient confidentiality is required by:",o:["Personal preference","Ethical codes and legal statutes","Hospital policy only","Patient request only"],a:1},
+  {q:"Proper documentation in nursing records should be:",o:["Completed at end of week","Accurate, timely, and objective","Written in personal shorthand","Shared freely with colleagues"],a:1},
+  {q:"Legal liability for nursing malpractice requires proof of:",o:["Patient dissatisfaction only","Duty, breach, causation, and damages","Employer negligence only","High treatment costs"],a:1},
+  {q:"Continuing professional development for nurses is important to:",o:["Increase salary only","Maintain competence and current knowledge","Fulfill administrative requirements","Avoid patient contact"],a:1},
+  {q:"When a nurse witnesses a colleague's unsafe practice, ethical action requires:",o:["Ignoring to maintain harmony","Reporting through proper channels","Confronting publicly","Documenting for personal records only"],a:1},
+  {q:"The standard of care in nursing is determined by:",o:["What the nurse thinks is best","What a reasonably prudent nurse would do","Hospital budget constraints","Patient demands"],a:1},
+  {q:"Professional boundaries in nurse-patient relationships prevent:",o:["Effective communication","Exploitation and role confusion","Quality care delivery","Documentation requirements"],a:1},
+  {q:"Accepting substantial gifts from patients may violate:",o:["Hospital dress code","Professional ethics regarding boundaries","Documentation standards","Shift scheduling policies"],a:1},
+  {q:"A nurse's duty to advocate for patients includes:",o:["Following all physician orders without question","Protecting patient rights and ensuring informed decisions","Prioritizing institutional efficiency","Avoiding difficult conversations"],a:1}
+]
+};
 
-                body.innerHTML = `<iframe 
-                    class="${className}" 
-                    src="${cleanUrl}" 
-                    sandbox="allow-scripts allow-same-origin allow-presentation"
-                    allow="autoplay; encrypted-media; fullscreen">
-                </iframe>`;
-            }
-        }
-
-        function openQuiz(unitId) {
-            history.pushState({ modalOpen: true }, null, '#quiz');
-
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            const titleEl = document.getElementById('modal-title');
-            
-            titleEl.textContent = `Quiz: Unit ${unitId}`;
-            modal.style.display = 'flex';
-            
-            // FIX: Remove flex centering for Quiz so it starts at the top
-            body.style.display = 'block';
-            body.scrollTop = 0; 
-            
-            const questions = QUIZ_DATA[unitId] || [];
-            
-            let quizHtml = `<div class="quiz-container">`;
-            questions.forEach((q, idx) => {
-                quizHtml += `
-                    <div class="quiz-question">${idx + 1}. ${q.q}</div>
-                    <div class="quiz-options" id="q-${idx}">
-                        ${q.o.map((opt, oIdx) => `
-                            <div class="quiz-option" onclick="checkAnswer(this, ${idx}, ${oIdx}, ${q.a})">${opt}</div>
-                        `).join('')}
-                    </div>
-                `;
-            });
-            
-            if(questions.length === 0) quizHtml += `<p>Quiz coming soon!</p>`;
-            
-            quizHtml += `</div>`;
-            body.innerHTML = quizHtml;
-        }
-
-        function checkAnswer(el, qIdx, oIdx, correctIdx) {
-            const parent = document.getElementById(`q-${qIdx}`);
-            const opts = parent.children;
-            for(let opt of opts) opt.style.pointerEvents = 'none';
-
-            if(oIdx === correctIdx) {
-                el.classList.add('correct');
-            } else {
-                el.classList.add('wrong');
-                opts[correctIdx].classList.add('correct');
-            }
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            modal.style.display = 'none';
-            body.innerHTML = ''; 
-            
-            if (history.state && history.state.modalOpen) {
-                history.back();
-            }
-        }
-
-        window.onpopstate = function(event) {
-            const modal = document.getElementById('app-modal');
-            if (modal.style.display === 'flex') {
-                modal.style.display = 'none';
-                document.getElementById('modal-body').innerHTML = '';
-            }
-        };
-
-        // Auto-expand first unit
-        document.addEventListener('DOMContentLoaded', () => {
-            const firstUnitHeader = document.querySelector('.unit-header');
-            if(firstUnitHeader) {
-                // toggleUnit(firstUnitHeader);
-            }
-        });
-    </script>
-
+let curQuiz=null,answered=[];
+function openQuiz(id){
+  curQuiz=id;
+  const qs=QD[id]||[];
+  answered=new Array(qs.length).fill(null);
+  document.getElementById('qtitle').textContent='Unit '+id+' Quiz';
+  document.getElementById('qpips').innerHTML=qs.map((_,i)=>`<div class="pip" id="pip${i}"></div>`).join('');
+  let html=`<div class="qscore" id="qscore"><div><div class="qs-num" id="qsnum">—</div><div class="qs-sub">Score</div></div><div class="qs-msg" id="qsmsg"></div></div>`;
+  qs.forEach((q,qi)=>{
+    html+=`<div class="qitem" id="qi${qi}"><div class="qlbl">Question ${qi+1} of ${qs.length}</div><div class="qtext">${q.q}</div><div class="qopts">${q.o.map((opt,oi)=>`<button class="qopt" id="opt${qi}_${oi}" onclick="ans(${qi},${oi},${q.a})"><span class="qltr">${['A','B','C','D'][oi]}</span>${opt}</button>`).join('')}</div></div>`;
+  });
+  document.getElementById('qbody').innerHTML=html;
+  document.getElementById('qmodal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function ans(qi,oi,correct){
+  if(answered[qi]!==null)return;
+  answered[qi]=oi;
+  const opts=document.querySelectorAll(`#qi${qi} .qopt`);
+  opts.forEach(b=>b.classList.add('lock'));
+  opts[correct].classList.add('cor');
+  if(oi!==correct)opts[oi].classList.add('wrg');
+  const pip=document.getElementById('pip'+qi);
+  pip.classList.add('ans',oi===correct?'cor':'wrg');
+  if(answered.every(a=>a!==null)){
+    const score=answered.filter((a,i)=>a===QD[curQuiz][i].a).length;
+    const total=QD[curQuiz].length;
+    const pct=Math.round(score/total*100);
+    const msgs=['📚 Keep Studying!','👍 Good Effort!','🎉 Well Done!','🏆 Perfect!'];
+    const mi=pct<50?0:pct<70?1:pct<100?2:3;
+    document.getElementById('qsnum').textContent=score+'/'+total;
+    document.getElementById('qsmsg').textContent=msgs[mi];
+    const sc=document.getElementById('qscore');
+    sc.classList.add('show');
+    sc.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+function closeQuiz(){
+  document.getElementById('qmodal').classList.remove('open');
+  document.body.style.overflow='';
+  curQuiz=null;
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQuiz();});
+</script>
 </body>
 </html>
