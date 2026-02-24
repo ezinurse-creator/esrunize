@@ -1,786 +1,522 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Applied Sociology - Syllabus & Quizzes</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Applied Sociology</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-    :root {
-        /* ORIGINAL BLUE COLOR SCHEME */
-        --brand: #003B82; 
-        --accent: #00B9F2;
-        --gray-50: #f9fafb;
-        --gray-100: #f3f4f6;
-        --gray-200: #e5e7eb;
-        --gray-700: #374151;
-        --gray-900: #111827;
-        --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-        --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-        --danger: #ef4444;
-        --success: #10b981;
-        --warning: #f59e0b;
-    }
-
-    * { box-sizing: border-box; }
-    body {
-        font-family: 'Inter', system-ui, sans-serif;
-        background: white;
-        color: var(--gray-900);
-        line-height: 1.6;
-        padding: 24px;
-        max-width: 1000px;
-        margin: 0 auto;
-    }
-
-    /* --- BUTTONS & HEADERS SHARED STYLES --- */
-    .syllabus-btn, .unit-header {
-        display: block;
-        width: 100%;
-        padding: 18px 24px;
-        margin: 12px 0;
-        font-weight: 600;
-        font-size: 16px;
-        text-decoration: none;
-        border-radius: 12px;
-        cursor: pointer;
-        box-shadow: var(--shadow-sm);
-        transition: all 0.2s ease;
-    }
-
-    /* --- SPECIFIC: SYLLABUS BUTTON (White with Blue Outline) --- */
-    .syllabus-btn {
-        background: white;
-        color: var(--brand);
-        border: 2px solid var(--brand);
-        text-align: center;
-    }
-
-    .syllabus-btn:hover {
-        background: #f0f9ff; /* Light blue tint on hover */
-        transform: translateY(-1px);
-        box-shadow: var(--shadow-md);
-    }
-    
-    /* --- SPECIFIC: UNIT HEADER (Solid Blue) --- */
-    .unit-header {
-        background: var(--brand);
-        color: white;
-        border: none;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        text-align: left;
-        margin: 16px 0;
-    }
-
-    .unit-header:hover {
-        background: #002d63;
-        transform: translateY(-1px);
-        box-shadow: var(--shadow-md);
-    }
-
-    /* Unit Header Arrow Animation */
-    .unit-header span:last-child {
-        transition: transform 0.3s ease;
-        color: #FFA500;
-    }
-    .unit-header[aria-expanded="true"] span:last-child {
-        transform: rotate(180deg);
-    }
-
-    /* --- UNIT CONTENT & RESOURCES --- */
-    .unit-content {
-        padding: 0 12px;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.4s ease, padding 0.3s ease;
-    }
-    .unit-content.active {
-        padding: 24px 12px;
-        max-height: none; 
-    }
-
-    .subsection {
-        margin: 16px 0;
-        padding: 20px;
-        background: white;
-        border-radius: 12px;
-        border: 1px solid var(--gray-200);
-        box-shadow: var(--shadow-sm);
-        transition: box-shadow 0.2s ease;
-    }
-
-    .sub-title {
-        font-size: 0.95rem;
-        font-weight: 700;
-        color: var(--gray-700);
-        margin: 15px 0 8px 0;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-
-    .resource-btn {
-        display: flex;
-        align-items: flex-start;
-        width: 100%;
-        padding: 14px 18px;
-        margin: 6px 0;
-        background: var(--gray-50);
-        color: var(--gray-900);
-        text-decoration: none;
-        border-radius: 8px;
-        font-weight: 500;
-        border: 1px solid var(--gray-200);
-        transition: all 0.2s ease;
-        gap: 12px;
-        cursor: pointer;
-    }
-    .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
-    .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
-    .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
-    .resource-btn.model { background: #fdf4ff; border-color: #f0abfc; color: #86198f; }
-    .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
-
-    .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
-    .icon.video-icon { color: #8b5cf6; }
-    .icon.quiz-icon { color: #f59e0b; }
-    .icon.model-icon { color: #d946ef; }
-
-    /* --- MODAL --- */
-    .modal-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.85);
-        z-index: 1000;
-        display: none;
-        flex-direction: column;
-    }
-
-    .modal-header {
-        height: 60px;
-        background: white;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 20px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        flex-shrink: 0;
-    }
-
-    .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; }
-    
-    .btn-close {
-        background: var(--danger);
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 6px;
-        font-weight: 600;
-        cursor: pointer;
-    }
-
-    .modal-body {
-        flex: 1;
-        background: #f3f4f6;
-        position: relative;
-        overflow-y: auto;
-        display: flex;
-        align-items: flex-start;
-        justify-content: center;
-        padding: 20px;
-    }
-
-    .iframe-res {
-        width: 100%;
-        height: 100%;
-        border: none;
-        background: #fff;
-        display: block;
-    }
-
-    /* --- QUIZ STYLES --- */
-    .quiz-container {
-        background: white;
-        width: 100%;
-        max-width: 800px;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        padding: 30px;
-        margin-bottom: 40px;
-    }
-    .quiz-header-sticky {
-        position: sticky;
-        top: 0;
-        background: white;
-        z-index: 10;
-        padding-bottom: 10px;
-        border-bottom: 2px solid var(--gray-100);
-        margin-bottom: 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .score-badge {
-        background: var(--brand);
-        color: white;
-        padding: 5px 15px;
-        border-radius: 20px;
-        font-weight: 700;
-    }
-    .question-block {
-        margin-bottom: 30px;
-        padding-bottom: 20px;
-        border-bottom: 1px solid var(--gray-200);
-    }
-    .question-block:last-child { border-bottom: none; }
-    
-    .quiz-question-text {
-        font-size: 1.15rem;
-        font-weight: 600;
-        margin-bottom: 15px;
-        color: var(--gray-900);
-    }
-    .quiz-option {
-        padding: 12px 15px;
-        border: 2px solid var(--gray-200);
-        border-radius: 8px;
-        margin-bottom: 10px;
-        cursor: pointer;
-        transition: all 0.2s;
-        font-weight: 500;
-    }
-    .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
-    
-    .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; }
-    .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
-    
-    .btn-quiz { background: var(--brand); color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 16px; width: 100%; margin-top: 20px; }
-
-    @media (max-width: 768px) {
-        body { padding: 16px; }
-        .unit-header, .resource-btn { font-size: 15px; }
-        .modal-body { padding: 0; }
-        .quiz-container { height: auto; border-radius: 0; max-width: 100%; padding: 20px; min-height: 100%; }
-    }
+:root{
+  --p50:#faf5ff;--p100:#f3e8ff;--p200:#e9d5ff;--p300:#d8b4fe;
+  --p400:#c084fc;--p500:#a855f7;--p600:#9333ea;--p700:#7e22ce;
+  --p800:#6b21a8;--p900:#581c87;
+  --w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;
+  --g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;
+  --ok:#16a34a;--ok-lt:#dcfce7;--err:#dc2626;--err-lt:#fee2e2;
+  --warn:#d97706;--warn-lt:#fef3c7;
+  --r:12px;--rs:8px;
+  --s1:0 1px 3px rgba(109,40,217,.08);
+  --s2:0 4px 12px rgba(109,40,217,.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:90;background:var(--w);border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 16px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-back{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:var(--p100);color:var(--p700);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;margin-right:12px}
+.tb-back:hover{background:var(--p200)}
+.tb-info{flex:1;min-width:0}
+.tb-title{font-size:.88rem;font-weight:700;color:var(--g900);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb-sub{font-size:.65rem;color:var(--g400);font-weight:500;margin-top:1px}
+.tb-chip{background:var(--p100);color:var(--p700);border:1px solid var(--p200);font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
+.hero{background:linear-gradient(145deg,var(--p900),var(--p700) 55%,var(--p500));padding:28px 18px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.08),transparent 50%),radial-gradient(circle at 10% 85%,rgba(255,255,255,.05),transparent 40%)}
+.hero::after{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-dot-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:.65rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border-radius:30px;margin-bottom:12px}
+.hero-eyebrow-dot{width:5px;height:5px;background:#c4b5fd;border-radius:50%}
+.hero h1{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:7px}
+.hero h1 em{color:rgba(255,255,255,.45);font-style:italic;font-weight:300}
+.hero-desc{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:18px}
+.hero-cta{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.28);color:#fff;font-size:.8rem;font-weight:700;padding:9px 16px;border-radius:9px;cursor:pointer;transition:all .2s;backdrop-filter:blur(6px)}
+.hero-cta:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
+.hero-stats{display:flex;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+.hs{flex:1;text-align:center}
+.hs+.hs{border-left:1px solid rgba(255,255,255,.1)}
+.hs-n{font-size:1.35rem;font-weight:800;color:#fff;line-height:1}
+.hs-l{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
+.main{padding:16px 14px 56px}
+.divider{display:flex;align-items:center;gap:8px;margin-bottom:12px;margin-top:2px}
+.divider span{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g400)}
+.divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+.uc{background:var(--w);border:1.5px solid var(--g200);border-radius:var(--r);margin-bottom:9px;overflow:hidden;box-shadow:var(--s1);transition:border-color .2s,box-shadow .2s}
+.uc:hover{border-color:var(--p300);box-shadow:var(--s2)}
+.uc[data-open=true]{border-color:var(--p400);box-shadow:var(--s2)}
+.ubtn{width:100%;display:flex;align-items:center;padding:14px 15px;gap:12px;background:none;border:none;cursor:pointer;text-align:left}
+.upill{min-width:54px;padding:0 8px;height:36px;border-radius:9px;flex-shrink:0;background:var(--p100);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.upill span{font-size:.65rem;font-weight:800;color:var(--p700);letter-spacing:-.01em;white-space:nowrap}
+.uc[data-open=true] .upill{background:var(--p700)}
+.uc[data-open=true] .upill span{color:#fff}
+.uinfo{flex:1;min-width:0}
+.uname{font-size:.85rem;font-weight:700;color:var(--g900);line-height:1.3}
+.umeta{font-size:.66rem;color:var(--g400);margin-top:2px;font-weight:500}
+.uright{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.uchev{width:16px;height:16px;color:var(--g300);transition:transform .3s,color .2s}
+.uc[data-open=true] .uchev{transform:rotate(180deg);color:var(--p500)}
+.ubody{display:none;background:var(--p50);border-top:1.5px solid var(--p200);padding:12px 13px 14px}
+.ubody.open{display:block;animation:bodyIn .2s ease}
+@keyframes bodyIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.rrow{display:flex;gap:9px;margin-bottom:8px}
+.rrow:last-child{margin-bottom:0}
+@media(max-width:380px){.rrow{flex-direction:column}}
+.rbtn{flex:1;display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .17s;background:var(--w);text-decoration:none}
+.rbtn .rico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.rbtn .rtxt{line-height:1.25}
+.rbtn .rtxt small{display:block;font-size:.62rem;font-weight:400;opacity:.5;margin-top:1px}
+.rbtn .rarr{margin-left:auto;opacity:0;font-size:.7rem;color:var(--g400);transition:opacity .15s}
+.rbtn:hover .rarr{opacity:1}
+.rbtn.notes{border-color:var(--p200);color:var(--p800)}
+.rbtn.notes .rico{background:var(--p100)}
+.rbtn.notes:hover{background:var(--p50);border-color:var(--p500);box-shadow:var(--s2);transform:translateY(-1px)}
+.rbtn.video{border-color:#bae6fd;color:#0369a1}
+.rbtn.video .rico{background:#e0f2fe}
+.rbtn.video:hover{background:#f0f9ff;border-color:#38bdf8;box-shadow:0 3px 10px rgba(56,189,248,.12);transform:translateY(-1px)}
+.rbtn.quiz{border-color:#fde68a;color:#78350f}
+.rbtn.quiz .rico{background:var(--warn-lt)}
+.rbtn.quiz:hover{background:#fffbeb;border-color:var(--warn);box-shadow:0 3px 10px rgba(217,119,6,.12);transform:translateY(-1px)}
+.qoverlay{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end}
+.qoverlay.open{display:flex}
+.qscrim{position:absolute;inset:0;background:rgba(15,10,40,.55);backdrop-filter:blur(3px)}
+.qpanel{position:relative;z-index:1;background:var(--w);width:100%;max-width:580px;margin:0 auto;border-radius:18px 18px 0 0;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 -10px 50px rgba(109,40,217,.2);animation:panelUp .3s cubic-bezier(.32,.72,0,1)}
+@keyframes panelUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.qhead{padding:16px 18px 12px;border-bottom:1px solid var(--g100);flex-shrink:0}
+.qhead-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.qtitle{font-size:1rem;font-weight:800;color:var(--p800)}
+.qclose{width:28px;height:28px;border-radius:50%;background:var(--g100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--g500);transition:all .15s}
+.qclose:hover{background:var(--err-lt);color:var(--err)}
+.qpips{display:flex;gap:3px}
+.pip{flex:1;height:4px;border-radius:4px;background:var(--g100);transition:background .3s}
+.pip.ans{background:var(--p300)}.pip.cor{background:var(--ok)}.pip.wrg{background:var(--err)}
+.qbody{overflow-y:auto;padding:14px 18px 28px;flex:1}
+.qscore{display:none;background:linear-gradient(135deg,var(--p800),var(--p500));color:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;align-items:center;gap:14px}
+.qscore.show{display:flex}
+.qs-num{font-size:1.9rem;font-weight:800;line-height:1}
+.qs-sub{font-size:.65rem;opacity:.6;margin-top:2px}
+.qs-msg{font-size:.85rem;font-weight:600}
+.qitem{margin-bottom:24px}
+.qitem:last-child{margin-bottom:0}
+.qlbl{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--p500);margin-bottom:4px}
+.qtext{font-size:.88rem;font-weight:600;color:var(--g900);line-height:1.5;margin-bottom:10px}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1.5px solid var(--g200);border-radius:var(--rs);cursor:pointer;font-size:.83rem;font-weight:500;background:var(--w);color:var(--g700);transition:all .14s}
+.qopt:hover{border-color:var(--p300);background:var(--p50);color:var(--p800)}
+.qltr{width:21px;height:21px;border-radius:50%;background:var(--g100);border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:800;color:var(--g500);flex-shrink:0;transition:all .14s}
+.qopt.cor{background:var(--ok-lt);border-color:#86efac;color:#14532d}
+.qopt.cor .qltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.qopt.wrg{background:var(--err-lt);border-color:#fca5a5;color:#7f1d1d}
+.qopt.wrg .qltr{background:var(--err);border-color:var(--err);color:#fff}
+.qopt.lock{cursor:default;pointer-events:none}
+.qopt.lock:not(.cor):not(.wrg):hover{border-color:var(--g200);background:var(--w);color:var(--g700)}
 </style>
 </head>
 <body>
-
-    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/1Zsa4yX9_78mNk3Pjhgfob1Qc5FqjKBIi/preview', 'Syllabus')">
-        📄 DOWNLOAD APPLIED SOCIOLOGY SYLLABUS
+<header class="topbar">
+  <button class="tb-back" onclick="goBackToApp()" aria-label="Back">&#8592;</button>
+  <div class="tb-info">
+    <div class="tb-title">Applied Sociology</div>
+    <div class="tb-sub">BSc First Semester</div>
+  </div>
+  <div class="tb-chip">7 Units</div>
+</header>
+<section class="hero">
+  <div class="hero-dot-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>BSc First Semester</div>
+    <h1>Applied<br/><em>Sociology</em></h1>
+    <p class="hero-desc">Interactive syllabus, detailed notes, video lectures & internal quizzes on sociology fundamentals, social structure & clinical applications.</p>
+    <button class="hero-cta" onclick="openPDF('https://drive.google.com/file/d/1Zsa4yX9_78mNk3Pjhgfob1Qc5FqjKBIi/view')">
+      📄 &nbsp;Download Syllabus
+    </button>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-n">7</div><div class="hs-l">Units</div></div>
+      <div class="hs"><div class="hs-n">70</div><div class="hs-l">Quizzes</div></div>
     </div>
-    
-    <div id="units">
-        
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 1 - SOCIOLOGY AND SIGNIFICANCE IN NURSING <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1BV88-SV64qyZy2AvrAIPGB1ZJD51DAmB/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1JD-OhAL3WPEq9rnOqqD6kYAhcOUpIObw/preview', 'Definition, Nature and Scope')">
-                        <span class="icon video-icon">▶️</span><span>Definition, Nature and Scope of Sociology</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1u8bWIpQ5fC3yktDmg66mN38HY-eKCvMh/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1iP9p5b5uJpTGDzmJ3rVX6QwBwrZ3LO3Y/preview', 'Significance in Nursing')">
-                        <span class="icon video-icon">▶️</span><span>Significance of Sociology in Nursing</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1h-SCRZQdlhuSjx6NuUn8B_cz3c7MRLac/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1lxVqH1-YNH8hgdFOqgO2C-fEf-ejNiFo/preview', 'Branches of Sociology')">
-                        <span class="icon video-icon">▶️</span><span>Branches of Sociology</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1QKFdw1TsUUXYdBzkkC3FjN9ZQxBc2enA/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(1)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 2 - SOCIAL STRUCTURE <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1xdwGthzzd0zsASOL8d5okW0uIRW5iqpB/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/13VAUswAlo1N_ysjSAm8a1f0Vt6QYqlKT/preview', 'Basic Concept of Society')">
-                        <span class="icon video-icon">▶️</span><span>Basic concept of Society, Community, Association</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1oftc5MF7_4-5eFNWNrf1icwYKe27YJr1/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1cNDr3y9vaqKXE5NVwutZ8HDvq4u0Pbt1/preview', 'Social Group')">
-                        <span class="icon video-icon">▶️</span><span>Social Group</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1dqOM4Pn6zfKUstXGGUdeE0yV2MkIDaeQ/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1cyVJVgiCpKk33fLdYDv-EQ0EdV2eD1By/preview', 'Social Processes')">
-                        <span class="icon video-icon">▶️</span><span>Social Processes</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ka8HPemgx4HljgioeWJJHLkitVGvMsJG/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1RU2-56mlGSLCYQeDb49pqZ8rDSZI2FUW/preview', 'Socialization & Social Change')">
-                        <span class="icon video-icon">▶️</span><span>Socialization & Social Change</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1sDQQ4mDZGty2jDR9AAdZPk2_8H5OhqFc/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1TR8gdH7DonaFTlLPbuVwTv409RBzLi2S/preview', 'Community & Health Problems')">
-                        <span class="icon video-icon">▶️</span><span>Community, Major Health Problems & Social Structure</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1itPbS3rQjYCgoVkziu-7SjJfL71l3JUy/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(2)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 3 - CULTURE <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1HSM8DxMZkWVuBoGRg_15bH9bDwFn3Ojy/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/186CFUt_H2H-SLuW3hTYxaHv1M1GVu-9D/preview', 'Nature & Characteristic')">
-                        <span class="icon video-icon">▶️</span><span>Nature & Characteristic of Culture</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1qwBedRBUJYa2E7Wku_LXHqP9rOIcktrI/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ngy7TNBunLTmFnm2c656j7PpR0irmRlR/preview', 'Evolution of Culture')">
-                        <span class="icon video-icon">▶️</span><span>Evolution of Culture & Diversity</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1OYRgp2EqtquaPeP5GFVxDA98jgP5oUi_/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Ia-NF-yKeO5qhKnDCMSrat58NZ-iwgbB/preview', 'Culture & Health')">
-                        <span class="icon video-icon">▶️</span><span>Culture, Modernization & Impact on Health</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1mY5o6mf26t_bUaWG-SqIBGuG_QjtcwbF/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(3)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 4 - FAMILY AND MARRIAGE <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1aGc5QIEpxEoLyKt1S694Sg6olkcq85FQ/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/15ZNr7Nu81WGMUP-kZWf2BSVEIDMSME90/preview', 'Family Characteristics')">
-                        <span class="icon video-icon">▶️</span><span>Family – Characteristics, Types & Functions</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Hh1nuBy8rjKDmplkhkuvv3oM4tJue1Z7/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1oUMU2kUUy9odZYV-QnTnopRu9-WnTnkU/preview', 'Marriage Forms')">
-                        <span class="icon video-icon">▶️</span><span>Marriage – Forms, Customs & Importance</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_8g7N7-fL68mUnZKu2lJi1i6nnh2MmnW/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1EbODYmGqKWP-4IPvh4iw96OJxaVx7-Nz/preview', 'Legislation on Marriage')">
-                        <span class="icon video-icon">▶️</span><span>Legislation on Indian Marriage & Influence</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/165EuJU31dD7e9ybvn9uj4srUc-UEZWqk/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(4)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 5 - SOCIAL STRATIFICATION <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/12pMCQS7lUnbHZG1gZFoimUHN6FMiA682/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1b7eoASTOSt7pUCGwAKU6JZksklUCmr5c/preview', 'Introduction to Stratification')">
-                        <span class="icon video-icon">▶️</span><span>Introduction: Characteristics, Forms & Indian Caste System</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1cXo__lQiYPUVVmqBylHtls34PV-JmMW6/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1qtq5nkhEM1nDwUAnhrnW3itRc9GCUa43/preview', 'Social Class & Mobility')">
-                        <span class="icon video-icon">▶️</span><span>Social Class & Social Mobility</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1MWv6eDj4KX-xCzEyvB-1sISw-lvXW-V2/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1OJaulyAJ4JPKMqlq5Ph8dCs1Jt4V7sIE/preview', 'Race & Influence on Health')">
-                        <span class="icon video-icon">▶️</span><span>Race & Influence of Class, Caste on Health</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1NbbJreaRt0lvblFGG7CzdSG_hIyIyd2O/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(5)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 6 - SOCIAL ORGANIZATION AND DISORGANIZATION <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1fL3KpQGT5HaHKUBCPoHFpy3LqBU32Ku4/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1NvEhjO0Avk0dIX2jFw9svWwsS-xOO31X/preview', 'Social Organization')">
-                        <span class="icon video-icon">▶️</span><span>Social Organization: Meaning, Elements, Types</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/17w8BCVHA8jhB7svdBHSZ0uBn0QSErZYG/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1SlXpxj2WxT-MC1AHFZEaK_IJoTY2QYfD/preview', 'Social System')">
-                        <span class="icon video-icon">▶️</span><span>Social System</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1cl4T75I8T9KppQwfPdJomiK16X6D3gyW/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Z7SnnUhvRCxQerZXM3F1NXMEW7K6k2Al/preview', 'Social Control')">
-                        <span class="icon video-icon">▶️</span><span>Social Control</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1S5Qkfjy1Gysa78IAwmPqsFXtj02Xk9jf/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1IDvi6J0zk-_-vJriqogUUGbRcAmeFFwh/preview', 'Social Control - Part B')">
-                        <span class="icon video-icon">▶️</span><span>Social Control - Part B</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ck7WWfwv2DCwh7EU1rs0FP5qP85n9kx3/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1PVbe_ulHfSKaW1yrKV3dohfDQcMYGesc/preview', 'Social Disorganization')">
-                        <span class="icon video-icon">▶️</span><span>Social Disorganization</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1FhfCd7ElY4Pzq0pKSnAiibLIh-Vr4k29/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1wcs0Wi0Ouqemb3ZUddgSu3XeA0ELMNyx/preview', 'Major Social Problems')">
-                        <span class="icon video-icon">▶️</span><span>Major Social Problems</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1SiIxvKAiaK938EO1bk9UR_WsGHcZ9jj2/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1v7kaMB81YADUHMaHz6xBe0NV7NT9paMU/preview', 'Major Social Problems - Part B')">
-                        <span class="icon video-icon">▶️</span><span>Major Social Problems - Part B</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/15wS_uZZxAvHUIabtqfK8x7QAj467CooD/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1QmQTbl6bRIKUsl3HHTc4in3k8VnqrJz9/preview', 'Vulnerable Group')">
-                        <span class="icon video-icon">▶️</span><span>Vulnerable Group</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/122_4MA_7JptDPIpsl7aefBRRLiTrVX2v/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1MvniSi2Yce0OKbDQJuzlEQJ70fJAF5ai/preview', 'Social Welfare Organization')">
-                        <span class="icon video-icon">▶️</span><span>Social Welfare Organization</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1KHHdwKLWseLveRv2t0npcd3DM5_M9oAS/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1sEaWtma4aG2XUilSCBBIvmCyiQ4lM6-y/preview', 'Role of Nurse')">
-                        <span class="icon video-icon">▶️</span><span>Role of Nurse in Reducing Social Problems</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1TgOSRCoI7G6Ob2bf2E-KN6jJsFt3Vs4U/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1NR9A9Zo9StmBaWxUZaPxtlPbE_kdPDCS/preview', 'Rights Of Children')">
-                        <span class="icon video-icon">▶️</span><span>Rights Of Children</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1gFKlQTrT1LeApCIuJ-JfqtyVWGHF0UWI/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1X7SWGCwBVzrMuou-nM8jUVlcd-ar8fvi/preview', 'Rights Of Women')">
-                        <span class="icon video-icon">▶️</span><span>Rights Of Women</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1lut_9izqc_W4dWDS6xR6N-LOm-ocY190/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(6)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 7 - CLINICAL SOCIOLOGY <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1jMPs_Iy3UO1_8W0lBk2ayHmz0jNdXQo1/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/12YgrcI7HlYZofmZ0pbBf8dbeXXwKEwcR/preview', 'Introduction, Strategies')">
-                        <span class="icon video-icon">▶️</span><span>Introduction, Sociological Strategies & Use</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1hTdNZBZyNXMbfNCNl5taVtxx_b9v1tsz/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(7)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+  </div>
+</section>
+<main class="main">
+  <div class="divider"><span>Course Units</span></div>
+  
+  <div class="uc" id="u1" data-open="false">
+    <button class="ubtn" onclick="tog('u1')">
+      <div class="upill"><span>Unit 1</span></div>
+      <div class="uinfo"><div class="uname">Sociology and Significance</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u1">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1BV88-SV64qyZy2AvrAIPGB1ZJD51DAmB/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 1 Overview</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1JD-OhAL3WPEq9rnOqqD6kYAhcOUpIObw/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Definition, Nature and Scope</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1u8bWIpQ5fC3yktDmg66mN38HY-eKCvMh/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Nature and Scope</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1iP9p5b5uJpTGDzmJ3rVX6QwBwrZ3LO3Y/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Significance in Nursing</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1h-SCRZQdlhuSjx6NuUn8B_cz3c7MRLac/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Significance</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1lxVqH1-YNH8hgdFOqgO2C-fEf-ejNiFo/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Branches of Sociology</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1QKFdw1TsUUXYdBzkkC3FjN9ZQxBc2enA/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Branches</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(1)"><div class="rico">✍️</div><div class="rtxt">Unit 1 Quiz<small>10 questions</small></div></button>
+      </div>
     </div>
+  </div>
 
-    <div id="app-modal" class="modal-overlay">
-        <div class="modal-header">
-            <div id="modal-title" class="modal-title">Resource</div>
-            <button class="btn-close" onclick="closeModal()">Close X</button>
-        </div>
-        <div id="modal-body" class="modal-body"></div>
+  <div class="uc" id="u2" data-open="false">
+    <button class="ubtn" onclick="tog('u2')">
+      <div class="upill"><span>Unit 2</span></div>
+      <div class="uinfo"><div class="uname">Social Structure</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u2">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1xdwGthzzd0zsASOL8d5okW0uIRW5iqpB/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Social Structure</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/13VAUswAlo1N_ysjSAm8a1f0Vt6QYqlKT/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Basic Concept of Society</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1oftc5MF7_4-5eFNWNrf1icwYKe27YJr1/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Society Concepts</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1cNDr3y9vaqKXE5NVwutZ8HDvq4u0Pbt1/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Group</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1dqOM4Pn6zfKUstXGGUdeE0yV2MkIDaeQ/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Social Group</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1cyVJVgiCpKk33fLdYDv-EQ0EdV2eD1By/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Processes</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1ka8HPemgx4HljgioeWJJHLkitVGvMsJG/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Social Processes</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1RU2-56mlGSLCYQeDb49pqZ8rDSZI2FUW/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Socialization & Change</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1sDQQ4mDZGty2jDR9AAdZPk2_8H5OhqFc/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Socialization</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1TR8gdH7DonaFTlLPbuVwTv409RBzLi2S/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Community & Health</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1itPbS3rQjYCgoVkziu-7SjJfL71l3JUy/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Community Health</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(2)"><div class="rico">✍️</div><div class="rtxt">Unit 2 Quiz<small>10 questions</small></div></button>
+      </div>
     </div>
+  </div>
+
+  <div class="uc" id="u3" data-open="false">
+    <button class="ubtn" onclick="tog('u3')">
+      <div class="upill"><span>Unit 3</span></div>
+      <div class="uinfo"><div class="uname">Culture</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u3">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1HSM8DxMZkWVuBoGRg_15bH9bDwFn3Ojy/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Culture</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/186CFUt_H2H-SLuW3hTYxaHv1M1GVu-9D/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Nature & Characteristic</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1qwBedRBUJYa2E7Wku_LXHqP9rOIcktrI/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Characteristics</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1ngy7TNBunLTmFnm2c656j7PpR0irmRlR/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Evolution of Culture</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1OYRgp2EqtquaPeP5GFVxDA98jgP5oUi_/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Evolution</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Ia-NF-yKeO5qhKnDCMSrat58NZ-iwgbB/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Culture & Health</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1mY5o6mf26t_bUaWG-SqIBGuG_QjtcwbF/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Impact on Health</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(3)"><div class="rico">✍️</div><div class="rtxt">Unit 3 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u4" data-open="false">
+    <button class="ubtn" onclick="tog('u4')">
+      <div class="upill"><span>Unit 4</span></div>
+      <div class="uinfo"><div class="uname">Family and Marriage</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u4">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1aGc5QIEpxEoLyKt1S694Sg6olkcq85FQ/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Family & Marriage</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/15ZNr7Nu81WGMUP-kZWf2BSVEIDMSME90/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Family Characteristics</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Hh1nuBy8rjKDmplkhkuvv3oM4tJue1Z7/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Characteristics</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1oUMU2kUUy9odZYV-QnTnopRu9-WnTnkU/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Marriage Forms</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1_8g7N7-fL68mUnZKu2lJi1i6nnh2MmnW/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Forms & Customs</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1EbODYmGqKWP-4IPvh4iw96OJxaVx7-Nz/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Legislation on Marriage</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/165EuJU31dD7e9ybvn9uj4srUc-UEZWqk/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Legislation</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(4)"><div class="rico">✍️</div><div class="rtxt">Unit 4 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u5" data-open="false">
+    <button class="ubtn" onclick="tog('u5')">
+      <div class="upill"><span>Unit 5</span></div>
+      <div class="uinfo"><div class="uname">Social Stratification</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u5">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/12pMCQS7lUnbHZG1gZFoimUHN6FMiA682/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Stratification</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1b7eoASTOSt7pUCGwAKU6JZksklUCmr5c/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Intro to Stratification</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1cXo__lQiYPUVVmqBylHtls34PV-JmMW6/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Characteristics</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1qtq5nkhEM1nDwUAnhrnW3itRc9GCUa43/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Class & Mobility</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1MWv6eDj4KX-xCzEyvB-1sISw-lvXW-V2/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Class & Mobility</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1OJaulyAJ4JPKMqlq5Ph8dCs1Jt4V7sIE/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Race & Influence on Health</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1NbbJreaRt0lvblFGG7CzdSG_hIyIyd2O/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Influence on Health</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(5)"><div class="rico">✍️</div><div class="rtxt">Unit 5 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u6" data-open="false">
+    <button class="ubtn" onclick="tog('u6')">
+      <div class="upill"><span>Unit 6</span></div>
+      <div class="uinfo"><div class="uname">Social Organization</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u6">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1fL3KpQGT5HaHKUBCPoHFpy3LqBU32Ku4/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Org & Disorganization</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1NvEhjO0Avk0dIX2jFw9svWwsS-xOO31X/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Organization</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/17w8BCVHA8jhB7svdBHSZ0uBn0QSErZYG/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Organization</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1SlXpxj2WxT-MC1AHFZEaK_IJoTY2QYfD/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social System</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1cl4T75I8T9KppQwfPdJomiK16X6D3gyW/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Social System</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Z7SnnUhvRCxQerZXM3F1NXMEW7K6k2Al/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Control</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1S5Qkfjy1Gysa78IAwmPqsFXtj02Xk9jf/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Social Control</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1IDvi6J0zk-_-vJriqogUUGbRcAmeFFwh/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Control - Part B</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1ck7WWfwv2DCwh7EU1rs0FP5qP85n9kx3/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Control Part B</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1PVbe_ulHfSKaW1yrKV3dohfDQcMYGesc/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Disorganization</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1FhfCd7ElY4Pzq0pKSnAiibLIh-Vr4k29/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Disorganization</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1wcs0Wi0Ouqemb3ZUddgSu3XeA0ELMNyx/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Major Social Problems</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1SiIxvKAiaK938EO1bk9UR_WsGHcZ9jj2/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Social Problems</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1v7kaMB81YADUHMaHz6xBe0NV7NT9paMU/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Major Social Problems - Part B</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/15wS_uZZxAvHUIabtqfK8x7QAj467CooD/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Social Problems Part B</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1QmQTbl6bRIKUsl3HHTc4in3k8VnqrJz9/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Vulnerable Group</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/122_4MA_7JptDPIpsl7aefBRRLiTrVX2v/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Vulnerable Group</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1MvniSi2Yce0OKbDQJuzlEQJ70fJAF5ai/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Welfare Organization</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1KHHdwKLWseLveRv2t0npcd3DM5_M9oAS/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Welfare Organization</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1sEaWtma4aG2XUilSCBBIvmCyiQ4lM6-y/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Role of Nurse</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1TgOSRCoI7G6Ob2bf2E-KN6jJsFt3Vs4U/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Role of Nurse</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1NR9A9Zo9StmBaWxUZaPxtlPbE_kdPDCS/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Rights Of Children</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1gFKlQTrT1LeApCIuJ-JfqtyVWGHF0UWI/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Rights Of Children</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1X7SWGCwBVzrMuou-nM8jUVlcd-ar8fvi/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Rights Of Women</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1lut_9izqc_W4dWDS6xR6N-LOm-ocY190/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Rights Of Women</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(6)"><div class="rico">✍️</div><div class="rtxt">Unit 6 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u7" data-open="false">
+    <button class="ubtn" onclick="tog('u7')">
+      <div class="upill"><span>Unit 7</span></div>
+      <div class="uinfo"><div class="uname">Clinical Sociology</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u7">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1jMPs_Iy3UO1_8W0lBk2ayHmz0jNdXQo1/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Clinical Sociology</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/12YgrcI7HlYZofmZ0pbBf8dbeXXwKEwcR/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Introduction, Strategies</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1hTdNZBZyNXMbfNCNl5taVtxx_b9v1tsz/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Strategies & Use</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(7)"><div class="rico">✍️</div><div class="rtxt">Unit 7 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div class="qoverlay" id="qmodal">
+  <div class="qscrim" onclick="closeQuiz()"></div>
+  <div class="qpanel">
+    <div class="qhead">
+      <div class="qhead-top"><div class="qtitle" id="qtitle">Quiz</div><button class="qclose" onclick="closeQuiz()">✕</button></div>
+      <div class="qpips" id="qpips"></div>
+    </div>
+    <div class="qbody" id="qbody"></div>
+  </div>
+</div>
 
 <script>
-    const QUIZ_DATA = {
-        1: [
-            { q: "Who is known as the 'Father of Sociology'?", o: ["Emile Durkheim", "Auguste Comte", "Karl Marx", "Max Weber"], a: 1 },
-            { q: "Sociology is best defined as the scientific study of:", o: ["Human mind", "Society and social behavior", "Political systems", "Economic markets"], a: 1 },
-            { q: "The term 'Sociology' was coined in which year?", o: ["1839", "1859", "1900", "1750"], a: 0 },
-            { q: "Which of the following is NOT a scope of sociology?", o: ["Social Institutions", "Social Control", "Chemical Reactions", "Social Change"], a: 2 },
-            { q: "Significance of sociology in nursing includes understanding:", o: ["Drug interactions", "Patient's social background", "Surgical procedures", "Hospital architecture"], a: 1 },
-            { q: "Medical Sociology focuses on:", o: ["Social factors affecting health", "Manufacturing medicines", "Hospital billing", "Anatomy"], a: 0 },
-            { q: "The word 'Sociology' is derived from:", o: ["Latin and Greek", "French and German", "English and Spanish", "Greek only"], a: 0 },
-            { q: "Micro-sociology studies:", o: ["Large social systems", "Face-to-face interactions", "National economies", "Global trends"], a: 1 },
-            { q: "Social pathology refers to:", o: ["Study of diseases", "Study of social problems", "Study of mind", "Study of cells"], a: 1 },
-            { q: "Which is a primary institution of society?", o: ["Bank", "Family", "Factory", "Club"], a: 1 }
-        ],
-        2: [
-            { q: "A 'Community' is best described by:", o: ["We-feeling and definite territory", "Formal rules", "Temporary gathering", "Online group"], a: 0 },
-            { q: "The process of learning social norms is called:", o: ["Assimilation", "Socialization", "Competition", "Conflict"], a: 1 },
-            { q: "A 'Primary Group' is characterized by:", o: ["Formal relations", "Intimate face-to-face association", "Large membership", "Temporary nature"], a: 1 },
-            { q: "Which is an example of a secondary group?", o: ["Family", "Playgroup", "Political Party", "Neighbors"], a: 2 },
-            { q: "Competition and Conflict are forms of:", o: ["Social Groups", "Social Processes", "Social Control", "Social Institutions"], a: 1 },
-            { q: "Accommodation implies:", o: ["Fighting", "Adjusting to conflict", "Leaving society", "Destroying the opponent"], a: 1 },
-            { q: "An 'Association' is formed for:", o: ["General living", "Specific purpose/goal", "Spontaneous gathering", "Biological needs"], a: 1 },
-            { q: "Society is a web of:", o: ["Political relations", "Social relationships", "Economic goods", "Legal rules"], a: 1 },
-            { q: "Social change refers to modification in:", o: ["Climate", "Social structure and functions", "Individual DNA", "Geography"], a: 1 },
-            { q: "Urban communities are characterized by:", o: ["Homogeneity", "Heterogeneity and anonymity", "Agriculture", "Slow change"], a: 1 }
-        ],
-        3: [
-            { q: "Culture includes:", o: ["Only art", "Knowledge, belief, art, morals, law, custom", "Only laws", "Only food"], a: 1 },
-            { q: "Material culture refers to:", o: ["Ideas and beliefs", "Physical objects/artifacts", "Language", "Values"], a: 1 },
-            { q: "Cultural Lag occurs when:", o: ["Material culture changes faster than non-material culture", "Non-material changes faster", "Both change equally", "No change occurs"], a: 0 },
-            { q: "The tendency to judge others' culture by one's own standards is:", o: ["Xenocentrism", "Ethnocentrism", "Cultural Relativism", "Multiculturalism"], a: 1 },
-            { q: "Acculturation means:", o: ["Rejecting culture", "Cultural exchange/modification through contact", "Creating new culture", "Destroying culture"], a: 1 },
-            { q: "Which is a characteristic of culture?", o: ["It is innate/inherited", "It is learned and shared", "It is static", "It is individual"], a: 1 },
-            { q: "Cultural diversity in nursing requires:", o: ["Ignoring patient beliefs", "Cultural competence/sensitivity", "Forcing own beliefs", "Treating everyone identically"], a: 1 },
-            { q: "Folkways are:", o: ["Strict laws", "Everyday habits/customs", "Religious texts", "Scientific rules"], a: 1 },
-            { q: "Mores are norms that have:", o: ["Little significance", "Strong moral significance", "Legal punishment", "No value"], a: 1 },
-            { q: "Modernization often leads to:", o: ["Stronger joint families", "Nuclear families and individualism", "Less technology", "Rural migration"], a: 1 }
-        ],
-        4: [
-            { q: "The basic unit of society is:", o: ["Individual", "Family", "State", "School"], a: 1 },
-            { q: "Polyandry is a form of marriage where:", o: ["One man marries multiple women", "One woman marries multiple men", "Group marriage", "Serial monogamy"], a: 1 },
-            { q: "A nuclear family consists of:", o: ["Parents and children", "Three generations", "Siblings only", "Grandparents only"], a: 0 },
-            { q: "Matriarchal family is one where authority lies with the:", o: ["Father", "Mother", "Uncle", "Eldest Son"], a: 1 },
-            { q: "Endogamy refers to marriage:", o: ["Outside the group", "Within the group", "With foreigners", "With multiple partners"], a: 1 },
-            { q: "The primary function of the family is:", o: ["Banking", "Socialization and reproduction", "Political voting", "Manufacturing"], a: 1 },
-            { q: "Which Act prohibits dowry in India?", o: ["Dowry Prohibition Act 1961", "Marriage Act 1955", "Family Court Act", "Sati Act"], a: 0 },
-            { q: "Monogamy is:", o: ["Marriage to one person", "Marriage to many", "No marriage", "Living together"], a: 0 },
-            { q: "Joint families are most common in:", o: ["Urban West", "Rural India", "Industrial cities", "Nomadic tribes"], a: 1 },
-            { q: "Divorce rates are generally influenced by:", o: ["Weather", "Changing social values and laws", "Genetics", "Food"], a: 1 }
-        ],
-        5: [
-            { q: "Social stratification is based on:", o: ["Equality", "Inequality/Hierarchy", "Friendship", "Geography"], a: 1 },
-            { q: "The Caste system is an example of:", o: ["Open stratification", "Closed stratification", "Class system", "Meritocracy"], a: 1 },
-            { q: "Social mobility refers to:", o: ["Moving to a new city", "Movement between social strata", "Walking", "Traveling"], a: 1 },
-            { q: "Vertical mobility implies:", o: ["Change in status (up or down)", "Change in job with same status", "Migration", "Retirement"], a: 0 },
-            { q: "Class system is primarily based on:", o: ["Birth", "Economic status/Achievement", "Religion", "Skin color"], a: 1 },
-            { q: "Sanskritization concept was given by:", o: ["M.N. Srinivas", "G.S. Ghurye", "Ambedkar", "Gandhi"], a: 0 },
-            { q: "Social inequality affects health by:", o: ["Uniform access", "Unequal access to resources/care", "Improving immunity", "None"], a: 1 },
-            { q: "Race is a:", o: ["Cultural concept", "Biological concept", "Economic concept", "Political concept"], a: 1 },
-            { q: "Inter-generational mobility means change in status:", o: ["Within one's life", "Between generations", "After death", "In old age"], a: 1 },
-            { q: "Which is a determinant of social class?", o: ["Height", "Occupation and Income", "Blood group", "Hair color"], a: 1 }
-        ],
-        6: [
-            { q: "Social control ensures:", o: ["Chaos", "Conformity to norms", "Revolution", "Anarchy"], a: 1 },
-            { q: "Informal means of social control include:", o: ["Police", "Courts", "Gossip, Customs, Family", "Prison"], a: 2 },
-            { q: "Social disorganization leads to:", o: ["Stability", "Breakdown of social order", "Peace", "Growth"], a: 1 },
-            { q: "Juvenile delinquency refers to crimes committed by:", o: ["Minors", "Adults", "Elderly", "Politicians"], a: 0 },
-            { q: "Anomie is a state of:", o: ["Normlessness", "Strict rules", "Happiness", "Wealth"], a: 0 },
-            { q: "Which is a major social problem in India?", o: ["High Literacy", "Poverty and Unemployment", "Clean Air", "Equality"], a: 1 },
-            { q: "Prostitution is often linked to:", o: ["Economic necessity/Exploitation", "High morals", "Better health", "Social prestige"], a: 0 },
-            { q: "Vulnerable groups include:", o: ["Healthy adults", "Women, Children, Elderly", "Rich businessmen", "Athletes"], a: 1 },
-            { q: "NGO stands for:", o: ["Non-Governmental Organization", "New Govt Office", "National Growth Org", "No Group Org"], a: 0 },
-            { q: "Substance abuse affects:", o: ["Individual health only", "Family and Society", "Economy only", "All of the above"], a: 3 }
-        ],
-        7: [
-            { q: "Clinical Sociology involves:", o: ["Theoretical study only", "Intervention for change", "Laboratory experiments", "Teaching history"], a: 1 },
-            { q: "A primary role of a clinical sociologist is:", o: ["Counseling and consultancy", "Surgery", "Prescribing drugs", "Farming"], a: 0 },
-            { q: "Which method is used in clinical sociology?", o: ["Case study", "Chemical analysis", "X-ray", "Surgery"], a: 0 },
-            { q: "The focus of clinical sociology is:", o: ["Improving social life/systems", "Writing books", "Studying rocks", "Building bridges"], a: 0 },
-            { q: "Sociological strategies in health care include:", o: ["Patient advocacy", "Ignoring social factors", "Strict medication only", "Isolation"], a: 0 },
-            { q: "Clinical sociology differs from academic sociology in its:", o: ["Focus on application/practice", "Focus on theory", "Lack of research", "Use of math"], a: 0 },
-            { q: "A 'Change Agent' refers to:", o: ["One who resists change", "One who facilitates change", "A chemical", "A static system"], a: 1 },
-            { q: "Intervention in clinical sociology can occur at:", o: ["Individual level only", "Community level only", "Multiple levels (Individual/Group/Community)", "Global level only"], a: 2 },
-            { q: "Empowerment strategies aim to:", o: ["Control people", "Increase capacity/control over life", "Suppress rights", "Create dependency"], a: 1 },
-            { q: "The client in clinical sociology can be:", o: ["An individual", "An organization", "A community", "All of the above"], a: 3 }
-        ]
-    };
+function goBackToApp(){if(window.parent&&window.parent!==window){window.parent.postMessage({action:'goBack'},'*');}else{history.back();}}
+function openPDF(url){
+  if(!url || url==='COMING SOON' || url===''){ alert('This resource is coming soon!'); return; }
+  const clean=url.replace(/\/preview.*$/,'').replace(/\/view.*$/,'')+'/view';
+  window.open(clean,'_blank');
+}
+function tog(id){const card=document.getElementById(id);const body=document.getElementById('b-'+id);const open=card.dataset.open==='true';card.dataset.open=String(!open);body.classList.toggle('open',!open);}
 
-    let currentQuizUnit = 1;
-    let score = 0;
+// QUIZ DATA - Each unit has exactly 10 MCQs
+const QD={
+1:[
+  {q:"Who is known as the 'Father of Sociology'?",o:["Emile Durkheim","Auguste Comte","Karl Marx","Max Weber"],a:1},
+  {q:"Sociology is best defined as the scientific study of:",o:["Human mind","Society and social behavior","Political systems","Economic markets"],a:1},
+  {q:"The term 'Sociology' was coined in which year?",o:["1839","1859","1900","1750"],a:0},
+  {q:"Which of the following is NOT a scope of sociology?",o:["Social Institutions","Social Control","Chemical Reactions","Social Change"],a:2},
+  {q:"Significance of sociology in nursing includes understanding:",o:["Drug interactions","Patient's social background","Surgical procedures","Hospital architecture"],a:1},
+  {q:"Medical Sociology focuses on:",o:["Social factors affecting health","Manufacturing medicines","Hospital billing","Anatomy"],a:0},
+  {q:"The word 'Sociology' is derived from:",o:["Latin and Greek","French and German","English and Spanish","Greek only"],a:0},
+  {q:"Micro-sociology studies:",o:["Large social systems","Face-to-face interactions","National economies","Global trends"],a:1},
+  {q:"Social pathology refers to:",o:["Study of diseases","Study of social problems","Study of mind","Study of cells"],a:1},
+  {q:"Which is a primary institution of society?",o:["Bank","Family","Factory","Club"],a:1}
+],
+2:[
+  {q:"A 'Community' is best described by:",o:["We-feeling and definite territory","Formal rules","Temporary gathering","Online group"],a:0},
+  {q:"The process of learning social norms is called:",o:["Assimilation","Socialization","Competition","Conflict"],a:1},
+  {q:"A 'Primary Group' is characterized by:",o:["Formal relations","Intimate face-to-face association","Large membership","Temporary nature"],a:1},
+  {q:"Which is an example of a secondary group?",o:["Family","Playgroup","Political Party","Neighbors"],a:2},
+  {q:"Competition and Conflict are forms of:",o:["Social Groups","Social Processes","Social Control","Social Institutions"],a:1},
+  {q:"Accommodation implies:",o:["Fighting","Adjusting to conflict","Leaving society","Destroying the opponent"],a:1},
+  {q:"An 'Association' is formed for:",o:["General living","Specific purpose/goal","Spontaneous gathering","Biological needs"],a:1},
+  {q:"Society is a web of:",o:["Political relations","Social relationships","Economic goods","Legal rules"],a:1},
+  {q:"Social change refers to modification in:",o:["Climate","Social structure and functions","Individual DNA","Geography"],a:1},
+  {q:"Urban communities are characterized by:",o:["Homogeneity","Heterogeneity and anonymity","Agriculture","Slow change"],a:1}
+],
+3:[
+  {q:"Culture includes:",o:["Only art","Knowledge, belief, art, morals, law, custom","Only laws","Only food"],a:1},
+  {q:"Material culture refers to:",o:["Ideas and beliefs","Physical objects/artifacts","Language","Values"],a:1},
+  {q:"Cultural Lag occurs when:",o:["Material culture changes faster than non-material culture","Non-material changes faster","Both change equally","No change occurs"],a:0},
+  {q:"The tendency to judge others' culture by one's own standards is:",o:["Xenocentrism","Ethnocentrism","Cultural Relativism","Multiculturalism"],a:1},
+  {q:"Acculturation means:",o:["Rejecting culture","Cultural exchange/modification through contact","Creating new culture","Destroying culture"],a:1},
+  {q:"Which is a characteristic of culture?",o:["It is innate/inherited","It is learned and shared","It is static","It is individual"],a:1},
+  {q:"Cultural diversity in nursing requires:",o:["Ignoring patient beliefs","Cultural competence/sensitivity","Forcing own beliefs","Treating everyone identically"],a:1},
+  {q:"Folkways are:",o:["Strict laws","Everyday habits/customs","Religious texts","Scientific rules"],a:1},
+  {q:"Mores are norms that have:",o:["Little significance","Strong moral significance","Legal punishment","No value"],a:1},
+  {q:"Modernization often leads to:",o:["Stronger joint families","Nuclear families and individualism","Less technology","Rural migration"],a:1}
+],
+4:[
+  {q:"The basic unit of society is:",o:["Individual","Family","State","School"],a:1},
+  {q:"Polyandry is a form of marriage where:",o:["One man marries multiple women","One woman marries multiple men","Group marriage","Serial monogamy"],a:1},
+  {q:"A nuclear family consists of:",o:["Parents and children","Three generations","Siblings only","Grandparents only"],a:0},
+  {q:"Matriarchal family is one where authority lies with the:",o:["Father","Mother","Uncle","Eldest Son"],a:1},
+  {q:"Endogamy refers to marriage:",o:["Outside the group","Within the group","With foreigners","With multiple partners"],a:1},
+  {q:"The primary function of the family is:",o:["Banking","Socialization and reproduction","Political voting","Manufacturing"],a:1},
+  {q:"Which Act prohibits dowry in India?",o:["Dowry Prohibition Act 1961","Marriage Act 1955","Family Court Act","Sati Act"],a:0},
+  {q:"Monogamy is:",o:["Marriage to one person","Marriage to many","No marriage","Living together"],a:0},
+  {q:"Joint families are most common in:",o:["Urban West","Rural India","Industrial cities","Nomadic tribes"],a:1},
+  {q:"Divorce rates are generally influenced by:",o:["Weather","Changing social values and laws","Genetics","Food"],a:1}
+],
+5:[
+  {q:"Social stratification is based on:",o:["Equality","Inequality/Hierarchy","Friendship","Geography"],a:1},
+  {q:"The Caste system is an example of:",o:["Open stratification","Closed stratification","Class system","Meritocracy"],a:1},
+  {q:"Social mobility refers to:",o:["Moving to a new city","Movement between social strata","Walking","Traveling"],a:1},
+  {q:"Vertical mobility implies:",o:["Change in status (up or down)","Change in job with same status","Migration","Retirement"],a:0},
+  {q:"Class system is primarily based on:",o:["Birth","Economic status/Achievement","Religion","Skin color"],a:1},
+  {q:"Sanskritization concept was given by:",o:["M.N. Srinivas","G.S. Ghurye","Ambedkar","Gandhi"],a:0},
+  {q:"Social inequality affects health by:",o:["Uniform access","Unequal access to resources/care","Improving immunity","None"],a:1},
+  {q:"Race is a:",o:["Cultural concept","Biological concept","Economic concept","Political concept"],a:1},
+  {q:"Inter-generational mobility means change in status:",o:["Within one's life","Between generations","After death","In old age"],a:1},
+  {q:"Which is a determinant of social class?",o:["Height","Occupation and Income","Blood group","Hair color"],a:1}
+],
+6:[
+  {q:"Social control ensures:",o:["Chaos","Conformity to norms","Revolution","Anarchy"],a:1},
+  {q:"Informal means of social control include:",o:["Police","Courts","Gossip, Customs, Family","Prison"],a:2},
+  {q:"Social disorganization leads to:",o:["Stability","Breakdown of social order","Peace","Growth"],a:1},
+  {q:"Juvenile delinquency refers to crimes committed by:",o:["Minors","Adults","Elderly","Politicians"],a:0},
+  {q:"Anomie is a state of:",o:["Normlessness","Strict rules","Happiness","Wealth"],a:0},
+  {q:"Which is a major social problem in India?",o:["High Literacy","Poverty and Unemployment","Clean Air","Equality"],a:1},
+  {q:"Prostitution is often linked to:",o:["Economic necessity/Exploitation","High morals","Better health","Social prestige"],a:0},
+  {q:"Vulnerable groups include:",o:["Healthy adults","Women, Children, Elderly","Rich businessmen","Athletes"],a:1},
+  {q:"NGO stands for:",o:["Non-Governmental Organization","New Govt Office","National Growth Org","No Group Org"],a:0},
+  {q:"Substance abuse affects:",o:["Individual health only","Family and Society","Economy only","All of the above"],a:3}
+],
+7:[
+  {q:"Clinical Sociology involves:",o:["Theoretical study only","Intervention for change","Laboratory experiments","Teaching history"],a:1},
+  {q:"A primary role of a clinical sociologist is:",o:["Counseling and consultancy","Surgery","Prescribing drugs","Farming"],a:0},
+  {q:"Which method is used in clinical sociology?",o:["Case study","Chemical analysis","X-ray","Surgery"],a:0},
+  {q:"The focus of clinical sociology is:",o:["Improving social life/systems","Writing books","Studying rocks","Building bridges"],a:0},
+  {q:"Sociological strategies in health care include:",o:["Patient advocacy","Ignoring social factors","Strict medication only","Isolation"],a:0},
+  {q:"Clinical sociology differs from academic sociology in its:",o:["Focus on application/practice","Focus on theory","Lack of research","Use of math"],a:0},
+  {q:"A 'Change Agent' refers to:",o:["One who resists change","One who facilitates change","A chemical","A static system"],a:1},
+  {q:"Intervention in clinical sociology can occur at:",o:["Individual level only","Community level only","Multiple levels (Individual/Group/Community)","Global level only"],a:2},
+  {q:"Empowerment strategies aim to:",o:["Control people","Increase capacity/control over life","Suppress rights","Create dependency"],a:1},
+  {q:"The client in clinical sociology can be:",o:["An individual","An organization","A community","All of the above"],a:3}
+]
+};
 
-    function toggleUnit(header) {
-        const content = header.nextElementSibling;
-        const isExpanded = header.getAttribute('aria-expanded') === 'true';
-        header.setAttribute('aria-expanded', !isExpanded);
-        content.classList.toggle('active');
-    }
-
-    function openResource(type, url, title) {
-        // 1. PUSH HISTORY STATE
-        history.pushState({ modalOpen: true }, null, '#resource');
-
-        const modal = document.getElementById('app-modal');
-        const body = document.getElementById('modal-body');
-        document.getElementById('modal-title').textContent = title;
-        modal.style.display = 'flex';
-        
-        // Clean URL Logic
-        let finalUrl = url;
-        if (url.includes('drive.google.com')) { 
-            finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview'); 
-        }
-        else if (url.includes('human.biodigital.com')) { 
-            if (url.includes('/viewer/')) finalUrl = url.replace('/viewer/', '/widget/');
-            else finalUrl = url.replace('/view', '/widget'); 
-        }
-        
-        // 2. VIDEO SECURITY FIX
-        body.innerHTML = `
-            <iframe 
-                class="iframe-res" 
-                src="${finalUrl}" 
-                width="100%" 
-                height="100%" 
-                frameborder="0"
-                sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-presentation"
-                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen">
-            </iframe>`;
-    }
-
-    function startQuiz(unitId) {
-        // PUSH HISTORY STATE
-        history.pushState({ modalOpen: true }, null, '#quiz');
-
-        currentQuizUnit = unitId;
-        score = 0;
-        const questions = QUIZ_DATA[unitId];
-        
-        let html = `
-            <div class="quiz-container">
-                <div class="quiz-header-sticky">
-                    <h2 style="margin:0; color:var(--brand);">Unit ${unitId} Quiz</h2>
-                    <div id="score-display" class="score-badge">Score: 0 / 10</div>
-                </div>
-        `;
-        
-        questions.forEach((q, index) => {
-            html += `
-                <div class="question-block">
-                    <p class="quiz-question-text">${index + 1}. ${q.q}</p>
-                    <div class="options-container">
-                        ${q.o.map((opt, optIndex) => `
-                            <div class="quiz-option" onclick="checkAnswer(this, ${unitId}, ${optIndex}, ${q.a})">${opt}</div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        });
-        
-        html += `
-                <button class="btn-quiz" onclick="closeModal()">Close Quiz</button>
-            </div>
-        `;
-        
-        document.getElementById('modal-body').innerHTML = html;
-        document.getElementById('modal-title').textContent = `Unit ${unitId} Quiz`;
-        document.getElementById('app-modal').style.display = 'flex';
-    }
-
-    function checkAnswer(element, unitId, selectedIndex, correctIndex) {
-        if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
-
-        if (selectedIndex === correctIndex) {
-            element.classList.add('correct');
-            score++;
-        } else {
-            element.classList.add('wrong');
-            element.parentElement.children[correctIndex].classList.add('correct');
-        }
-        document.getElementById('score-display').textContent = `Score: ${score} / 10`;
-    }
-
-    function closeModal() { 
-        const modal = document.getElementById('app-modal');
-        modal.style.display = 'none'; 
-        document.getElementById('modal-body').innerHTML = ""; 
-        
-        // LOGIC: If we have a history state (meaning the modal is open),
-        // we manually go 'Back' to remove that state so the user doesn't get stuck.
-        if ((history.state && history.state.modalOpen) || window.location.hash === '#resource' || window.location.hash === '#quiz') {
-            history.back();
-        }
-    }
-
-    // LISTENER FOR HARDWARE BACK BUTTON
-    window.onpopstate = function(event) {
-        const modal = document.getElementById('app-modal');
-        // If the modal is currently visible, hide it.
-        if (modal.style.display === 'flex') {
-            modal.style.display = 'none';
-            document.getElementById('modal-body').innerHTML = '';
-        }
-    };
+let curQuiz=null,answered=[];
+function openQuiz(id){
+  curQuiz=id;
+  const qs=QD[id]||[];
+  answered=new Array(qs.length).fill(null);
+  document.getElementById('qtitle').textContent='Unit '+id+' Quiz';
+  document.getElementById('qpips').innerHTML=qs.map((_,i)=>`<div class="pip" id="pip${i}"></div>`).join('');
+  let html=`<div class="qscore" id="qscore"><div><div class="qs-num" id="qsnum">—</div><div class="qs-sub">Score</div></div><div class="qs-msg" id="qsmsg"></div></div>`;
+  qs.forEach((q,qi)=>{
+    html+=`<div class="qitem" id="qi${qi}"><div class="qlbl">Question ${qi+1} of ${qs.length}</div><div class="qtext">${q.q}</div><div class="qopts">${q.o.map((opt,oi)=>`<button class="qopt" id="opt${qi}_${oi}" onclick="ans(${qi},${oi},${q.a})"><span class="qltr">${['A','B','C','D'][oi]}</span>${opt}</button>`).join('')}</div></div>`;
+  });
+  document.getElementById('qbody').innerHTML=html;
+  document.getElementById('qmodal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function ans(qi,oi,correct){
+  if(answered[qi]!==null)return;
+  answered[qi]=oi;
+  const opts=document.querySelectorAll(`#qi${qi} .qopt`);
+  opts.forEach(b=>b.classList.add('lock'));
+  opts[correct].classList.add('cor');
+  if(oi!==correct)opts[oi].classList.add('wrg');
+  const pip=document.getElementById('pip'+qi);
+  pip.classList.add('ans',oi===correct?'cor':'wrg');
+  if(answered.every(a=>a!==null)){
+    const score=answered.filter((a,i)=>a===QD[curQuiz][i].a).length;
+    const total=QD[curQuiz].length;
+    const pct=Math.round(score/total*100);
+    const msgs=['📚 Keep Studying!','👍 Good Effort!','🎉 Well Done!','🏆 Perfect!'];
+    const mi=pct<50?0:pct<70?1:pct<100?2:3;
+    document.getElementById('qsnum').textContent=score+'/'+total;
+    document.getElementById('qsmsg').textContent=msgs[mi];
+    const sc=document.getElementById('qscore');
+    sc.classList.add('show');
+    sc.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+function closeQuiz(){
+  document.getElementById('qmodal').classList.remove('open');
+  document.body.style.overflow='';
+  curQuiz=null;
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQuiz();});
 </script>
 </body>
 </html>
