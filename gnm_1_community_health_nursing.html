@@ -1,230 +1,539 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Community Health Nursing I</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <style>
-        :root {
-            --brand: #003B82; --accent: #00B9F2; --gray-50: #f9fafb; --gray-200: #e5e7eb; --gray-900: #111827;
-            --danger: #ef4444; --success: #10b981; --warning: #f59e0b;
-        }
-        * { box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: white; color: var(--gray-900); padding: 24px; max-width: 1000px; margin: 0 auto; }
-        .syllabus-btn { display: block; width: 100%; padding: 18px 24px; margin: 12px 0; background: white; color: var(--brand); border: 2px solid var(--brand); font-weight: 700; font-size: 16px; text-align: center; cursor: pointer; border-radius: 12px; transition: all 0.2s ease; text-decoration: none; }
-        .syllabus-btn:hover { background: var(--gray-50); transform: translateY(-1px); }
-        .unit-header { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 18px 24px; margin: 16px 0; background: var(--brand); color: white; font-weight: 600; font-size: 16px; border-radius: 12px; cursor: pointer; transition: 0.2s; }
-        .unit-header:hover { background: #002d63; }
-        .unit-content { padding: 0 12px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; }
-        .unit-content.active { padding: 24px 12px; max-height: none; }
-        .subsection { padding: 20px; background: white; border-radius: 12px; border: 1px solid var(--gray-200); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-        .resource-btn { display: flex; width: 100%; padding: 14px 18px; margin: 6px 0; background: var(--gray-50); border-radius: 8px; font-weight: 500; border: 1px solid var(--gray-200); cursor: pointer; gap: 12px; transition: 0.2s; align-items: center; }
-        
-        /* EXISTING BUTTON STYLES */
-        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
-        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
-        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
-        .resource-btn.model { background: #fdf4ff; border-color: #f0abfc; color: #86198f; }
-
-        /* NEW BUTTON STYLES FOR APP */
-        .resource-btn.imp-discussion { background: #fef2f2; border-color: #fecaca; color: #b91c1c; } /* Light Red Background */
-        .resource-btn.imp-pdf { background: #fff7ed; border-color: #fed7aa; color: #c2410c; } /* Light Orange Background */
-        
-        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
-        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
-        .icon.video-icon { color: #8b5cf6; } .icon.quiz-icon { color: #f59e0b; } .icon.model-icon { color: #d946ef; }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; display: none; flex-direction: column; }
-        .modal-header { height: 60px; background: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; }
-        .btn-close { background: var(--danger); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
-        .modal-body { flex: 1; background: #f3f4f6; position: relative; padding: 20px; display:flex; justify-content:center; overflow-y: auto;}
-        .iframe-res { width: 100%; height: 100%; border: none; background: white; }
-        .quiz-container { background: white; width: 100%; max-width: 800px; padding: 30px; border-radius: 12px; margin-bottom: 50px; }
-        .quiz-option { padding: 12px 15px; border: 2px solid var(--gray-200); border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
-        .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
-        .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; }
-        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
-        .btn-quiz { background: var(--brand); color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 600; font-size: 16px; margin-top: 20px; cursor: pointer;}
-        @media (max-width: 768px) { body { padding: 16px; } .quiz-container { padding: 15px; } }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Community Health Nursing I</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+--p50:#faf5ff;--p100:#f3e8ff;--p200:#e9d5ff;--p300:#d8b4fe;
+--p400:#c084fc;--p500:#a855f7;--p600:#9333ea;--p700:#7e22ce;
+--p800:#6b21a8;--p900:#581c87;
+--w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;
+--g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;
+--ok:#16a34a;--ok-lt:#dcfce7;--err:#dc2626;--err-lt:#fee2e2;
+--warn:#d97706;--warn-lt:#fef3c7;
+--r:12px;--rs:8px;
+--s1:0 1px 3px rgba(109,40,217,.08);
+--s2:0 4px 12px rgba(109,40,217,.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:90;background:var(--w);border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 16px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-back{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:var(--p100);color:var(--p700);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;margin-right:12px}
+.tb-back:hover{background:var(--p200)}
+.tb-info{flex:1;min-width:0}
+.tb-title{font-size:.88rem;font-weight:700;color:var(--g900);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb-sub{font-size:.65rem;color:var(--g400);font-weight:500;margin-top:1px}
+.tb-chip{background:var(--p100);color:var(--p700);border:1px solid var(--p200);font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
+.hero{background:linear-gradient(145deg,var(--p900),var(--p700) 55%,var(--p500));padding:28px 18px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.08),transparent 50%),radial-gradient(circle at 10% 85%,rgba(255,255,255,.05),transparent 40%)}
+.hero::after{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-dot-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:.65rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border-radius:30px;margin-bottom:12px}
+.hero-eyebrow-dot{width:5px;height:5px;background:#c4b5fd;border-radius:50%}
+.hero h1{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:7px}
+.hero h1 em{color:rgba(255,255,255,.45);font-style:italic;font-weight:300}
+.hero-desc{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:18px}
+.hero-cta{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.28);color:#fff;font-size:.8rem;font-weight:700;padding:9px 16px;border-radius:9px;cursor:pointer;transition:all .2s;backdrop-filter:blur(6px)}
+.hero-cta:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
+.hero-stats{display:flex;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+.hs{flex:1;text-align:center}
+.hs+.hs{border-left:1px solid rgba(255,255,255,.1)}
+.hs-n{font-size:1.35rem;font-weight:800;color:#fff;line-height:1}
+.hs-l{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
+.main{padding:16px 14px 56px}
+.divider{display:flex;align-items:center;gap:8px;margin-bottom:12px;margin-top:2px}
+.divider span{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g400)}
+.divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+.uc{background:var(--w);border:1.5px solid var(--g200);border-radius:var(--r);margin-bottom:9px;overflow:hidden;box-shadow:var(--s1);transition:border-color .2s,box-shadow .2s}
+.uc:hover{border-color:var(--p300);box-shadow:var(--s2)}
+.uc[data-open=true]{border-color:var(--p400);box-shadow:var(--s2)}
+.ubtn{width:100%;display:flex;align-items:center;padding:14px 15px;gap:12px;background:none;border:none;cursor:pointer;text-align:left}
+.upill{min-width:54px;padding:0 8px;height:36px;border-radius:9px;flex-shrink:0;background:var(--p100);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.upill span{font-size:.65rem;font-weight:800;color:var(--p700);letter-spacing:-.01em;white-space:nowrap}
+.uc[data-open=true] .upill{background:var(--p700)}
+.uc[data-open=true] .upill span{color:#fff}
+.uinfo{flex:1;min-width:0}
+.uname{font-size:.85rem;font-weight:700;color:var(--g900);line-height:1.3}
+.umeta{font-size:.66rem;color:var(--g400);margin-top:2px;font-weight:500}
+.uright{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.uchev{width:16px;height:16px;color:var(--g300);transition:transform .3s,color .2s}
+.uc[data-open=true] .uchev{transform:rotate(180deg);color:var(--p500)}
+.ubody{display:none;background:var(--p50);border-top:1.5px solid var(--p200);padding:12px 13px 14px}
+.ubody.open{display:block;animation:bodyIn .2s ease}
+@keyframes bodyIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.rrow{display:flex;gap:9px;margin-bottom:8px}
+.rrow:last-child{margin-bottom:0}
+@media(max-width:380px){.rrow{flex-direction:column}}
+.rbtn{flex:1;display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .17s;background:var(--w);text-decoration:none}
+.rbtn .rico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.rbtn .rtxt{line-height:1.25}
+.rbtn .rtxt small{display:block;font-size:.62rem;font-weight:400;opacity:.5;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;}
+.rbtn .rarr{margin-left:auto;opacity:0;font-size:.7rem;color:var(--g400);transition:opacity .15s}
+.rbtn:hover .rarr{opacity:1}
+.rbtn.notes{border-color:var(--p200);color:var(--p800)}
+.rbtn.notes .rico{background:var(--p100)}
+.rbtn.notes:hover{background:var(--p50);border-color:var(--p500);box-shadow:var(--s2);transform:translateY(-1px)}
+.rbtn.video{border-color:#bae6fd;color:#0369a1}
+.rbtn.video .rico{background:#e0f2fe}
+.rbtn.video:hover{background:#f0f9ff;border-color:#38bdf8;box-shadow:0 3px 10px rgba(56,189,248,.12);transform:translateY(-1px)}
+.rbtn.quiz{border-color:#fde68a;color:#78350f}
+.rbtn.quiz .rico{background:var(--warn-lt)}
+.rbtn.quiz:hover{background:#fffbeb;border-color:var(--warn);box-shadow:0 3px 10px rgba(217,119,6,.12);transform:translateY(-1px)}
+.rbtn.model{border-color:#fbcfe8;color:#9d174d}
+.rbtn.model .rico{background:#fdf2f8}
+.rbtn.model:hover{background:#fdf2f8;border-color:#ec4899;box-shadow:0 3px 10px rgba(236,72,153,.12);transform:translateY(-1px)}
+.qoverlay{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end}
+.qoverlay.open{display:flex}
+.qscrim{position:absolute;inset:0;background:rgba(15,10,40,.55);backdrop-filter:blur(3px)}
+.qpanel{position:relative;z-index:1;background:var(--w);width:100%;max-width:580px;margin:0 auto;border-radius:18px 18px 0 0;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 -10px 50px rgba(109,40,217,.2);animation:panelUp .3s cubic-bezier(.32,.72,0,1)}
+@keyframes panelUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.qhead{padding:16px 18px 12px;border-bottom:1px solid var(--g100);flex-shrink:0}
+.qhead-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.qtitle{font-size:1rem;font-weight:800;color:var(--p800)}
+.qclose{width:28px;height:28px;border-radius:50%;background:var(--g100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--g500);transition:all .15s}
+.qclose:hover{background:var(--err-lt);color:var(--err)}
+.qpips{display:flex;gap:3px}
+.pip{flex:1;height:4px;border-radius:4px;background:var(--g100);transition:background .3s}
+.pip.ans{background:var(--p300)}.pip.cor{background:var(--ok)}.pip.wrg{background:var(--err)}
+.qbody{overflow-y:auto;padding:14px 18px 28px;flex:1}
+.qscore{display:none;background:linear-gradient(135deg,var(--p800),var(--p500));color:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;align-items:center;gap:14px}
+.qscore.show{display:flex}
+.qs-num{font-size:1.9rem;font-weight:800;line-height:1}
+.qs-sub{font-size:.65rem;opacity:.6;margin-top:2px}
+.qs-msg{font-size:.85rem;font-weight:600}
+.qitem{margin-bottom:24px}
+.qitem:last-child{margin-bottom:0}
+.qlbl{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--p500);margin-bottom:4px}
+.qtext{font-size:.88rem;font-weight:600;color:var(--g900);line-height:1.5;margin-bottom:10px}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1.5px solid var(--g200);border-radius:var(--rs);cursor:pointer;font-size:.83rem;font-weight:500;background:var(--w);color:var(--g700);transition:all .14s}
+.qopt:hover{border-color:var(--p300);background:var(--p50);color:var(--p800)}
+.qltr{width:21px;height:21px;border-radius:50%;background:var(--g100);border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:800;color:var(--g500);flex-shrink:0;transition:all .14s}
+.qopt.cor{background:var(--ok-lt);border-color:#86efac;color:#14532d}
+.qopt.cor .qltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.qopt.wrg{background:var(--err-lt);border-color:#fca5a5;color:#7f1d1d}
+.qopt.wrg .qltr{background:var(--err);border-color:var(--err);color:#fff}
+.qopt.lock{cursor:default;pointer-events:none}
+.qopt.lock:not(.cor):not(.wrg):hover{border-color:var(--g200);background:var(--w);color:var(--g700)}
+</style>
 </head>
 <body>
-    <a class="syllabus-btn" href="https://drive.google.com/file/d/1od7YFbD7VkobycSNQY-rKMC_jcAATAnw/view?usp=drive_link" target="_blank">📄 DOWNLOAD SYLLABUS</a>
-    <div id="units">
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 1 - INTRODUCTION TO COMMUNITY HEALTH <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1rZnASNcm-1NXgPNeGqaRDpUceHq5-cgg/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1x3B9zhwfKUhFySZ5m9MC3xXdoExnfy07/preview', 'Introduction to Community Health Nursing, Public Health Nursing')"><span class="icon video-icon">▶️</span><span>Introduction to Community Health Nursing, Public Health Nursing</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1zKbQtnfJoqSnOmt21UILL5avS0xchWlL/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1pN5O-9dx8pCece0KnaekLcXUyijWoVTp/preview', 'Health Determinants')"><span class="icon video-icon">▶️</span><span>Health Determinants</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/18SLlpoaA93GYVeDXryxr-ait40S0sfFM/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1PHNlEZRfy7aT1AxGhMwS3oI9kwtae6OG/preview', 'Indicators Of Health')"><span class="icon video-icon">▶️</span><span>Indicators Of Health</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1d-F29V09EYhyj6KUFFa6abll2XrYFCGq/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1BCJKEks8dXjsKIN_lR5KHZcQK9nSx5oB/preview', 'Concept of Primary Health Care')"><span class="icon video-icon">▶️</span><span>Concept of Primary Health Care</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1R1Mw_-MPJ5Gr_SXbTanPSGLGnwgi_pNw/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1p26oqrU80ZIRxMN_txVkt2TEwPbylxI7/preview', 'Promotion Of Health')"><span class="icon video-icon">▶️</span><span>Promotion Of Health</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1-uaGGdkPtUN4MnJES6dWO2sILzH5nTmG/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(1)"><span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 2 - COMMUNITY HEALTH NURSING <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1N9IE6tCt1gKgBDQNnALvPt0ehL5e97aa/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1aY5om-0rrgK5XjyMrEnSmdpBGGl37BMA/preview', 'Definition of Community Health Nursing')"><span class="icon video-icon">▶️</span><span>Definition of Community Health Nursing</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1-AjOTogypL7Bp8lkrW3Q5mnzKrXAzDkf/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1nGKJG75Yo1J4-nY28Y1rly88pVhUhbrX/preview', 'Principles of CHN')"><span class="icon video-icon">▶️</span><span>Principles of CHN</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1kV4Q0uAUjAdrSANC9lefXYPCiR0mwrlM/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1f5Zl_gJTd2R8bgkFmiZZLUxxs5zpyS7j/preview', 'Community Health Nursing Process')"><span class="icon video-icon">▶️</span><span>Community Health Nursing Process</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1VMsuynNsJBx6Z9za5VH_RsVeRRCig78Z/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(2)"><span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 3 - HEALTH ASSESSMENT  <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1JiYH0z4WxMOWfIrS3M91KNAHRqtvukzr/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1U-8s0P9t64PMeUayudakQfmw_cPGMGHf/preview', 'Health Assessment')"><span class="icon video-icon">▶️</span><span>Health Assessment</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1p0ZPRmYhxIoFrILZ_ackO3YMCqfSul_Z/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1pGlQeWeTGYIhFRM56nVvrDk_AoQiIx5K/preview', 'Characteristic of a Healthy Person')"><span class="icon video-icon">▶️</span><span>Characteristic of a Healthy Person</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1CBjrfoVxbxtILpDE5v9K2KJjUUdzThFG/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1KhlJbYLOsBxXJx12n3BrdXivePOxCMYg/preview', 'Health Assessment of Individuals According to Age Group')"><span class="icon video-icon">▶️</span><span>Health Assessment of Individuals According to Age Group</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1haXKexX94JKtnZ1fq_MTTs0QfNmZgMyT/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1yq34B8DDdnC6xWRgGCTTc_Lts0iZbSd_/preview', 'Health Assessnment of Preschool Going Child')"><span class="icon video-icon">▶️</span><span>Health Assessnment of Preschool Going Child</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1QfPUvLtZt6Tu_LgYOBZIqHCQcLh5r6Z3/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1jaFbUCFuP2TBREe8iCWVPcnOhb9tZhP7/preview', 'Health Assessment of Adult')"><span class="icon video-icon">▶️</span><span>Health Assessment of Adult</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1EpdQPU9YXHEu4topY6KHvLXuOdcphE12/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1a7LHFEV3DcUzjm2J_h6HieA4uUIhiSGe/preview', 'Health Assessnment of Pregnant Women')"><span class="icon video-icon">▶️</span><span>Health Assessnment of Pregnant Women</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1H9bqPksriSZeGpCuEL-SamCaaJMVE9M1/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(3)"><span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 4 - PRINCIPLES OF EPIDEMIOLOGY AND EPIDEMIOLOGICAL METHODS  <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1IY6e7KdBTBV39348RphN7LWM1PntaKeh/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1HPMeoDILC3-cCrTw0TYRxFQw9Epau8wR/preview', 'Introduction, Epidemiology')"><span class="icon video-icon">▶️</span><span>Introduction, Epidemiology</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ratbJ8HfFm5GJlPuXtzAZLq-8DAyhZ5A/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WHj&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt6as&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Measles')"><span class="icon model-icon">🧊</span><span>3D Model: Measles</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1GtWeU6kLKFRb_0WxA_h8kMk0Cy_j82uK/preview', 'Common Communicable Disease Part A')"><span class="icon video-icon">▶️</span><span>Common Communicable Disease Part A</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1STU311vLxYpunjGvOcUuHIAkBuXgFQ66/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WHk&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt6az&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Pertussis')"><span class="icon model-icon">🧊</span><span>3D Model: Pertussis</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1KI0R5fTjj7t7D4i7BkWJCLz00ce8P-ig/preview', 'Common Communicable Disease Part B')"><span class="icon video-icon">▶️</span><span>Common Communicable Disease Part B</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1zfJRP4pz46qR2pvy5vgozHskGglTShwi/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1H2h0jYRegjQzQXVyDM1EAgJ_VKWG2Ald/preview', 'Tuberculosis')"><span class="icon video-icon">▶️</span><span>Tuberculosis</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Yuaf5SQ7SoBErSABHNGAJcDsX4dAqZwr/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WHm&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt6b4&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Tuberculosis')"><span class="icon model-icon">🧊</span><span>3D Model: Tuberculosis</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1VVSMWz64171EY-Egj4oPUOT9uOXTcuPC/preview', 'Influenza')"><span class="icon video-icon">▶️</span><span>Influenza</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/16_IA8hhQeTM35DjiPErTdENEenPbSKzH/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WHo&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt6bE&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Influenza')"><span class="icon model-icon">🧊</span><span>3D Model: Influenza</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1W1Z9rjHR3Dc6XEsLFscrBCxPtPSWDt4J/preview', 'Malnutrition')"><span class="icon video-icon">▶️</span><span>Malnutrition</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/10S51TEG5xH32vJfqs_3QImTJmTNote9I/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/13sC6KWzCGJrlRbT-_xn-Du26u8AjyCOU/preview', 'Assessment of Malnutrition')"><span class="icon video-icon">▶️</span><span>Assessment of Malnutrition</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1yPUXVARI_GsUgHuSmUd35VXmNYy6cuhv/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/16d5qkeIvG1rw27IhV3zA6k9PkRXZQQHQ/preview', 'Hypertension and Coronary Heart Disease')"><span class="icon video-icon">▶️</span><span>Hypertension and Coronary Heart Disease</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WHp&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt6bH&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Hypertension')"><span class="icon model-icon">🧊</span><span>3D Model: Hypertension</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WHq&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt6bO&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Coronary Heart Disease')"><span class="icon model-icon">🧊</span><span>3D Model: Coronary Heart Disease</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/12LWLY0cZ0EX9_4yp6Ua-XIQ1c5dhgdVS/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/17vTOXn95aM8e1gw4BmWxJWQRqbOCdqE1/preview', 'Diabetes Mellitus and Anemia')"><span class="icon video-icon">▶️</span><span>Diabetes Mellitus and Anemia</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WHr&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt6ba&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Type 1 Diabetes')"><span class="icon model-icon">🧊</span><span>3D Model: Type 1 Diabetes</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WHs&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt6bg&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Type 2 Diabetes')"><span class="icon model-icon">🧊</span><span>3D Model: Type 2 Diabetes</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WHt&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt6bo&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Anemia ')"><span class="icon model-icon">🧊</span><span>3D Model: Anemia </span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1sLDDKnE2fQMr-4PJ7dNjSArGsTZrPHAY/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/15sjU0XD8XZXqN80L68eVeY03isDKQG5m/preview', 'Cancer')"><span class="icon video-icon">▶️</span><span>Cancer</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1OdSKsK2ltTDUzen8Dlleul-IA8-Qx5zi/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1L8nLq6Q-5L4J8qaFmCf_nVkXNQfR7gQn/preview', 'Accidents and Injuries')"><span class="icon video-icon">▶️</span><span>Accidents and Injuries</span></div><div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/widget/?id=5WHu&amp;ui-anatomy-descriptions=true&amp;ui-anatomy-pronunciations=true&amp;ui-anatomy-labels=true&amp;ui-audio=true&amp;ui-chapter-list=false&amp;ui-fullscreen=true&amp;ui-help=true&amp;ui-info=true&amp;ui-label-list=true&amp;ui-layers=true&amp;ui-loader=circle&amp;ui-media-controls=full&amp;ui-menu=true&amp;ui-nav=true&amp;ui-search=true&amp;ui-tools=true&amp;ui-tutorial=false&amp;ui-undo=true&amp;ui-whiteboard=true&amp;initial.none=true&amp;disable-scroll=false&amp;uaid=Lt6bt&amp;paid=o_10a88be0&amp;ui-bd.link=false', '3D Model: Injuries')"><span class="icon model-icon">🧊</span><span>3D Model: Injuries</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1eiTswlI-_KRZDAFUfAZRbSAbJrGO0v6d/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1hgyrv9820SqC7dIAGCrIUZgWI9Y9iyoI/preview', 'Basic Tools for Measurement In Epidemiology')"><span class="icon video-icon">▶️</span><span>Basic Tools for Measurement In Epidemiology</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1pTp828zlkFsbRFQuuk2wjEepK00SFmTZ/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1VH8BjYm7z7plufatHv5ew8Zys-Uj3ASK/preview', 'Levels of Prevention')"><span class="icon video-icon">▶️</span><span>Levels of Prevention</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1phXIGdmqdn_-7VMiD01aCivTJMN2gFD0/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1QjoXGDJCVXU8ya4ydZ8kP0etJqUGtJzg/preview', 'Immunity')"><span class="icon video-icon">▶️</span><span>Immunity</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1S3WCgt9JrxCmeKLURDR6KrV5yYrcJFR7/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/12CwK3G3VimwjxCkscVOHwybzNw0j1_f-/preview', 'Vaccines')"><span class="icon video-icon">▶️</span><span>Vaccines</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1WLNI5Cj5S0z3z4IiGh9Ih58a9oSdoXqF/preview', 'Special Types of Vaccines')"><span class="icon video-icon">▶️</span><span>Special Types of Vaccines</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1gXPJxJuu6TsPe559lhmfyA5enJbIXuXM/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ZJBg44gBoC9Pq83TBDm6FI4WSpN4wem6/preview', 'Disinfection')"><span class="icon video-icon">▶️</span><span>Disinfection</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1-2oIbCzpowN7Rv5sRiPaPr7EIPaOIfMY/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(4)"><span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 5 - FAMILY HEALTH NURSING CARE  <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1hsBeJQVnqfnzhxbjL-ORsDvLslU7qKSm/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/10n4cTEITP-BvkIQnHjBUOM_t6wvukHLp/preview', 'Family Health Nursing Care')"><span class="icon video-icon">▶️</span><span>Family Health Nursing Care</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1sCEaNWCrt5wv6C_Wu_LTln-GIySZvdLJ/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ziDkpUl0U-F20IItkJlqy_dErGm2Smwk/preview', 'Phases Family Health Nursing Care Process')"><span class="icon video-icon">▶️</span><span>Phases Family Health Nursing Care Process</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1qHFvb06RK3LMvQY0DA-1_wXcGwBFjksa/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(5)"><span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 6 - FAMILY HEALTH NURSING CARE SETTINGS : HOME VISIT  <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1-WUv7KWW30I_uJOPZ1b4IMwPfnQSubr9/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1FMgj-8gW4mKnY8bXZcDWjDRaq4zdljaE/preview', 'Family Health Care Settings')"><span class="icon video-icon">▶️</span><span>Family Health Care Settings</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1RQi6H95gbnd8w3h59u9tQHkPv4gIwqLp/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1KnP_Ycf81h-ixCaHpZv4VMlEQLIZxNxt/preview', 'Bag Techniques')"><span class="icon video-icon">▶️</span><span>Bag Techniques</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1j7zibEXo9N5ZXuM9ik88VdATvzDr4OTc/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(6)"><span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 7 - REFERRAL SYSTEM <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1PGOtkefqGs1mRTWzePJubRLuVT8C-z0U/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1U7h4tXFbtVDNNiP2QNdmMptaW05jYIlj/preview', 'Referral System')"><span class="icon video-icon">▶️</span><span>Referral System</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1WFevyj4m9Vh6Ouz9ZE29w55x4dcbKw8n/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(7)"><span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 8 - RECORDS AND REPORTS <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1NtLJOE06oGuZ5dhbe3t9jrLoN-H-CSfF/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1UzpPDdotH1w0p_UjJNog74UuptTmWxbI/preview', 'Records and Reports')"><span class="icon video-icon">▶️</span><span>Records and Reports</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1EtaBpOxU90AeANNX4pnSva4iaz75zCbe/preview', 'Reports')"><span class="icon video-icon">▶️</span><span>Reports</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1fHPJvS7fAqgCT_eQdFnBc4P8lVTGUiHI/preview', 'Essential Requirements Of Records')"><span class="icon video-icon">▶️</span><span>Essential Requirements Of Records</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Oz62gaVPbFBrzLFH03t_ShSKgPJ_AfbM/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(8)"><span class="icon quiz-icon">✍️</span><span>Take Unit 8 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 9 - MINOR ALIGNMENTS <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1kZd-S03x1rszkFE6M2EsMK1eFpl6fN47/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1nX5P1o5Sb6Abf6kbcz5Q3Mx_NiaVDK9T/preview', 'Minor Alignments')"><span class="icon video-icon">▶️</span><span>Minor Alignments</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1coLsEbYgNxhrvfJpzHu7M2Ejn03x5N6C/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1B0t8WEQInEC03dFZTY18wdj-8pl2TyA8/preview', 'Standing Orders')"><span class="icon video-icon">▶️</span><span>Standing Orders</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/11xIpVk6KCcXIEw-OhmIwpE2PykHHYvoi/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(9)"><span class="icon quiz-icon">✍️</span><span>Take Unit 9 Quiz</span></div></div></div>
-                </div></div>
-    <div id="app-modal" class="modal-overlay">
-        <div class="modal-header">
-            <div id="modal-title" style="font-weight:700; color:var(--brand);">Resource</div>
-            <button class="btn-close" onclick="closeModal()">Close X</button>
-        </div>
-        <div id="modal-body" class="modal-body"></div>
-    </div>
+<header class="topbar">
+<button class="tb-back" onclick="goBackToApp()" aria-label="Back">&#8592;</button>
+<div class="tb-info">
+<div class="tb-title">Community Health Nursing I</div>
+<div class="tb-sub">GNM First Year</div>
+</div>
+<div class="tb-chip">9 Units</div>
+</header>
+
+<section class="hero">
+<div class="hero-dot-grid"></div>
+<div class="hero-inner">
+<div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>GNM First Year</div>
+<h1>Community Health<br/><em>Nursing I</em></h1>
+<p class="hero-desc">Interactive syllabus, detailed notes, 3D models, video lectures & internal quizzes.</p>
+<button class="hero-cta" onclick="openLink('https://drive.google.com/file/d/1od7YFbD7VkobycSNQY-rKMC_jcAATAnw/view')">
+📄 &nbsp;Download Syllabus
+</button>
+<div class="hero-stats">
+<div class="hs"><div class="hs-n">9</div><div class="hs-l">Units</div></div>
+<div class="hs"><div class="hs-n">90</div><div class="hs-l">Quizzes</div></div>
+</div>
+</div>
+</section>
+
+<main class="main">
+<div class="divider"><span>Course Units</span></div>
+
+<div class="uc" id="u1" data-open="false">
+<button class="ubtn" onclick="tog('u1')">
+<div class="upill"><span>Unit 1</span></div>
+<div class="uinfo"><div class="uname">Introduction to Community Health</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u1">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1rZnASNcm-1NXgPNeGqaRDpUceHq5-cgg/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 1 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1x3B9zhwfKUhFySZ5m9MC3xXdoExnfy07/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Intro to CHN</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1zKbQtnfJoqSnOmt21UILL5avS0xchWlL/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>CHN</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1pN5O-9dx8pCece0KnaekLcXUyijWoVTp/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Health Determinants</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/18SLlpoaA93GYVeDXryxr-ait40S0sfFM/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Health Determinants</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1PHNlEZRfy7aT1AxGhMwS3oI9kwtae6OG/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Indicators Of Health</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1d-F29V09EYhyj6KUFFa6abll2XrYFCGq/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Indicators Of Health</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1BCJKEks8dXjsKIN_lR5KHZcQK9nSx5oB/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Concept of PHC</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1R1Mw_-MPJ5Gr_SXbTanPSGLGnwgi_pNw/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Concept of PHC</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1p26oqrU80ZIRxMN_txVkt2TEwPbylxI7/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Promotion Of Health</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1-uaGGdkPtUN4MnJES6dWO2sILzH5nTmG/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Promotion Of Health</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(1)"><div class="rico">✍️</div><div class="rtxt">Unit 1 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u2" data-open="false">
+<button class="ubtn" onclick="tog('u2')">
+<div class="upill"><span>Unit 2</span></div>
+<div class="uinfo"><div class="uname">Community Health Nursing</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u2">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1N9IE6tCt1gKgBDQNnALvPt0ehL5e97aa/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 2 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1aY5om-0rrgK5XjyMrEnSmdpBGGl37BMA/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Definition of CHN</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1-AjOTogypL7Bp8lkrW3Q5mnzKrXAzDkf/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Definition of CHN</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1nGKJG75Yo1J4-nY28Y1rly88pVhUhbrX/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Principles of CHN</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1kV4Q0uAUjAdrSANC9lefXYPCiR0mwrlM/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Principles of CHN</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1f5Zl_gJTd2R8bgkFmiZZLUxxs5zpyS7j/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>CHN Process</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1VMsuynNsJBx6Z9za5VH_RsVeRRCig78Z/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>CHN Process</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(2)"><div class="rico">✍️</div><div class="rtxt">Unit 2 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u3" data-open="false">
+<button class="ubtn" onclick="tog('u3')">
+<div class="upill"><span>Unit 3</span></div>
+<div class="uinfo"><div class="uname">Health Assessment</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u3">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1JiYH0z4WxMOWfIrS3M91KNAHRqtvukzr/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 3 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1U-8s0P9t64PMeUayudakQfmw_cPGMGHf/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Health Assessment</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1p0ZPRmYhxIoFrILZ_ackO3YMCqfSul_Z/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Health Assessment</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1pGlQeWeTGYIhFRM56nVvrDk_AoQiIx5K/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Healthy Person</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1CBjrfoVxbxtILpDE5v9K2KJjUUdzThFG/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Healthy Person</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1KhlJbYLOsBxXJx12n3BrdXivePOxCMYg/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Assessment by Age</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1haXKexX94JKtnZ1fq_MTTs0QfNmZgMyT/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Assessment by Age</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1yq34B8DDdnC6xWRgGCTTc_Lts0iZbSd_/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Preschool Child</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1QfPUvLtZt6Tu_LgYOBZIqHCQcLh5r6Z3/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Preschool Child</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1jaFbUCFuP2TBREe8iCWVPcnOhb9tZhP7/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Assessment of Adult</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1EpdQPU9YXHEu4topY6KHvLXuOdcphE12/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Assessment of Adult</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1a7LHFEV3DcUzjm2J_h6HieA4uUIhiSGe/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pregnant Women</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1H9bqPksriSZeGpCuEL-SamCaaJMVE9M1/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Pregnant Women</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(3)"><div class="rico">✍️</div><div class="rtxt">Unit 3 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u4" data-open="false">
+<button class="ubtn" onclick="tog('u4')">
+<div class="upill"><span>Unit 4</span></div>
+<div class="uinfo"><div class="uname">Principles of Epidemiology</div><div class="umeta">Notes · Videos · 3D Models · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u4">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1IY6e7KdBTBV39348RphN7LWM1PntaKeh/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Epidemiology</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1HPMeoDILC3-cCrTw0TYRxFQw9Epau8wR/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Introduction</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1ratbJ8HfFm5GJlPuXtzAZLq-8DAyhZ5A/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Introduction</small></div></button>
+<button class="rbtn model" onclick="openLink('https://human.biodigital.com/widget/?id=5WHj&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt6as&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Measles</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1GtWeU6kLKFRb_0WxA_h8kMk0Cy_j82uK/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Communicable A</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1STU311vLxYpunjGvOcUuHIAkBuXgFQ66/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Communicable A</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn model" onclick="openLink('https://human.biodigital.com/widget/?id=5WHk&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt6az&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Pertussis</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1KI0R5fTjj7t7D4i7BkWJCLz00ce8P-ig/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Communicable B</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1zfJRP4pz46qR2pvy5vgozHskGglTShwi/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Communicable B</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1H2h0jYRegjQzQXVyDM1EAgJ_VKWG2Ald/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Tuberculosis</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1Yuaf5SQ7SoBErSABHNGAJcDsX4dAqZwr/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Tuberculosis</small></div></button>
+<button class="rbtn model" onclick="openLink('https://human.biodigital.com/widget/?id=5WHm&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt6b4&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Tuberculosis</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1VVSMWz64171EY-Egj4oPUOT9uOXTcuPC/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Influenza</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/16_IA8hhQeTM35DjiPErTdENEenPbSKzH/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Influenza</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn model" onclick="openLink('https://human.biodigital.com/widget/?id=5WHo&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt6bE&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Influenza</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1W1Z9rjHR3Dc6XEsLFscrBCxPtPSWDt4J/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Malnutrition</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/10S51TEG5xH32vJfqs_3QImTJmTNote9I/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Malnutrition</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/13sC6KWzCGJrlRbT-_xn-Du26u8AjyCOU/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Assessment</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1yPUXVARI_GsUgHuSmUd35VXmNYy6cuhv/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Assessment</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/16d5qkeIvG1rw27IhV3zA6k9PkRXZQQHQ/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hypertension/CHD</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn model" onclick="openLink('https://human.biodigital.com/widget/?id=5WHp&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt6bH&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Hypertension</small></div></button>
+<button class="rbtn model" onclick="openLink('https://human.biodigital.com/widget/?id=5WHq&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt6bO&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Coronary Heart</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/12LWLY0cZ0EX9_4yp6Ua-XIQ1c5dhgdVS/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Hypertension/CHD</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/17vTOXn95aM8e1gw4BmWxJWQRqbOCdqE1/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Diabetes & Anemia</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn model" onclick="openLink('https://human.biodigital.com/widget/?id=5WHr&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt6ba&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Type 1 Diabetes</small></div></button>
+<button class="rbtn model" onclick="openLink('https://human.biodigital.com/widget/?id=5WHs&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt6bg&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Type 2 Diabetes</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn model" onclick="openLink('https://human.biodigital.com/widget/?id=5WHt&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt6bo&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Anemia</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1sLDDKnE2fQMr-4PJ7dNjSArGsTZrPHAY/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Diabetes & Anemia</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/15sjU0XD8XZXqN80L68eVeY03isDKQG5m/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cancer</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1OdSKsK2ltTDUzen8Dlleul-IA8-Qx5zi/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Cancer</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1L8nLq6Q-5L4J8qaFmCf_nVkXNQfR7gQn/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Accidents & Injuries</small></div></button>
+<button class="rbtn model" onclick="openLink('https://human.biodigital.com/widget/?id=5WHu&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt6bt&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Injuries</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1eiTswlI-_KRZDAFUfAZRbSAbJrGO0v6d/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Injuries</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1hgyrv9820SqC7dIAGCrIUZgWI9Y9iyoI/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Basic Tools</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1pTp828zlkFsbRFQuuk2wjEepK00SFmTZ/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Basic Tools</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1VH8BjYm7z7plufatHv5ew8Zys-Uj3ASK/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Levels of Prevention</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1phXIGdmqdn_-7VMiD01aCivTJMN2gFD0/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Prevention</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1QjoXGDJCVXU8ya4ydZ8kP0etJqUGtJzg/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Immunity</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1S3WCgt9JrxCmeKLURDR6KrV5yYrcJFR7/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Immunity</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/12CwK3G3VimwjxCkscVOHwybzNw0j1_f-/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Vaccines</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1WLNI5Cj5S0z3z4IiGh9Ih58a9oSdoXqF/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Special Vaccines</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1gXPJxJuu6TsPe559lhmfyA5enJbIXuXM/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Vaccines</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1ZJBg44gBoC9Pq83TBDm6FI4WSpN4wem6/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Disinfection</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1-2oIbCzpowN7Rv5sRiPaPr7EIPaOIfMY/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Disinfection</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn quiz" onclick="openQuiz(4)"><div class="rico">✍️</div><div class="rtxt">Unit 4 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u5" data-open="false">
+<button class="ubtn" onclick="tog('u5')">
+<div class="upill"><span>Unit 5</span></div>
+<div class="uinfo"><div class="uname">Family Health Nursing Care</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u5">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1hsBeJQVnqfnzhxbjL-ORsDvLslU7qKSm/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 5 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/10n4cTEITP-BvkIQnHjBUOM_t6wvukHLp/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Nursing Care</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1sCEaNWCrt5wv6C_Wu_LTln-GIySZvdLJ/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Nursing Care</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1ziDkpUl0U-F20IItkJlqy_dErGm2Smwk/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Phases Process</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1qHFvb06RK3LMvQY0DA-1_wXcGwBFjksa/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Phases Process</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(5)"><div class="rico">✍️</div><div class="rtxt">Unit 5 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u6" data-open="false">
+<button class="ubtn" onclick="tog('u6')">
+<div class="upill"><span>Unit 6</span></div>
+<div class="uinfo"><div class="uname">Care Settings: Home Visit</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u6">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1-WUv7KWW30I_uJOPZ1b4IMwPfnQSubr9/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 6 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1FMgj-8gW4mKnY8bXZcDWjDRaq4zdljaE/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Care Settings</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1RQi6H95gbnd8w3h59u9tQHkPv4gIwqLp/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Care Settings</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1KnP_Ycf81h-ixCaHpZv4VMlEQLIZxNxt/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Bag Techniques</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1j7zibEXo9N5ZXuM9ik88VdATvzDr4OTc/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Bag Techniques</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(6)"><div class="rico">✍️</div><div class="rtxt">Unit 6 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u7" data-open="false">
+<button class="ubtn" onclick="tog('u7')">
+<div class="upill"><span>Unit 7</span></div>
+<div class="uinfo"><div class="uname">Referral System</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u7">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1PGOtkefqGs1mRTWzePJubRLuVT8C-z0U/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 7 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1U7h4tXFbtVDNNiP2QNdmMptaW05jYIlj/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Referral System</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1WFevyj4m9Vh6Ouz9ZE29w55x4dcbKw8n/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Referral System</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(7)"><div class="rico">✍️</div><div class="rtxt">Unit 7 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u8" data-open="false">
+<button class="ubtn" onclick="tog('u8')">
+<div class="upill"><span>Unit 8</span></div>
+<div class="uinfo"><div class="uname">Records and Reports</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u8">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1NtLJOE06oGuZ5dhbe3t9jrLoN-H-CSfF/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 8 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1UzpPDdotH1w0p_UjJNog74UuptTmWxbI/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Records & Reports</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1EtaBpOxU90AeANNX4pnSva4iaz75zCbe/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Reports</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1fHPJvS7fAqgCT_eQdFnBc4P8lVTGUiHI/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Essential Reqs</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1Oz62gaVPbFBrzLFH03t_ShSKgPJ_AfbM/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Records</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(8)"><div class="rico">✍️</div><div class="rtxt">Unit 8 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u9" data-open="false">
+<button class="ubtn" onclick="tog('u9')">
+<div class="upill"><span>Unit 9</span></div>
+<div class="uinfo"><div class="uname">Minor Ailments</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u9">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1kZd-S03x1rszkFE6M2EsMK1eFpl6fN47/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 9 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1nX5P1o5Sb6Abf6kbcz5Q3Mx_NiaVDK9T/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Minor Ailments</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1coLsEbYgNxhrvfJpzHu7M2Ejn03x5N6C/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Minor Ailments</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1B0t8WEQInEC03dFZTY18wdj-8pl2TyA8/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Standing Orders</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/11xIpVk6KCcXIEw-OhmIwpE2PykHHYvoi/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Standing Orders</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(9)"><div class="rico">✍️</div><div class="rtxt">Unit 9 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+</main>
+<div class="qoverlay" id="qmodal">
+<div class="qscrim" onclick="closeQuiz()"></div>
+<div class="qpanel">
+<div class="qhead">
+<div class="qhead-top"><div class="qtitle" id="qtitle">Quiz</div><button class="qclose" onclick="closeQuiz()">✕</button></div>
+<div class="qpips" id="qpips"></div>
+</div>
+<div class="qbody" id="qbody"></div>
+</div>
+</div>
 <script>
-    // --- 1. QUIZ DATA (Units 1-9) ---
-    const QUIZ_DATA = {
-        "1": [{"q":"Which of the following is the WHO definition of health?","o":["Absence of illness or infirmity","State of physical well-being only","State of complete physical, mental, and social well-being, and not merely the absence of disease","Ability to perform daily activities without pain"],"a":2},{"q":"Who defined community as “a social group with some degree of ‘we feeling’ and living in a given area”?","o":["Bertrand","Davis","Bogardus","Nightingale"],"a":2},{"q":"The biomedical concept of health is primarily based on:","o":["Ecological balance","Absence of disease","Spiritual well-being","Social determinants of health"],"a":1},{"q":"Which dimension of health is concerned with the ability of an individual to make personal and social adjustments?","o":["Physical health","Social health","Mental health","Spiritual health"],"a":2},{"q":"The infant mortality rate is defined as:","o":["Number of infant deaths per 100,000 live births in a year","Number of infant deaths per 1,000 live births in a year","Number of neonatal deaths per 1,000 live births in a year","Number of child deaths under 5 years per 1,000 births in a year"],"a":1},{"q":"Which of the following is NOT a component of the holistic concept of health?","o":["Recognition of social, cultural, political, and environmental influences","Emphasis on prevention and protection of health","Viewing health as absence of disease only","Sound mind, body, family, and environment"],"a":2},{"q":"The Alma-Ata Declaration (1978) is most closely associated with:","o":["Millennium Development Goals","Universal Immunization Programme","Primary Health Care (PHC)","Sustainable Development Goals"],"a":2},{"q":"Which of the following is a psychosocial determinant of health?","o":["Body Mass Index (BMI)","Housing conditions","Stress and cultural factors","Maternal mortality ratio"],"a":2},{"q":"Which Millennium Development Goal (MDG) directly focused on maternal health?","o":["MDG 3","MDG 4","MDG 5","MDG 6"],"a":2},{"q":"Which of the following best describes health promotion?","o":["Early diagnosis and treatment of disease","A process enabling people to increase control over, and improve their health","Providing curative and rehabilitative services","Screening programs to detect illness early"],"a":1}],
-        "2": [{"q":"Who defined community health nursing as “a synthesis of nursing practice and public health practice applied in promoting and preserving the health of populations”?","o":["Margaret Jacobson","Florence Nightingale","American Nursing Association","World Health Organization"],"a":2},{"q":"Which of the following is NOT a principle of community health nursing?","o":["CH nurse should accept gifts from patients","CH nurses should follow the policy of the agency","CH nurses should maintain professional relationships with community leaders","CH nurses should follow ethics while working in the community"],"a":0},{"q":"According to the ecological concept of health, disease occurs due to:","o":["Maladjustment of the human organism to the environment","Absence of disease only","Stress and cultural factors","Lack of personal hygiene"],"a":0},{"q":"The main aim of community health nursing is:","o":["To cure diseases only","To promote health and prevent occurrence of disease","To provide hospital care only","To perform surgeries at community level"],"a":1},{"q":"Which of the following is a function of a community health nurse as a collaborator?","o":["Solving health problems with a single health worker","Coordinating with doctors, ANMs, and health assistants","Collecting only demographic data","Distributing free medicines"],"a":1},{"q":"In the community health nursing process, the first step is:","o":["Planning","Evaluation","Establish and maintain interpersonal relationship (IPR)","Implementation"],"a":2},{"q":"During data collection in community health nursing, which of the following is NOT included?","o":["Geographical data","Demographic data","Economic data","Health-related information"],"a":2},{"q":"Which of the following best describes community diagnosis?","o":["Interpretation of information to identify community health problems","Recording only the demographic data","Teaching handwashing methods only","Distribution of medicines"],"a":0},{"q":"The holistic concept of health considers:","o":["Sound body, sound mind, sound family, sound environment","Only physical fitness","Absence of communicable diseases only","Only social well-being"],"a":0},{"q":"In the evaluation phase of community health nursing process, the nurse:","o":["Collects data again","Determines the extent of goal achievement","Conducts survey only","Gives immunization to all"],"a":1}],
-        "3": [{"q":"Which organization defines health as “a state of complete physical, mental and social well-being and not merely the absence of disease or infirmity”?","o":["UNICEF","WHO","UNESCO","Red Cross"],"a":1},{"q":"The biomedical concept of health mainly focuses on:","o":["Social well-being","Absence of disease","Holistic wellness","Economic stability"],"a":1},{"q":"According to the ecological concept, disease is:","o":["A punishment from God","An imbalance between man and environment","Only due to genetic factors","A purely psychological condition"],"a":1},{"q":"Infant mortality rate (IMR) refers to:","o":["Number of deaths of children under 5 years per 1,000 live births","Number of infant deaths under 1 year per 1,000 live births","Number of neonatal deaths per 100,000 live births","Number of child deaths under 12 years per 1,000 live births"],"a":1},{"q":"Which of the following is NOT a dimension of health?","o":["Physical","Spiritual","Economic","Mental"],"a":2},{"q":"The Alma-Ata Declaration (1978) is related to:","o":["Universal immunization","Primary Health Care","Millennium Development Goals","Sustainable Development Goals"],"a":1},{"q":"Which of the following is considered a determinant of health?","o":["Age, gender, heredity","Housing and sanitation","Income and education","All of the above"],"a":3},{"q":"The holistic concept of health emphasizes:","o":["Absence of disease","Sound body, mind, family, and environment","Religious beliefs only","Economic prosperity"],"a":1},{"q":"Which of the following is an indicator of health?","o":["Literacy rate","Life expectancy at birth","Per capita income","Food production"],"a":1},{"q":"The Millennium Development Goal (MDG) 5 focused on:","o":["Reducing child mortality","Eradicating poverty and hunger","Improving maternal health","Combating HIV/AIDS and malaria"],"a":2}],
-        "4": [{"q":"Which of the following best defines epidemiology?","o":["Study of microbes in the laboratory","Study of distribution and determinants of health events in populations","Study of clinical management of diseases","Study of human genetics only"],"a":1},{"q":"In the epidemiological triad, which of the following is NOT a component?","o":["Agent","Host","Environment","Vector"],"a":3},{"q":"Which clinical feature is specific for measles?","o":["Koplik spots inside the cheeks","Bull neck appearance","Opisthotonos","Purpuric rash"],"a":0},{"q":"The incubation period of chickenpox is:","o":["2–5 days","7–17 days","10–21 days","1–3 months"],"a":2},{"q":"Which type of epidemiology deals with the “Who, Where, and When” of disease distribution?","o":["Analytical epidemiology","Descriptive epidemiology","Experimental epidemiology","Molecular epidemiology"],"a":1},{"q":"The causative agent of diphtheria is:","o":["Bordetella pertussis","Corynebacterium diphtheriae","Clostridium tetani","Neisseria meningitidis"],"a":1},{"q":"Which of the following communicable diseases is not transmitted person-to-person?","o":["Tetanus","Pertussis","Rubella","Measles"],"a":0},{"q":"Which disease shows a synchronous rash (all lesions in the same stage)?","o":["Chickenpox","Smallpox","Rubella","Measles"],"a":1},{"q":"The “whooping sound” after a paroxysmal cough is characteristic of:","o":["Pertussis","Diphtheria","Measles","Influenza"],"a":0},{"q":"Which vaccine prevents Congenital Rubella Syndrome (CRS)?","o":["BCG","MMR","OPV","DPT"],"a":1}],
-        "5": [{"q":"The family is considered as the:","o":["Secondary group in society","Fundamental unit of society","Temporary institution","Voluntary organization"],"a":1},{"q":"A nuclear family consists of:","o":["Husband, wife, children, and grandparents","Husband, wife, and their children","Multiple generations living together","Extended relatives like cousins and in-laws"],"a":1},{"q":"Which type of family system is commonly seen among the Khasi tribe in India?","o":["Patriarchal family","Matriarchal family","Egalitarian family","Nuclear family"],"a":1},{"q":"When a newly married couple sets up their own independent residence, it is called:","o":["Patrilocal family","Matrilocal family","Neolocal family","Extended family"],"a":2},{"q":"A family in which one man has multiple wives is called:","o":["Monogamous family","Polygynous family","Polyandrous family","Reconstituted family"],"a":1},{"q":"Which of the following is NOT a function of family?","o":["Reproductive function","Emotional support","Cultural transmission","Political governance"],"a":3},{"q":"The main goal of family health nursing is to:","o":["Provide curative care only","Promote and maintain family health","Provide financial support to families","Reduce cultural practices"],"a":1},{"q":"Which of the following is an objective of family health nursing?","o":["To identify health needs and problems of the family","To provide comprehensive and continuous care","To promote environmental health","All of the above"],"a":3},{"q":"Family health records are important because they:","o":["Provide legal evidence of care given","Help in family health assessment and planning","Ensure continuity of care","All of the above"],"a":3},{"q":"Which of the following is a role of the community health nurse in family health service?","o":["Conduct health education and counseling","Maintain family health records","Provide maternal and child health care","All of the above"],"a":3}],
-        "6": [{"q":"A home visit by a community health nurse is defined as:","o":["An informal friendly meeting at a family’s house","A systematic, planned, purposeful visit to deliver health services at home","A social gathering for health awareness","A random unplanned visit to check family health"],"a":1},{"q":"Which of the following is NOT a purpose of home visits?","o":["To provide preventive, promotive, curative, and rehabilitative care","To observe environmental and living conditions","To collect money from families for hospital funds","To develop rapport and trust with families"],"a":2},{"q":"One of the principles of home visiting is:","o":["Visits should always be unplanned and surprise-based","Family privacy and cultural values must be respected","Family members should never be involved in planning","Documentation is optional"],"a":1},{"q":"The frequency of postnatal home visits includes a visit within:","o":["24 hours of delivery","48 hours of delivery","1 week of delivery","1 month of delivery"],"a":1},{"q":"High-priority families for home visits include:","o":["Families with good sanitation and nutrition","Families with high income and easy hospital access","Families with pregnant women, infants, elderly, or chronic disease patients","Families that do not want to be visited"],"a":2},{"q":"The bag technique in community health nursing mainly prevents:","o":["Misuse of medical supplies","Cross-infection between nurse, patients, and environment","Overcrowding in hospitals","Excessive documentation"],"a":1},{"q":"Which of the following items is a sterile article in the community health bag?","o":["Kidney tray","Measuring tape","Sterile gauze pieces","Torch/flashlight"],"a":2},{"q":"According to the principles of bag technique, the nurse should:","o":["Place the bag directly on the floor","Handle contaminated items first, then clean items","Use hand hygiene and clean-to-dirty principle","Carry only non-sterile items"],"a":2},{"q":"Which of the following is a purpose of clinics in community health?","o":["Provide only emergency surgical services","Offer preventive, promotive, curative, and referral services","Function only as vaccination centers","Keep patients admitted for long-term care"],"a":1},{"q":"A maternal and child health (MCH) clinic primarily provides:","o":["Specialized cardiac care","Pediatric and maternal services including antenatal, postnatal, and newborn care","Orthopedic rehabilitation","Dental care services"],"a":1}],
-        "7": [{"q":"A home visit in community health nursing is defined as:","o":["A casual visit by the nurse to check the family","A systematic, planned, purposeful visit to provide health services at home","A surprise visit to collect information","A social visit to build rapport only"],"a":1},{"q":"Which of the following is NOT a principle of home visiting?","o":["Respect privacy and cultural values of the family","Build mutual trust and acceptance","Document observations accurately","Visits should always be unplanned and surprise-based"],"a":3},{"q":"According to standard guidelines, the first postnatal home visit should be made:","o":["Within 24 hours of delivery","Within 48 hours of delivery","On the 7th day after delivery","On the 42nd day after delivery"],"a":1},{"q":"The main goal of bag technique is to:","o":["Reduce travel expenses","Prevent cross-infection between nurse, patients, and environment","Carry more supplies in less space","Reduce time of documentation"],"a":1},{"q":"Which of the following is a sterile item in the community health nursing bag?","o":["Kidney tray","Measuring tape","Sterile gauze pieces","Torch/flashlight"],"a":2},{"q":"Which type of clinic provides prenatal, postnatal, and pediatric services?","o":["General clinic","Specialty clinic","Maternal and Child Health (MCH) clinic","Dental clinic"],"a":2},{"q":"A referral system in health care is best defined as:","o":["Sending all patients to hospitals directly","A process where patients are guided to higher-level facilities when needed","Shifting patients only for financial reasons","A documentation process without actual transfer"],"a":1},{"q":"Which of the following is a characteristic of an effective referral system?","o":["Timeliness and appropriateness","Two-way feedback","Proper documentation","All of the above"],"a":3},{"q":"Primary level of health care is mainly delivered through:","o":["Medical colleges and super-specialty hospitals","Community health centres and district hospitals","Sub-centres and primary health centres (PHCs)","Private nursing homes"],"a":2},{"q":"Which of the following is an example of tertiary health care service?","o":["Immunization","Management of common cold and fever","Complicated cardiac surgery or organ transplant","Antenatal check-up at PHC"],"a":2}],
-        "8": [{"q":"A nursing record is best defined as:","o":["Informal notes written for memory aid","Systematic, accurate, and comprehensive documentation of patient care","Oral communication between nurses only","Statistical data maintained by administration"],"a":1},{"q":"Which of the following is an example of an administrative record?","o":["Nursing care plan","Medication chart","Duty roster and equipment log","Vital signs chart"],"a":2},{"q":"A cumulative record in nursing refers to:","o":["Short notes about patient complaints","Continuous and permanent collection of information over a period of time","Oral reports given during handover","Daily temperature chart"],"a":1},{"q":"The main purpose of family records in nursing is:","o":["To document only immunization status","To assess and plan family-centered healthcare services","To keep track of financial expenses","To record hospital admissions only"],"a":1},{"q":"An anecdotal record is used to:","o":["Record vital signs at regular intervals","Document unusual or significant incidents or behaviors","Keep a list of medications administered","Record discharge instructions"],"a":1},{"q":"Which of the following is a special nursing record?","o":["Intake and output chart","Duty roster","Admission register","Incident report"],"a":0},{"q":"A doctor’s order sheet is legally important because:","o":["It contains personal opinions of nurses","It provides official medical instructions for diagnosis and treatment","It records only financial details of patients","It is maintained for research purposes only"],"a":1},{"q":"Which of the following is an essential requirement of nursing records?","o":["Accuracy, clarity, timeliness, confidentiality","Opinions, assumptions, guesses, and personal views","Delay in writing until the end of duty","Erasing errors to hide mistakes"],"a":0},{"q":"Charting by exception (CBE) in nursing records means:","o":["Recording every single detail of care provided","Recording only abnormal or unusual findings","Writing anecdotal incidents only","Recording vital signs at hourly intervals"],"a":1},{"q":"The primary purpose of nursing reports is:","o":["To provide entertainment in hospitals","To communicate important patient information for continuity of care","To replace nursing records completely","To record financial accounts of patients"],"a":1}],
-        "9": [{"q":"Minor ailments are best defined as:","o":["Serious, life-threatening diseases","Common, mild, self-limiting health conditions not requiring extensive intervention","Conditions always needing hospitalization","Only communicable diseases"],"a":1},{"q":"Which of the following is a principle of managing minor ailments?","o":["Early identification and assessment","Rational use of medicines","Health education and promotion","All of the above"],"a":3},{"q":"A child with frequent loose stools but no blood or dehydration should be managed with:","o":["Intravenous fluids immediately","Oral Rehydration Solution (ORS) and Zinc tablets","Antibiotics for 5 days","Nothing, it resolves on its own"],"a":1},{"q":"The recommended drug for worm infestation under standing orders is:","o":["Metronidazole","Albendazole","Ciprofloxacin","Amoxicillin"],"a":1},{"q":"The correct treatment for scabies under standing orders is:","o":["Chloramphenicol eye drops","Permethrin cream or Benzyl benzoate lotion","Antihistamines only","Oral antibiotics"],"a":1},{"q":"Which of the following is a systemic minor ailment?","o":["Conjunctivitis","Toothache","Low-grade fever","Scabies"],"a":2},{"q":"Standing orders are:","o":["Oral advice by nurses without approval","Pre-approved written instructions by doctors for nurses/health workers","Legal documents for patient insurance claims","Orders given only during disasters"],"a":1},{"q":"Which of the following is a preventive standing order?","o":["Treatment of minor cuts","Vitamin A supplementation","Paracetamol for fever","Permethrin for scabies"],"a":1},{"q":"The main goal of standing orders is:","o":["To delay treatment until a doctor is available","To standardize and ensure prompt treatment of minor ailments","To reduce the workload of nurses","To increase the use of antibiotics"],"a":1},{"q":"A patient presents with red, watery eyes and sticky discharge. According to standing orders, the nurse should:","o":["Refer immediately to a specialist","Administer Chloramphenicol eye drops","Prescribe systemic antibiotics","Do nothing"],"a":1}]
-    };
-
-    let score = 0;
-
-    function toggleUnit(header) {
-        const content = header.nextElementSibling;
-        header.setAttribute('aria-expanded', header.getAttribute('aria-expanded') !== 'true');
-        content.classList.toggle('active');
-        const arrow = header.querySelector('span');
-        if(arrow) arrow.innerText = content.classList.contains('active') ? '🔼' : '🔽';
-    }
-
-    // --- 3. OPEN RESOURCE (FIXED VIDEO + BACK BUTTON) ---
-    function openResource(type, url, title) {
-        // PUSH STATE: Fixes Back Button logic
-        history.pushState({ modalOpen: true }, null, '#resource');
-
-        const modal = document.getElementById('app-modal');
-        const body = document.getElementById('modal-body');
-        document.getElementById('modal-title').textContent = title;
-        modal.style.display = 'flex';
-        
-        let finalUrl = url;
-        if (url.includes('drive.google.com')) { 
-            finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview'); 
-        }
-        else if (url.includes('human.biodigital.com')) { 
-             if (url.includes('/viewer/')) finalUrl = url.replace('/viewer/', '/widget/');
-             else finalUrl = url.replace('/view', '/widget'); 
-        }
-        
-        // --- VIDEO FIX: ADDED SANDBOX AND ALLOW ATTRIBUTES ---
-        body.innerHTML = `
-            <iframe 
-                class="iframe-res" 
-                src="${finalUrl}" 
-                width="100%" 
-                height="100%" 
-                frameborder="0"
-                sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-presentation"
-                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen">
-            </iframe>`;
-    }
-
-    // --- 4. START QUIZ (FIXED BACK BUTTON) ---
-    function startQuiz(unitId) {
-        // PUSH STATE: Add history entry for Quiz
-        history.pushState({ modalOpen: true }, null, '#quiz');
-
-        score = 0;
-        const questions = QUIZ_DATA[unitId];
-        if(!questions || questions.length === 0) { alert('No questions found.'); history.back(); return; }
-        
-        let html = '<div class="quiz-container"><h2 style="color:var(--brand); margin-top:0;">Unit ' + unitId + ' Quiz</h2>';
-        html += '<div id="score-display" style="background:var(--brand); color:white; padding:5px 15px; border-radius:20px; display:inline-block; font-weight:700; margin-bottom:20px;">Score: 0 / ' + questions.length + '</div>';
-        
-        questions.forEach((q, index) => {
-            html += '<div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">';
-            html += '<p style="font-weight:600; font-size:1.1rem; margin-bottom:15px;">' + (index + 1) + '. ' + q.q + '</p>';
-            q.o.forEach((opt, optIndex) => {
-                html += '<div class="quiz-option" onclick="checkAnswer(this, ' + unitId + ', ' + optIndex + ', ' + q.a + ')">' + opt + '</div>';
-            });
-            html += '</div>';
-        });
-        html += '<button class="btn-quiz" onclick="closeModal()">Close Quiz</button></div>';
-        
-        document.getElementById('modal-body').innerHTML = html;
-        document.getElementById('modal-title').textContent = 'Unit ' + unitId + ' Quiz';
-        document.getElementById('app-modal').style.display = 'flex';
-    }
-
-    function checkAnswer(element, unitId, selectedIndex, correctIndex) {
-        if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
-        if (selectedIndex === correctIndex) {
-            element.classList.add('correct'); score++;
-        } else {
-            element.classList.add('wrong'); element.parentElement.children[correctIndex + 1].classList.add('correct');
-        }
-        document.getElementById('score-display').textContent = 'Score: ' + score + ' / ' + QUIZ_DATA[unitId].length;
-    }
-
-    // --- 6. CLOSE MODAL (MANUAL CLICK) ---
-    function closeModal() { 
-        const modal = document.getElementById('app-modal');
-        modal.style.display = 'none'; 
-        document.getElementById('modal-body').innerHTML = ""; 
-        
-        // IMPORTANT: Manually go back in history if we are closing via button
-        if ((history.state && history.state.modalOpen) || window.location.hash === '#resource' || window.location.hash === '#quiz') {
-            history.back();
-        }
-    }
-
-    // --- 7. HANDLE DEVICE BACK BUTTON ---
-    window.onpopstate = function(event) {
-        const modal = document.getElementById('app-modal');
-        if (modal.style.display === 'flex') {
-            modal.style.display = 'none';
-            document.getElementById('modal-body').innerHTML = '';
-        }
-    };
+function goBackToApp(){if(window.parent&&window.parent!==window){window.parent.postMessage({action:'goBack'},'*');}else{history.back();}}
+function openLink(url) {
+if(!url || url==='COMING SOON' || url===''){ alert('This resource is coming soon!'); return; }
+let clean = url;
+if(clean.includes('drive.google.com')){
+clean = clean.replace(/\/preview.*$/,'').replace(/\/view.*$/,'')+'/view';
+} else if(clean.includes('human.biodigital.com')) {
+clean = clean.replace(/\/viewer\//, '/widget/').replace(/\/view\?/, '/widget?');
+}
+window.open(clean, '_blank');
+}
+function tog(id){const card=document.getElementById(id);const body=document.getElementById('b-'+id);const open=card.dataset.open==='true';card.dataset.open=String(!open);body.classList.toggle('open',!open);}
+const QD={
+1:[{"q":"Which of the following is the WHO definition of health?","o":["Absence of illness or infirmity","State of physical well-being only","State of complete physical, mental, and social well-being, and not merely the absence of disease","Ability to perform daily activities without pain"],"a":2},{"q":"Who defined community as “a social group with some degree of ‘we feeling’ and living in a given area”?","o":["Bertrand","Davis","Bogardus","Nightingale"],"a":2},{"q":"The biomedical concept of health is primarily based on:","o":["Ecological balance","Absence of disease","Spiritual well-being","Social determinants of health"],"a":1},{"q":"Which dimension of health is concerned with the ability of an individual to make personal and social adjustments?","o":["Physical health","Social health","Mental health","Spiritual health"],"a":2},{"q":"The infant mortality rate is defined as:","o":["Number of infant deaths per 100,000 live births in a year","Number of infant deaths per 1,000 live births in a year","Number of neonatal deaths per 1,000 live births in a year","Number of child deaths under 5 years per 1,000 births in a year"],"a":1},{"q":"Which of the following is NOT a component of the holistic concept of health?","o":["Recognition of social, cultural, political, and environmental influences","Emphasis on prevention and protection of health","Viewing health as absence of disease only","Sound mind, body, family, and environment"],"a":2},{"q":"The Alma-Ata Declaration (1978) is most closely associated with:","o":["Millennium Development Goals","Universal Immunization Programme","Primary Health Care (PHC)","Sustainable Development Goals"],"a":2},{"q":"Which of the following is a psychosocial determinant of health?","o":["Body Mass Index (BMI)","Housing conditions","Stress and cultural factors","Maternal mortality ratio"],"a":2},{"q":"Which Millennium Development Goal (MDG) directly focused on maternal health?","o":["MDG 3","MDG 4","MDG 5","MDG 6"],"a":2},{"q":"Which of the following best describes health promotion?","o":["Early diagnosis and treatment of disease","A process enabling people to increase control over, and improve their health","Providing curative and rehabilitative services","Screening programs to detect illness early"],"a":1}],
+2:[{"q":"Who defined community health nursing as “a synthesis of nursing practice and public health practice applied in promoting and preserving the health of populations”?","o":["Margaret Jacobson","Florence Nightingale","American Nursing Association","World Health Organization"],"a":2},{"q":"Which of the following is NOT a principle of community health nursing?","o":["CH nurse should accept gifts from patients","CH nurses should follow the policy of the agency","CH nurses should maintain professional relationships with community leaders","CH nurses should follow ethics while working in the community"],"a":0},{"q":"According to the ecological concept of health, disease occurs due to:","o":["Maladjustment of the human organism to the environment","Absence of disease only","Stress and cultural factors","Lack of personal hygiene"],"a":0},{"q":"The main aim of community health nursing is:","o":["To cure diseases only","To promote health and prevent occurrence of disease","To provide hospital care only","To perform surgeries at community level"],"a":1},{"q":"Which of the following is a function of a community health nurse as a collaborator?","o":["Solving health problems with a single health worker","Coordinating with doctors, ANMs, and health assistants","Collecting only demographic data","Distributing free medicines"],"a":1},{"q":"In the community health nursing process, the first step is:","o":["Planning","Evaluation","Establish and maintain interpersonal relationship (IPR)","Implementation"],"a":2},{"q":"During data collection in community health nursing, which of the following is NOT included?","o":["Geographical data","Demographic data","Economic data","Health-related information"],"a":2},{"q":"Which of the following best describes community diagnosis?","o":["Interpretation of information to identify community health problems","Recording only the demographic data","Teaching handwashing methods only","Distribution of medicines"],"a":0},{"q":"The holistic concept of health considers:","o":["Sound body, sound mind, sound family, sound environment","Only physical fitness","Absence of communicable diseases only","Only social well-being"],"a":0},{"q":"In the evaluation phase of community health nursing process, the nurse:","o":["Collects data again","Determines the extent of goal achievement","Conducts survey only","Gives immunization to all"],"a":1}],
+3:[{"q":"Which organization defines health as “a state of complete physical, mental and social well-being and not merely the absence of disease or infirmity”?","o":["UNICEF","WHO","UNESCO","Red Cross"],"a":1},{"q":"The biomedical concept of health mainly focuses on:","o":["Social well-being","Absence of disease","Holistic wellness","Economic stability"],"a":1},{"q":"According to the ecological concept, disease is:","o":["A punishment from God","An imbalance between man and environment","Only due to genetic factors","A purely psychological condition"],"a":1},{"q":"Infant mortality rate (IMR) refers to:","o":["Number of deaths of children under 5 years per 1,000 live births","Number of infant deaths under 1 year per 1,000 live births","Number of neonatal deaths per 100,000 live births","Number of child deaths under 12 years per 1,000 live births"],"a":1},{"q":"Which of the following is NOT a dimension of health?","o":["Physical","Spiritual","Economic","Mental"],"a":2},{"q":"The Alma-Ata Declaration (1978) is related to:","o":["Universal immunization","Primary Health Care","Millennium Development Goals","Sustainable Development Goals"],"a":1},{"q":"Which of the following is considered a determinant of health?","o":["Age, gender, heredity","Housing and sanitation","Income and education","All of the above"],"a":3},{"q":"The holistic concept of health emphasizes:","o":["Absence of disease","Sound body, mind, family, and environment","Religious beliefs only","Economic prosperity"],"a":1},{"q":"Which of the following is an indicator of health?","o":["Literacy rate","Life expectancy at birth","Per capita income","Food production"],"a":1},{"q":"The Millennium Development Goal (MDG) 5 focused on:","o":["Reducing child mortality","Eradicating poverty and hunger","Improving maternal health","Combating HIV/AIDS and malaria"],"a":2}],
+4:[{"q":"Which of the following best defines epidemiology?","o":["Study of microbes in the laboratory","Study of distribution and determinants of health events in populations","Study of clinical management of diseases","Study of human genetics only"],"a":1},{"q":"In the epidemiological triad, which of the following is NOT a component?","o":["Agent","Host","Environment","Vector"],"a":3},{"q":"Which clinical feature is specific for measles?","o":["Koplik spots inside the cheeks","Bull neck appearance","Opisthotonos","Purpuric rash"],"a":0},{"q":"The incubation period of chickenpox is:","o":["2–5 days","7–17 days","10–21 days","1–3 months"],"a":2},{"q":"Which type of epidemiology deals with the “Who, Where, and When” of disease distribution?","o":["Analytical epidemiology","Descriptive epidemiology","Experimental epidemiology","Molecular epidemiology"],"a":1},{"q":"The causative agent of diphtheria is:","o":["Bordetella pertussis","Corynebacterium diphtheriae","Clostridium tetani","Neisseria meningitidis"],"a":1},{"q":"Which of the following communicable diseases is not transmitted person-to-person?","o":["Tetanus","Pertussis","Rubella","Measles"],"a":0},{"q":"Which disease shows a synchronous rash (all lesions in the same stage)?","o":["Chickenpox","Smallpox","Rubella","Measles"],"a":1},{"q":"The “whooping sound” after a paroxysmal cough is characteristic of:","o":["Pertussis","Diphtheria","Measles","Influenza"],"a":0},{"q":"Which vaccine prevents Congenital Rubella Syndrome (CRS)?","o":["BCG","MMR","OPV","DPT"],"a":1}],
+5:[{"q":"The family is considered as the:","o":["Secondary group in society","Fundamental unit of society","Temporary institution","Voluntary organization"],"a":1},{"q":"A nuclear family consists of:","o":["Husband, wife, children, and grandparents","Husband, wife, and their children","Multiple generations living together","Extended relatives like cousins and in-laws"],"a":1},{"q":"Which type of family system is commonly seen among the Khasi tribe in India?","o":["Patriarchal family","Matriarchal family","Egalitarian family","Nuclear family"],"a":1},{"q":"When a newly married couple sets up their own independent residence, it is called:","o":["Patrilocal family","Matrilocal family","Neolocal family","Extended family"],"a":2},{"q":"A family in which one man has multiple wives is called:","o":["Monogamous family","Polygynous family","Polyandrous family","Reconstituted family"],"a":1},{"q":"Which of the following is NOT a function of family?","o":["Reproductive function","Emotional support","Cultural transmission","Political governance"],"a":3},{"q":"The main goal of family health nursing is to:","o":["Provide curative care only","Promote and maintain family health","Provide financial support to families","Reduce cultural practices"],"a":1},{"q":"Which of the following is an objective of family health nursing?","o":["To identify health needs and problems of the family","To provide comprehensive and continuous care","To promote environmental health","All of the above"],"a":3},{"q":"Family health records are important because they:","o":["Provide legal evidence of care given","Help in family health assessment and planning","Ensure continuity of care","All of the above"],"a":3},{"q":"Which of the following is a role of the community health nurse in family health service?","o":["Conduct health education and counseling","Maintain family health records","Provide maternal and child health care","All of the above"],"a":3}],
+6:[{"q":"A home visit by a community health nurse is defined as:","o":["An informal friendly meeting at a family’s house","A systematic, planned, purposeful visit to deliver health services at home","A social gathering for health awareness","A random unplanned visit to check family health"],"a":1},{"q":"Which of the following is NOT a purpose of home visits?","o":["To provide preventive, promotive, curative, and rehabilitative care","To observe environmental and living conditions","To collect money from families for hospital funds","To develop rapport and trust with families"],"a":2},{"q":"One of the principles of home visiting is:","o":["Visits should always be unplanned and surprise-based","Family privacy and cultural values must be respected","Family members should never be involved in planning","Documentation is optional"],"a":1},{"q":"The frequency of postnatal home visits includes a visit within:","o":["24 hours of delivery","48 hours of delivery","1 week of delivery","1 month of delivery"],"a":1},{"q":"High-priority families for home visits include:","o":["Families with good sanitation and nutrition","Families with high income and easy hospital access","Families with pregnant women, infants, elderly, or chronic disease patients","Families that do not want to be visited"],"a":2},{"q":"The bag technique in community health nursing mainly prevents:","o":["Misuse of medical supplies","Cross-infection between nurse, patients, and environment","Overcrowding in hospitals","Excessive documentation"],"a":1},{"q":"Which of the following items is a sterile article in the community health bag?","o":["Kidney tray","Measuring tape","Sterile gauze pieces","Torch/flashlight"],"a":2},{"q":"According to the principles of bag technique, the nurse should:","o":["Place the bag directly on the floor","Handle contaminated items first, then clean items","Use hand hygiene and clean-to-dirty principle","Carry only non-sterile items"],"a":2},{"q":"Which of the following is a purpose of clinics in community health?","o":["Provide only emergency surgical services","Offer preventive, promotive, curative, and referral services","Function only as vaccination centers","Keep patients admitted for long-term care"],"a":1},{"q":"A maternal and child health (MCH) clinic primarily provides:","o":["Specialized cardiac care","Pediatric and maternal services including antenatal, postnatal, and newborn care","Orthopedic rehabilitation","Dental care services"],"a":1}],
+7:[{"q":"A home visit in community health nursing is defined as:","o":["A casual visit by the nurse to check the family","A systematic, planned, purposeful visit to provide health services at home","A surprise visit to collect information","A social visit to build rapport only"],"a":1},{"q":"Which of the following is NOT a principle of home visiting?","o":["Respect privacy and cultural values of the family","Build mutual trust and acceptance","Document observations accurately","Visits should always be unplanned and surprise-based"],"a":3},{"q":"According to standard guidelines, the first postnatal home visit should be made:","o":["Within 24 hours of delivery","Within 48 hours of delivery","On the 7th day after delivery","On the 42nd day after delivery"],"a":1},{"q":"The main goal of bag technique is to:","o":["Reduce travel expenses","Prevent cross-infection between nurse, patients, and environment","Carry more supplies in less space","Reduce time of documentation"],"a":1},{"q":"Which of the following is a sterile item in the community health nursing bag?","o":["Kidney tray","Measuring tape","Sterile gauze pieces","Torch/flashlight"],"a":2},{"q":"Which type of clinic provides prenatal, postnatal, and pediatric services?","o":["General clinic","Specialty clinic","Maternal and Child Health (MCH) clinic","Dental clinic"],"a":2},{"q":"A referral system in health care is best defined as:","o":["Sending all patients to hospitals directly","A process where patients are guided to higher-level facilities when needed","Shifting patients only for financial reasons","A documentation process without actual transfer"],"a":1},{"q":"Which of the following is a characteristic of an effective referral system?","o":["Timeliness and appropriateness","Two-way feedback","Proper documentation","All of the above"],"a":3},{"q":"Primary level of health care is mainly delivered through:","o":["Medical colleges and super-specialty hospitals","Community health centres and district hospitals","Sub-centres and primary health centres (PHCs)","Private nursing homes"],"a":2},{"q":"Which of the following is an example of tertiary health care service?","o":["Immunization","Management of common cold and fever","Complicated cardiac surgery or organ transplant","Antenatal check-up at PHC"],"a":2}],
+8:[{"q":"A nursing record is best defined as:","o":["Informal notes written for memory aid","Systematic, accurate, and comprehensive documentation of patient care","Oral communication between nurses only","Statistical data maintained by administration"],"a":1},{"q":"Which of the following is an example of an administrative record?","o":["Nursing care plan","Medication chart","Duty roster and equipment log","Vital signs chart"],"a":2},{"q":"A cumulative record in nursing refers to:","o":["Short notes about patient complaints","Continuous and permanent collection of information over a period of time","Oral reports given during handover","Daily temperature chart"],"a":1},{"q":"The main purpose of family records in nursing is:","o":["To document only immunization status","To assess and plan family-centered healthcare services","To keep track of financial expenses","To record hospital admissions only"],"a":1},{"q":"An anecdotal record is used to:","o":["Record vital signs at regular intervals","Document unusual or significant incidents or behaviors","Keep a list of medications administered","Record discharge instructions"],"a":1},{"q":"Which of the following is a special nursing record?","o":["Intake and output chart","Duty roster","Admission register","Incident report"],"a":0},{"q":"A doctor’s order sheet is legally important because:","o":["It contains personal opinions of nurses","It provides official medical instructions for diagnosis and treatment","It records only financial details of patients","It is maintained for research purposes only"],"a":1},{"q":"Which of the following is an essential requirement of nursing records?","o":["Accuracy, clarity, timeliness, confidentiality","Opinions, assumptions, guesses, and personal views","Delay in writing until the end of duty","Erasing errors to hide mistakes"],"a":0},{"q":"Charting by exception (CBE) in nursing records means:","o":["Recording every single detail of care provided","Recording only abnormal or unusual findings","Writing anecdotal incidents only","Recording vital signs at hourly intervals"],"a":1},{"q":"The primary purpose of nursing reports is:","o":["To provide entertainment in hospitals","To communicate important patient information for continuity of care","To replace nursing records completely","To record financial accounts of patients"],"a":1}],
+9:[{"q":"Minor ailments are best defined as:","o":["Serious, life-threatening diseases","Common, mild, self-limiting health conditions not requiring extensive intervention","Conditions always needing hospitalization","Only communicable diseases"],"a":1},{"q":"Which of the following is a principle of managing minor ailments?","o":["Early identification and assessment","Rational use of medicines","Health education and promotion","All of the above"],"a":3},{"q":"A child with frequent loose stools but no blood or dehydration should be managed with:","o":["Intravenous fluids immediately","Oral Rehydration Solution (ORS) and Zinc tablets","Antibiotics for 5 days","Nothing, it resolves on its own"],"a":1},{"q":"The recommended drug for worm infestation under standing orders is:","o":["Metronidazole","Albendazole","Ciprofloxacin","Amoxicillin"],"a":1},{"q":"The correct treatment for scabies under standing orders is:","o":["Chloramphenicol eye drops","Permethrin cream or Benzyl benzoate lotion","Antihistamines only","Oral antibiotics"],"a":1},{"q":"Which of the following is a systemic minor ailment?","o":["Conjunctivitis","Toothache","Low-grade fever","Scabies"],"a":2},{"q":"Standing orders are:","o":["Oral advice by nurses without approval","Pre-approved written instructions by doctors for nurses/health workers","Legal documents for patient insurance claims","Orders given only during disasters"],"a":1},{"q":"Which of the following is a preventive standing order?","o":["Treatment of minor cuts","Vitamin A supplementation","Paracetamol for fever","Permethrin for scabies"],"a":1},{"q":"The main goal of standing orders is:","o":["To delay treatment until a doctor is available","To standardize and ensure prompt treatment of minor ailments","To reduce the workload of nurses","To increase the use of antibiotics"],"a":1},{"q":"A patient presents with red, watery eyes and sticky discharge. According to standing orders, the nurse should:","o":["Refer immediately to a specialist","Administer Chloramphenicol eye drops","Prescribe systemic antibiotics","Do nothing"],"a":1}]
+};
+let curQuiz=null,answered=[];
+function openQuiz(id){
+curQuiz=id;
+const qs=QD[id]||[];
+answered=new Array(qs.length).fill(null);
+document.getElementById('qtitle').textContent='Unit '+id+' Quiz';
+document.getElementById('qpips').innerHTML=qs.map((_,i)=>`<div class="pip" id="pip${i}"></div>`).join('');
+let html=`<div class="qscore" id="qscore"><div><div class="qs-num" id="qsnum">—</div><div class="qs-sub">Score</div></div><div class="qs-msg" id="qsmsg"></div></div>`;
+qs.forEach((q,qi)=>{
+html+=`<div class="qitem" id="qi${qi}"><div class="qlbl">Question ${qi+1} of ${qs.length}</div><div class="qtext">${q.q}</div><div class="qopts">${q.o.map((opt,oi)=>`<button class="qopt" id="opt${qi}_${oi}" onclick="ans(${qi},${oi},${q.a})"><span class="qltr">${['A','B','C','D'][oi]}</span>${opt}</button>`).join('')}</div></div>`;
+});
+document.getElementById('qbody').innerHTML=html;
+document.getElementById('qmodal').classList.add('open');
+document.body.style.overflow='hidden';
+}
+function ans(qi,oi,correct){
+if(answered[qi]!==null)return;
+answered[qi]=oi;
+const opts=document.querySelectorAll(`#qi${qi} .qopt`);
+opts.forEach(b=>b.classList.add('lock'));
+opts[correct].classList.add('cor');
+if(oi!==correct)opts[oi].classList.add('wrg');
+const pip=document.getElementById('pip'+qi);
+pip.classList.add('ans',oi===correct?'cor':'wrg');
+if(answered.every(a=>a!==null)){
+const score=answered.filter((a,i)=>a===QD[curQuiz][i].a).length;
+const total=QD[curQuiz].length;
+const pct=Math.round(score/total*100);
+const msgs=['📚 Keep Studying!','👍 Good Effort!','🎉 Well Done!','🏆 Perfect!'];
+const mi=pct<50?0:pct<70?1:pct<100?2:3;
+document.getElementById('qsnum').textContent=score+'/'+total;
+document.getElementById('qsmsg').textContent=msgs[mi];
+const sc=document.getElementById('qscore');
+sc.classList.add('show');
+sc.scrollIntoView({behavior:'smooth',block:'start'});
+}
+}
+function closeQuiz(){
+document.getElementById('qmodal').classList.remove('open');
+document.body.style.overflow='';
+curQuiz=null;
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQuiz();});
 </script>
 </body>
 </html>
