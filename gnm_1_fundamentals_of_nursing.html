@@ -1,216 +1,460 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fundamentals Of Nursing</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <style>
-        :root {
-            --brand: #003B82; --accent: #00B9F2; --gray-50: #f9fafb; --gray-200: #e5e7eb; --gray-900: #111827;
-            --danger: #ef4444; --success: #10b981; --warning: #f59e0b;
-        }
-        * { box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: white; color: var(--gray-900); padding: 24px; max-width: 1000px; margin: 0 auto; }
-        .syllabus-btn { display: block; width: 100%; padding: 18px 24px; margin: 12px 0; background: white; color: var(--brand); border: 2px solid var(--brand); font-weight: 700; font-size: 16px; text-align: center; cursor: pointer; border-radius: 12px; transition: all 0.2s ease; text-decoration: none; }
-        .syllabus-btn:hover { background: var(--gray-50); transform: translateY(-1px); }
-        .unit-header { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 18px 24px; margin: 16px 0; background: var(--brand); color: white; font-weight: 600; font-size: 16px; border-radius: 12px; cursor: pointer; transition: 0.2s; }
-        .unit-header:hover { background: #002d63; }
-        .unit-content { padding: 0 12px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; }
-        .unit-content.active { padding: 24px 12px; max-height: none; }
-        .subsection { padding: 20px; background: white; border-radius: 12px; border: 1px solid var(--gray-200); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-        .resource-btn { display: flex; width: 100%; padding: 14px 18px; margin: 6px 0; background: var(--gray-50); border-radius: 8px; font-weight: 500; border: 1px solid var(--gray-200); cursor: pointer; gap: 12px; transition: 0.2s; align-items: center; }
-        
-        /* EXISTING BUTTON STYLES */
-        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
-        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
-        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
-        .resource-btn.model { background: #fdf4ff; border-color: #f0abfc; color: #86198f; }
-
-        /* NEW BUTTON STYLES FOR APP */
-        .resource-btn.imp-discussion { background: #fef2f2; border-color: #fecaca; color: #b91c1c; } /* Light Red Background */
-        .resource-btn.imp-pdf { background: #fff7ed; border-color: #fed7aa; color: #c2410c; } /* Light Orange Background */
-        
-        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
-        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
-        .icon.video-icon { color: #8b5cf6; } .icon.quiz-icon { color: #f59e0b; } .icon.model-icon { color: #d946ef; }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; display: none; flex-direction: column; }
-        .modal-header { height: 60px; background: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; }
-        .btn-close { background: var(--danger); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
-        .modal-body { flex: 1; background: #f3f4f6; position: relative; padding: 20px; display:flex; justify-content:center; overflow-y: auto;}
-        .iframe-res { width: 100%; height: 100%; border: none; background: white; }
-        .quiz-container { background: white; width: 100%; max-width: 800px; padding: 30px; border-radius: 12px; margin-bottom: 50px; }
-        .quiz-option { padding: 12px 15px; border: 2px solid var(--gray-200); border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
-        .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
-        .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; }
-        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
-        .btn-quiz { background: var(--brand); color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 600; font-size: 16px; margin-top: 20px; cursor: pointer;}
-        @media (max-width: 768px) { body { padding: 16px; } .quiz-container { padding: 15px; } }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Fundamentals Of Nursing</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+--p50:#faf5ff;--p100:#f3e8ff;--p200:#e9d5ff;--p300:#d8b4fe;
+--p400:#c084fc;--p500:#a855f7;--p600:#9333ea;--p700:#7e22ce;
+--p800:#6b21a8;--p900:#581c87;
+--w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;
+--g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;
+--ok:#16a34a;--ok-lt:#dcfce7;--err:#dc2626;--err-lt:#fee2e2;
+--warn:#d97706;--warn-lt:#fef3c7;
+--r:12px;--rs:8px;
+--s1:0 1px 3px rgba(109,40,217,.08);
+--s2:0 4px 12px rgba(109,40,217,.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:90;background:var(--w);border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 16px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-back{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:var(--p100);color:var(--p700);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;margin-right:12px}
+.tb-back:hover{background:var(--p200)}
+.tb-info{flex:1;min-width:0}
+.tb-title{font-size:.88rem;font-weight:700;color:var(--g900);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb-sub{font-size:.65rem;color:var(--g400);font-weight:500;margin-top:1px}
+.tb-chip{background:var(--p100);color:var(--p700);border:1px solid var(--p200);font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
+.hero{background:linear-gradient(145deg,var(--p900),var(--p700) 55%,var(--p500));padding:28px 18px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.08),transparent 50%),radial-gradient(circle at 10% 85%,rgba(255,255,255,.05),transparent 40%)}
+.hero::after{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-dot-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:.65rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border-radius:30px;margin-bottom:12px}
+.hero-eyebrow-dot{width:5px;height:5px;background:#c4b5fd;border-radius:50%}
+.hero h1{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:7px}
+.hero h1 em{color:rgba(255,255,255,.45);font-style:italic;font-weight:300}
+.hero-desc{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:18px}
+.hero-cta{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.28);color:#fff;font-size:.8rem;font-weight:700;padding:9px 16px;border-radius:9px;cursor:pointer;transition:all .2s;backdrop-filter:blur(6px)}
+.hero-cta:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
+.hero-stats{display:flex;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+.hs{flex:1;text-align:center}
+.hs+.hs{border-left:1px solid rgba(255,255,255,.1)}
+.hs-n{font-size:1.35rem;font-weight:800;color:#fff;line-height:1}
+.hs-l{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
+.main{padding:16px 14px 56px}
+.divider{display:flex;align-items:center;gap:8px;margin-bottom:12px;margin-top:2px}
+.divider span{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g400)}
+.divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+.uc{background:var(--w);border:1.5px solid var(--g200);border-radius:var(--r);margin-bottom:9px;overflow:hidden;box-shadow:var(--s1);transition:border-color .2s,box-shadow .2s}
+.uc:hover{border-color:var(--p300);box-shadow:var(--s2)}
+.uc[data-open=true]{border-color:var(--p400);box-shadow:var(--s2)}
+.ubtn{width:100%;display:flex;align-items:center;padding:14px 15px;gap:12px;background:none;border:none;cursor:pointer;text-align:left}
+.upill{min-width:54px;padding:0 8px;height:36px;border-radius:9px;flex-shrink:0;background:var(--p100);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.upill span{font-size:.65rem;font-weight:800;color:var(--p700);letter-spacing:-.01em;white-space:nowrap}
+.uc[data-open=true] .upill{background:var(--p700)}
+.uc[data-open=true] .upill span{color:#fff}
+.uinfo{flex:1;min-width:0}
+.uname{font-size:.85rem;font-weight:700;color:var(--g900);line-height:1.3}
+.umeta{font-size:.66rem;color:var(--g400);margin-top:2px;font-weight:500}
+.uright{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.uchev{width:16px;height:16px;color:var(--g300);transition:transform .3s,color .2s}
+.uc[data-open=true] .uchev{transform:rotate(180deg);color:var(--p500)}
+.ubody{display:none;background:var(--p50);border-top:1.5px solid var(--p200);padding:12px 13px 14px}
+.ubody.open{display:block;animation:bodyIn .2s ease}
+@keyframes bodyIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.rrow{display:flex;gap:9px;margin-bottom:8px}
+.rrow:last-child{margin-bottom:0}
+@media(max-width:380px){.rrow{flex-direction:column}}
+.rbtn{flex:1;display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .17s;background:var(--w);text-decoration:none}
+.rbtn .rico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.rbtn .rtxt{line-height:1.25}
+.rbtn .rtxt small{display:block;font-size:.62rem;font-weight:400;opacity:.5;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;}
+.rbtn .rarr{margin-left:auto;opacity:0;font-size:.7rem;color:var(--g400);transition:opacity .15s}
+.rbtn:hover .rarr{opacity:1}
+.rbtn.notes{border-color:var(--p200);color:var(--p800)}
+.rbtn.notes .rico{background:var(--p100)}
+.rbtn.notes:hover{background:var(--p50);border-color:var(--p500);box-shadow:var(--s2);transform:translateY(-1px)}
+.rbtn.video{border-color:#bae6fd;color:#0369a1}
+.rbtn.video .rico{background:#e0f2fe}
+.rbtn.video:hover{background:#f0f9ff;border-color:#38bdf8;box-shadow:0 3px 10px rgba(56,189,248,.12);transform:translateY(-1px)}
+.rbtn.quiz{border-color:#fde68a;color:#78350f}
+.rbtn.quiz .rico{background:var(--warn-lt)}
+.rbtn.quiz:hover{background:#fffbeb;border-color:var(--warn);box-shadow:0 3px 10px rgba(217,119,6,.12);transform:translateY(-1px)}
+.rbtn.model{border-color:#fbcfe8;color:#9d174d}
+.rbtn.model .rico{background:#fdf2f8}
+.rbtn.model:hover{background:#fdf2f8;border-color:#ec4899;box-shadow:0 3px 10px rgba(236,72,153,.12);transform:translateY(-1px)}
+.qoverlay{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end}
+.qoverlay.open{display:flex}
+.qscrim{position:absolute;inset:0;background:rgba(15,10,40,.55);backdrop-filter:blur(3px)}
+.qpanel{position:relative;z-index:1;background:var(--w);width:100%;max-width:580px;margin:0 auto;border-radius:18px 18px 0 0;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 -10px 50px rgba(109,40,217,.2);animation:panelUp .3s cubic-bezier(.32,.72,0,1)}
+@keyframes panelUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.qhead{padding:16px 18px 12px;border-bottom:1px solid var(--g100);flex-shrink:0}
+.qhead-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.qtitle{font-size:1rem;font-weight:800;color:var(--p800)}
+.qclose{width:28px;height:28px;border-radius:50%;background:var(--g100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--g500);transition:all .15s}
+.qclose:hover{background:var(--err-lt);color:var(--err)}
+.qpips{display:flex;gap:3px}
+.pip{flex:1;height:4px;border-radius:4px;background:var(--g100);transition:background .3s}
+.pip.ans{background:var(--p300)}.pip.cor{background:var(--ok)}.pip.wrg{background:var(--err)}
+.qbody{overflow-y:auto;padding:14px 18px 28px;flex:1}
+.qscore{display:none;background:linear-gradient(135deg,var(--p800),var(--p500));color:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;align-items:center;gap:14px}
+.qscore.show{display:flex}
+.qs-num{font-size:1.9rem;font-weight:800;line-height:1}
+.qs-sub{font-size:.65rem;opacity:.6;margin-top:2px}
+.qs-msg{font-size:.85rem;font-weight:600}
+.qitem{margin-bottom:24px}
+.qitem:last-child{margin-bottom:0}
+.qlbl{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--p500);margin-bottom:4px}
+.qtext{font-size:.88rem;font-weight:600;color:var(--g900);line-height:1.5;margin-bottom:10px}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1.5px solid var(--g200);border-radius:var(--rs);cursor:pointer;font-size:.83rem;font-weight:500;background:var(--w);color:var(--g700);transition:all .14s}
+.qopt:hover{border-color:var(--p300);background:var(--p50);color:var(--p800)}
+.qltr{width:21px;height:21px;border-radius:50%;background:var(--g100);border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:800;color:var(--g500);flex-shrink:0;transition:all .14s}
+.qopt.cor{background:var(--ok-lt);border-color:#86efac;color:#14532d}
+.qopt.cor .qltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.qopt.wrg{background:var(--err-lt);border-color:#fca5a5;color:#7f1d1d}
+.qopt.wrg .qltr{background:var(--err);border-color:var(--err);color:#fff}
+.qopt.lock{cursor:default;pointer-events:none}
+.qopt.lock:not(.cor):not(.wrg):hover{border-color:var(--g200);background:var(--w);color:var(--g700)}
+</style>
 </head>
 <body>
-    <a class="syllabus-btn" href="https://drive.google.com/file/d/19QZvxh40sy5DW0I5QxTZvk4sEsPPOSik/view?usp=drive_link" target="_blank">📄 DOWNLOAD SYLLABUS</a>
-    <div id="units">
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 1 - INTRODUCTION TO NURSING <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1T-DgCPqge96ZFT9EcQDMMCMGh2p7gBQM/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1eLPe9obG3tRGW38QPGr6UyBI3yN0y3Am/preview', 'Concept of Nursing')"><span class="icon video-icon">▶️</span><span>Concept of Nursing</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1k7kiKmf5WrFcNHB8RXEIuBliZiw1w_fr/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1MEtog-YHrufEVTlE2bxNGawsPllzxz2m/preview', 'Hospitals')"><span class="icon video-icon">▶️</span><span>Hospitals</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ta_n6qLd6TsM-l-hFmWXIL3XBpIAoglm/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(1)"><span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 2 - NURSING CARE OF THE PATIENT  <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/18DPn_QjMtl1hSKvof-FDKiuEqe6RXINZ/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/17LqIUEfEHZqRrak-WR5OUiESOJVWCqsb/preview', 'Introduction, Therapeutic Environment')"><span class="icon video-icon">▶️</span><span>Introduction, Therapeutic Environment</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1y6VmNRiO9kA8Q3A2LQXRNmpkSPZ9JKt0/preview', 'Admission Procedure')"><span class="icon video-icon">▶️</span><span>Admission Procedure</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1tnaLpICCahH6hSeAQ-_I1k6OhlOOS567/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1PBq8TRDRLEUV3BXhY49sicU3L2tBPO9j/preview', 'Communication')"><span class="icon video-icon">▶️</span><span>Communication</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1pj0RDSdFROBWO4wP4oW6fZqPzvzDwF7a/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1N6N-uj9_C1prcGTfK8OapyErJP1CLhtr/preview', 'Nursing Process : Assessment, Diagnosis')"><span class="icon video-icon">▶️</span><span>Nursing Process : Assessment, Diagnosis</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1l8D6nr6NYdYYzoFdaMMNf8jQ8WuIHRDL/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1zd5jz3dJpDI-JEpvpec8EJ47Ew2GwyBq/preview', 'Nursing Process : Planning, Nursing Intervention, Implementation, Evaluation, Format of Nursing Care Plan')"><span class="icon video-icon">▶️</span><span>Nursing Process : Planning, Nursing Intervention, Implementation, Evaluation, Format of Nursing Care Plan</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1MPQcB475py_3w4xGA4yx1Hi-L5lnO9xl/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(2)"><span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 3 - MEETING THE BASIC NEEDS OF A PATIENT <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1VnTepjZX5GVpH6-YzVx6eG7zGbri3mLs/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/14zCqvhEgnEs2HAppzv4kXgwjv7skG4EE/preview', 'Introduction')"><span class="icon video-icon">▶️</span><span>Introduction</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_QAa8Zi_HQkupLngRWvzvdb2-sHmBv2l/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1GdNFY3RfywLPHF6FueOJHpAtL5CYxhTA/preview', 'Therapeutic Position')"><span class="icon video-icon">▶️</span><span>Therapeutic Position</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1d8vudrRj-OLUnadLk0a0BS0e2zcjtcNI/preview', 'Comfort Devices')"><span class="icon video-icon">▶️</span><span>Comfort Devices</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1yl1z24F3I4_fHyGK9C2qvTmWYH0T1f0i/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Zqi9V0mFO8w9F0Zhdsq4jLJUqhG5p-bK/preview', 'Bed Making')"><span class="icon video-icon">▶️</span><span>Bed Making</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1IXxC3mHkfHlUAgjGpDot106wrYyJBn_8/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1nTy9R2QAyDSIrCqs8d1SZn3HrjLQU2U-/preview', 'Safety Devices')"><span class="icon video-icon">▶️</span><span>Safety Devices</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1JYV32bMrTnhDokmnw1Ylhhvu4yVpu8SX/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1PrM8IRptGGruTyJLJyF7zkSYgS7NHquG/preview', 'Nutrition')"><span class="icon video-icon">▶️</span><span>Nutrition</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1tkcEUiyJPXXagtRJYz35Bbf8m0dcXRs1/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1gIPOhiJx9tXQETK5O7ylj7mkJOJp5xwO/preview', 'Perineal Care')"><span class="icon video-icon">▶️</span><span>Perineal Care</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1JuXP33EzLxRAoHPsmvOKAd6nkDl7nZdM/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1yPaNlv1tCHxnQRAq7SgJcuO5qBnq33wZ/preview', 'Psychological and Spiritual Needs')"><span class="icon video-icon">▶️</span><span>Psychological and Spiritual Needs</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1fCg3PhB2VnNaOooeA-IAPl25e0PKv228/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(3)"><span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 4 - ASSESSMENT OF PATIENT / CLIENT  <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1M7s-3o-xHSkmcrwWZ9eJkO7spopT5MiE/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1_D3Y3z1IpZnaCM74ckwBIkKf3WYNM6Jr/preview', 'Physical Assessment : Health History and its Format')"><span class="icon video-icon">▶️</span><span>Physical Assessment : Health History and its Format</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1G2c33h42_m476CQ_RU9K5nIOvE7rWi1m/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/12EXnhqMt0xGGZzAAD4nf-khj-_jsJoOo/preview', 'Physical Assessment : Guidelines During Physical Examination, Head to Toe Examination')"><span class="icon video-icon">▶️</span><span>Physical Assessment : Guidelines During Physical Examination, Head to Toe Examination</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ppkkmdnJzLRsNaAt677vKLuMzcL0cw7P/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1hg8ld_HV5EcQoJ0pKEPhmTF-gk9kWO8I/preview', 'Assessment of Patient : Preparation of the Patient and Unit for Examination, System Wise Assessment, Reflex Testing ')"><span class="icon video-icon">▶️</span><span>Assessment of Patient : Preparation of the Patient and Unit for Examination, System Wise Assessment, Reflex Testing </span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/135Usano1kPmumX027J_Y41Z2KLc0BeL_/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1RlkNk2ro7eLYByhbuAL1mtQaV39BKt9i/preview', 'Assessment of Patient : Coordination, Gait Testing, Cardiac Assessment, Respiratory Assessment')"><span class="icon video-icon">▶️</span><span>Assessment of Patient : Coordination, Gait Testing, Cardiac Assessment, Respiratory Assessment</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1PZRiMLynRUNjDvl9fWfzuHECBz0vEJ6j/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/16LEvVx_IAqlkk1WvAa5S723wLYpmh7xu/preview', 'Vital Signs : Heat Regulation, Thermometer, Fever ')"><span class="icon video-icon">▶️</span><span>Vital Signs : Heat Regulation, Thermometer, Fever </span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/15_53kgFpPi4_qKis_nXmFqW5ytGA5f2B/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1x-F-lojs1I6RgLWNN5EvuObuZOj1GEXJ/preview', 'Pulse')"><span class="icon video-icon">▶️</span><span>Pulse</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1NHfHAZd1BdafssniKSuErgnB0OXzSji8/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1sWIi5xxkY-g3hd-kZ7kT7e1Fyw_-6Tji/preview', 'Blood Pressure')"><span class="icon video-icon">▶️</span><span>Blood Pressure</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1oVr8qSWXuD5rblwTrikKN5s3J-Tt31RU/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(4)"><span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 5 - INFECTION CONTROL <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ZJsH9y08BI6Q3t_wISDHvRJMeujpsqdl/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1E6c5bl9-ElbqppncLqCNYOrAQvqAqpRK/preview', 'Nature of Infection, Chain of Infection')"><span class="icon video-icon">▶️</span><span>Nature of Infection, Chain of Infection</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1LmzZ-T5idssGQ2TjykD7endXWUWWoFV_/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1IHqfpnEXTdcGM4ncY5iWyW9oFHdqpBTf/preview', 'Isolation , Protective Techniques')"><span class="icon video-icon">▶️</span><span>Isolation , Protective Techniques</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1i3rP56CGVnoPWJOVEB0nDolywsgy_6NA/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1LIYHAkmy6k99SwQXbAG2c8VqJctmJiUY/preview', 'Infection Control in Clinical Setting , Biomedical Waste Management')"><span class="icon video-icon">▶️</span><span>Infection Control in Clinical Setting , Biomedical Waste Management</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1x2A-j9xZygg6-4ZaP4UC3PwUAd5MX_QX/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(5)"><span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 6 - THERAPEUTIC NURSING CARE <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1au4pyFyEPwcJwRNmIqzEE5SyL5CQBAjy/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1voRUb6iYMqpqu_ds4wVGzfxmSBis1yRd/preview', 'Care of Patient with Respiratory Problems')"><span class="icon video-icon">▶️</span><span>Care of Patient with Respiratory Problems</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1rf0FkkfanzYHTvuTzo0Ani-CoNKqelYd/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/14UCCur4YPJ0z8egZggBQvejabZY0Mvi9/preview', 'Care of Oxygen Cylinders, Oxygen Administration')"><span class="icon video-icon">▶️</span><span>Care of Oxygen Cylinders, Oxygen Administration</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1kyEcxb0P3BGpK0mTrBkucXlIPPYhFNrm/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/19Y9jkUt-J4NsETWHvUqO8wd4ZHC5zI0O/preview', 'Care of Patient with Fluid and Electrolyte Imbalance ')"><span class="icon video-icon">▶️</span><span>Care of Patient with Fluid and Electrolyte Imbalance </span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/10yNZhhj9__l-HBepa0NVwjt0lf7iwaJR/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1E8Z0xrb2ffFT1SSDlt64ej1UaD2Jmooa/preview', 'Electrolyte Changes, Sensorium')"><span class="icon video-icon">▶️</span><span>Electrolyte Changes, Sensorium</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1G_T9fLvMe2QxfxCLnapYru717bF7GywX/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1oiAixeBzJKfOQ158AlcabU02-ADwdrlR/preview', 'Care of Patient and Factor Affecting with Pain and Body Elimination')"><span class="icon video-icon">▶️</span><span>Care of Patient and Factor Affecting with Pain and Body Elimination</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/12IS4mQatWthAnzYdu23yldnDiDP6MOMW/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(6)"><span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 7 - INTRODUCTION TO CLINICAL PHARMACOLOGY <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1AQcAAOd7rGMBEpFseC17EMJUwTL9h-rG/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/13M7BK5GZ1U1WaOW8jQIih1LbAbFi8krh/preview', 'Introduction')"><span class="icon video-icon">▶️</span><span>Introduction</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ixD_tkHXwHNfG5s5P4aN8TNqU1Hj-XWJ/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/14vdM-C-iWC0tO1KwwD9AteEknHBDwWLC/preview', 'Intradermal Injection')"><span class="icon video-icon">▶️</span><span>Intradermal Injection</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1E1LYCDiIWHZjF43gXLpi9rPLFWIwj8pc/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1t6mVepVKK6eejDUxxkmypvKc-yaPZh6e/preview', 'Subcutaneous Injection, Intravenous Injection')"><span class="icon video-icon">▶️</span><span>Subcutaneous Injection, Intravenous Injection</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Mqons6MOu-Uh4TL2UDW32yydFCGQycqM/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(7)"><span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span></div></div></div>
-                </div></div>
-    <div id="app-modal" class="modal-overlay">
-        <div class="modal-header">
-            <div id="modal-title" style="font-weight:700; color:var(--brand);">Resource</div>
-            <button class="btn-close" onclick="closeModal()">Close X</button>
-        </div>
-        <div id="modal-body" class="modal-body"></div>
-    </div>
+<header class="topbar">
+<button class="tb-back" onclick="goBackToApp()" aria-label="Back">&#8592;</button>
+<div class="tb-info">
+<div class="tb-title">Fundamentals Of Nursing</div>
+<div class="tb-sub">GNM First Year</div>
+</div>
+<div class="tb-chip">7 Units</div>
+</header>
+
+<section class="hero">
+<div class="hero-dot-grid"></div>
+<div class="hero-inner">
+<div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>GNM First Year</div>
+<h1>Fundamentals Of<br/><em>Nursing</em></h1>
+<p class="hero-desc">Interactive syllabus, detailed notes, video lectures & internal quizzes to aid in exam prep.</p>
+<button class="hero-cta" onclick="openLink('https://drive.google.com/file/d/19QZvxh40sy5DW0I5QxTZvk4sEsPPOSik/view')">
+📄 &nbsp;Download Syllabus
+</button>
+<div class="hero-stats">
+<div class="hs"><div class="hs-n">7</div><div class="hs-l">Units</div></div>
+<div class="hs"><div class="hs-n">70</div><div class="hs-l">Quizzes</div></div>
+</div>
+</div>
+</section>
+
+<main class="main">
+<div class="divider"><span>Course Units</span></div>
+
+<div class="uc" id="u1" data-open="false">
+<button class="ubtn" onclick="tog('u1')">
+<div class="upill"><span>Unit 1</span></div>
+<div class="uinfo"><div class="uname">Introduction to Nursing</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u1">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1T-DgCPqge96ZFT9EcQDMMCMGh2p7gBQM/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 1 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1eLPe9obG3tRGW38QPGr6UyBI3yN0y3Am/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Concept of Nursing</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1k7kiKmf5WrFcNHB8RXEIuBliZiw1w_fr/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Nursing</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1MEtog-YHrufEVTlE2bxNGawsPllzxz2m/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hospitals</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1ta_n6qLd6TsM-l-hFmWXIL3XBpIAoglm/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Hospitals</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(1)"><div class="rico">✍️</div><div class="rtxt">Unit 1 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u2" data-open="false">
+<button class="ubtn" onclick="tog('u2')">
+<div class="upill"><span>Unit 2</span></div>
+<div class="uinfo"><div class="uname">Nursing Care of the Patient</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u2">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/18DPn_QjMtl1hSKvof-FDKiuEqe6RXINZ/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 2 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/17LqIUEfEHZqRrak-WR5OUiESOJVWCqsb/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Intro & Environment</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1y6VmNRiO9kA8Q3A2LQXRNmpkSPZ9JKt0/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Admission Procedure</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1tnaLpICCahH6hSeAQ-_I1k6OhlOOS567/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Admission</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1PBq8TRDRLEUV3BXhY49sicU3L2tBPO9j/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Communication</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1pj0RDSdFROBWO4wP4oW6fZqPzvzDwF7a/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Communication</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1N6N-uj9_C1prcGTfK8OapyErJP1CLhtr/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Process: Assessment</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1l8D6nr6NYdYYzoFdaMMNf8jQ8WuIHRDL/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Assessment</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1zd5jz3dJpDI-JEpvpec8EJ47Ew2GwyBq/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Process: Planning</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1MPQcB475py_3w4xGA4yx1Hi-L5lnO9xl/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Planning</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn quiz" onclick="openQuiz(2)"><div class="rico">✍️</div><div class="rtxt">Unit 2 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u3" data-open="false">
+<button class="ubtn" onclick="tog('u3')">
+<div class="upill"><span>Unit 3</span></div>
+<div class="uinfo"><div class="uname">Meeting the Basic Needs</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u3">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1VnTepjZX5GVpH6-YzVx6eG7zGbri3mLs/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 3 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/14zCqvhEgnEs2HAppzv4kXgwjv7skG4EE/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Introduction</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1_QAa8Zi_HQkupLngRWvzvdb2-sHmBv2l/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Needs</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1GdNFY3RfywLPHF6FueOJHpAtL5CYxhTA/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Therapeutic Position</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1d8vudrRj-OLUnadLk0a0BS0e2zcjtcNI/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Comfort Devices</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1yl1z24F3I4_fHyGK9C2qvTmWYH0T1f0i/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Comfort Devices</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1Zqi9V0mFO8w9F0Zhdsq4jLJUqhG5p-bK/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Bed Making</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1IXxC3mHkfHlUAgjGpDot106wrYyJBn_8/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Bed Making</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1nTy9R2QAyDSIrCqs8d1SZn3HrjLQU2U-/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Safety Devices</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1JYV32bMrTnhDokmnw1Ylhhvu4yVpu8SX/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Safety Devices</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1PrM8IRptGGruTyJLJyF7zkSYgS7NHquG/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Nutrition</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1tkcEUiyJPXXagtRJYz35Bbf8m0dcXRs1/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Nutrition</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1gIPOhiJx9tXQETK5O7ylj7mkJOJp5xwO/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Perineal Care</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1JuXP33EzLxRAoHPsmvOKAd6nkDl7nZdM/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Perineal Care</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1yPaNlv1tCHxnQRAq7SgJcuO5qBnq33wZ/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Spiritual Needs</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1fCg3PhB2VnNaOooeA-IAPl25e0PKv228/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Spiritual Needs</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn quiz" onclick="openQuiz(3)"><div class="rico">✍️</div><div class="rtxt">Unit 3 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u4" data-open="false">
+<button class="ubtn" onclick="tog('u4')">
+<div class="upill"><span>Unit 4</span></div>
+<div class="uinfo"><div class="uname">Assessment of Patient / Client</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u4">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1M7s-3o-xHSkmcrwWZ9eJkO7spopT5MiE/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 4 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1_D3Y3z1IpZnaCM74ckwBIkKf3WYNM6Jr/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Health History</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1G2c33h42_m476CQ_RU9K5nIOvE7rWi1m/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Health History</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/12EXnhqMt0xGGZzAAD4nf-khj-_jsJoOo/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Head to Toe</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1ppkkmdnJzLRsNaAt677vKLuMzcL0cw7P/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Head to Toe</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1hg8ld_HV5EcQoJ0pKEPhmTF-gk9kWO8I/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>System & Reflex</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/135Usano1kPmumX027J_Y41Z2KLc0BeL_/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>System & Reflex</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1RlkNk2ro7eLYByhbuAL1mtQaV39BKt9i/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Coordination</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1PZRiMLynRUNjDvl9fWfzuHECBz0vEJ6j/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Coordination</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/16LEvVx_IAqlkk1WvAa5S723wLYpmh7xu/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Vital Signs</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/15_53kgFpPi4_qKis_nXmFqW5ytGA5f2B/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Vital Signs</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1x-F-lojs1I6RgLWNN5EvuObuZOj1GEXJ/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pulse</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1NHfHAZd1BdafssniKSuErgnB0OXzSji8/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Pulse</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1sWIi5xxkY-g3hd-kZ7kT7e1Fyw_-6Tji/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Blood Pressure</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1oVr8qSWXuD5rblwTrikKN5s3J-Tt31RU/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Blood Pressure</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(4)"><div class="rico">✍️</div><div class="rtxt">Unit 4 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u5" data-open="false">
+<button class="ubtn" onclick="tog('u5')">
+<div class="upill"><span>Unit 5</span></div>
+<div class="uinfo"><div class="uname">Infection Control</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u5">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1ZJsH9y08BI6Q3t_wISDHvRJMeujpsqdl/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 5 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1E6c5bl9-ElbqppncLqCNYOrAQvqAqpRK/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Nature of Infection</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1LmzZ-T5idssGQ2TjykD7endXWUWWoFV_/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Infection</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1IHqfpnEXTdcGM4ncY5iWyW9oFHdqpBTf/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Isolation/Protocols</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1i3rP56CGVnoPWJOVEB0nDolywsgy_6NA/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Isolation</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1LIYHAkmy6k99SwQXbAG2c8VqJctmJiUY/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Waste Mgmt</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1x2A-j9xZygg6-4ZaP4UC3PwUAd5MX_QX/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Waste Mgmt</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(5)"><div class="rico">✍️</div><div class="rtxt">Unit 5 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u6" data-open="false">
+<button class="ubtn" onclick="tog('u6')">
+<div class="upill"><span>Unit 6</span></div>
+<div class="uinfo"><div class="uname">Therapeutic Nursing Care</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u6">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1au4pyFyEPwcJwRNmIqzEE5SyL5CQBAjy/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 6 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1voRUb6iYMqpqu_ds4wVGzfxmSBis1yRd/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Respiratory Care</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1rf0FkkfanzYHTvuTzo0Ani-CoNKqelYd/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Respiratory Care</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/14UCCur4YPJ0z8egZggBQvejabZY0Mvi9/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Oxygen Admin</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1kyEcxb0P3BGpK0mTrBkucXlIPPYhFNrm/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Oxygen Admin</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/19Y9jkUt-J4NsETWHvUqO8wd4ZHC5zI0O/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Fluid & Electrolyte</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/10yNZhhj9__l-HBepa0NVwjt0lf7iwaJR/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Fluid & Electrolyte</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1E8Z0xrb2ffFT1SSDlt64ej1UaD2Jmooa/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Electrolyte Changes</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1G_T9fLvMe2QxfxCLnapYru717bF7GywX/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Electrolyte Changes</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1oiAixeBzJKfOQ158AlcabU02-ADwdrlR/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pain & Elimination</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/12IS4mQatWthAnzYdu23yldnDiDP6MOMW/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Pain & Elimination</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(6)"><div class="rico">✍️</div><div class="rtxt">Unit 6 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u7" data-open="false">
+<button class="ubtn" onclick="tog('u7')">
+<div class="upill"><span>Unit 7</span></div>
+<div class="uinfo"><div class="uname">Clinical Pharmacology</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u7">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1AQcAAOd7rGMBEpFseC17EMJUwTL9h-rG/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 7 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/13M7BK5GZ1U1WaOW8jQIih1LbAbFi8krh/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Introduction</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1ixD_tkHXwHNfG5s5P4aN8TNqU1Hj-XWJ/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Introduction</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/14vdM-C-iWC0tO1KwwD9AteEknHBDwWLC/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Intradermal Injection</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1E1LYCDiIWHZjF43gXLpi9rPLFWIwj8pc/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Intradermal Injection</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1t6mVepVKK6eejDUxxkmypvKc-yaPZh6e/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>SubQ/IV Injection</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1Mqons6MOu-Uh4TL2UDW32yydFCGQycqM/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>SubQ/IV Injection</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(7)"><div class="rico">✍️</div><div class="rtxt">Unit 7 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+</main>
+<div class="qoverlay" id="qmodal">
+<div class="qscrim" onclick="closeQuiz()"></div>
+<div class="qpanel">
+<div class="qhead">
+<div class="qhead-top"><div class="qtitle" id="qtitle">Quiz</div><button class="qclose" onclick="closeQuiz()">✕</button></div>
+<div class="qpips" id="qpips"></div>
+</div>
+<div class="qbody" id="qbody"></div>
+</div>
+</div>
 <script>
-    // --- 1. QUIZ DATA (Units 1-7) ---
-    const QUIZ_DATA = {
-        "1": [{"q":"Florence Nightingale defined nursing as:","o":["Assisting doctors in surgeries only","To provide medicines at proper times","To put patients in the best condition for nature to act upon them","To ensure complete dependence of patients on nurses"],"a":2},{"q":"The Latin word Nutrix, from which “Nurse” is derived, means:","o":["To teach","To nourish","To protect","To prevent"],"a":1},{"q":"Which of the following is NOT a characteristic of a profession?","o":["Autonomy in decision-making","Code of ethics","Limited theoretical body of knowledge","Service orientation"],"a":2},{"q":"The principle of Nonmaleficence in nursing ethics means:","o":["Doing good to patients","Respecting patient’s decisions","Avoiding harm to patients","Ensuring fairness in healthcare"],"a":2},{"q":"According to Maslow’s hierarchy of needs, which comes immediately after safety needs?","o":["Esteem needs","Physiological needs","Social/love and belonging needs","Self-actualization"],"a":2},{"q":"Which of the following is an expanded role of nurses?","o":["Nurse entrepreneur","Nurse assistant","Nurse orderly","Ward attendant"],"a":0},{"q":"Which is a primary function of hospitals as per WHO (1963)?","o":["Only research work","Providing curative and preventive care","Social welfare activities only","Producing medical equipment"],"a":1},{"q":"Which modern approach in nursing emphasizes using the best current research evidence in practice?","o":["Patient-centered care","Evidence-Based Practice","Holistic care","Cultural competence"],"a":1},{"q":"Which of the following is an example of a determinant of health?","o":["Genetic inheritance","Education level","Environmental factors","All of the above"],"a":3},{"q":"The unique function of a nurse, according to Virginia Henderson, is:","o":["To replace doctors in emergencies","To assist individuals in activities contributing to health or peaceful death","To perform diagnostic surgeries","To prescribe medications freely"],"a":1}],
-        "2": [{"q":"Psychology is best defined as the science of:","o":["Human soul","Human behavior and mental processes","Physical growth","Nursing practice"],"a":1},{"q":"Which stage of Erikson’s psychosocial development is termed as “Identity vs. Role confusion”?","o":["Infancy","Adolescence","Early adulthood","Middle adulthood"],"a":1},{"q":"Sociology mainly studies:","o":["Individual thought processes","Human society, social interactions, and culture","Human anatomy and physiology","Scientific nursing care"],"a":1},{"q":"A child learns to walk independently typically at what age?","o":["6 months","12 months","24 months","36 months"],"a":1},{"q":"Which is NOT a primary social institution?","o":["Family","Education","Religion","Entertainment media"],"a":3},{"q":"In Piaget’s cognitive development theory, the preoperational stage occurs in which age group?","o":["Birth to 2 years","2 to 7 years","7 to 11 years","11 years and above"],"a":1},{"q":"The term “Socialization” refers to:","o":["Learning of norms, values, and culture of society","Biological development of an individual","Emotional adjustment in adolescence","Nursing therapeutic communication"],"a":0},{"q":"Child welfare programs primarily aim at:","o":["Child education only","Child nutrition, protection, and development","Limiting population growth","Reducing health expenditure"],"a":1},{"q":"Which is considered the first agent of socialization for a child?","o":["Peer group","Family","School","Mass media"],"a":1},{"q":"Growth is a quantitative change, while development is a:","o":["Quantitative change","Qualitative change","Mechanical change","Temporary change"],"a":1}],
-        "3": [{"q":"The main principle of body mechanics is:","o":["Keep feet close together while lifting","Use back muscles instead of leg muscles","Maintain a wide base of support and bend knees while lifting","Always keep patient’s bed at the lowest level"],"a":2},{"q":"The position most suitable for a patient in respiratory distress is:","o":["Supine position","Fowler’s position","Prone position","Trendelenburg position"],"a":1},{"q":"Which of the following is NOT a comfort device?","o":["Back rest","Bed cradle","Foot board","Intravenous stand"],"a":3},{"q":"The process of destroying all forms of microorganisms including spores is called:","o":["Disinfection","Sterilization","Antisepsis","Medical asepsis"],"a":1},{"q":"Which of the following is an isolation precaution for airborne infections?","o":["Use of surgical mask only","Negative pressure room and N95 respirator","Gloves only","Regular cleaning of room"],"a":1},{"q":"Oral care for an unconscious patient should be provided:","o":["Once daily","Every 8 hours","Every 2–4 hours","Only if patient requests"],"a":2},{"q":"The catheter used for continuous bladder drainage is:","o":["Robinson catheter","Foley’s catheter","Nelaton catheter","Malecot catheter"],"a":1},{"q":"The safest site for intramuscular injection in infants is:","o":["Gluteus maximus","Vastus lateralis","Deltoid","Gluteus medius"],"a":1},{"q":"Which type of diet is recommended immediately after abdominal surgery?","o":["High-protein diet","Full liquid diet","Soft diet","Clear liquid diet"],"a":3},{"q":"The primary purpose of oxygen therapy is:","o":["To prevent hospital-acquired infection","To maintain adequate tissue oxygenation","To provide sedation","To improve appetite"],"a":1}],
-        "4": [{"q":"Which of the following is the first step in physical examination?","o":["Palpation","Inspection","Percussion","Auscultation"],"a":1},{"q":"The principle of comparing both sides of the body during assessment is mainly to:","o":["Identify muscle tone","Detect abnormalities through symmetry","Measure skin turgor","Observe emotional state"],"a":1},{"q":"Which reflex is tested by tapping the Achilles tendon?","o":["Biceps reflex","Triceps reflex","Patellar reflex","Ankle jerk reflex"],"a":3},{"q":"The Romberg test is performed to assess:","o":["Visual acuity","Balance and sensory ataxia","Respiratory function","Heart murmurs"],"a":1},{"q":"Which cardiac landmark corresponds to the mitral valve?","o":["2nd intercostal space, right sternal border","2nd intercostal space, left sternal border","4th intercostal space, left sternal border","5th intercostal space, midclavicular line"],"a":3},{"q":"A patient with barrel-shaped chest is most likely suffering from:","o":["Pneumonia","Asthma","Emphysema","Pulmonary embolism"],"a":2},{"q":"Which mechanism of heat loss occurs when sweat evaporates from the skin surface?","o":["Radiation","Conduction","Convection","Evaporation"],"a":3},{"q":"In which type of fever does the temperature remain above normal with fluctuations >1°C in 24 hours?","o":["Continuous fever","Remittent fever","Intermittent fever","Relapsing fever"],"a":1},{"q":"Which site gives the most accurate measurement of body temperature?","o":["Oral","Axillary","Rectal","Tympanic"],"a":2},{"q":"Which abnormal breath sound is typically associated with asthma?","o":["Crackles","Wheeze","Rhonchi","Stridor"],"a":1}],
-        "5": [{"q":"The incubation period of infection refers to:","o":["Time between recovery and relapse","Time between pathogen entry and appearance of symptoms","Time when full-blown symptoms appear","Time when immune response is maximum"],"a":1},{"q":"Which of the following is a vector-borne mode of transmission?","o":["Blood transfusion","Mosquito bite causing malaria","Sharing needles","Eating contaminated food"],"a":1},{"q":"Which type of immunity is gained after vaccination?","o":["Active natural immunity","Active artificial immunity","Passive natural immunity","Passive artificial immunity"],"a":1},{"q":"Hospital-acquired infection is also known as:","o":["Opportunistic infection","Community-acquired infection","Nosocomial infection","Latent infection"],"a":2},{"q":"Which method is the most effective in breaking the chain of infection?","o":["Wearing gloves only","Hand hygiene","Use of antibiotics","Isolation of all patients"],"a":1},{"q":"Medical asepsis is also called:","o":["Sterile technique","Clean technique","Isolation technique","Barrier nursing"],"a":1},{"q":"For a patient with tuberculosis, the correct isolation precaution is:","o":["Contact precautions with gloves only","Droplet precautions with surgical mask","Airborne precautions with N95 mask and negative pressure room","Standard precautions only"],"a":2},{"q":"The duration of medical handwashing should be:","o":["10–15 seconds","20–30 seconds","40–60 seconds","3–5 minutes"],"a":2},{"q":"In biomedical waste management, yellow bags are used for:","o":["General waste like packaging","Sharps like needles and scalpels","Infectious and pathological waste","Plastic items like IV sets and syringes"],"a":2},{"q":"The safest method of sterilization for heat-sensitive instruments is:","o":["Autoclaving","Dry heat sterilization","Ethylene oxide gas sterilization","Boiling"],"a":2}],
-        "6": [{"q":"The most appropriate position for a patient with severe dyspnea is:","o":["Supine position","High Fowler’s position","Trendelenburg position","Prone position"],"a":1},{"q":"Which coughing technique is specifically used in patients with spinal cord injury?","o":["Huff coughing","Controlled coughing","Quad coughing","Splinted coughing"],"a":2},{"q":"Pursed-lip breathing is mainly recommended for:","o":["COPD patients","Asthma during remission","Pneumonia with fever","Pulmonary embolism"],"a":0},{"q":"A Venturi mask is preferred in:","o":["Infants with hypoxia","COPD patients requiring controlled oxygen therapy","Postoperative patients with mild hypoxia","Emergency trauma patients needing 100% oxygen"],"a":1},{"q":"During suctioning, the maximum duration for catheter insertion with suction should not exceed:","o":["5 seconds","10 seconds","15 seconds","30 seconds"],"a":2},{"q":"Which of the following is a contraindication for hot application?","o":["Muscle spasm","Chronic arthritis","Bleeding wounds","Joint stiffness"],"a":2},{"q":"In heat stroke, which drug is used for malignant hyperthermia?","o":["Paracetamol","Ibuprofen","Dantrolene sodium","Diazepam"],"a":2},{"q":"Which electrolyte is the major intracellular cation?","o":["Sodium (Na+)","Potassium (K+)","Calcium (Ca2+)","Chloride (Cl−)"],"a":1},{"q":"The Glasgow Coma Scale (GCS) is used to assess:","o":["Pain intensity","Sensorium and consciousness level","Electrolyte imbalance","Fluid deficit"],"a":1},{"q":"The earliest sign of compartment syndrome in a fracture patient is:","o":["Absent distal pulses","Severe pain disproportionate to injury","Cold extremity","Numbness of limb"],"a":1}],
-        "7": [{"q":"The “Five Rights” of drug administration include all except:","o":["Right patient","Right drug","Right environment","Right dose"],"a":2},{"q":"A STAT order for medication means:","o":["To be given when required","To be given at regular intervals","To be given immediately, once only","To be given daily until stopped"],"a":2},{"q":"Which of the following is not a parenteral route of drug administration?","o":["Intramuscular","Intradermal","Oral","Subcutaneous"],"a":2},{"q":"Which of the following drugs is commonly given by the sublingual route?","o":["Paracetamol","Nitroglycerin","Tetracycline","Diclofenac"],"a":1},{"q":"The correct gauge needle for an intramuscular injection is usually:","o":["16–18 G","20–22 G","25–27 G","30 G"],"a":1},{"q":"A nurse is asked to give 250 mg of a drug. The vial contains 50 mg/mL. How many mL will the nurse administer?","o":["2.5 mL","5 mL","10 mL","12.5 mL"],"a":1},{"q":"Which type of syringe is most appropriate for giving an intradermal injection (Mantoux test)?","o":["10 mL syringe","Insulin syringe","1 mL tuberculin syringe","20 mL syringe"],"a":2},{"q":"Anaphylaxis due to drug allergy is best managed by:","o":["Hydrocortisone IV slowly","Adrenaline (epinephrine) IM STAT","Antihistamine orally","Oxygen inhalation only"],"a":1},{"q":"Which of the following abbreviations means “nothing by mouth”?","o":["NPO","OD","qid","PRN"],"a":0},{"q":"The most accurate drug measurement system used in clinical practice is:","o":["Household system","Avoirdupois system","Metric system","Apothecary system"],"a":2}]
-    };
-
-    let score = 0;
-
-    function toggleUnit(header) {
-        const content = header.nextElementSibling;
-        header.setAttribute('aria-expanded', header.getAttribute('aria-expanded') !== 'true');
-        content.classList.toggle('active');
-        const arrow = header.querySelector('span');
-        if(arrow) arrow.innerText = content.classList.contains('active') ? '🔼' : '🔽';
-    }
-
-    // --- 3. OPEN RESOURCE (FIXED VIDEO + BACK BUTTON) ---
-    function openResource(type, url, title) {
-        // PUSH STATE: Fixes Back Button Logic
-        history.pushState({ modalOpen: true }, null, '#resource');
-
-        const modal = document.getElementById('app-modal');
-        const body = document.getElementById('modal-body');
-        document.getElementById('modal-title').textContent = title;
-        modal.style.display = 'flex';
-        
-        let finalUrl = url;
-        if (url.includes('drive.google.com')) { 
-            finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview'); 
-        }
-        else if (url.includes('human.biodigital.com')) { 
-             if (url.includes('/viewer/')) finalUrl = url.replace('/viewer/', '/widget/');
-             else finalUrl = url.replace('/view', '/widget'); 
-        }
-        
-        // --- VIDEO FIX: ADDED SANDBOX AND ALLOW ATTRIBUTES ---
-        body.innerHTML = `
-            <iframe 
-                class="iframe-res" 
-                src="${finalUrl}" 
-                width="100%" 
-                height="100%" 
-                frameborder="0"
-                sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-presentation"
-                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen">
-            </iframe>`;
-    }
-
-    // --- 4. START QUIZ (FIXED BACK BUTTON) ---
-    function startQuiz(unitId) {
-        // PUSH STATE: Add history entry for Quiz
-        history.pushState({ modalOpen: true }, null, '#quiz');
-
-        score = 0;
-        const questions = QUIZ_DATA[unitId];
-        if(!questions || questions.length === 0) { alert('No questions found.'); history.back(); return; }
-        
-        let html = '<div class="quiz-container"><h2 style="color:var(--brand); margin-top:0;">Unit ' + unitId + ' Quiz</h2>';
-        html += '<div id="score-display" style="background:var(--brand); color:white; padding:5px 15px; border-radius:20px; display:inline-block; font-weight:700; margin-bottom:20px;">Score: 0 / ' + questions.length + '</div>';
-        
-        questions.forEach((q, index) => {
-            html += '<div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">';
-            html += '<p style="font-weight:600; font-size:1.1rem; margin-bottom:15px;">' + (index + 1) + '. ' + q.q + '</p>';
-            q.o.forEach((opt, optIndex) => {
-                html += '<div class="quiz-option" onclick="checkAnswer(this, ' + unitId + ', ' + optIndex + ', ' + q.a + ')">' + opt + '</div>';
-            });
-            html += '</div>';
-        });
-        html += '<button class="btn-quiz" onclick="closeModal()">Close Quiz</button></div>';
-        
-        document.getElementById('modal-body').innerHTML = html;
-        document.getElementById('modal-title').textContent = 'Unit ' + unitId + ' Quiz';
-        document.getElementById('app-modal').style.display = 'flex';
-    }
-
-    function checkAnswer(element, unitId, selectedIndex, correctIndex) {
-        if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
-        if (selectedIndex === correctIndex) {
-            element.classList.add('correct'); score++;
-        } else {
-            element.classList.add('wrong'); element.parentElement.children[correctIndex + 1].classList.add('correct');
-        }
-        document.getElementById('score-display').textContent = 'Score: ' + score + ' / ' + QUIZ_DATA[unitId].length;
-    }
-
-    // --- 6. CLOSE MODAL (MANUAL CLICK) ---
-    function closeModal() { 
-        const modal = document.getElementById('app-modal');
-        modal.style.display = 'none'; 
-        document.getElementById('modal-body').innerHTML = ""; 
-        
-        // IMPORTANT: Manually go back in history if we are closing via button
-        if ((history.state && history.state.modalOpen) || window.location.hash === '#resource' || window.location.hash === '#quiz') {
-            history.back();
-        }
-    }
-
-    // --- 7. HANDLE DEVICE BACK BUTTON ---
-    window.onpopstate = function(event) {
-        const modal = document.getElementById('app-modal');
-        if (modal.style.display === 'flex') {
-            modal.style.display = 'none';
-            document.getElementById('modal-body').innerHTML = '';
-        }
-    };
+function goBackToApp(){if(window.parent&&window.parent!==window){window.parent.postMessage({action:'goBack'},'*');}else{history.back();}}
+function openLink(url) {
+if(!url || url==='COMING SOON' || url===''){ alert('This resource is coming soon!'); return; }
+let clean = url;
+if(clean.includes('drive.google.com')){
+clean = clean.replace(/\/preview.*$/,'').replace(/\/view.*$/,'')+'/view';
+} else if(clean.includes('human.biodigital.com')) {
+clean = clean.replace(/\/viewer\//, '/widget/').replace(/\/view\?/, '/widget?');
+}
+window.open(clean, '_blank');
+}
+function tog(id){const card=document.getElementById(id);const body=document.getElementById('b-'+id);const open=card.dataset.open==='true';card.dataset.open=String(!open);body.classList.toggle('open',!open);}
+const QD={
+1:[{"q":"Florence Nightingale defined nursing as:","o":["Assisting doctors in surgeries only","To provide medicines at proper times","To put patients in the best condition for nature to act upon them","To ensure complete dependence of patients on nurses"],"a":2},{"q":"The Latin word Nutrix, from which “Nurse” is derived, means:","o":["To teach","To nourish","To protect","To prevent"],"a":1},{"q":"Which of the following is NOT a characteristic of a profession?","o":["Autonomy in decision-making","Code of ethics","Limited theoretical body of knowledge","Service orientation"],"a":2},{"q":"The principle of Nonmaleficence in nursing ethics means:","o":["Doing good to patients","Respecting patient’s decisions","Avoiding harm to patients","Ensuring fairness in healthcare"],"a":2},{"q":"According to Maslow’s hierarchy of needs, which comes immediately after safety needs?","o":["Esteem needs","Physiological needs","Social/love and belonging needs","Self-actualization"],"a":2},{"q":"Which of the following is an expanded role of nurses?","o":["Nurse entrepreneur","Nurse assistant","Nurse orderly","Ward attendant"],"a":0},{"q":"Which is a primary function of hospitals as per WHO (1963)?","o":["Only research work","Providing curative and preventive care","Social welfare activities only","Producing medical equipment"],"a":1},{"q":"Which modern approach in nursing emphasizes using the best current research evidence in practice?","o":["Patient-centered care","Evidence-Based Practice","Holistic care","Cultural competence"],"a":1},{"q":"Which of the following is an example of a determinant of health?","o":["Genetic inheritance","Education level","Environmental factors","All of the above"],"a":3},{"q":"The unique function of a nurse, according to Virginia Henderson, is:","o":["To replace doctors in emergencies","To assist individuals in activities contributing to health or peaceful death","To perform diagnostic surgeries","To prescribe medications freely"],"a":1}],
+2:[{"q":"Psychology is best defined as the science of:","o":["Human soul","Human behavior and mental processes","Physical growth","Nursing practice"],"a":1},{"q":"Which stage of Erikson’s psychosocial development is termed as “Identity vs. Role confusion”?","o":["Infancy","Adolescence","Early adulthood","Middle adulthood"],"a":1},{"q":"Sociology mainly studies:","o":["Individual thought processes","Human society, social interactions, and culture","Human anatomy and physiology","Scientific nursing care"],"a":1},{"q":"A child learns to walk independently typically at what age?","o":["6 months","12 months","24 months","36 months"],"a":1},{"q":"Which is NOT a primary social institution?","o":["Family","Education","Religion","Entertainment media"],"a":3},{"q":"In Piaget’s cognitive development theory, the preoperational stage occurs in which age group?","o":["Birth to 2 years","2 to 7 years","7 to 11 years","11 years and above"],"a":1},{"q":"The term “Socialization” refers to:","o":["Learning of norms, values, and culture of society","Biological development of an individual","Emotional adjustment in adolescence","Nursing therapeutic communication"],"a":0},{"q":"Child welfare programs primarily aim at:","o":["Child education only","Child nutrition, protection, and development","Limiting population growth","Reducing health expenditure"],"a":1},{"q":"Which is considered the first agent of socialization for a child?","o":["Peer group","Family","School","Mass media"],"a":1},{"q":"Growth is a quantitative change, while development is a:","o":["Quantitative change","Qualitative change","Mechanical change","Temporary change"],"a":1}],
+3:[{"q":"The main principle of body mechanics is:","o":["Keep feet close together while lifting","Use back muscles instead of leg muscles","Maintain a wide base of support and bend knees while lifting","Always keep patient’s bed at the lowest level"],"a":2},{"q":"The position most suitable for a patient in respiratory distress is:","o":["Supine position","Fowler’s position","Prone position","Trendelenburg position"],"a":1},{"q":"Which of the following is NOT a comfort device?","o":["Back rest","Bed cradle","Foot board","Intravenous stand"],"a":3},{"q":"The process of destroying all forms of microorganisms including spores is called:","o":["Disinfection","Sterilization","Antisepsis","Medical asepsis"],"a":1},{"q":"Which of the following is an isolation precaution for airborne infections?","o":["Use of surgical mask only","Negative pressure room and N95 respirator","Gloves only","Regular cleaning of room"],"a":1},{"q":"Oral care for an unconscious patient should be provided:","o":["Once daily","Every 8 hours","Every 2–4 hours","Only if patient requests"],"a":2},{"q":"The catheter used for continuous bladder drainage is:","o":["Robinson catheter","Foley’s catheter","Nelaton catheter","Malecot catheter"],"a":1},{"q":"The safest site for intramuscular injection in infants is:","o":["Gluteus maximus","Vastus lateralis","Deltoid","Gluteus medius"],"a":1},{"q":"Which type of diet is recommended immediately after abdominal surgery?","o":["High-protein diet","Full liquid diet","Soft diet","Clear liquid diet"],"a":3},{"q":"The primary purpose of oxygen therapy is:","o":["To prevent hospital-acquired infection","To maintain adequate tissue oxygenation","To provide sedation","To improve appetite"],"a":1}],
+4:[{"q":"Which of the following is the first step in physical examination?","o":["Palpation","Inspection","Percussion","Auscultation"],"a":1},{"q":"The principle of comparing both sides of the body during assessment is mainly to:","o":["Identify muscle tone","Detect abnormalities through symmetry","Measure skin turgor","Observe emotional state"],"a":1},{"q":"Which reflex is tested by tapping the Achilles tendon?","o":["Biceps reflex","Triceps reflex","Patellar reflex","Ankle jerk reflex"],"a":3},{"q":"The Romberg test is performed to assess:","o":["Visual acuity","Balance and sensory ataxia","Respiratory function","Heart murmurs"],"a":1},{"q":"Which cardiac landmark corresponds to the mitral valve?","o":["2nd intercostal space, right sternal border","2nd intercostal space, left sternal border","4th intercostal space, left sternal border","5th intercostal space, midclavicular line"],"a":3},{"q":"A patient with barrel-shaped chest is most likely suffering from:","o":["Pneumonia","Asthma","Emphysema","Pulmonary embolism"],"a":2},{"q":"Which mechanism of heat loss occurs when sweat evaporates from the skin surface?","o":["Radiation","Conduction","Convection","Evaporation"],"a":3},{"q":"In which type of fever does the temperature remain above normal with fluctuations >1°C in 24 hours?","o":["Continuous fever","Remittent fever","Intermittent fever","Relapsing fever"],"a":1},{"q":"Which site gives the most accurate measurement of body temperature?","o":["Oral","Axillary","Rectal","Tympanic"],"a":2},{"q":"Which abnormal breath sound is typically associated with asthma?","o":["Crackles","Wheeze","Rhonchi","Stridor"],"a":1}],
+5:[{"q":"The incubation period of infection refers to:","o":["Time between recovery and relapse","Time between pathogen entry and appearance of symptoms","Time when full-blown symptoms appear","Time when immune response is maximum"],"a":1},{"q":"Which of the following is a vector-borne mode of transmission?","o":["Blood transfusion","Mosquito bite causing malaria","Sharing needles","Eating contaminated food"],"a":1},{"q":"Which type of immunity is gained after vaccination?","o":["Active natural immunity","Active artificial immunity","Passive natural immunity","Passive artificial immunity"],"a":1},{"q":"Hospital-acquired infection is also known as:","o":["Opportunistic infection","Community-acquired infection","Nosocomial infection","Latent infection"],"a":2},{"q":"Which method is the most effective in breaking the chain of infection?","o":["Wearing gloves only","Hand hygiene","Use of antibiotics","Isolation of all patients"],"a":1},{"q":"Medical asepsis is also called:","o":["Sterile technique","Clean technique","Isolation technique","Barrier nursing"],"a":1},{"q":"For a patient with tuberculosis, the correct isolation precaution is:","o":["Contact precautions with gloves only","Droplet precautions with surgical mask","Airborne precautions with N95 mask and negative pressure room","Standard precautions only"],"a":2},{"q":"The duration of medical handwashing should be:","o":["10–15 seconds","20–30 seconds","40–60 seconds","3–5 minutes"],"a":2},{"q":"In biomedical waste management, yellow bags are used for:","o":["General waste like packaging","Sharps like needles and scalpels","Infectious and pathological waste","Plastic items like IV sets and syringes"],"a":2},{"q":"The safest method of sterilization for heat-sensitive instruments is:","o":["Autoclaving","Dry heat sterilization","Ethylene oxide gas sterilization","Boiling"],"a":2}],
+6:[{"q":"The most appropriate position for a patient with severe dyspnea is:","o":["Supine position","High Fowler’s position","Trendelenburg position","Prone position"],"a":1},{"q":"Which coughing technique is specifically used in patients with spinal cord injury?","o":["Huff coughing","Controlled coughing","Quad coughing","Splinted coughing"],"a":2},{"q":"Pursed-lip breathing is mainly recommended for:","o":["COPD patients","Asthma during remission","Pneumonia with fever","Pulmonary embolism"],"a":0},{"q":"A Venturi mask is preferred in:","o":["Infants with hypoxia","COPD patients requiring controlled oxygen therapy","Postoperative patients with mild hypoxia","Emergency trauma patients needing 100% oxygen"],"a":1},{"q":"During suctioning, the maximum duration for catheter insertion with suction should not exceed:","o":["5 seconds","10 seconds","15 seconds","30 seconds"],"a":2},{"q":"Which of the following is a contraindication for hot application?","o":["Muscle spasm","Chronic arthritis","Bleeding wounds","Joint stiffness"],"a":2},{"q":"In heat stroke, which drug is used for malignant hyperthermia?","o":["Paracetamol","Ibuprofen","Dantrolene sodium","Diazepam"],"a":2},{"q":"Which electrolyte is the major intracellular cation?","o":["Sodium (Na+)","Potassium (K+)","Calcium (Ca2+)","Chloride (Cl−)"],"a":1},{"q":"The Glasgow Coma Scale (GCS) is used to assess:","o":["Pain intensity","Sensorium and consciousness level","Electrolyte imbalance","Fluid deficit"],"a":1},{"q":"The earliest sign of compartment syndrome in a fracture patient is:","o":["Absent distal pulses","Severe pain disproportionate to injury","Cold extremity","Numbness of limb"],"a":1}],
+7:[{"q":"The “Five Rights” of drug administration include all except:","o":["Right patient","Right drug","Right environment","Right dose"],"a":2},{"q":"A STAT order for medication means:","o":["To be given when required","To be given at regular intervals","To be given immediately, once only","To be given daily until stopped"],"a":2},{"q":"Which of the following is not a parenteral route of drug administration?","o":["Intramuscular","Intradermal","Oral","Subcutaneous"],"a":2},{"q":"Which of the following drugs is commonly given by the sublingual route?","o":["Paracetamol","Nitroglycerin","Tetracycline","Diclofenac"],"a":1},{"q":"The correct gauge needle for an intramuscular injection is usually:","o":["16–18 G","20–22 G","25–27 G","30 G"],"a":1},{"q":"A nurse is asked to give 250 mg of a drug. The vial contains 50 mg/mL. How many mL will the nurse administer?","o":["2.5 mL","5 mL","10 mL","12.5 mL"],"a":1},{"q":"Which type of syringe is most appropriate for giving an intradermal injection (Mantoux test)?","o":["10 mL syringe","Insulin syringe","1 mL tuberculin syringe","20 mL syringe"],"a":2},{"q":"Anaphylaxis due to drug allergy is best managed by:","o":["Hydrocortisone IV slowly","Adrenaline (epinephrine) IM STAT","Antihistamine orally","Oxygen inhalation only"],"a":1},{"q":"Which of the following abbreviations means “nothing by mouth”?","o":["NPO","OD","qid","PRN"],"a":0},{"q":"The most accurate drug measurement system used in clinical practice is:","o":["Household system","Avoirdupois system","Metric system","Apothecary system"],"a":2}]
+};
+let curQuiz=null,answered=[];
+function openQuiz(id){
+curQuiz=id;
+const qs=QD[id]||[];
+answered=new Array(qs.length).fill(null);
+document.getElementById('qtitle').textContent='Unit '+id+' Quiz';
+document.getElementById('qpips').innerHTML=qs.map((_,i)=>`<div class="pip" id="pip${i}"></div>`).join('');
+let html=`<div class="qscore" id="qscore"><div><div class="qs-num" id="qsnum">—</div><div class="qs-sub">Score</div></div><div class="qs-msg" id="qsmsg"></div></div>`;
+qs.forEach((q,qi)=>{
+html+=`<div class="qitem" id="qi${qi}"><div class="qlbl">Question ${qi+1} of ${qs.length}</div><div class="qtext">${q.q}</div><div class="qopts">${q.o.map((opt,oi)=>`<button class="qopt" id="opt${qi}_${oi}" onclick="ans(${qi},${oi},${q.a})"><span class="qltr">${['A','B','C','D'][oi]}</span>${opt}</button>`).join('')}</div></div>`;
+});
+document.getElementById('qbody').innerHTML=html;
+document.getElementById('qmodal').classList.add('open');
+document.body.style.overflow='hidden';
+}
+function ans(qi,oi,correct){
+if(answered[qi]!==null)return;
+answered[qi]=oi;
+const opts=document.querySelectorAll(`#qi${qi} .qopt`);
+opts.forEach(b=>b.classList.add('lock'));
+opts[correct].classList.add('cor');
+if(oi!==correct)opts[oi].classList.add('wrg');
+const pip=document.getElementById('pip'+qi);
+pip.classList.add('ans',oi===correct?'cor':'wrg');
+if(answered.every(a=>a!==null)){
+const score=answered.filter((a,i)=>a===QD[curQuiz][i].a).length;
+const total=QD[curQuiz].length;
+const pct=Math.round(score/total*100);
+const msgs=['📚 Keep Studying!','👍 Good Effort!','🎉 Well Done!','🏆 Perfect!'];
+const mi=pct<50?0:pct<70?1:pct<100?2:3;
+document.getElementById('qsnum').textContent=score+'/'+total;
+document.getElementById('qsmsg').textContent=msgs[mi];
+const sc=document.getElementById('qscore');
+sc.classList.add('show');
+sc.scrollIntoView({behavior:'smooth',block:'start'});
+}
+}
+function closeQuiz(){
+document.getElementById('qmodal').classList.remove('open');
+document.body.style.overflow='';
+curQuiz=null;
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQuiz();});
 </script>
 </body>
 </html>
