@@ -1,1254 +1,838 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Applied Anatomy - Syllabus & Quizzes</title>
-    <meta name="description" content="Interactive syllabus with 3D models and internal quizzes for Applied Anatomy." />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Applied Anatomy</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-    :root {
-        /* ORIGINAL BLUE COLOR SCHEME */
-        --brand: #003B82; 
-        --accent: #00B9F2;
-        --gray-50: #f9fafb;
-        --gray-100: #f3f4f6;
-        --gray-200: #e5e7eb;
-        --gray-700: #374151;
-        --gray-900: #111827;
-        --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-        --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-        --danger: #ef4444;
-        --success: #10b981;
-        --warning: #f59e0b;
-    }
+:root{
+  --p50:#faf5ff;--p100:#f3e8ff;--p200:#e9d5ff;--p300:#d8b4fe;
+  --p400:#c084fc;--p500:#a855f7;--p600:#9333ea;--p700:#7e22ce;
+  --p800:#6b21a8;--p900:#581c87;
+  --w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;
+  --g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;
+  --ok:#16a34a;--ok-lt:#dcfce7;--err:#dc2626;--err-lt:#fee2e2;
+  --warn:#d97706;--warn-lt:#fef3c7;
+  --r:12px;--rs:8px;
+  --s1:0 1px 3px rgba(109,40,217,.08);
+  --s2:0 4px 12px rgba(109,40,217,.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:90;background:var(--w);border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 16px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-back{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:var(--p100);color:var(--p700);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;margin-right:12px}
+.tb-back:hover{background:var(--p200)}
+.tb-info{flex:1;min-width:0}
+.tb-title{font-size:.88rem;font-weight:700;color:var(--g900);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb-sub{font-size:.65rem;color:var(--g400);font-weight:500;margin-top:1px}
+.tb-chip{background:var(--p100);color:var(--p700);border:1px solid var(--p200);font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
+.hero{background:linear-gradient(145deg,var(--p900),var(--p700) 55%,var(--p500));padding:28px 18px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.08),transparent 50%),radial-gradient(circle at 10% 85%,rgba(255,255,255,.05),transparent 40%)}
+.hero::after{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-dot-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:.65rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border-radius:30px;margin-bottom:12px}
+.hero-eyebrow-dot{width:5px;height:5px;background:#c4b5fd;border-radius:50%}
+.hero h1{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:7px}
+.hero h1 em{color:rgba(255,255,255,.45);font-style:italic;font-weight:300}
+.hero-desc{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:18px}
+.hero-cta{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.28);color:#fff;font-size:.8rem;font-weight:700;padding:9px 16px;border-radius:9px;cursor:pointer;transition:all .2s;backdrop-filter:blur(6px)}
+.hero-cta:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
+.hero-stats{display:flex;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+.hs{flex:1;text-align:center}
+.hs+.hs{border-left:1px solid rgba(255,255,255,.1)}
+.hs-n{font-size:1.35rem;font-weight:800;color:#fff;line-height:1}
+.hs-l{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
+.main{padding:16px 14px 56px}
+.divider{display:flex;align-items:center;gap:8px;margin-bottom:12px;margin-top:2px}
+.divider span{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g400)}
+.divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+.uc{background:var(--w);border:1.5px solid var(--g200);border-radius:var(--r);margin-bottom:9px;overflow:hidden;box-shadow:var(--s1);transition:border-color .2s,box-shadow .2s}
+.uc:hover{border-color:var(--p300);box-shadow:var(--s2)}
+.uc[data-open=true]{border-color:var(--p400);box-shadow:var(--s2)}
+.ubtn{width:100%;display:flex;align-items:center;padding:14px 15px;gap:12px;background:none;border:none;cursor:pointer;text-align:left}
+.upill{min-width:54px;padding:0 8px;height:36px;border-radius:9px;flex-shrink:0;background:var(--p100);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.upill span{font-size:.65rem;font-weight:800;color:var(--p700);letter-spacing:-.01em;white-space:nowrap}
+.uc[data-open=true] .upill{background:var(--p700)}
+.uc[data-open=true] .upill span{color:#fff}
+.uinfo{flex:1;min-width:0}
+.uname{font-size:.85rem;font-weight:700;color:var(--g900);line-height:1.3}
+.umeta{font-size:.66rem;color:var(--g400);margin-top:2px;font-weight:500}
+.uright{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.uchev{width:16px;height:16px;color:var(--g300);transition:transform .3s,color .2s}
+.uc[data-open=true] .uchev{transform:rotate(180deg);color:var(--p500)}
+.ubody{display:none;background:var(--p50);border-top:1.5px solid var(--p200);padding:12px 13px 14px}
+.ubody.open{display:block;animation:bodyIn .2s ease}
+@keyframes bodyIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.rrow{display:flex;gap:9px;margin-bottom:8px}
+.rrow:last-child{margin-bottom:0}
+@media(max-width:380px){.rrow{flex-direction:column}}
+.rbtn{flex:1;display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .17s;background:var(--w);text-decoration:none}
+.rbtn .rico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.rbtn .rtxt{line-height:1.25}
+.rbtn .rtxt small{display:block;font-size:.62rem;font-weight:400;opacity:.5;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;}
+.rbtn .rarr{margin-left:auto;opacity:0;font-size:.7rem;color:var(--g400);transition:opacity .15s}
+.rbtn:hover .rarr{opacity:1}
+.rbtn.notes{border-color:var(--p200);color:var(--p800)}
+.rbtn.notes .rico{background:var(--p100)}
+.rbtn.notes:hover{background:var(--p50);border-color:var(--p500);box-shadow:var(--s2);transform:translateY(-1px)}
+.rbtn.video{border-color:#bae6fd;color:#0369a1}
+.rbtn.video .rico{background:#e0f2fe}
+.rbtn.video:hover{background:#f0f9ff;border-color:#38bdf8;box-shadow:0 3px 10px rgba(56,189,248,.12);transform:translateY(-1px)}
+.rbtn.quiz{border-color:#fde68a;color:#78350f}
+.rbtn.quiz .rico{background:var(--warn-lt)}
+.rbtn.quiz:hover{background:#fffbeb;border-color:var(--warn);box-shadow:0 3px 10px rgba(217,119,6,.12);transform:translateY(-1px)}
+.rbtn.model{border-color:#fbcfe8;color:#9d174d}
+.rbtn.model .rico{background:#fdf2f8}
+.rbtn.model:hover{background:#fdf2f8;border-color:#ec4899;box-shadow:0 3px 10px rgba(236,72,153,.12);transform:translateY(-1px)}
 
-    * { box-sizing: border-box; }
-    body {
-        font-family: 'Inter', system-ui, sans-serif;
-        background: white;
-        color: var(--gray-900);
-        line-height: 1.6;
-        padding: 24px;
-        max-width: 1000px;
-        margin: 0 auto;
-    }
-
-    /* --- BUTTONS & HEADERS SHARED STYLES --- */
-    .syllabus-btn, .unit-header {
-        display: block;
-        width: 100%;
-        padding: 18px 24px;
-        margin: 12px 0;
-        font-weight: 600;
-        font-size: 16px;
-        text-decoration: none;
-        border-radius: 12px;
-        cursor: pointer;
-        box-shadow: var(--shadow-sm);
-        transition: all 0.2s ease;
-    }
-
-    /* --- SPECIFIC: SYLLABUS BUTTON (White with Blue Outline) --- */
-    .syllabus-btn {
-        background: white;
-        color: var(--brand);
-        border: 2px solid var(--brand);
-        text-align: center;
-    }
-
-    .syllabus-btn:hover {
-        background: #f0f9ff; /* Light blue tint on hover */
-        transform: translateY(-1px);
-        box-shadow: var(--shadow-md);
-    }
-    
-    /* --- SPECIFIC: UNIT HEADER (Solid Blue) --- */
-    .unit-header {
-        background: var(--brand);
-        color: white;
-        border: none;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        text-align: left;
-        margin: 16px 0;
-    }
-
-    .unit-header:hover {
-        background: #002d63;
-        transform: translateY(-1px);
-        box-shadow: var(--shadow-md);
-    }
-
-    /* Unit Header Arrow Animation */
-    .unit-header span:last-child {
-        transition: transform 0.3s ease;
-        color: #FFA500;
-    }
-    .unit-header[aria-expanded="true"] span:last-child {
-        transform: rotate(180deg);
-    }
-
-    /* --- UNIT CONTENT & RESOURCES --- */
-    .unit-content {
-        padding: 0 12px;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.4s ease, padding 0.3s ease;
-    }
-    .unit-content.active {
-        padding: 24px 12px;
-        max-height: none; 
-    }
-
-    .subsection {
-        margin: 16px 0;
-        padding: 20px;
-        background: white;
-        border-radius: 12px;
-        border: 1px solid var(--gray-200);
-        box-shadow: var(--shadow-sm);
-        transition: box-shadow 0.2s ease;
-    }
-
-    .sub-title {
-        font-size: 0.95rem;
-        font-weight: 700;
-        color: var(--gray-700);
-        margin: 15px 0 8px 0;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-
-    .resource-btn {
-        display: flex;
-        align-items: flex-start;
-        width: 100%;
-        padding: 14px 18px;
-        margin: 6px 0;
-        background: var(--gray-50);
-        color: var(--gray-900);
-        text-decoration: none;
-        border-radius: 8px;
-        font-weight: 500;
-        border: 1px solid var(--gray-200);
-        transition: all 0.2s ease;
-        gap: 12px;
-        cursor: pointer;
-    }
-    .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
-    .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
-    .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
-    .resource-btn.model { background: #fdf4ff; border-color: #f0abfc; color: #86198f; }
-    .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
-
-    .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
-    .icon.video-icon { color: #8b5cf6; }
-    .icon.quiz-icon { color: #f59e0b; }
-    .icon.model-icon { color: #d946ef; }
-
-    /* --- MODAL --- */
-    .modal-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.85);
-        z-index: 1000;
-        display: none;
-        flex-direction: column;
-    }
-
-    .modal-header {
-        height: 60px;
-        background: white;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 20px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        flex-shrink: 0;
-    }
-
-    .modal-title { font-weight: 700; color: var(--brand); font-size: 1rem; }
-    
-    .btn-close {
-        background: var(--danger);
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 6px;
-        font-weight: 600;
-        cursor: pointer;
-    }
-
-    .modal-body {
-        flex: 1;
-        background: #f3f4f6;
-        position: relative;
-        overflow-y: auto;
-        display: flex;
-        align-items: flex-start;
-        justify-content: center;
-        padding: 20px;
-    }
-
-    .iframe-res {
-        width: 100%;
-        height: 100%;
-        border: none;
-        background: #fff;
-        display: block;
-    }
-
-    /* --- QUIZ STYLES --- */
-    .quiz-container {
-        background: white;
-        width: 100%;
-        max-width: 800px;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        padding: 30px;
-        margin-bottom: 40px;
-    }
-    .quiz-header-sticky {
-        position: sticky;
-        top: 0;
-        background: white;
-        z-index: 10;
-        padding-bottom: 10px;
-        border-bottom: 2px solid var(--gray-100);
-        margin-bottom: 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .score-badge {
-        background: var(--brand);
-        color: white;
-        padding: 5px 15px;
-        border-radius: 20px;
-        font-weight: 700;
-    }
-    .question-block {
-        margin-bottom: 30px;
-        padding-bottom: 20px;
-        border-bottom: 1px solid var(--gray-200);
-    }
-    .question-block:last-child { border-bottom: none; }
-    
-    .quiz-question-text {
-        font-size: 1.15rem;
-        font-weight: 600;
-        margin-bottom: 15px;
-        color: var(--gray-900);
-    }
-    .quiz-option {
-        padding: 12px 15px;
-        border: 2px solid var(--gray-200);
-        border-radius: 8px;
-        margin-bottom: 10px;
-        cursor: pointer;
-        transition: all 0.2s;
-        font-weight: 500;
-    }
-    .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
-    
-    .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; }
-    .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
-    
-    .btn-quiz { background: var(--brand); color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 16px; width: 100%; margin-top: 20px; }
-
-    @media (max-width: 768px) {
-        body { padding: 16px; }
-        .unit-header, .resource-btn { font-size: 15px; }
-        .modal-body { padding: 0; }
-        .quiz-container { height: auto; border-radius: 0; max-width: 100%; padding: 20px; min-height: 100%; }
-    }
+.qoverlay{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end}
+.qoverlay.open{display:flex}
+.qscrim{position:absolute;inset:0;background:rgba(15,10,40,.55);backdrop-filter:blur(3px)}
+.qpanel{position:relative;z-index:1;background:var(--w);width:100%;max-width:580px;margin:0 auto;border-radius:18px 18px 0 0;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 -10px 50px rgba(109,40,217,.2);animation:panelUp .3s cubic-bezier(.32,.72,0,1)}
+@keyframes panelUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.qhead{padding:16px 18px 12px;border-bottom:1px solid var(--g100);flex-shrink:0}
+.qhead-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.qtitle{font-size:1rem;font-weight:800;color:var(--p800)}
+.qclose{width:28px;height:28px;border-radius:50%;background:var(--g100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--g500);transition:all .15s}
+.qclose:hover{background:var(--err-lt);color:var(--err)}
+.qpips{display:flex;gap:3px}
+.pip{flex:1;height:4px;border-radius:4px;background:var(--g100);transition:background .3s}
+.pip.ans{background:var(--p300)}.pip.cor{background:var(--ok)}.pip.wrg{background:var(--err)}
+.qbody{overflow-y:auto;padding:14px 18px 28px;flex:1}
+.qscore{display:none;background:linear-gradient(135deg,var(--p800),var(--p500));color:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;align-items:center;gap:14px}
+.qscore.show{display:flex}
+.qs-num{font-size:1.9rem;font-weight:800;line-height:1}
+.qs-sub{font-size:.65rem;opacity:.6;margin-top:2px}
+.qs-msg{font-size:.85rem;font-weight:600}
+.qitem{margin-bottom:24px}
+.qitem:last-child{margin-bottom:0}
+.qlbl{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--p500);margin-bottom:4px}
+.qtext{font-size:.88rem;font-weight:600;color:var(--g900);line-height:1.5;margin-bottom:10px}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1.5px solid var(--g200);border-radius:var(--rs);cursor:pointer;font-size:.83rem;font-weight:500;background:var(--w);color:var(--g700);transition:all .14s}
+.qopt:hover{border-color:var(--p300);background:var(--p50);color:var(--p800)}
+.qltr{width:21px;height:21px;border-radius:50%;background:var(--g100);border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:800;color:var(--g500);flex-shrink:0;transition:all .14s}
+.qopt.cor{background:var(--ok-lt);border-color:#86efac;color:#14532d}
+.qopt.cor .qltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.qopt.wrg{background:var(--err-lt);border-color:#fca5a5;color:#7f1d1d}
+.qopt.wrg .qltr{background:var(--err);border-color:var(--err);color:#fff}
+.qopt.lock{cursor:default;pointer-events:none}
+.qopt.lock:not(.cor):not(.wrg):hover{border-color:var(--g200);background:var(--w);color:var(--g700)}
 </style>
 </head>
 <body>
-
-    <div class="syllabus-btn" onclick="openResource('notes', 'https://drive.google.com/file/d/1sPup33yo_7WjFxKCAd6_5WkESw46-CjI/preview', 'Syllabus')">
-        📄 DOWNLOAD APPLIED ANATOMY SYLLABUS
+<header class="topbar">
+  <button class="tb-back" onclick="goBackToApp()" aria-label="Back">&#8592;</button>
+  <div class="tb-info">
+    <div class="tb-title">Applied Anatomy</div>
+    <div class="tb-sub">BSc First Semester</div>
+  </div>
+  <div class="tb-chip">10 Units</div>
+</header>
+<section class="hero">
+  <div class="hero-dot-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>BSc First Semester</div>
+    <h1>Applied<br/><em>Anatomy</em></h1>
+    <p class="hero-desc">Interactive syllabus, detailed notes, 3D anatomical models, video lectures & internal quizzes.</p>
+    <button class="hero-cta" onclick="openLink('https://drive.google.com/file/d/1sPup33yo_7WjFxKCAd6_5WkESw46-CjI/view')">
+      📄 &nbsp;Download Syllabus
+    </button>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-n">10</div><div class="hs-l">Units</div></div>
+      <div class="hs"><div class="hs-n">100</div><div class="hs-l">Quizzes</div></div>
     </div>
-    
-    <div id="units">
-        
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 1 - INTRODUCTION TO ANATOMICAL TERMS & ORGANIZATION <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1kBEniLShpJ5aNYXwxOBv7tvC4-w-vD5V/preview', 'Unit 1 Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes: Introduction</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1q39lDL7hKo_vmSwuBKhVstPXr7m5_86p/preview', 'Video: Intro & Cell Structure')">
-                        <span class="icon video-icon">▶️</span><span>Video: Introduction & Cell Structure</span>
-                    </div>
-
-                    <div class="sub-title">3D Models: Body Overview</div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5WBX&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt5F3&paid=o_10a88be0&ui-bd.link=false', '3D Model: Male Complete Anatomy')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Male Complete Anatomy</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5WBY&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt5FI&paid=o_10a88be0&ui-bd.link=false', '3D Model: Female Complete Anatomy')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Female Complete Anatomy</span>
-                    </div>
-                    
-                    <div class="sub-title"></div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1IWL4S5kumnZVNBIUB-sEMZVIEKQG6pre/preview', 'Lecture Notes: Introduction to Cell Structure')">
-                        <span class="icon">📝</span><span>Lecture Notes: Introduction to Cell Structure</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('video', 'https://drive.google.com/file/d/1CIO4-Ztrru3s_cNoDjx1TlxpN2jE8eeR/preview', 'Cell')">
-                        <span class="icon">▶️</span><span>Cell</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5WMM&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt7pQ&paid=o_10a88be0&ui-bd.link=false', '3D Model: Cell')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Cell</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1w4E1c8Is1z4Yo2S6XewLgLHA5gQkOwum/preview', 'Lecture Notes: Cell Division')">
-                        <span class="icon">📝</span><span>Lecture Notes: Cell Division</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Igg8WpoIsghGvDyA0iTrPDbBd3UGd1uh/preview', 'Video: Mitosis & Meiosis')">
-                        <span class="icon video-icon">▶️</span><span>Video: Mitosis & Meiosis</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1nCtsob7hw4vKRwvGeuVUlBEFCCMU8-sV/preview', 'Video: Meiosis I & II')">
-                        <span class="icon video-icon">▶️</span><span>Video: Meiosis I & II</span>
-                    </div>
-
-                    <div class="sub-title"></div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1kyh1YNyGaprCHRhmsRvYU39SKnaes0ZO/preview', 'Lecture Notes: Mitosis & Meiosis')">
-                        <span class="icon">📝</span><span>Lecture Notes: Mitosis & Meiosis</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1rPbXeMjGBAoHhWuSpaKhBCXF7kJT6Ian/preview', 'Video: Epithelial, Connective, Muscle')">
-                        <span class="icon video-icon">▶️</span><span>Video: Epithelial, Connective, Muscle</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/140zaAHcIUvLdg9qCX0XD-49ODaZ-m9yL/preview', 'Video: Nervous Tissue')">
-                        <span class="icon video-icon">▶️</span><span>Video: Nervous Tissue</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5WBK&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt5Bb&paid=o_10a88be0&ui-bd.link=false', '3D Model: Neuron')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Neuron</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1VE6-YBuvTBxqT6OHxxNThl3B0ySvlyb6/preview', 'Lecture Notes: Tissue')">
-                        <span class="icon">📝</span><span>Lecture Notes: Tissue</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1sil8smYE73u7qf7RSM_GjXX292cfEksS/preview', 'Video: Surface & Bony Landmarks')">
-                        <span class="icon video-icon">▶️</span><span>Video: Surface & Bony Landmarks</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5WMQ&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt7pj&paid=o_10a88be0&ui-bd.link=false', '3D Model: Injection Site')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Injection Site</span>
-                    </div>
-
-                    <div class="resource-btn quiz" onclick="startQuiz(1)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 2 - THE RESPIRATORY SYSTEM <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1zp3SJthkar0Zqglf8gIQuMjJYfWXM2EY/preview', 'Unit 2 Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes: Respiratory System</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1OmqEhegf9VlGH867yfBHEAQIiD9MeGFQ/preview', 'Video: Organs of Respiration')">
-                        <span class="icon video-icon">▶️</span><span>Video: Organs of Respiration</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5W6e&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt3nI&paid=o_10a88be0&ui-bd.link=false', '3D Model: The Respiratory System')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: The Respiratory System</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1-X7K8jrTv_fs1yWybyNFmlannrDtqkBr/preview', 'Lecture Notes: Respiratory')">
-                        <span class="icon">📝</span><span>Lecture Notes: Respiratory</span>
-                    </div>
-
-                    <div class="sub-title"></div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1F5xDrsluhcpwW4j0DnwC-_nKpACD4X-I/preview', 'Video: Nose')">
-                        <span class="icon video-icon">▶️</span><span>Video: Nose</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5W6l&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3oG&paid=o_10a88be0&ui-bd.link=false', '3D Model: Nose')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Nose</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/12XDRcQHkRqEnxXbp5xkJ13Cn9DDNyF7C/preview', 'Lecture Notes: Nose')">
-                        <span class="icon">📝</span><span>Lecture Notes: Nose</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1wqEMaMgy1NWL4CZkjcXwfz5cE8_ETHvu/preview', 'Video: Pharynx')">
-                        <span class="icon video-icon">▶️</span><span>Video: Pharynx</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5W6o&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3oo&paid=o_10a88be0&ui-bd.link=false', '3D Model: Pharynx')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Pharynx</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1AbrT7cTpXsK0ZRT_hY4ugcQGqOTeJySl/preview', 'Lecture Notes: Pharynx')">
-                        <span class="icon">📝</span><span>Lecture Notes: Pharynx</span>
-                    </div>
-
-                    <div class="sub-title"></div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1n9OWWqcH36vcyFHwtLkHfJIHOoOAkAGr/preview', 'Video: Larynx')">
-                        <span class="icon video-icon">▶️</span><span>Video: Larynx</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5W6p&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3p2&paid=o_10a88be0&ui-bd.link=false', '3D Model: Larynx')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Larynx</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1kWOjX4RhYHLZfXLD-IDZ-eqlpluXJHsw/preview', 'Lecture Notes: Larynx')">
-                        <span class="icon">📝</span><span>Lecture Notes: Larynx</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ibk0bGro4EYt-EakAnC_AuSkjMv0GXbN/preview', 'Video: Trachea')">
-                        <span class="icon video-icon">▶️</span><span>Video: Trachea</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5W6q&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3pJ&paid=o_10a88be0&ui-bd.link=false', '3D Model: Trachea')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Trachea</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1xwLwFOwcEQvkL0NKhSnIwUr2RRB_f5lL/preview', 'Lecture Notes: Trachea')">
-                        <span class="icon">📝</span><span>Lecture Notes: Trachea</span>
-                    </div>
-
-                    <div class="resource-btn quiz" onclick="startQuiz(2)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 3 - THE DIGESTIVE SYSTEM <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1GsEUK__ngjD9CBpWue0CqXO56mmjxGZ0/preview', 'Unit 3 Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes: Digestive System</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1J2veHwrJ83i1Qi63iMS818hWGEAkRkAA/preview', 'Video: Digestive System Overview')">
-                        <span class="icon video-icon">▶️</span><span>Video: Digestive System Overview</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5W6r&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3pi&paid=o_10a88be0', '3D Model: GI Tract')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Gastrointestinal Tract</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/16RBc_T9lXiDLqM7gksV3mGWRSe-LwPvb/preview', 'Lecture Notes: Digestive')">
-                        <span class="icon">📝</span><span>Lecture Notes: Digestive</span>
-                    </div>
-
-                    <div class="sub-title"></div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1UetDfsIJoGgdj_5BFmPsRCUrBbyJosfT/preview', 'Video: Mouth, Pharynx, Esophagus, Stomach')">
-                        <span class="icon video-icon">▶️</span><span>Video: Mouth, Pharynx, Esophagus, Stomach</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5W6x&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3rI&paid=o_10a88be0&ui-bd.link=false', '3D Model: Stomach')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Stomach</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1GKJzoRPgOcGUhRQ7NaMes5nojhRm7aSD/preview', 'Video: Intestines, Rectum, Anus')">
-                        <span class="icon video-icon">▶️</span><span>Video: Intestines, Rectum, Anus</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5W72&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3s7&paid=o_10a88be0&ui-bd.link=false', '3D Model: Large Intestine')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Large Intestine</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5WMR&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt7qF&paid=o_10a88be0&ui-bd.link=false', '3D Model: Anus & Rectum')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Anus & Rectum</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5WMS&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt7qJ&paid=o_10a88be0&ui-bd.link=false', '3D Model: Colorectal Anatomy')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Colorectal Anatomy</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1hMrH-1a31PXc2UlHZ-38fxCkUoVIMxRI/preview', 'Lecture Notes: Major Organs')">
-                        <span class="icon">📝</span><span>Lecture Notes: Major Organs</span>
-                    </div>
-
-                    <div class="sub-title"></div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Z10EruxmurF-VwMUkp7cH0miycrZIC8X/preview', 'Video: Teeth, Tongue, Salivary Glands')">
-                        <span class="icon video-icon">▶️</span><span>Video: Teeth, Tongue, Salivary Glands</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5W6s&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3qG&paid=o_10a88be0&ui-bd.link=false', '3D Model: Teeth')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Teeth</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5W6u&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3qk&paid=o_10a88be0&ui-bd.link=false', '3D Model: Tongue')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Tongue</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Ij8j9b45FQdVKea3NH75h59hrtsOGDMW/preview', 'Video: Liver, Gallbladder, Pancreas')">
-                        <span class="icon video-icon">▶️</span><span>Video: Liver, Gallbladder, Pancreas</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5W6x&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3rh&paid=o_10a88be0&ui-bd.link=false', '3D Model: Liver')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Liver</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5W71&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3s0&paid=o_10a88be0&ui-bd.link=false', '3D Model: Gallbladder')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Gallbladder</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5W6y&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3rP&paid=o_10a88be0&ui-bd.link=false', '3D Model: Pancreas')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Pancreas</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1IkyDibJYujUNn3i2eF-DEcO2vuIrlQyU/preview', 'Lecture Notes: Accessory Organs')">
-                        <span class="icon">📝</span><span>Lecture Notes: Accessory Organs</span>
-                    </div>
-
-                    <div class="resource-btn quiz" onclick="startQuiz(3)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 4 - THE CIRCULATORY & LYMPHATIC SYSTEM <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Z-5OBzBGiQ5khWySeLIW79SrvC2B2zqz/preview', 'Unit 4 Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes: Circulatory System</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1c2SvDIMfV_2QROjL21zueX2AisClnOJL/preview', 'Video: Structure, Layers & Chambers')">
-                        <span class="icon video-icon">▶️</span><span>Video: Structure, Layers & Chambers</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5WBX&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt5F3&paid=o_10a88be0&ui-bd.link=false', '3D Model: Heart to Lungs Circulation')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Heart to Lungs Circulation</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_AYeDd5O-Vfv2QM3xtoWl8b6LR7YtFU2/preview', 'Lecture Notes: Heart Structure')">
-                        <span class="icon">📝</span><span>Lecture Notes: Heart Structure</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1gKLMDmpruJJcDO9I0tVCpNyCs5gPn29N/preview', 'Video: Valves of the Heart')">
-                        <span class="icon video-icon">▶️</span><span>Video: Valves of the Heart</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1RW64cf5CCvO562MfUOSJsEofpH9Af5ta/preview', 'Lecture Notes: Valves')">
-                        <span class="icon">📝</span><span>Lecture Notes: Valves</span>
-                    </div>
-
-                    <div class="sub-title"></div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1YN1R3ORgCOZW7I0zwoCFSReqv--sP1V-/preview', 'Video: Functions, Conduction, Cardiac Cycle')">
-                        <span class="icon video-icon">▶️</span><span>Video: Functions, Conduction, Cardiac Cycle</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1AKuqG9zZUKHLpE8Y8vpRg-orQa0-D_hA/preview', 'Video: Stroke Volume')">
-                        <span class="icon video-icon">▶️</span><span>Video: Stroke Volume</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1pzDhCdA2HDEynD5ko4FNmzpVKS-GiVJa/preview', 'Video: Cardiac Output & Heart Rate')">
-                        <span class="icon video-icon">▶️</span><span>Video: Cardiac Output & Heart Rate</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Ec20jwtZzLFfneg0OMqK3FO261zxRM_X/preview', 'Lecture Notes: Physiology')">
-                        <span class="icon">📝</span><span>Lecture Notes: Physiology</span>
-                    </div>
-
-                    <div class="sub-title"></div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1CDpZuBMgkCM-CX9603R7-qy4aZh66qqO/preview', 'Video: Pulmonary & Systemic Circulation')">
-                        <span class="icon video-icon">▶️</span><span>Video: Pulmonary & Systemic Circulation</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1262O0888IeOjk2uvL1cH_MyHU2DscFy7/preview', 'Lecture Notes: Circulation')">
-                        <span class="icon">📝</span><span>Lecture Notes: Circulation</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ZNSmG28SzdSISm_ymQ6lnXtt4jb8uhvm/preview', 'Video: Thoracic Aorta Branches')">
-                        <span class="icon video-icon">▶️</span><span>Video: Thoracic Aorta Branches</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1yak7PcNQ6ZO2_rbEmUVEb6tl5j81ZgVD/preview', 'Lecture Notes: Aorta')">
-                        <span class="icon">📝</span><span>Lecture Notes: Aorta</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1EcBwprEnpuWXA53qbBA35OC9On3SPh84/preview', 'Video: Venous Circulation (Upper)')">
-                        <span class="icon video-icon">▶️</span><span>Video: Venous Circulation (Upper)</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1voG33zrrdYoCKpMsZnQAChgFaVF_FWbp/preview', 'Video: Venous Circulation (Lower)')">
-                        <span class="icon video-icon">▶️</span><span>Video: Venous Circulation (Lower)</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1zgsHAnG1zEQyIzhClNdLrilPTVNmj_CG/preview', 'Lecture Notes: Veins')">
-                        <span class="icon">📝</span><span>Lecture Notes: Veins</span>
-                    </div>
-
-                    <div class="sub-title"></div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1HnNCXLNOga-LLV0BT_aRLduO2TL3uBnM/preview', 'Video: Capillaries & Ducts')">
-                        <span class="icon video-icon">▶️</span><span>Video: Capillaries & Ducts</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1FRYKJr2ycOuAPwdSqGFcykwYrHINKrqv/preview', 'Video: Organs & Tissues')">
-                        <span class="icon video-icon">▶️</span><span>Video: Organs & Tissues</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1IxEFK4fjEYKfxNvBRiRlMeZIEdiCcbM5/preview', 'Video: Spleen & Nodules')">
-                        <span class="icon video-icon">▶️</span><span>Video: Spleen & Nodules</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1GwaGnD_sjwzfDm0VvHxfR6nB88TvJVK4/preview', 'Lecture Notes: Lymphatic')">
-                        <span class="icon">📝</span><span>Lecture Notes: Lymphatic</span>
-                    </div>
-
-                    <div class="resource-btn quiz" onclick="startQuiz(4)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 5 - THE ENDOCRINE SYSTEM <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1DhUray7ZdgEfZmoSLxK_Ah9-P_y6uA35/preview', 'Unit 5 Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes: Endocrine System</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1RkkA8rAcXeFv8nQVj5MeipFSGSVyavrU/preview', 'Video: Intro & Hypothalamus')">
-                        <span class="icon video-icon">▶️</span><span>Video: Intro & Hypothalamus</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1AMGTE-wphhX8AJq0FqXqrfLJXvXXdEOn/preview', 'Lecture Notes: Intro')">
-                        <span class="icon">📝</span><span>Lecture Notes: Intro</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1oxMOZKsEqi9-v3Jkv914haQXIzQEXnMA/preview', 'Video: Pituitary (Anterior)')">
-                        <span class="icon video-icon">▶️</span><span>Video: Pituitary (Anterior)</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1cghequtktwARAfKOnVM5skDDTyTZv4hB/preview', 'Video: Pituitary (Posterior)')">
-                        <span class="icon video-icon">▶️</span><span>Video: Pituitary (Posterior)</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1e6y5TAS8eYquR1Q9Tvi9aAt-aG0IYRJa/preview', 'Lecture Notes: Pituitary')">
-                        <span class="icon">📝</span><span>Lecture Notes: Pituitary</span>
-                    </div>
-
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1apCsaobC9JRzjvKU03zqmfTbE8i1rd_1/preview', 'Video: Thyroid Gland')">
-                        <span class="icon video-icon">▶️</span><span>Video: Thyroid Gland</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_hlHXVYyKgHR4rcITkdZ9Cor-YCTf0ib/preview', 'Lecture Notes: Thyroid')">
-                        <span class="icon">📝</span><span>Lecture Notes: Thyroid</span>
-                    </div>
-
-                    <div class="resource-btn quiz" onclick="startQuiz(5)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 6 - THE SENSORY ORGANS <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/10ReXGEjNagS3lQWO4GcQxe9ucmx8a5Fp/preview', 'Unit 6 Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes: Sensory Organs</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1tfjepPkz0X2V7sIX9HjLzuNG2qamX7MN/preview', 'Video: Intro to Sensory System')">
-                        <span class="icon video-icon">▶️</span><span>Video: Intro to Sensory System</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1R0wYF02yqE8FhWfjFz_lTj1Qj0w8r4vU/preview', 'Lecture Notes: Intro')">
-                        <span class="icon">📝</span><span>Lecture Notes: Intro</span>
-                    </div>
-
-                    <div class="sub-title"></div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1spCTVGLHIx5f8Jlg7dMkc3tIJG7i0-fw/preview', 'Video: Epidermis, Dermis, Glands')">
-                        <span class="icon video-icon">▶️</span><span>Video: Epidermis, Dermis, Glands</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1h4GZqcD1CAlNE_I8MpHyOhTi2kmHHwBP/preview', 'Video: Applied Physiology of Skin')">
-                        <span class="icon video-icon">▶️</span><span>Video: Applied Physiology of Skin</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Zq6UjNapvIayDsSJcRswsDGoiDgtfk1_/preview', 'Lecture Notes: Skin')">
-                        <span class="icon">📝</span><span>Lecture Notes: Skin</span>
-                    </div>
-
-                    <div class="sub-title"></div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1sA3BwCa5sIrlPpRJW1-8lRW_Zmr_XjeP/preview', 'Video: Eye Anatomy & Layers')">
-                        <span class="icon video-icon">▶️</span><span>Video: Eye Anatomy & Layers</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1scrYYbX1oU8BSo22PdnMpPyLZBGPhOg-/preview', 'Video: Eye Blood & Nerve Supply')">
-                        <span class="icon video-icon">▶️</span><span>Video: Eye Blood & Nerve Supply</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1qDPttOigYLc_EhGGYM8mhmBXkG7qmJc_/preview', 'Lecture Notes: Eye')">
-                        <span class="icon">📝</span><span>Lecture Notes: Eye</span>
-                    </div>
-
-                    <div class="sub-title"></div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1tFHvLaUNpdfA70hWRL_FVmMMBAOYs2iK/preview', 'Video: External & Middle Ear')">
-                        <span class="icon video-icon">▶️</span><span>Video: External & Middle Ear</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1l1jQYvsIINMf1TJs-iW6uAD-t29BKyKk/preview', 'Video: Inner Ear')">
-                        <span class="icon video-icon">▶️</span><span>Video: Inner Ear</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1nIBTV8L9bIjN5IMTdOwTeSgDXVHYMwX7/preview', 'Video: Vestibular & Cochlea')">
-                        <span class="icon video-icon">▶️</span><span>Video: Vestibular & Cochlea</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1QnKz-GiH4FArxiLEqhuSbJQlYTarIpgB/preview', 'Lecture Notes: Ear')">
-                        <span class="icon">📝</span><span>Lecture Notes: Ear</span>
-                    </div>
-
-                    <div class="sub-title"></div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1CeReEqjIXSwl5PDACOgWqgvFdioYelhf/preview', 'Video: Tongue & Gustation')">
-                        <span class="icon video-icon">▶️</span><span>Video: Tongue & Gustation</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1zuHk_9YdInyhjO-OH77m3ZSjTFwu0FSX/preview', 'Lecture Notes: Tongue')">
-                        <span class="icon">📝</span><span>Lecture Notes: Tongue</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1j7UCi2uBxSXO22cntanx9gJr0aAb8SN3/preview', 'Video: Nose Anatomy')">
-                        <span class="icon video-icon">▶️</span><span>Video: Nose Anatomy</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1D4pllkIQX1mQ775x3CqXAhrQpBqewemG/preview', 'Lecture Notes: Nose')">
-                        <span class="icon">📝</span><span>Lecture Notes: Nose</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/16q4bQnbziJ7g8oNtfPl8sTCsJF76y1ax/preview', 'Video: Smell & Olfaction')">
-                        <span class="icon video-icon">▶️</span><span>Video: Smell & Olfaction</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1L9ZfEeHg35IAL_S2nu4hoPw0S6fUcjcL/preview', 'Lecture Notes: Olfaction')">
-                        <span class="icon">📝</span><span>Lecture Notes: Olfaction</span>
-                    </div>
-
-                    <div class="resource-btn quiz" onclick="startQuiz(6)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 7 - THE MUSCULOSKELETAL SYSTEM <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1uhJdU-uVTxQYK_yBX4mnSNMUvuy6CDCE/view?usp=sharing', 'Unit 7 Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes: Musculoskeletal</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1FlwIyxMB4TFQjZSPYoMH9I0tntlHUqV0/preview', 'Video: Axial & Appendicular Skeleton')">
-                        <span class="icon video-icon">▶️</span><span>Video: Axial & Appendicular Skeleton</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1lmL0DQ7pdhGmB_KbG2-gcsl4j_99x0Qs/preview', 'Lecture Notes: Skeleton')">
-                        <span class="icon">📝</span><span>Lecture Notes: Skeleton</span>
-                    </div>
-
-                    <div class="sub-title"></div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1GlO-oknavSyl9c7LQiFqWXiox7OPsJJY/preview', 'Video: Frontal, Temporal, Occipital, Parietal')">
-                        <span class="icon video-icon">▶️</span><span>Video: Frontal, Temporal, Occipital, Parietal</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1iyWGQ36ydtPk-d8AM-W2oYTl8ZEfrMJB/preview', 'Video: Sphenoid, Ethmoid')">
-                        <span class="icon video-icon">▶️</span><span>Video: Sphenoid, Ethmoid</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1IKUDAxphmxHDBbYCN-eQN76Qf2N3SQue/preview', 'Lecture Notes: Skull')">
-                        <span class="icon">📝</span><span>Lecture Notes: Skull</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1AETKnAQRe44iMP-rmroqQ3SndtV6lhhk/preview', 'Video: Facial Bones & Ear Ossicles')">
-                        <span class="icon video-icon">▶️</span><span>Video: Facial Bones & Ear Ossicles</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1FymG_OrCS9wJ9TW7J2fMPddDDjTF5X6U/preview', 'Lecture Notes: Facial')">
-                        <span class="icon">📝</span><span>Lecture Notes: Facial</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1agTiGLA13gZiBpZjnVtOy7bhucniIghn/preview', 'Video: Ribs, Sternum, Articulations')">
-                        <span class="icon video-icon">▶️</span><span>Video: Ribs, Sternum, Articulations</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1yHgv14D3l4KpCE1ohLsQm8DRZ_0pPjp0/preview', 'Video: Vertebral Column')">
-                        <span class="icon video-icon">▶️</span><span>Video: Vertebral Column</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1gOvuFr_0qj6jAnx1RfDPsOEKoNzDLzAS/preview', 'Lecture Notes: Thorax & Vertebra')">
-                        <span class="icon">📝</span><span>Lecture Notes: Thorax & Vertebra</span>
-                    </div>
-
-                    <div class="sub-title"></div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1S0nR4p6Kqy3asO5p2AP729AkGC3_n-bv/preview', 'Video: Appendicular Overview')">
-                        <span class="icon video-icon">▶️</span><span>Video: Appendicular Overview</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1W0SgH2BthadBVMlve9p0ESUeg8OcvJwX/preview', 'Video: Upper Arm')">
-                        <span class="icon video-icon">▶️</span><span>Video: Upper Arm</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1xkGJiVJW9enQPQdCgpqFNK0jsQzntSGX/preview', 'Lecture Notes: Upper Limb')">
-                        <span class="icon">📝</span><span>Lecture Notes: Upper Limb</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1kGBTsWrYrPjABluub9l0e_3gsZIWxlJP/preview', 'Video: Pelvic Girdle')">
-                        <span class="icon video-icon">▶️</span><span>Video: Pelvic Girdle</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1d9dc01Ib8C9Iz0lvnKv5opAB4VlffT77/preview', 'Video: Femur, Patella, Tibia')">
-                        <span class="icon video-icon">▶️</span><span>Video: Femur, Patella, Tibia</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/160iJRItKSaoZy6gexqFYjTEQGQT9Zh29/preview', 'Video: Fibula, Tarsals, Phalanges')">
-                        <span class="icon video-icon">▶️</span><span>Video: Fibula, Tarsals, Phalanges</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1tgVPdQxo4uJXC_Js5YH5HR1rgKVpzxeB/preview', 'Lecture Notes: Lower Limb')">
-                        <span class="icon">📝</span><span>Lecture Notes: Lower Limb</span>
-                    </div>
-
-                    <div class="sub-title"></div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1NNbFQwSh2pow3kzGaHmczqfTtRHHhyMQ/preview', 'Video: Muscles of Head & Scalp')">
-                        <span class="icon video-icon">▶️</span><span>Video: Muscles of Head & Scalp</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1xBYgN3fEL2PeHiKD1r7EOxVeoSbzzydK/preview', 'Video: Muscles of Nose & Mouth')">
-                        <span class="icon video-icon">▶️</span><span>Video: Muscles of Nose & Mouth</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1OKPagZy19z7Xw0zpol4QIIshRdEXaiwX/preview', 'Lecture Notes: Head Muscles')">
-                        <span class="icon">📝</span><span>Lecture Notes: Head Muscles</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1zaSr6Zr1gmdYBg4ySTMTIK5Jmg_jK9rI/preview', 'Video: Muscles of Neck & Thorax')">
-                        <span class="icon video-icon">▶️</span><span>Video: Muscles of Neck & Thorax</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1cNnQKrTNKrfGR4Oob6JvtJ8cc63YUghY/preview', 'Lecture Notes: Neck/Thorax')">
-                        <span class="icon">📝</span><span>Lecture Notes: Neck/Thorax</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1awZPGUvAr_bQi9N8z7dUE7hYsHiamNww/preview', 'Video: Muscles of Abdomen')">
-                        <span class="icon video-icon">▶️</span><span>Video: Muscles of Abdomen</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/14inZNwxWOS4U4lU_8lZGsI46aA0nFWuJ/preview', 'Video: Muscles of Pelvis')">
-                        <span class="icon video-icon">▶️</span><span>Video: Muscles of Pelvis</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1XW9XQTguFmqmqRN7PdtK0emx0nsvipG-/preview', 'Lecture Notes: Abdomen/Pelvis')">
-                        <span class="icon">📝</span><span>Lecture Notes: Abdomen/Pelvis</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Zp-g9AMD6NgiEvW_tpeLm2_cpj1AyEG8/preview', 'Video: Muscles of Shoulder Girdle')">
-                        <span class="icon video-icon">▶️</span><span>Video: Muscles of Shoulder Girdle</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1p9K1agdplfI49J5BN4ZGmkU1GU6sSqq1/preview', 'Video: Muscles of Upper Limb')">
-                        <span class="icon video-icon">▶️</span><span>Video: Muscles of Upper Limb</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_nY4Tnijoe640hpDppK3f4-t8vPcYPB6/preview', 'Lecture Notes: Upper Limb')">
-                        <span class="icon">📝</span><span>Lecture Notes: Upper Limb</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1i4yUlGXKszLXhKO9HzZR2ud0O3TH1Flg/preview', 'Video: Gluteal, Thigh, Leg Muscles')">
-                        <span class="icon video-icon">▶️</span><span>Video: Gluteal, Thigh, Leg Muscles</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1hp-iS1JZ0pIKs0KPESLLxTvx7y5STnLo/preview', 'Video: Leg Compartments & Foot')">
-                        <span class="icon video-icon">▶️</span><span>Video: Leg Compartments & Foot</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1fUnjaLcQyGVxsyw38fAQG7bfJy_Vrr90/preview', 'Lecture Notes: Lower Limb')">
-                        <span class="icon">📝</span><span>Lecture Notes: Lower Limb</span>
-                    </div>
-
-                    <div class="resource-btn quiz" onclick="startQuiz(7)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-<div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 8 - THE RENAL SYSTEM <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1kmmyy5WYzxj4H0NLbVMxkmjM1Clwy2Fh/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1vhyUdOpH4nSLgBOGZ5iAIIpsTUUysCth/preview', 'Introduction, Kidney')">
-                        <span class="icon video-icon">▶️</span><span>Introduction, Kidney</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5W74&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3sG&paid=o_10a88be0&ui-bd.link=false', '3D Model: The Renal System')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: The Renal System</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5W76&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3sW&paid=o_10a88be0&ui-bd.link=false', '3D Model: Kidney Coronal Cross Section')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Kidney Coronal Cross Section</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1w5FhsuNnh2-xYO0K3XOJ9Jkifujnpib1/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/14Hf9dYtVB0vcgcK62TcHl-wgFkH0svMW/preview', 'Nephron')">
-                        <span class="icon video-icon">▶️</span><span>Nephron</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5W75&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3sS&paid=o_10a88be0&ui-bd.link=false', '3D Model: Nephron')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Nephron</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1QYHwhJfT3nsq65BQyjNyEZQyIjS2Tudb/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1GyLCexgijItmFDnqaRSRjyDOWwvsKH9o/preview', 'Formation of Urine')">
-                        <span class="icon video-icon">▶️</span><span>Formation of Urine</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1wGdhW4mIZ02dbIJBvl5MboOcJypExzpT/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1HVwzo7dyaHPjU5SEMewuSj42uDybT_YC/preview', 'Urinary Bladder')">
-                        <span class="icon video-icon">▶️</span><span>Urinary Bladder</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1VbyhtTIN9wrBBXJBcwMQcWzrIqiJr8Ax/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1KI-ghnLb9rT_nF-uHch4rzyFlgNMPZYS/preview', 'Ureters & Urethra')">
-                        <span class="icon video-icon">▶️</span><span>Ureters & Urethra</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1M4pfLTPc4F00kOZi_Duh46B8CgOr2Tfm/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1iqof5c5iQ15Q7D4cKimJp1iTBiIu_rEX/preview', 'Autoregulation of the Kidney')">
-                        <span class="icon video-icon">▶️</span><span>Regulation of Renal Function : Autoregulation of the Kidney</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Mj-pmY141JZqUmkfS6watsphxsRaCfG-/preview', 'Osmolarity and Volume')">
-                        <span class="icon video-icon">▶️</span><span>Regulation of Renal Function : Role of Kidney in Regulation of Osmolarity and Volume</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1LA_fJ1OlFg-aHxKkGLLGRA8O191puYbq/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(8)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 8 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 9 - THE REPRODUCTIVE SYSTEM <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1I08cHKZSrgoBuj2QBXFFSE46LctHrQVG/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1I8362MikaAHti6dN6VqYy_2Xc1GAOEj2/preview', 'Intro Female Repro')">
-                        <span class="icon video-icon">▶️</span><span>Introduction to Female Reproductive System</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5WBF&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt5AC&paid=o_10a88be0&ui-bd.link=false', '3D Model: Reproductive System')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: The Reproductive System</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1hA4yjYloPMWbt1_quImXWq290hZwB_Pr/preview', 'Blood Supply')">
-                        <span class="icon video-icon">▶️</span><span>Blood Supply to Reproductive Organs</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Q2uaIXGZeYdefhHaOQHB4La7VcU7zYSs/preview', 'Vagina')">
-                        <span class="icon video-icon">▶️</span><span>Vagina</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Sps6NRMuDs3_YI9_rCfSp4g6-SmU68Al/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/18tPRHR6HZ7xgI33sy083g0ZhzlM4wKSI/preview', 'Ovaries')">
-                        <span class="icon video-icon">▶️</span><span>Ovaries</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5WBF&ui-anatomy-descriptions=true&uaid=Lt5AC', '3D Model: Uterus')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Uterus</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1sT9ooUeG2Hjb-I4lOojZ7ButvYYh91JO/preview', 'Supports of Uterus')">
-                        <span class="icon video-icon">▶️</span><span>Supports of the Uterus</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5WBH&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt5Av&paid=o_10a88be0&ui-bd.link=false', '3D Model: Female Breast')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Female Breast</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1bYLV6Hu4-LckHmObgAf-nildLdIllt_1/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1bjVDhPVR4nUuPvtsq6SEwLQ7eSKhHZmX/preview', 'Menstrual Cycle')">
-                        <span class="icon video-icon">▶️</span><span>Menstrual Cycle</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1SKiI6Nl70N7my_rp6e_R_NmpXgKtIRFo/preview', 'Oogenesis')">
-                        <span class="icon video-icon">▶️</span><span>Oogenesis</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1-tTembIws0qGE-Ux9sdVyjHSr9XUni_U/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5WBI&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt5BC&paid=o_10a88be0&ui-bd.link=false', '3D Model: Male Reproductive System')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Male Reproductive System</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1I91niF_dCUutmMkRvSYSGbYlQ6WSssXJ/preview', 'Intro Male Repro')">
-                        <span class="icon video-icon">▶️</span><span>Male Reproductive System Introduction</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1WAZEZNkS8q3TA7hMfblZW0QQiWCEbwGO/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1MOp3NdW4WfTFgpD7A-z-8ibRKw6FLCSg/preview', 'Epididymis')">
-                        <span class="icon video-icon">▶️</span><span>Epididymis</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/17TmL4aHPbmDJTKb8BPBN8f1CI2VuXV1m/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5WBJ&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt5BM&paid=o_10a88be0&ui-bd.link=false', '3D Model: Prostate Cross Section')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Prostate: Sagittal Cross Section</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1zCIOwHcNDcGCstfHZzxqQmyp1PSY0wq4/preview', 'Spermatogenesis')">
-                        <span class="icon video-icon">▶️</span><span>Physiology: Spermatogenesis</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1-9CZj_02HT91clc8w5me4YBCGBVMPinJ/preview', 'Sperm Structure')">
-                        <span class="icon video-icon">▶️</span><span>Physiology: Sperm and Semen Structure</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1uQ3c-z2ZnZw7lSiQPN9OdnQigewELq_K/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(9)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 9 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="unit-container">
-            <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                UNIT 10 - THE NERVOUS SYSTEM <span>🔽</span>
-            </div>
-            <div class="unit-content">
-                <div class="subsection">
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5WMM&ui-anatomy-descriptions=true&uaid=Lt7pQ', '3D Model: Neuron')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Neuron</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1mhFnNF9ZWRXOIRmbFFlL0nY5dKijPyVB/preview', 'Detailed Notes')">
-                        <span class="icon">📚</span><span>Detailed Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1r0exklx5ryyVG_NaT1_LZ13aa2LRbjLq/preview', 'Intro & Neuron')">
-                        <span class="icon video-icon">▶️</span><span>Introduction to Nervous System & Structure of Neuron</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1rxxeNDqqIhoQuP3TeJfUXgyQzyfkh3wQ/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5WBM&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt5CF&paid=o_10a88be0&ui-bd.link=false', '3D Model: CNS')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: CNS (Basal Ganglia, Cerebrum)</span>
-                    </div>
-                    <div class="resource-btn model" onclick="openResource('model', 'https://human.biodigital.com/viewer/?id=5WBU&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt5Ds&paid=o_10a88be0&ui-bd.link=false', '3D Model: Brain')">
-                        <span class="icon model-icon">🧊</span><span>3D Model: Brain (Cerebellum, Brain Stem)</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1jlxkdv4ClaVP4iTWBNlZKojwg9dZN8GH/preview', 'Meninges')">
-                        <span class="icon video-icon">▶️</span><span>CNS AND The Brain : Structure of Brain - Meninges</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1xKJPUa-UiaHd1pCD_khApZqWp08VDrK9/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1K_0JLoUw5TTmV78uEYZ7nM7U44XE0EV9/preview', 'Spinal Cord')">
-                        <span class="icon video-icon">▶️</span><span>The Structure of the Spinal Cord & Spinal Nerves</span>
-                    </div>
-                    <div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1tLDfVSdMbul11iXlUApemFhq1UpZgoD6/preview', 'Lecture Notes')">
-                        <span class="icon">📝</span><span>Lecture Notes</span>
-                    </div>
-                    <div class="resource-btn quiz" onclick="startQuiz(10)">
-                        <span class="icon quiz-icon">✍️</span><span>Take Unit 10 Quiz</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    <div id="app-modal" class="modal-overlay">
-        <div class="modal-header">
-            <div id="modal-title" class="modal-title">Resource</div>
-            <button class="btn-close" onclick="closeModal()">Close X</button>
-        </div>
-        <div id="modal-body" class="modal-body"></div>
+  </div>
+</section>
+<main class="main">
+  <div class="divider"><span>Course Units</span></div>
+  
+  <div class="uc" id="u1" data-open="false">
+    <button class="ubtn" onclick="tog('u1')">
+      <div class="upill"><span>Unit 1</span></div>
+      <div class="uinfo"><div class="uname">Anatomical Terms & Org</div><div class="umeta">Notes · Videos · 3D Models · Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u1">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1kBEniLShpJ5aNYXwxOBv7tvC4-w-vD5V/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 1 Overview</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1q39lDL7hKo_vmSwuBKhVstPXr7m5_86p/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Intro & Cell Structure</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5WBX&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt5F3&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Male Anatomy</small></div></button>
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5WBY&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt5FI&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Female Anatomy</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1IWL4S5kumnZVNBIUB-sEMZVIEKQG6pre/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Cell Structure</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1CIO4-Ztrru3s_cNoDjx1TlxpN2jE8eeR/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>The Cell</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5WMM&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt7pQ&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Cell Layout</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1w4E1c8Is1z4Yo2S6XewLgLHA5gQkOwum/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Cell Division</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1Igg8WpoIsghGvDyA0iTrPDbBd3UGd1uh/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Mitosis & Meiosis</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1nCtsob7hw4vKRwvGeuVUlBEFCCMU8-sV/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Meiosis I & II</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1kyh1YNyGaprCHRhmsRvYU39SKnaes0ZO/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Mitosis/Meiosis</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1rPbXeMjGBAoHhWuSpaKhBCXF7kJT6Ian/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Epithelial/Connective</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/140zaAHcIUvLdg9qCX0XD-49ODaZ-m9yL/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Nervous Tissue</small></div></button>
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5WBK&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt5Bb&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Neuron</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1VE6-YBuvTBxqT6OHxxNThl3B0ySvlyb6/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Tissue</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1sil8smYE73u7qf7RSM_GjXX292cfEksS/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Bony Landmarks</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5WMQ&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt7pj&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Injection Site</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(1)"><div class="rico">✍️</div><div class="rtxt">Unit 1 Quiz<small>10 questions</small></div></button>
+      </div>
     </div>
+  </div>
+
+  <div class="uc" id="u2" data-open="false">
+    <button class="ubtn" onclick="tog('u2')">
+      <div class="upill"><span>Unit 2</span></div>
+      <div class="uinfo"><div class="uname">The Respiratory System</div><div class="umeta">Notes · Videos · 3D Models · Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u2">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1zp3SJthkar0Zqglf8gIQuMjJYfWXM2EY/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Respiratory System</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1OmqEhegf9VlGH867yfBHEAQIiD9MeGFQ/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Respiratory Organs</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5W6e&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt3nI&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Respiratory Sys</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1-X7K8jrTv_fs1yWybyNFmlannrDtqkBr/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Respiratory</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1F5xDrsluhcpwW4j0DnwC-_nKpACD4X-I/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Nose</small></div></button>
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5W6l&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3oG&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Nose</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/12XDRcQHkRqEnxXbp5xkJ13Cn9DDNyF7C/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Nose</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1wqEMaMgy1NWL4CZkjcXwfz5cE8_ETHvu/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pharynx</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5W6o&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3oo&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Pharynx</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1AbrT7cTpXsK0ZRT_hY4ugcQGqOTeJySl/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Pharynx</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1n9OWWqcH36vcyFHwtLkHfJIHOoOAkAGr/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Larynx</small></div></button>
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5W6p&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3p2&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Larynx</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1kWOjX4RhYHLZfXLD-IDZ-eqlpluXJHsw/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Larynx</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1ibk0bGro4EYt-EakAnC_AuSkjMv0GXbN/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Trachea</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5W6q&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3pJ&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Trachea</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1xwLwFOwcEQvkL0NKhSnIwUr2RRB_f5lL/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Trachea</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(2)"><div class="rico">✍️</div><div class="rtxt">Unit 2 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u3" data-open="false">
+    <button class="ubtn" onclick="tog('u3')">
+      <div class="upill"><span>Unit 3</span></div>
+      <div class="uinfo"><div class="uname">The Digestive System</div><div class="umeta">Notes · Videos · 3D Models · Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u3">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1GsEUK__ngjD9CBpWue0CqXO56mmjxGZ0/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Digestive System</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1J2veHwrJ83i1Qi63iMS818hWGEAkRkAA/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>System Overview</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5W6r&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3pi&paid=o_10a88be0')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>GI Tract</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/16RBc_T9lXiDLqM7gksV3mGWRSe-LwPvb/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Digestive</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1UetDfsIJoGgdj_5BFmPsRCUrBbyJosfT/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Mouth & Stomach</small></div></button>
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5W6x&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3rI&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Stomach</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1GKJzoRPgOcGUhRQ7NaMes5nojhRm7aSD/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Intestines & Anus</small></div></button>
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5W72&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3s7&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Large Intestine</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5WMR&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt7qF&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Anus & Rectum</small></div></button>
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5WMS&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt7qJ&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Colorectal</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1hMrH-1a31PXc2UlHZ-38fxCkUoVIMxRI/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Major Organs</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1Z10EruxmurF-VwMUkp7cH0miycrZIC8X/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Teeth & Tongue</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5W6s&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3qG&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Teeth</small></div></button>
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5W6u&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3qk&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Tongue</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1Ij8j9b45FQdVKea3NH75h59hrtsOGDMW/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Liver & Pancreas</small></div></button>
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5W6x&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3rh&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Liver</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5W71&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3s0&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Gallbladder</small></div></button>
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5W6y&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3rP&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Pancreas</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1IkyDibJYujUNn3i2eF-DEcO2vuIrlQyU/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Accessory Organs</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(3)"><div class="rico">✍️</div><div class="rtxt">Unit 3 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u4" data-open="false">
+    <button class="ubtn" onclick="tog('u4')">
+      <div class="upill"><span>Unit 4</span></div>
+      <div class="uinfo"><div class="uname">Circulatory & Lymphatic</div><div class="umeta">Notes · Videos · 3D Models · Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u4">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1Z-5OBzBGiQ5khWySeLIW79SrvC2B2zqz/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit Overview</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1c2SvDIMfV_2QROjL21zueX2AisClnOJL/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Heart Structure</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5WBX&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt5F3&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Heart/Lungs</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1_AYeDd5O-Vfv2QM3xtoWl8b6LR7YtFU2/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Structure</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1gKLMDmpruJJcDO9I0tVCpNyCs5gPn29N/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Valves</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1RW64cf5CCvO562MfUOSJsEofpH9Af5ta/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Valves</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1YN1R3ORgCOZW7I0zwoCFSReqv--sP1V-/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Conduction/Cycle</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1AKuqG9zZUKHLpE8Y8vpRg-orQa0-D_hA/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Stroke Volume</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1pzDhCdA2HDEynD5ko4FNmzpVKS-GiVJa/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cardiac Output</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1Ec20jwtZzLFfneg0OMqK3FO261zxRM_X/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Physiology</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1CDpZuBMgkCM-CX9603R7-qy4aZh66qqO/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pulmonary/Systemic</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1262O0888IeOjk2uvL1cH_MyHU2DscFy7/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Circulation</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1ZNSmG28SzdSISm_ymQ6lnXtt4jb8uhvm/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Thoracic Aorta</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1yak7PcNQ6ZO2_rbEmUVEb6tl5j81ZgVD/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Aorta</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1EcBwprEnpuWXA53qbBA35OC9On3SPh84/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Venous Upper</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1voG33zrrdYoCKpMsZnQAChgFaVF_FWbp/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Venous Lower</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1zgsHAnG1zEQyIzhClNdLrilPTVNmj_CG/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Veins</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1HnNCXLNOga-LLV0BT_aRLduO2TL3uBnM/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Capillaries</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1FRYKJr2ycOuAPwdSqGFcykwYrHINKrqv/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Organs/Tissues</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1IxEFK4fjEYKfxNvBRiRlMeZIEdiCcbM5/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Spleen/Nodules</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1GwaGnD_sjwzfDm0VvHxfR6nB88TvJVK4/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Lymphatic</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(4)"><div class="rico">✍️</div><div class="rtxt">Unit 4 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u5" data-open="false">
+    <button class="ubtn" onclick="tog('u5')">
+      <div class="upill"><span>Unit 5</span></div>
+      <div class="uinfo"><div class="uname">The Endocrine System</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u5">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1DhUray7ZdgEfZmoSLxK_Ah9-P_y6uA35/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Endocrine</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1RkkA8rAcXeFv8nQVj5MeipFSGSVyavrU/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hypothalamus</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1AMGTE-wphhX8AJq0FqXqrfLJXvXXdEOn/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Intro</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1oxMOZKsEqi9-v3Jkv914haQXIzQEXnMA/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pituitary Ant.</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1cghequtktwARAfKOnVM5skDDTyTZv4hB/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pituitary Post.</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1e6y5TAS8eYquR1Q9Tvi9aAt-aG0IYRJa/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Pituitary</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1apCsaobC9JRzjvKU03zqmfTbE8i1rd_1/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Thyroid Gland</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1_hlHXVYyKgHR4rcITkdZ9Cor-YCTf0ib/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Thyroid</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(5)"><div class="rico">✍️</div><div class="rtxt">Unit 5 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u6" data-open="false">
+    <button class="ubtn" onclick="tog('u6')">
+      <div class="upill"><span>Unit 6</span></div>
+      <div class="uinfo"><div class="uname">The Sensory Organs</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u6">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/10ReXGEjNagS3lQWO4GcQxe9ucmx8a5Fp/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Sensory Organs</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1tfjepPkz0X2V7sIX9HjLzuNG2qamX7MN/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Intro to Sensory</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1R0wYF02yqE8FhWfjFz_lTj1Qj0w8r4vU/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Intro</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1spCTVGLHIx5f8Jlg7dMkc3tIJG7i0-fw/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Epidermis/Dermis</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1h4GZqcD1CAlNE_I8MpHyOhTi2kmHHwBP/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Skin Physiology</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1Zq6UjNapvIayDsSJcRswsDGoiDgtfk1_/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Skin</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1sA3BwCa5sIrlPpRJW1-8lRW_Zmr_XjeP/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Eye Anatomy</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1scrYYbX1oU8BSo22PdnMpPyLZBGPhOg-/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Eye Blood/Nerve</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1qDPttOigYLc_EhGGYM8mhmBXkG7qmJc_/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Eye</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1tFHvLaUNpdfA70hWRL_FVmMMBAOYs2iK/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Ext & Middle Ear</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1l1jQYvsIINMf1TJs-iW6uAD-t29BKyKk/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Inner Ear</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1nIBTV8L9bIjN5IMTdOwTeSgDXVHYMwX7/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Vestibular</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1QnKz-GiH4FArxiLEqhuSbJQlYTarIpgB/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Ear</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1CeReEqjIXSwl5PDACOgWqgvFdioYelhf/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Tongue & Gustation</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1zuHk_9YdInyhjO-OH77m3ZSjTFwu0FSX/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Tongue</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1j7UCi2uBxSXO22cntanx9gJr0aAb8SN3/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Nose Anatomy</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1D4pllkIQX1mQ775x3CqXAhrQpBqewemG/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Nose</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/16q4bQnbziJ7g8oNtfPl8sTCsJF76y1ax/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Smell/Olfaction</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1L9ZfEeHg35IAL_S2nu4hoPw0S6fUcjcL/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Olfaction</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(6)"><div class="rico">✍️</div><div class="rtxt">Unit 6 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u7" data-open="false">
+    <button class="ubtn" onclick="tog('u7')">
+      <div class="upill"><span>Unit 7</span></div>
+      <div class="uinfo"><div class="uname">The Musculoskeletal System</div><div class="umeta">Notes · Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u7">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1uhJdU-uVTxQYK_yBX4mnSNMUvuy6CDCE/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Musculoskeletal</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1FlwIyxMB4TFQjZSPYoMH9I0tntlHUqV0/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Skeleton Types</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1lmL0DQ7pdhGmB_KbG2-gcsl4j_99x0Qs/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Skeleton</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1GlO-oknavSyl9c7LQiFqWXiox7OPsJJY/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Skull Bones</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1iyWGQ36ydtPk-d8AM-W2oYTl8ZEfrMJB/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Sphenoid/Ethmoid</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1IKUDAxphmxHDBbYCN-eQN76Qf2N3SQue/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Skull</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1AETKnAQRe44iMP-rmroqQ3SndtV6lhhk/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Facial Bones</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1FymG_OrCS9wJ9TW7J2fMPddDDjTF5X6U/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Facial</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1agTiGLA13gZiBpZjnVtOy7bhucniIghn/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Ribs/Sternum</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1yHgv14D3l4KpCE1ohLsQm8DRZ_0pPjp0/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Vertebral Column</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1gOvuFr_0qj6jAnx1RfDPsOEKoNzDLzAS/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Thorax/Vertebra</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1S0nR4p6Kqy3asO5p2AP729AkGC3_n-bv/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Appendicular</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1W0SgH2BthadBVMlve9p0ESUeg8OcvJwX/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Upper Arm</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1xkGJiVJW9enQPQdCgpqFNK0jsQzntSGX/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Upper Limb</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1kGBTsWrYrPjABluub9l0e_3gsZIWxlJP/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pelvic Girdle</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1d9dc01Ib8C9Iz0lvnKv5opAB4VlffT77/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Femur/Patella</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/160iJRItKSaoZy6gexqFYjTEQGQT9Zh29/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Fibula/Tarsals</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1tgVPdQxo4uJXC_Js5YH5HR1rgKVpzxeB/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Lower Limb</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1NNbFQwSh2pow3kzGaHmczqfTtRHHhyMQ/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Head/Scalp Muscles</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1xBYgN3fEL2PeHiKD1r7EOxVeoSbzzydK/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Nose/Mouth Muscles</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1OKPagZy19z7Xw0zpol4QIIshRdEXaiwX/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Head Muscles</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1zaSr6Zr1gmdYBg4ySTMTIK5Jmg_jK9rI/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Neck/Thorax</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1cNnQKrTNKrfGR4Oob6JvtJ8cc63YUghY/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Neck/Thorax</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1awZPGUvAr_bQi9N8z7dUE7hYsHiamNww/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Abdomen Muscles</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/14inZNwxWOS4U4lU_8lZGsI46aA0nFWuJ/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pelvis Muscles</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1XW9XQTguFmqmqRN7PdtK0emx0nsvipG-/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Abdomen/Pelvis</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1Zp-g9AMD6NgiEvW_tpeLm2_cpj1AyEG8/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Shoulder Girdle</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1p9K1agdplfI49J5BN4ZGmkU1GU6sSqq1/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Upper Limb Musc.</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1_nY4Tnijoe640hpDppK3f4-t8vPcYPB6/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Upper Limb</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1i4yUlGXKszLXhKO9HzZR2ud0O3TH1Flg/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Gluteal/Thigh</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1hp-iS1JZ0pIKs0KPESLLxTvx7y5STnLo/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Leg Compartments</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1fUnjaLcQyGVxsyw38fAQG7bfJy_Vrr90/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Lower Limb</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(7)"><div class="rico">✍️</div><div class="rtxt">Unit 7 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u8" data-open="false">
+    <button class="ubtn" onclick="tog('u8')">
+      <div class="upill"><span>Unit 8</span></div>
+      <div class="uinfo"><div class="uname">The Renal System</div><div class="umeta">Notes · Videos · 3D Models · Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u8">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1kmmyy5WYzxj4H0NLbVMxkmjM1Clwy2Fh/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Renal System</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1vhyUdOpH4nSLgBOGZ5iAIIpsTUUysCth/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Intro & Kidney</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5W74&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3sG&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>The Renal System</small></div></button>
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5W76&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3sW&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Kidney Section</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1w5FhsuNnh2-xYO0K3XOJ9Jkifujnpib1/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Kidney</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/14Hf9dYtVB0vcgcK62TcHl-wgFkH0svMW/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Nephron</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5W75&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=Lt3sS&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Nephron</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1QYHwhJfT3nsq65BQyjNyEZQyIjS2Tudb/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Nephron</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1GyLCexgijItmFDnqaRSRjyDOWwvsKH9o/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Urine Formation</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1wGdhW4mIZ02dbIJBvl5MboOcJypExzpT/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Urine</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1HVwzo7dyaHPjU5SEMewuSj42uDybT_YC/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Urinary Bladder</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1VbyhtTIN9wrBBXJBcwMQcWzrIqiJr8Ax/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Bladder</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1KI-ghnLb9rT_nF-uHch4rzyFlgNMPZYS/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Ureters/Urethra</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1M4pfLTPc4F00kOZi_Duh46B8CgOr2Tfm/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Ureters</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1iqof5c5iQ15Q7D4cKimJp1iTBiIu_rEX/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Autoregulation</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1Mj-pmY141JZqUmkfS6watsphxsRaCfG-/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Osmolarity</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1LA_fJ1OlFg-aHxKkGLLGRA8O191puYbq/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Regulation</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(8)"><div class="rico">✍️</div><div class="rtxt">Unit 8 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u9" data-open="false">
+    <button class="ubtn" onclick="tog('u9')">
+      <div class="upill"><span>Unit 9</span></div>
+      <div class="uinfo"><div class="uname">The Reproductive System</div><div class="umeta">Notes · Videos · 3D Models · Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u9">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1I08cHKZSrgoBuj2QBXFFSE46LctHrQVG/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Reproductive</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1I8362MikaAHti6dN6VqYy_2Xc1GAOEj2/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Intro Female Repro</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5WBF&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt5AC&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Reproductive Sys</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1hA4yjYloPMWbt1_quImXWq290hZwB_Pr/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Blood Supply</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1Q2uaIXGZeYdefhHaOQHB4La7VcU7zYSs/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Vagina</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1Sps6NRMuDs3_YI9_rCfSp4g6-SmU68Al/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Vagina</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/18tPRHR6HZ7xgI33sy083g0ZhzlM4wKSI/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Ovaries</small></div></button>
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5WBF&ui-anatomy-descriptions=true&uaid=Lt5AC')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Uterus</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1sT9ooUeG2Hjb-I4lOojZ7ButvYYh91JO/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Uterus Supports</small></div></button>
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5WBH&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt5Av&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Female Breast</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1bYLV6Hu4-LckHmObgAf-nildLdIllt_1/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Uterus</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1bjVDhPVR4nUuPvtsq6SEwLQ7eSKhHZmX/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Menstrual Cycle</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1SKiI6Nl70N7my_rp6e_R_NmpXgKtIRFo/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Oogenesis</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1-tTembIws0qGE-Ux9sdVyjHSr9XUni_U/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Cycle</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5WBI&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt5BC&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Male Repro Sys</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1I91niF_dCUutmMkRvSYSGbYlQ6WSssXJ/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Intro Male Repro</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1WAZEZNkS8q3TA7hMfblZW0QQiWCEbwGO/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Male System</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1MOp3NdW4WfTFgpD7A-z-8ibRKw6FLCSg/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Epididymis</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/17TmL4aHPbmDJTKb8BPBN8f1CI2VuXV1m/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Epididymis</small></div></button>
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5WBJ&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt5BM&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Prostate Section</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1zCIOwHcNDcGCstfHZzxqQmyp1PSY0wq4/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Spermatogenesis</small></div></button>
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1-9CZj_02HT91clc8w5me4YBCGBVMPinJ/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Sperm Structure</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1uQ3c-z2ZnZw7lSiQPN9OdnQigewELq_K/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Sperm</small></div></button>
+        <button class="rbtn quiz" onclick="openQuiz(9)"><div class="rico">✍️</div><div class="rtxt">Unit 9 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u10" data-open="false">
+    <button class="ubtn" onclick="tog('u10')">
+      <div class="upill"><span>Unit 10</span></div>
+      <div class="uinfo"><div class="uname">The Nervous System</div><div class="umeta">Notes · Videos · 3D Models · Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u10">
+      <div class="rrow">
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5WMM&ui-anatomy-descriptions=true&uaid=Lt7pQ')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Neuron</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1mhFnNF9ZWRXOIRmbFFlL0nY5dKijPyVB/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Nervous System</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1r0exklx5ryyVG_NaT1_LZ13aa2LRbjLq/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Intro & Neuron</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1rxxeNDqqIhoQuP3TeJfUXgyQzyfkh3wQ/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Neuron</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5WBM&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt5CF&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>CNS System</small></div></button>
+        <button class="rbtn model" onclick="openLink('https://human.biodigital.com/viewer/?id=5WBU&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=Lt5Ds&paid=o_10a88be0&ui-bd.link=false')"><div class="rico">🧊</div><div class="rtxt">3D Model<small>Brain</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1jlxkdv4ClaVP4iTWBNlZKojwg9dZN8GH/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Meninges</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1xKJPUa-UiaHd1pCD_khApZqWp08VDrK9/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Meninges</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1K_0JLoUw5TTmV78uEYZ7nM7U44XE0EV9/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Spinal Cord</small></div></button>
+        <button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1tLDfVSdMbul11iXlUApemFhq1UpZgoD6/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Spinal Cord</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(10)"><div class="rico">✍️</div><div class="rtxt">Unit 10 Quiz<small>10 questions</small></div></button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div class="qoverlay" id="qmodal">
+  <div class="qscrim" onclick="closeQuiz()"></div>
+  <div class="qpanel">
+    <div class="qhead">
+      <div class="qhead-top"><div class="qtitle" id="qtitle">Quiz</div><button class="qclose" onclick="closeQuiz()">✕</button></div>
+      <div class="qpips" id="qpips"></div>
+    </div>
+    <div class="qbody" id="qbody"></div>
+  </div>
+</div>
 
 <script>
-    const QUIZ_DATA = {
-        1: [
-            { q: "Which part of the cell is known as the 'powerhouse'?", o: ["Nucleus", "Ribosome", "Mitochondria", "Golgi Body"], a: 2 },
-            { q: "The anatomical term 'distal' refers to:", o: ["Closer to the point of attachment", "Farther from the point of attachment", "Toward the head", "Toward the feet"], a: 1 },
-            { q: "Mitosis results in:", o: ["Two identical daughter cells", "Four distinct haploid cells", "One large cell", "Dead cells"], a: 0 },
-            { q: "Which tissue type covers body surfaces and lines cavities?", o: ["Connective", "Muscle", "Nervous", "Epithelial"], a: 3 },
-            { q: "The structural and functional unit of the nervous system is the:", o: ["Nephron", "Neuron", "Alveoli", "Osteon"], a: 1 },
-            { q: "Meiosis occurs in:", o: ["Somatic cells", "Liver cells", "Germ/Sex cells", "Skin cells"], a: 2 },
-            { q: "The plane that divides the body into anterior and posterior parts is:", o: ["Sagittal", "Transverse", "Coronal (Frontal)", "Oblique"], a: 2 },
-            { q: "Adipose tissue is a type of:", o: ["Epithelial tissue", "Connective tissue", "Muscle tissue", "Nervous tissue"], a: 1 },
-            { q: "The control center of the cell containing DNA is the:", o: ["Nucleus", "Cytoplasm", "Lysosome", "Vacuole"], a: 0 },
-            { q: "Skeletal muscle is:", o: ["Involuntary and smooth", "Voluntary and striated", "Involuntary and striated", "Voluntary and smooth"], a: 1 }
-        ],
-        2: [
-            { q: "Gas exchange takes place in the:", o: ["Trachea", "Bronchi", "Alveoli", "Pharynx"], a: 2 },
-            { q: "The 'voice box' is anatomically known as the:", o: ["Pharynx", "Larynx", "Trachea", "Esophagus"], a: 1 },
-            { q: "The right lung has how many lobes?", o: ["Two", "Three", "Four", "One"], a: 1 },
-            { q: "The flap that prevents food from entering the trachea is the:", o: ["Uvula", "Epiglottis", "Tonsil", "Glottis"], a: 1 },
-            { q: "The trachea bifurcates into the right and left bronchi at the level of the:", o: ["Carina", "Cricoid", "Hyoid", "Thyroid"], a: 0 },
-            { q: "The primary muscle of respiration is the:", o: ["Intercostal", "Diaphragm", "Abdominal", "Pectoral"], a: 1 },
-            { q: "The pleural cavity contains:", o: ["Air only", "Serous fluid", "Blood", "Mucus"], a: 1 },
-            { q: "The Adam's apple is formed by the:", o: ["Cricoid cartilage", "Thyroid cartilage", "Epiglottis", "Arytenoid cartilage"], a: 1 },
-            { q: "Oxygen is transported in the blood primarily by:", o: ["Plasma", "White blood cells", "Hemoglobin in RBCs", "Platelets"], a: 2 },
-            { q: "Inhalation is an:", o: ["Active process", "Passive process", "Automatic reflex", "None of above"], a: 0 }
-        ],
-        3: [
-            { q: "Which organ produces bile?", o: ["Gallbladder", "Pancreas", "Liver", "Stomach"], a: 2 },
-            { q: "Protein digestion begins in the:", o: ["Mouth", "Stomach", "Small Intestine", "Esophagus"], a: 1 },
-            { q: "The finger-like projections in the small intestine are called:", o: ["Cilia", "Villi", "Flagella", "Ruga"], a: 1 },
-            { q: "Insulin is produced by which part of the pancreas?", o: ["Acini cells", "Islets of Langerhans", "Duct cells", "Liver cells"], a: 1 },
-            { q: "The hardest substance in the human body is:", o: ["Bone", "Enamel", "Dentin", "Cementum"], a: 1 },
-            { q: "Which acid is present in the stomach?", o: ["Sulfuric acid", "Hydrochloric acid (HCl)", "Nitric acid", "Acetic acid"], a: 1 },
-            { q: "The first part of the small intestine is the:", o: ["Jejunum", "Ileum", "Duodenum", "Cecum"], a: 2 },
-            { q: "Bile is stored and concentrated in the:", o: ["Liver", "Gallbladder", "Pancreas", "Spleen"], a: 1 },
-            { q: "Peristalsis refers to:", o: ["Breaking down food", "Wave-like muscle contractions", "Absorbing water", "Chewing"], a: 1 },
-            { q: "The appendix is attached to the:", o: ["Duodenum", "Cecum", "Rectum", "Sigmoid colon"], a: 1 }
-        ],
-        4: [
-            { q: "The muscular layer of the heart is called:", o: ["Pericardium", "Myocardium", "Endocardium", "Epicardium"], a: 1 },
-            { q: "The valve between the right atrium and right ventricle is the:", o: ["Mitral valve", "Tricuspid valve", "Aortic valve", "Pulmonary valve"], a: 1 },
-            { q: "Which blood vessel carries oxygenated blood from the lungs to the heart?", o: ["Pulmonary Artery", "Pulmonary Vein", "Aorta", "Vena Cava"], a: 1 },
-            { q: "The natural pacemaker of the heart is the:", o: ["AV Node", "SA Node", "Bundle of His", "Purkinje Fibers"], a: 1 },
-            { q: "The universal donor blood group is:", o: ["A positive", "B negative", "O negative", "AB positive"], a: 2 },
-            { q: "Exchange of nutrients and gases occurs in the:", o: ["Arteries", "Veins", "Capillaries", "Aorta"], a: 2 },
-            { q: "Systole refers to:", o: ["Relaxation of heart", "Contraction of heart", "Filling of blood", "None"], a: 1 },
-            { q: "The largest artery in the body is the:", o: ["Carotid", "Femoral", "Aorta", "Subclavian"], a: 2 },
-            { q: "Lymph nodes function to:", o: ["Pump blood", "Filter lymph and fight infection", "Digest food", "Produce insulin"], a: 1 },
-            { q: "Normal heart rate is approximately:", o: ["20-40 bpm", "60-100 bpm", "120-140 bpm", "10-20 bpm"], a: 1 }
-        ],
-        5: [
-            { q: "Which gland is known as the 'Master Gland'?", o: ["Thyroid", "Adrenal", "Pituitary", "Pineal"], a: 2 },
-            { q: "Insulin and Glucagon are secreted by the:", o: ["Liver", "Pancreas", "Kidney", "Stomach"], a: 1 },
-            { q: "T3 and T4 hormones are produced by the:", o: ["Parathyroid", "Thyroid", "Thymus", "Ovary"], a: 1 },
-            { q: "The 'Fight or Flight' hormone Adrenaline is secreted by:", o: ["Adrenal Cortex", "Adrenal Medulla", "Pituitary", "Testes"], a: 1 },
-            { q: "Oxytocin is released from the:", o: ["Anterior Pituitary", "Posterior Pituitary", "Thyroid", "Pancreas"], a: 1 },
-            { q: "Which hormone regulates calcium levels in the blood?", o: ["Insulin", "Parathyroid Hormone (PTH)", "Thyroxine", "Cortisol"], a: 1 },
-            { q: "Growth Hormone (GH) is secreted by:", o: ["Anterior Pituitary", "Posterior Pituitary", "Adrenal", "Thyroid"], a: 0 },
-            { q: "The hypothalamus regulates the:", o: ["Heart only", "Pituitary gland", "Lungs", "Muscles"], a: 1 },
-            { q: "Deficiency of iodine leads to:", o: ["Diabetes", "Goiter", "Dwarfism", "Gigantism"], a: 1 },
-            { q: "Cortisol is a type of:", o: ["Steroid hormone", "Protein hormone", "Vitamin", "Mineral"], a: 0 }
-        ],
-        6: [
-            { q: "The white part of the eye is called the:", o: ["Cornea", "Sclera", "Retina", "Iris"], a: 1 },
-            { q: "The sensory receptor for hearing (Organ of Corti) is located in the:", o: ["Outer ear", "Middle ear", "Cochlea (Inner ear)", "Eustachian tube"], a: 2 },
-            { q: "The outermost layer of the skin is the:", o: ["Dermis", "Epidermis", "Hypodermis", "Muscle"], a: 1 },
-            { q: "Olfactory receptors are responsible for:", o: ["Taste", "Sight", "Smell", "Touch"], a: 2 },
-            { q: "The tympanic membrane is also known as the:", o: ["Ear drum", "Ear canal", "Pinna", "Stapes"], a: 0 },
-            { q: "Which layer of the eye contains rods and cones?", o: ["Sclera", "Choroid", "Retina", "Lens"], a: 2 },
-            { q: "The three ossicles in the middle ear are:", o: ["Femur, Tibia, Fibula", "Malleus, Incus, Stapes", "Radius, Ulna, Humerus", "Carpals, Tarsals"], a: 1 },
-            { q: "Taste buds are located on structures called:", o: ["Villi", "Cilia", "Papillae", "Follicles"], a: 2 },
-            { q: "The pigment responsible for skin color is:", o: ["Keratin", "Melanin", "Collagen", "Hemoglobin"], a: 1 },
-            { q: "Balance and equilibrium are functions of the:", o: ["Cochlea", "Vestibular apparatus", "Pinna", "Ear lobe"], a: 1 }
-        ],
-        7: [
-            { q: "The longest bone in the human body is the:", o: ["Humerus", "Tibia", "Femur", "Fibula"], a: 2 },
-            { q: "How many vertebrae are in the cervical region?", o: ["5", "7", "12", "4"], a: 1 },
-            { q: "The shoulder blade is anatomically known as the:", o: ["Clavicle", "Scapula", "Sternum", "Rib"], a: 1 },
-            { q: "Which muscle is responsible for abduction of the arm?", o: ["Biceps", "Deltoid", "Triceps", "Pectoralis"], a: 1 },
-            { q: "The suture joining the frontal and parietal bones is the:", o: ["Sagittal", "Coronal", "Lambdoid", "Squamous"], a: 1 },
-            { q: "Acetabulum is a socket found in the:", o: ["Shoulder girdle", "Pelvic girdle (Hip)", "Skull", "Knee"], a: 1 },
-            { q: "The patella is also known as the:", o: ["Elbow cap", "Knee cap", "Wrist bone", "Ankle bone"], a: 1 },
-            { q: "Muscles are attached to bones by:", o: ["Ligaments", "Tendons", "Cartilage", "Skin"], a: 1 },
-            { q: "The large muscle of the buttocks is the:", o: ["Gluteus Maximus", "Quadriceps", "Hamstrings", "Gastrocnemius"], a: 0 },
-            { q: "The axial skeleton includes the:", o: ["Arms and legs", "Skull, vertebral column, and rib cage", "Hands and feet", "Hip and shoulder"], a: 1 }
-        ],
-        8: [
-            { q: "The functional unit of the kidney is the:", o: ["Neuron", "Nephron", "Alveolus", "Lobe"], a: 1 },
-            { q: "Urine flows from the kidneys to the bladder via the:", o: ["Urethra", "Ureter", "Aorta", "Vena cava"], a: 1 },
-            { q: "Glomerular filtration occurs in the:", o: ["Loop of Henle", "Bowman's Capsule", "Collecting Duct", "Distal Tubule"], a: 1 },
-            { q: "The hormone that regulates water reabsorption in the kidney is:", o: ["Insulin", "ADH (Antidiuretic Hormone)", "Thyroxine", "Glucagon"], a: 1 },
-            { q: "The triangular muscular organ that stores urine is the:", o: ["Kidney", "Ureter", "Urinary Bladder", "Urethra"], a: 2 },
-            { q: "The loop of Henle is found in the:", o: ["Cortex", "Medulla", "Pelvis", "Capsule"], a: 1 },
-            { q: "Normal urine output per day is approximately:", o: ["100-200 ml", "1000-1500 ml", "5000 ml", "10 ml"], a: 1 },
-            { q: "Renin is secreted by the:", o: ["Liver", "Lungs", "Kidneys (JGA cells)", "Heart"], a: 2 },
-            { q: "Which substance is NOT normally found in urine?", o: ["Urea", "Creatinine", "Glucose", "Water"], a: 2 },
-            { q: "The tube conveying urine from the bladder to the exterior is the:", o: ["Ureter", "Urethra", "Nephron", "Tubule"], a: 1 }
-        ],
-        9: [
-            { q: "The primary female sex hormone is:", o: ["Testosterone", "Estrogen", "Adrenaline", "Insulin"], a: 1 },
-            { q: "Fertilization normally occurs in the:", o: ["Uterus", "Ovary", "Fallopian Tube", "Vagina"], a: 2 },
-            { q: "Sperm production takes place in the:", o: ["Prostate", "Seminiferous tubules (Testes)", "Vas deferens", "Penis"], a: 1 },
-            { q: "The inner lining of the uterus is called the:", o: ["Myometrium", "Perimetrium", "Endometrium", "Epithelium"], a: 2 },
-            { q: "The process of releasing an egg from the ovary is:", o: ["Menstruation", "Ovulation", "Fertilization", "Gestation"], a: 1 },
-            { q: "The male gland that surrounds the urethra is the:", o: ["Testis", "Prostate", "Adrenal", "Cowper's gland"], a: 1 },
-            { q: "Testosterone is produced by:", o: ["Sertoli cells", "Leydig cells", "Sperm", "Prostate"], a: 1 },
-            { q: "The normal length of the menstrual cycle is roughly:", o: ["14 days", "28 days", "40 days", "10 days"], a: 1 },
-            { q: "The muscular layer of the uterus responsible for contractions is:", o: ["Endometrium", "Myometrium", "Perimetrium", "Cervix"], a: 1 },
-            { q: "Sperm are stored and matured in the:", o: ["Epididymis", "Vas deferens", "Seminal vesicle", "Urethra"], a: 0 }
-        ],
-        10: [
-            { q: "The Central Nervous System (CNS) consists of:", o: ["Brain and Spinal Cord", "Nerves only", "Brain only", "Spinal cord only"], a: 0 },
-            { q: "The part of the neuron that carries impulses away from the cell body is:", o: ["Dendrite", "Axon", "Nucleus", "Myelin"], a: 1 },
-            { q: "The largest part of the brain is the:", o: ["Cerebellum", "Brain Stem", "Cerebrum", "Medulla"], a: 2 },
-            { q: "The part of the brain responsible for balance and coordination is:", o: ["Cerebrum", "Cerebellum", "Pons", "Midbrain"], a: 1 },
-            { q: "The protective covering of the brain and spinal cord is:", o: ["Pericardium", "Meninges", "Pleura", "Peritoneum"], a: 1 },
-            { q: "There are how many pairs of cranial nerves?", o: ["10", "12", "31", "20"], a: 1 },
-            { q: "The junction between two neurons is called a:", o: ["Node", "Synapse", "Ganglion", "Plexus"], a: 1 },
-            { q: "Reflex actions are primarily controlled by the:", o: ["Brain", "Spinal Cord", "Heart", "Skin"], a: 1 },
-            { q: "The myelin sheath is produced by:", o: ["Schwann cells", "Neurons", "Blood cells", "Bone cells"], a: 0 },
-            { q: "CSF (Cerebrospinal Fluid) flows in the:", o: ["Subdural space", "Subarachnoid space", "Epidural space", "Veins"], a: 1 }
-        ]
-    };
+function goBackToApp(){if(window.parent&&window.parent!==window){window.parent.postMessage({action:'goBack'},'*');}else{history.back();}}
 
-    let currentQuizUnit = 1;
-    let score = 0;
+function openLink(url) {
+  if(!url || url==='COMING SOON' || url===''){ alert('This resource is coming soon!'); return; }
+  let clean = url;
+  if(clean.includes('drive.google.com')){
+      clean = clean.replace(/\/preview.*$/,'').replace(/\/view.*$/,'')+'/view';
+  } else if(clean.includes('human.biodigital.com')) {
+      clean = clean.replace(/\/viewer\//, '/widget/').replace(/\/view\?/, '/widget?');
+  }
+  window.open(clean, '_blank');
+}
 
-    function toggleUnit(header) {
-        const content = header.nextElementSibling;
-        const isExpanded = header.getAttribute('aria-expanded') === 'true';
-        header.setAttribute('aria-expanded', !isExpanded);
-        content.classList.toggle('active');
-    }
+function tog(id){const card=document.getElementById(id);const body=document.getElementById('b-'+id);const open=card.dataset.open==='true';card.dataset.open=String(!open);body.classList.toggle('open',!open);}
 
-    function openResource(type, url, title) {
-        // 1. PUSH HISTORY STATE
-        history.pushState({ modalOpen: true }, null, '#resource');
+const QD={
+1:[
+  { q: "Which part of the cell is known as the 'powerhouse'?", o: ["Nucleus", "Ribosome", "Mitochondria", "Golgi Body"], a: 2 },
+  { q: "The anatomical term 'distal' refers to:", o: ["Closer to the point of attachment", "Farther from the point of attachment", "Toward the head", "Toward the feet"], a: 1 },
+  { q: "Mitosis results in:", o: ["Two identical daughter cells", "Four distinct haploid cells", "One large cell", "Dead cells"], a: 0 },
+  { q: "Which tissue type covers body surfaces and lines cavities?", o: ["Connective", "Muscle", "Nervous", "Epithelial"], a: 3 },
+  { q: "The structural and functional unit of the nervous system is the:", o: ["Nephron", "Neuron", "Alveoli", "Osteon"], a: 1 },
+  { q: "Meiosis occurs in:", o: ["Somatic cells", "Liver cells", "Germ/Sex cells", "Skin cells"], a: 2 },
+  { q: "The plane that divides the body into anterior and posterior parts is:", o: ["Sagittal", "Transverse", "Coronal (Frontal)", "Oblique"], a: 2 },
+  { q: "Adipose tissue is a type of:", o: ["Epithelial tissue", "Connective tissue", "Muscle tissue", "Nervous tissue"], a: 1 },
+  { q: "The control center of the cell containing DNA is the:", o: ["Nucleus", "Cytoplasm", "Lysosome", "Vacuole"], a: 0 },
+  { q: "Skeletal muscle is:", o: ["Involuntary and smooth", "Voluntary and striated", "Involuntary and striated", "Voluntary and smooth"], a: 1 }
+],
+2:[
+  { q: "Gas exchange takes place in the:", o: ["Trachea", "Bronchi", "Alveoli", "Pharynx"], a: 2 },
+  { q: "The 'voice box' is anatomically known as the:", o: ["Pharynx", "Larynx", "Trachea", "Esophagus"], a: 1 },
+  { q: "The right lung has how many lobes?", o: ["Two", "Three", "Four", "One"], a: 1 },
+  { q: "The flap that prevents food from entering the trachea is the:", o: ["Uvula", "Epiglottis", "Tonsil", "Glottis"], a: 1 },
+  { q: "The trachea bifurcates into the right and left bronchi at the level of the:", o: ["Carina", "Cricoid", "Hyoid", "Thyroid"], a: 0 },
+  { q: "The primary muscle of respiration is the:", o: ["Intercostal", "Diaphragm", "Abdominal", "Pectoral"], a: 1 },
+  { q: "The pleural cavity contains:", o: ["Air only", "Serous fluid", "Blood", "Mucus"], a: 1 },
+  { q: "The Adam's apple is formed by the:", o: ["Cricoid cartilage", "Thyroid cartilage", "Epiglottis", "Arytenoid cartilage"], a: 1 },
+  { q: "Oxygen is transported in the blood primarily by:", o: ["Plasma", "White blood cells", "Hemoglobin in RBCs", "Platelets"], a: 2 },
+  { q: "Inhalation is an:", o: ["Active process", "Passive process", "Automatic reflex", "None of above"], a: 0 }
+],
+3:[
+  { q: "Which organ produces bile?", o: ["Gallbladder", "Pancreas", "Liver", "Stomach"], a: 2 },
+  { q: "Protein digestion begins in the:", o: ["Mouth", "Stomach", "Small Intestine", "Esophagus"], a: 1 },
+  { q: "The finger-like projections in the small intestine are called:", o: ["Cilia", "Villi", "Flagella", "Ruga"], a: 1 },
+  { q: "Insulin is produced by which part of the pancreas?", o: ["Acini cells", "Islets of Langerhans", "Duct cells", "Liver cells"], a: 1 },
+  { q: "The hardest substance in the human body is:", o: ["Bone", "Enamel", "Dentin", "Cementum"], a: 1 },
+  { q: "Which acid is present in the stomach?", o: ["Sulfuric acid", "Hydrochloric acid (HCl)", "Nitric acid", "Acetic acid"], a: 1 },
+  { q: "The first part of the small intestine is the:", o: ["Jejunum", "Ileum", "Duodenum", "Cecum"], a: 2 },
+  { q: "Bile is stored and concentrated in the:", o: ["Liver", "Gallbladder", "Pancreas", "Spleen"], a: 1 },
+  { q: "Peristalsis refers to:", o: ["Breaking down food", "Wave-like muscle contractions", "Absorbing water", "Chewing"], a: 1 },
+  { q: "The appendix is attached to the:", o: ["Duodenum", "Cecum", "Rectum", "Sigmoid colon"], a: 1 }
+],
+4:[
+  { q: "The muscular layer of the heart is called:", o: ["Pericardium", "Myocardium", "Endocardium", "Epicardium"], a: 1 },
+  { q: "The valve between the right atrium and right ventricle is the:", o: ["Mitral valve", "Tricuspid valve", "Aortic valve", "Pulmonary valve"], a: 1 },
+  { q: "Which blood vessel carries oxygenated blood from the lungs to the heart?", o: ["Pulmonary Artery", "Pulmonary Vein", "Aorta", "Vena Cava"], a: 1 },
+  { q: "The natural pacemaker of the heart is the:", o: ["AV Node", "SA Node", "Bundle of His", "Purkinje Fibers"], a: 1 },
+  { q: "The universal donor blood group is:", o: ["A positive", "B negative", "O negative", "AB positive"], a: 2 },
+  { q: "Exchange of nutrients and gases occurs in the:", o: ["Arteries", "Veins", "Capillaries", "Aorta"], a: 2 },
+  { q: "Systole refers to:", o: ["Relaxation of heart", "Contraction of heart", "Filling of blood", "None"], a: 1 },
+  { q: "The largest artery in the body is the:", o: ["Carotid", "Femoral", "Aorta", "Subclavian"], a: 2 },
+  { q: "Lymph nodes function to:", o: ["Pump blood", "Filter lymph and fight infection", "Digest food", "Produce insulin"], a: 1 },
+  { q: "Normal heart rate is approximately:", o: ["20-40 bpm", "60-100 bpm", "120-140 bpm", "10-20 bpm"], a: 1 }
+],
+5:[
+  { q: "Which gland is known as the 'Master Gland'?", o: ["Thyroid", "Adrenal", "Pituitary", "Pineal"], a: 2 },
+  { q: "Insulin and Glucagon are secreted by the:", o: ["Liver", "Pancreas", "Kidney", "Stomach"], a: 1 },
+  { q: "T3 and T4 hormones are produced by the:", o: ["Parathyroid", "Thyroid", "Thymus", "Ovary"], a: 1 },
+  { q: "The 'Fight or Flight' hormone Adrenaline is secreted by:", o: ["Adrenal Cortex", "Adrenal Medulla", "Pituitary", "Testes"], a: 1 },
+  { q: "Oxytocin is released from the:", o: ["Anterior Pituitary", "Posterior Pituitary", "Thyroid", "Pancreas"], a: 1 },
+  { q: "Which hormone regulates calcium levels in the blood?", o: ["Insulin", "Parathyroid Hormone (PTH)", "Thyroxine", "Cortisol"], a: 1 },
+  { q: "Growth Hormone (GH) is secreted by:", o: ["Anterior Pituitary", "Posterior Pituitary", "Adrenal", "Thyroid"], a: 0 },
+  { q: "The hypothalamus regulates the:", o: ["Heart only", "Pituitary gland", "Lungs", "Muscles"], a: 1 },
+  { q: "Deficiency of iodine leads to:", o: ["Diabetes", "Goiter", "Dwarfism", "Gigantism"], a: 1 },
+  { q: "Cortisol is a type of:", o: ["Steroid hormone", "Protein hormone", "Vitamin", "Mineral"], a: 0 }
+],
+6:[
+  { q: "The white part of the eye is called the:", o: ["Cornea", "Sclera", "Retina", "Iris"], a: 1 },
+  { q: "The sensory receptor for hearing (Organ of Corti) is located in the:", o: ["Outer ear", "Middle ear", "Cochlea (Inner ear)", "Eustachian tube"], a: 2 },
+  { q: "The outermost layer of the skin is the:", o: ["Dermis", "Epidermis", "Hypodermis", "Muscle"], a: 1 },
+  { q: "Olfactory receptors are responsible for:", o: ["Taste", "Sight", "Smell", "Touch"], a: 2 },
+  { q: "The tympanic membrane is also known as the:", o: ["Ear drum", "Ear canal", "Pinna", "Stapes"], a: 0 },
+  { q: "Which layer of the eye contains rods and cones?", o: ["Sclera", "Choroid", "Retina", "Lens"], a: 2 },
+  { q: "The three ossicles in the middle ear are:", o: ["Femur, Tibia, Fibula", "Malleus, Incus, Stapes", "Radius, Ulna, Humerus", "Carpals, Tarsals"], a: 1 },
+  { q: "Taste buds are located on structures called:", o: ["Villi", "Cilia", "Papillae", "Follicles"], a: 2 },
+  { q: "The pigment responsible for skin color is:", o: ["Keratin", "Melanin", "Collagen", "Hemoglobin"], a: 1 },
+  { q: "Balance and equilibrium are functions of the:", o: ["Cochlea", "Vestibular apparatus", "Pinna", "Ear lobe"], a: 1 }
+],
+7:[
+  { q: "The longest bone in the human body is the:", o: ["Humerus", "Tibia", "Femur", "Fibula"], a: 2 },
+  { q: "How many vertebrae are in the cervical region?", o: ["5", "7", "12", "4"], a: 1 },
+  { q: "The shoulder blade is anatomically known as the:", o: ["Clavicle", "Scapula", "Sternum", "Rib"], a: 1 },
+  { q: "Which muscle is responsible for abduction of the arm?", o: ["Biceps", "Deltoid", "Triceps", "Pectoralis"], a: 1 },
+  { q: "The suture joining the frontal and parietal bones is the:", o: ["Sagittal", "Coronal", "Lambdoid", "Squamous"], a: 1 },
+  { q: "Acetabulum is a socket found in the:", o: ["Shoulder girdle", "Pelvic girdle (Hip)", "Skull", "Knee"], a: 1 },
+  { q: "The patella is also known as the:", o: ["Elbow cap", "Knee cap", "Wrist bone", "Ankle bone"], a: 1 },
+  { q: "Muscles are attached to bones by:", o: ["Ligaments", "Tendons", "Cartilage", "Skin"], a: 1 },
+  { q: "The large muscle of the buttocks is the:", o: ["Gluteus Maximus", "Quadriceps", "Hamstrings", "Gastrocnemius"], a: 0 },
+  { q: "The axial skeleton includes the:", o: ["Arms and legs", "Skull, vertebral column, and rib cage", "Hands and feet", "Hip and shoulder"], a: 1 }
+],
+8:[
+  { q: "The functional unit of the kidney is the:", o: ["Neuron", "Nephron", "Alveolus", "Lobe"], a: 1 },
+  { q: "Urine flows from the kidneys to the bladder via the:", o: ["Urethra", "Ureter", "Aorta", "Vena cava"], a: 1 },
+  { q: "Glomerular filtration occurs in the:", o: ["Loop of Henle", "Bowman's Capsule", "Collecting Duct", "Distal Tubule"], a: 1 },
+  { q: "The hormone that regulates water reabsorption in the kidney is:", o: ["Insulin", "ADH (Antidiuretic Hormone)", "Thyroxine", "Glucagon"], a: 1 },
+  { q: "The triangular muscular organ that stores urine is the:", o: ["Kidney", "Ureter", "Urinary Bladder", "Urethra"], a: 2 },
+  { q: "The loop of Henle is found in the:", o: ["Cortex", "Medulla", "Pelvis", "Capsule"], a: 1 },
+  { q: "Normal urine output per day is approximately:", o: ["100-200 ml", "1000-1500 ml", "5000 ml", "10 ml"], a: 1 },
+  { q: "Renin is secreted by the:", o: ["Liver", "Lungs", "Kidneys (JGA cells)", "Heart"], a: 2 },
+  { q: "Which substance is NOT normally found in urine?", o: ["Urea", "Creatinine", "Glucose", "Water"], a: 2 },
+  { q: "The tube conveying urine from the bladder to the exterior is the:", o: ["Ureter", "Urethra", "Nephron", "Tubule"], a: 1 }
+],
+9:[
+  { q: "The primary female sex hormone is:", o: ["Testosterone", "Estrogen", "Adrenaline", "Insulin"], a: 1 },
+  { q: "Fertilization normally occurs in the:", o: ["Uterus", "Ovary", "Fallopian Tube", "Vagina"], a: 2 },
+  { q: "Sperm production takes place in the:", o: ["Prostate", "Seminiferous tubules (Testes)", "Vas deferens", "Penis"], a: 1 },
+  { q: "The inner lining of the uterus is called the:", o: ["Myometrium", "Perimetrium", "Endometrium", "Epithelium"], a: 2 },
+  { q: "The process of releasing an egg from the ovary is:", o: ["Menstruation", "Ovulation", "Fertilization", "Gestation"], a: 1 },
+  { q: "The male gland that surrounds the urethra is the:", o: ["Testis", "Prostate", "Adrenal", "Cowper's gland"], a: 1 },
+  { q: "Testosterone is produced by:", o: ["Sertoli cells", "Leydig cells", "Sperm", "Prostate"], a: 1 },
+  { q: "The normal length of the menstrual cycle is roughly:", o: ["14 days", "28 days", "40 days", "10 days"], a: 1 },
+  { q: "The muscular layer of the uterus responsible for contractions is:", o: ["Endometrium", "Myometrium", "Perimetrium", "Cervix"], a: 1 },
+  { q: "Sperm are stored and matured in the:", o: ["Epididymis", "Vas deferens", "Seminal vesicle", "Urethra"], a: 0 }
+],
+10:[
+  { q: "The Central Nervous System (CNS) consists of:", o: ["Brain and Spinal Cord", "Nerves only", "Brain only", "Spinal cord only"], a: 0 },
+  { q: "The part of the neuron that carries impulses away from the cell body is:", o: ["Dendrite", "Axon", "Nucleus", "Myelin"], a: 1 },
+  { q: "The largest part of the brain is the:", o: ["Cerebellum", "Brain Stem", "Cerebrum", "Medulla"], a: 2 },
+  { q: "The part of the brain responsible for balance and coordination is:", o: ["Cerebrum", "Cerebellum", "Pons", "Midbrain"], a: 1 },
+  { q: "The protective covering of the brain and spinal cord is:", o: ["Pericardium", "Meninges", "Pleura", "Peritoneum"], a: 1 },
+  { q: "There are how many pairs of cranial nerves?", o: ["10", "12", "31", "20"], a: 1 },
+  { q: "The junction between two neurons is called a:", o: ["Node", "Synapse", "Ganglion", "Plexus"], a: 1 },
+  { q: "Reflex actions are primarily controlled by the:", o: ["Brain", "Spinal Cord", "Heart", "Skin"], a: 1 },
+  { q: "The myelin sheath is produced by:", o: ["Schwann cells", "Neurons", "Blood cells", "Bone cells"], a: 0 },
+  { q: "CSF (Cerebrospinal Fluid) flows in the:", o: ["Subdural space", "Subarachnoid space", "Epidural space", "Veins"], a: 1 }
+]
+};
 
-        const modal = document.getElementById('app-modal');
-        const body = document.getElementById('modal-body');
-        document.getElementById('modal-title').textContent = title;
-        modal.style.display = 'flex';
-        
-        // Clean URL Logic
-        let finalUrl = url;
-        if (url.includes('drive.google.com')) { 
-            finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview'); 
-        }
-        else if (url.includes('human.biodigital.com')) { 
-            if (url.includes('/viewer/')) finalUrl = url.replace('/viewer/', '/widget/');
-            else finalUrl = url.replace('/view', '/widget'); 
-        }
-        
-        // 2. VIDEO SECURITY FIX: Added 'sandbox' with 'allow-same-origin' and 'allow="encrypted-media"'
-        body.innerHTML = `
-            <iframe 
-                class="iframe-res" 
-                src="${finalUrl}" 
-                width="100%" 
-                height="100%" 
-                frameborder="0"
-                sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-presentation"
-                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen">
-            </iframe>`;
-    }
-
-    function startQuiz(unitId) {
-        // PUSH HISTORY STATE
-        history.pushState({ modalOpen: true }, null, '#quiz');
-
-        currentQuizUnit = unitId;
-        score = 0;
-        const questions = QUIZ_DATA[unitId];
-        
-        let html = `
-            <div class="quiz-container">
-                <div class="quiz-header-sticky">
-                    <h2 style="margin:0; color:var(--brand);">Unit ${unitId} Quiz</h2>
-                    <div id="score-display" class="score-badge">Score: 0 / ${questions.length}</div>
-                </div>
-        `;
-        
-        questions.forEach((q, index) => {
-            html += `
-                <div class="question-block">
-                    <p class="quiz-question-text">${index + 1}. ${q.q}</p>
-                    <div class="options-container">
-                        ${q.o.map((opt, optIndex) => `
-                            <div class="quiz-option" onclick="checkAnswer(this, ${unitId}, ${optIndex}, ${q.a})">${opt}</div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        });
-        
-        html += `
-                <button class="btn-quiz" onclick="closeModal()">Close Quiz</button>
-            </div>
-        `;
-        
-        document.getElementById('modal-body').innerHTML = html;
-        document.getElementById('modal-title').textContent = `Unit ${unitId} Quiz`;
-        document.getElementById('app-modal').style.display = 'flex';
-    }
-
-    function checkAnswer(element, unitId, selectedIndex, correctIndex) {
-        if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
-
-        if (selectedIndex === correctIndex) {
-            element.classList.add('correct');
-            score++;
-        } else {
-            element.classList.add('wrong');
-            element.parentElement.children[correctIndex].classList.add('correct');
-        }
-        document.getElementById('score-display').textContent = `Score: ${score} / ${QUIZ_DATA[unitId].length}`;
-    }
-
-    function closeModal() { 
-        const modal = document.getElementById('app-modal');
-        modal.style.display = 'none'; 
-        document.getElementById('modal-body').innerHTML = ""; 
-        
-        // LOGIC: If we have a history state (meaning the modal is open),
-        // we manually go 'Back' to remove that state so the user doesn't get stuck.
-        if ((history.state && history.state.modalOpen) || window.location.hash === '#resource' || window.location.hash === '#quiz') {
-            history.back();
-        }
-    }
-
-    // LISTENER FOR HARDWARE BACK BUTTON
-    window.onpopstate = function(event) {
-        const modal = document.getElementById('app-modal');
-        // If the modal is currently visible, hide it.
-        if (modal.style.display === 'flex') {
-            modal.style.display = 'none';
-            document.getElementById('modal-body').innerHTML = '';
-        }
-    };
+let curQuiz=null,answered=[];
+function openQuiz(id){
+  curQuiz=id;
+  const qs=QD[id]||[];
+  answered=new Array(qs.length).fill(null);
+  document.getElementById('qtitle').textContent='Unit '+id+' Quiz';
+  document.getElementById('qpips').innerHTML=qs.map((_,i)=>`<div class="pip" id="pip${i}"></div>`).join('');
+  let html=`<div class="qscore" id="qscore"><div><div class="qs-num" id="qsnum">—</div><div class="qs-sub">Score</div></div><div class="qs-msg" id="qsmsg"></div></div>`;
+  qs.forEach((q,qi)=>{
+    html+=`<div class="qitem" id="qi${qi}"><div class="qlbl">Question ${qi+1} of ${qs.length}</div><div class="qtext">${q.q}</div><div class="qopts">${q.o.map((opt,oi)=>`<button class="qopt" id="opt${qi}_${oi}" onclick="ans(${qi},${oi},${q.a})"><span class="qltr">${['A','B','C','D'][oi]}</span>${opt}</button>`).join('')}</div></div>`;
+  });
+  document.getElementById('qbody').innerHTML=html;
+  document.getElementById('qmodal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function ans(qi,oi,correct){
+  if(answered[qi]!==null)return;
+  answered[qi]=oi;
+  const opts=document.querySelectorAll(`#qi${qi} .qopt`);
+  opts.forEach(b=>b.classList.add('lock'));
+  opts[correct].classList.add('cor');
+  if(oi!==correct)opts[oi].classList.add('wrg');
+  const pip=document.getElementById('pip'+qi);
+  pip.classList.add('ans',oi===correct?'cor':'wrg');
+  if(answered.every(a=>a!==null)){
+    const score=answered.filter((a,i)=>a===QD[curQuiz][i].a).length;
+    const total=QD[curQuiz].length;
+    const pct=Math.round(score/total*100);
+    const msgs=['📚 Keep Studying!','👍 Good Effort!','🎉 Well Done!','🏆 Perfect!'];
+    const mi=pct<50?0:pct<70?1:pct<100?2:3;
+    document.getElementById('qsnum').textContent=score+'/'+total;
+    document.getElementById('qsmsg').textContent=msgs[mi];
+    const sc=document.getElementById('qscore');
+    sc.classList.add('show');
+    sc.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+function closeQuiz(){
+  document.getElementById('qmodal').classList.remove('open');
+  document.body.style.overflow='';
+  curQuiz=null;
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQuiz();});
 </script>
 </body>
 </html>
