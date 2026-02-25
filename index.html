@@ -1286,10 +1286,31 @@ const _realApp = {
     },
 
     _openDemoUrl: function(url) {
-        if (!url || url === 'about:blank') { alert('Demo content coming soon!'); return; }
+        if (!url || url === 'about:blank') {
+            this._showDemoToast('Demo content coming soon!');
+            return;
+        }
         // Same as openPDF in subject pages: strip to /view and open in new tab
         const clean = url.replace(/\/preview.*$/, '').replace(/\/view.*$/, '') + '/view';
         window.open(clean, '_blank');
+    },
+
+    _showDemoToast: function(msg) {
+        let t = document.getElementById('demo-toast');
+        if (!t) {
+            t = document.createElement('div');
+            t.id = 'demo-toast';
+            t.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e1b4b;color:#fff;padding:10px 20px;border-radius:24px;font-size:0.85rem;font-weight:600;z-index:9999;opacity:0;transition:all 0.3s;pointer-events:none;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,0.25);';
+            document.body.appendChild(t);
+        }
+        t.textContent = msg;
+        t.style.opacity = '1';
+        t.style.transform = 'translateX(-50%) translateY(0)';
+        clearTimeout(t._hide);
+        t._hide = setTimeout(() => {
+            t.style.opacity = '0';
+            t.style.transform = 'translateX(-50%) translateY(20px)';
+        }, 2500);
     },
 
     demoOpenVideo: function() {
