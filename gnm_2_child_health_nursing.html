@@ -1,204 +1,525 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Child Health Nursing</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <style>
-        :root {
-            --brand: #003B82; --accent: #00B9F2; --gray-50: #f9fafb; --gray-200: #e5e7eb; --gray-900: #111827;
-            --danger: #ef4444; --success: #10b981; --warning: #f59e0b;
-        }
-        * { box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: white; color: var(--gray-900); padding: 24px; max-width: 1000px; margin: 0 auto; }
-        .syllabus-btn { display: block; width: 100%; padding: 18px 24px; margin: 12px 0; background: white; color: var(--brand); border: 2px solid var(--brand); font-weight: 700; font-size: 16px; text-align: center; cursor: pointer; border-radius: 12px; transition: all 0.2s ease; text-decoration: none; }
-        .syllabus-btn:hover { background: var(--gray-50); transform: translateY(-1px); }
-        .unit-header { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 18px 24px; margin: 16px 0; background: var(--brand); color: white; font-weight: 600; font-size: 16px; border-radius: 12px; cursor: pointer; transition: 0.2s; }
-        .unit-header:hover { background: #002d63; }
-        .unit-content { padding: 0 12px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; }
-        .unit-content.active { padding: 24px 12px; max-height: none; }
-        .subsection { padding: 20px; background: white; border-radius: 12px; border: 1px solid var(--gray-200); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-        .resource-btn { display: flex; width: 100%; padding: 14px 18px; margin: 6px 0; background: var(--gray-50); border-radius: 8px; font-weight: 500; border: 1px solid var(--gray-200); cursor: pointer; gap: 12px; transition: 0.2s; align-items: center; }
-        
-        /* EXISTING BUTTON STYLES */
-        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
-        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
-        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
-        .resource-btn.model { background: #fdf4ff; border-color: #f0abfc; color: #86198f; }
-
-        /* NEW BUTTON STYLES FOR APP */
-        .resource-btn.imp-discussion { background: #fef2f2; border-color: #fecaca; color: #b91c1c; } /* Light Red Background */
-        .resource-btn.imp-pdf { background: #fff7ed; border-color: #fed7aa; color: #c2410c; } /* Light Orange Background */
-        
-        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
-        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
-        .icon.video-icon { color: #8b5cf6; } .icon.quiz-icon { color: #f59e0b; } .icon.model-icon { color: #d946ef; }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; display: none; flex-direction: column; }
-        .modal-header { height: 60px; background: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; }
-        .btn-close { background: var(--danger); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
-        .modal-body { flex: 1; background: #f3f4f6; position: relative; padding: 20px; display:flex; justify-content:center; overflow-y: auto;}
-        .iframe-res { width: 100%; height: 100%; border: none; background: white; }
-        .quiz-container { background: white; width: 100%; max-width: 800px; padding: 30px; border-radius: 12px; margin-bottom: 50px; }
-        .quiz-option { padding: 12px 15px; border: 2px solid var(--gray-200); border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
-        .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
-        .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; }
-        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
-        .btn-quiz { background: var(--brand); color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 600; font-size: 16px; margin-top: 20px; cursor: pointer;}
-        @media (max-width: 768px) { body { padding: 16px; } .quiz-container { padding: 15px; } }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Child Health Nursing</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+--p50:#faf5ff;--p100:#f3e8ff;--p200:#e9d5ff;--p300:#d8b4fe;
+--p400:#c084fc;--p500:#a855f7;--p600:#9333ea;--p700:#7e22ce;
+--p800:#6b21a8;--p900:#581c87;
+--w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;
+--g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;
+--ok:#16a34a;--ok-lt:#dcfce7;--err:#dc2626;--err-lt:#fee2e2;
+--warn:#d97706;--warn-lt:#fef3c7;
+--r:12px;--rs:8px;
+--s1:0 1px 3px rgba(109,40,217,.08);
+--s2:0 4px 12px rgba(109,40,217,.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:90;background:var(--w);border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 16px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-back{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:var(--p100);color:var(--p700);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;margin-right:12px}
+.tb-back:hover{background:var(--p200)}
+.tb-info{flex:1;min-width:0}
+.tb-title{font-size:.88rem;font-weight:700;color:var(--g900);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb-sub{font-size:.65rem;color:var(--g400);font-weight:500;margin-top:1px}
+.tb-chip{background:var(--p100);color:var(--p700);border:1px solid var(--p200);font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
+.hero{background:linear-gradient(145deg,var(--p900),var(--p700) 55%,var(--p500));padding:28px 18px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.08),transparent 50%),radial-gradient(circle at 10% 85%,rgba(255,255,255,.05),transparent 40%)}
+.hero::after{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-dot-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:.65rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border-radius:30px;margin-bottom:12px}
+.hero-eyebrow-dot{width:5px;height:5px;background:#c4b5fd;border-radius:50%}
+.hero h1{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:7px}
+.hero h1 em{color:rgba(255,255,255,.45);font-style:italic;font-weight:300}
+.hero-desc{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:18px}
+.hero-cta{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.28);color:#fff;font-size:.8rem;font-weight:700;padding:9px 16px;border-radius:9px;cursor:pointer;transition:all .2s;backdrop-filter:blur(6px)}
+.hero-cta:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
+.hero-stats{display:flex;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+.hs{flex:1;text-align:center}
+.hs+.hs{border-left:1px solid rgba(255,255,255,.1)}
+.hs-n{font-size:1.35rem;font-weight:800;color:#fff;line-height:1}
+.hs-l{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
+.main{padding:16px 14px 56px}
+.divider{display:flex;align-items:center;gap:8px;margin-bottom:12px;margin-top:2px}
+.divider span{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g400)}
+.divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+.uc{background:var(--w);border:1.5px solid var(--g200);border-radius:var(--r);margin-bottom:9px;overflow:hidden;box-shadow:var(--s1);transition:border-color .2s,box-shadow .2s}
+.uc:hover{border-color:var(--p300);box-shadow:var(--s2)}
+.uc[data-open=true]{border-color:var(--p400);box-shadow:var(--s2)}
+.ubtn{width:100%;display:flex;align-items:center;padding:14px 15px;gap:12px;background:none;border:none;cursor:pointer;text-align:left}
+.upill{min-width:54px;padding:0 8px;height:36px;border-radius:9px;flex-shrink:0;background:var(--p100);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.upill span{font-size:.65rem;font-weight:800;color:var(--p700);letter-spacing:-.01em;white-space:nowrap}
+.uc[data-open=true] .upill{background:var(--p700)}
+.uc[data-open=true] .upill span{color:#fff}
+.uinfo{flex:1;min-width:0}
+.uname{font-size:.85rem;font-weight:700;color:var(--g900);line-height:1.3}
+.umeta{font-size:.66rem;color:var(--g400);margin-top:2px;font-weight:500}
+.uright{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.uchev{width:16px;height:16px;color:var(--g300);transition:transform .3s,color .2s}
+.uc[data-open=true] .uchev{transform:rotate(180deg);color:var(--p500)}
+.ubody{display:none;background:var(--p50);border-top:1.5px solid var(--p200);padding:12px 13px 14px}
+.ubody.open{display:block;animation:bodyIn .2s ease}
+@keyframes bodyIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.rrow{display:flex;gap:9px;margin-bottom:8px}
+.rrow:last-child{margin-bottom:0}
+@media(max-width:380px){.rrow{flex-direction:column}}
+.rbtn{flex:1;display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .17s;background:var(--w);text-decoration:none}
+.rbtn .rico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.rbtn .rtxt{line-height:1.25}
+.rbtn .rtxt small{display:block;font-size:.62rem;font-weight:400;opacity:.5;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;}
+.rbtn .rarr{margin-left:auto;opacity:0;font-size:.7rem;color:var(--g400);transition:opacity .15s}
+.rbtn:hover .rarr{opacity:1}
+.rbtn.notes{border-color:var(--p200);color:var(--p800)}
+.rbtn.notes .rico{background:var(--p100)}
+.rbtn.notes:hover{background:var(--p50);border-color:var(--p500);box-shadow:var(--s2);transform:translateY(-1px)}
+.rbtn.video{border-color:#bae6fd;color:#0369a1}
+.rbtn.video .rico{background:#e0f2fe}
+.rbtn.video:hover{background:#f0f9ff;border-color:#38bdf8;box-shadow:0 3px 10px rgba(56,189,248,.12);transform:translateY(-1px)}
+.rbtn.quiz{border-color:#fde68a;color:#78350f}
+.rbtn.quiz .rico{background:var(--warn-lt)}
+.rbtn.quiz:hover{background:#fffbeb;border-color:var(--warn);box-shadow:0 3px 10px rgba(217,119,6,.12);transform:translateY(-1px)}
+.qoverlay{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end}
+.qoverlay.open{display:flex}
+.qscrim{position:absolute;inset:0;background:rgba(15,10,40,.55);backdrop-filter:blur(3px)}
+.qpanel{position:relative;z-index:1;background:var(--w);width:100%;max-width:580px;margin:0 auto;border-radius:18px 18px 0 0;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 -10px 50px rgba(109,40,217,.2);animation:panelUp .3s cubic-bezier(.32,.72,0,1)}
+@keyframes panelUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.qhead{padding:16px 18px 12px;border-bottom:1px solid var(--g100);flex-shrink:0}
+.qhead-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.qtitle{font-size:1rem;font-weight:800;color:var(--p800)}
+.qclose{width:28px;height:28px;border-radius:50%;background:var(--g100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--g500);transition:all .15s}
+.qclose:hover{background:var(--err-lt);color:var(--err)}
+.qpips{display:flex;gap:3px}
+.pip{flex:1;height:4px;border-radius:4px;background:var(--g100);transition:background .3s}
+.pip.ans{background:var(--p300)}.pip.cor{background:var(--ok)}.pip.wrg{background:var(--err)}
+.qbody{overflow-y:auto;padding:14px 18px 28px;flex:1}
+.qscore{display:none;background:linear-gradient(135deg,var(--p800),var(--p500));color:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;align-items:center;gap:14px}
+.qscore.show{display:flex}
+.qs-num{font-size:1.9rem;font-weight:800;line-height:1}
+.qs-sub{font-size:.65rem;opacity:.6;margin-top:2px}
+.qs-msg{font-size:.85rem;font-weight:600}
+.qitem{margin-bottom:24px}
+.qitem:last-child{margin-bottom:0}
+.qlbl{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--p500);margin-bottom:4px}
+.qtext{font-size:.88rem;font-weight:600;color:var(--g900);line-height:1.5;margin-bottom:10px}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1.5px solid var(--g200);border-radius:var(--rs);cursor:pointer;font-size:.83rem;font-weight:500;background:var(--w);color:var(--g700);transition:all .14s}
+.qopt:hover{border-color:var(--p300);background:var(--p50);color:var(--p800)}
+.qltr{width:21px;height:21px;border-radius:50%;background:var(--g100);border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:800;color:var(--g500);flex-shrink:0;transition:all .14s}
+.qopt.cor{background:var(--ok-lt);border-color:#86efac;color:#14532d}
+.qopt.cor .qltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.qopt.wrg{background:var(--err-lt);border-color:#fca5a5;color:#7f1d1d}
+.qopt.wrg .qltr{background:var(--err);border-color:var(--err);color:#fff}
+.qopt.lock{cursor:default;pointer-events:none}
+.qopt.lock:not(.cor):not(.wrg):hover{border-color:var(--g200);background:var(--w);color:var(--g700)}
+</style>
 </head>
 <body>
-    <a class="syllabus-btn" href="https://drive.google.com/file/d/1HjpaRuwhe1C2T8vfhKoacjE1I7peBqoT/view?usp=drive_link" target="_blank">📄 DOWNLOAD SYLLABUS</a>
-    <div id="units">
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 1 - INTRODUCTION <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1KE1xm3RyicScKaHlfHHGU0A2k3hG5TOk/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1NovK1uYNUdqJbh6dwqlGi-Qv5ePebmk5/preview', 'Modern concept in child health care')"><span class="icon video-icon">▶️</span><span>Modern concept in child health care</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_T1boDTddX9qHzNehDbh15g6WqNe2Ghz/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1QY7UhKm84OxVYZ84BOJ8t0JIQYqndAFe/preview', 'Concept of preventive pediatric & Trends in pediatric nursing')"><span class="icon video-icon">▶️</span><span>Concept of preventive pediatric & Trends in pediatric nursing</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1vqiyQXBDww4xOJ0PdrVQ87D9uBDqEyUY/preview', 'Vital statistics & Emerging challenges, Nursing process related to pediatric nursing')"><span class="icon video-icon">▶️</span><span>Vital statistics & Emerging challenges, Nursing process related to pediatric nursing</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Cu_yb3QhvTK8RDTVfE9U-biAz3QW2XXo/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(1)"><span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 2 - GROWTH & DEVELOPMENT <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1GBY0bCpNP-y4exQrgCRoa_SmAnQTHb1f/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1a3g4WmallrpvX_pun_XaAHvsV7Y1_O_G/preview', 'Definition, importance & pattern of Growth & Development')"><span class="icon video-icon">▶️</span><span>Definition, importance & pattern of Growth & Development</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1QhbRymEdpeSIdkpp8el7s6pq1U4Xxso1/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/192h5h07dNXvKcvS7wZQYwcSEHV5r6UEJ/preview', 'Principles, factors & stages of Growth & Development')"><span class="icon video-icon">▶️</span><span>Principles, factors & stages of Growth & Development</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/136vAu1HXR0YVqPh_HcklyrK8mQKfq8lp/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1AE826ouDw7rZLTMbIKVFE1wyw2BuZ-RN/preview', 'Infant: Growth & Development')"><span class="icon video-icon">▶️</span><span>Infant: Growth & Development</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Pp6SKX8ySgoka7lhNOEKwXBLDAd9gKHw/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1UTPHZpSDszwB2TMtHvRPMtO7IIxQaeox/preview', 'Weaning , BFHI & Breast feeding')"><span class="icon video-icon">▶️</span><span>Weaning , BFHI & Breast feeding</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/12ozjjBK5Yw5jcqyBVrdPmeRwlRhcBnGU/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ItdIeYaUqZSnvIH2jgElGBQ_1TntqAxk/preview', 'Toddler: Growth & Development')"><span class="icon video-icon">▶️</span><span>Toddler: Growth & Development</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Z9fAMGl0u3FRWBT-CvWarxpA5yQUAKkx/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1-xnxAqCDQUNlBYfDVDn4cupTFsXBFaq8/preview', 'Play')"><span class="icon video-icon">▶️</span><span>Play</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Gj6swQ71Hloy4t6mh7zX738Fim2-ZrpM/preview', 'Prevention of accidents')"><span class="icon video-icon">▶️</span><span>Prevention of accidents</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_3j_vtIlnO4n6M2a6j8whTJrxNDdOsFS/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1F3rLgcrOpJCQ_OME49BcxUErdGSz19tO/preview', 'Preschoolers Growth & development')"><span class="icon video-icon">▶️</span><span>Preschoolers Growth & development</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1WA32HUs5oNf6F9L7vHmiBVcpCmJfpigD/preview', 'School ager Growth & development')"><span class="icon video-icon">▶️</span><span>School ager Growth & development</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1MiM-u6qUCe8KwBBLdloTxe_7rznBJ3CT/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1p97n0NwwGG89oVeMffPtsKGAiSBSGH1C/preview', 'Adolescent - Growth & Development')"><span class="icon video-icon">▶️</span><span>Adolescent - Growth & Development</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1faK3GedQ5s6vVYEqCi5vOX_rlZ6MYMYn/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(2)"><span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 3 - THE SICK CHILD <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_eHEy8mSMSaUmGJ-cw1jBwSjzNRv-Aym/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ZgDyvwww7TlBn-KyA5s6ld-irIg33ztb/preview', 'Child’s reaction to hospital & Effect of hospitalization on the family of the child.')"><span class="icon video-icon">▶️</span><span>Child’s reaction to hospital & Effect of hospitalization on the family of the child.</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1EXAB7iT3WXE_tWTvWAdpPdb_GpjW_9bL/preview', 'Measures to minimize the impact of hospitalization in children.')"><span class="icon video-icon">▶️</span><span>Measures to minimize the impact of hospitalization in children.</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1rs00KM44nJf52pHRPgc0mOmO-sbbPOKF/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(3)"><span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 4 - DISORDERS AND HEALTH PROBLEMS OF A CHILD <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1okjJfB67k0jdWqy9GD_mC-JVSIbht904/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/13_Fs2dgJga5y3yc6GFcIIkHpn6N0whqe/preview', 'Communicable Diseases')"><span class="icon video-icon">▶️</span><span>Communicable Diseases</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1cz76DV1XTG4_RpwAtq47xBDcF_3uu-RF/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/18PIaumyIUeCpF8WTvPGjkshe0IB20dQc/preview', 'Tonsillitis, Enuresis, Nail bitting, Thumb sucking, Somnambulism, BHS, PICA & TICS')"><span class="icon video-icon">▶️</span><span>Tonsillitis, Enuresis, Nail bitting, Thumb sucking, Somnambulism, BHS, PICA & TICS</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1mSN3svukrjgUJLrBxLB3TP2QTOCY8LDN/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1f3B7EdDCDIzBjeyEPt20g7yfdulBGCpL/preview', 'Enuresis')"><span class="icon video-icon">▶️</span><span>Enuresis</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1TDp-WI6Ii2__HQAD7KpRUtZfnwVk93aD/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1q0YMzsX1eD5jJy1FlYiyIqYPyUUFO1ft/preview', 'Diarrhea')"><span class="icon video-icon">▶️</span><span>Diarrhea</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ZfpPNTckg0m-iKJCIxpAvSZohQ37sMGt/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1xkiEhw1kJCvYT_Fw2srAypQB0k_MT7dE/preview', 'Helminthic Infections')"><span class="icon video-icon">▶️</span><span>Helminthic Infections</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/14MakrfHluOMe-l7LqAWgREHoznI-LYQ_/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1IEX4GtaKt4B4B6k5rj9WuEURMtwYBbMN/preview', 'Protein Energy Malnutrition & Child Abuse')"><span class="icon video-icon">▶️</span><span>Protein Energy Malnutrition & Child Abuse</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/12WejO1upIiwzwjgelKfGaMaWl9T04M88/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1HZwRgeH5HTq7ecFUOOT-j0w8VjzLAYqb/preview', 'Adolescent problems, Bites and Stings')"><span class="icon video-icon">▶️</span><span>Adolescent problems, Bites and Stings</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1BuppRAqhwNCqYHtUnswZMmwxYqw4ighb/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(4)"><span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 5 - CHILD WITH CONGENITAL DISORDERS <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ydl3LBXPWXnQxBjlJCLPV-oRhGQYgQ7A/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1KCj4im1mk-9cic1qP-nsvxhEeH5Gtn_J/preview', 'Cleft lip & Cleft Palate and Tracheo Esophageal Fistula')"><span class="icon video-icon">▶️</span><span>Cleft lip & Cleft Palate and Tracheo Esophageal Fistula</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1d8a2q3QFtJB8B0wYiDSKVQBbw6Fz5W5A/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1o3-a2YbymIhBUTnbdnwrX7D1j7_yIZGr/preview', 'Anorectal Malformations, Pyloric Stenosis & Hernia')"><span class="icon video-icon">▶️</span><span>Anorectal Malformations, Pyloric Stenosis & Hernia</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1yNlSOaJoCUKOtE80sONtgSgqqn8EB-Ff/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1JPniDbemZt971bVBFHt4Dzw9UUMcIbo5/preview', 'Defects of Genito-Urinary Tract')"><span class="icon video-icon">▶️</span><span>Defects of Genito-Urinary Tract</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Ko3bTjjB17KFTNPwrrybT3hT7FWdPyGr/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/12Jhjn03A8wDFmtifzDTkOHsjFnaFdzwv/preview', 'Turner’s syndrome, Phimosis, Cryptorchidism, Polycystic kidney & Ambiguous genitalia')"><span class="icon video-icon">▶️</span><span>Turner’s syndrome, Phimosis, Cryptorchidism, Polycystic kidney & Ambiguous genitalia</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1up21vspzjJN5w7c9lx_NUKGNkWUqf5Z7/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1G5IA27ZxrcIh1_Utto-tY8PVysiOW5i6/preview', 'Defects of Cardio Vascular System')"><span class="icon video-icon">▶️</span><span>Defects of Cardio Vascular System</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/13nPGiFeaiYjMG5pOtymZlS0RY21zmgAN/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ovV7_yXjOm_Mi-xOxCi1zM7kIfpdKblr/preview', 'TOF, TGV, PDA & Coactation of Aorta')"><span class="icon video-icon">▶️</span><span>TOF, TGV, PDA & Coactation of Aorta</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1KMp7TYnHRstxn4uWfd3Ezelq_84bPw7o/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/14cZlqQ63pcz7o5cyrhnBbXcFOY-tcN4i/preview', 'Congenital dislocation of hips & Talipusequinovarus, Down’s syndrome')"><span class="icon video-icon">▶️</span><span>Congenital dislocation of hips & Talipusequinovarus, Down’s syndrome</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1v0AQxwIAUjFn5bTY9Dbmr4qL5ioHJ95k/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1JbTzHtTJovy8V4C9DraowIML8rBpTukK/preview', 'Malformations of CNS, Spina bifida & Hydrocephalus,')"><span class="icon video-icon">▶️</span><span>Malformations of CNS, Spina bifida & Hydrocephalus,</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1BAPe97GJexWk0mQKhoTofUGKKLQ81OCI/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1kYzwH_9_lwVxHcwdFL3-LwcUJGf3QRU-/preview', 'Cerebral Palsy')"><span class="icon video-icon">▶️</span><span>Cerebral Palsy</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Nca179aophUuMJ1PadYkM3UpjNWkLPo0/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(5)"><span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 6 - CHILDREN WITH VARIOUS DISORDERS AND DISEASES <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1SKSCnrZr0BMEtJV_zYcz4VMuv1KLA4-S/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1S3IWpntJNBNewuACW2hpgsWWkIi_VNjr/preview', 'Upper Respiratory infections & Asthma')"><span class="icon video-icon">▶️</span><span>Upper Respiratory infections & Asthma</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_ZX0vlO4TlQ94t-CdajC3f1JIbt6IK7X/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1qU6l2Y0bFSrgeKKy5CWMkWUoIOy1nBJF/preview', 'Lower Respiratory Infections, Bronchitis & Pneumonia')"><span class="icon video-icon">▶️</span><span>Lower Respiratory Infections, Bronchitis & Pneumonia</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1CwkaEWzQ2guI5eglFldODD0yUqF2X1Dz/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1CUcokcNIg3cjFp-oAWa-XkLjn-Zygx1w/preview', 'Nephrotic Syndrome, Glomerulonephritis, ARF & CRF')"><span class="icon video-icon">▶️</span><span>Nephrotic Syndrome, Glomerulonephritis, ARF & CRF</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1aYou7f_1HFzlnVeuTeKXVo8D81f_UWuG/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1iD3XFXb7H-vobaT8evMc3X8BniI-Tdqd/preview', 'Meningitis, Encephalitis & Convulsive Disorders')"><span class="icon video-icon">▶️</span><span>Meningitis, Encephalitis & Convulsive Disorders</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1TzRRn43H4opYGTTADYBIL3lAcUwnaqZO/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1diaqHbeQHd9rrY5pg_UFC8dzB5bi_ztv/preview', 'Epilepsy & Cranio-cerebral trauma')"><span class="icon video-icon">▶️</span><span>Epilepsy & Cranio-cerebral trauma</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1kfeQZd0qTPKAg2vFS_FiNJ4muQBbdjQQ/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1o4maScDJocxip1Z4YoDcSxvoNhmMfwjR/preview', 'Intestinal Obstruction & Hirschsprung’s Disease')"><span class="icon video-icon">▶️</span><span>Intestinal Obstruction & Hirschsprung’s Disease</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_Kls80sk3M7u2A4PrIL-ZexdxYcsgOGC/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1YOXJvcVxQJe3KLHphOAAnB3Bii5yNkMX/preview', 'Malabsorption Syndrome & Inflammatory condition')"><span class="icon video-icon">▶️</span><span>Malabsorption Syndrome & Inflammatory condition</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1cbort4JjYG2oe7c-DP71x5-NVZdpwsmd/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1xF_pSItEhLxq37MhCkgBUhLxWlyNDJlX/preview', 'Rheumatic Fever, CCF & Infective Endocarditis')"><span class="icon video-icon">▶️</span><span>Rheumatic Fever, CCF & Infective Endocarditis</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1yH1DTdQVkJhyqK3yFX8Taai5lRZ_ezKE/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/10tZ_R11Zs3HHEMJmbE7PG9Ywu2ffLnj3/preview', 'Anemia & Leukemia')"><span class="icon video-icon">▶️</span><span>Anemia & Leukemia</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1r4LtJ-4Ncv5LZR690gyYvyhmgf7NvScK/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1emgrtGm5loENj1SjxRIZndxj2mHyixd3/preview', 'Thalassemia, Hemophilia, Sickle Cell Anemia & Thrombocytopenic Purpura')"><span class="icon video-icon">▶️</span><span>Thalassemia, Hemophilia, Sickle Cell Anemia & Thrombocytopenic Purpura</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1rhhvFTaKD4sgb2qyLiCCqu7RnnF6qHNV/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1sBS6i29GwylcL0wIxVIPWlFQhM6mmiQl/preview', 'Handicapped children, Mental Retardation & Dyslexia')"><span class="icon video-icon">▶️</span><span>Handicapped children, Mental Retardation & Dyslexia</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/17lJxoNXqYJXMcJF0cqw-W3tYd6lKHIZa/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1OM8_VSS-FqqU-4-8qmNXhPhBVrEMdV55/preview', 'Hearing & Vision Impairment')"><span class="icon video-icon">▶️</span><span>Hearing & Vision Impairment</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/11flc7FEvGS68NxRj2Ky2rtIS5x4S1BSJ/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1_Fd8hTgyhJzbIEs9beJJIwKRp-f41IaD/preview', 'Problems with locomotion & GHD')"><span class="icon video-icon">▶️</span><span>Problems with locomotion & GHD</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/11rQr9o_Sgs9R-vb5lLdvfUVK54Dog-EH/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1aLAp8cI4zu1cXt1MKGalqULElf6KCRrT/preview', 'Diabetes insipidus, Hypo & Hyperthyroidism')"><span class="icon video-icon">▶️</span><span>Diabetes insipidus, Hypo & Hyperthyroidism</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1l2zh26Escq-krLKgh6tlF3BWrxKmQesm/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1VvKu2cJ3nN9YuwFhPSg_oi94xEXrHPbm/preview', 'Juvenile Diabetes & Adrenal Disorders')"><span class="icon video-icon">▶️</span><span>Juvenile Diabetes & Adrenal Disorders</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1rjcSKN85PVLHdGxooeQg3YACV83VmvPC/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1js9SPfpSel4siEeJd_ZSOjIt_imVHHU_/preview', 'Pre and Post operative care of children undergoing surgery')"><span class="icon video-icon">▶️</span><span>Pre and Post operative care of children undergoing surgery</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/19Ln-zCUMYQIzxuNLXL1p5uFM96D3d-7m/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1RUpcvbkPdyyfHm3531a1EzcyvxXclKCh/preview', 'Burns')"><span class="icon video-icon">▶️</span><span>Burns</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1xiXzCBIgk4tQh5u5pUF5lttacKzWBsDm/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1EdulX7DCH_DtCOD2tFqFTKlpe50cy1FO/preview', 'Fluid and Electrolyte Imbalance')"><span class="icon video-icon">▶️</span><span>Fluid and Electrolyte Imbalance</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1F6nznFdBL07oCTz4pJJzt4D1E-ZruCGB/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(6)"><span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 7 - CHILD WELFARE SERVICES <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1dsMcUDg3orYOCHg_KJZFUdiKNzhK_xSJ/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1yZ_bd-hmeeCuisiLpNdZJb7iqbJsdlTP/preview', 'Child welfare services and Agencies')"><span class="icon video-icon">▶️</span><span>Child welfare services and Agencies</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1WXdQvGdiZXyk7TRrqAGksnci9Tz0s5ZX/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1UjqTOfRH1F3x7wlyvOQyEMfxPTrvo6cl/preview', 'Law pertaining to Pediatrics')"><span class="icon video-icon">▶️</span><span>Law pertaining to Pediatrics</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1UJYfkmyn35WLaDc7aKsAA3RTyE3yy3Sh/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(7)"><span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span></div></div></div>
-                </div></div>
-    <div id="app-modal" class="modal-overlay">
-        <div class="modal-header">
-            <div id="modal-title" style="font-weight:700; color:var(--brand);">Resource</div>
-            <button class="btn-close" onclick="closeModal()">Close X</button>
-        </div>
-        <div id="modal-body" class="modal-body"></div>
-    </div>
+<header class="topbar">
+<button class="tb-back" onclick="goBackToApp()" aria-label="Back">&#8592;</button>
+<div class="tb-info">
+<div class="tb-title">Child Health Nursing</div>
+<div class="tb-sub">GNM Second Year</div>
+</div>
+<div class="tb-chip">7 Units</div>
+</header>
+
+<section class="hero">
+<div class="hero-dot-grid"></div>
+<div class="hero-inner">
+<div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>GNM Second Year</div>
+<h1>Child Health<br/><em>Nursing</em></h1>
+<p class="hero-desc">Interactive syllabus, detailed notes, video lectures & internal quizzes to aid in exam prep.</p>
+<button class="hero-cta" onclick="openLink('https://drive.google.com/file/d/1HjpaRuwhe1C2T8vfhKoacjE1I7peBqoT/view')">
+📄 &nbsp;Download Syllabus
+</button>
+<div class="hero-stats">
+<div class="hs"><div class="hs-n">7</div><div class="hs-l">Units</div></div>
+<div class="hs"><div class="hs-n">70</div><div class="hs-l">Questions</div></div>
+</div>
+</div>
+</section>
+
+<main class="main">
+<div class="divider"><span>Course Units</span></div>
+
+<div class="uc" id="u1" data-open="false">
+<button class="ubtn" onclick="tog('u1')">
+<div class="upill"><span>Unit 1</span></div>
+<div class="uinfo"><div class="uname">Introduction</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u1">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1KE1xm3RyicScKaHlfHHGU0A2k3hG5TOk/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 1 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1NovK1uYNUdqJbh6dwqlGi-Qv5ePebmk5/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Modern Concept</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1_T1boDTddX9qHzNehDbh15g6WqNe2Ghz/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Modern Concept</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1QY7UhKm84OxVYZ84BOJ8t0JIQYqndAFe/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Preventive Pediatric</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1vqiyQXBDww4xOJ0PdrVQ87D9uBDqEyUY/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Nursing Process</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1Cu_yb3QhvTK8RDTVfE9U-biAz3QW2XXo/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Nursing Process</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn quiz" onclick="openQuiz(1)"><div class="rico">✍️</div><div class="rtxt">Unit 1 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u2" data-open="false">
+<button class="ubtn" onclick="tog('u2')">
+<div class="upill"><span>Unit 2</span></div>
+<div class="uinfo"><div class="uname">Growth & Development</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u2">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1GBY0bCpNP-y4exQrgCRoa_SmAnQTHb1f/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 2 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1a3g4WmallrpvX_pun_XaAHvsV7Y1_O_G/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pattern of Growth</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1QhbRymEdpeSIdkpp8el7s6pq1U4Xxso1/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Pattern of Growth</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/192h5h07dNXvKcvS7wZQYwcSEHV5r6UEJ/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Stages of Growth</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/136vAu1HXR0YVqPh_HcklyrK8mQKfq8lp/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Stages of Growth</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1AE826ouDw7rZLTMbIKVFE1wyw2BuZ-RN/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Infant Growth</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1Pp6SKX8ySgoka7lhNOEKwXBLDAd9gKHw/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Infant Growth</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1UTPHZpSDszwB2TMtHvRPMtO7IIxQaeox/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Weaning & BFHI</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/12ozjjBK5Yw5jcqyBVrdPmeRwlRhcBnGU/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Weaning & BFHI</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1ItdIeYaUqZSnvIH2jgElGBQ_1TntqAxk/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Toddler Growth</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1Z9fAMGl0u3FRWBT-CvWarxpA5yQUAKkx/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Toddler Growth</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1-xnxAqCDQUNlBYfDVDn4cupTFsXBFaq8/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Play</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1Gj6swQ71Hloy4t6mh7zX738Fim2-ZrpM/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Accident Prevention</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1_3j_vtIlnO4n6M2a6j8whTJrxNDdOsFS/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Play & Prevention</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1F3rLgcrOpJCQ_OME49BcxUErdGSz19tO/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Preschoolers Growth</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1WA32HUs5oNf6F9L7vHmiBVcpCmJfpigD/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>School Ager Growth</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1MiM-u6qUCe8KwBBLdloTxe_7rznBJ3CT/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Growth Stages</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1p97n0NwwGG89oVeMffPtsKGAiSBSGH1C/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Adolescent Growth</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1faK3GedQ5s6vVYEqCi5vOX_rlZ6MYMYn/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Adolescent Growth</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(2)"><div class="rico">✍️</div><div class="rtxt">Unit 2 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u3" data-open="false">
+<button class="ubtn" onclick="tog('u3')">
+<div class="upill"><span>Unit 3</span></div>
+<div class="uinfo"><div class="uname">The Sick Child</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u3">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1_eHEy8mSMSaUmGJ-cw1jBwSjzNRv-Aym/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 3 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1ZgDyvwww7TlBn-KyA5s6ld-irIg33ztb/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hospitalization</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1EXAB7iT3WXE_tWTvWAdpPdb_GpjW_9bL/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Impact Measures</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1rs00KM44nJf52pHRPgc0mOmO-sbbPOKF/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Hospitalization</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn quiz" onclick="openQuiz(3)"><div class="rico">✍️</div><div class="rtxt">Unit 3 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u4" data-open="false">
+<button class="ubtn" onclick="tog('u4')">
+<div class="upill"><span>Unit 4</span></div>
+<div class="uinfo"><div class="uname">Disorders & Health Problems</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u4">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1okjJfB67k0jdWqy9GD_mC-JVSIbht904/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 4 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/13_Fs2dgJga5y3yc6GFcIIkHpn6N0whqe/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Communicable</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1cz76DV1XTG4_RpwAtq47xBDcF_3uu-RF/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Communicable</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/18PIaumyIUeCpF8WTvPGjkshe0IB20dQc/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Tonsillitis & TICS</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1mSN3svukrjgUJLrBxLB3TP2QTOCY8LDN/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Tonsillitis & TICS</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1f3B7EdDCDIzBjeyEPt20g7yfdulBGCpL/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Enuresis</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1TDp-WI6Ii2__HQAD7KpRUtZfnwVk93aD/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Enuresis</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1q0YMzsX1eD5jJy1FlYiyIqYPyUUFO1ft/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Diarrhea</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1ZfpPNTckg0m-iKJCIxpAvSZohQ37sMGt/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Diarrhea</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1xkiEhw1kJCvYT_Fw2srAypQB0k_MT7dE/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Helminthic Infect.</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/14MakrfHluOMe-l7LqAWgREHoznI-LYQ_/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Helminthic Infect.</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1IEX4GtaKt4B4B6k5rj9WuEURMtwYBbMN/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>PEM & Abuse</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/12WejO1upIiwzwjgelKfGaMaWl9T04M88/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>PEM & Abuse</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1HZwRgeH5HTq7ecFUOOT-j0w8VjzLAYqb/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Adolescent Problems</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1BuppRAqhwNCqYHtUnswZMmwxYqw4ighb/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Adolescent Problems</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(4)"><div class="rico">✍️</div><div class="rtxt">Unit 4 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u5" data-open="false">
+<button class="ubtn" onclick="tog('u5')">
+<div class="upill"><span>Unit 5</span></div>
+<div class="uinfo"><div class="uname">Congenital Disorders</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u5">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1ydl3LBXPWXnQxBjlJCLPV-oRhGQYgQ7A/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 5 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1KCj4im1mk-9cic1qP-nsvxhEeH5Gtn_J/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cleft Lip & Palate</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1d8a2q3QFtJB8B0wYiDSKVQBbw6Fz5W5A/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Cleft Lip & Palate</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1o3-a2YbymIhBUTnbdnwrX7D1j7_yIZGr/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Anorectal/Pyloric</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1yNlSOaJoCUKOtE80sONtgSgqqn8EB-Ff/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Anorectal/Pyloric</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1JPniDbemZt971bVBFHt4Dzw9UUMcIbo5/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Genito-Urinary</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1Ko3bTjjB17KFTNPwrrybT3hT7FWdPyGr/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Genito-Urinary</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/12Jhjn03A8wDFmtifzDTkOHsjFnaFdzwv/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Turner's/Phimosis</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1up21vspzjJN5w7c9lx_NUKGNkWUqf5Z7/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Turner's/Phimosis</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1G5IA27ZxrcIh1_Utto-tY8PVysiOW5i6/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cardio Vascular</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/13nPGiFeaiYjMG5pOtymZlS0RY21zmgAN/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Cardio Vascular</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1ovV7_yXjOm_Mi-xOxCi1zM7kIfpdKblr/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>TOF, TGV, PDA</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1KMp7TYnHRstxn4uWfd3Ezelq_84bPw7o/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>TOF, TGV, PDA</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/14cZlqQ63pcz7o5cyrhnBbXcFOY-tcN4i/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Dislocation/Down's</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1v0AQxwIAUjFn5bTY9Dbmr4qL5ioHJ95k/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Dislocation/Down's</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1JbTzHtTJovy8V4C9DraowIML8rBpTukK/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>CNS/Spina Bifida</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1BAPe97GJexWk0mQKhoTofUGKKLQ81OCI/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>CNS/Spina Bifida</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1kYzwH_9_lwVxHcwdFL3-LwcUJGf3QRU-/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cerebral Palsy</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1Nca179aophUuMJ1PadYkM3UpjNWkLPo0/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Cerebral Palsy</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(5)"><div class="rico">✍️</div><div class="rtxt">Unit 5 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u6" data-open="false">
+<button class="ubtn" onclick="tog('u6')">
+<div class="upill"><span>Unit 6</span></div>
+<div class="uinfo"><div class="uname">Various Disorders</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u6">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1SKSCnrZr0BMEtJV_zYcz4VMuv1KLA4-S/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 6 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1S3IWpntJNBNewuACW2hpgsWWkIi_VNjr/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Upper Resp/Asthma</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1_ZX0vlO4TlQ94t-CdajC3f1JIbt6IK7X/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Upper Resp/Asthma</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1qU6l2Y0bFSrgeKKy5CWMkWUoIOy1nBJF/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Lower Resp/Pneumo</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1CwkaEWzQ2guI5eglFldODD0yUqF2X1Dz/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Lower Resp/Pneumo</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1CUcokcNIg3cjFp-oAWa-XkLjn-Zygx1w/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Nephrotic/Glom.</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1aYou7f_1HFzlnVeuTeKXVo8D81f_UWuG/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Nephrotic/Glom.</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1iD3XFXb7H-vobaT8evMc3X8BniI-Tdqd/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Meningitis/Conv.</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1TzRRn43H4opYGTTADYBIL3lAcUwnaqZO/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Meningitis/Conv.</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1diaqHbeQHd9rrY5pg_UFC8dzB5bi_ztv/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Epilepsy/Trauma</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1kfeQZd0qTPKAg2vFS_FiNJ4muQBbdjQQ/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Epilepsy/Trauma</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1o4maScDJocxip1Z4YoDcSxvoNhmMfwjR/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Obstruction/Hirsch.</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1_Kls80sk3M7u2A4PrIL-ZexdxYcsgOGC/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Obstruction/Hirsch.</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1YOXJvcVxQJe3KLHphOAAnB3Bii5yNkMX/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Malabsorption</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1cbort4JjYG2oe7c-DP71x5-NVZdpwsmd/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Malabsorption</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1xF_pSItEhLxq37MhCkgBUhLxWlyNDJlX/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Rheumatic Fever</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1yH1DTdQVkJhyqK3yFX8Taai5lRZ_ezKE/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Rheumatic Fever</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/10tZ_R11Zs3HHEMJmbE7PG9Ywu2ffLnj3/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Anemia & Leukemia</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1r4LtJ-4Ncv5LZR690gyYvyhmgf7NvScK/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Anemia & Leukemia</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1emgrtGm5loENj1SjxRIZndxj2mHyixd3/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Thalassemia/Hemo</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1rhhvFTaKD4sgb2qyLiCCqu7RnnF6qHNV/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Thalassemia/Hemo</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1sBS6i29GwylcL0wIxVIPWlFQhM6mmiQl/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Handicap/Mental Ret</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/17lJxoNXqYJXMcJF0cqw-W3tYd6lKHIZa/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Handicap/Mental Ret</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1OM8_VSS-FqqU-4-8qmNXhPhBVrEMdV55/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hearing/Vision</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/11flc7FEvGS68NxRj2Ky2rtIS5x4S1BSJ/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Hearing/Vision</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1_Fd8hTgyhJzbIEs9beJJIwKRp-f41IaD/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Locomotion/GHD</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/11rQr9o_Sgs9R-vb5lLdvfUVK54Dog-EH/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Locomotion/GHD</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1aLAp8cI4zu1cXt1MKGalqULElf6KCRrT/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Diabetes Insipidus</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1l2zh26Escq-krLKgh6tlF3BWrxKmQesm/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Diabetes Insipidus</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1VvKu2cJ3nN9YuwFhPSg_oi94xEXrHPbm/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Juv. Diabetes/Adrenal</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1rjcSKN85PVLHdGxooeQg3YACV83VmvPC/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Juv. Diabetes/Adrenal</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1js9SPfpSel4siEeJd_ZSOjIt_imVHHU_/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Perioperative Care</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/19Ln-zCUMYQIzxuNLXL1p5uFM96D3d-7m/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Perioperative Care</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1RUpcvbkPdyyfHm3531a1EzcyvxXclKCh/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Burns</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1xiXzCBIgk4tQh5u5pUF5lttacKzWBsDm/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Burns</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1EdulX7DCH_DtCOD2tFqFTKlpe50cy1FO/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Fluid & Electrolyte</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1F6nznFdBL07oCTz4pJJzt4D1E-ZruCGB/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Fluid & Electrolyte</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(6)"><div class="rico">✍️</div><div class="rtxt">Unit 6 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u7" data-open="false">
+<button class="ubtn" onclick="tog('u7')">
+<div class="upill"><span>Unit 7</span></div>
+<div class="uinfo"><div class="uname">Child Welfare Services</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u7">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1dsMcUDg3orYOCHg_KJZFUdiKNzhK_xSJ/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 7 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1yZ_bd-hmeeCuisiLpNdZJb7iqbJsdlTP/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Welfare Agencies</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1WXdQvGdiZXyk7TRrqAGksnci9Tz0s5ZX/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Welfare Agencies</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1UjqTOfRH1F3x7wlyvOQyEMfxPTrvo6cl/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pediatric Laws</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1UJYfkmyn35WLaDc7aKsAA3RTyE3yy3Sh/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Pediatric Laws</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(7)"><div class="rico">✍️</div><div class="rtxt">Unit 7 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+</main>
+<div class="qoverlay" id="qmodal">
+<div class="qscrim" onclick="closeQuiz()"></div>
+<div class="qpanel">
+<div class="qhead">
+<div class="qhead-top"><div class="qtitle" id="qtitle">Quiz</div><button class="qclose" onclick="closeQuiz()">✕</button></div>
+<div class="qpips" id="qpips"></div>
+</div>
+<div class="qbody" id="qbody"></div>
+</div>
+</div>
 <script>
-        // 1. LISTENER FOR HARDWARE BACK BUTTON
-        // This detects when the user hits "Back" on their phone/browser
-        window.onpopstate = function(event) {
-            const modal = document.getElementById('app-modal');
-            // If the modal is currently visible, hide it cleanly.
-            if (modal.style.display === 'flex') {
-                modal.style.display = 'none';
-                document.getElementById('modal-body').innerHTML = '';
-            }
-        };
-
-        const QUIZ_DATA = {"1":[{"q":"Pediatrics is a branch of medical science that deals with the care of children from:","o":["Birth to 12 years","Conception to adolescence","Neonatal to adulthood","5 years to adolescence"],"a":1},{"q":"The Greek word ‘iatros’ means:","o":["Child","Healer","Mother","Growth"],"a":1},{"q":"Which of the following is a modern concept of pediatric nursing?","o":["Focus on disease-centered care","Not allowing parents in hospital","Comprehensive child care from conception","Care limited to hygiene and treatment"],"a":2},{"q":"Atraumatic care in pediatric nursing primarily aims to:","o":["Reduce hospital stay duration","Eliminate or minimize psychological and physical distress","Provide only pharmacological management","Restrict parental involvement during hospitalization"],"a":1},{"q":"Which of the following roles of a pediatric nurse involves health teaching and creating awareness about prevention and promotion?","o":["Primary care giver","Health educator","Social worker","Counsellor"],"a":1},{"q":"Which characteristic of the nursing process ensures that it can be applied to all patients, irrespective of age or condition?","o":["Dynamic","Universally applicable","Humanistic","Cyclic outcome-focused"],"a":1},{"q":"Which component of the nursing process involves formulating nursing diagnoses like “Impaired Growth and Development”?","o":["Assessment","Diagnosis","Planning","Implementation"],"a":1},{"q":"Social preventive pediatrics primarily focuses on:","o":["Promotion of exclusive breastfeeding","Collection and interpretation of community information","Growth monitoring of infants","Introduction of complementary feeding"],"a":1},{"q":"Which among the following is a major challenge in pediatric nursing?","o":["Limited use of technology","Decreasing psychological problems in children","Increasing number of HIV-infected children","Decreasing specialization in pediatrics"],"a":2},{"q":"Which Millennium Development Goal (MDG) specifically focused on reducing child mortality?","o":["MDG 2","MDG 3","MDG 4","MDG 6"],"a":2}],"2":[{"q":"Which of the following best describes growth?","o":["Functional maturation of an individual","Quantitative increase in body size","Development of social skills","Psychological adaptation"],"a":1},{"q":"At what age does a baby’s birth weight usually triple?","o":["5 months","8 months","12 months","18 months"],"a":2},{"q":"Which principle of growth and development refers to progression from head to tail?","o":["Proximodistal","Cephalocaudal","Sequential","Interdependent"],"a":1},{"q":"Which of the following is a hereditary factor influencing growth?","o":["Nutrition","Trauma","Genetic disorders","Socioeconomic status"],"a":2},{"q":"At what age does the anterior fontanel normally close?","o":["12 months","18 months","24 months","30 months"],"a":1},{"q":"The first teeth to erupt in most infants are:","o":["Upper central incisors","Lower central incisors","Upper lateral incisors","Lower molars"],"a":1},{"q":"During infancy, the head circumference equals the chest circumference at about:","o":["3 months","6 months","9 months","12 months"],"a":3},{"q":"According to Erikson’s psychosocial theory, the developmental task of a toddler (1–3 years) is:","o":["Trust vs. Mistrust","Initiative vs. Guilt","Autonomy vs. Shame and Doubt","Industry vs. Inferiority"],"a":2},{"q":"In Freud’s psychosexual stages, the child who is learning toilet training is in which stage?","o":["Oral","Anal","Phallic","Latency"],"a":1},{"q":"Which of the following statements about adolescent growth is TRUE?","o":["Pubertal growth spurt occurs earlier in boys than girls","Girls usually reach menarche at the same age as their mothers","Boys always stop growing before girls","Weight gain is faster in girls than boys after puberty"],"a":1}],"3":[{"q":"Which of the following is the most common reaction of infants to hospitalization?","o":["Loss of appetite","Separation anxiety","Increased curiosity","Peer dependence"],"a":1},{"q":"A toddler admitted to the hospital throws frequent temper tantrums, refuses meals, and soils clothes. What is the MOST likely explanation?","o":["Regression due to hospitalization","Increased appetite","Developmental delay","Early independence"],"a":0},{"q":"Which of the following best explains loss of control in preschool children during hospitalization?","o":["Fear of strangers","Restriction of mobility and disruption of routines","Lack of parental visits","Fear of surgery outcomes"],"a":1},{"q":"Night terrors, enuresis, and nail biting in school-age children during hospitalization are signs of:","o":["Separation anxiety","Regression","Normal development","Increased independence"],"a":0},{"q":"Which intervention is MOST appropriate for reducing separation anxiety in hospitalized infants?","o":["Encourage group play with peers","Allow the use of home security objects","Promote strict hospital routines only","Provide lengthy medical explanations"],"a":1},{"q":"Adolescents hospitalized for long periods may show poor compliance and risk-taking behaviors because:","o":["They lack body awareness","They do not understand consequences of treatment","They deny gravity of diagnosis despite understanding it","They are too dependent on parents"],"a":2},{"q":"Which measure BEST helps reduce stress during painful procedures in infants?","o":["Loud talking","Comforting touch and non-nutritive sucking","Performing procedure during sleep","Removing parents from the room"],"a":1},{"q":"For hospitalized toddlers, which nursing action is MOST effective in reducing temper tantrums?","o":["Provide tactile comfort and verbal reassurance","Isolate the child from parents","Withhold play activities","Encourage strict discipline"],"a":0},{"q":"In designing a child-friendly hospital environment, which of the following principles is LEAST important?","o":["Use of colorful clothing and toys","Self-care and independence support","Isolation of all children regardless of infection status","Connection to nature and light as healing elements"],"a":2},{"q":"Which strategy BEST promotes coping for hospitalized school-age children?","o":["Ignoring regression and focusing on rules","Explaining procedures before performing them","Minimizing play activities to avoid over-stimulation","Avoiding parental involvement"],"a":1}],"4":[{"q":"Failure to thrive in infants can be caused by which of the following?","o":["Congenital heart disease","Malabsorption syndrome","Emotional deprivation","All of the above"],"a":3},{"q":"Which rule is NOT included in the home management of diarrhea?","o":["Give zinc supplements for 14 days","Restrict feeding until diarrhea stops","Provide extra fluids after each stool","Continue breastfeeding frequently"],"a":1},{"q":"Which worm infestation is most likely transmitted by penetration of larvae through bare feet?","o":["Roundworm (Ascaris lumbricoides)","Pinworm (Enterobius vermicularis)","Hookworm (Ancylostoma duodenale)","Tapeworm (Taenia solium)"],"a":2},{"q":"Which of the following is the drug of choice for roundworm infection in children?","o":["Albendazole","Praziquantel","Niclosamide","Erythromycin"],"a":0},{"q":"Chronic tonsillitis is best managed by:","o":["Analgesics only","Tonsillectomy after recurrent infections","Warm saline gargles only","Antiviral drugs"],"a":1},{"q":"A child presents with fever, irritability, ear tugging, and purulent otorrhea. The most likely diagnosis is:","o":["Otitis externa","Acute otitis media","Mastoiditis","Serous otitis media"],"a":1},{"q":"Enuresis is considered normal until what age?","o":["3 years","4 years","5 years","6 years"],"a":3},{"q":"Koplik spots are diagnostic of:","o":["Chickenpox","Measles","Pertussis","Diphtheria"],"a":1},{"q":"Which feature differentiates Kwashiorkor from Marasmus?","o":["Severe wasting of subcutaneous fat","Presence of edema","Very low weight-for-height","Monkey face appearance"],"a":1},{"q":"Which of the following is NOT a type of child abuse?","o":["Emotional abuse","Physical abuse","Nutritional deficiency","Sexual abuse"],"a":2}],"5":[{"q":"Cleft lip and cleft palate result from failure of fusion of which structure during intrauterine development?","o":["Second branchial arch","First branchial arch","Maxillary sinus","Mandibular condyle"],"a":1},{"q":"In esophageal atresia with distal fistula (Type C), which of the following is true?","o":["Upper esophagus communicates with trachea","Both ends of esophagus form blind pouch","Lower esophagus communicates with trachea","Both proximal and distal esophagus communicate with trachea"],"a":2},{"q":"The most common type of congenital heart disease associated with cyanotic “Tet spells” is:","o":["Transposition of great arteries","Tetralogy of Fallot","Ventricular septal defect","Patent ductus arteriosus"],"a":1},{"q":"What is the hallmark clinical finding of hypertrophic pyloric stenosis?","o":["Bulging fontanelle","Visible peristalsis and palpable olive-shaped mass","Abdominal distension with absent bowel sounds","Excessive salivation and drooling"],"a":1},{"q":"Which of the following is a complication of cleft palate if not surgically corrected?","o":["Hypocalcemia","Malocclusion of teeth","Intussusception","Hirschsprung’s disease"],"a":1},{"q":"In anorectal malformations, presence of meconium in urine suggests:","o":["Rectovaginal fistula","Rectourethral fistula","Anal stenosis","Rectal atresia"],"a":1},{"q":"The first-line medical treatment of a patent ductus arteriosus (PDA) in a preterm neonate is:","o":["Aspirin","Indomethacin","Digoxin","Heparin"],"a":1},{"q":"Which of the following is the most common type of hypospadias?","o":["Perineal","Penoscrotal","Glandular","Coronal"],"a":2},{"q":"A newborn presents with cyanosis, clubbing, and right axis deviation on ECG. Echocardiogram shows aorta arising from right ventricle and pulmonary artery from left ventricle. The diagnosis is:","o":["Tetralogy of Fallot","Transposition of Great Arteries","Atrial Septal Defect","Coarctation of Aorta"],"a":1},{"q":"The Pavlik harness is used in management of:","o":["Clubfoot","Cryptorchidism","Developmental dysplasia of hip","Exstrophy of bladder"],"a":2}],"6":[{"q":"The most common causative organism of the common cold is:","o":["Influenza virus","Rhinovirus","Adenovirus","Coronavirus"],"a":1},{"q":"Which of the following is not a symptom of rhinitis?","o":["Runny nose","Sneezing","Wheezing","Watery eyes"],"a":2},{"q":"Which complication of nephrotic syndrome is characterized by fluid accumulation in the abdominal cavity?","o":["Pleural effusion","Ascites","Growth retardation","Thrombosis"],"a":1},{"q":"Which clinical sign is classically associated with meningitis when flexing the hip and extending the knee causes pain?","o":["Brudzinski’s sign","Kernig’s sign","Psoas sign","Rovsing’s sign"],"a":1},{"q":"The deficiency of parasympathetic ganglionic nerve cells in the colon is the main pathological cause of:","o":["Ulcerative colitis","Appendicitis","Hirschsprung’s disease","Meckel’s diverticulum"],"a":2},{"q":"Which type of acute renal failure (ARF) is caused by decreased renal blood flow due to shock or dehydration?","o":["Prerenal ARF","Intrarenal ARF","Postrenal ARF","Chronic ARF"],"a":0},{"q":"In epilepsy, which seizure type is characterized by sudden loss of muscle tone, often leading to falls?","o":["Myoclonic seizure","Atonic seizure","Tonic-clonic seizure","Absence seizure"],"a":1},{"q":"In Cushing’s syndrome, the classical clinical feature is:","o":["Hypotension and weight loss","Hyperpigmentation and dehydration","Moon face and truncal obesity","Hyperpigmentation and salt wasting"],"a":2},{"q":"Which complication is most life-threatening in thalassemia if not managed properly?","o":["Splenomegaly","Recurrent infection","Iron overload","Growth retardation"],"a":2},{"q":"A 10-year-old child presents with polyuria, polydipsia, weight loss, and frequent infections. Blood glucose is 250 mg/dL fasting. The most likely diagnosis is:","o":["Juvenile Diabetes Mellitus (Type 1 DM)","Diabetes Insipidus","Hypothyroidism","Addison’s disease"],"a":0}],"7":[{"q":"The Integrated Child Development Services (ICDS) was launched in:","o":["1965","1975","1985","1995"],"a":1},{"q":"Which of the following is not a service provided under ICDS for children below 3 years?","o":["Supplementary nutrition","Immunization","Health check-up","Non-formal preschool education"],"a":3},{"q":"The Mid-Day Meal Programme primarily targets children in the age group of:","o":["0–6 years","6–14 years","11–18 years","3–6 years"],"a":1},{"q":"Which of the following is not a key feature of Anganwadi centers?","o":["Preschool education","Regular immunization","Counseling for drug addiction","Supplementary nutrition"],"a":2},{"q":"The National Policy for Children (1974) emphasizes which of the following principles?","o":["Free and compulsory education up to 14 years","Right to property for children","Mandatory employment after age 12","Political participation for adolescents"],"a":0},{"q":"Which act specifies the legal minimum age of marriage as 18 for girls and 21 for boys?","o":["Juvenile Justice Act, 2000","Child Marriage Restraint Act","Children Act, 1960","National Child Labor Policy"],"a":1},{"q":"Which of the following correctly matches the law with its primary focus?","o":["Juvenile Justice Act, 2000 – Prohibition of Child Labor","National Child Labor Policy – Rehabilitation of delinquent children","Children Act, 1960 – Care and rehabilitation of delinquent children","ICDS – Protection against child marriage"],"a":2},{"q":"Under ICDS, adolescents (11–18 years) are specifically provided with:","o":["Immunization against tetanus and free textbooks","Nutrition and health education, and supplementary nutrition","Non-formal preschool education and skill training","Free midday meals and counseling services"],"a":1},{"q":"Which of the following is a key objective of the Mid-Day Meal Programme apart from nutrition?","o":["Promotion of higher secondary education","Improving school attendance","Providing skill-based training","Ensuring child labor prohibition"],"a":1},{"q":"A 14-year-old child is working in a factory. Which of the following laws/policies is directly violated?","o":["National Child Labor Policy","Child Marriage Restraint Act","Juvenile Justice Act, 2000","ICDS Scheme"],"a":0}]};
-
-        let score = 0;
-
-        function toggleUnit(header) {
-            const content = header.nextElementSibling;
-            header.setAttribute('aria-expanded', header.getAttribute('aria-expanded') !== 'true');
-            content.classList.toggle('active');
-        }
-
-        function openResource(type, url, title) {
-            // FIX 2: Push a fake state to history so "Back Button" catches it
-            history.pushState({ modalOpen: true }, null, '#resource');
-
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            document.getElementById('modal-title').textContent = title;
-            modal.style.display = 'flex';
-            
-            // URL CLEANUP LOGIC
-            let finalUrl = url;
-            if (url.includes('drive.google.com')) { 
-                finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview'); 
-            }
-            else if (url.includes('human.biodigital.com')) { 
-                 if (url.includes('/viewer/')) finalUrl = url.replace('/viewer/', '/widget/');
-                 else finalUrl = url.replace('/view', '/widget'); 
-            }
-            
-            // FIX 3: Added sandbox and allow attributes for Video Playback
-            // This enables Google Drive videos to play inside the app
-            body.innerHTML = `
-                <iframe 
-                    class="iframe-res" 
-                    src="${finalUrl}" 
-                    width="100%" 
-                    height="100%" 
-                    frameborder="0"
-                    sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-presentation"
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen">
-                </iframe>`;
-        }
-
-        function startQuiz(unitId) {
-            // FIX 4: Push a fake state to history for Quiz as well
-            history.pushState({ modalOpen: true }, null, '#quiz');
-
-            score = 0;
-            const questions = QUIZ_DATA[unitId];
-            if(!questions || questions.length === 0) { alert('No questions found.'); return; }
-            let html = '<div class="quiz-container"><h2 style="color:var(--brand); margin-top:0;">Unit ' + unitId + ' Quiz</h2>';
-            html += '<div id="score-display" style="background:var(--brand); color:white; padding:5px 15px; border-radius:20px; display:inline-block; font-weight:700; margin-bottom:20px;">Score: 0 / ' + questions.length + '</div>';
-            questions.forEach((q, index) => {
-                html += '<div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">';
-                html += '<p style="font-weight:600; font-size:1.1rem; margin-bottom:15px;">' + (index + 1) + '. ' + q.q + '</p>';
-                q.o.forEach((opt, optIndex) => {
-                    html += '<div class="quiz-option" onclick="checkAnswer(this, ' + unitId + ', ' + optIndex + ', ' + q.a + ')">' + opt + '</div>';
-                });
-                html += '</div>';
-            });
-            html += '<button class="btn-quiz" onclick="closeModal()">Close Quiz</button></div>';
-            document.getElementById('modal-body').innerHTML = html;
-            document.getElementById('modal-title').textContent = 'Unit ' + unitId + ' Quiz';
-            document.getElementById('app-modal').style.display = 'flex';
-        }
-
-        function checkAnswer(element, unitId, selectedIndex, correctIndex) {
-            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
-            if (selectedIndex === correctIndex) {
-                element.classList.add('correct'); score++;
-            } else {
-                element.classList.add('wrong'); element.parentElement.children[correctIndex + 1].classList.add('correct');
-            }
-            document.getElementById('score-display').textContent = 'Score: ' + score + ' / ' + QUIZ_DATA[unitId].length;
-        }
-
-        function closeModal() { 
-            const modal = document.getElementById('app-modal');
-            modal.style.display = 'none'; 
-            document.getElementById('modal-body').innerHTML = ""; 
-
-            // FIX 5: Manual History Back
-            // If we have a history state (meaning the modal is open), go 'Back' to clear it
-            if ((history.state && history.state.modalOpen) || window.location.hash === '#resource' || window.location.hash === '#quiz') {
-                history.back();
-            }
-        }
-    </script>
+function goBackToApp(){if(window.parent&&window.parent!==window){window.parent.postMessage({action:'goBack'},'*');}else{history.back();}}
+function openLink(url) {
+if(!url || url==='COMING SOON' || url===''){ alert('This resource is coming soon!'); return; }
+let clean = url;
+if(clean.includes('drive.google.com')){
+clean = clean.replace(/\/preview.*$/,'').replace(/\/view.*$/,'')+'/view';
+} else if(clean.includes('human.biodigital.com')) {
+clean = clean.replace(/\/viewer\//, '/widget/').replace(/\/view\?/, '/widget?');
+}
+window.open(clean, '_blank');
+}
+function tog(id){const card=document.getElementById(id);const body=document.getElementById('b-'+id);const open=card.dataset.open==='true';card.dataset.open=String(!open);body.classList.toggle('open',!open);}
+const QD={
+1:[{"q":"Pediatrics is a branch of medical science that deals with the care of children from:","o":["Birth to 12 years","Conception to adolescence","Neonatal to adulthood","5 years to adolescence"],"a":1},{"q":"The Greek word ‘iatros’ means:","o":["Child","Healer","Mother","Growth"],"a":1},{"q":"Which of the following is a modern concept of pediatric nursing?","o":["Focus on disease-centered care","Not allowing parents in hospital","Comprehensive child care from conception","Care limited to hygiene and treatment"],"a":2},{"q":"Atraumatic care in pediatric nursing primarily aims to:","o":["Reduce hospital stay duration","Eliminate or minimize psychological and physical distress","Provide only pharmacological management","Restrict parental involvement during hospitalization"],"a":1},{"q":"Which of the following roles of a pediatric nurse involves health teaching and creating awareness about prevention and promotion?","o":["Primary care giver","Health educator","Social worker","Counsellor"],"a":1},{"q":"Which characteristic of the nursing process ensures that it can be applied to all patients, irrespective of age or condition?","o":["Dynamic","Universally applicable","Humanistic","Cyclic outcome-focused"],"a":1},{"q":"Which component of the nursing process involves formulating nursing diagnoses like “Impaired Growth and Development”?","o":["Assessment","Diagnosis","Planning","Implementation"],"a":1},{"q":"Social preventive pediatrics primarily focuses on:","o":["Promotion of exclusive breastfeeding","Collection and interpretation of community information","Growth monitoring of infants","Introduction of complementary feeding"],"a":1},{"q":"Which among the following is a major challenge in pediatric nursing?","o":["Limited use of technology","Decreasing psychological problems in children","Increasing number of HIV-infected children","Decreasing specialization in pediatrics"],"a":2},{"q":"Which Millennium Development Goal (MDG) specifically focused on reducing child mortality?","o":["MDG 2","MDG 3","MDG 4","MDG 6"],"a":2}],
+2:[{"q":"Which of the following best describes growth?","o":["Functional maturation of an individual","Quantitative increase in body size","Development of social skills","Psychological adaptation"],"a":1},{"q":"At what age does a baby’s birth weight usually triple?","o":["5 months","8 months","12 months","18 months"],"a":2},{"q":"Which principle of growth and development refers to progression from head to tail?","o":["Proximodistal","Cephalocaudal","Sequential","Interdependent"],"a":1},{"q":"Which of the following is a hereditary factor influencing growth?","o":["Nutrition","Trauma","Genetic disorders","Socioeconomic status"],"a":2},{"q":"At what age does the anterior fontanel normally close?","o":["12 months","18 months","24 months","30 months"],"a":1},{"q":"The first teeth to erupt in most infants are:","o":["Upper central incisors","Lower central incisors","Upper lateral incisors","Lower molars"],"a":1},{"q":"During infancy, the head circumference equals the chest circumference at about:","o":["3 months","6 months","9 months","12 months"],"a":3},{"q":"According to Erikson’s psychosocial theory, the developmental task of a toddler (1–3 years) is:","o":["Trust vs. Mistrust","Initiative vs. Guilt","Autonomy vs. Shame and Doubt","Industry vs. Inferiority"],"a":2},{"q":"In Freud’s psychosexual stages, the child who is learning toilet training is in which stage?","o":["Oral","Anal","Phallic","Latency"],"a":1},{"q":"Which of the following statements about adolescent growth is TRUE?","o":["Pubertal growth spurt occurs earlier in boys than girls","Girls usually reach menarche at the same age as their mothers","Boys always stop growing before girls","Weight gain is faster in girls than boys after puberty"],"a":1}],
+3:[{"q":"Which of the following is the most common reaction of infants to hospitalization?","o":["Loss of appetite","Separation anxiety","Increased curiosity","Peer dependence"],"a":1},{"q":"A toddler admitted to the hospital throws frequent temper tantrums, refuses meals, and soils clothes. What is the MOST likely explanation?","o":["Regression due to hospitalization","Increased appetite","Developmental delay","Early independence"],"a":0},{"q":"Which of the following best explains loss of control in preschool children during hospitalization?","o":["Fear of strangers","Restriction of mobility and disruption of routines","Lack of parental visits","Fear of surgery outcomes"],"a":1},{"q":"Night terrors, enuresis, and nail biting in school-age children during hospitalization are signs of:","o":["Separation anxiety","Regression","Normal development","Increased independence"],"a":0},{"q":"Which intervention is MOST appropriate for reducing separation anxiety in hospitalized infants?","o":["Encourage group play with peers","Allow the use of home security objects","Promote strict hospital routines only","Provide lengthy medical explanations"],"a":1},{"q":"Adolescents hospitalized for long periods may show poor compliance and risk-taking behaviors because:","o":["They lack body awareness","They do not understand consequences of treatment","They deny gravity of diagnosis despite understanding it","They are too dependent on parents"],"a":2},{"q":"Which measure BEST helps reduce stress during painful procedures in infants?","o":["Loud talking","Comforting touch and non-nutritive sucking","Performing procedure during sleep","Removing parents from the room"],"a":1},{"q":"For hospitalized toddlers, which nursing action is MOST effective in reducing temper tantrums?","o":["Provide tactile comfort and verbal reassurance","Isolate the child from parents","Withhold play activities","Encourage strict discipline"],"a":0},{"q":"In designing a child-friendly hospital environment, which of the following principles is LEAST important?","o":["Use of colorful clothing and toys","Self-care and independence support","Isolation of all children regardless of infection status","Connection to nature and light as healing elements"],"a":2},{"q":"Which strategy BEST promotes coping for hospitalized school-age children?","o":["Ignoring regression and focusing on rules","Explaining procedures before performing them","Minimizing play activities to avoid over-stimulation","Avoiding parental involvement"],"a":1}],
+4:[{"q":"Failure to thrive in infants can be caused by which of the following?","o":["Congenital heart disease","Malabsorption syndrome","Emotional deprivation","All of the above"],"a":3},{"q":"Which rule is NOT included in the home management of diarrhea?","o":["Give zinc supplements for 14 days","Restrict feeding until diarrhea stops","Provide extra fluids after each stool","Continue breastfeeding frequently"],"a":1},{"q":"Which worm infestation is most likely transmitted by penetration of larvae through bare feet?","o":["Roundworm (Ascaris lumbricoides)","Pinworm (Enterobius vermicularis)","Hookworm (Ancylostoma duodenale)","Tapeworm (Taenia solium)"],"a":2},{"q":"Which of the following is the drug of choice for roundworm infection in children?","o":["Albendazole","Praziquantel","Niclosamide","Erythromycin"],"a":0},{"q":"Chronic tonsillitis is best managed by:","o":["Analgesics only","Tonsillectomy after recurrent infections","Warm saline gargles only","Antiviral drugs"],"a":1},{"q":"A child presents with fever, irritability, ear tugging, and purulent otorrhea. The most likely diagnosis is:","o":["Otitis externa","Acute otitis media","Mastoiditis","Serous otitis media"],"a":1},{"q":"Enuresis is considered normal until what age?","o":["3 years","4 years","5 years","6 years"],"a":3},{"q":"Koplik spots are diagnostic of:","o":["Chickenpox","Measles","Pertussis","Diphtheria"],"a":1},{"q":"Which feature differentiates Kwashiorkor from Marasmus?","o":["Severe wasting of subcutaneous fat","Presence of edema","Very low weight-for-height","Monkey face appearance"],"a":1},{"q":"Which of the following is NOT a type of child abuse?","o":["Emotional abuse","Physical abuse","Nutritional deficiency","Sexual abuse"],"a":2}],
+5:[{"q":"Cleft lip and cleft palate result from failure of fusion of which structure during intrauterine development?","o":["Second branchial arch","First branchial arch","Maxillary sinus","Mandibular condyle"],"a":1},{"q":"In esophageal atresia with distal fistula (Type C), which of the following is true?","o":["Upper esophagus communicates with trachea","Both ends of esophagus form blind pouch","Lower esophagus communicates with trachea","Both proximal and distal esophagus communicate with trachea"],"a":2},{"q":"The most common type of congenital heart disease associated with cyanotic “Tet spells” is:","o":["Transposition of great arteries","Tetralogy of Fallot","Ventricular septal defect","Patent ductus arteriosus"],"a":1},{"q":"What is the hallmark clinical finding of hypertrophic pyloric stenosis?","o":["Bulging fontanelle","Visible peristalsis and palpable olive-shaped mass","Abdominal distension with absent bowel sounds","Excessive salivation and drooling"],"a":1},{"q":"Which of the following is a complication of cleft palate if not surgically corrected?","o":["Hypocalcemia","Malocclusion of teeth","Intussusception","Hirschsprung’s disease"],"a":1},{"q":"In anorectal malformations, presence of meconium in urine suggests:","o":["Rectovaginal fistula","Rectourethral fistula","Anal stenosis","Rectal atresia"],"a":1},{"q":"The first-line medical treatment of a patent ductus arteriosus (PDA) in a preterm neonate is:","o":["Aspirin","Indomethacin","Digoxin","Heparin"],"a":1},{"q":"Which of the following is the most common type of hypospadias?","o":["Perineal","Penoscrotal","Glandular","Coronal"],"a":2},{"q":"A newborn presents with cyanosis, clubbing, and right axis deviation on ECG. Echocardiogram shows aorta arising from right ventricle and pulmonary artery from left ventricle. The diagnosis is:","o":["Tetralogy of Fallot","Transposition of Great Arteries","Atrial Septal Defect","Coarctation of Aorta"],"a":1},{"q":"The Pavlik harness is used in management of:","o":["Clubfoot","Cryptorchidism","Developmental dysplasia of hip","Exstrophy of bladder"],"a":2}],
+6:[{"q":"The most common causative organism of the common cold is:","o":["Influenza virus","Rhinovirus","Adenovirus","Coronavirus"],"a":1},{"q":"Which of the following is not a symptom of rhinitis?","o":["Runny nose","Sneezing","Wheezing","Watery eyes"],"a":2},{"q":"Which complication of nephrotic syndrome is characterized by fluid accumulation in the abdominal cavity?","o":["Pleural effusion","Ascites","Growth retardation","Thrombosis"],"a":1},{"q":"Which clinical sign is classically associated with meningitis when flexing the hip and extending the knee causes pain?","o":["Brudzinski’s sign","Kernig’s sign","Psoas sign","Rovsing’s sign"],"a":1},{"q":"The deficiency of parasympathetic ganglionic nerve cells in the colon is the main pathological cause of:","o":["Ulcerative colitis","Appendicitis","Hirschsprung’s disease","Meckel’s diverticulum"],"a":2},{"q":"Which type of acute renal failure (ARF) is caused by decreased renal blood flow due to shock or dehydration?","o":["Prerenal ARF","Intrarenal ARF","Postrenal ARF","Chronic ARF"],"a":0},{"q":"In epilepsy, which seizure type is characterized by sudden loss of muscle tone, often leading to falls?","o":["Myoclonic seizure","Atonic seizure","Tonic-clonic seizure","Absence seizure"],"a":1},{"q":"In Cushing’s syndrome, the classical clinical feature is:","o":["Hypotension and weight loss","Hyperpigmentation and dehydration","Moon face and truncal obesity","Hyperpigmentation and salt wasting"],"a":2},{"q":"Which complication is most life-threatening in thalassemia if not managed properly?","o":["Splenomegaly","Recurrent infection","Iron overload","Growth retardation"],"a":2},{"q":"A 10-year-old child presents with polyuria, polydipsia, weight loss, and frequent infections. Blood glucose is 250 mg/dL fasting. The most likely diagnosis is:","o":["Juvenile Diabetes Mellitus (Type 1 DM)","Diabetes Insipidus","Hypothyroidism","Addison’s disease"],"a":0}],
+7:[{"q":"The Integrated Child Development Services (ICDS) was launched in:","o":["1965","1975","1985","1995"],"a":1},{"q":"Which of the following is not a service provided under ICDS for children below 3 years?","o":["Supplementary nutrition","Immunization","Health check-up","Non-formal preschool education"],"a":3},{"q":"The Mid-Day Meal Programme primarily targets children in the age group of:","o":["0–6 years","6–14 years","11–18 years","3–6 years"],"a":1},{"q":"Which of the following is not a key feature of Anganwadi centers?","o":["Preschool education","Regular immunization","Counseling for drug addiction","Supplementary nutrition"],"a":2},{"q":"The National Policy for Children (1974) emphasizes which of the following principles?","o":["Free and compulsory education up to 14 years","Right to property for children","Mandatory employment after age 12","Political participation for adolescents"],"a":0},{"q":"Which act specifies the legal minimum age of marriage as 18 for girls and 21 for boys?","o":["Juvenile Justice Act, 2000","Child Marriage Restraint Act","Children Act, 1960","National Child Labor Policy"],"a":1},{"q":"Which of the following correctly matches the law with its primary focus?","o":["Juvenile Justice Act, 2000 – Prohibition of Child Labor","National Child Labor Policy – Rehabilitation of delinquent children","Children Act, 1960 – Care and rehabilitation of delinquent children","ICDS – Protection against child marriage"],"a":2},{"q":"Under ICDS, adolescents (11–18 years) are specifically provided with:","o":["Immunization against tetanus and free textbooks","Nutrition and health education, and supplementary nutrition","Non-formal preschool education and skill training","Free midday meals and counseling services"],"a":1},{"q":"Which of the following is a key objective of the Mid-Day Meal Programme apart from nutrition?","o":["Promotion of higher secondary education","Improving school attendance","Providing skill-based training","Ensuring child labor prohibition"],"a":1},{"q":"A 14-year-old child is working in a factory. Which of the following laws/policies is directly violated?","o":["National Child Labor Policy","Child Marriage Restraint Act","Juvenile Justice Act, 2000","ICDS Scheme"],"a":0}]
+};
+let curQuiz=null,answered=[];
+function openQuiz(id){
+curQuiz=id;
+const qs=QD[id]||[];
+answered=new Array(qs.length).fill(null);
+document.getElementById('qtitle').textContent='Unit '+id+' Quiz';
+document.getElementById('qpips').innerHTML=qs.map((_,i)=>`<div class="pip" id="pip${i}"></div>`).join('');
+let html=`<div class="qscore" id="qscore"><div><div class="qs-num" id="qsnum">—</div><div class="qs-sub">Score</div></div><div class="qs-msg" id="qsmsg"></div></div>`;
+qs.forEach((q,qi)=>{
+html+=`<div class="qitem" id="qi${qi}"><div class="qlbl">Question ${qi+1} of ${qs.length}</div><div class="qtext">${q.q}</div><div class="qopts">${q.o.map((opt,oi)=>`<button class="qopt" id="opt${qi}_${oi}" onclick="ans(${qi},${oi},${q.a})"><span class="qltr">${['A','B','C','D'][oi]}</span>${opt}</button>`).join('')}</div></div>`;
+});
+document.getElementById('qbody').innerHTML=html;
+document.getElementById('qmodal').classList.add('open');
+document.body.style.overflow='hidden';
+}
+function ans(qi,oi,correct){
+if(answered[qi]!==null)return;
+answered[qi]=oi;
+const opts=document.querySelectorAll(`#qi${qi} .qopt`);
+opts.forEach(b=>b.classList.add('lock'));
+opts[correct].classList.add('cor');
+if(oi!==correct)opts[oi].classList.add('wrg');
+const pip=document.getElementById('pip'+qi);
+pip.classList.add('ans',oi===correct?'cor':'wrg');
+if(answered.every(a=>a!==null)){
+const score=answered.filter((a,i)=>a===QD[curQuiz][i].a).length;
+const total=QD[curQuiz].length;
+const pct=Math.round(score/total*100);
+const msgs=['📚 Keep Studying!','👍 Good Effort!','🎉 Well Done!','🏆 Perfect!'];
+const mi=pct<50?0:pct<70?1:pct<100?2:3;
+document.getElementById('qsnum').textContent=score+'/'+total;
+document.getElementById('qsmsg').textContent=msgs[mi];
+const sc=document.getElementById('qscore');
+sc.classList.add('show');
+sc.scrollIntoView({behavior:'smooth',block:'start'});
+}
+}
+function closeQuiz(){
+document.getElementById('qmodal').classList.remove('open');
+document.body.style.overflow='';
+curQuiz=null;
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQuiz();});
+</script>
 </body>
 </html>
