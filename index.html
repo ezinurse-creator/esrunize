@@ -768,53 +768,8 @@
             </div>
         </div>
 
-        <!-- 2×2 tile grid -->
-        <div class="demo-grid">
-            <!-- Video Lecture -->
-            <div class="demo-tile demo-tile-video" onclick="app.demoOpenVideo()">
-                <div class="demo-tile-icon">
-                    <span class="material-icons-round">play_circle_filled</span>
-                </div>
-                <div>
-                    <div class="demo-tile-label">Video Lecture</div>
-                    <div class="demo-tile-sub">Watch &amp; learn</div>
-                </div>
-            </div>
-
-            <!-- Lecture Note -->
-            <div class="demo-tile demo-tile-lecture" onclick="app.demoOpenLectureNote()">
-                <div class="demo-tile-icon">
-                    <span class="material-icons-round">description</span>
-                </div>
-                <div>
-                    <div class="demo-tile-label">Lecture Note</div>
-                    <div class="demo-tile-sub">Quick summary</div>
-                </div>
-            </div>
-
-            <!-- Detailed Notes -->
-            <div class="demo-tile demo-tile-notes" onclick="app.demoOpenDetailedNotes()">
-                <div class="demo-tile-icon">
-                    <span class="material-icons-round">menu_book</span>
-                </div>
-                <div>
-                    <div class="demo-tile-label">Detailed Notes</div>
-                    <div class="demo-tile-sub">In-depth study</div>
-                </div>
-            </div>
-
-            <!-- Quiz -->
-            <div class="demo-tile demo-tile-quiz" onclick="app.demoOpenQuiz()">
-                <div class="demo-tile-icon">
-                    <span class="material-icons-round">quiz</span>
-                </div>
-                <div>
-                    <div class="demo-tile-label">Quiz</div>
-                    <div class="demo-tile-sub">Test yourself</div>
-                </div>
-                <div class="demo-tile-badge">AI</div>
-            </div>
-        </div>
+        <!-- Tiles rendered dynamically by JS (course-aware) -->
+        <div class="demo-grid" id="demo-tile-grid"></div>
 
         <!-- Unlock Premium Button -->
         <div class="demo-unlock-section">
@@ -859,22 +814,18 @@
         </button>
     </nav>
 
-    <!-- ============================================
-         QUIZ MODAL (overlay inside #app)
-         ============================================ -->
-    <div id="quiz-modal">
-        <div class="quiz-header">
-            <button class="icon-btn" onclick="app.closeQuiz()" style="margin-right:4px;">
-                <span class="material-icons-round">close</span>
-            </button>
-            <h2 id="quiz-modal-title">Quiz</h2>
-            <span id="quiz-progress-label" style="font-size:0.8rem; opacity:0.85;"></span>
-        </div>
-        <div class="quiz-body" id="quiz-body">
-            <div class="quiz-loading">
-                <div class="quiz-spinner"></div>
-                <div style="color:var(--text-muted); font-size:0.9rem;">Generating quiz questions…</div>
+    <!-- QUIZ — bottom sheet overlay -->
+    <div class="qoverlay" id="qmodal">
+        <div class="qscrim" onclick="app.closeQuiz()"></div>
+        <div class="qpanel">
+            <div class="qhead">
+                <div class="qhead-top">
+                    <div class="qtitle" id="qtitle">Demo Quiz</div>
+                    <button class="qclose" onclick="app.closeQuiz()">✕</button>
+                </div>
+                <div class="qpips" id="qpips"></div>
             </div>
+            <div class="qbody-scroll" id="qbody"></div>
         </div>
     </div>
 </div>
@@ -1001,10 +952,8 @@ const _realApp = {
     permissions: {},
 
     // Demo state
-    _demoSubject: null,   // { label, link, course, section }
-    _quizQuestions: [],   // parsed quiz Q&A
-    _quizAnswered: {},    // { qIndex: selectedOptionIndex }
-    _quizSubmitted: false,
+    _demoSubject: null,
+    _dq_answered: [],
 
     init: function() {
         onAuthStateChanged(auth, async (user) => {
@@ -1307,6 +1256,9 @@ const _realApp = {
         }
     },
 
+    // Courses that have NO video content
+    _noVideo: ['MSc'],
+
     // Demo screen shown for ALL locked course sections (replaces old paywall view)
     openSectionDemo: function(course, section) {
         this._demoSubject = { label: section, link: null, course, section };
@@ -1314,9 +1266,36 @@ const _realApp = {
         document.getElementById('demo-subject-course').textContent = 'Preview before you buy';
         document.getElementById('demo-badge').textContent = 'DEMO';
         document.getElementById('header-title').textContent = section;
-        // Populate the unlock button price info
         this.renderDemoPaywallInfo(course, section);
+        this.renderDemoTiles(course);
         this.navTo('view-demo', false, { course, section });
+    },
+
+    renderDemoTiles: function(course) {
+        const showVideo = !this._noVideo.includes(course);
+        const grid = document.getElementById('demo-tile-grid');
+        if (!grid) return;
+        let html = '';
+        if (showVideo) {
+            html += `<div class="demo-tile demo-tile-video" onclick="app.demoOpenVideo()">
+                <div class="demo-tile-icon"><span class="material-icons-round">play_circle_filled</span></div>
+                <div><div class="demo-tile-label">Video Lecture</div><div class="demo-tile-sub">Watch &amp; learn</div></div>
+            </div>`;
+        }
+        html += `<div class="demo-tile demo-tile-lecture" onclick="app.demoOpenLectureNote()">
+            <div class="demo-tile-icon"><span class="material-icons-round">description</span></div>
+            <div><div class="demo-tile-label">Lecture Note</div><div class="demo-tile-sub">Quick summary</div></div>
+        </div>
+        <div class="demo-tile demo-tile-notes" onclick="app.demoOpenDetailedNotes()">
+            <div class="demo-tile-icon"><span class="material-icons-round">menu_book</span></div>
+            <div><div class="demo-tile-label">Detailed Notes</div><div class="demo-tile-sub">In-depth study</div></div>
+        </div>
+        <div class="demo-tile demo-tile-quiz" onclick="app.demoOpenQuiz()">
+            <div class="demo-tile-icon"><span class="material-icons-round">quiz</span></div>
+            <div><div class="demo-tile-label">Quiz</div><div class="demo-tile-sub">Test yourself</div></div>
+            <div class="demo-tile-badge">AI</div>
+        </div>`;
+        grid.innerHTML = html;
     },
 
     openSubjectList: function(course, section) { this.renderSubjectList(course, section); this.navTo('view-subjects', false, { course, section }); },
@@ -1373,174 +1352,66 @@ const _realApp = {
     // ============================================
     demoOpenQuiz: function() {
         if (!this._demoSubject) return;
-        this._quizQuestions = [];
-        this._quizAnswered = {};
-        this._quizSubmitted = false;
+        const course = this._demoSubject.course;
+        const section = this._demoSubject.section;
+        const key = course + '_' + section;
+        const qs = DEMO_QUIZ[key] || DEMO_QUIZ[course] || DEMO_QUIZ['default'];
+        const title = course + ' · ' + section + ' — Demo Quiz';
 
-        const modal = document.getElementById('quiz-modal');
-        const rawLabel = this._demoSubject.label.replace(/<[^>]*>?/gm, '');
-        document.getElementById('quiz-modal-title').textContent = rawLabel + ' Quiz';
-        document.getElementById('quiz-progress-label').textContent = '';
-        document.getElementById('quiz-body').innerHTML = `
-            <div class="quiz-loading">
-                <div class="quiz-spinner"></div>
-                <div style="color:var(--text-muted); font-size:0.9rem;">Generating quiz questions…</div>
+        this._dq_answered = new Array(qs.length).fill(null);
+
+        document.getElementById('qtitle').textContent = title;
+        document.getElementById('qpips').innerHTML = qs.map((_,i) =>
+            `<div class="qpip" id="dqpip${i}"></div>`).join('');
+
+        let html = `<div class="qscore-banner" id="dqscore">
+            <div><div class="qscore-num" id="dqsnum">—</div><div class="qscore-sub">Score</div></div>
+            <div class="qscore-msg" id="dqsmsg"></div>
+        </div>`;
+        qs.forEach((q, qi) => {
+            html += `<div class="qitem" id="dqi${qi}">
+                <div class="qlbl">Question ${qi+1} of ${qs.length}</div>
+                <div class="qtext">${q.q}</div>
+                <div class="qopts">${q.o.map((opt, oi) =>
+                    `<button class="qopt" id="dqopt${qi}_${oi}" onclick="app._dqAns(${qi},${oi},${q.a})">
+                        <span class="qltr">${['A','B','C','D'][oi]}</span>${opt}
+                    </button>`).join('')}
+                </div>
             </div>`;
-        modal.classList.add('open');
+        });
+        document.getElementById('qbody').innerHTML = html;
+        document.getElementById('qmodal').classList.add('open');
+    },
 
-        this._generateQuiz(rawLabel, this._demoSubject.course, this._demoSubject.section);
+    _dqAns: function(qi, oi, correct) {
+        if (!this._dq_answered || this._dq_answered[qi] !== null) return;
+        this._dq_answered[qi] = oi;
+        const course = this._demoSubject.course;
+        const section = this._demoSubject.section;
+        const qs = DEMO_QUIZ[course + '_' + section] || DEMO_QUIZ[course] || DEMO_QUIZ['default'];
+
+        const opts = document.querySelectorAll(`#dqi${qi} .qopt`);
+        opts.forEach(b => b.classList.add('lock'));
+        opts[correct].classList.add('cor');
+        if (oi !== correct) opts[oi].classList.add('wrg');
+        const pip = document.getElementById('dqpip' + qi);
+        if (pip) { pip.classList.add('ans', oi === correct ? 'cor' : 'wrg'); }
+
+        if (this._dq_answered.every(a => a !== null)) {
+            const score = this._dq_answered.filter((a, i) => a === qs[i].a).length;
+            const total = qs.length;
+            const pct = Math.round(score / total * 100);
+            const msgs = ['📚 Keep Studying!', '👍 Good Effort!', '🎉 Well Done!', '🏆 Perfect!'];
+            const mi = pct < 50 ? 0 : pct < 70 ? 1 : pct < 100 ? 2 : 3;
+            document.getElementById('dqsnum').textContent = score + '/' + total;
+            document.getElementById('dqsmsg').textContent = msgs[mi];
+            const sc = document.getElementById('dqscore');
+            if (sc) { sc.classList.add('show'); sc.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        }
     },
 
     closeQuiz: function() {
-        document.getElementById('quiz-modal').classList.remove('open');
-    },
-
-    _generateQuiz: async function(subjectName, course, section) {
-        const prompt = `You are a nursing education expert. Generate exactly 5 multiple-choice quiz questions about "${subjectName}" (${course} Nursing, ${section}).
-
-Each question must test genuine clinical/academic knowledge.
-
-Return ONLY a valid JSON array in this exact format (no markdown, no explanation):
-[
-  {
-    "question": "Question text here?",
-    "options": ["Option A", "Option B", "Option C", "Option D"],
-    "correct": 0,
-    "explanation": "Brief explanation why the correct answer is right."
-  }
-]
-
-Rules:
-- "correct" is the 0-based index of the correct option
-- All 4 options must be plausible
-- Questions must be specific to ${subjectName}
-- No duplicate questions`;
-
-        try {
-            const response = await fetch("https://api.anthropic.com/v1/messages", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    model: "claude-sonnet-4-20250514",
-                    max_tokens: 1000,
-                    messages: [{ role: "user", content: prompt }]
-                })
-            });
-
-            const data = await response.json();
-            const text = data.content && data.content[0] ? data.content[0].text : '';
-            // Strip markdown fences if present
-            const clean = text.replace(/```json|```/g, '').trim();
-            const questions = JSON.parse(clean);
-
-            this._quizQuestions = questions;
-            this._renderQuiz();
-        } catch (err) {
-            console.error('Quiz generation error:', err);
-            document.getElementById('quiz-body').innerHTML = `
-                <div class="quiz-error-msg">
-                    <span class="material-icons-round" style="font-size:40px; color:var(--danger); display:block; margin-bottom:10px;">error_outline</span>
-                    Could not generate quiz questions. Please check your connection and try again.
-                    <br><br>
-                    <button class="quiz-submit-btn" onclick="app.demoOpenQuiz()" style="max-width:200px; margin:0 auto;">
-                        <span class="material-icons-round">refresh</span> Retry
-                    </button>
-                </div>`;
-        }
-    },
-
-    _renderQuiz: function() {
-        const questions = this._quizQuestions;
-        document.getElementById('quiz-progress-label').textContent = `${questions.length} Questions`;
-
-        let html = '';
-        questions.forEach((q, qi) => {
-            const letters = ['A', 'B', 'C', 'D'];
-            html += `<div class="quiz-question-card" id="quiz-card-${qi}">
-                <div class="quiz-q-num">Question ${qi + 1} of ${questions.length}</div>
-                <div class="quiz-q-text">${q.question}</div>
-                <div id="quiz-opts-${qi}">`;
-            q.options.forEach((opt, oi) => {
-                html += `<div class="quiz-option" id="quiz-opt-${qi}-${oi}" onclick="app._selectOption(${qi}, ${oi})">
-                    <span class="quiz-opt-letter">${letters[oi]}</span>
-                    <span>${opt}</span>
-                </div>`;
-            });
-            html += `</div>
-                <div class="quiz-explanation" id="quiz-exp-${qi}">
-                    <strong>Explanation:</strong> ${q.explanation}
-                </div>
-            </div>`;
-        });
-
-        html += `<button class="quiz-submit-btn" id="quiz-submit-btn" onclick="app._submitQuiz()">
-            <span class="material-icons-round">check_circle</span> Submit Quiz
-        </button>`;
-
-        document.getElementById('quiz-body').innerHTML = html;
-    },
-
-    _selectOption: function(qi, oi) {
-        if (this._quizSubmitted) return;
-        this._quizAnswered[qi] = oi;
-        const optsContainer = document.getElementById(`quiz-opts-${qi}`);
-        optsContainer.querySelectorAll('.quiz-option').forEach((el, idx) => {
-            el.classList.toggle('selected', idx === oi);
-        });
-    },
-
-    _submitQuiz: function() {
-        const questions = this._quizQuestions;
-        const total = questions.length;
-        const answered = Object.keys(this._quizAnswered).length;
-
-        if (answered < total) {
-            const unanswered = total - answered;
-            if (!confirm(`You have ${unanswered} unanswered question(s). Submit anyway?`)) return;
-        }
-
-        this._quizSubmitted = true;
-        let score = 0;
-
-        questions.forEach((q, qi) => {
-            const selected = this._quizAnswered[qi];
-            const correct = q.correct;
-            const optsContainer = document.getElementById(`quiz-opts-${qi}`);
-
-            optsContainer.querySelectorAll('.quiz-option').forEach((el, oi) => {
-                el.classList.remove('selected');
-                if (oi === correct) el.classList.add('correct');
-                if (selected !== undefined && oi === selected && selected !== correct) el.classList.add('wrong');
-            });
-
-            if (selected === correct) score++;
-            // Show explanation
-            const expEl = document.getElementById(`quiz-exp-${qi}`);
-            if (expEl) expEl.classList.add('show');
-        });
-
-        const pct = Math.round((score / total) * 100);
-        const pctColor = pct >= 70 ? 'var(--success)' : pct >= 40 ? 'var(--grad-orange)' : 'var(--danger)';
-        const emoji = pct >= 70 ? '🎉' : pct >= 40 ? '👍' : '📚';
-
-        // Replace submit btn with score + retry
-        const submitBtn = document.getElementById('quiz-submit-btn');
-        if (submitBtn) {
-            submitBtn.outerHTML = `
-                <div class="quiz-score-bar">
-                    <div>
-                        <div class="quiz-score-num">${score}/${total}</div>
-                        <div class="quiz-score-label">Your Score ${emoji}</div>
-                    </div>
-                    <div class="quiz-score-pct" style="background:rgba(0,0,0,0.05); color:${pctColor};">${pct}%</div>
-                </div>
-                <button class="quiz-retry-btn" onclick="app.demoOpenQuiz()">
-                    <span class="material-icons-round">refresh</span> Try New Questions
-                </button>`;
-        }
-
-        // Scroll to top of quiz body
-        document.getElementById('quiz-body').scrollTop = 0;
+        document.getElementById('qmodal').classList.remove('open');
     },
 
     // ============================================
@@ -1780,6 +1651,88 @@ const DEMO_URLS = {
     'esci.html':                                 { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
     'nursingrequirements.html':                  { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
     'communicativeenglish.html':                 { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' }
+};
+
+// ============================================================
+// DEMO QUIZ DATA — 2 questions per course section
+// Key format: 'Course_Section' e.g. 'GNM_First Year'
+// ============================================================
+const DEMO_QUIZ = {
+    // MSc First Year
+    'MSc_First Year': [
+        { q: "Which research design is most appropriate for studying cause-and-effect relationships in nursing?", o: ["Descriptive", "Experimental/RCT", "Historical", "Case Study"], a: 1 },
+        { q: "The primary goal of Advanced Nursing Practice is to:", o: ["Replace physicians", "Provide specialized, evidence-based patient care", "Reduce hospital costs only", "Manage hospital administration"], a: 1 }
+    ],
+    // MSc Second Year
+    'MSc_Second Year': [
+        { q: "In nursing management, 'span of control' refers to:", o: ["Budget allocation", "Number of subordinates a manager supervises", "Span of patient care", "Duration of shift"], a: 1 },
+        { q: "Which is a key principle of Mental Health Nursing?", o: ["Restraint first approach", "Therapeutic nurse-patient relationship", "Medication only", "Isolation"], a: 1 }
+    ],
+    // BSc Semesters
+    'BSc_Semester 1': [
+        { q: "The basic structural and functional unit of the human body is the:", o: ["Tissue", "Organ", "Cell", "System"], a: 2 },
+        { q: "According to Maslow's hierarchy, which need must be met first?", o: ["Safety", "Love and Belonging", "Physiological needs", "Self-esteem"], a: 2 }
+    ],
+    'BSc_Semester 2': [
+        { q: "Which vitamin is essential for calcium absorption in the body?", o: ["Vitamin A", "Vitamin C", "Vitamin D", "Vitamin K"], a: 2 },
+        { q: "The pH of normal blood is approximately:", o: ["6.8", "7.0", "7.4", "8.0"], a: 2 }
+    ],
+    'BSc_Semester 3': [
+        { q: "Which microorganism causes Tuberculosis?", o: ["Staphylococcus aureus", "Mycobacterium tuberculosis", "E. coli", "Streptococcus"], a: 1 },
+        { q: "Paracetamol primarily acts as a:", o: ["Antibiotic", "Analgesic and Antipyretic", "Antifungal", "Anticoagulant"], a: 1 }
+    ],
+    'BSc_Semester 4': [
+        { q: "The term 'genetics' was coined by:", o: ["Gregor Mendel", "William Bateson", "Charles Darwin", "Watson"], a: 1 },
+        { q: "Normal Adult Blood Pressure is:", o: ["100/60 mmHg", "120/80 mmHg", "140/90 mmHg", "160/100 mmHg"], a: 1 }
+    ],
+    'BSc_Semester 5': [
+        { q: "Primary Health Care was declared at:", o: ["Ottawa Charter", "Alma-Ata Declaration", "Jakarta Declaration", "Bangkok Charter"], a: 1 },
+        { q: "Which Act governs forensic nursing practice in India?", o: ["Nursing Act 1947", "Indian Penal Code (IPC)", "Mental Health Act", "Drug Act"], a: 1 }
+    ],
+    'BSc_Semester 6': [
+        { q: "The APGAR score assesses a newborn at:", o: ["Birth only", "1 and 5 minutes after birth", "24 hours", "1 week"], a: 1 },
+        { q: "Which phase of labour involves delivery of the placenta?", o: ["First stage", "Second stage", "Third stage", "Fourth stage"], a: 2 }
+    ],
+    'BSc_Semester 7': [
+        { q: "In nursing research, 'hypothesis' is a:", o: ["Proven fact", "Testable prediction/statement", "Research conclusion", "Data analysis"], a: 1 },
+        { q: "The main goal of Community Health Nursing is:", o: ["Treating acute illness", "Promoting health and preventing disease in the community", "Hospital-based care only", "Surgical intervention"], a: 1 }
+    ],
+    // PBBSc
+    'PBBSc_First Year': [
+        { q: "The normal respiratory rate in a healthy adult is:", o: ["8–10/min", "12–20/min", "25–30/min", "35–40/min"], a: 1 },
+        { q: "Apical pulse is best heard at the:", o: ["Radial artery", "5th intercostal space, midclavicular line", "Carotid artery", "Femoral artery"], a: 1 }
+    ],
+    'PBBSc_Second Year': [
+        { q: "The 'nursing process' follows which order?", o: ["Assessment, Diagnosis, Planning, Implementation, Evaluation", "Diagnosis, Assessment, Planning, Evaluation, Implementation", "Planning, Assessment, Implementation, Diagnosis, Evaluation", "Implementation, Planning, Assessment, Evaluation, Diagnosis"], a: 0 },
+        { q: "Which organization regulates nursing education in India?", o: ["WHO", "Indian Nursing Council (INC)", "MCI", "AIIMS"], a: 1 }
+    ],
+    // GNM
+    'GNM_First Year': [
+        { q: "The normal temperature of the human body is:", o: ["35°C", "36°C", "37°C", "38°C"], a: 2 },
+        { q: "Which nutrient provides the most energy per gram?", o: ["Carbohydrates", "Proteins", "Fats", "Vitamins"], a: 2 }
+    ],
+    'GNM_Second Year': [
+        { q: "A patient with a blood glucose of 45 mg/dL is most likely experiencing:", o: ["Hyperglycemia", "Hypoglycemia", "Normal range", "Diabetic ketoacidosis"], a: 1 },
+        { q: "The correct position for a patient in shock is:", o: ["Fowler's position", "Trendelenburg/legs elevated", "Prone", "Left lateral"], a: 1 }
+    ],
+    'GNM_Third Year': [
+        { q: "The first stage of labour begins with:", o: ["Rupture of membranes", "Onset of regular contractions to full cervical dilation", "Delivery of baby", "Delivery of placenta"], a: 1 },
+        { q: "Which contraceptive method has the highest efficacy?", o: ["Condom", "Combined Oral Contraceptive Pill", "Copper-T IUD", "Calendar method"], a: 2 }
+    ],
+    // EXAMS
+    'EXAMS_NORCET': [
+        { q: "NORCET stands for:", o: ["Nursing Officer Recruitment Common Eligibility Test", "National Oral Care Exam Test", "Nursing Officer Regular Certification Exam", "None of the above"], a: 0 },
+        { q: "The conducting authority of NORCET is:", o: ["AIIMS New Delhi", "UPSC", "NMC", "INC"], a: 0 }
+    ],
+    'EXAMS_ESCI': [
+        { q: "ESCI exam primarily tests knowledge in:", o: ["Management only", "Clinical Nursing and Sciences", "Law", "History"], a: 1 },
+        { q: "Normal serum sodium level is:", o: ["100–110 mEq/L", "135–145 mEq/L", "150–160 mEq/L", "120–130 mEq/L"], a: 1 }
+    ],
+    // Fallback default
+    'default': [
+        { q: "The normal adult heart rate is:", o: ["40–60 bpm", "60–100 bpm", "100–120 bpm", "120–140 bpm"], a: 1 },
+        { q: "Florence Nightingale is known as the:", o: ["Mother of Medicine", "Lady with the Lamp / Founder of Modern Nursing", "Pioneer of Surgery", "First Doctor"], a: 1 }
+    ]
 };
 </script>
 </body>
