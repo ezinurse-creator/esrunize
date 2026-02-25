@@ -410,6 +410,30 @@
     .demo-tile-notes .demo-tile-icon { background: var(--grad-green); }
     .demo-tile-quiz .demo-tile-icon { background: var(--grad-pink); }
 
+    .demo-unlock-section {
+        margin: 0 20px 24px 20px;
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 18px 20px;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid #f1f5f9;
+    }
+    .demo-unlock-price-row {
+        display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
+    }
+    .demo-unlock-price {
+        display: flex; align-items: baseline; gap: 8px;
+    }
+    .demo-unlock-btn {
+        width: 100%; padding: 15px; border-radius: var(--radius-md);
+        border: none; font-size: 1rem; font-weight: 700; cursor: pointer;
+        background: var(--primary); color: white;
+        box-shadow: 0 4px 12px rgba(94,53,177,0.3);
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        transition: transform 0.1s;
+    }
+    .demo-unlock-btn:active { transform: scale(0.98); }
+
     .demo-tile-badge {
         position: absolute; top: 10px; right: 10px;
         font-size: 0.62rem; font-weight: 700; padding: 2px 7px;
@@ -790,6 +814,18 @@
                 </div>
                 <div class="demo-tile-badge">AI</div>
             </div>
+        </div>
+
+        <!-- Unlock Premium Button -->
+        <div class="demo-unlock-section">
+            <div class="demo-unlock-price-row">
+                <span class="material-icons-round" style="color:var(--accent); font-size:20px;">lock</span>
+                <div id="demo-unlock-price" class="demo-unlock-price"></div>
+            </div>
+            <button class="demo-unlock-btn" onclick="app.purchaseLockedContent()">
+                <span class="material-icons-round">shopping_cart</span>
+                Unlock Full Access
+            </button>
         </div>
     </div>
 
@@ -1263,11 +1299,24 @@ const _realApp = {
         this.lockedCourseKey = course; this.lockedCourseSection = section;
         const pKey = getPermissionKey(course, section);
         if (this.permissions && (this.permissions[pKey] === true || this.permissions['all_access'] === true)) {
+            // Has access — go straight to subject list
             this.openSubjectList(course, section);
         } else {
-            this.renderPaywallInfo(course, section);
-            this.navTo('view-paywall', false, { from: 'checkAccess' });
+            // No access — show Demo screen instead of paywall
+            this.openSectionDemo(course, section);
         }
+    },
+
+    // Demo screen shown for ALL locked course sections (replaces old paywall view)
+    openSectionDemo: function(course, section) {
+        this._demoSubject = { label: section, link: null, course, section };
+        document.getElementById('demo-subject-name').textContent = course + ' Nursing — ' + section;
+        document.getElementById('demo-subject-course').textContent = 'Preview before you buy';
+        document.getElementById('demo-badge').textContent = 'DEMO';
+        document.getElementById('header-title').textContent = section;
+        // Populate the unlock button price info
+        this.renderDemoPaywallInfo(course, section);
+        this.navTo('view-demo', false, { course, section });
     },
 
     openSubjectList: function(course, section) { this.renderSubjectList(course, section); this.navTo('view-subjects', false, { course, section }); },
@@ -1280,58 +1329,43 @@ const _realApp = {
         subjects.forEach(sub => {
             const item = document.createElement('div');
             item.className = 'list-item';
-            item.innerHTML = `<div style="display:flex;align-items:center;"><span class="material-icons-round list-icon">article</span><div class="list-info"><h4>${sub.label.replace(/<[^>]*>?/gm, '')}</h4></div></div><span class="material-icons-round" style="color:#ccc;">play_circle_outline</span>`;
-            // ← KEY CHANGE: clicking a subject now opens the DEMO screen instead of directly opening content
-            item.onclick = () => { this.openDemoScreen(sub, course, section); };
+            item.innerHTML = `<div style="display:flex;align-items:center;"><span class="material-icons-round list-icon">article</span><div class="list-info"><h4>${sub.label.replace(/<[^>]*>?/gm, '')}</h4></div></div><span class="material-icons-round" style="color:#ccc;">chevron_right</span>`;
+            item.onclick = () => { this.openContent(sub.link, sub.label.replace(/<[^>]*>?/gm, '')); };
             list.appendChild(item);
         });
     },
 
-    // ============================================
-    // DEMO SCREEN
-    // ============================================
-    openDemoScreen: function(subject, course, section) {
-        this._demoSubject = { ...subject, course, section };
-
-        // Populate hero
-        const rawLabel = subject.label.replace(/<[^>]*>?/gm, '');
-        document.getElementById('demo-subject-name').textContent = rawLabel;
-        document.getElementById('demo-subject-course').textContent = `${course} · ${section}`;
-        document.getElementById('demo-badge').textContent = 'SELECT';
-        document.getElementById('header-title').textContent = rawLabel;
-
-        this.navTo('view-demo', false, { course, section, subjectLink: subject.link });
+    renderDemoPaywallInfo: function(course, section) {
+        const el = document.getElementById('demo-unlock-price');
+        if (!el) return;
+        let html = '';
+        if (course === 'BSc') html = `<span class="price-original">₹12,000</span><span class="price-discounted">₹5,999</span>`;
+        else if (course === 'GNM') html = `<span class="price-original">₹14,000</span><span class="price-discounted">₹5,800</span>`;
+        else if (course === 'MSc') html = `<span class="price-original">₹10,000</span><span class="price-discounted">₹4,999</span>`;
+        else if (course === 'PBBSc') html = `<span class="price-original">₹10,000</span><span class="price-discounted">₹4,999</span>`;
+        else html = `<span class="price-discounted">Buy Now</span>`;
+        el.innerHTML = html;
     },
 
     demoOpenVideo: function() {
-        // Opens the main subject page — which typically contains video content
         if (!this._demoSubject) return;
-        this.openContent(this._demoSubject.link, this._demoSubject.label.replace(/<[^>]*>?/gm, ''));
+        const key = this._demoSubject.link;
+        const url = (DEMO_URLS[key] && DEMO_URLS[key].video) || 'about:blank';
+        this.openContent(url, 'Video Demo – ' + this._demoSubject.label.replace(/<[^>]*>?/gm, ''));
     },
 
     demoOpenLectureNote: function() {
         if (!this._demoSubject) return;
-        // Derive a lecture-note variant of the link: append ?mode=lecture to the URL
-        const url = this._addQueryParam(this._demoSubject.link, 'mode', 'lecture');
-        this.openContent(url, 'Lecture Note – ' + this._demoSubject.label.replace(/<[^>]*>?/gm, ''));
+        const key = this._demoSubject.link;
+        const url = (DEMO_URLS[key] && DEMO_URLS[key].lecture) || 'about:blank';
+        this.openContent(url, 'Lecture Note Demo – ' + this._demoSubject.label.replace(/<[^>]*>?/gm, ''));
     },
 
     demoOpenDetailedNotes: function() {
         if (!this._demoSubject) return;
-        const url = this._addQueryParam(this._demoSubject.link, 'mode', 'detailed');
-        this.openContent(url, 'Detailed Notes – ' + this._demoSubject.label.replace(/<[^>]*>?/gm, ''));
-    },
-
-    _addQueryParam: function(link, key, value) {
-        // If link is a relative path like 'bsc_1_nursing_foundation.html'
-        // we just pass it through with a hash so the page can read it
-        try {
-            const u = new URL(link, window.location.href);
-            u.searchParams.set(key, value);
-            return u.pathname + u.search + u.hash;
-        } catch (e) {
-            return link + (link.includes('?') ? '&' : '?') + key + '=' + value;
-        }
+        const key = this._demoSubject.link;
+        const url = (DEMO_URLS[key] && DEMO_URLS[key].detailed) || 'about:blank';
+        this.openContent(url, 'Detailed Notes Demo – ' + this._demoSubject.label.replace(/<[^>]*>?/gm, ''));
     },
 
     // ============================================
@@ -1629,6 +1663,123 @@ const COURSES = {
     'EXAMS': { 'NORCET': [{ label: 'NORCET 8 (English)', link: 'norcetenglish.html' },{ label: 'NORCET (Hindi)', link: 'norcethindi.html' }], 'ESCI': [{ label: 'ESCI Exclusive Q&A', link: 'esci.html' }] },
     'REQ': { 'Documents': [{ label: 'Nursing Requirements', link: 'nursingrequirements.html' }] },
     'COMM': { 'Basics': [{ label: 'Communicative English', link: 'communicativeenglish.html' }] }
+};
+
+// ============================================================
+// DEMO_URLS — keyed by the subject's `link` filename
+// Each entry has: video, lecture, detailed
+// Replace 'about:blank' with real URLs when ready
+// ============================================================
+const DEMO_URLS = {
+    // MSc First Year
+    'msc_1_advanced_nursing_practice.html':      { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'msc_1_nursing_education.html':              { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'msc_1_child_health_nursing.html':           { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'msc_1_community_health_nursing.html':       { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'msc_1_medical_surgical_nursing.html':       { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'msc_1_mental_health_nursing.html':          { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'msc_1_nursing_research_and_statistics.html':{ video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'msc_1_obgyn_nursing.html':                  { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'msc1qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    // MSc Second Year
+    'msc_2_child_health_nursing.html':           { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'msc_2_community_health_nursing.html':       { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'msc_2_obgyn_nursing.html':                  { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'msc_2_nursing_management.html':             { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'msc_2_mental_health_nursing.html':          { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'msc_2_medical_surgical_nursing.html':       { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'msc2qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    // BSc Semester 1
+    'bsc_1_applied_sociology.html':              { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc_1_applied_psychology.html':             { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc_1_applied_physiology.html':             { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc_1_applied_anatomy.html':                { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc_1_nursing_foundation.html':             { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc1qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    // BSc Semester 2
+    'bsc_2_applied_nutrition.html':              { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc_2_applied_biochemistry.html':           { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc_2_nursing_foundation.html':             { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc2qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    // BSc Semester 3
+    'bsc_3_pharmacology.html':                   { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc_3_pathology.html':                      { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc_3_applied_microbiology.html':           { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc_3_adult_health_nursing.html':           { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc3qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    // BSc Semester 4
+    'bsc_4_pharmacology.html':                   { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc_4_pathology.html':                      { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc_4_adult_health_nursing.html':           { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc_4_professionalism.html':                { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc_4_genetics.html':                       { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc4qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    // BSc Semester 5
+    'bsc_5_forensic_nursing_indian_law.html':    { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc_5_nursing_education.html':              { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc_5_community_health_nursing.html':       { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc_5_mental_health_nursing.html':          { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc_5_child_health_nursing.html':           { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc5qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    // BSc Semester 6
+    'bsc_6_child_health_nursing.html':           { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc_6_mental_health_nursing.html':          { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc_6_midwifery_obgyn.html':                { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc_6_nursing_management_leadership.html':  { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc6qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    // BSc Semester 7
+    'bsc_7_community_health_nursing.html':       { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc_7_nursing_research_statistics.html':    { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc_7_midwifery_obgyn.html':                { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'bsc7qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    // PBBSc First Year
+    'pbbsc_1_medical_surgical_nursing.html':     { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'pbbsc_1_child_health_nursing.html':         { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'pbbsc_1_microbiology.html':                 { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'pbbsc_1_biochemistry_biophysics.html':      { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'pbbsc_1_nutrition_dietetics.html':          { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'pbbsc_1_nursing_foundation.html':           { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'pbbsc_1_maternal_nursing.html':             { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'pbbsc_1_psychology.html':                   { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'pbbsc1qp.html':                             { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'pbbsc1live.html':                           { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    // PBBSc Second Year
+    'pbbsc_2_nursing_service_administration.html':{ video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'pbbsc_2_mental_health_nursing.html':        { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'pbbsc_2_nursing_education.html':            { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'pbbsc_2_community_health_nursing.html':     { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'pbbsc_2_sociology.html':                    { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'pbbsc2qp.html':                             { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    // GNM First Year
+    'gnm_1_nutrition.html':                      { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'gnm_1_health_education.html':               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'gnm_1_environmental_hygiene.html':          { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'gnm_1_community_health_nursing.html':       { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'gnm_1_first_aid.html':                      { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'gnm_1_fundamentals_of_nursing.html':        { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'gnm_1_sociology.html':                      { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'gnm_1_psychology.html':                     { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'gnm_1_microbiology.html':                   { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'gnm_1_anatomy_physiology.html':             { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'gnm1qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    // GNM Second Year
+    'gnm_2_medical_surgical_nursing.html':       { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'gnm_2_mental_health_nursing.html':          { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'gnm_2_medical_surgical_nursing_two.html':   { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'gnm_2_child_health_nursing.html':           { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'gnm2qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    // GNM Third Year
+    'gnm_3_community_health_nursing.html':       { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'gnm_3_midwifery.html':                      { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'gnm_3_gynecology.html':                     { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'gnm3qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    // 3D / EXAMS / REQ / COMM
+    '3dmodels.html':                             { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'norcetenglish.html':                        { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'norcethindi.html':                          { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'esci.html':                                 { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'nursingrequirements.html':                  { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
+    'communicativeenglish.html':                 { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' }
 };
 </script>
 </body>
