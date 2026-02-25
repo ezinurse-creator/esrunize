@@ -1,216 +1,589 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mental Health Nursing</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <style>
-        :root {
-            --brand: #003B82; --accent: #00B9F2; --gray-50: #f9fafb; --gray-200: #e5e7eb; --gray-900: #111827;
-            --danger: #ef4444; --success: #10b981; --warning: #f59e0b;
-        }
-        * { box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: white; color: var(--gray-900); padding: 24px; max-width: 1000px; margin: 0 auto; }
-        .syllabus-btn { display: block; width: 100%; padding: 18px 24px; margin: 12px 0; background: white; color: var(--brand); border: 2px solid var(--brand); font-weight: 700; font-size: 16px; text-align: center; cursor: pointer; border-radius: 12px; transition: all 0.2s ease; text-decoration: none; }
-        .syllabus-btn:hover { background: var(--gray-50); transform: translateY(-1px); }
-        .unit-header { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 18px 24px; margin: 16px 0; background: var(--brand); color: white; font-weight: 600; font-size: 16px; border-radius: 12px; cursor: pointer; transition: 0.2s; }
-        .unit-header:hover { background: #002d63; }
-        .unit-content { padding: 0 12px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; }
-        .unit-content.active { padding: 24px 12px; max-height: none; }
-        .subsection { padding: 20px; background: white; border-radius: 12px; border: 1px solid var(--gray-200); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-        .resource-btn { display: flex; width: 100%; padding: 14px 18px; margin: 6px 0; background: var(--gray-50); border-radius: 8px; font-weight: 500; border: 1px solid var(--gray-200); cursor: pointer; gap: 12px; transition: 0.2s; align-items: center; }
-        
-        /* EXISTING BUTTON STYLES */
-        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
-        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
-        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
-        .resource-btn.model { background: #fdf4ff; border-color: #f0abfc; color: #86198f; }
-
-        /* NEW BUTTON STYLES FOR APP */
-        .resource-btn.imp-discussion { background: #fef2f2; border-color: #fecaca; color: #b91c1c; } /* Light Red Background */
-        .resource-btn.imp-pdf { background: #fff7ed; border-color: #fed7aa; color: #c2410c; } /* Light Orange Background */
-        
-        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
-        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
-        .icon.video-icon { color: #8b5cf6; } .icon.quiz-icon { color: #f59e0b; } .icon.model-icon { color: #d946ef; }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; display: none; flex-direction: column; }
-        .modal-header { height: 60px; background: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; }
-        .btn-close { background: var(--danger); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
-        .modal-body { flex: 1; background: #f3f4f6; position: relative; padding: 20px; display:flex; justify-content:center; overflow-y: auto;}
-        .iframe-res { width: 100%; height: 100%; border: none; background: white; }
-        .quiz-container { background: white; width: 100%; max-width: 800px; padding: 30px; border-radius: 12px; margin-bottom: 50px; }
-        .quiz-option { padding: 12px 15px; border: 2px solid var(--gray-200); border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
-        .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
-        .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; }
-        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
-        .btn-quiz { background: var(--brand); color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 600; font-size: 16px; margin-top: 20px; cursor: pointer;}
-        @media (max-width: 768px) { body { padding: 16px; } .quiz-container { padding: 15px; } }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mental Health Nursing</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+--p50:#faf5ff;--p100:#f3e8ff;--p200:#e9d5ff;--p300:#d8b4fe;
+--p400:#c084fc;--p500:#a855f7;--p600:#9333ea;--p700:#7e22ce;
+--p800:#6b21a8;--p900:#581c87;
+--w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;
+--g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;
+--ok:#16a34a;--ok-lt:#dcfce7;--err:#dc2626;--err-lt:#fee2e2;
+--warn:#d97706;--warn-lt:#fef3c7;
+--r:12px;--rs:8px;
+--s1:0 1px 3px rgba(109,40,217,.08);
+--s2:0 4px 12px rgba(109,40,217,.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:90;background:var(--w);border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 16px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-back{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:var(--p100);color:var(--p700);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;margin-right:12px}
+.tb-back:hover{background:var(--p200)}
+.tb-info{flex:1;min-width:0}
+.tb-title{font-size:.88rem;font-weight:700;color:var(--g900);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb-sub{font-size:.65rem;color:var(--g400);font-weight:500;margin-top:1px}
+.tb-chip{background:var(--p100);color:var(--p700);border:1px solid var(--p200);font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
+.hero{background:linear-gradient(145deg,var(--p900),var(--p700) 55%,var(--p500));padding:28px 18px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.08),transparent 50%),radial-gradient(circle at 10% 85%,rgba(255,255,255,.05),transparent 40%)}
+.hero::after{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-dot-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:.65rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border-radius:30px;margin-bottom:12px}
+.hero-eyebrow-dot{width:5px;height:5px;background:#c4b5fd;border-radius:50%}
+.hero h1{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:7px}
+.hero h1 em{color:rgba(255,255,255,.45);font-style:italic;font-weight:300}
+.hero-desc{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:18px}
+.hero-cta{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.28);color:#fff;font-size:.8rem;font-weight:700;padding:9px 16px;border-radius:9px;cursor:pointer;transition:all .2s;backdrop-filter:blur(6px)}
+.hero-cta:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
+.hero-stats{display:flex;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+.hs{flex:1;text-align:center}
+.hs+.hs{border-left:1px solid rgba(255,255,255,.1)}
+.hs-n{font-size:1.35rem;font-weight:800;color:#fff;line-height:1}
+.hs-l{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
+.main{padding:16px 14px 56px}
+.divider{display:flex;align-items:center;gap:8px;margin-bottom:12px;margin-top:2px}
+.divider span{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g400)}
+.divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+.uc{background:var(--w);border:1.5px solid var(--g200);border-radius:var(--r);margin-bottom:9px;overflow:hidden;box-shadow:var(--s1);transition:border-color .2s,box-shadow .2s}
+.uc:hover{border-color:var(--p300);box-shadow:var(--s2)}
+.uc[data-open=true]{border-color:var(--p400);box-shadow:var(--s2)}
+.ubtn{width:100%;display:flex;align-items:center;padding:14px 15px;gap:12px;background:none;border:none;cursor:pointer;text-align:left}
+.upill{min-width:54px;padding:0 8px;height:36px;border-radius:9px;flex-shrink:0;background:var(--p100);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.upill span{font-size:.65rem;font-weight:800;color:var(--p700);letter-spacing:-.01em;white-space:nowrap}
+.uc[data-open=true] .upill{background:var(--p700)}
+.uc[data-open=true] .upill span{color:#fff}
+.uinfo{flex:1;min-width:0}
+.uname{font-size:.85rem;font-weight:700;color:var(--g900);line-height:1.3}
+.umeta{font-size:.66rem;color:var(--g400);margin-top:2px;font-weight:500}
+.uright{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.uchev{width:16px;height:16px;color:var(--g300);transition:transform .3s,color .2s}
+.uc[data-open=true] .uchev{transform:rotate(180deg);color:var(--p500)}
+.ubody{display:none;background:var(--p50);border-top:1.5px solid var(--p200);padding:12px 13px 14px}
+.ubody.open{display:block;animation:bodyIn .2s ease}
+@keyframes bodyIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.rrow{display:flex;gap:9px;margin-bottom:8px}
+.rrow:last-child{margin-bottom:0}
+@media(max-width:380px){.rrow{flex-direction:column}}
+.rbtn{flex:1;display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .17s;background:var(--w);text-decoration:none}
+.rbtn .rico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.rbtn .rtxt{line-height:1.25}
+.rbtn .rtxt small{display:block;font-size:.62rem;font-weight:400;opacity:.5;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;}
+.rbtn .rarr{margin-left:auto;opacity:0;font-size:.7rem;color:var(--g400);transition:opacity .15s}
+.rbtn:hover .rarr{opacity:1}
+.rbtn.notes{border-color:var(--p200);color:var(--p800)}
+.rbtn.notes .rico{background:var(--p100)}
+.rbtn.notes:hover{background:var(--p50);border-color:var(--p500);box-shadow:var(--s2);transform:translateY(-1px)}
+.rbtn.video{border-color:#bae6fd;color:#0369a1}
+.rbtn.video .rico{background:#e0f2fe}
+.rbtn.video:hover{background:#f0f9ff;border-color:#38bdf8;box-shadow:0 3px 10px rgba(56,189,248,.12);transform:translateY(-1px)}
+.rbtn.quiz{border-color:#fde68a;color:#78350f}
+.rbtn.quiz .rico{background:var(--warn-lt)}
+.rbtn.quiz:hover{background:#fffbeb;border-color:var(--warn);box-shadow:0 3px 10px rgba(217,119,6,.12);transform:translateY(-1px)}
+.qoverlay{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end}
+.qoverlay.open{display:flex}
+.qscrim{position:absolute;inset:0;background:rgba(15,10,40,.55);backdrop-filter:blur(3px)}
+.qpanel{position:relative;z-index:1;background:var(--w);width:100%;max-width:580px;margin:0 auto;border-radius:18px 18px 0 0;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 -10px 50px rgba(109,40,217,.2);animation:panelUp .3s cubic-bezier(.32,.72,0,1)}
+@keyframes panelUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.qhead{padding:16px 18px 12px;border-bottom:1px solid var(--g100);flex-shrink:0}
+.qhead-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.qtitle{font-size:1rem;font-weight:800;color:var(--p800)}
+.qclose{width:28px;height:28px;border-radius:50%;background:var(--g100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--g500);transition:all .15s}
+.qclose:hover{background:var(--err-lt);color:var(--err)}
+.qpips{display:flex;gap:3px}
+.pip{flex:1;height:4px;border-radius:4px;background:var(--g100);transition:background .3s}
+.pip.ans{background:var(--p300)}.pip.cor{background:var(--ok)}.pip.wrg{background:var(--err)}
+.qbody{overflow-y:auto;padding:14px 18px 28px;flex:1}
+.qscore{display:none;background:linear-gradient(135deg,var(--p800),var(--p500));color:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;align-items:center;gap:14px}
+.qscore.show{display:flex}
+.qs-num{font-size:1.9rem;font-weight:800;line-height:1}
+.qs-sub{font-size:.65rem;opacity:.6;margin-top:2px}
+.qs-msg{font-size:.85rem;font-weight:600}
+.qitem{margin-bottom:24px}
+.qitem:last-child{margin-bottom:0}
+.qlbl{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--p500);margin-bottom:4px}
+.qtext{font-size:.88rem;font-weight:600;color:var(--g900);line-height:1.5;margin-bottom:10px}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1.5px solid var(--g200);border-radius:var(--rs);cursor:pointer;font-size:.83rem;font-weight:500;background:var(--w);color:var(--g700);transition:all .14s}
+.qopt:hover{border-color:var(--p300);background:var(--p50);color:var(--p800)}
+.qltr{width:21px;height:21px;border-radius:50%;background:var(--g100);border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:800;color:var(--g500);flex-shrink:0;transition:all .14s}
+.qopt.cor{background:var(--ok-lt);border-color:#86efac;color:#14532d}
+.qopt.cor .qltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.qopt.wrg{background:var(--err-lt);border-color:#fca5a5;color:#7f1d1d}
+.qopt.wrg .qltr{background:var(--err);border-color:var(--err);color:#fff}
+.qopt.lock{cursor:default;pointer-events:none}
+.qopt.lock:not(.cor):not(.wrg):hover{border-color:var(--g200);background:var(--w);color:var(--g700)}
+</style>
 </head>
 <body>
-    <a class="syllabus-btn" href="https://drive.google.com/file/d/1n-2l2FPJ6g2UPERIeH7N1lSM5tQ1jLs6/view?usp=drive_link" target="_blank">📄 DOWNLOAD SYLLABUS</a>
-    <div id="units">
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 1 - INTRODUCTION <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1SjHvc_unvwMxzlpdRnRyu6XtbWZEvcOL/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1v8VtDYqB1_k8jWQzcOIZpOWl4-Xrp4mZ/preview', 'Definition & components of mental health and Mental illness')"><span class="icon video-icon">▶️</span><span>Definition & components of mental health and Mental illness</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1_gx-_7GHy7JDqIoDqvspP1KXt998Ek10/preview', 'Factors affecting mental health & terms used in psychiatry')"><span class="icon video-icon">▶️</span><span>Factors affecting mental health & terms used in psychiatry</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1gppsG3B0_JWF9O-AK2rM0QmqQ2KcqyD9/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1zsIKLhNP50Rnnu5CiBW1xzs8xptLQHWn/preview', 'Principles of MHN & Misconceptions related to mental illness')"><span class="icon video-icon">▶️</span><span>Principles of MHN & Misconceptions related to mental illness</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1OmD_0qUxvqHENFRF37OdRJyF1sBJe-rK/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/10ogg45mkWnX1gvHuorxCrKqF9G-YFydD/preview', 'Signs & Symptoms of Mental illness')"><span class="icon video-icon">▶️</span><span>Signs & Symptoms of Mental illness</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1S_av1SFebsNEOOczoInrNKvBmAfo3PWE/preview', 'Disorders of Motor activity & Memory')"><span class="icon video-icon">▶️</span><span>Disorders of Motor activity & Memory</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1WBy0KvitP_odNnt34caDUlH_UfYwHb8F/preview', 'Disorders of consciousness & perception')"><span class="icon video-icon">▶️</span><span>Disorders of consciousness & perception</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1_LhB2ZKZMAk3GPE0cs9gFWcQ8rdSQYab/preview', 'Disorders of thought & mood')"><span class="icon video-icon">▶️</span><span>Disorders of thought & mood</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Fo9YDGoANBbiiD36DbUFQv_Y5-9SXZOb/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/128jOqY6Ck_9DnnoVeRKTntglZY93YDQm/preview', 'Review of Defense Mechanisms')"><span class="icon video-icon">▶️</span><span>Review of Defense Mechanisms</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1mpYTB_BsG082fpRLr14ONvfRnVHO-6EC/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1YV9MJMu10b9eGYh0pGG2VOVUGB8b_FWS/preview', 'Mental Health Team')"><span class="icon video-icon">▶️</span><span>Mental Health Team</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ph3dtjJ3e5PW0p7ivavb5xADY38c1Dk7/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(1)"><span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 2 - HISTORY OF PSYCHIATRY <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1H4PH4mnHVjdDVi03HlUtgr_-_zPfNxBr/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1AWCsY89QYeK2PF4tu_hzOiEegzDc9Uei/preview', 'History of Psychiatric Nursing')"><span class="icon video-icon">▶️</span><span>History of Psychiatric Nursing</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/14bc22ZA-TXOgFNl32Vy8R1fF-Amvrp6v/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/15tmNz0VFDl_7qCVu5ymxA10sXBLihrCZ/preview', 'Trends in Psychiatric Nursing')"><span class="icon video-icon">▶️</span><span>Trends in Psychiatric Nursing</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1H57Wn2NAI-K292mb4JUksBKcH54ay0O4/preview', 'Trends in Psychiatric Nursing')"><span class="icon video-icon">▶️</span><span>Trends in Psychiatric Nursing</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1IxTUNOZzLRaWUVuOeALWDDaq-yyDTE0r/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1jXMU3eE8uHm5TBtfMORdigF2dXYXbciM/preview', 'National Mental Health Program')"><span class="icon video-icon">▶️</span><span>National Mental Health Program</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1BAN9Ktx58ztYtpjnnBfIXp3tzWDdQvMI/preview', 'Mental Health Act')"><span class="icon video-icon">▶️</span><span>Mental Health Act</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Tc4JZg6ta2leqhOiVIxi3_LS3e1CInZD/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(2)"><span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 3 - MENTAL HEALTH ASSESSMENT <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1FgNPaGnG_4Auvy60IL_16LSb7W8kMxlQ/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Er_J3rKeRwJ4v3__6UMfCzQjmZPFnjLV/preview', 'Psychiatry History Taking')"><span class="icon video-icon">▶️</span><span>Psychiatry History Taking</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1DcH8W-qTV60r8JNAE_FZl7FAgTm7ruPu/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1eZEljCMtVHqmQ7Tkv-Fu6pEj-UOW7TPO/preview', 'Mini Mental Status Examination')"><span class="icon video-icon">▶️</span><span>Mini Mental Status Examination</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/14z35XCcqv2csNcW6orgti8_L1y3J_hUp/preview', 'MMSE')"><span class="icon video-icon">▶️</span><span>MMSE</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1VR90DZx7dFETFEz945Q0T0sT6RNr-Tp7/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1onNvn0lBz0HRLfI5v9nqEbEcZ2ctgvFl/preview', 'Mental Status Examination')"><span class="icon video-icon">▶️</span><span>Mental Status Examination</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1N0LttQTuXESSrq8QE_K1InMYxxZHY1VP/preview', 'MSE')"><span class="icon video-icon">▶️</span><span>MSE</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ycIloJ6_cWRZG5qTAHALk7kmasLaK9Om/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(3)"><span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 4 - THERAPEUTIC NURSE - PATIENT RELATIONSHIP <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1bxbhjksGYHYvL9-6Fg7EJahZVh0XHnWX/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1qqru67_1-YfZcClKvb9nR9gPBl9FGw2V/preview', 'Therapeutic nurse patient relationship')"><span class="icon video-icon">▶️</span><span>Therapeutic nurse patient relationship</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1x_VgzF2rTMUPK7fLDgRANQZURj1oyKdZ/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1E5eUmGC_7Hh8Hj-m0HLSXh6jXKGxIXDH/preview', 'Phases of nurse patient relationship & Barriers in communication')"><span class="icon video-icon">▶️</span><span>Phases of nurse patient relationship & Barriers in communication</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1xNcFdbnlLKlNkF3h4lMvlpTqAhBzDkVN/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(4)"><span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 5 - MENTAL DISORDERS AND NURSING INTERVENTIONS <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1XFmYk630WOrHgPZyBJH3WMJlI-HdbQna/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1kCNxpnzPW_SiRPMac13U3bSrl-hd77YL/preview', 'Psycho-Pathophysiology of human behavior, Etiological theories & Classification of mental disorders.')"><span class="icon video-icon">▶️</span><span>Psycho-Pathophysiology of human behavior, Etiological theories & Classification of mental disorders.</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/19MhX4rS283FilKyenVHPchDnIVW43V9r/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1rFaDGXbP_jObEmwsKgJZQs2-5wV7sJNF/preview', 'Disorders of thought, Motor Activity & Memory')"><span class="icon video-icon">▶️</span><span>Disorders of thought, Motor Activity & Memory</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1rkU2N93R--GpuVI4pTbgwg08U5_1Eo14/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/19E7wNe-65QqesW2HQC4SO57zVLfhdG1R/preview', 'Disorders of perception, Speech, Mood & Concentration')"><span class="icon video-icon">▶️</span><span>Disorders of perception, Speech, Mood & Concentration</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_LQVJMLEQgHbGAGiynCb3RTv-uixFUMG/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/10x6TIr4f-0rEtF6CYGDAcIbELwgHB7vP/preview', 'Disorders of judgement & personality')"><span class="icon video-icon">▶️</span><span>Disorders of judgement & personality</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1J_GQeYfMKDu3tBL2qb1ZAP9pf-jOah0B/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Z1rt2UjEsmYRsZZPpQt91OD0pHRX3UYq/preview', 'Organic mental disorders: Dementia')"><span class="icon video-icon">▶️</span><span>Organic mental disorders: Dementia</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1rncrvyRo-gEmAPT2kPbseA6GIR5EwYlQ/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1BMCa_gYIDXwFLVsRL-KSuQQuUfDJaJ7U/preview', 'Delirium')"><span class="icon video-icon">▶️</span><span>Delirium</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1uFYrWPeIlHCn29evBHWd1axI-XvFhdDo/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1q7qiVNtAMiBPbK6kOA7TnPJKZOVUy2r7/preview', 'Psychotic Disorders: Schizophrenia')"><span class="icon video-icon">▶️</span><span>Psychotic Disorders: Schizophrenia</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Enei6Uu1RWaHuYDJS5h89T3kGhpB4L68/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1zVZ4ibgUFmz7wc9XDMq_XIjae5k76ebB/preview', 'Mood (Affective) Disorders: Depression')"><span class="icon video-icon">▶️</span><span>Mood (Affective) Disorders: Depression</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/11ixk6oGkSlfp_ohMdLt90pazAc4QjBw7/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/19azLVbADHXidr9i4nXIQk8MOPmGqXA4v/preview', 'Mania')"><span class="icon video-icon">▶️</span><span>Mania</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/17POVQB_CLU53qlu1wzKSh1N-pEApZYi-/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1DCSGES7d_TlzaIvzxKO7-pNy2j0-1C0S/preview', 'Bi-Polar Affective Disorders(BPAD)')"><span class="icon video-icon">▶️</span><span>Bi-Polar Affective Disorders(BPAD)</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1YqZpcdl510psDAPITQnvq7mi3B0iQEJK/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1BMCa_gYIDXwFLVsRL-KSuQQuUfDJaJ7U/preview', 'Delirium')"><span class="icon video-icon">▶️</span><span>Delirium</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1uFYrWPeIlHCn29evBHWd1axI-XvFhdDo/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1q7qiVNtAMiBPbK6kOA7TnPJKZOVUy2r7/preview', 'Psychotic Disorders: Schizophrenia')"><span class="icon video-icon">▶️</span><span>Psychotic Disorders: Schizophrenia</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Enei6Uu1RWaHuYDJS5h89T3kGhpB4L68/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1zVZ4ibgUFmz7wc9XDMq_XIjae5k76ebB/preview', 'Mood (Affective) Disorders: Depression')"><span class="icon video-icon">▶️</span><span>Mood (Affective) Disorders: Depression</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/11ixk6oGkSlfp_ohMdLt90pazAc4QjBw7/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/19azLVbADHXidr9i4nXIQk8MOPmGqXA4v/preview', 'Mania')"><span class="icon video-icon">▶️</span><span>Mania</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/17POVQB_CLU53qlu1wzKSh1N-pEApZYi-/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1DCSGES7d_TlzaIvzxKO7-pNy2j0-1C0S/preview', 'Bi-Polar Affective Disorders(BPAD)')"><span class="icon video-icon">▶️</span><span>Bi-Polar Affective Disorders(BPAD)</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1YqZpcdl510psDAPITQnvq7mi3B0iQEJK/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/19x2wpy9Gz1xZ7xFLhonXy2eT6lcIwIsT/preview', 'Neurotic Disorders: Phobia')"><span class="icon video-icon">▶️</span><span>Neurotic Disorders: Phobia</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1sO9Yn9P_RokaubGNGQP7At712p_BGE7L/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1tIGKj6VQFCIAU-HKfoa3GfreoTHvtpTT/preview', 'Anxiety Disorders')"><span class="icon video-icon">▶️</span><span>Anxiety Disorders</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1vNSIlPg1lUD2vGpDuGr4_mi9ptrOYdw2/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1cNmMZs6sJMSJCEqS6FJlRKxRb_VH2J-L/preview', 'Obsessive Compulsive Disorders')"><span class="icon video-icon">▶️</span><span>Obsessive Compulsive Disorders</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1XKeCDQG4qlvjFkuU4OAMzARz22JLEYLR/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1RQhxV-RqFOCWwQXgxF3jXKJVd501iijm/preview', 'Depressive Neurosis')"><span class="icon video-icon">▶️</span><span>Depressive Neurosis</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/19JIqlCGktLe7IEZ2p6e6Z7jcyHZnPGcU/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1PqAoHT29w-kAudxBc41sluoxMfn3uJqQ/preview', 'Conversion disorders & Post traumatic stress disorder')"><span class="icon video-icon">▶️</span><span>Conversion disorders & Post traumatic stress disorder</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1DpzRCkLnvWpdNu--VX1E7MbUbBxgnNM-/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1hIbKtGiU59JJPBNQB-ei02IHtk277nJ2/preview', 'Psychosomatic Disorders')"><span class="icon video-icon">▶️</span><span>Psychosomatic Disorders</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1IWY0qJfCrpInyCfMH5TDIy0w2yNlm2TK/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1-Thbm1c6sS-CXNCUixPbDP34BVOjTLSk/preview', 'Substance use and De-addiction: Alcohol')"><span class="icon video-icon">▶️</span><span>Substance use and De-addiction: Alcohol</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1keYS32CDmu350POw-Si0HRCY0PsQg-Bv/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1rK36Vg2yUNns9mklYJ5tw4WjoEpUPJAJ/preview', 'Tobacco withdrawal and Psychoactive substance')"><span class="icon video-icon">▶️</span><span>Tobacco withdrawal and Psychoactive substance</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ZQUUdctHSXmCRp0TATy5Lj6tKZD2yZOK/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1sIaWio7aFDVsmct-JoV5UCCifD1LDslI/preview', 'Sedative Hypnotic drugs & Cannabis')"><span class="icon video-icon">▶️</span><span>Sedative Hypnotic drugs & Cannabis</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1HtK49-lCoEWaSEu4Bv8gC-GjMoXlfPbJ/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ydqsAECH_iTrXzJFZ_VJLS7sCKY8YYC_/preview', 'Child and Adolescent Psychiatric Disorder; Sleep Disorder')"><span class="icon video-icon">▶️</span><span>Child and Adolescent Psychiatric Disorder; Sleep Disorder</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1tO372LUkjABVdxd-V9PNd_EwioBUL6HP/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1wgRVRF1DRclEwo9LdJXXb9Xf6NmH3wTY/preview', 'Eating Disorders')"><span class="icon video-icon">▶️</span><span>Eating Disorders</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Wfj4jM_tXeXqf0sNiSYSrpdGU7g5ndp_/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/184S1s0lS4_L7zXmDNhPl3yV_QfJMaQ_m/preview', 'Sexual Disorders')"><span class="icon video-icon">▶️</span><span>Sexual Disorders</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1biXhlqVaQteXf2HKU5MomNwpGXQMUjdB/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/15itVSyQU7lgUSkf_vk8S1UJAQtiNKcvs/preview', 'Nursing Management of Patients with Various Psychiatric Disorders')"><span class="icon video-icon">▶️</span><span>Nursing Management of Patients with Various Psychiatric Disorders</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1L17IUfKl4LJG6lbcAy4NWqUsF98pivHb/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(5)"><span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 6 - BIO - PSYCHO AND SOCIAL THERAPIES <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/19oa19eHMhTkRACUaXbIGqYWxaW3SfwdY/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1XJCAH9YIVKUmnRvXhYdpxYDQnJSUjgvA/preview', 'Physical method of treatment in psychiatry & Antipsychotics')"><span class="icon video-icon">▶️</span><span>Physical method of treatment in psychiatry & Antipsychotics</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/14GHDHlHInI-mBUJCG2ketK09ZMP5aBM8/preview', 'Side effects od antipsychotic drugs')"><span class="icon video-icon">▶️</span><span>Side effects od antipsychotic drugs</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1B4NDCLiL98OX9fob3KXwF4s_luyLeLH1/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/128pLGRjIGpyS-S6EPNlAEfgjbvQUYCjo/preview', 'Antidepressant drugs')"><span class="icon video-icon">▶️</span><span>Antidepressant drugs</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1GS12C0AYYXB3ythPNg11uwXUQGahQcrl/preview', 'MOA & Nurses role in Antidepressant drugs')"><span class="icon video-icon">▶️</span><span>MOA & Nurses role in Antidepressant drugs</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Yv6rzCxPx7nKswsot4AptMihPK364aai/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1YHqUZTaNAalWaV8mYIvaSrU15giPW0JW/preview', 'Mood stabilizers or antimanic drugs')"><span class="icon video-icon">▶️</span><span>Mood stabilizers or antimanic drugs</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1uRnNo4N4J84ZlUws-wTtJUgb9cj3Cwz0/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1tZagFd_wTvDG3Hj4IY_He4vrGQrj82NO/preview', 'Antianxiety agents')"><span class="icon video-icon">▶️</span><span>Antianxiety agents</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1M9y8FSHiPvs0MlAVg2XC7SN8d1OQMqg9/preview', 'CNS Stimulants')"><span class="icon video-icon">▶️</span><span>CNS Stimulants</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1qvFVIkD4V6OIJoasc6Ko0OoBR-9TIp6w/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1iPHEbcQcaa021Um0GkQSZDK-nBdXrtEf/preview', 'Electro Convulsive Therapy')"><span class="icon video-icon">▶️</span><span>Electro Convulsive Therapy</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1uj95e3EnuppeawAGAxx6J8q7igRRFMKb/preview', 'Effects & nurse role in ECT')"><span class="icon video-icon">▶️</span><span>Effects & nurse role in ECT</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1x8cnn7X-0LWev00QaqxnJ15SW3quLogx/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/12IninvlsrMSMY7BJb2R4LsnNWSDs5YAj/preview', 'Psychological Therapy ')"><span class="icon video-icon">▶️</span><span>Psychological Therapy </span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/17fIjcxOtQQ6IX31mw41WvKu9qAAT4yLR/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1K3WRukM17exSbvOpP6jv-DCqJhs6R0tN/preview', 'Behavior therapy')"><span class="icon video-icon">▶️</span><span>Behavior therapy</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1P20pyxhCXCxIhG1dNAoB6dUQORMtNaoj/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/13mWq-uQct9m03dAPgJCs6nH2JzHyfQNj/preview', 'Therapeutic Community')"><span class="icon video-icon">▶️</span><span>Therapeutic Community</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1wXF5woh1l86R4NR8m9hsx5OLq2fiYwVF/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1JWqFab3VlJqeZlwDz7CqiDnCYuySbIpA/preview', 'Occupational therapy')"><span class="icon video-icon">▶️</span><span>Occupational therapy</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1cceNdACl5RepREepeXKCHCNe3hnSXhCy/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(6)"><span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 7 - COMMUNITY MENTAL HEALTH <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1IF2qcb_9w5Yum7sEfrUVxSQh28KT9uXN/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1dsMf8E2BT2V_bE3bvhmDT5HtkTpK2zlt/preview', 'Definition, importance & scope of Community Mental Health')"><span class="icon video-icon">▶️</span><span>Definition, importance & scope of Community Mental Health</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1-EGVEuPIA73iaCf8i_hTL1KRIc1VHqIE/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1cQE2GYcTy1khegO5CrHfotwMm6xhNlhv/preview', 'Prevention of mental illness & Role of Nurse in national mental health programme and Psychiatric care in Community')"><span class="icon video-icon">▶️</span><span>Prevention of mental illness & Role of Nurse in national mental health programme and Psychiatric care in Community</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1TLVoMjMeL83j47VdsmvkVFWRYgmrWpfZ/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(7)"><span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 8 - PSYCHIATRIC EMERGENCIES AND CRISIS INTERVENTIONS <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1c1TTwjxVwnVUkkx0s2RJsnZIZvpynsof/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1MGfEeigu2CekQzgq1jv935gb6TlaLJDW/preview', 'Types of Psychiatric emergencies')"><span class="icon video-icon">▶️</span><span>Types of Psychiatric emergencies</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1jx67PdN_Np5_flJWBwsRiKKzK4V_Yn8g/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1TU9F1USlpISBjMTj5336ANMSbhfNk2AM/preview', 'Crisis and its intervention')"><span class="icon video-icon">▶️</span><span>Crisis and its intervention</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1tFV1h2O5luY4aPctxzEYf37pdqt9Magy/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(8)"><span class="icon quiz-icon">✍️</span><span>Take Unit 8 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 9 - FORENSIC PSYCHIATRY / LEGAL ASPECTS <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_qi5ql8pwFCfQ5357hZUO-b-iBT06gQ5/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1jdyV3OZenjJrTyBYzfdv-i2o1FAIezL2/preview', 'Legal Acts ')"><span class="icon video-icon">▶️</span><span>Legal Acts </span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1wxR5Xi1hP9zHEnU_Bk29QtGrvQLiR6AG/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1EqE3uRX0x9DqJLyNjqvegyRr9XVnLKkx/preview', 'Admission and discharge procedures')"><span class="icon video-icon">▶️</span><span>Admission and discharge procedures</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1S-MfrQYyD87dWvGRkqa1cpIfGWkJnBdd/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1HcA_c7FyZrNxY3DVf6rGlYlr4U9Tv8Rt/preview', 'Standards of psychiatric nursing practice, Rights of Mentally ill patients & Legal responsibilities in the care of mentally ill patients.')"><span class="icon video-icon">▶️</span><span>Standards of psychiatric nursing practice, Rights of Mentally ill patients & Legal responsibilities in the care of mentally ill patients.</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/14NWBhWhGnFtitG_1zWAfBqE7xWlu_Wu2/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(9)"><span class="icon quiz-icon">✍️</span><span>Take Unit 9 Quiz</span></div></div></div>
-                </div></div>
-    <div id="app-modal" class="modal-overlay">
-        <div class="modal-header">
-            <div id="modal-title" style="font-weight:700; color:var(--brand);">Resource</div>
-            <button class="btn-close" onclick="closeModal()">Close X</button>
-        </div>
-        <div id="modal-body" class="modal-body"></div>
-    </div>
+<header class="topbar">
+<button class="tb-back" onclick="goBackToApp()" aria-label="Back">&#8592;</button>
+<div class="tb-info">
+<div class="tb-title">Mental Health Nursing</div>
+<div class="tb-sub">GNM Second Year</div>
+</div>
+<div class="tb-chip">9 Units</div>
+</header>
+
+<section class="hero">
+<div class="hero-dot-grid"></div>
+<div class="hero-inner">
+<div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>GNM Second Year</div>
+<h1>Mental Health<br/><em>Nursing</em></h1>
+<p class="hero-desc">Interactive syllabus, detailed notes, video lectures & internal quizzes to aid in exam prep.</p>
+<button class="hero-cta" onclick="openLink('https://drive.google.com/file/d/1n-2l2FPJ6g2UPERIeH7N1lSM5tQ1jLs6/view')">
+📄 &nbsp;Download Syllabus
+</button>
+<div class="hero-stats">
+<div class="hs"><div class="hs-n">9</div><div class="hs-l">Units</div></div>
+<div class="hs"><div class="hs-n">90</div><div class="hs-l">Questions</div></div>
+</div>
+</div>
+</section>
+
+<main class="main">
+<div class="divider"><span>Course Units</span></div>
+
+<div class="uc" id="u1" data-open="false">
+<button class="ubtn" onclick="tog('u1')">
+<div class="upill"><span>Unit 1</span></div>
+<div class="uinfo"><div class="uname">Introduction</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u1">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1SjHvc_unvwMxzlpdRnRyu6XtbWZEvcOL/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 1 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1v8VtDYqB1_k8jWQzcOIZpOWl4-Xrp4mZ/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Mental Illness Def.</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1_gx-_7GHy7JDqIoDqvspP1KXt998Ek10/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Factors & Terms</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1gppsG3B0_JWF9O-AK2rM0QmqQ2KcqyD9/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Factors & Terms</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1zsIKLhNP50Rnnu5CiBW1xzs8xptLQHWn/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Principles & Myths</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1OmD_0qUxvqHENFRF37OdRJyF1sBJe-rK/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Principles</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/10ogg45mkWnX1gvHuorxCrKqF9G-YFydD/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Signs & Symptoms</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1S_av1SFebsNEOOczoInrNKvBmAfo3PWE/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Motor & Memory</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1WBy0KvitP_odNnt34caDUlH_UfYwHb8F/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Conscious/Percept.</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1_LhB2ZKZMAk3GPE0cs9gFWcQ8rdSQYab/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Thought & Mood</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1Fo9YDGoANBbiiD36DbUFQv_Y5-9SXZOb/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Symptoms</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/128jOqY6Ck_9DnnoVeRKTntglZY93YDQm/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Defense Mech.</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1mpYTB_BsG082fpRLr14ONvfRnVHO-6EC/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Defense Mech.</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1YV9MJMu10b9eGYh0pGG2VOVUGB8b_FWS/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Mental Health Team</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1ph3dtjJ3e5PW0p7ivavb5xADY38c1Dk7/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Health Team</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(1)"><div class="rico">✍️</div><div class="rtxt">Unit 1 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u2" data-open="false">
+<button class="ubtn" onclick="tog('u2')">
+<div class="upill"><span>Unit 2</span></div>
+<div class="uinfo"><div class="uname">History of Psychiatry</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u2">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1H4PH4mnHVjdDVi03HlUtgr_-_zPfNxBr/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 2 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1AWCsY89QYeK2PF4tu_hzOiEegzDc9Uei/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>History of Psych</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/14bc22ZA-TXOgFNl32Vy8R1fF-Amvrp6v/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>History</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/15tmNz0VFDl_7qCVu5ymxA10sXBLihrCZ/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Trends in Psych (1)</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1H57Wn2NAI-K292mb4JUksBKcH54ay0O4/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Trends in Psych (2)</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1IxTUNOZzLRaWUVuOeALWDDaq-yyDTE0r/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Trends</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1jXMU3eE8uHm5TBtfMORdigF2dXYXbciM/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Nat. Health Prog.</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1BAN9Ktx58ztYtpjnnBfIXp3tzWDdQvMI/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Mental Health Act</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1Tc4JZg6ta2leqhOiVIxi3_LS3e1CInZD/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Prog & Act</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(2)"><div class="rico">✍️</div><div class="rtxt">Unit 2 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u3" data-open="false">
+<button class="ubtn" onclick="tog('u3')">
+<div class="upill"><span>Unit 3</span></div>
+<div class="uinfo"><div class="uname">Mental Health Assessment</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u3">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1FgNPaGnG_4Auvy60IL_16LSb7W8kMxlQ/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 3 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1Er_J3rKeRwJ4v3__6UMfCzQjmZPFnjLV/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>History Taking</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1DcH8W-qTV60r8JNAE_FZl7FAgTm7ruPu/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>History Taking</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1eZEljCMtVHqmQ7Tkv-Fu6pEj-UOW7TPO/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>MMSE Exam</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/14z35XCcqv2csNcW6orgti8_L1y3J_hUp/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>MMSE</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1VR90DZx7dFETFEz945Q0T0sT6RNr-Tp7/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>MMSE</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1onNvn0lBz0HRLfI5v9nqEbEcZ2ctgvFl/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>MSE Exam</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1N0LttQTuXESSrq8QE_K1InMYxxZHY1VP/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>MSE</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1ycIloJ6_cWRZG5qTAHALk7kmasLaK9Om/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>MSE</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(3)"><div class="rico">✍️</div><div class="rtxt">Unit 3 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u4" data-open="false">
+<button class="ubtn" onclick="tog('u4')">
+<div class="upill"><span>Unit 4</span></div>
+<div class="uinfo"><div class="uname">Therapeutic Relationship</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u4">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1bxbhjksGYHYvL9-6Fg7EJahZVh0XHnWX/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 4 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1qqru67_1-YfZcClKvb9nR9gPBl9FGw2V/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Therapeutic Rel.</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1x_VgzF2rTMUPK7fLDgRANQZURj1oyKdZ/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Relationship</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1E5eUmGC_7Hh8Hj-m0HLSXh6jXKGxIXDH/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Phases & Barriers</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1xNcFdbnlLKlNkF3h4lMvlpTqAhBzDkVN/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Phases/Barriers</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(4)"><div class="rico">✍️</div><div class="rtxt">Unit 4 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u5" data-open="false">
+<button class="ubtn" onclick="tog('u5')">
+<div class="upill"><span>Unit 5</span></div>
+<div class="uinfo"><div class="uname">Mental Disorders</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u5">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1XFmYk630WOrHgPZyBJH3WMJlI-HdbQna/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 5 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1kCNxpnzPW_SiRPMac13U3bSrl-hd77YL/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Psycho-Patho/Class.</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/19MhX4rS283FilKyenVHPchDnIVW43V9r/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Classification</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1rFaDGXbP_jObEmwsKgJZQs2-5wV7sJNF/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Thought/Motor</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1rkU2N93R--GpuVI4pTbgwg08U5_1Eo14/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Thought/Motor</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/19E7wNe-65QqesW2HQC4SO57zVLfhdG1R/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Perception/Mood</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1_LQVJMLEQgHbGAGiynCb3RTv-uixFUMG/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Perception</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/10x6TIr4f-0rEtF6CYGDAcIbELwgHB7vP/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Judgement/Personal</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1J_GQeYfMKDu3tBL2qb1ZAP9pf-jOah0B/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Judgement</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1Z1rt2UjEsmYRsZZPpQt91OD0pHRX3UYq/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Dementia</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1rncrvyRo-gEmAPT2kPbseA6GIR5EwYlQ/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Dementia</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1BMCa_gYIDXwFLVsRL-KSuQQuUfDJaJ7U/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Delirium</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1uFYrWPeIlHCn29evBHWd1axI-XvFhdDo/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Delirium</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1q7qiVNtAMiBPbK6kOA7TnPJKZOVUy2r7/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Schizophrenia</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1Enei6Uu1RWaHuYDJS5h89T3kGhpB4L68/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Schizophrenia</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1zVZ4ibgUFmz7wc9XDMq_XIjae5k76ebB/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Depression</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/11ixk6oGkSlfp_ohMdLt90pazAc4QjBw7/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Depression</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/19azLVbADHXidr9i4nXIQk8MOPmGqXA4v/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Mania</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/17POVQB_CLU53qlu1wzKSh1N-pEApZYi-/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Mania</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1DCSGES7d_TlzaIvzxKO7-pNy2j0-1C0S/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>BPAD</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1YqZpcdl510psDAPITQnvq7mi3B0iQEJK/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>BPAD</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/19x2wpy9Gz1xZ7xFLhonXy2eT6lcIwIsT/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Phobia</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1sO9Yn9P_RokaubGNGQP7At712p_BGE7L/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Phobia</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1tIGKj6VQFCIAU-HKfoa3GfreoTHvtpTT/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Anxiety</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1vNSIlPg1lUD2vGpDuGr4_mi9ptrOYdw2/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Anxiety</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1cNmMZs6sJMSJCEqS6FJlRKxRb_VH2J-L/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>OCD</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1XKeCDQG4qlvjFkuU4OAMzARz22JLEYLR/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>OCD</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1RQhxV-RqFOCWwQXgxF3jXKJVd501iijm/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Depressive Neurosis</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/19JIqlCGktLe7IEZ2p6e6Z7jcyHZnPGcU/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Depression</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1PqAoHT29w-kAudxBc41sluoxMfn3uJqQ/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Conversion/PTSD</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1DpzRCkLnvWpdNu--VX1E7MbUbBxgnNM-/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>PTSD</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1hIbKtGiU59JJPBNQB-ei02IHtk277nJ2/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Psychosomatic</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1IWY0qJfCrpInyCfMH5TDIy0w2yNlm2TK/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Psychosomatic</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1-Thbm1c6sS-CXNCUixPbDP34BVOjTLSk/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Substance/Alcohol</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1keYS32CDmu350POw-Si0HRCY0PsQg-Bv/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Alcohol</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1rK36Vg2yUNns9mklYJ5tw4WjoEpUPJAJ/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Tobacco/Substance</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1ZQUUdctHSXmCRp0TATy5Lj6tKZD2yZOK/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Tobacco</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1sIaWio7aFDVsmct-JoV5UCCifD1LDslI/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Sedatives/Cannabis</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1HtK49-lCoEWaSEu4Bv8gC-GjMoXlfPbJ/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Sedatives</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1ydqsAECH_iTrXzJFZ_VJLS7sCKY8YYC_/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Child/Sleep Disorder</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1tO372LUkjABVdxd-V9PNd_EwioBUL6HP/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Sleep Disorder</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1wgRVRF1DRclEwo9LdJXXb9Xf6NmH3wTY/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Eating Disorders</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1Wfj4jM_tXeXqf0sNiSYSrpdGU7g5ndp_/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Eating Disorders</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/184S1s0lS4_L7zXmDNhPl3yV_QfJMaQ_m/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Sexual Disorders</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1biXhlqVaQteXf2HKU5MomNwpGXQMUjdB/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Sexual Disorders</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/15itVSyQU7lgUSkf_vk8S1UJAQtiNKcvs/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Nursing Mgt.</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1L17IUfKl4LJG6lbcAy4NWqUsF98pivHb/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Nursing Mgt.</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(5)"><div class="rico">✍️</div><div class="rtxt">Unit 5 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u6" data-open="false">
+<button class="ubtn" onclick="tog('u6')">
+<div class="upill"><span>Unit 6</span></div>
+<div class="uinfo"><div class="uname">Bio-Psycho & Social Therapies</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u6">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/19oa19eHMhTkRACUaXbIGqYWxaW3SfwdY/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 6 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1XJCAH9YIVKUmnRvXhYdpxYDQnJSUjgvA/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Physical/Antipsychotics</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/14GHDHlHInI-mBUJCG2ketK09ZMP5aBM8/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Antipsychotic S/E</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1B4NDCLiL98OX9fob3KXwF4s_luyLeLH1/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Antipsychotics</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/128pLGRjIGpyS-S6EPNlAEfgjbvQUYCjo/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Antidepressants</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1GS12C0AYYXB3ythPNg11uwXUQGahQcrl/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>MOA Antidepressants</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1Yv6rzCxPx7nKswsot4AptMihPK364aai/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Antidepressants</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1YHqUZTaNAalWaV8mYIvaSrU15giPW0JW/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Mood Stabilizers</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1uRnNo4N4J84ZlUws-wTtJUgb9cj3Cwz0/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Mood Stabilizers</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1tZagFd_wTvDG3Hj4IY_He4vrGQrj82NO/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Antianxiety Agents</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1M9y8FSHiPvs0MlAVg2XC7SN8d1OQMqg9/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>CNS Stimulants</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1qvFVIkD4V6OIJoasc6Ko0OoBR-9TIp6w/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>CNS Stimulants</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1iPHEbcQcaa021Um0GkQSZDK-nBdXrtEf/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>ECT (1)</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1uj95e3EnuppeawAGAxx6J8q7igRRFMKb/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>ECT (2)</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1x8cnn7X-0LWev00QaqxnJ15SW3quLogx/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>ECT</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/12IninvlsrMSMY7BJb2R4LsnNWSDs5YAj/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Psychological Therapy</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/17fIjcxOtQQ6IX31mw41WvKu9qAAT4yLR/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Psychological Therapy</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1K3WRukM17exSbvOpP6jv-DCqJhs6R0tN/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Behavior Therapy</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1P20pyxhCXCxIhG1dNAoB6dUQORMtNaoj/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Behavior Therapy</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/13mWq-uQct9m03dAPgJCs6nH2JzHyfQNj/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Therapeutic Comms</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1wXF5woh1l86R4NR8m9hsx5OLq2fiYwVF/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Therapeutic Comms</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1JWqFab3VlJqeZlwDz7CqiDnCYuySbIpA/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Occupational Therapy</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1cceNdACl5RepREepeXKCHCNe3hnSXhCy/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Occupational Therapy</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(6)"><div class="rico">✍️</div><div class="rtxt">Unit 6 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u7" data-open="false">
+<button class="ubtn" onclick="tog('u7')">
+<div class="upill"><span>Unit 7</span></div>
+<div class="uinfo"><div class="uname">Community Mental Health</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u7">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1IF2qcb_9w5Yum7sEfrUVxSQh28KT9uXN/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 7 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1dsMf8E2BT2V_bE3bvhmDT5HtkTpK2zlt/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Community Health</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1-EGVEuPIA73iaCf8i_hTL1KRIc1VHqIE/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Community Health</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1cQE2GYcTy1khegO5CrHfotwMm6xhNlhv/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Nurse's Role</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1TLVoMjMeL83j47VdsmvkVFWRYgmrWpfZ/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Nurse's Role</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(7)"><div class="rico">✍️</div><div class="rtxt">Unit 7 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u8" data-open="false">
+<button class="ubtn" onclick="tog('u8')">
+<div class="upill"><span>Unit 8</span></div>
+<div class="uinfo"><div class="uname">Emergencies & Crisis</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u8">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1c1TTwjxVwnVUkkx0s2RJsnZIZvpynsof/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 8 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1MGfEeigu2CekQzgq1jv935gb6TlaLJDW/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Psych Emergencies</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1jx67PdN_Np5_flJWBwsRiKKzK4V_Yn8g/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Psych Emergencies</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1TU9F1USlpISBjMTj5336ANMSbhfNk2AM/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Crisis Intervention</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1tFV1h2O5luY4aPctxzEYf37pdqt9Magy/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Crisis Intervention</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(8)"><div class="rico">✍️</div><div class="rtxt">Unit 8 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u9" data-open="false">
+<button class="ubtn" onclick="tog('u9')">
+<div class="upill"><span>Unit 9</span></div>
+<div class="uinfo"><div class="uname">Forensic / Legal Aspects</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u9">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1_qi5ql8pwFCfQ5357hZUO-b-iBT06gQ5/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 9 Overview</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1jdyV3OZenjJrTyBYzfdv-i2o1FAIezL2/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Legal Acts</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1wxR5Xi1hP9zHEnU_Bk29QtGrvQLiR6AG/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Legal Acts</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1EqE3uRX0x9DqJLyNjqvegyRr9XVnLKkx/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Admission/Discharge</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1S-MfrQYyD87dWvGRkqa1cpIfGWkJnBdd/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Admission/Discharge</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1HcA_c7FyZrNxY3DVf6rGlYlr4U9Tv8Rt/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Rights & Resp.</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/14NWBhWhGnFtitG_1zWAfBqE7xWlu_Wu2/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Rights & Resp.</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(9)"><div class="rico">✍️</div><div class="rtxt">Unit 9 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+</main>
+<div class="qoverlay" id="qmodal">
+<div class="qscrim" onclick="closeQuiz()"></div>
+<div class="qpanel">
+<div class="qhead">
+<div class="qhead-top"><div class="qtitle" id="qtitle">Quiz</div><button class="qclose" onclick="closeQuiz()">✕</button></div>
+<div class="qpips" id="qpips"></div>
+</div>
+<div class="qbody" id="qbody"></div>
+</div>
+</div>
 <script>
-        // 1. LISTENER FOR HARDWARE BACK BUTTON
-        // This detects when the user hits "Back" on their phone/browser
-        window.onpopstate = function(event) {
-            const modal = document.getElementById('app-modal');
-            // If the modal is currently visible, hide it cleanly.
-            if (modal.style.display === 'flex') {
-                modal.style.display = 'none';
-                document.getElementById('modal-body').innerHTML = '';
-            }
-        };
-
-        const QUIZ_DATA = {"1":[{"q":"Mental health is considered an essential component of:","o":["Only physical well-being","Overall health and well-being","Spiritual health only","Economic stability"],"a":1},{"q":"Which of the following is NOT a dimension of mental health?","o":["Emotional","Psychological","Social","Metabolic"],"a":3},{"q":"Which trait is a positive indicator of good mental health?","o":["Emotional resilience","Financial independence","Physical strength","Political influence"],"a":0},{"q":"Mental health is vital in which stage of life?","o":["Childhood","Adolescence","Old age","All stages of life"],"a":3},{"q":"Mental health is defined as:","o":["Absence of disease","Presence of positive traits such as adaptability and coping skills","Economic stability","Genetic inheritance"],"a":1},{"q":"Which of the following BEST describes the importance of mental health?","o":["Helps individuals develop only academic skills","Helps in stress management, adaptability, and meaningful relationships","Ensures financial independence","Prevents only psychological disorders"],"a":1},{"q":"Mental health enables individuals to:","o":["Avoid social contact","Handle daily challenges effectively","Become financially successful","Avoid old age problems"],"a":1},{"q":"Which of the following does not directly reflect poor mental health?","o":["Inability to cope with stress","Difficulty in forming relationships","Low emotional resilience","High physical stamina"],"a":3},{"q":"Which factor is considered foundational for a balanced and fulfilling life?","o":["Physical appearance","Mental well-being","Financial success","Professional achievements"],"a":1},{"q":"The absence of mental disorders:","o":["Is the complete definition of mental health","Is only part of the definition, as positive traits must also be present","Has no relation to mental health","Guarantees emotional resilience"],"a":1}],"2":[{"q":"In ancient civilizations, mental illness was most commonly believed to be caused by:","o":["Chemical imbalances","Possession by evil spirits","Poor diet","Genetic inheritance"],"a":1},{"q":"Which procedure involved drilling holes in the skull to \"release evil spirits\"?","o":["Phrenology","Trephination","Electroconvulsive therapy","Craniotomy"],"a":1},{"q":"Who is regarded as the \"Father of Medicine\" and proposed that mental illness had biological origins?","o":["Galen","Plato","Hippocrates","Aristotle"],"a":2},{"q":"According to Hippocrates, which of the following was NOT one of the four humors?","o":["Blood","Phlegm","Lymph","Black bile"],"a":2},{"q":"The term “melancholia” used by ancient physicians most closely corresponds to which modern disorder?","o":["Schizophrenia","Depression","Mania","Delirium"],"a":1},{"q":"In Greek and Roman medicine, \"phrenitis\" most likely referred to:","o":["Bipolar disorder","Brain inflammation or delirium","Obsessive-compulsive disorder","Epilepsy"],"a":1},{"q":"During the Middle Ages, which institution primarily took responsibility for the care of the mentally ill?","o":["Universities","Religious institutions (Church/Monasteries)","State hospitals","Independent physicians"],"a":1},{"q":"Which of the following ancient treatments aimed to restore balance of humors by removing excess fluids?","o":["Bloodletting and purging","Meditation and yoga","Herbal concoctions","Spiritual chanting"],"a":0},{"q":"Match the following disorders with their ancient descriptions: 1. Mania 2. Melancholia 3. Phrenitis","o":["1-b, 2-a, 3-c","1-a, 2-b, 3-c","1-c, 2-a, 3-b","1-b, 2-c, 3-a"],"a":0},{"q":"Which historical perspective represents the first significant departure from supernatural explanations of mental illness?","o":["Ancient Egyptian rituals","Hippocratic theory of humors","Medieval exorcism practices","Renaissance witch-hunts"],"a":1}],"3":[{"q":"What is the main purpose of history taking in mental health nursing?","o":["To fill hospital records","To diagnose only physical illness","To collect detailed information about the patient’s mental, emotional, and social health","To evaluate financial background"],"a":2},{"q":"Which of the following is NOT typically included in psychiatric history collection?","o":["Family and social background","Coping mechanisms","Past and present mental health issues","Bank account details"],"a":3},{"q":"Which of these is considered a primary goal of psychiatric history taking?","o":["Identifying triggers of mental illness","Prescribing medications","Conducting surgery","Measuring IQ"],"a":0},{"q":"History taking in mental health nursing helps in:","o":["Creating a general nursing routine","Developing individualized nursing care plans","Deciding hospital management policies","Reducing financial costs of treatment"],"a":1},{"q":"A detailed psychiatric history typically includes all EXCEPT:","o":["Lifestyle and coping mechanisms","Family psychiatric history","Current workplace salary","Medical comorbidities"],"a":2},{"q":"Why is assessing mental status considered an essential part of history taking?","o":["It evaluates the patient’s physical strength","It identifies cognitive functions, mood, perception, and behavior","It measures the patient’s economic condition","It avoids legal issues in care"],"a":1},{"q":"Which of the following best explains the link between history taking and diagnosis?","o":["It ensures faster hospital discharge","It provides structured information to understand the root cause and progression of mental illness","It improves hospital reputation","It avoids the need for mental status examination"],"a":1},{"q":"Which aspect of history taking focuses on understanding stressors and recurring symptoms that aggravate mental illness?","o":["Mental status assessment","Identifying patterns and triggers","Lifestyle documentation","Family history recording"],"a":1},{"q":"Psychiatric history differs from medical history primarily because it emphasizes:","o":["Past surgical interventions","Emotional, behavioral, and social insights","Blood test reports","Physical injury details"],"a":1},{"q":"Which of the following best reflects the holistic nature of psychiatric history taking?","o":["It combines medical data with emotional, social, and behavioral information to guide individualized care","It focuses only on symptoms and medications","It avoids personal and family questions to maintain privacy","It depends exclusively on psychological tests"],"a":0}],"4":[{"q":"Therapeutic communication in nursing is primarily used to:","o":["Maintain social interaction","Build a trusting relationship and promote healing","Speed up hospital paperwork","Replace medical treatment"],"a":1},{"q":"The process of converting thoughts and feelings into a message is called:","o":["Decoding","Encoding","Reflecting","Channeling"],"a":1},{"q":"Which of the following is NOT an essential responsibility of the sender in therapeutic communication?","o":["Using clear language","Understanding the receiver’s background","Having strong communication skills","Interpreting the message received"],"a":3},{"q":"The main difference between therapeutic communication and ordinary conversation is that therapeutic communication is:","o":["Purposeful and goal-directed","Casual and unstructured","Focused on social bonding","Primarily one-way"],"a":0},{"q":"In a nurse–patient relationship, which role does the nurse primarily take during therapeutic communication?","o":["Passive listener","Source or sender of the message","Secondary observer","Non-participant"],"a":1},{"q":"Which of the following best explains why communication is described as a dynamic and interactive process?","o":["It requires technology to transmit information","It involves constant exchange and feedback between sender and receiver","It depends solely on the sender’s knowledge","It is always face-to-face and verbal"],"a":1},{"q":"Which factor has the greatest influence on the effectiveness of therapeutic communication?","o":["Nonverbal cues only","The sender’s ability to understand the needs and background of the receiver","Length of the conversation","The physical environment of the hospital"],"a":1},{"q":"In therapeutic communication, when a nurse restates the patient’s message in their own words to clarify understanding, the technique is known as:","o":["Confrontation","Paraphrasing","Blocking","Encoding"],"a":1},{"q":"Which of the following illustrates a barrier to therapeutic communication?","o":["Using silence to encourage expression","Offering false reassurance such as “Don’t worry, everything will be fine”","Active listening with eye contact","Clarifying patient concerns with questions"],"a":1},{"q":"The success of nurse–patient therapeutic communication largely depends on:","o":["Medical knowledge alone","Accuracy of diagnostic tests","The nurse’s ability to balance empathy, clarity, and patient-centered focus","Use of complex medical terminology"],"a":2}],"5":[{"q":"Which of the following is classified under psychosis?","o":["Phobia","Anxiety","Schizophrenia","Obsessive compulsive disorder"],"a":2},{"q":"Mental and behavioural disorders due to psychoactive substance use fall under which ICD code range?","o":["F00–F09","F10–F19","F30–F39","F50–F59"],"a":1},{"q":"A patient with compulsive handwashing to relieve anxiety most likely suffers from:","o":["Phobia","Depression","Obsessive compulsive disorder","Mania"],"a":2},{"q":"Behavioural syndromes associated with physiological disturbances are categorized under:","o":["F20–F29","F40–F48","F50–F59","F70–F79"],"a":2},{"q":"Which of the following best describes psychosis?","o":["Disorder without loss of contact with reality","Disorder with loss of contact with reality","Disorder of personality traits","Disorder limited to phobias"],"a":1},{"q":"Schizotypal and delusional disorders are grouped under:","o":["F00–F09","F20–F29","F60–F69","F70–F79"],"a":1},{"q":"Which disorder is NOT a neurosis?","o":["Phobia","Anxiety","Obsessive compulsive disorder","Mania"],"a":3},{"q":"Intellectual disability is classified in ICD under which category?","o":["F40–F48","F60–F69","F80–F89","F70–F79"],"a":3},{"q":"Which of the following is an example of a mood (affective) disorder?","o":["Phobia","Schizophrenia","Bipolar affective disorder","Obsessive compulsive disorder"],"a":2},{"q":"Eating disorder is considered under which group of mental disorders?","o":["Psychosis","Neurosis","Organic mental disorders","Personality disorders"],"a":1}],"6":[{"q":"Which of the following is the gold standard drug for the treatment of bipolar disorder?","o":["Carbamazepine","Lithium carbonate","Valproic acid","Clozapine"],"a":1},{"q":"Electroconvulsive Therapy (ECT) is absolutely contraindicated in which condition?","o":["Severe hypertension","Recent myocardial infarction","Raised intracranial pressure","Catatonia"],"a":2},{"q":"Which class of antidepressants is most commonly associated with hypertensive crisis when taken with tyramine-rich foods?","o":["SSRIs","SNRIs","TCAs","MAOIs"],"a":3},{"q":"Clozapine is reserved for treatment-resistant schizophrenia because of the risk of:","o":["Tardive dyskinesia","Agranulocytosis","Neuroleptic malignant syndrome","Parkinsonism"],"a":1},{"q":"Which anxiolytic drug is preferred in elderly patients with alcohol withdrawal due to safer pharmacokinetics?","o":["Diazepam","Lorazepam","Oxazepam","Alprazolam"],"a":2},{"q":"A patient with severe depression is kept awake for 36 hours as therapy. This method is called:","o":["Phototherapy","Hydrotherapy","Sleep deprivation therapy","Light therapy"],"a":2},{"q":"Which mechanism best explains the therapeutic effect of ECT?","o":["Permanent increase in acetylcholine levels","Modulation of serotonin, dopamine, and norepinephrine with enhanced neuroplasticity","Irreversible inhibition of monoamine oxidase","Blockade of dopamine D2 receptors"],"a":1},{"q":"A patient on long-term Haloperidol presents with lip smacking, tongue protrusion, and grimacing. This condition is best managed by:","o":["Increasing the Haloperidol dose","Immediate discontinuation without taper","Switching to Clozapine or using Valbenazine","Giving benzodiazepines"],"a":2},{"q":"Which of the following mood stabilizers acts by blocking voltage-gated sodium channels and modulating neurotransmitter activity?","o":["Lithium","Valproate","Carbamazepine","Lamotrigine"],"a":2},{"q":"In Disulfiram therapy, alcohol ingestion causes accumulation of which toxic metabolite responsible for adverse effects?","o":["Ethanol","Acetyl-CoA","Acetaldehyde","Formaldehyde"],"a":2}],"7":[{"q":"Community Mental Health can be best defined as:","o":["Treatment of mental illness only in hospitals","A branch of public health that deals with prevention and treatment of mental disorders using community resources","Rehabilitation of patients only after hospitalization","Mental health services for children only"],"a":1},{"q":"Which is an absolute aim of Community Mental Health services?","o":["Early identification, prevention, and social integration","Long-term institutionalization","Only pharmacological management","Exclusive care for elderly"],"a":0},{"q":"Which of the following is NOT a focus of primordial prevention in mental health?","o":["Healthy prenatal environment","Secure attachment in childhood","Immediate pharmacological intervention","Socioeconomic improvements"],"a":2},{"q":"Which program is specifically designed at the district level for community-based psychiatric services in India?","o":["WHO Mental Health Action Plan","District Mental Health Programme (DMHP)","National Tuberculosis Elimination Program","Ayushman Bharat Scheme"],"a":1},{"q":"Which level of prevention aims at early detection and prompt treatment to reduce severity of mental illness?","o":["Primordial prevention","Primary prevention","Secondary prevention","Tertiary prevention"],"a":2},{"q":"Which role of the nurse involves providing psychological first aid during crises such as suicide attempts or natural disasters?","o":["Preventive role","Crisis intervention role","Administrative role","Advocacy role"],"a":1},{"q":"The main objective of tertiary prevention in mental illness is:","o":["Preventing the development of risk factors","Reducing severity and duration by early detection","Reducing disability and improving social integration of already diagnosed individuals","Complete elimination of all mental illnesses"],"a":2},{"q":"Which of the following is NOT a key responsibility of a community psychiatric nurse?","o":["Life skills and vocational training","Administering psychotropic medication at home","Conducting cardiac bypass surgery for psychiatric patients","Organizing awareness programs"],"a":2},{"q":"In Primary Prevention of mental illness, school-based programs usually focus on:","o":["Early diagnosis through laboratory tests","Life skills training, anti-bullying campaigns, and emotional intelligence education","Only strict disciplinary actions","Exclusive pharmacological treatment for children"],"a":1},{"q":"Under the National Mental Health Programme (NMHP), nurses play a vital role in:","o":["Screening, early identification, counseling, and rehabilitation at community level","Restricting services only to psychiatric hospitals","Providing care only to prisoners with mental illness","Limiting services to urban populations"],"a":0}],"8":[{"q":"Which of the following is a warning sign of violent behavior?","o":["Decreased sleep","Intense anger","Social withdrawal","Low self-esteem"],"a":1},{"q":"Neuroleptic Malignant Syndrome is most commonly associated with:","o":["Antidepressants","Benzodiazepines","Antipsychotics","Antiparkinsonian drugs"],"a":2},{"q":"Which is NOT a warning sign of suicide?","o":["Talking about being a burden","Looking for a way to kill oneself","Increased social interaction","Withdrawing from activities"],"a":2},{"q":"A patient suddenly stops alcohol intake after long-term heavy use. Which dangerous condition may result?","o":["Neuroleptic malignant syndrome","Alcohol withdrawal syndrome","Acute psychosis","Hypochondriasis"],"a":1},{"q":"Which of the following management steps is recommended for an overactive patient?","o":["Isolating the patient completely","Giving complex and long tasks","Engaging the patient in small activities","Avoiding interaction"],"a":2},{"q":"In acute psychosis, the main features include:","o":["Muscle rigidity and fever","Hallucinations and delusions","Withdrawal from activities","Irritability and insomnia"],"a":1},{"q":"During management of suicidal patients, which intervention is correct?","o":["Ignoring warning signs until behavior worsens","Use of psychotherapy and appropriate medications","Restricting communication with family","Avoiding pharmacological treatment"],"a":1},{"q":"Which of the following is NOT a common cause of adolescent crisis?","o":["Family conflict","Peer pressure","Parental mental illness","Low blood pressure"],"a":3},{"q":"In AIDS crisis intervention, the primary step includes:","o":["Providing immediate financial support","Detection and assessment of cases","Hospital admission of all patients","Avoiding disclosure of illness"],"a":1},{"q":"Which drug can be used as an antiparkinsonian agent in neuroleptic malignant syndrome?","o":["Clozapine","Procyclidine","Imipramine","Diazepam"],"a":1}],"9":[{"q":"The Indian Lunacy Act of 1912 was mainly concerned with:","o":["Prevention of drug trafficking","Care and treatment of mentally ill persons","Rights of mentally ill patients","Rehabilitation of prisoners"],"a":1},{"q":"Under the NDPS Act, how many drugs and their derivatives are listed?","o":["50","60","76","100"],"a":2},{"q":"Which Act introduced the concept of voluntary and involuntary admission in psychiatric hospitals?","o":["Indian Lunacy Act, 1912","NDPS Act, 1985","Mental Health Act, 1987","Rights of Persons with Disabilities Act, 2016"],"a":2},{"q":"In independent admission (voluntary hospitalization), a minor requires:","o":["Consent from magistrate","Consent from parent/legal guardian","No consent required","Consent from psychiatrist alone"],"a":1},{"q":"Which body approves supported admission beyond 30 days?","o":["High Court","Mental Health Review Tribunal","Chief Medical Officer","Superintendent of Hospital"],"a":1},{"q":"The leave of absence in psychiatric admission means:","o":["Discharge against medical advice","Temporary permission to leave hospital under supervision","Permanent release of patient","Refusal of treatment"],"a":1},{"q":"Which of the following is a right of mentally ill patients?","o":["Right to confidentiality","Right to forced isolation","Right to refuse family contact always","Right to detention without reason"],"a":0},{"q":"The least restrictive alternative principle means:","o":["Patients must always stay in locked wards","Only minimum limitations on patient’s freedom should be applied","Restraints are first choice of management","Patients cannot refuse any treatment"],"a":1},{"q":"Under the NDPS Act, Chapter II deals with:","o":["Synthetic drug control","Property forfeiture","Control of opium poppy cultivation","Offences and punishments"],"a":2},{"q":"Which of the following is a legal responsibility of nurses in psychiatric care?","o":["Restricting all patient communications","Ensuring informed consent before treatment","Disclosing all patient details to family without permission","Using restraints as the first measure"],"a":1}]};
-
-        let score = 0;
-
-        function toggleUnit(header) {
-            const content = header.nextElementSibling;
-            header.setAttribute('aria-expanded', header.getAttribute('aria-expanded') !== 'true');
-            content.classList.toggle('active');
-        }
-
-        function openResource(type, url, title) {
-            // FIX 2: Push a fake state to history so "Back Button" catches it
-            history.pushState({ modalOpen: true }, null, '#resource');
-
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            document.getElementById('modal-title').textContent = title;
-            modal.style.display = 'flex';
-            
-            // URL CLEANUP LOGIC (Maintained from your original code)
-            let finalUrl = url;
-            if (url.includes('drive.google.com')) { 
-                finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview'); 
-            }
-            else if (url.includes('human.biodigital.com')) { 
-                 if (url.includes('/viewer/')) finalUrl = url.replace('/viewer/', '/widget/');
-                 else finalUrl = url.replace('/view', '/widget'); 
-            }
-            
-            // FIX 3: Added sandbox and allow attributes for Video Playback
-            // This enables Google Drive videos to play inside the app
-            body.innerHTML = `
-                <iframe 
-                    class="iframe-res" 
-                    src="${finalUrl}" 
-                    width="100%" 
-                    height="100%" 
-                    frameborder="0"
-                    sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-presentation"
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen">
-                </iframe>`;
-        }
-
-        function startQuiz(unitId) {
-            // FIX 4: Push a fake state to history for Quiz as well
-            history.pushState({ modalOpen: true }, null, '#quiz');
-
-            score = 0;
-            const questions = QUIZ_DATA[unitId];
-            if(!questions || questions.length === 0) { alert('No questions found.'); return; }
-            let html = '<div class="quiz-container"><h2 style="color:var(--brand); margin-top:0;">Unit ' + unitId + ' Quiz</h2>';
-            html += '<div id="score-display" style="background:var(--brand); color:white; padding:5px 15px; border-radius:20px; display:inline-block; font-weight:700; margin-bottom:20px;">Score: 0 / ' + questions.length + '</div>';
-            questions.forEach((q, index) => {
-                html += '<div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">';
-                html += '<p style="font-weight:600; font-size:1.1rem; margin-bottom:15px;">' + (index + 1) + '. ' + q.q + '</p>';
-                q.o.forEach((opt, optIndex) => {
-                    html += '<div class="quiz-option" onclick="checkAnswer(this, ' + unitId + ', ' + optIndex + ', ' + q.a + ')">' + opt + '</div>';
-                });
-                html += '</div>';
-            });
-            html += '<button class="btn-quiz" onclick="closeModal()">Close Quiz</button></div>';
-            document.getElementById('modal-body').innerHTML = html;
-            document.getElementById('modal-title').textContent = 'Unit ' + unitId + ' Quiz';
-            document.getElementById('app-modal').style.display = 'flex';
-        }
-
-        function checkAnswer(element, unitId, selectedIndex, correctIndex) {
-            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
-            if (selectedIndex === correctIndex) {
-                element.classList.add('correct'); score++;
-            } else {
-                element.classList.add('wrong'); element.parentElement.children[correctIndex + 1].classList.add('correct');
-            }
-            document.getElementById('score-display').textContent = 'Score: ' + score + ' / ' + QUIZ_DATA[unitId].length;
-        }
-
-        function closeModal() { 
-            const modal = document.getElementById('app-modal');
-            modal.style.display = 'none'; 
-            document.getElementById('modal-body').innerHTML = ""; 
-
-            // FIX 5: Manual History Back
-            // If we have a history state (meaning the modal is open), go 'Back' to clear it
-            if ((history.state && history.state.modalOpen) || window.location.hash === '#resource' || window.location.hash === '#quiz') {
-                history.back();
-            }
-        }
-    </script>
+function goBackToApp(){if(window.parent&&window.parent!==window){window.parent.postMessage({action:'goBack'},'*');}else{history.back();}}
+function openLink(url) {
+if(!url || url==='COMING SOON' || url===''){ alert('This resource is coming soon!'); return; }
+let clean = url;
+if(clean.includes('drive.google.com')){
+clean = clean.replace(/\/preview.*$/,'').replace(/\/view.*$/,'')+'/view';
+} else if(clean.includes('human.biodigital.com')) {
+clean = clean.replace(/\/viewer\//, '/widget/').replace(/\/view\?/, '/widget?');
+}
+window.open(clean, '_blank');
+}
+function tog(id){const card=document.getElementById(id);const body=document.getElementById('b-'+id);const open=card.dataset.open==='true';card.dataset.open=String(!open);body.classList.toggle('open',!open);}
+const QD={
+1:[{"q":"Mental health is considered an essential component of:","o":["Only physical well-being","Overall health and well-being","Spiritual health only","Economic stability"],"a":1},{"q":"Which of the following is NOT a dimension of mental health?","o":["Emotional","Psychological","Social","Metabolic"],"a":3},{"q":"Which trait is a positive indicator of good mental health?","o":["Emotional resilience","Financial independence","Physical strength","Political influence"],"a":0},{"q":"Mental health is vital in which stage of life?","o":["Childhood","Adolescence","Old age","All stages of life"],"a":3},{"q":"Mental health is defined as:","o":["Absence of disease","Presence of positive traits such as adaptability and coping skills","Economic stability","Genetic inheritance"],"a":1},{"q":"Which of the following BEST describes the importance of mental health?","o":["Helps individuals develop only academic skills","Helps in stress management, adaptability, and meaningful relationships","Ensures financial independence","Prevents only psychological disorders"],"a":1},{"q":"Mental health enables individuals to:","o":["Avoid social contact","Handle daily challenges effectively","Become financially successful","Avoid old age problems"],"a":1},{"q":"Which of the following does not directly reflect poor mental health?","o":["Inability to cope with stress","Difficulty in forming relationships","Low emotional resilience","High physical stamina"],"a":3},{"q":"Which factor is considered foundational for a balanced and fulfilling life?","o":["Physical appearance","Mental well-being","Financial success","Professional achievements"],"a":1},{"q":"The absence of mental disorders:","o":["Is the complete definition of mental health","Is only part of the definition, as positive traits must also be present","Has no relation to mental health","Guarantees emotional resilience"],"a":1}],
+2:[{"q":"In ancient civilizations, mental illness was most commonly believed to be caused by:","o":["Chemical imbalances","Possession by evil spirits","Poor diet","Genetic inheritance"],"a":1},{"q":"Which procedure involved drilling holes in the skull to \"release evil spirits\"?","o":["Phrenology","Trephination","Electroconvulsive therapy","Craniotomy"],"a":1},{"q":"Who is regarded as the \"Father of Medicine\" and proposed that mental illness had biological origins?","o":["Galen","Plato","Hippocrates","Aristotle"],"a":2},{"q":"According to Hippocrates, which of the following was NOT one of the four humors?","o":["Blood","Phlegm","Lymph","Black bile"],"a":2},{"q":"The term “melancholia” used by ancient physicians most closely corresponds to which modern disorder?","o":["Schizophrenia","Depression","Mania","Delirium"],"a":1},{"q":"In Greek and Roman medicine, \"phrenitis\" most likely referred to:","o":["Bipolar disorder","Brain inflammation or delirium","Obsessive-compulsive disorder","Epilepsy"],"a":1},{"q":"During the Middle Ages, which institution primarily took responsibility for the care of the mentally ill?","o":["Universities","Religious institutions (Church/Monasteries)","State hospitals","Independent physicians"],"a":1},{"q":"Which of the following ancient treatments aimed to restore balance of humors by removing excess fluids?","o":["Bloodletting and purging","Meditation and yoga","Herbal concoctions","Spiritual chanting"],"a":0},{"q":"Match the following disorders with their ancient descriptions: 1. Mania 2. Melancholia 3. Phrenitis","o":["1-b, 2-a, 3-c","1-a, 2-b, 3-c","1-c, 2-a, 3-b","1-b, 2-c, 3-a"],"a":0},{"q":"Which historical perspective represents the first significant departure from supernatural explanations of mental illness?","o":["Ancient Egyptian rituals","Hippocratic theory of humors","Medieval exorcism practices","Renaissance witch-hunts"],"a":1}],
+3:[{"q":"What is the main purpose of history taking in mental health nursing?","o":["To fill hospital records","To diagnose only physical illness","To collect detailed information about the patient’s mental, emotional, and social health","To evaluate financial background"],"a":2},{"q":"Which of the following is NOT typically included in psychiatric history collection?","o":["Family and social background","Coping mechanisms","Past and present mental health issues","Bank account details"],"a":3},{"q":"Which of these is considered a primary goal of psychiatric history taking?","o":["Identifying triggers of mental illness","Prescribing medications","Conducting surgery","Measuring IQ"],"a":0},{"q":"History taking in mental health nursing helps in:","o":["Creating a general nursing routine","Developing individualized nursing care plans","Deciding hospital management policies","Reducing financial costs of treatment"],"a":1},{"q":"A detailed psychiatric history typically includes all EXCEPT:","o":["Lifestyle and coping mechanisms","Family psychiatric history","Current workplace salary","Medical comorbidities"],"a":2},{"q":"Why is assessing mental status considered an essential part of history taking?","o":["It evaluates the patient’s physical strength","It identifies cognitive functions, mood, perception, and behavior","It measures the patient’s economic condition","It avoids legal issues in care"],"a":1},{"q":"Which of the following best explains the link between history taking and diagnosis?","o":["It ensures faster hospital discharge","It provides structured information to understand the root cause and progression of mental illness","It improves hospital reputation","It avoids the need for mental status examination"],"a":1},{"q":"Which aspect of history taking focuses on understanding stressors and recurring symptoms that aggravate mental illness?","o":["Mental status assessment","Identifying patterns and triggers","Lifestyle documentation","Family history recording"],"a":1},{"q":"Psychiatric history differs from medical history primarily because it emphasizes:","o":["Past surgical interventions","Emotional, behavioral, and social insights","Blood test reports","Physical injury details"],"a":1},{"q":"Which of the following best reflects the holistic nature of psychiatric history taking?","o":["It combines medical data with emotional, social, and behavioral information to guide individualized care","It focuses only on symptoms and medications","It avoids personal and family questions to maintain privacy","It depends exclusively on psychological tests"],"a":0}],
+4:[{"q":"Therapeutic communication in nursing is primarily used to:","o":["Maintain social interaction","Build a trusting relationship and promote healing","Speed up hospital paperwork","Replace medical treatment"],"a":1},{"q":"The process of converting thoughts and feelings into a message is called:","o":["Decoding","Encoding","Reflecting","Channeling"],"a":1},{"q":"Which of the following is NOT an essential responsibility of the sender in therapeutic communication?","o":["Using clear language","Understanding the receiver’s background","Having strong communication skills","Interpreting the message received"],"a":3},{"q":"The main difference between therapeutic communication and ordinary conversation is that therapeutic communication is:","o":["Purposeful and goal-directed","Casual and unstructured","Focused on social bonding","Primarily one-way"],"a":0},{"q":"In a nurse–patient relationship, which role does the nurse primarily take during therapeutic communication?","o":["Passive listener","Source or sender of the message","Secondary observer","Non-participant"],"a":1},{"q":"Which of the following best explains why communication is described as a dynamic and interactive process?","o":["It requires technology to transmit information","It involves constant exchange and feedback between sender and receiver","It depends solely on the sender’s knowledge","It is always face-to-face and verbal"],"a":1},{"q":"Which factor has the greatest influence on the effectiveness of therapeutic communication?","o":["Nonverbal cues only","The sender’s ability to understand the needs and background of the receiver","Length of the conversation","The physical environment of the hospital"],"a":1},{"q":"In therapeutic communication, when a nurse restates the patient’s message in their own words to clarify understanding, the technique is known as:","o":["Confrontation","Paraphrasing","Blocking","Encoding"],"a":1},{"q":"Which of the following illustrates a barrier to therapeutic communication?","o":["Using silence to encourage expression","Offering false reassurance such as “Don’t worry, everything will be fine”","Active listening with eye contact","Clarifying patient concerns with questions"],"a":1},{"q":"The success of nurse–patient therapeutic communication largely depends on:","o":["Medical knowledge alone","Accuracy of diagnostic tests","The nurse’s ability to balance empathy, clarity, and patient-centered focus","Use of complex medical terminology"],"a":2}],
+5:[{"q":"Which of the following is classified under psychosis?","o":["Phobia","Anxiety","Schizophrenia","Obsessive compulsive disorder"],"a":2},{"q":"Mental and behavioural disorders due to psychoactive substance use fall under which ICD code range?","o":["F00–F09","F10–F19","F30–F39","F50–F59"],"a":1},{"q":"A patient with compulsive handwashing to relieve anxiety most likely suffers from:","o":["Phobia","Depression","Obsessive compulsive disorder","Mania"],"a":2},{"q":"Behavioural syndromes associated with physiological disturbances are categorized under:","o":["F20–F29","F40–F48","F50–F59","F70–F79"],"a":2},{"q":"Which of the following best describes psychosis?","o":["Disorder without loss of contact with reality","Disorder with loss of contact with reality","Disorder of personality traits","Disorder limited to phobias"],"a":1},{"q":"Schizotypal and delusional disorders are grouped under:","o":["F00–F09","F20–F29","F60–F69","F70–F79"],"a":1},{"q":"Which disorder is NOT a neurosis?","o":["Phobia","Anxiety","Obsessive compulsive disorder","Mania"],"a":3},{"q":"Intellectual disability is classified in ICD under which category?","o":["F40–F48","F60–F69","F80–F89","F70–F79"],"a":3},{"q":"Which of the following is an example of a mood (affective) disorder?","o":["Phobia","Schizophrenia","Bipolar affective disorder","Obsessive compulsive disorder"],"a":2},{"q":"Eating disorder is considered under which group of mental disorders?","o":["Psychosis","Neurosis","Organic mental disorders","Personality disorders"],"a":1}],
+6:[{"q":"Which of the following is the gold standard drug for the treatment of bipolar disorder?","o":["Carbamazepine","Lithium carbonate","Valproic acid","Clozapine"],"a":1},{"q":"Electroconvulsive Therapy (ECT) is absolutely contraindicated in which condition?","o":["Severe hypertension","Recent myocardial infarction","Raised intracranial pressure","Catatonia"],"a":2},{"q":"Which class of antidepressants is most commonly associated with hypertensive crisis when taken with tyramine-rich foods?","o":["SSRIs","SNRIs","TCAs","MAOIs"],"a":3},{"q":"Clozapine is reserved for treatment-resistant schizophrenia because of the risk of:","o":["Tardive dyskinesia","Agranulocytosis","Neuroleptic malignant syndrome","Parkinsonism"],"a":1},{"q":"Which anxiolytic drug is preferred in elderly patients with alcohol withdrawal due to safer pharmacokinetics?","o":["Diazepam","Lorazepam","Oxazepam","Alprazolam"],"a":2},{"q":"A patient with severe depression is kept awake for 36 hours as therapy. This method is called:","o":["Phototherapy","Hydrotherapy","Sleep deprivation therapy","Light therapy"],"a":2},{"q":"Which mechanism best explains the therapeutic effect of ECT?","o":["Permanent increase in acetylcholine levels","Modulation of serotonin, dopamine, and norepinephrine with enhanced neuroplasticity","Irreversible inhibition of monoamine oxidase","Blockade of dopamine D2 receptors"],"a":1},{"q":"A patient on long-term Haloperidol presents with lip smacking, tongue protrusion, and grimacing. This condition is best managed by:","o":["Increasing the Haloperidol dose","Immediate discontinuation without taper","Switching to Clozapine or using Valbenazine","Giving benzodiazepines"],"a":2},{"q":"Which of the following mood stabilizers acts by blocking voltage-gated sodium channels and modulating neurotransmitter activity?","o":["Lithium","Valproate","Carbamazepine","Lamotrigine"],"a":2},{"q":"In Disulfiram therapy, alcohol ingestion causes accumulation of which toxic metabolite responsible for adverse effects?","o":["Ethanol","Acetyl-CoA","Acetaldehyde","Formaldehyde"],"a":2}],
+7:[{"q":"Community Mental Health can be best defined as:","o":["Treatment of mental illness only in hospitals","A branch of public health that deals with prevention and treatment of mental disorders using community resources","Rehabilitation of patients only after hospitalization","Mental health services for children only"],"a":1},{"q":"Which is an absolute aim of Community Mental Health services?","o":["Early identification, prevention, and social integration","Long-term institutionalization","Only pharmacological management","Exclusive care for elderly"],"a":0},{"q":"Which of the following is NOT a focus of primordial prevention in mental health?","o":["Healthy prenatal environment","Secure attachment in childhood","Immediate pharmacological intervention","Socioeconomic improvements"],"a":2},{"q":"Which program is specifically designed at the district level for community-based psychiatric services in India?","o":["WHO Mental Health Action Plan","District Mental Health Programme (DMHP)","National Tuberculosis Elimination Program","Ayushman Bharat Scheme"],"a":1},{"q":"Which level of prevention aims at early detection and prompt treatment to reduce severity of mental illness?","o":["Primordial prevention","Primary prevention","Secondary prevention","Tertiary prevention"],"a":2},{"q":"Which role of the nurse involves providing psychological first aid during crises such as suicide attempts or natural disasters?","o":["Preventive role","Crisis intervention role","Administrative role","Advocacy role"],"a":1},{"q":"The main objective of tertiary prevention in mental illness is:","o":["Preventing the development of risk factors","Reducing severity and duration by early detection","Reducing disability and improving social integration of already diagnosed individuals","Complete elimination of all mental illnesses"],"a":2},{"q":"Which of the following is NOT a key responsibility of a community psychiatric nurse?","o":["Life skills and vocational training","Administering psychotropic medication at home","Conducting cardiac bypass surgery for psychiatric patients","Organizing awareness programs"],"a":2},{"q":"In Primary Prevention of mental illness, school-based programs usually focus on:","o":["Early diagnosis through laboratory tests","Life skills training, anti-bullying campaigns, and emotional intelligence education","Only strict disciplinary actions","Exclusive pharmacological treatment for children"],"a":1},{"q":"Under the National Mental Health Programme (NMHP), nurses play a vital role in:","o":["Screening, early identification, counseling, and rehabilitation at community level","Restricting services only to psychiatric hospitals","Providing care only to prisoners with mental illness","Limiting services to urban populations"],"a":0}],
+8:[{"q":"Which of the following is a warning sign of violent behavior?","o":["Decreased sleep","Intense anger","Social withdrawal","Low self-esteem"],"a":1},{"q":"Neuroleptic Malignant Syndrome is most commonly associated with:","o":["Antidepressants","Benzodiazepines","Antipsychotics","Antiparkinsonian drugs"],"a":2},{"q":"Which is NOT a warning sign of suicide?","o":["Talking about being a burden","Looking for a way to kill oneself","Increased social interaction","Withdrawing from activities"],"a":2},{"q":"A patient suddenly stops alcohol intake after long-term heavy use. Which dangerous condition may result?","o":["Neuroleptic malignant syndrome","Alcohol withdrawal syndrome","Acute psychosis","Hypochondriasis"],"a":1},{"q":"Which of the following management steps is recommended for an overactive patient?","o":["Isolating the patient completely","Giving complex and long tasks","Engaging the patient in small activities","Avoiding interaction"],"a":2},{"q":"In acute psychosis, the main features include:","o":["Muscle rigidity and fever","Hallucinations and delusions","Withdrawal from activities","Irritability and insomnia"],"a":1},{"q":"During management of suicidal patients, which intervention is correct?","o":["Ignoring warning signs until behavior worsens","Use of psychotherapy and appropriate medications","Restricting communication with family","Avoiding pharmacological treatment"],"a":1},{"q":"Which of the following is NOT a common cause of adolescent crisis?","o":["Family conflict","Peer pressure","Parental mental illness","Low blood pressure"],"a":3},{"q":"In AIDS crisis intervention, the primary step includes:","o":["Providing immediate financial support","Detection and assessment of cases","Hospital admission of all patients","Avoiding disclosure of illness"],"a":1},{"q":"Which drug can be used as an antiparkinsonian agent in neuroleptic malignant syndrome?","o":["Clozapine","Procyclidine","Imipramine","Diazepam"],"a":1}],
+9:[{"q":"The Indian Lunacy Act of 1912 was mainly concerned with:","o":["Prevention of drug trafficking","Care and treatment of mentally ill persons","Rights of mentally ill patients","Rehabilitation of prisoners"],"a":1},{"q":"Under the NDPS Act, how many drugs and their derivatives are listed?","o":["50","60","76","100"],"a":2},{"q":"Which Act introduced the concept of voluntary and involuntary admission in psychiatric hospitals?","o":["Indian Lunacy Act, 1912","NDPS Act, 1985","Mental Health Act, 1987","Rights of Persons with Disabilities Act, 2016"],"a":2},{"q":"In independent admission (voluntary hospitalization), a minor requires:","o":["Consent from magistrate","Consent from parent/legal guardian","No consent required","Consent from psychiatrist alone"],"a":1},{"q":"Which body approves supported admission beyond 30 days?","o":["High Court","Mental Health Review Tribunal","Chief Medical Officer","Superintendent of Hospital"],"a":1},{"q":"The leave of absence in psychiatric admission means:","o":["Discharge against medical advice","Temporary permission to leave hospital under supervision","Permanent release of patient","Refusal of treatment"],"a":1},{"q":"Which of the following is a right of mentally ill patients?","o":["Right to confidentiality","Right to forced isolation","Right to refuse family contact always","Right to detention without reason"],"a":0},{"q":"The least restrictive alternative principle means:","o":["Patients must always stay in locked wards","Only minimum limitations on patient’s freedom should be applied","Restraints are first choice of management","Patients cannot refuse any treatment"],"a":1},{"q":"Under the NDPS Act, Chapter II deals with:","o":["Synthetic drug control","Property forfeiture","Control of opium poppy cultivation","Offences and punishments"],"a":2},{"q":"Which of the following is a legal responsibility of nurses in psychiatric care?","o":["Restricting all patient communications","Ensuring informed consent before treatment","Disclosing all patient details to family without permission","Using restraints as the first measure"],"a":1}]
+};
+let curQuiz=null,answered=[];
+function openQuiz(id){
+curQuiz=id;
+const qs=QD[id]||[];
+answered=new Array(qs.length).fill(null);
+document.getElementById('qtitle').textContent='Unit '+id+' Quiz';
+document.getElementById('qpips').innerHTML=qs.map((_,i)=>`<div class="pip" id="pip${i}"></div>`).join('');
+let html=`<div class="qscore" id="qscore"><div><div class="qs-num" id="qsnum">—</div><div class="qs-sub">Score</div></div><div class="qs-msg" id="qsmsg"></div></div>`;
+qs.forEach((q,qi)=>{
+html+=`<div class="qitem" id="qi${qi}"><div class="qlbl">Question ${qi+1} of ${qs.length}</div><div class="qtext">${q.q}</div><div class="qopts">${q.o.map((opt,oi)=>`<button class="qopt" id="opt${qi}_${oi}" onclick="ans(${qi},${oi},${q.a})"><span class="qltr">${['A','B','C','D'][oi]}</span>${opt}</button>`).join('')}</div></div>`;
+});
+document.getElementById('qbody').innerHTML=html;
+document.getElementById('qmodal').classList.add('open');
+document.body.style.overflow='hidden';
+}
+function ans(qi,oi,correct){
+if(answered[qi]!==null)return;
+answered[qi]=oi;
+const opts=document.querySelectorAll(`#qi${qi} .qopt`);
+opts.forEach(b=>b.classList.add('lock'));
+opts[correct].classList.add('cor');
+if(oi!==correct)opts[oi].classList.add('wrg');
+const pip=document.getElementById('pip'+qi);
+pip.classList.add('ans',oi===correct?'cor':'wrg');
+if(answered.every(a=>a!==null)){
+const score=answered.filter((a,i)=>a===QD[curQuiz][i].a).length;
+const total=QD[curQuiz].length;
+const pct=Math.round(score/total*100);
+const msgs=['📚 Keep Studying!','👍 Good Effort!','🎉 Well Done!','🏆 Perfect!'];
+const mi=pct<50?0:pct<70?1:pct<100?2:3;
+document.getElementById('qsnum').textContent=score+'/'+total;
+document.getElementById('qsmsg').textContent=msgs[mi];
+const sc=document.getElementById('qscore');
+sc.classList.add('show');
+sc.scrollIntoView({behavior:'smooth',block:'start'});
+}
+}
+function closeQuiz(){
+document.getElementById('qmodal').classList.remove('open');
+document.body.style.overflow='';
+curQuiz=null;
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQuiz();});
+</script>
 </body>
 </html>
