@@ -971,30 +971,39 @@ const _realApp = {
         });
 
         window.addEventListener('popstate', (event) => {
-            if (event.state && event.state.viewId) {
-                if (event.state.viewId === 'view-dashboard') {
-                    sessionStorage.removeItem('currentView');
-                    sessionStorage.removeItem('currentUrl');
-                }
-                if (event.state.viewId === 'view-submenu') {
-                    const c = event.state.course || this.lockedCourseKey;
-                    if (c) { this.renderSubmenu(c); this.renderView('view-submenu'); }
-                    else this.renderView('view-dashboard');
-                } else if (event.state.viewId === 'view-subjects') {
-                    const c = event.state.course || this.lockedCourseKey;
-                    const s = event.state.section || this.lockedCourseSection;
-                    if (c && s) { this.renderSubjectList(c, s); this.renderView('view-subjects'); }
-                    else this.renderView('view-dashboard');
-                } else if (event.state.viewId === 'view-demo') {
-                    this.renderView('view-demo');
-                } else if (event.state.viewId === 'view-iframe') {
-                    if (event.state.sourceUrl) this.openContent(event.state.sourceUrl, event.state.title, true);
-                    else this.renderView('view-dashboard');
-                } else {
-                    this.renderView(event.state.viewId);
-                }
-            } else {
+            const state = event.state;
+
+            if (!state || !state.viewId) {
+                // No state — go to appropriate root
                 this.currentUser ? this.renderView('view-dashboard') : this.renderView('view-auth');
+                return;
+            }
+
+            if (state.viewId === 'view-dashboard') {
+                sessionStorage.removeItem('currentView');
+                sessionStorage.removeItem('currentUrl');
+                this.renderView('view-dashboard');
+            } else if (state.viewId === 'view-submenu') {
+                const c = state.course || this.lockedCourseKey;
+                if (c) { this.renderSubmenu(c); this.renderView('view-submenu'); }
+                else this.renderView('view-dashboard');
+            } else if (state.viewId === 'view-subjects') {
+                const c = state.course || this.lockedCourseKey;
+                const s = state.section || this.lockedCourseSection;
+                if (c && s) { this.renderSubjectList(c, s); this.renderView('view-subjects'); }
+                else this.renderView('view-dashboard');
+            } else if (state.viewId === 'view-demo') {
+                this.renderView('view-demo');
+            } else if (state.viewId === 'view-paywall') {
+                this.renderView('view-paywall');
+            } else if (state.viewId === 'view-iframe') {
+                if (state.sourceUrl) this.openContent(state.sourceUrl, state.title, true);
+                else this.renderView('view-dashboard');
+            } else if (state.viewId === 'view-auth') {
+                if (!this.currentUser) this.renderView('view-auth');
+                else this.renderView('view-dashboard');
+            } else {
+                this.renderView(state.viewId);
             }
         });
     },
