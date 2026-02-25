@@ -1,1739 +1,899 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta id="viewport-meta" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Ezi Nurse | Premium Nursing Education</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
-
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Biochemistry & Biophysics</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-    :root {
-        --primary: #5e35b1;
-        --primary-light: #7e57c2;
-        --secondary: #0091ea;
-        --accent: #ff4081;
-        --success: #00c853;
-        --bg-body: #f5f7fa;
-        --bg-card: #ffffff;
-        --text-main: #1e293b;
-        --text-muted: #64748b;
-        --danger: #ef4444;
-        --radius-lg: 16px;
-        --radius-md: 12px;
-        --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
-        --shadow-lg: 0 10px 25px rgba(94, 53, 177, 0.15);
-        --grad-blue: linear-gradient(135deg, #42a5f5, #1976d2);
-        --grad-orange: linear-gradient(135deg, #ffa726, #f57c00);
-        --grad-pink: linear-gradient(135deg, #ec407a, #c2185b);
-        --grad-green: linear-gradient(135deg, #66bb6a, #388e3c);
-        --grad-purple: linear-gradient(135deg, #7e57c2, #512da8);
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
-    
-    html, body { height: 100%; width: 100%; overflow: hidden; background-color: var(--bg-body); color: var(--text-main); }
-    body.zoom-mode { overflow: auto !important; }
-
-    #app {
-        width: 100%; max-width: 480px; margin: 0 auto;
-        background: var(--bg-body); height: 100%; position: relative;
-        display: flex; flex-direction: column;
-        box-shadow: var(--shadow-lg); overflow: hidden;
-        padding-top: env(safe-area-inset-top, 25px); 
-    }
-
-    .view { 
-        flex: 1; overflow-y: auto; display: none; 
-        padding-bottom: 90px;
-        animation: fadeIn 0.25s ease-out; 
-    }
-    .view.active { display: block; }
-    .view.full-screen { padding-bottom: 0; }
-    
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-    .header {
-        padding: 15px 20px;
-        background: linear-gradient(to right, var(--primary), var(--primary-light));
-        color: white;
-        display: flex; align-items: center; justify-content: space-between;
-        z-index: 20; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        flex-shrink: 0;
-    }
-    .header-title { font-weight: 700; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; }
-    .header-actions { display: flex; gap: 15px; align-items: center; }
-    .icon-btn { background: none; border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-    .back-btn { margin-right: 10px; }
-
-    .auth-container { 
-        min-height: 100%; display: flex; flex-direction: column; 
-        justify-content: center; padding: 30px; background: white;
-        position: relative; overflow: hidden;
-    }
-    .auth-container::before {
-        content: '';
-        position: absolute; top: -80px; right: -80px;
-        width: 220px; height: 220px; border-radius: 50%;
-        background: linear-gradient(135deg, rgba(94,53,177,0.07), rgba(0,145,234,0.07));
-        pointer-events: none;
-    }
-    .auth-container::after {
-        content: '';
-        position: absolute; bottom: -60px; left: -60px;
-        width: 180px; height: 180px; border-radius: 50%;
-        background: linear-gradient(135deg, rgba(255,64,129,0.06), rgba(94,53,177,0.06));
-        pointer-events: none;
-    }
-    .auth-header { text-align: center; margin-bottom: 30px; }
-
-    .brand-hero { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }
-    .brand-logo-text { display: flex; align-items: baseline; gap: 1px; font-family: 'Poppins', sans-serif; }
-    .brand-ezi { font-size: 2.6rem; font-weight: 800; letter-spacing: -1px; background: linear-gradient(135deg, #5e35b1, #7e57c2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .brand-nurse { font-size: 2.6rem; font-weight: 800; letter-spacing: -1px; background: linear-gradient(135deg, #0091ea, #00b0ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .brand-tagline { font-size: 0.72rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; background: linear-gradient(90deg, #7e57c2, #0091ea); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent; margin-top: 2px; opacity: 0.85; }
-    .brand-pill-row { display: flex; gap: 8px; margin-top: 10px; }
-    .brand-pill { padding: 3px 10px; border-radius: 20px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.5px; }
-    .brand-pill-purple { background: rgba(94,53,177,0.1); color: #5e35b1; }
-    .brand-pill-blue   { background: rgba(0,145,234,0.1); color: #0091ea; }
-    .brand-pill-pink   { background: rgba(255,64,129,0.1); color: #ff4081; }
-    .brand-pill-green  { background: rgba(56,142,60,0.1); color: #388e3c; }
-
-    .form-group { margin-bottom: 16px; }
-    .form-label { display: block; margin-bottom: 6px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
-    .form-input { width: 100%; padding: 14px 16px; border: 1px solid #e2e8f0; border-radius: var(--radius-md); font-size: 1rem; background: #f8fafc; transition: all 0.2s; font-family: 'Open Sans', sans-serif; }
-    .form-input:focus { border-color: var(--primary); background: white; outline: none; box-shadow: 0 0 0 3px rgba(94, 53, 177, 0.1); }
-    
-    .btn { width: 100%; padding: 16px; border-radius: var(--radius-md); border: none; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: transform 0.1s; }
-    .btn:active { transform: scale(0.98); }
-    .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(94, 53, 177, 0.3); }
-    .btn-outline { background: white; border: 2px solid var(--primary); color: var(--primary); }
-    .btn-ghost { background: transparent; color: var(--text-muted); font-size: 0.9rem; margin-top: 10px; }
-
-    /* --- NETFLIX-STYLE SPLASH SCREEN --- */
-    #splash-screen {
-        position: fixed; inset: 0; z-index: 9999;
-        background: #ffffff;
-        display: flex; align-items: center; justify-content: center;
-        overflow: hidden;
-    }
-
-    /* The flare overlay — mimics Netflix's sweep of light */
-    #splash-screen::before {
-        content: '';
-        position: absolute;
-        top: 50%; left: 50%;
-        width: 8px; height: 120%;
-        background: linear-gradient(to bottom,
-            transparent 0%,
-            rgba(255,255,255,0) 20%,
-            rgba(180,150,255,0.55) 48%,
-            rgba(255,255,255,0.95) 50%,
-            rgba(100,180,255,0.55) 52%,
-            rgba(255,255,255,0) 80%,
-            transparent 100%
-        );
-        transform: translate(-50%, -50%) scaleX(0);
-        transform-origin: center;
-        animation: netflixFlare 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        pointer-events: none;
-        z-index: 2;
-    }
-
-    /* Ambient glow blob behind logo */
-    #splash-screen::after {
-        content: '';
-        position: absolute;
-        top: 50%; left: 50%;
-        width: 260px; height: 260px;
-        border-radius: 50%;
-        background: radial-gradient(circle,
-            rgba(140, 100, 255, 0.18) 0%,
-            rgba(0, 145, 234, 0.10) 50%,
-            transparent 75%
-        );
-        transform: translate(-50%, -50%) scale(0);
-        animation: netflixGlow 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        pointer-events: none;
-        z-index: 1;
-    }
-
-    .splash-content {
-        position: relative;
-        z-index: 3;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 15px;
-        width: 100%;
-        animation: netflixLogo 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    }
-
-    .splash-logo {
-        width: 62px; height: 62px;
-        border-radius: 50%;
-        object-fit: cover;
-        filter: drop-shadow(0 0 0px rgba(94,53,177,0));
-        animation: netflixLogoGlow 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    }
-
-    .splash-text-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-    .splash-brand-text {
-        font-family: 'Poppins', sans-serif;
-        font-size: 2.6rem;
-        font-weight: 800;
-        line-height: 1;
-        letter-spacing: -0.5px;
-        white-space: nowrap;
-        display: flex;
-        gap: 2px;
-    }
-
-    .sp-ezi {
-        color: #5e35b1;
-        display: inline-block;
-        animation: netflixTextLeft 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    }
-    .sp-nurse {
-        color: #0091ea;
-        display: inline-block;
-        animation: netflixTextRight 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    }
-
-    /* ── Keyframes ── */
-
-    /* Logo: starts invisible + slightly large, snaps in at ~30%, holds, then fades with screen */
-    @keyframes netflixLogo {
-        0%   { opacity: 0; transform: scale(1.15); }
-        28%  { opacity: 0; transform: scale(1.15); }
-        38%  { opacity: 1; transform: scale(1.02); }
-        55%  { opacity: 1; transform: scale(1); }
-        85%  { opacity: 1; transform: scale(1); }
-        100% { opacity: 0; transform: scale(0.92); }
-    }
-
-    /* Logo gets a purple-blue glow at peak, then fades */
-    @keyframes netflixLogoGlow {
-        0%,28% { filter: drop-shadow(0 0 0px rgba(94,53,177,0)); }
-        50%    { filter: drop-shadow(0 0 18px rgba(94,53,177,0.7)) drop-shadow(0 0 8px rgba(0,145,234,0.5)); }
-        85%    { filter: drop-shadow(0 0 8px rgba(94,53,177,0.3)); }
-        100%   { filter: drop-shadow(0 0 0px rgba(94,53,177,0)); }
-    }
-
-    /* Flare line: thin vertical light sweep expanding sideways */
-    @keyframes netflixFlare {
-        0%,25% { transform: translate(-50%,-50%) scaleX(0); opacity: 0; }
-        35%    { transform: translate(-50%,-50%) scaleX(1); opacity: 1; }
-        50%    { transform: translate(-50%,-50%) scaleX(200); opacity: 0.6; }
-        65%    { transform: translate(-50%,-50%) scaleX(400); opacity: 0; }
-        100%   { transform: translate(-50%,-50%) scaleX(400); opacity: 0; }
-    }
-
-    /* Ambient glow blob grows then fades */
-    @keyframes netflixGlow {
-        0%,25% { transform: translate(-50%,-50%) scale(0); opacity: 0; }
-        42%    { transform: translate(-50%,-50%) scale(1.1); opacity: 1; }
-        70%    { transform: translate(-50%,-50%) scale(1.4); opacity: 0.4; }
-        100%   { transform: translate(-50%,-50%) scale(1.6); opacity: 0; }
-    }
-
-    /* "Ezi" nudges slightly left as it appears, then settles */
-    @keyframes netflixTextLeft {
-        0%,30%  { opacity: 0; letter-spacing: 4px; }
-        42%     { opacity: 1; letter-spacing: -0.5px; }
-        85%     { opacity: 1; }
-        100%    { opacity: 0; }
-    }
-
-    /* "Nurse" nudges slightly right */
-    @keyframes netflixTextRight {
-        0%,32%  { opacity: 0; letter-spacing: 4px; }
-        44%     { opacity: 1; letter-spacing: -0.5px; }
-        85%     { opacity: 1; }
-        100%    { opacity: 0; }
-    }
-
-    .dashboard-hero { padding: 15px 20px 8px 20px; background: white; }
-    .welcome-text { font-size: 1.5rem; font-weight: 700; color: var(--text-main); margin-bottom: 5px; }
-    .welcome-sub { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px; }
-
-    .slider-wrapper { position: relative; width: 100%; overflow: hidden; margin-bottom: 8px; border-radius: var(--radius-lg); }
-    .slider-track { display: flex; transition: transform 0.4s ease; will-change: transform; }
-    .slider-slide { min-width: 100%; height: 135px; overflow: hidden; border-radius: var(--radius-lg); flex-shrink: 0; }
-    .slider-slide img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; border-radius: var(--radius-lg); }
-    .slider-dots { display: flex; justify-content: center; gap: 5px; margin-top: 6px; padding-bottom: 2px; }
-    .slider-dot { width: 7px; height: 7px; border-radius: 50%; background: #d1d5db; transition: all 0.3s; cursor: pointer; }
-    .slider-dot.active { background: var(--primary); width: 20px; border-radius: 4px; }
-
-    .section-title { padding: 0 20px; margin-bottom: 15px; font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
-    .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px 20px 20px; }
-    .cat-card { height: 110px; border-radius: var(--radius-lg); padding: 15px; display: flex; flex-direction: column; justify-content: space-between; color: white; cursor: pointer; position: relative; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: transform 0.2s; }
-    .cat-card:active { transform: scale(0.97); }
-    .cat-card h3 { font-size: 1.1rem; font-weight: 700; z-index: 2; }
-    .cat-card .icon { font-size: 2rem; opacity: 0.3; position: absolute; right: 10px; bottom: 10px; z-index: 1; }
-    .cat-arrow { align-self: flex-start; background: rgba(255,255,255,0.2); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
-    .bg-msc { background: var(--grad-purple); }
-    .bg-bsc { background: var(--grad-orange); }
-    .bg-pbbsc { background: var(--grad-blue); }
-    .bg-gnm { background: var(--grad-pink); }
-    .bg-dark { background: var(--text-main); }
-
-    .list-container { padding: 20px; }
-    .list-item { background: white; padding: 16px; border-radius: var(--radius-md); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow-sm); border: 1px solid #f1f5f9; cursor: pointer; }
-    .list-item:active { background-color: #f8fafc; }
-    .list-info h4 { font-size: 1rem; color: var(--text-main); font-weight: 600; }
-    .list-info p { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
-    .list-icon { color: var(--primary); margin-right: 15px; }
-
-    #view-iframe.view { padding: 0 !important; height: 100%; width: 100%; z-index: 50; position: relative; }
-    .iframe-wrapper { width: 100%; height: 100%; transform-origin: 0 0; transition: transform 0.3s ease, width 0.3s ease; }
-    iframe { width: 100%; height: 100%; border: none; display: block; background: #fff; }
-
-    .watermark-strip { position: absolute; top: 50%; left: 50%; width: 200%; transform: translate(-50%, -50%) rotate(-45deg); z-index: 9999; pointer-events: none; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; color: rgba(0, 0, 0, 0.04); user-select: none; white-space: nowrap; letter-spacing: 6px; text-transform: uppercase; }
-
-    .bottom-nav { position: absolute; bottom: 0; left: 0; width: 100%; height: 70px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-around; align-items: center; z-index: 40; padding-bottom: 10px; }
-    .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; height: 100%; color: var(--text-muted); cursor: pointer; background: none; border: none; }
-    .nav-item.active { color: var(--primary); }
-    .nav-item span { font-size: 24px; margin-bottom: 4px; }
-    .nav-item label { font-size: 0.7rem; font-weight: 600; }
-
-    #fab-zoom { position: absolute; bottom: 30px; left: 20px; width: 50px; height: 50px; background-color: var(--text-main); border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: none; align-items: center; justify-content: center; color: white; cursor: pointer; z-index: 100; }
-
-    .paywall-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px; background: white; min-height: 100%; }
-    .price-wrapper { margin: 20px 0; }
-    .price-original { text-decoration: line-through; color: var(--text-muted); font-size: 1.1rem; margin-right: 10px; }
-    .price-discounted { color: var(--text-main); font-weight: 800; font-size: 2.2rem; }
-    
-    .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(4px); }
-    .modal-card { background: white; width: 85%; padding: 24px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center; }
-    .hidden { display: none !important; }
-    .password-wrapper { position: relative; width: 100%; }
-    .toggle-password-btn { position: absolute; right: 12px; top: 12px; border: none; background: none; color: var(--text-muted); cursor: pointer; }
-    .error-msg { color: var(--danger); font-size: 0.85rem; margin-top: 5px; text-align: left; }
-
-    .hamburger-btn { background: none; border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-right: 10px; }
-    .drawer-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; display: none; backdrop-filter: blur(2px); }
-    .drawer-overlay.open { display: block; }
-    .drawer { position: absolute; top: 0; left: -280px; width: 260px; height: 100%; background: white; z-index: 201; transition: left 0.3s ease; display: flex; flex-direction: column; box-shadow: 4px 0 20px rgba(0,0,0,0.15); }
-    .drawer.open { left: 0; }
-    .drawer-header { background: linear-gradient(to right, var(--primary), var(--primary-light)); padding: 30px 20px 20px 20px; color: white; }
-    .drawer-header .d-name { font-size: 1.1rem; font-weight: 700; margin-top: 10px; }
-    .drawer-header .d-email { font-size: 0.78rem; opacity: 0.85; margin-top: 3px; }
-    .drawer-avatar { width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; }
-    .drawer-body { flex: 1; padding: 15px 0; }
-    .drawer-item { display: flex; align-items: center; gap: 14px; padding: 14px 20px; cursor: pointer; color: var(--text-main); font-size: 0.95rem; font-weight: 500; border: none; background: none; width: 100%; text-align: left; transition: background 0.15s; }
-    .drawer-item:active { background: #f1f5f9; }
-    .drawer-item.danger { color: var(--danger); }
-    .drawer-item .d-icon { color: inherit; }
-    .drawer-divider { height: 1px; background: #f1f5f9; margin: 8px 0; }
-
-    .tc-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px; margin-top: 4px; }
-    .tc-row input[type="checkbox"] { width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; accent-color: var(--primary); cursor: pointer; }
-    .tc-row label { font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; cursor: pointer; }
-    .tc-row a { color: var(--primary); font-weight: 600; text-decoration: none; }
-
-    /* ============================================
-       DEMO VIEW STYLES
-       ============================================ */
-    #view-demo.view { padding-bottom: 20px; }
-
-    .demo-hero {
-        background: linear-gradient(135deg, var(--primary), var(--primary-light));
-        padding: 28px 20px 36px 20px;
-        color: white;
-        position: relative;
-        overflow: hidden;
-    }
-    .demo-hero::after {
-        content: '';
-        position: absolute; bottom: -20px; left: 0; right: 0;
-        height: 40px; background: var(--bg-body);
-        border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-    }
-    .demo-subject-name {
-        font-size: 1.3rem; font-weight: 700; margin-bottom: 4px; line-height: 1.3;
-    }
-    .demo-subject-meta {
-        font-size: 0.82rem; opacity: 0.85; display: flex; align-items: center; gap: 6px;
-    }
-    .demo-badge {
-        background: rgba(255,255,255,0.2); border-radius: 20px;
-        padding: 2px 10px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.5px;
-    }
-
-    .demo-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 14px;
-        padding: 30px 20px 20px 20px;
-    }
-
-    .demo-tile {
-        background: white;
-        border-radius: var(--radius-lg);
-        padding: 20px 16px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-        box-shadow: var(--shadow-sm);
-        border: 1px solid #f1f5f9;
-        cursor: pointer;
-        transition: transform 0.18s, box-shadow 0.18s;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-    }
-    .demo-tile:active { transform: scale(0.96); }
-    .demo-tile:hover { box-shadow: 0 6px 20px rgba(94,53,177,0.13); transform: translateY(-2px); }
-
-    .demo-tile-icon {
-        width: 52px; height: 52px; border-radius: 14px;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 24px; color: white;
-        flex-shrink: 0;
-    }
-    .demo-tile-label {
-        font-size: 0.85rem; font-weight: 700; color: var(--text-main); line-height: 1.2;
-    }
-    .demo-tile-sub {
-        font-size: 0.72rem; color: var(--text-muted);
-    }
-
-    .demo-tile-video .demo-tile-icon { background: var(--grad-blue); }
-    .demo-tile-lecture .demo-tile-icon { background: var(--grad-orange); }
-    .demo-tile-notes .demo-tile-icon { background: var(--grad-green); }
-    .demo-tile-quiz .demo-tile-icon { background: var(--grad-pink); }
-
-    .demo-unlock-section {
-        margin: 0 20px 24px 20px;
-        background: white;
-        border-radius: var(--radius-lg);
-        padding: 18px 20px;
-        box-shadow: var(--shadow-sm);
-        border: 1px solid #f1f5f9;
-    }
-    .demo-unlock-price-row {
-        display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
-    }
-    .demo-unlock-price {
-        display: flex; align-items: baseline; gap: 8px;
-    }
-    .demo-unlock-btn {
-        width: 100%; padding: 15px; border-radius: var(--radius-md);
-        border: none; font-size: 1rem; font-weight: 700; cursor: pointer;
-        background: var(--primary); color: white;
-        box-shadow: 0 4px 12px rgba(94,53,177,0.3);
-        display: flex; align-items: center; justify-content: center; gap: 8px;
-        transition: transform 0.1s;
-    }
-    .demo-unlock-btn:active { transform: scale(0.98); }
-
-    .demo-tile-badge {
-        position: absolute; top: 10px; right: 10px;
-        font-size: 0.62rem; font-weight: 700; padding: 2px 7px;
-        border-radius: 10px; background: rgba(94,53,177,0.1); color: var(--primary);
-    }
-
-    /* ============================================
-       QUIZ MODAL STYLES
-       ============================================ */
-    #quiz-modal {
-        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        background: var(--bg-body); z-index: 300;
-        display: none; flex-direction: column;
-        animation: fadeIn 0.25s ease-out;
-    }
-    #quiz-modal.open { display: flex; }
-
-    .quiz-header {
-        background: linear-gradient(to right, var(--primary), var(--primary-light));
-        color: white; padding: 15px 20px;
-        display: flex; align-items: center; gap: 12px;
-        flex-shrink: 0;
-    }
-    .quiz-header h2 { font-size: 1.05rem; font-weight: 700; flex: 1; }
-
-    .quiz-body { flex: 1; overflow-y: auto; padding: 20px; }
-
-    .quiz-loading {
-        display: flex; flex-direction: column; align-items: center;
-        justify-content: center; gap: 16px; min-height: 200px;
-    }
-    .quiz-spinner {
-        width: 44px; height: 44px; border-radius: 50%;
-        border: 4px solid #e2e8f0; border-top-color: var(--primary);
-        animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .quiz-question-card {
-        background: white; border-radius: var(--radius-lg);
-        padding: 20px; margin-bottom: 16px;
-        box-shadow: var(--shadow-sm); border: 1px solid #f1f5f9;
-    }
-    .quiz-q-num {
-        font-size: 0.72rem; font-weight: 700; color: var(--primary);
-        text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
-    }
-    .quiz-q-text {
-        font-size: 0.95rem; font-weight: 600; color: var(--text-main);
-        margin-bottom: 14px; line-height: 1.5;
-    }
-    .quiz-option {
-        padding: 12px 14px; border-radius: 10px;
-        border: 1.5px solid #e2e8f0; margin-bottom: 8px;
-        cursor: pointer; font-size: 0.88rem; color: var(--text-main);
-        transition: all 0.15s; background: white;
-        display: flex; align-items: center; gap: 10px;
-    }
-    .quiz-option:last-child { margin-bottom: 0; }
-    .quiz-option:active { transform: scale(0.99); }
-    .quiz-option.selected { border-color: var(--primary); background: rgba(94,53,177,0.06); color: var(--primary); font-weight: 600; }
-    .quiz-option.correct { border-color: var(--success); background: rgba(0,200,83,0.08); color: #388e3c; font-weight: 600; }
-    .quiz-option.wrong { border-color: var(--danger); background: rgba(239,68,68,0.08); color: var(--danger); font-weight: 600; }
-
-    .quiz-opt-letter {
-        width: 24px; height: 24px; border-radius: 50%;
-        background: #f1f5f9; display: flex; align-items: center;
-        justify-content: center; font-size: 0.78rem; font-weight: 700;
-        flex-shrink: 0; transition: all 0.15s;
-    }
-    .quiz-option.selected .quiz-opt-letter { background: var(--primary); color: white; }
-    .quiz-option.correct .quiz-opt-letter { background: var(--success); color: white; }
-    .quiz-option.wrong .quiz-opt-letter { background: var(--danger); color: white; }
-
-    .quiz-explanation {
-        margin-top: 12px; padding: 12px 14px; border-radius: 10px;
-        background: rgba(0,145,234,0.07); border-left: 3px solid var(--secondary);
-        font-size: 0.83rem; color: var(--text-muted); line-height: 1.5;
-        display: none;
-    }
-    .quiz-explanation.show { display: block; }
-    .quiz-explanation strong { color: var(--secondary); }
-
-    .quiz-score-bar {
-        background: white; border-radius: var(--radius-lg);
-        padding: 18px 20px; margin-bottom: 16px;
-        box-shadow: var(--shadow-sm); border: 1px solid #f1f5f9;
-        display: flex; align-items: center; justify-content: space-between;
-    }
-    .quiz-score-num { font-size: 1.8rem; font-weight: 800; color: var(--primary); }
-    .quiz-score-label { font-size: 0.8rem; color: var(--text-muted); }
-    .quiz-score-pct {
-        font-size: 1rem; font-weight: 700; padding: 6px 14px;
-        border-radius: 20px;
-    }
-
-    .quiz-submit-btn {
-        width: 100%; padding: 14px; border-radius: var(--radius-md);
-        border: none; font-size: 0.95rem; font-weight: 700;
-        cursor: pointer; background: var(--primary); color: white;
-        box-shadow: 0 4px 12px rgba(94,53,177,0.3);
-        display: flex; align-items: center; justify-content: center; gap: 8px;
-        margin-top: 8px;
-    }
-    .quiz-submit-btn:active { transform: scale(0.98); }
-    .quiz-retry-btn {
-        width: 100%; padding: 14px; border-radius: var(--radius-md);
-        border: 2px solid var(--primary); font-size: 0.95rem; font-weight: 700;
-        cursor: pointer; background: white; color: var(--primary);
-        display: flex; align-items: center; justify-content: center; gap: 8px;
-        margin-top: 10px;
-    }
-
-    .quiz-error-msg {
-        text-align: center; color: var(--danger); font-size: 0.9rem;
-        padding: 20px; line-height: 1.5;
-    }
+:root{
+  --p50:#faf5ff;--p100:#f3e8ff;--p200:#e9d5ff;--p300:#d8b4fe;
+  --p400:#c084fc;--p500:#a855f7;--p600:#9333ea;--p700:#7e22ce;
+  --p800:#6b21a8;--p900:#581c87;
+  --w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;
+  --g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;
+  --ok:#16a34a;--ok-lt:#dcfce7;--err:#dc2626;--err-lt:#fee2e2;
+  --warn:#d97706;--warn-lt:#fef3c7;
+  --r:12px;--rs:8px;
+  --s1:0 1px 3px rgba(109,40,217,.08);
+  --s2:0 4px 12px rgba(109,40,217,.12);
+  --s3:0 8px 30px rgba(109,40,217,.16);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:90;background:var(--w);border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 16px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-back{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:var(--p100);color:var(--p700);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;margin-right:12px}
+.tb-back:hover{background:var(--p200)}
+.tb-info{flex:1;min-width:0}
+.tb-title{font-size:.88rem;font-weight:700;color:var(--g900);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb-sub{font-size:.65rem;color:var(--g400);font-weight:500;margin-top:1px}
+.tb-chip{background:var(--p100);color:var(--p700);border:1px solid var(--p200);font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
+.hero{background:linear-gradient(145deg,var(--p900),var(--p700) 55%,var(--p500));padding:28px 18px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.08),transparent 50%),radial-gradient(circle at 10% 85%,rgba(255,255,255,.05),transparent 40%)}
+.hero::after{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-dot-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:.65rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border-radius:30px;margin-bottom:12px}
+.hero-eyebrow-dot{width:5px;height:5px;background:#c4b5fd;border-radius:50%}
+.hero h1{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:7px}
+.hero h1 em{color:rgba(255,255,255,.45);font-style:italic;font-weight:300}
+.hero-desc{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:18px}
+.hero-cta{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.28);color:#fff;font-size:.8rem;font-weight:700;padding:9px 16px;border-radius:9px;cursor:pointer;transition:all .2s;backdrop-filter:blur(6px)}
+.hero-cta:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
+.hero-stats{display:flex;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+.hs{flex:1;text-align:center}
+.hs+.hs{border-left:1px solid rgba(255,255,255,.1)}
+.hs-n{font-size:1.35rem;font-weight:800;color:#fff;line-height:1}
+.hs-l{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
+.main{padding:16px 14px 56px}
+.divider{display:flex;align-items:center;gap:8px;margin-bottom:12px;margin-top:2px}
+.divider span{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g400)}
+.divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+.uc{background:var(--w);border:1.5px solid var(--g200);border-radius:var(--r);margin-bottom:9px;overflow:hidden;box-shadow:var(--s1);transition:border-color .2s,box-shadow .2s}
+.uc:hover{border-color:var(--p300);box-shadow:var(--s2)}
+.uc[data-open=true]{border-color:var(--p400);box-shadow:var(--s2)}
+.ubtn{width:100%;display:flex;align-items:center;padding:14px 15px;gap:12px;background:none;border:none;cursor:pointer;text-align:left}
+.upill{height:36px;padding:0 12px;border-radius:9px;flex-shrink:0;background:var(--p100);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.upill span{font-size:.67rem;font-weight:800;color:var(--p700);letter-spacing:-.01em;white-space:nowrap}
+.uc[data-open=true] .upill{background:var(--p700)}
+.uc[data-open=true] .upill span{color:#fff}
+.uinfo{flex:1;min-width:0}
+.uname{font-size:.85rem;font-weight:700;color:var(--g900);line-height:1.3}
+.umeta{font-size:.66rem;color:var(--g400);margin-top:2px;font-weight:500}
+.uright{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.uchev{width:16px;height:16px;color:var(--g300);transition:transform .3s,color .2s}
+.uc[data-open=true] .uchev{transform:rotate(180deg);color:var(--p500)}
+.ubody{display:none;background:var(--p50);border-top:1.5px solid var(--p200);padding:12px 13px 14px}
+.ubody.open{display:block;animation:bodyIn .2s ease}
+@keyframes bodyIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.rrow{display:flex;gap:9px;margin-bottom:9px}
+.rrow:last-child{margin-bottom:0}
+@media(max-width:380px){.rrow{flex-direction:column}}
+.rbtn{flex:1;display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .17s;background:var(--w);text-decoration:none}
+.rbtn .rico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.rbtn .rtxt{line-height:1.25}
+.rbtn .rtxt small{display:block;font-size:.62rem;font-weight:400;opacity:.5;margin-top:1px}
+.rbtn .rarr{margin-left:auto;opacity:0;font-size:.7rem;color:var(--g400);transition:opacity .15s}
+.rbtn:hover .rarr{opacity:1}
+.rbtn.notes{border-color:var(--p200);color:var(--p800)}
+.rbtn.notes .rico{background:var(--p100)}
+.rbtn.notes:hover{background:var(--p50);border-color:var(--p500);box-shadow:var(--s2);transform:translateY(-1px)}
+.rbtn.video{border-color:var(--p300);color:var(--p900)}
+.rbtn.video .rico{background:var(--p100);color:var(--p700)}
+.rbtn.video:hover{background:var(--p50);border-color:var(--p600);box-shadow:var(--s2);transform:translateY(-1px)}
+.rbtn.quiz{border-color:#fde68a;color:#78350f}
+.rbtn.quiz .rico{background:var(--warn-lt)}
+.rbtn.quiz:hover{background:#fffbeb;border-color:var(--warn);box-shadow:0 3px 10px rgba(217,119,6,.12);transform:translateY(-1px)}
+.rbtn.pyq{border-color:#bbf7d0;color:#14532d}
+.rbtn.pyq .rico{background:var(--ok-lt)}
+.rbtn.pyq:hover{background:#f0fdf4;border-color:var(--ok);box-shadow:0 3px 10px rgba(22,163,74,.12);transform:translateY(-1px)}
+.pyq-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:380px){.pyq-grid{grid-template-columns:1fr}}
+.qoverlay{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end}
+.qoverlay.open{display:flex}
+.qscrim{position:absolute;inset:0;background:rgba(15,10,40,.55);backdrop-filter:blur(3px)}
+.qpanel{position:relative;z-index:1;background:var(--w);width:100%;max-width:580px;margin:0 auto;border-radius:18px 18px 0 0;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 -10px 50px rgba(109,40,217,.2);animation:panelUp .3s cubic-bezier(.32,.72,0,1)}
+@keyframes panelUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.qhead{padding:16px 18px 12px;border-bottom:1px solid var(--g100);flex-shrink:0}
+.qhead-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.qtitle{font-size:1rem;font-weight:800;color:var(--p800)}
+.qclose{width:28px;height:28px;border-radius:50%;background:var(--g100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--g500);transition:all .15s}
+.qclose:hover{background:var(--err-lt);color:var(--err)}
+.qpips{display:flex;gap:3px}
+.pip{flex:1;height:4px;border-radius:4px;background:var(--g100);transition:background .3s}
+.pip.ans{background:var(--p300)}.pip.cor{background:var(--ok)}.pip.wrg{background:var(--err)}
+.qbody{overflow-y:auto;padding:14px 18px 28px;flex:1}
+.qscore{display:none;background:linear-gradient(135deg,var(--p800),var(--p500));color:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;align-items:center;gap:14px}
+.qscore.show{display:flex}
+.qs-num{font-size:1.9rem;font-weight:800;line-height:1}
+.qs-sub{font-size:.65rem;opacity:.6;margin-top:2px}
+.qs-msg{font-size:.85rem;font-weight:600}
+.qitem{margin-bottom:24px}
+.qitem:last-child{margin-bottom:0}
+.qlbl{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--p500);margin-bottom:4px}
+.qtext{font-size:.88rem;font-weight:600;color:var(--g900);line-height:1.5;margin-bottom:10px}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1.5px solid var(--g200);border-radius:var(--rs);cursor:pointer;font-size:.83rem;font-weight:500;background:var(--w);color:var(--g700);transition:all .14s}
+.qopt:hover{border-color:var(--p300);background:var(--p50);color:var(--p800)}
+.qltr{width:21px;height:21px;border-radius:50%;background:var(--g100);border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:800;color:var(--g500);flex-shrink:0;transition:all .14s}
+.qopt.cor{background:var(--ok-lt);border-color:#86efac;color:#14532d}
+.qopt.cor .qltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.qopt.wrg{background:var(--err-lt);border-color:#fca5a5;color:#7f1d1d}
+.qopt.wrg .qltr{background:var(--err);border-color:var(--err);color:#fff}
+.qopt.lock{cursor:default;pointer-events:none}
+.qopt.lock:not(.cor):not(.wrg):hover{border-color:var(--g200);background:var(--w);color:var(--g700)}
 </style>
 </head>
 <body>
 
-<!-- SPLASH SCREEN -->
-<div id="splash-screen">
-    <div class="splash-content">
-        <img src="splash.png" alt="Logo" class="splash-logo">
-        <div class="splash-text-container">
-            <div class="splash-brand-text">
-                <span class="sp-ezi">Ezi</span><span class="sp-nurse">Nurse</span>
-            </div>
-        </div>
+<header class="topbar">
+  <button class="tb-back" onclick="goBackToApp()" aria-label="Back">&#8592;</button>
+  <div class="tb-info">
+    <div class="tb-title">Biochemistry & Biophysics</div>
+    <div class="tb-sub">Nursing · First Year</div>
+  </div>
+  <div class="tb-chip">18 Units</div>
+</header>
+
+<section class="hero">
+  <div class="hero-dot-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>Nursing · First Year</div>
+    <h1>Biochemistry &<br/><em>Biophysics</em></h1>
+    <p class="hero-desc">Interactive syllabus, unit notes, video lectures, and quizzes for your exams.</p>
+    <button class="hero-cta" onclick="openPDF('https://drive.google.com/file/d/1K3u3vanpMh8JE_NpvP3SUEkkMsqL-Rce/view')">
+      📄 &nbsp;Download Syllabus
+    </button>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-n">18</div><div class="hs-l">Units</div></div>
+      <div class="hs"><div class="hs-n">180</div><div class="hs-l">Questions</div></div>
+      <div class="hs"><div class="hs-n">1</div><div class="hs-l">PYQ</div></div>
     </div>
-</div>
-<audio id="splash-sound" src="https://www.myinstants.com/media/sounds/netflix-intro-sound.mp3" preload="auto"></audio>
+  </div>
+</section>
 
-<!-- AUTH LOADING -->
-<div id="auth-loading" class="hidden">
-    <div class="loading-spinner"></div>
-    <div class="loading-text">Loading...</div>
-</div>
+<main class="main">
+  
+  <div class="divider"><span>Biochemistry</span></div>
 
-<div id="app" style="visibility:hidden;">
-    <div id="wm-diagonal" class="watermark-strip"></div>
-
-    <header class="header" id="main-header" style="display:none;">
-        <button class="icon-btn hamburger-btn" onclick="app.openDrawer()">
-            <span class="material-icons-round">menu</span>
+  <div class="uc" id="u1" data-open="false">
+    <button class="ubtn" onclick="tog('u1')">
+      <div class="upill"><span>Unit 01</span></div>
+      <div class="uinfo"><div class="uname">Intro to Biochemistry</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u1">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1ymDO69kUIFjxHVlhcl_-dtqlcxddc60-/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Importance</small></div><span class="rarr">↗</span>
         </button>
-        <button class="icon-btn back-btn" id="btn-back" onclick="app.goBack()">
-            <span class="material-icons-round">arrow_back</span>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1bItwp-RTb_zHOTt589XeVqAcWv1h-0d7/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
         </button>
-        <div class="header-title" id="header-title">Ezi<span>Nurse</span></div>
-        <div class="header-actions"></div>
-    </header>
-
-    <div id="drawer-overlay" class="drawer-overlay" onclick="app.closeDrawer()"></div>
-
-    <div id="side-drawer" class="drawer">
-        <div class="drawer-header">
-            <div class="drawer-avatar"><span class="material-icons-round" style="font-size:28px;">person</span></div>
-            <div class="d-name" id="drawer-name">My Account</div>
-            <div class="d-email" id="drawer-email"></div>
-        </div>
-        <div class="drawer-body">
-            <div class="drawer-divider"></div>
-            <button class="drawer-item danger" onclick="app.deleteAccount()">
-                <span class="material-icons-round d-icon">delete_forever</span>
-                Delete Account
-            </button>
-        </div>
-    </div>
-
-    <div id="modal-delete" class="modal-overlay hidden">
-        <div class="modal-card">
-            <span class="material-icons-round" style="font-size:48px; color:var(--danger); margin-bottom:12px;">delete_forever</span>
-            <h3 style="margin-bottom:10px;">Delete Account</h3>
-            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px; line-height:1.5;">Deletion request successful. You will get a confirmation email when your account is deleted.</p>
-            <button class="btn btn-primary" onclick="app.closeDeleteModal()">OK</button>
-        </div>
-    </div>
-
-    <div id="fab-zoom" onclick="app.toggleZoom()"><span class="material-icons-round">zoom_in</span></div>
-
-    <!-- AUTH VIEW -->
-    <div id="view-auth" class="view full-screen">
-        <div class="auth-container">
-            <div class="auth-header">
-                <div class="brand-hero">
-                    <div class="brand-logo-text">
-                        <span class="brand-ezi">Ezi</span><span class="brand-nurse">Nurse</span>
-                    </div>
-                    <div class="brand-tagline">Premium Nursing Education</div>
-                    <div class="brand-pill-row">
-                        <span class="brand-pill brand-pill-purple">MSc</span>
-                        <span class="brand-pill brand-pill-blue">BSc</span>
-                        <span class="brand-pill brand-pill-green">PBBSc</span>
-                        <span class="brand-pill brand-pill-pink">GNM</span>
-                    </div>
-                </div>
-                <h1 style="font-size: 1.3rem; margin-bottom: 5px; font-weight: 700;">Welcome Back 👋</h1>
-                <p style="color:var(--text-muted); font-size:0.9rem;">Sign in to continue your learning</p>
-            </div>
-            <div id="form-login">
-                <div class="form-group">
-                    <label class="form-label">Email Address</label>
-                    <input type="email" id="login-email" class="form-input" placeholder="nurse@example.com">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="login-pass" class="form-input">
-                        <button class="toggle-password-btn" onclick="app.togglePassword('login-pass', this)"><span class="material-icons-round">visibility</span></button>
-                    </div>
-                    <div style="text-align: right; margin-top:8px;">
-                        <span style="font-size:0.85rem; color:var(--primary); font-weight:600; cursor:pointer;" onclick="app.navTo('view-reset')">Forgot Password?</span>
-                    </div>
-                </div>
-                <div id="login-error" class="error-msg" style="text-align:center; margin-bottom:15px;"></div>
-                <button id="btn-login-submit" class="btn btn-primary" onclick="app.login()">
-                    <span>Login Securely</span>
-                    <span class="material-icons-round" style="font-size:18px;">login</span>
-                </button>
-                <div style="text-align:center; margin: 20px 0; color:var(--text-muted); font-size:0.8rem;">OR</div>
-                <button class="btn btn-outline" onclick="app.toggleAuthMode()">Create New Account</button>
-            </div>
-            <div id="form-signup" class="hidden">
-                <div class="form-group"><label class="form-label">Full Name</label><input type="text" id="signup-name" class="form-input" placeholder="Nurse Joy"></div>
-                <div class="form-group"><label class="form-label">Email</label><input type="email" id="signup-email" class="form-input"></div>
-                <div class="form-group"><label class="form-label">Phone</label><input type="tel" id="signup-phone" class="form-input"></div>
-                <div class="form-group"><label class="form-label">Password</label>
-                    <div class="password-wrapper"><input type="password" id="signup-pass" class="form-input"><button class="toggle-password-btn" onclick="app.togglePassword('signup-pass', this)"><span class="material-icons-round">visibility</span></button></div>
-                </div>
-                <div id="signup-error" class="error-msg" style="text-align:center;"></div>
-                <div class="tc-row">
-                    <input type="checkbox" id="signup-tc">
-                    <label for="signup-tc">I agree to the <a href="tc.html" target="_blank">Terms and Conditions</a></label>
-                </div>
-                <button id="btn-signup-submit" class="btn btn-primary" style="margin-top:5px;" onclick="app.signup()">Create Account</button>
-                <button class="btn btn-ghost" onclick="app.toggleAuthMode()">Already have an account? Login</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- RESET VIEW -->
-    <div id="view-reset" class="view full-screen">
-        <div class="auth-container">
-            <h2 style="font-size:1.5rem; margin-bottom:10px;">Reset Password</h2>
-            <div id="reset-step-1">
-                <p class="form-label">Enter your email to receive a password reset link.</p>
-                <input type="email" id="reset-email" class="form-input" style="margin-bottom:15px;">
-                <div id="reset-error-1" class="error-msg"></div>
-                <button id="btn-reset-req" class="btn btn-primary" onclick="app.requestResetCode()">Send Link</button>
-                <button class="btn btn-ghost" onclick="app.navTo('view-auth', true)">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- DASHBOARD VIEW -->
-    <div id="view-dashboard" class="view">
-        <div class="dashboard-hero">
-            <div class="welcome-text">Hello, <span id="user-name-display" style="color:var(--primary);">Nurse</span> 👋</div>
-            <div class="welcome-sub">Let's start learning today.</div>
-            <div class="slider-wrapper" id="hero-slider">
-                <div class="slider-track" id="slider-track">
-                    <div class="slider-slide"><img src="1.png" alt="Slide 1" onerror="this.style.background='linear-gradient(135deg,#7e57c2,#512da8)';this.alt='';"></div>
-                    <div class="slider-slide"><img src="2.png" alt="Slide 2" onerror="this.style.background='linear-gradient(135deg,#ffa726,#f57c00)';this.alt='';"></div>
-                    <div class="slider-slide"><img src="3.png" alt="Slide 3" onerror="this.style.background='linear-gradient(135deg,#42a5f5,#1976d2)';this.alt='';"></div>
-                    <div class="slider-slide"><img src="4.png" alt="Slide 4" onerror="this.style.background='linear-gradient(135deg,#ec407a,#c2185b)';this.alt='';"></div>
-                    <div class="slider-slide"><img src="5.png" alt="Slide 5" onerror="this.style.background='linear-gradient(135deg,#66bb6a,#388e3c)';this.alt='';"></div>
-                    <div class="slider-slide"><img src="6.png" alt="Slide 6" onerror="this.style.background='linear-gradient(135deg,#26c6da,#00838f)';this.alt='';"></div>
-                </div>
-            </div>
-            <div class="slider-dots" id="slider-dots">
-                <div class="slider-dot active" onclick="sliderGoTo(0)"></div>
-                <div class="slider-dot" onclick="sliderGoTo(1)"></div>
-                <div class="slider-dot" onclick="sliderGoTo(2)"></div>
-                <div class="slider-dot" onclick="sliderGoTo(3)"></div>
-                <div class="slider-dot" onclick="sliderGoTo(4)"></div>
-                <div class="slider-dot" onclick="sliderGoTo(5)"></div>
-            </div>
-        </div>
-        <div class="section-title">What are you looking for?</div>
-        <div class="category-grid">
-            <div class="cat-card bg-msc" onclick="app.navToCourse('MSc')">
-                <div class="cat-arrow"><span class="material-icons-round" style="font-size:14px;">arrow_forward</span></div>
-                <h3>MSc<br>Nursing</h3>
-                <span class="material-icons-round icon">psychology</span>
-            </div>
-            <div class="cat-card bg-bsc" onclick="app.navToCourse('BSc')">
-                <div class="cat-arrow"><span class="material-icons-round" style="font-size:14px;">arrow_forward</span></div>
-                <h3>BSc<br>Nursing</h3>
-                <span class="material-icons-round icon">menu_book</span>
-            </div>
-            <div class="cat-card bg-pbbsc" onclick="app.navToCourse('PBBSc')">
-                <div class="cat-arrow"><span class="material-icons-round" style="font-size:14px;">arrow_forward</span></div>
-                <h3>PBBSc<br>Nursing</h3>
-                <span class="material-icons-round icon">science</span>
-            </div>
-            <div class="cat-card bg-gnm" onclick="app.navToCourse('GNM')">
-                <div class="cat-arrow"><span class="material-icons-round" style="font-size:14px;">arrow_forward</span></div>
-                <h3>GNM<br>Nursing</h3>
-                <span class="material-icons-round icon">healing</span>
-            </div>
-            <div class="cat-card bg-dark" onclick="app.navToCourse('EXAMS')">
-                <div class="cat-arrow"><span class="material-icons-round" style="font-size:14px;">star</span></div>
-                <h3>Competitive<br>Exams</h3>
-                <span class="material-icons-round icon">quiz</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- SUBMENU VIEW -->
-    <div id="view-submenu" class="view">
-        <div class="list-container" id="submenu-list"></div>
-    </div>
-
-    <!-- SUBJECTS VIEW -->
-    <div id="view-subjects" class="view">
-        <div class="list-container" id="subject-list"></div>
-    </div>
-
-    <!-- ============================================
-         DEMO VIEW — shown before every subject
-         ============================================ -->
-    <div id="view-demo" class="view">
-        <!-- Hero banner -->
-        <div class="demo-hero">
-            <div class="demo-badge" id="demo-badge">DEMO</div>
-            <div class="demo-subject-name" id="demo-subject-name">Subject Name</div>
-            <div class="demo-subject-meta" id="demo-subject-meta">
-                <span class="material-icons-round" style="font-size:14px;">school</span>
-                <span id="demo-subject-course">Course</span>
-            </div>
-        </div>
-
-        <!-- Tiles rendered dynamically by JS (course-aware) -->
-        <div class="demo-grid" id="demo-tile-grid"></div>
-
-        <!-- Unlock Premium Button -->
-        <div class="demo-unlock-section">
-            <div class="demo-unlock-price-row">
-                <span class="material-icons-round" style="color:var(--accent); font-size:20px;">lock</span>
-                <div id="demo-unlock-price" class="demo-unlock-price"></div>
-            </div>
-            <button class="demo-unlock-btn" onclick="app.purchaseLockedContent()">
-                <span class="material-icons-round">shopping_cart</span>
-                Unlock Full Access
-            </button>
-        </div>
-    </div>
-
-    <!-- IFRAME VIEW (kept for content rendering) -->
-    <div id="view-iframe" class="view full-screen"></div>
-
-    <!-- PAYWALL VIEW -->
-    <div id="view-paywall" class="view full-screen">
-        <div class="paywall-container">
-            <span class="material-icons-round" style="font-size:64px; color:var(--accent); margin-bottom:20px;">lock</span>
-            <h2 style="font-size:1.5rem; margin-bottom:10px;">Unlock Premium</h2>
-            <p style="color:var(--text-muted); margin-bottom:20px;">Get complete access to this course material and boost your preparation.</p>
-            <div id="paywall-price-display" class="price-wrapper"></div>
-            <button class="btn btn-primary" onclick="app.purchaseLockedContent()">
-                <span>Unlock Now</span>
-                <span class="material-icons-round">shopping_cart</span>
-            </button>
-            <button class="btn btn-ghost" onclick="app.goBack()">Maybe Later</button>
-        </div>
-    </div>
-
-    <!-- BOTTOM NAV -->
-    <nav id="bottom-nav" class="bottom-nav" style="display:none;">
-        <button class="nav-item active" onclick="app.navTo('view-dashboard')">
-            <span class="material-icons-round">home</span>
-            <label>Home</label>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1GDIH-NP5-bfSeTvniyk4quqiIKyvXYe3/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
         </button>
-        <button class="nav-item" onclick="app.logout()">
-            <span class="material-icons-round">person</span>
-            <label>Logout</label>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/12vIKXOzYCKjt4U4UqBk3UtKKWkAR0xAv/view')">
+          <div class="rico">▶️</div><div class="rtxt">Overview<small>Watch Video</small></div><span class="rarr">↗</span>
         </button>
-    </nav>
-
-    <!-- QUIZ — bottom sheet overlay -->
-    <div class="qoverlay" id="qmodal">
-        <div class="qscrim" onclick="app.closeQuiz()"></div>
-        <div class="qpanel">
-            <div class="qhead">
-                <div class="qhead-top">
-                    <div class="qtitle" id="qtitle">Demo Quiz</div>
-                    <button class="qclose" onclick="app.closeQuiz()">✕</button>
-                </div>
-                <div class="qpips" id="qpips"></div>
-            </div>
-            <div class="qbody-scroll" id="qbody"></div>
-        </div>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(1)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 1 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
     </div>
+  </div>
+
+  <div class="uc" id="u2" data-open="false">
+    <button class="ubtn" onclick="tog('u2')">
+      <div class="upill"><span>Unit 02</span></div>
+      <div class="uinfo"><div class="uname">Water and Electrolytes</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u2">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1XAPezYJLo5dSvg6-nRixyFzNj71LzGAo/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1oOxf-Sap2g-H1_d6zt-KyzThuqa_hfdk/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1caw2vtO3M2HZlYy9mW-A_O4cHqR1fb8c/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Uc0NcGXreT51bsupgBomlyuf3aPVdm-d/view')">
+          <div class="rico">▶️</div><div class="rtxt">Electrolytes<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(2)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 2 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u3" data-open="false">
+    <button class="ubtn" onclick="tog('u3')">
+      <div class="upill"><span>Unit 03</span></div>
+      <div class="uinfo"><div class="uname">Enzymes</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u3">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1wteYXWjMahUw9Y7ZEDAt9dJIQ7wYk_Vg/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Mechanism</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1CC8Lqi6z5EwdfHM4Cq1LXvwnkjcsVmRa/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1NP2VXXG5oGu_k6Na8OIAG9-ak67Ys-Bg/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1jhNvvtB-KXx8AMEkP5OvxGtCuOGgX7et/view')">
+          <div class="rico">▶️</div><div class="rtxt">Part 1<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1mqzrQ3pHbYOsFJMqVz3vNZszp0KGj6Ai/view')">
+          <div class="rico">▶️</div><div class="rtxt">Part 2<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1k8WDyjy16s09vPXjygdpHmaVq3VDRIId/view')">
+          <div class="rico">▶️</div><div class="rtxt">Part 3<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/19-hzXX7_XYcNkRPT6l8mUdWBqIl2msHC/view')">
+          <div class="rico">▶️</div><div class="rtxt">Part 4<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(3)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 3 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u4" data-open="false">
+    <button class="ubtn" onclick="tog('u4')">
+      <div class="upill"><span>Unit 04</span></div>
+      <div class="uinfo"><div class="uname">Carbohydrates</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u4">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1VUvWaB7JdxM1f_q2KFQrHTVUELlwDuK-/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1AOmDL7-ECszXj2Vl16y2rKKeszVbrhGM/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1KXK55A3rrKCAyzE5iBWe_x-d38zGpovZ/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(4)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 4 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u5" data-open="false">
+    <button class="ubtn" onclick="tog('u5')">
+      <div class="upill"><span>Unit 05</span></div>
+      <div class="uinfo"><div class="uname">Proteins</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u5">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1lq50_Fl7NINXuXvu7Axt8TCQ44Vwqs93/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1TR9im_-ZUv8tFImSe_T4o1feIbR435VQ/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1HX1amrt8kzzGXLG5ruon3p8kJkU9O1_l/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(5)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 5 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u6" data-open="false">
+    <button class="ubtn" onclick="tog('u6')">
+      <div class="upill"><span>Unit 06</span></div>
+      <div class="uinfo"><div class="uname">Fats & Metabolism</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u6">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/146pOEiKBU00bcLjAmGiYXxC5_UJrkeMP/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Pd-BrYF5fYPMPwap95ohsJMyvoRZfo53/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1zbie-WzdQOcjCKf1_h8sfcWdE7QGgu_v/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(6)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 6 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u7" data-open="false">
+    <button class="ubtn" onclick="tog('u7')">
+      <div class="upill"><span>Unit 07</span></div>
+      <div class="uinfo"><div class="uname">Biomedical Waste Management</div><div class="umeta">Notes, Videos · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u7">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1phvcM092pB4wP69u0C031VBCsP_NrozG/view')">
+          <div class="rico">📖</div><div class="rtxt">Detailed Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1csWmKWhqMdjQYEfSFPXsaKYucK433ut6/view')">
+          <div class="rico">📄</div><div class="rtxt">Lecture Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Ffav-RfOT29bEla-hqVLATaG62rwf0jy/view')">
+          <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1HkA3H-r5Qdpsno_-fsWHR1T9Q3Kqa9a0/view')">
+          <div class="rico">▶️</div><div class="rtxt">Waste Mgmt<small>Watch Video</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn quiz" onclick="openQuiz(7)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 7 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider" style="margin-top:20px"><span>Biophysics</span></div>
+
+  <div class="uc" id="u8" data-open="false">
+    <button class="ubtn" onclick="tog('u8')">
+      <div class="upill"><span>Unit 01</span></div>
+      <div class="uinfo"><div class="uname">Units and Measurements</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u8">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/17H3BXpX7rrWwfkDXKXlo-SlvIBFQzoYh/view')">
+          <div class="rico">📄</div><div class="rtxt">Unit Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(8)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 1 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u9" data-open="false">
+    <button class="ubtn" onclick="tog('u9')">
+      <div class="upill"><span>Unit 02</span></div>
+      <div class="uinfo"><div class="uname">Vector and Solar Motion</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u9">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1kdv2_Ln7ZD11HOKxDTseuR4xXX4RkKFq/view')">
+          <div class="rico">📄</div><div class="rtxt">Unit Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(9)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 2 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u10" data-open="false">
+    <button class="ubtn" onclick="tog('u10')">
+      <div class="upill"><span>Unit 03</span></div>
+      <div class="uinfo"><div class="uname">Gravity</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u10">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1-BbSwufTU7ERzCSc4k2Mp6mmiopYnOpw/view')">
+          <div class="rico">📄</div><div class="rtxt">Unit Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(10)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 3 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u11" data-open="false">
+    <button class="ubtn" onclick="tog('u11')">
+      <div class="upill"><span>Unit 04</span></div>
+      <div class="uinfo"><div class="uname">Force</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u11">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1-JZOJ2ByKksk5IRiLW9zbaDdg-XkaXTC/view')">
+          <div class="rico">📄</div><div class="rtxt">Unit Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(11)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 4 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u12" data-open="false">
+    <button class="ubtn" onclick="tog('u12')">
+      <div class="upill"><span>Unit 05</span></div>
+      <div class="uinfo"><div class="uname">Heat</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u12">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1eGcy22aTor7usNErE0xIkhC2SI4zsgVV/view')">
+          <div class="rico">📄</div><div class="rtxt">Unit Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(12)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 5 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u13" data-open="false">
+    <button class="ubtn" onclick="tog('u13')">
+      <div class="upill"><span>Unit 06</span></div>
+      <div class="uinfo"><div class="uname">Light</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u13">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1qLtl8SP7qfRLc5xEUjmwC1zo3Q2XE0Bs/view')">
+          <div class="rico">📄</div><div class="rtxt">Unit Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(13)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 6 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u14" data-open="false">
+    <button class="ubtn" onclick="tog('u14')">
+      <div class="upill"><span>Unit 07</span></div>
+      <div class="uinfo"><div class="uname">Pressures</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u14">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1sQqhrvM5buFcsppTAMXpATbZrY83_Iwf/view')">
+          <div class="rico">📄</div><div class="rtxt">Unit Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(14)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 7 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u15" data-open="false">
+    <button class="ubtn" onclick="tog('u15')">
+      <div class="upill"><span>Unit 08</span></div>
+      <div class="uinfo"><div class="uname">Sound</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u15">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Fqx7GHHghSXzEFIvPC3z-1MJo8P2TxlH/view')">
+          <div class="rico">📄</div><div class="rtxt">Unit Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(15)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 8 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u16" data-open="false">
+    <button class="ubtn" onclick="tog('u16')">
+      <div class="upill"><span>Unit 09</span></div>
+      <div class="uinfo"><div class="uname">Electricity</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u16">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1glBCwBntm_KOoyesYEGjrT5O0gEY2x0e/view')">
+          <div class="rico">📄</div><div class="rtxt">Unit Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(16)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 9 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u17" data-open="false">
+    <button class="ubtn" onclick="tog('u17')">
+      <div class="upill"><span>Unit 10</span></div>
+      <div class="uinfo"><div class="uname">Atomic Energy</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u17">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1k34CKAJ5fkGro1-bYYFmtEg1kjof_cx8/view')">
+          <div class="rico">📄</div><div class="rtxt">Unit Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(17)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 10 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="uc" id="u18" data-open="false">
+    <button class="ubtn" onclick="tog('u18')">
+      <div class="upill"><span>Unit 11</span></div>
+      <div class="uinfo"><div class="uname">Electronics</div><div class="umeta">Detailed Notes · 10-Q Quiz</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-u18">
+      <div class="rrow">
+        <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1vmO_iH5pSDTkmqr9R2Kz8Mq3531GMq01/view')">
+          <div class="rico">📄</div><div class="rtxt">Unit Notes<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+        <button class="rbtn quiz" onclick="openQuiz(18)">
+          <div class="rico">✍️</div><div class="rtxt">Unit 11 Quiz<small>10 questions</small></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider" style="margin-top:20px"><span>Previous Year Questions</span></div>
+  <div class="uc" id="upyq" data-open="false">
+    <button class="ubtn" onclick="tog('upyq')">
+      <div class="upill"><span style="font-size:.58rem">PYQ</span></div>
+      <div class="uinfo"><div class="uname">Previous Year Papers</div><div class="umeta">1 exam paper</div></div>
+      <div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+    </button>
+    <div class="ubody" id="b-upyq">
+      <div class="pyq-grid">
+        <button class="rbtn pyq" onclick="openPDF('https://drive.google.com/file/d/1HtgCASerzg8cdqEMmibfgCZPewV8ijhI/view')">
+          <div class="rico">📄</div><div class="rtxt">PYQ Paper<small>Open PDF</small></div><span class="rarr">↗</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div class="qoverlay" id="qmodal">
+  <div class="qscrim" onclick="closeQuiz()"></div>
+  <div class="qpanel">
+    <div class="qhead">
+      <div class="qhead-top">
+        <div class="qtitle" id="qtitle">Quiz</div>
+        <button class="qclose" onclick="closeQuiz()">✕</button>
+      </div>
+      <div class="qpips" id="qpips"></div>
+    </div>
+    <div class="qbody" id="qbody"></div>
+  </div>
 </div>
 
 <script>
-var sliderCurrent = 0, sliderTotal = 6, sliderTimer = null;
-function sliderGoTo(index) {
-    sliderCurrent = index;
-    document.getElementById('slider-track').style.transform = 'translateX(-' + (index * 100) + '%)';
-    document.querySelectorAll('.slider-dot').forEach(function(d, i) { d.classList.toggle('active', i === index); });
-}
-function sliderNext() { sliderGoTo((sliderCurrent + 1) % sliderTotal); }
-function startSliderAuto() { sliderTimer = setInterval(sliderNext, 3000); }
-function stopSliderAuto() { clearInterval(sliderTimer); }
-(function() {
-    var startX = 0, el = document.getElementById('hero-slider');
-    el.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; stopSliderAuto(); }, { passive: true });
-    el.addEventListener('touchend', function(e) {
-        var diff = startX - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 40) { if (diff > 0) sliderGoTo((sliderCurrent+1)%sliderTotal); else sliderGoTo((sliderCurrent-1+sliderTotal)%sliderTotal); }
-        startSliderAuto();
-    }, { passive: true });
-})();
-startSliderAuto();
-
-function getDeviceId() {
-    let id = localStorage.getItem('ezinurse_device_id');
-    if (!id) { id = crypto.randomUUID(); localStorage.setItem('ezinurse_device_id', id); }
-    return id;
+function goBackToApp() {
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage({ action: 'goBack' }, '*');
+  } else {
+    history.back();
+  }
 }
 
-// SPLASH LOGIC
-var splashDone = false;
-var authResolved = false;
-var pendingView = null;
-
-function onSplashDone() {
-    if (splashDone) return;
-    splashDone = true;
-    // Smooth fade out — the logo is already faded by CSS animation at 3.5s
-    var splash = document.getElementById('splash-screen');
-    splash.style.transition = 'opacity 0.4s ease';
-    splash.style.opacity = '0';
-    setTimeout(function() { splash.style.display = 'none'; }, 400);
-    if (authResolved) { showApp(); }
-    else { document.getElementById('auth-loading').classList.remove('hidden'); }
+function openPDF(url) {
+  const clean = url.replace(/\/preview.*$/,'').replace(/\/view.*$/,'') + '/view';
+  window.open(clean, '_blank');
 }
 
-function onAuthResolved(viewId) {
-    authResolved = true;
-    pendingView = viewId;
-    if (splashDone) showApp();
+function tog(id) {
+  const card = document.getElementById(id);
+  const body = document.getElementById('b-' + id);
+  const open = card.dataset.open === 'true';
+  card.dataset.open = String(!open);
+  body.classList.toggle('open', !open);
 }
 
-function showApp() {
-    document.getElementById('auth-loading').classList.add('hidden');
-    document.getElementById('app').style.visibility = 'visible';
-    if (pendingView && window._realApp) { window._realApp.renderView(pendingView); }
-}
-
-if (sessionStorage.getItem('currentView') === 'view-iframe') {
-    splashDone = true;
-    document.getElementById('splash-screen').style.display = 'none';
-    document.getElementById('auth-loading').classList.remove('hidden');
-} else {
-    // Play audio: try immediately, fallback on first user interaction
-    var splashAudio = document.getElementById('splash-sound');
-    function tryPlayAudio() {
-        if (splashAudio) {
-            splashAudio.volume = 1.0;
-            splashAudio.play().catch(function() {
-                // Autoplay blocked — play on first touch/click
-                function playOnInteraction() {
-                    splashAudio.play().catch(function(){});
-                    document.removeEventListener('touchstart', playOnInteraction);
-                    document.removeEventListener('click', playOnInteraction);
-                }
-                document.addEventListener('touchstart', playOnInteraction, { once: true });
-                document.addEventListener('click', playOnInteraction, { once: true });
-            });
-        }
-    }
-    tryPlayAudio();
-    setTimeout(onSplashDone, 3500);
-}
-</script>
-
-<script>
-window._realApp = null;
-window._appQueue = [];
-window.app = new Proxy({}, {
-    get(_, prop) {
-        return function(...args) {
-            if (window._realApp && typeof window._realApp[prop] === 'function') return window._realApp[prop](...args);
-            window._appQueue.push({ prop, args });
-        };
-    }
-});
-</script>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-const firebaseConfig = {
-    apiKey: "AIzaSyDVAJZaxBjcCjWUirUXnffZv5nmM5Th1No",
-    authDomain: "my-login-app-54abd.firebaseapp.com",
-    projectId: "my-login-app-54abd",
-    storageBucket: "my-login-app-54abd.firebasestorage.app",
-    messagingSenderId: "747689511082",
-    appId: "1:747689511082:web:0815e12c1ada17a31ca8d3"
+const QD = {
+1:[
+  {q:"Biochemistry is best defined as the study of:",o:["Physical movements","Chemical processes within living organisms","Ecosystems","Rock formations"],a:1},
+  {q:"Which organelle is known as the 'Powerhouse' of the cell?",o:["Nucleus","Ribosome","Mitochondria","Lysosome"],a:2},
+  {q:"Which is a prokaryotic organism?",o:["Human","Fungi","Bacteria","Plant"],a:2},
+  {q:"Knowledge of biochemistry helps nurses to:",o:["Diagnose diseases via lab tests","Perform surgery","Prescribe physical therapy","Ignore symptoms"],a:0},
+  {q:"The most abundant molecule in the human body is:",o:["Water","Protein","Lipid","Carbohydrate"],a:0},
+  {q:"Which cell component is responsible for protein synthesis?",o:["Lysosome","Ribosome","Golgi apparatus","Smooth ER"],a:1},
+  {q:"The fluid mosaic model describes the structure of:",o:["Nucleus","Cell membrane","Mitochondria","DNA"],a:1},
+  {q:"Anabolic pathways are:",o:["Energy releasing","Energy consuming","Breakdown processes","Always spontaneous"],a:1},
+  {q:"The primary genetic material in humans is:",o:["RNA","ATP","DNA","Protein"],a:2},
+  {q:"Biochemistry in nursing is crucial for understanding:",o:["Hospital architecture","Pharmacokinetics and drug action","Scheduling staff","Medical billing"],a:1}
+],
+2:[
+  {q:"The normal pH range of human blood is:",o:["7.0 - 7.2","7.35 - 7.45","6.8 - 7.0","7.5 - 7.8"],a:1},
+  {q:"Which is the major cation in intracellular fluid?",o:["Sodium (Na+)","Calcium (Ca++)","Potassium (K+)","Chloride (Cl-)"],a:2},
+  {q:"Movement of water from high concentration to low concentration through a semi-permeable membrane is:",o:["Diffusion","Osmosis","Active Transport","Filtration"],a:1},
+  {q:"Dehydration is characterized by:",o:["Loss of water","Excess water","Low blood pressure","Both A and C"],a:3},
+  {q:"The normal concentration of sodium in extracellular fluid is approximately:",o:["135-145 mEq/L","3.5-5.0 mEq/L","98-106 mEq/L","8.5-10.5 mg/dL"],a:0},
+  {q:"Which hormone primarily regulates water reabsorption in the kidneys?",o:["Insulin","Thyroxine","Antidiuretic hormone (ADH)","Aldosterone"],a:2},
+  {q:"A pH of 7.25 in the human blood indicates:",o:["Alkalosis","Acidosis","Normal neutral","Hyperkalemia"],a:1},
+  {q:"The major buffer system in the extracellular fluid is:",o:["Phosphate buffer","Protein buffer","Bicarbonate-carbonic acid buffer","Hemoglobin buffer"],a:2},
+  {q:"Edema is typically caused by:",o:["Excess intracellular fluid","Accumulation of fluid in interstitial spaces","Dehydration","Low sodium intake"],a:1},
+  {q:"Insensible water loss occurs primarily through:",o:["Urine","Feces","Skin and lungs","Sweat glands"],a:2}
+],
+3:[
+  {q:"Enzymes are primarily composed of:",o:["Carbohydrates","Lipids","Proteins","Nucleic Acids"],a:2},
+  {q:"The 'Lock and Key' model explains:",o:["Enzyme specificity","Enzyme denaturation","Enzyme production","Enzyme storage"],a:0},
+  {q:"Which factor affects enzyme activity?",o:["Temperature","pH","Substrate concentration","All of the above"],a:3},
+  {q:"An enzyme that helps digestion in the stomach is:",o:["Amylase","Pepsin","Lipase","Trypsin"],a:1},
+  {q:"The non-protein component required for some enzymes to function is called a:",o:["Substrate","Coenzyme/Cofactor","Inhibitor","Product"],a:1},
+  {q:"A competitive inhibitor binds to the:",o:["Allosteric site","Active site","Substrate","Coenzyme"],a:1},
+  {q:"Isoenzymes are:",o:["Enzymes with identical structures","Different forms of an enzyme catalyzing the same reaction","Enzymes that inhibit each other","Inactive precursors"],a:1},
+  {q:"Clinical elevation of Troponin and CK-MB is indicative of:",o:["Liver failure","Myocardial infarction","Kidney disease","Pancreatitis"],a:1},
+  {q:"The optimum body temperature for most human enzymes is approximately:",o:["25°C","37°C","42°C","98°C"],a:1},
+  {q:"Zymogens (like pepsinogen) are:",o:["Hyperactive enzymes","Inactive enzyme precursors","Enzyme inhibitors","Coenzymes"],a:1}
+],
+4:[
+  {q:"Glucose is an example of a:",o:["Monosaccharide","Disaccharide","Polysaccharide","Fatty Acid"],a:0},
+  {q:"The storage form of glucose in humans is:",o:["Starch","Cellulose","Glycogen","Sucrose"],a:2},
+  {q:"Which carbohydrate is known as table sugar?",o:["Lactose","Sucrose","Maltose","Fructose"],a:1},
+  {q:"The primary function of carbohydrates is to provide:",o:["Structure","Energy","Insulation","Genetic information"],a:1},
+  {q:"Which test is commonly used to detect reducing sugars in urine?",o:["Biuret test","Benedict's test","Ninhydrin test","Sudan III test"],a:1},
+  {q:"The breakdown of glycogen to glucose is called:",o:["Glycogenesis","Glycolysis","Glycogenolysis","Gluconeogenesis"],a:2},
+  {q:"Which hormone lowers blood glucose levels?",o:["Glucagon","Epinephrine","Cortisol","Insulin"],a:3},
+  {q:"The end product of glycolysis in aerobic conditions is:",o:["Lactic acid","Pyruvate","Ethanol","Acetyl CoA"],a:1},
+  {q:"Normal fasting blood glucose level is approximately:",o:["70-100 mg/dL","120-150 mg/dL","40-60 mg/dL","150-200 mg/dL"],a:0},
+  {q:"Cellulose cannot be digested by humans because we lack:",o:["Amylase","Beta-glycosidase (cellulase)","Maltase","Sucrase"],a:1}
+],
+5:[
+  {q:"The building blocks of proteins are:",o:["Fatty acids","Amino acids","Monosaccharides","Nucleotides"],a:1},
+  {q:"Which bond links amino acids together?",o:["Ionic bond","Hydrogen bond","Peptide bond","Glycosidic bond"],a:2},
+  {q:"Albumin is an example of a:",o:["Plasma protein","Structural protein","Contractile protein","Storage protein"],a:0},
+  {q:"Denaturation of proteins results in:",o:["Loss of biological activity","Increase in size","Color change","Synthesis of new proteins"],a:0},
+  {q:"The essential amino acids:",o:["Can be synthesized by the body","Must be obtained from the diet","Are not needed for health","Are only found in plants"],a:1},
+  {q:"The secondary structure of a protein includes:",o:["Alpha-helices and beta-sheets","Amino acid sequence","Multiple polypeptide chains","Peptide bonds only"],a:0},
+  {q:"Urea is synthesized in the liver as a byproduct of:",o:["Lipid breakdown","Carbohydrate breakdown","Amino acid metabolism","Nucleic acid synthesis"],a:2},
+  {q:"Severe protein deficiency in children can lead to:",o:["Scurvy","Kwashiorkor","Rickets","Beriberi"],a:1},
+  {q:"Hemoglobin is an example of which protein structure level?",o:["Primary","Secondary","Tertiary","Quaternary"],a:3},
+  {q:"Which laboratory test is most specific for assessing long-term nutritional status?",o:["Blood glucose","Serum albumin","Creatinine","Bilirubin"],a:1}
+],
+6:[
+  {q:"Lipids that are solid at room temperature are usually:",o:["Saturated fats","Unsaturated fats","Oils","Liquids"],a:0},
+  {q:"Which lipid is a major component of cell membranes?",o:["Triglycerides","Phospholipids","Steroids","Waxes"],a:1},
+  {q:"Cholesterol is a precursor for:",o:["Vitamin D","Steroid hormones","Bile salts","All of the above"],a:3},
+  {q:"Essential fatty acids must be:",o:["Synthesized by the body","Obtained from diet","Avoided completely","Converted to sugar"],a:1},
+  {q:"Beta-oxidation is the pathway for the breakdown of:",o:["Glucose","Amino acids","Fatty acids","Glycogen"],a:2},
+  {q:"Ketone bodies are produced primarily in the:",o:["Kidneys","Brain","Muscle","Liver"],a:3},
+  {q:"Which lipoprotein is known as 'good cholesterol'?",o:["LDL","VLDL","HDL","Chylomicrons"],a:2},
+  {q:"Bile salts are essential for the digestion and absorption of:",o:["Proteins","Carbohydrates","Lipids","Vitamins B and C"],a:2},
+  {q:"Excess energy from carbohydrates and proteins is ultimately stored as:",o:["Glycogen","Muscle tissue","Triglycerides (fat)","Urea"],a:2},
+  {q:"Atherosclerosis is most strongly associated with elevated levels of:",o:["HDL","LDL","Chylomicrons","Albumin"],a:1}
+],
+7:[
+  {q:"In biomedical waste management, human anatomical waste goes in the:",o:["Red bin","Blue bin","Yellow bin","Black bin"],a:2},
+  {q:"Plastic waste like catheters and IV tubes should be discarded in:",o:["Yellow bin","Red bin","White bin","Blue bin"],a:1},
+  {q:"The symbol for biohazard consists of:",o:["Three interlocked circles","Skull and crossbones","Green square","Red triangle"],a:0},
+  {q:"Sharps (needles, blades) must be disposed of in a:",o:["Puncture-proof container (White)","Black bag","Yellow bag","Red bag"],a:0},
+  {q:"Outdated and discarded medicines are disposed of in:",o:["Red bag","Yellow bag","Blue puncture-proof box","Black bag"],a:1},
+  {q:"Autoclaving is a method used primarily for:",o:["Incinerating anatomical waste","Sterilizing reusable equipment and some waste","Chemical treatment of liquid waste","Compacting waste"],a:1},
+  {q:"Broken glass ampoules should be discarded in:",o:["White container","Red bag","Cardboard box with blue marking","Yellow bag"],a:2},
+  {q:"The maximum time limit for storing untreated biomedical waste is generally:",o:["12 hours","24 hours","48 hours","7 days"],a:2},
+  {q:"Which step is the most critical in effective biomedical waste management?",o:["Transportation","Treatment","Segregation at source","Final disposal"],a:2},
+  {q:"Cytotoxic drugs and their containers must be disposed of in:",o:["Red bag with biohazard symbol","Yellow bag with cytotoxic label","White translucent container","General waste bin"],a:1}
+],
+8:[
+  {q:"The standard SI unit of length is the:",o:["Centimeter","Meter","Kilometer","Inch"],a:1},
+  {q:"In medical practice, blood pressure is typically measured in:",o:["Pascals","Atmospheres","Millimeters of mercury (mmHg)","Torr"],a:2},
+  {q:"Normal human body temperature on the Celsius scale is approximately:",o:["98.6°C","32°C","37°C","42°C"],a:2},
+  {q:"Which of the following is an SI base unit?",o:["Liter","Joule","Kilogram","Newton"],a:2},
+  {q:"The prefix 'milli-' signifies:",o:["One-tenth","One-hundredth","One-thousandth","One-millionth"],a:2},
+  {q:"A patient weighs 70 kg. Approximately how much is this in pounds?",o:["120 lbs","154 lbs","175 lbs","100 lbs"],a:1},
+  {q:"Which unit is used to express fluid intake and output in clinical settings?",o:["Milliliters (mL)","Ounces","Grams","Drops"],a:0},
+  {q:"The SI unit for energy is the:",o:["Watt","Joule","Calorie","Volt"],a:1},
+  {q:"1 cubic centimeter (cc) is exactly equivalent to:",o:["10 mL","1 Liter","1 milliliter (mL)","0.1 Liter"],a:2},
+  {q:"Thermometers in clinical practice most commonly measure:",o:["Specific heat capacity","Latent heat","Thermal radiation","Temperature"],a:3}
+],
+9:[
+  {q:"A vector quantity possesses both magnitude and:",o:["Mass","Direction","Time","Temperature"],a:1},
+  {q:"Which of the following is a vector quantity?",o:["Speed","Distance","Velocity","Volume"],a:2},
+  {q:"Acceleration is defined as the rate of change of:",o:["Position","Velocity","Mass","Force"],a:1},
+  {q:"In human body mechanics, maintaining balance requires the center of gravity to be:",o:["Above the head","Outside the base of support","Within the base of support","At the knees"],a:2},
+  {q:"When a nurse lifts a patient, keeping the feet wide apart increases:",o:["Friction","The base of support","The center of gravity","Torque"],a:1},
+  {q:"Solar motion refers to:",o:["The movement of the moon","The movement of the sun and the solar system","Human cellular transport","Blood circulation"],a:1},
+  {q:"The study of motion without considering its causes is called:",o:["Dynamics","Kinematics","Statics","Thermodynamics"],a:1},
+  {q:"Speed is a scalar quantity because it lacks:",o:["Magnitude","Direction","Measurement","Units"],a:1},
+  {q:"When a patient is transported in a moving ambulance, they experience:",o:["Zero velocity","Acceleration and deceleration forces","Only gravitational force","Constant static friction"],a:1},
+  {q:"Proper body mechanics in nursing prevents:",o:["Infection","Musculoskeletal injuries","Fluid imbalance","Medication errors"],a:1}
+],
+10:[
+  {q:"Gravity is defined as the force of attraction between:",o:["Two magnetic poles","Two charges","Any two masses","Light waves"],a:2},
+  {q:"The acceleration due to gravity on Earth is approximately:",o:["9.8 m/s²","10.5 m/s²","3.14 m/s²","5.0 m/s²"],a:0},
+  {q:"Specific gravity of a liquid is the ratio of its density to the density of:",o:["Air","Blood","Water","Alcohol"],a:2},
+  {q:"The normal specific gravity of human urine is approximately:",o:["1.001 - 1.030","2.000 - 3.000","0.500 - 0.900","1.500 - 1.800"],a:0},
+  {q:"Elevating a patient's swollen leg uses gravity to:",o:["Increase arterial pressure","Promote venous return and reduce edema","Decrease oxygen supply","Increase friction"],a:1},
+  {q:"An IV drip works primarily based on:",o:["Magnetic force","Gravitational pull","Chemical reactions","Nuclear energy"],a:1},
+  {q:"Center of gravity in a standing human adult is typically located near the:",o:["Chest","Pelvis (sacrum)","Knees","Neck"],a:1},
+  {q:"Postural drainage in respiratory therapy utilizes gravity to:",o:["Increase heart rate","Clear secretions from the lungs","Measure blood pressure","Prevent bedsores"],a:1},
+  {q:"The force exerted by gravity on an object's mass is its:",o:["Volume","Density","Weight","Momentum"],a:2},
+  {q:"Which clinical position uses gravity to keep abdominal organs away from the diaphragm?",o:["Trendelenburg","Reverse Trendelenburg","Prone","Sim's"],a:1}
+],
+11:[
+  {q:"Force is defined as a push or pull that can change an object's:",o:["Mass","State of motion","Temperature","Color"],a:1},
+  {q:"The SI unit of force is the:",o:["Joule","Watt","Newton","Pascal"],a:2},
+  {q:"Friction between a patient's skin and bed sheets can cause:",o:["Bone fractures","Pressure ulcers (bedsores)","Muscle spasms","Improved circulation"],a:1},
+  {q:"In skeletal traction, weights are used to apply a continuous:",o:["Magnetic force","Pulling force (tension)","Compressive force","Centrifugal force"],a:1},
+  {q:"The human arm functioning at the elbow joint is an example of a:",o:["First-class lever","Second-class lever","Third-class lever","Pulley system"],a:2},
+  {q:"Newton's Third Law of Motion states:",o:["Force equals mass times acceleration","An object at rest stays at rest","For every action, there is an equal and opposite reaction","Gravity pulls everything down"],a:2},
+  {q:"Centrifuge machines in labs separate blood components using:",o:["Magnetic force","Centrifugal force","Thermal energy","Electrical force"],a:1},
+  {q:"To reduce friction when moving a heavy patient, a nurse should use:",o:["Rubber sheets","A slide board or draw sheet","More muscle power","Bare hands on dry skin"],a:1},
+  {q:"Pressure is defined as:",o:["Force multiplied by area","Force per unit area","Mass per unit volume","Work done over time"],a:1},
+  {q:"Applying pressure to a bleeding wound uses force to:",o:["Increase blood flow","Promote hemostasis (stop bleeding)","Cause infection","Decrease temperature"],a:1}
+],
+12:[
+  {q:"Heat transfer from a hot pack to a patient's skin occurs primarily via:",o:["Convection","Conduction","Radiation","Evaporation"],a:1},
+  {q:"Sweating cools the body primarily through the process of:",o:["Conduction","Convection","Radiation","Evaporation"],a:3},
+  {q:"The normal core body temperature is maintained by the:",o:["Cerebellum","Hypothalamus","Medulla oblongata","Pituitary gland"],a:1},
+  {q:"Which method of heat transfer involves the movement of fluids or gases?",o:["Conduction","Convection","Radiation","Insulation"],a:1},
+  {q:"Basal Metabolic Rate (BMR) represents the heat produced by the body at:",o:["Maximum exertion","Absolute rest","During digestion","During fever"],a:1},
+  {q:"A cold compress reduces swelling by causing:",o:["Vasodilation","Vasoconstriction","Increased capillary permeability","Muscle relaxation"],a:1},
+  {q:"Infrared warmers used for premature infants transfer heat via:",o:["Conduction","Convection","Radiation","Friction"],a:2},
+  {q:"The amount of heat required to raise the temperature of 1 gram of water by 1°C is a:",o:["Joule","Watt","Calorie","Newton"],a:2},
+  {q:"Fever (pyrexia) is defined as a body temperature above:",o:["37°C (98.6°F)","38°C (100.4°F)","36°C (96.8°F)","40°C (104°F)"],a:1},
+  {q:"Hypothermia occurs when the core body temperature falls below:",o:["35°C (95°F)","36.5°C (97.7°F)","37°C (98.6°F)","32°C (89.6°F)"],a:0}
+],
+13:[
+  {q:"Light is a form of:",o:["Mechanical energy","Electromagnetic radiation","Acoustic energy","Chemical energy"],a:1},
+  {q:"The part of the eye that acts like a camera lens to focus light is the:",o:["Retina","Cornea and Lens","Optic nerve","Sclera"],a:1},
+  {q:"Phototherapy in neonatal jaundice uses blue light to break down:",o:["Hemoglobin","Bilirubin","Melanin","Carotene"],a:1},
+  {q:"Endoscopes use which principle to transmit light through flexible tubes?",o:["Total internal reflection","Refraction","Diffraction","Dispersion"],a:0},
+  {q:"LASER stands for Light Amplification by Stimulated Emission of:",o:["Radiation","Radio waves","Resonance","Reflection"],a:0},
+  {q:"Which type of UV radiation is primarily responsible for sunburn?",o:["UV-A","UV-B","UV-C","Visible light"],a:1},
+  {q:"Myopia (nearsightedness) is corrected using a:",o:["Convex lens","Concave lens","Cylindrical lens","Prism"],a:1},
+  {q:"The speed of light in a vacuum is approximately:",o:["300,000 km/s","150,000 km/s","3,000 km/s","340 m/s"],a:0},
+  {q:"Ophthalmoscopes are used to examine the interior of the:",o:["Ear","Throat","Eye","Stomach"],a:2},
+  {q:"Ultraviolet (UV) light is commonly used in hospitals for:",o:["Heating patient rooms","Sterilizing equipment and air","X-ray imaging","Taking temperatures"],a:1}
+],
+14:[
+  {q:"Blood pressure is typically measured using a:",o:["Thermometer","Sphygmomanometer","Spirometer","Barometer"],a:1},
+  {q:"Normal atmospheric pressure at sea level is:",o:["760 mmHg","100 mmHg","120/80 mmHg","1000 mmHg"],a:0},
+  {q:"Intracranial pressure (ICP) measures the pressure within the:",o:["Eyeball","Skull","Lungs","Heart"],a:1},
+  {q:"Intraocular pressure is measured to test for:",o:["Cataracts","Glaucoma","Macular degeneration","Conjunctivitis"],a:1},
+  {q:"In a mechanical ventilator, Positive End-Expiratory Pressure (PEEP) helps to:",o:["Collapse the lungs","Keep alveoli open at the end of expiration","Measure blood oxygen","Decrease lung volume"],a:1},
+  {q:"The principle that pressure applied to a confined fluid is transmitted equally in all directions is:",o:["Newton's Law","Pascal's Principle","Archimedes' Principle","Boyle's Law"],a:1},
+  {q:"Air flows into the lungs during inspiration because intra-alveolar pressure becomes:",o:["Higher than atmospheric pressure","Lower than atmospheric pressure","Equal to blood pressure","Zero"],a:1},
+  {q:"Hyperbaric oxygen therapy involves breathing 100% oxygen at pressures:",o:["Lower than atmospheric","Higher than atmospheric","Equal to atmospheric","Zero pressure"],a:1},
+  {q:"A decubitus ulcer (bedsore) forms when tissue pressure exceeds:",o:["Arterial pressure","Capillary closing pressure","Venous pressure","Atmospheric pressure"],a:1},
+  {q:"Syringes work on the principle of creating a:",o:["Positive pressure vacuum","Negative pressure vacuum","Magnetic field","Thermal gradient"],a:1}
+],
+15:[
+  {q:"Sound waves are:",o:["Transverse electromagnetic waves","Longitudinal mechanical waves","Radio waves","Stationary waves"],a:1},
+  {q:"The pitch of a sound is determined by its:",o:["Amplitude","Frequency","Velocity","Wavelength"],a:1},
+  {q:"The unit used to measure the intensity or loudness of sound is the:",o:["Hertz (Hz)","Watt (W)","Decibel (dB)","Joule (J)"],a:2},
+  {q:"A stethoscope amplifies internal body sounds primarily through:",o:["Electronic amplification","Acoustic resonance in the chest piece and tubing","Magnetic resonance","Thermal dynamics"],a:1},
+  {q:"Ultrasound imaging uses sound frequencies that are:",o:["Below human hearing (<20 Hz)","Within human hearing (20-20,000 Hz)","Above human hearing (>20,000 Hz)","Exactly 100 Hz"],a:2},
+  {q:"In ultrasound, the transducer acts as both a:",o:["Receiver and amplifier","Transmitter and receiver","Heater and cooler","Light and sound source"],a:1},
+  {q:"The Doppler effect in ultrasound is used clinically to measure:",o:["Bone density","Blood flow velocity and direction","Stomach acidity","Brain waves"],a:1},
+  {q:"Prolonged exposure to sounds above 85 dB can cause:",o:["Improved hearing","Visual impairment","Sensorineural hearing loss","Tinnitus cure"],a:2},
+  {q:"Lithotripsy uses high-energy sound waves to:",o:["Measure fetal heart rate","Break up kidney stones","Clean surgical instruments","Heal bone fractures"],a:1},
+  {q:"Audiometry is a test used to evaluate:",o:["Vision acuity","Heart rhythms","Hearing acuity","Lung capacity"],a:2}
+],
+16:[
+  {q:"Electric current is defined as the flow of:",o:["Protons","Neutrons","Electrons","Atoms"],a:2},
+  {q:"An Electrocardiogram (ECG) measures the electrical activity of the:",o:["Brain","Heart","Muscles","Nerves"],a:1},
+  {q:"An Electroencephalogram (EEG) is used to record the electrical activity of the:",o:["Heart","Stomach","Brain","Skeletal muscles"],a:2},
+  {q:"A defibrillator delivers an electrical shock to the heart to:",o:["Start the heart from a flatline","Restore a normal sinus rhythm during arrhythmias like VFib","Measure blood pressure","Increase heart rate slowly"],a:1},
+  {q:"Which material is considered an excellent electrical insulator?",o:["Copper","Water","Rubber","Iron"],a:2},
+  {q:"Microshock in a hospital setting is dangerous because the current is applied directly to the:",o:["Skin","Myocardium (heart muscle)","Brain","Bones"],a:1},
+  {q:"A pacemaker relies on electrical impulses to regulate the:",o:["Breathing rate","Heart rate","Digestive tract","Kidney filtration"],a:1},
+  {q:"The third prong on a hospital electrical plug serves as a:",o:["Power booster","Ground connection for safety","Voltage regulator","Decorative element"],a:1},
+  {q:"Electromyography (EMG) assesses the health of:",o:["Motor neurons and muscles","Heart valves","Retinal cells","Gastric mucosa"],a:0},
+  {q:"Diathermy uses high-frequency electrical currents to generate:",o:["Light inside the body","Deep heat in body tissues","Cold compresses","Magnetic fields"],a:1}
+],
+17:[
+  {q:"X-rays are a type of:",o:["High-energy electromagnetic radiation","Low-energy acoustic wave","Radioactive particle","Visible light"],a:0},
+  {q:"Which property allows X-rays to create images of bones?",o:["They reflect off skin","They are absorbed by dense tissues like bone","They turn bone into liquid","They are visible to the naked eye"],a:1},
+  {q:"Isotopes of an element have the same number of protons but different numbers of:",o:["Electrons","Positrons","Neutrons","Photons"],a:2},
+  {q:"Radioactive Iodine-131 is commonly used in the diagnosis and treatment of:",o:["Lung cancer","Thyroid disorders","Bone fractures","Kidney stones"],a:1},
+  {q:"The ALARA principle in radiation safety stands for:",o:["As Low As Reasonably Achievable","Always Leave A Radioactive Area","Avoid Light And Radiation Always","As Long As Radiation Allows"],a:0},
+  {q:"To protect themselves from scatter radiation, healthcare workers wear aprons lined with:",o:["Aluminum","Copper","Lead","Plastic"],a:2},
+  {q:"Radiotherapy primarily uses high-energy radiation to:",o:["Take pictures of the spine","Destroy cancer cells","Cure viral infections","Increase blood circulation"],a:1},
+  {q:"PET scans utilize which type of particle emission for imaging?",o:["Alpha particles","Beta particles","Positrons","Neutrons"],a:2},
+  {q:"The half-life of a radioactive isotope is the time required for:",o:["Half of the patient to recover","Half of the radioactive atoms to decay","The radiation to travel halfway","The X-ray machine to warm up"],a:1},
+  {q:"A dosimeter badge is worn by nurses in radiology to:",o:["Block radiation","Measure cumulative radiation exposure","Identify patient allergies","Provide light in dark rooms"],a:1}
+],
+18:[
+  {q:"A transducer in medical electronics converts:",o:["Water to ice","One form of energy into another","High voltage to low voltage","AC current to DC current"],a:1},
+  {q:"Pulse oximetry measures the oxygen saturation of:",o:["Hemoglobin in arterial blood","Plasma","White blood cells","Platelets"],a:0},
+  {q:"A basic electronic component that allows current to flow in only one direction is a:",o:["Resistor","Capacitor","Diode","Transistor"],a:2},
+  {q:"Patient monitors use electrodes to detect physiological signals, which are then:",o:["Amplified and displayed","Erased","Turned into heat","Stored in a battery"],a:0},
+  {q:"A capacitor is an electronic component used primarily to:",o:["Resist current flow","Store electrical charge","Emit light","Measure temperature"],a:1},
+  {q:"Telemetry units in hospitals allow for the:",o:["Continuous wireless monitoring of a patient's ECG","Administration of IV fluids","Taking of X-rays at the bedside","Cooking of hospital food"],a:0},
+  {q:"The term 'artifact' on an electronic patient monitor refers to:",o:["A beautiful display","An abnormal signal caused by movement or electrical interference","A flatline","A perfectly normal heartbeat"],a:1},
+  {q:"An amplifier in a medical device is used to:",o:["Decrease signal size","Increase the amplitude of a weak biological signal","Convert analog to digital","Stop the machine"],a:1},
+  {q:"Infusion pumps use electronic microprocessors to:",o:["Control the precise delivery rate of IV fluids","Measure the patient's weight","Monitor brain waves","Generate X-rays"],a:0},
+  {q:"In digital thermometers, temperature changes are detected by a:",o:["Mercury column","Thermistor (temperature-sensitive resistor)","Lead apron","Diode"],a:1}
+]
 };
 
-const fbApp = initializeApp(firebaseConfig);
-const auth = getAuth(fbApp);
-const db = getFirestore(fbApp);
+let curQuiz=null, answered=[];
 
-const _realApp = {
-    currentUser: null,
-    lockedCourseKey: null,
-    lockedCourseSection: null,
-    zoomLevel: 1,
-    permissions: {},
-
-    // Demo state
-    _demoSubject: null,
-    _dq_answered: [],
-
-    init: function() {
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                this.currentUser = user;
-                this.updateWatermark();
-                if (user.displayName) document.getElementById('user-name-display').textContent = user.displayName.split(' ')[0];
-                await this.fetchUserPermissions(user.uid);
-                if (this.currentUser) {
-                    const savedView = sessionStorage.getItem('currentView');
-                    const savedUrl = sessionStorage.getItem('currentUrl');
-                    const savedTitle = sessionStorage.getItem('currentTitle') || 'Subject View';
-                    if (savedView === 'view-iframe' && savedUrl) {
-                        history.replaceState({ viewId: 'view-iframe', sourceUrl: savedUrl, title: savedTitle }, savedTitle, '#content');
-                        this.openContent(savedUrl, savedTitle, true);
-                        onAuthResolved('view-iframe');
-                    } else {
-                        history.replaceState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard');
-                        onAuthResolved('view-dashboard');
-                    }
-                }
-            } else {
-                this.currentUser = null;
-                this.permissions = {};
-                sessionStorage.clear();
-                history.replaceState({ viewId: 'view-auth' }, 'Login', '#login');
-                onAuthResolved('view-auth');
-            }
-        });
-
-        window.addEventListener('message', (event) => {
-            if (event.data && event.data.action === 'goBack') {
-                sessionStorage.removeItem('currentView');
-                sessionStorage.removeItem('currentUrl');
-                window.history.back();
-            }
-        });
-
-        window.addEventListener('popstate', (event) => {
-            if (event.state && event.state.viewId) {
-                if (event.state.viewId === 'view-dashboard') {
-                    sessionStorage.removeItem('currentView');
-                    sessionStorage.removeItem('currentUrl');
-                }
-                if (event.state.viewId === 'view-submenu') {
-                    const c = event.state.course || this.lockedCourseKey;
-                    if (c) { this.renderSubmenu(c); this.renderView('view-submenu'); }
-                    else this.renderView('view-dashboard');
-                } else if (event.state.viewId === 'view-subjects') {
-                    const c = event.state.course || this.lockedCourseKey;
-                    const s = event.state.section || this.lockedCourseSection;
-                    if (c && s) { this.renderSubjectList(c, s); this.renderView('view-subjects'); }
-                    else this.renderView('view-dashboard');
-                } else if (event.state.viewId === 'view-demo') {
-                    this.renderView('view-demo');
-                } else if (event.state.viewId === 'view-iframe') {
-                    if (event.state.sourceUrl) this.openContent(event.state.sourceUrl, event.state.title, true);
-                    else this.renderView('view-dashboard');
-                } else {
-                    this.renderView(event.state.viewId);
-                }
-            } else {
-                this.currentUser ? this.renderView('view-dashboard') : this.renderView('view-auth');
-            }
-        });
-    },
-
-    fetchUserPermissions: async function(uid) {
-        try {
-            const docRef = doc(db, "users", uid);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                const deviceId = getDeviceId();
-                if (data.deviceId && data.deviceId !== deviceId) {
-                    this.currentUser = null;
-                    this.permissions = {};
-                    await signOut(auth);
-                    const errEl = document.getElementById('login-error');
-                    if (errEl) errEl.textContent = '⚠️ Your account is active on another device. Log out there first, then try again.';
-                    return;
-                }
-                this.permissions = data.permissions || {};
-                if (data.name) {
-                    document.getElementById('user-name-display').textContent = data.name.split(' ')[0];
-                    document.getElementById('drawer-name').textContent = data.name;
-                }
-            } else {
-                await setDoc(doc(db, "users", uid), { email: this.currentUser.email, permissions: {} }, { merge: true });
-            }
-        } catch (e) { console.error("Error fetching permissions:", e); }
-    },
-
-    updateWatermark: function() {
-        const email = this.currentUser ? this.currentUser.email : '';
-        const strip = document.getElementById('wm-diagonal');
-        if (email) { strip.textContent = (email + " • ").repeat(30); strip.style.display = 'flex'; }
-        else { strip.style.display = 'none'; }
-    },
-
-    toggleZoom: function() {
-        const wrapper = document.getElementById('iframe-wrapper');
-        if (!wrapper) return;
-        if (this.zoomLevel === 1) this.zoomLevel = 1.5;
-        else if (this.zoomLevel === 1.5) this.zoomLevel = 2.0;
-        else this.zoomLevel = 1;
-        wrapper.style.transform = 'none';
-        if (this.zoomLevel === 1) wrapper.style.width = '100%';
-        if (this.zoomLevel === 1.5) wrapper.style.width = '150%';
-        if (this.zoomLevel === 2.0) wrapper.style.width = '200%';
-    },
-
-    login: function() {
-        const email = document.getElementById('login-email').value.trim();
-        const pass = document.getElementById('login-pass').value.trim();
-        const errorDiv = document.getElementById('login-error');
-        const btn = document.getElementById('btn-login-submit');
-        errorDiv.textContent = "";
-        if (!email || !pass) { errorDiv.textContent = "Fill all fields"; return; }
-        btn.innerHTML = '<span>Logging in...</span>'; btn.disabled = true;
-        signInWithEmailAndPassword(auth, email, pass)
-            .then(async (userCredential) => {
-                const user = userCredential.user;
-                const deviceId = getDeviceId();
-                const userRef = doc(db, "users", user.uid);
-                const userSnap = await getDoc(userRef);
-                if (userSnap.exists()) {
-                    const stored = userSnap.data().deviceId;
-                    if (stored && stored !== deviceId) {
-                        await signOut(auth);
-                        errorDiv.textContent = '⚠️ This account is active on another device. Please log out from that device first.';
-                        btn.innerHTML = '<span>Login Securely</span><span class="material-icons-round" style="font-size:18px;">login</span>';
-                        btn.disabled = false;
-                        return;
-                    }
-                }
-                await setDoc(userRef, { deviceId }, { merge: true });
-            })
-            .catch((error) => {
-                const ec = error.code;
-                if (ec === 'auth/invalid-credential' || ec === 'auth/user-not-found' || ec === 'auth/wrong-password') errorDiv.textContent = "Incorrect email or password.";
-                else if (ec === 'auth/too-many-requests') errorDiv.textContent = "Too many failed attempts. Try again later.";
-                else errorDiv.textContent = error.message;
-                btn.innerHTML = '<span>Login Securely</span><span class="material-icons-round" style="font-size:18px;">login</span>';
-                btn.disabled = false;
-            });
-    },
-
-    signup: function() {
-        const name = document.getElementById('signup-name').value.trim();
-        const email = document.getElementById('signup-email').value.trim();
-        const pass = document.getElementById('signup-pass').value.trim();
-        const phone = document.getElementById('signup-phone').value.trim();
-        const tc = document.getElementById('signup-tc').checked;
-        const errorDiv = document.getElementById('signup-error');
-        const btn = document.getElementById('btn-signup-submit');
-        
-        errorDiv.textContent = "";
-        if (!name || !email || !pass || !phone) { errorDiv.textContent = "Fill all fields"; return; }
-        if (!tc) { errorDiv.textContent = "Please accept the Terms and Conditions to continue."; return; }
-        
-        btn.textContent = "Creating..."; btn.disabled = true;
-        
-        createUserWithEmailAndPassword(auth, email, pass)
-            .then(async (userCredential) => {
-                const user = userCredential.user;
-                const defaultPermissions = {
-                    msc_first_year: false, msc_second_year: false,
-                    bsc_first_semester: false, bsc_second_semester: false, bsc_third_semester: false,
-                    bsc_fourth_semester: false, bsc_fifth_semester: false, bsc_sixth_semester: false,
-                    bsc_seventh_semester: false, pbbsc_first_year: false, pbbsc_second_year: false,
-                    gnm_first_year: false, gnm_second_year: false, gnm_third_year: false,
-                    qp_bsc: false, qp_gnm: false, '3d_models': false,
-                    exams_norcet: false, exams_esci: false, nursing_req: false,
-                    comm_english: false, all_access: false
-                };
-                await setDoc(doc(db, "users", user.uid), { 
-                    name, email, phone, createdAt: new Date(), permissions: defaultPermissions 
-                });
-                alert("Account Created!");
-            })
-            .catch((error) => { 
-                errorDiv.textContent = error.message; 
-                btn.textContent = "Create Account"; 
-                btn.disabled = false; 
-            });
-    },
-
-    requestResetCode: function() {
-        const email = document.getElementById('reset-email').value.trim();
-        const btn = document.getElementById('btn-reset-req');
-        const err = document.getElementById('reset-error-1');
-        err.textContent = "";
-        if (!email) { err.textContent = "Enter email"; return; }
-        btn.textContent = "Sending..."; btn.disabled = true;
-        sendPasswordResetEmail(auth, email)
-            .then(() => { alert("Password reset email sent! Check your inbox."); this.navTo('view-auth', true); })
-            .catch((error) => { err.textContent = error.message; })
-            .finally(() => { btn.textContent = "Send Link"; btn.disabled = false; });
-    },
-
-    toggleAuthMode: function() {
-        const login = document.getElementById('form-login');
-        const signup = document.getElementById('form-signup');
-        if (login.classList.contains('hidden')) { signup.classList.add('hidden'); login.classList.remove('hidden'); }
-        else { login.classList.add('hidden'); signup.classList.remove('hidden'); }
-    },
-
-    togglePassword: function(id, btn) {
-        const el = document.getElementById(id);
-        const icon = btn.querySelector('span');
-        if (el.type === 'password') { el.type = 'text'; icon.textContent = 'visibility_off'; btn.style.color = 'var(--primary)'; }
-        else { el.type = 'password'; icon.textContent = 'visibility'; btn.style.color = 'var(--text-muted)'; }
-    },
-
-    logout: function() {
-        if (this.currentUser) {
-            setDoc(doc(db, "users", this.currentUser.uid), { deviceId: null }, { merge: true })
-                .finally(() => signOut(auth).catch((e) => console.error(e)));
-        } else {
-            signOut(auth).catch((e) => console.error(e));
-        }
-    },
-
-    openDrawer: function() {
-        const email = this.currentUser ? this.currentUser.email : '';
-        const name = document.getElementById('user-name-display') ? document.getElementById('user-name-display').textContent : '';
-        document.getElementById('drawer-name').textContent = name || 'My Account';
-        document.getElementById('drawer-email').textContent = email;
-        document.getElementById('side-drawer').classList.add('open');
-        document.getElementById('drawer-overlay').classList.add('open');
-    },
-
-    closeDrawer: function() {
-        document.getElementById('side-drawer').classList.remove('open');
-        document.getElementById('drawer-overlay').classList.remove('open');
-    },
-
-    deleteAccount: function() {
-        this.closeDrawer();
-        document.getElementById('modal-delete').classList.remove('hidden');
-    },
-
-    closeDeleteModal: function() {
-        document.getElementById('modal-delete').classList.add('hidden');
-    },
-
-    navTo: function(viewId, isRoot = false, stateData = {}) {
-        const state = { viewId, ...stateData };
-        if (isRoot) history.replaceState(state, null, `#${viewId.replace('view-', '')}`);
-        else history.pushState(state, null, `#${viewId.replace('view-', '')}`);
-        this.renderView(viewId);
-    },
-
-    renderView: function(viewId) {
-        const iframeContainer = document.getElementById('view-iframe');
-        if (viewId !== 'view-iframe' && iframeContainer) iframeContainer.innerHTML = '';
-        const fab = document.getElementById('fab-zoom');
-        const header = document.getElementById('main-header');
-        const bottomNav = document.getElementById('bottom-nav');
-        fab.style.display = (viewId === 'view-iframe') ? 'flex' : 'none';
-        bottomNav.style.display = (viewId === 'view-dashboard') ? 'flex' : 'none';
-        const isAuth = viewId === 'view-auth' || viewId === 'view-reset';
-        const isDash = viewId === 'view-dashboard';
-        header.style.display = isAuth ? 'none' : 'flex';
-        const backBtn = document.getElementById('btn-back');
-        const hamburgerBtn = document.querySelector('.hamburger-btn');
-        if (isDash) { if (backBtn) backBtn.style.display = 'none'; if (hamburgerBtn) hamburgerBtn.style.display = 'flex'; }
-        else { if (backBtn) backBtn.style.display = 'flex'; if (hamburgerBtn) hamburgerBtn.style.display = 'none'; }
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        const target = document.getElementById(viewId);
-        if (target) target.classList.add('active');
-    },
-
-    goBack: function() { window.history.back(); },
-    navToCourse: function(key) { this.renderSubmenu(key); this.navTo('view-submenu', false, { course: key }); },
-
-    renderSubmenu: function(key) {
-        const list = document.getElementById('submenu-list');
-        list.innerHTML = '';
-        document.getElementById('header-title').innerHTML = `<span>${key}</span> Details`;
-        Object.keys(COURSES[key]).forEach(sec => {
-            const item = document.createElement('div');
-            item.className = 'list-item';
-            item.innerHTML = `<div style="display:flex;align-items:center;"><span class="material-icons-round list-icon">folder_open</span><div class="list-info"><h4>${sec}</h4></div></div><span class="material-icons-round" style="color:#ccc;">chevron_right</span>`;
-            item.onclick = () => { this.checkAccessAndOpen(key, sec); };
-            list.appendChild(item);
-        });
-    },
-
-    checkAccessAndOpen: function(course, section) {
-        this.lockedCourseKey = course; this.lockedCourseSection = section;
-        const pKey = getPermissionKey(course, section);
-        if (this.permissions && (this.permissions[pKey] === true || this.permissions['all_access'] === true)) {
-            // Has access — go straight to subject list
-            this.openSubjectList(course, section);
-        } else {
-            // No access — show Demo screen instead of paywall
-            this.openSectionDemo(course, section);
-        }
-    },
-
-    // Courses that have NO video content
-    _noVideo: ['MSc'],
-
-    // Demo screen shown for ALL locked course sections (replaces old paywall view)
-    openSectionDemo: function(course, section) {
-        this._demoSubject = { label: section, link: null, course, section };
-        document.getElementById('demo-subject-name').textContent = course + ' Nursing — ' + section;
-        document.getElementById('demo-subject-course').textContent = 'Preview before you buy';
-        document.getElementById('demo-badge').textContent = 'DEMO';
-        document.getElementById('header-title').textContent = section;
-        this.renderDemoPaywallInfo(course, section);
-        this.renderDemoTiles(course);
-        this.navTo('view-demo', false, { course, section });
-    },
-
-    renderDemoTiles: function(course) {
-        const showVideo = !this._noVideo.includes(course);
-        const grid = document.getElementById('demo-tile-grid');
-        if (!grid) return;
-        let html = '';
-        if (showVideo) {
-            html += `<div class="demo-tile demo-tile-video" onclick="app.demoOpenVideo()">
-                <div class="demo-tile-icon"><span class="material-icons-round">play_circle_filled</span></div>
-                <div><div class="demo-tile-label">Video Lecture</div><div class="demo-tile-sub">Watch &amp; learn</div></div>
-            </div>`;
-        }
-        html += `<div class="demo-tile demo-tile-lecture" onclick="app.demoOpenLectureNote()">
-            <div class="demo-tile-icon"><span class="material-icons-round">description</span></div>
-            <div><div class="demo-tile-label">Lecture Note</div><div class="demo-tile-sub">Quick summary</div></div>
-        </div>
-        <div class="demo-tile demo-tile-notes" onclick="app.demoOpenDetailedNotes()">
-            <div class="demo-tile-icon"><span class="material-icons-round">menu_book</span></div>
-            <div><div class="demo-tile-label">Detailed Notes</div><div class="demo-tile-sub">In-depth study</div></div>
-        </div>
-        <div class="demo-tile demo-tile-quiz" onclick="app.demoOpenQuiz()">
-            <div class="demo-tile-icon"><span class="material-icons-round">quiz</span></div>
-            <div><div class="demo-tile-label">Quiz</div><div class="demo-tile-sub">Test yourself</div></div>
-            <div class="demo-tile-badge">AI</div>
-        </div>`;
-        grid.innerHTML = html;
-    },
-
-    openSubjectList: function(course, section) { this.renderSubjectList(course, section); this.navTo('view-subjects', false, { course, section }); },
-
-    renderSubjectList: function(course, section) {
-        const list = document.getElementById('subject-list');
-        list.innerHTML = '';
-        document.getElementById('header-title').textContent = section;
-        const subjects = COURSES[course][section];
-        subjects.forEach(sub => {
-            const item = document.createElement('div');
-            item.className = 'list-item';
-            item.innerHTML = `<div style="display:flex;align-items:center;"><span class="material-icons-round list-icon">article</span><div class="list-info"><h4>${sub.label.replace(/<[^>]*>?/gm, '')}</h4></div></div><span class="material-icons-round" style="color:#ccc;">chevron_right</span>`;
-            item.onclick = () => { this.openContent(sub.link, sub.label.replace(/<[^>]*>?/gm, '')); };
-            list.appendChild(item);
-        });
-    },
-
-    renderDemoPaywallInfo: function(course, section) {
-        const el = document.getElementById('demo-unlock-price');
-        if (!el) return;
-        let html = '';
-        if (course === 'BSc') html = `<span class="price-original">₹12,000</span><span class="price-discounted">₹5,999</span>`;
-        else if (course === 'GNM') html = `<span class="price-original">₹14,000</span><span class="price-discounted">₹5,800</span>`;
-        else if (course === 'MSc') html = `<span class="price-original">₹10,000</span><span class="price-discounted">₹4,999</span>`;
-        else if (course === 'PBBSc') html = `<span class="price-original">₹10,000</span><span class="price-discounted">₹4,999</span>`;
-        else html = `<span class="price-discounted">Buy Now</span>`;
-        el.innerHTML = html;
-    },
-
-    demoOpenVideo: function() {
-        if (!this._demoSubject) return;
-        const key = this._demoSubject.link;
-        const url = (DEMO_URLS[key] && DEMO_URLS[key].video) || 'about:blank';
-        this.openContent(url, 'Video Demo – ' + this._demoSubject.label.replace(/<[^>]*>?/gm, ''));
-    },
-
-    demoOpenLectureNote: function() {
-        if (!this._demoSubject) return;
-        const key = this._demoSubject.link;
-        const url = (DEMO_URLS[key] && DEMO_URLS[key].lecture) || 'about:blank';
-        this.openContent(url, 'Lecture Note Demo – ' + this._demoSubject.label.replace(/<[^>]*>?/gm, ''));
-    },
-
-    demoOpenDetailedNotes: function() {
-        if (!this._demoSubject) return;
-        const key = this._demoSubject.link;
-        const url = (DEMO_URLS[key] && DEMO_URLS[key].detailed) || 'about:blank';
-        this.openContent(url, 'Detailed Notes Demo – ' + this._demoSubject.label.replace(/<[^>]*>?/gm, ''));
-    },
-
-    // ============================================
-    // QUIZ
-    // ============================================
-    demoOpenQuiz: function() {
-        if (!this._demoSubject) return;
-        const course = this._demoSubject.course;
-        const section = this._demoSubject.section;
-        const key = course + '_' + section;
-        const qs = DEMO_QUIZ[key] || DEMO_QUIZ[course] || DEMO_QUIZ['default'];
-        const title = course + ' · ' + section + ' — Demo Quiz';
-
-        this._dq_answered = new Array(qs.length).fill(null);
-
-        document.getElementById('qtitle').textContent = title;
-        document.getElementById('qpips').innerHTML = qs.map((_,i) =>
-            `<div class="qpip" id="dqpip${i}"></div>`).join('');
-
-        let html = `<div class="qscore-banner" id="dqscore">
-            <div><div class="qscore-num" id="dqsnum">—</div><div class="qscore-sub">Score</div></div>
-            <div class="qscore-msg" id="dqsmsg"></div>
-        </div>`;
-        qs.forEach((q, qi) => {
-            html += `<div class="qitem" id="dqi${qi}">
-                <div class="qlbl">Question ${qi+1} of ${qs.length}</div>
-                <div class="qtext">${q.q}</div>
-                <div class="qopts">${q.o.map((opt, oi) =>
-                    `<button class="qopt" id="dqopt${qi}_${oi}" onclick="app._dqAns(${qi},${oi},${q.a})">
-                        <span class="qltr">${['A','B','C','D'][oi]}</span>${opt}
-                    </button>`).join('')}
-                </div>
-            </div>`;
-        });
-        document.getElementById('qbody').innerHTML = html;
-        document.getElementById('qmodal').classList.add('open');
-    },
-
-    _dqAns: function(qi, oi, correct) {
-        if (!this._dq_answered || this._dq_answered[qi] !== null) return;
-        this._dq_answered[qi] = oi;
-        const course = this._demoSubject.course;
-        const section = this._demoSubject.section;
-        const qs = DEMO_QUIZ[course + '_' + section] || DEMO_QUIZ[course] || DEMO_QUIZ['default'];
-
-        const opts = document.querySelectorAll(`#dqi${qi} .qopt`);
-        opts.forEach(b => b.classList.add('lock'));
-        opts[correct].classList.add('cor');
-        if (oi !== correct) opts[oi].classList.add('wrg');
-        const pip = document.getElementById('dqpip' + qi);
-        if (pip) { pip.classList.add('ans', oi === correct ? 'cor' : 'wrg'); }
-
-        if (this._dq_answered.every(a => a !== null)) {
-            const score = this._dq_answered.filter((a, i) => a === qs[i].a).length;
-            const total = qs.length;
-            const pct = Math.round(score / total * 100);
-            const msgs = ['📚 Keep Studying!', '👍 Good Effort!', '🎉 Well Done!', '🏆 Perfect!'];
-            const mi = pct < 50 ? 0 : pct < 70 ? 1 : pct < 100 ? 2 : 3;
-            document.getElementById('dqsnum').textContent = score + '/' + total;
-            document.getElementById('dqsmsg').textContent = msgs[mi];
-            const sc = document.getElementById('dqscore');
-            if (sc) { sc.classList.add('show'); sc.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-        }
-    },
-
-    closeQuiz: function() {
-        document.getElementById('qmodal').classList.remove('open');
-    },
-
-    // ============================================
-    // CONTENT OPENING (unchanged)
-    // ============================================
-    openContent: function(url, title, fromHistory = false) {
-        sessionStorage.setItem('currentView', 'view-iframe');
-        sessionStorage.setItem('currentUrl', url);
-        sessionStorage.setItem('currentTitle', title);
-
-        const container = document.getElementById('view-iframe');
-        if (!fromHistory) this.navTo('view-iframe', false, { sourceUrl: url, title });
-        else this.renderView('view-iframe');
-        const wrapper = document.createElement('div');
-        wrapper.id = 'iframe-wrapper'; wrapper.className = 'iframe-wrapper';
-        const iframe = document.createElement('iframe');
-        iframe.id = "content-frame"; iframe.src = url;
-        wrapper.appendChild(iframe);
-        container.innerHTML = ''; container.appendChild(wrapper);
-        this.zoomLevel = 1;
-    },
-
-    renderPaywallInfo: function(course, section) {
-        const display = document.getElementById('paywall-price-display');
-        let html = '';
-        if (course === 'BSc') html = `<div><span class="price-original">₹12,000</span><span class="price-discounted">₹5,999</span></div>`;
-        else if (course === 'GNM') html = `<div><span class="price-original">₹14,000</span><span class="price-discounted">₹5,800</span></div>`;
-        display.innerHTML = html;
-    },
-
-    purchaseLockedContent: function() {
-        const course = this.lockedCourseKey;
-        const section = this.lockedCourseSection || 'Systems';
-        const discountKey = `${course}_${section}_D`;
-        const fullKey = `${course}_${section}_F`;
-        let url = PAYMENT_LINKS[discountKey] || PAYMENT_LINKS[fullKey] || `https://www.razorpay.com/fallback`;
-        window.open(url, '_blank');
-    }
-};
-
-window._realApp = _realApp;
-if (window._appQueue && window._appQueue.length) {
-    window._appQueue.forEach(({ prop, args }) => { if (typeof _realApp[prop] === 'function') _realApp[prop](...args); });
-    window._appQueue = [];
-}
-_realApp.init();
-</script>
-
-<script>
-const PAYMENT_LINKS = {
-    'GNM_Third Year_D':'https://rzp.io/rzp/tx1GzgB0','GNM_Second Year_D':'https://rzp.io/rzp/7ZEYqAR','GNM_First Year_D':'https://rzp.io/rzp/m7pEmVy5',
-    'GNM_Third Year_F':'https://rzp.io/rzp/abNPOlM','GNM_Second Year_F':'https://rzp.io/rzp/7uQDIiN','GNM_First Year_F':'https://rzp.io/rzp/lVAKDci',
-    'BSc_Semester 7_D':'https://rzp.io/rzp/5brZ609','BSc_Semester 6_D':'https://rzp.io/rzp/MyOzNDH3','BSc_Semester 5_D':'https://rzp.io/rzp/6Pyoc2KG',
-    'BSc_Semester 4_D':'https://rzp.io/rzp/XYCluxgu','BSc_Semester 3_D':'https://rzp.io/rzp/vD6slz2','BSc_Semester 2_D':'https://rzp.io/rzp/IdW8fls',
-    'BSc_Semester 1_D':'https://rzp.io/rzp/zrR68xJd','BSc_Semester 7_F':'https://rzp.io/rzp/9v1ESD8','BSc_Semester 6_F':'https://rzp.io/rzp/XAUmBAb',
-    'BSc_Semester 5_F':'https://rzp.io/rzp/f3ckmawE','BSc_Semester 4_F':'https://rzp.io/rzp/0xomOEkm','BSc_Semester 3_F':'https://rzp.io/rzp/XoiqWOK',
-    'BSc_Semester 2_F':'https://rzp.io/rzp/xn9Spct','BSc_Semester 1_F':'https://rzp.io/rzp/OepEc2wZ','PBBSc_Second Year_D':'https://rzp.io/rzp/O7QSNXOv',
-    'PBBSc_First Year_D':'https://rzp.io/rzp/TdjmSoy','PBBSc_Second Year_F':'https://rzp.io/rzp/SG5tGnXT','PBBSc_First Year_F':'https://rzp.io/rzp/2QOTgbD',
-    'MSc_Second Year_F':'https://rzp.io/rzp/Hpr9NDg','MSc_First Year_F':'https://rzp.io/rzp/SGdmSPd','3D_Systems_F':'https://rzp.io/rzp/Xnrnrxe',
-    'EXAMS_NORCET_F':'https://rzp.io/l/dummy-norcet-english','EXAMS_ESCI_F':'https://rzp.io/l/dummy-esci','REQ_Documents_F':'https://rzp.io/l/dummy-nursing-req',
-    'COMM_Basics_F':'https://rzp.io/l/dummy-comm-eng'
-};
-
-function getPermissionKey(course, section) {
-    if (course === '3D') return '3d_models';
-    if (course === 'REQ') return 'nursing_req';
-    if (course === 'COMM') return 'comm_english';
-    if (course === 'EXAMS') { if(section.includes('NORCET')) return 'exams_norcet'; if(section.includes('ESCI')) return 'exams_esci'; }
-    const c = course.toLowerCase();
-    if (section.includes('Semester')) {
-        const num = section.split(' ')[1];
-        const map = {'1':'first','2':'second','3':'third','4':'fourth','5':'fifth','6':'sixth','7':'seventh'};
-        return `${c}_${map[num]}_semester`;
-    }
-    return `${c}_${section.toLowerCase().replace(' ', '_')}`;
+function openQuiz(id){
+  curQuiz=id;
+  const qs=QD[id]||[];
+  answered=new Array(qs.length).fill(null);
+  
+  // Format Title properly depending on section
+  let qTitleText = id <= 7 ? `Biochemistry Unit ${id} Quiz` : `Biophysics Unit ${id - 7} Quiz`;
+  document.getElementById('qtitle').textContent = qTitleText;
+  
+  document.getElementById('qpips').innerHTML=qs.map((_,i)=>`<div class="pip" id="pip${i}"></div>`).join('');
+  let html=`<div class="qscore" id="qscore"><div><div class="qs-num" id="qsnum">—</div><div class="qs-sub">Score</div></div><div class="qs-msg" id="qsmsg"></div></div>`;
+  qs.forEach((q,qi)=>{
+    html+=`<div class="qitem" id="qi${qi}"><div class="qlbl">Question ${qi+1} of ${qs.length}</div><div class="qtext">${q.q}</div><div class="qopts">${q.o.map((opt,oi)=>`<button class="qopt" id="opt${qi}_${oi}" onclick="ans(${qi},${oi},${q.a})"><span class="qltr">${LTRS[oi]}</span>${opt}</button>`).join('')}</div></div>`;
+  });
+  document.getElementById('qbody').innerHTML=html;
+  document.getElementById('qmodal').classList.add('open');
+  document.body.style.overflow='hidden';
 }
 
-const COURSES = {
-    'MSc': {
-        'First Year': [
-            { label: 'Advanced Nursing Practice', link: 'msc_1_advanced_nursing_practice.html' },
-            { label: 'Nursing Education', link: 'msc_1_nursing_education.html' },
-            { label: 'Child Health Nursing', link: 'msc_1_child_health_nursing.html' },
-            { label: 'Community Health Nursing', link: 'msc_1_community_health_nursing.html' },
-            { label: 'Medical Surgical Nursing', link: 'msc_1_medical_surgical_nursing.html' },
-            { label: 'Mental Health Nursing', link: 'msc_1_mental_health_nursing.html' },
-            { label: 'Nursing Research & Stats', link: 'msc_1_nursing_research_and_statistics.html' },
-            { label: 'OBG Nursing', link: 'msc_1_obgyn_nursing.html' },
-            { label: '<span style="color: #ef4444;">Previous Year Question Papers</span>', link: 'msc1qp.html' }
-        ],
-        'Second Year': [
-            { label: 'Child Health Nursing', link: 'msc_2_child_health_nursing.html' },
-            { label: 'Community Health Nursing', link: 'msc_2_community_health_nursing.html' },
-            { label: 'OBG Nursing', link: 'msc_2_obgyn_nursing.html' },
-            { label: 'Nursing Management', link: 'msc_2_nursing_management.html' },
-            { label: 'Mental Health Nursing', link: 'msc_2_mental_health_nursing.html' },
-            { label: 'Medical Surgical Nursing', link: 'msc_2_medical_surgical_nursing.html' },
-            { label: '<span style="color: #ef4444;">Previous Year Question Papers</span>', link: 'msc2qp.html' }
-        ]
-    },
-    'BSc': {
-        'Semester 1': [{ label: 'Applied Sociology', link: 'bsc_1_applied_sociology.html' },{ label: 'Applied Psychology', link: 'bsc_1_applied_psychology.html' },{ label: 'Applied Physiology', link: 'bsc_1_applied_physiology.html' },{ label: 'Applied Anatomy', link: 'bsc_1_applied_anatomy.html' },{ label: 'Nursing Foundation', link: 'bsc_1_nursing_foundation.html' },{ label: 'QP', link: 'bsc1qp.html' }],
-        'Semester 2': [{ label: 'Applied Nutrition', link: 'bsc_2_applied_nutrition.html' },{ label: 'Applied Biochemistry', link: 'bsc_2_applied_biochemistry.html' },{ label: 'Nursing Foundation', link: 'bsc_2_nursing_foundation.html' },{ label: 'QP', link: 'bsc2qp.html' }],
-        'Semester 3': [{ label: 'Pharmacology', link: 'bsc_3_pharmacology.html' },{ label: 'Pathology', link: 'bsc_3_pathology.html' },{ label: 'Microbiology', link: 'bsc_3_applied_microbiology.html' },{ label: 'Adult Health Nursing', link: 'bsc_3_adult_health_nursing.html' },{ label: 'QP', link: 'bsc3qp.html' }],
-        'Semester 4': [{ label: 'Pharmacology II', link: 'bsc_4_pharmacology.html' },{ label: 'Pathology II', link: 'bsc_4_pathology.html' },{ label: 'Adult Health II', link: 'bsc_4_adult_health_nursing.html' },{ label: 'Professionalism', link: 'bsc_4_professionalism.html' },{ label: 'Genetics', link: 'bsc_4_genetics.html' },{ label: 'QP', link: 'bsc4qp.html' }],
-        'Semester 5': [{ label: 'Forensic Nursing', link: 'bsc_5_forensic_nursing_indian_law.html' },{ label: 'Education', link: 'bsc_5_nursing_education.html' },{ label: 'Community Health', link: 'bsc_5_community_health_nursing.html' },{ label: 'Mental Health', link: 'bsc_5_mental_health_nursing.html' },{ label: 'Child Health', link: 'bsc_5_child_health_nursing.html' },{ label: 'QP', link: 'bsc5qp.html' }],
-        'Semester 6': [{ label: 'Child Health II', link: 'bsc_6_child_health_nursing.html' },{ label: 'Mental Health II', link: 'bsc_6_mental_health_nursing.html' },{ label: 'Midwifery', link: 'bsc_6_midwifery_obgyn.html' },{ label: 'Management', link: 'bsc_6_nursing_management_leadership.html' },{ label: 'QP', link: 'bsc6qp.html' }],
-        'Semester 7': [{ label: 'Community Health II', link: 'bsc_7_community_health_nursing.html' },{ label: 'Research', link: 'bsc_7_nursing_research_statistics.html' },{ label: 'Midwifery II', link: 'bsc_7_midwifery_obgyn.html' },{ label: 'QP', link: 'bsc7qp.html' }]
-    },
-    'PBBSc': {
-        'First Year': [{ label: 'Medical Surgical', link: 'pbbsc_1_medical_surgical_nursing.html' },{ label: 'Child Health', link: 'pbbsc_1_child_health_nursing.html' },{ label: 'Microbiology', link: 'pbbsc_1_microbiology.html' },{ label: 'Biochem/Biophys', link: 'pbbsc_1_biochemistry_biophysics.html' },{ label: 'Nutrition', link: 'pbbsc_1_nutrition_dietetics.html' },{ label: 'Foundation', link: 'pbbsc_1_nursing_foundation.html' },{ label: 'Maternal', link: 'pbbsc_1_maternal_nursing.html' },{ label: 'Psychology', link: 'pbbsc_1_psychology.html' },{ label: 'QP', link: 'pbbsc1qp.html' },{ label: 'Live class', link: 'pbbsc1live.html' }],
-        'Second Year': [{ label: 'Administration', link: 'pbbsc_2_nursing_service_administration.html' },{ label: 'Mental Health', link: 'pbbsc_2_mental_health_nursing.html' },{ label: 'Education', link: 'pbbsc_2_nursing_education.html' },{ label: 'Community Health', link: 'pbbsc_2_community_health_nursing.html' },{ label: 'Sociology', link: 'pbbsc_2_sociology.html' },{ label: 'QP', link: 'pbbsc2qp.html' }]
-    },
-    'GNM': {
-        'First Year': [{ label: 'Nutrition', link: 'gnm_1_nutrition.html' },{ label: 'Health Ed', link: 'gnm_1_health_education.html' },{ label: 'Env Hygiene', link: 'gnm_1_environmental_hygiene.html' },{ label: 'Community Health', link: 'gnm_1_community_health_nursing.html' },{ label: 'First Aid', link: 'gnm_1_first_aid.html' },{ label: 'Fundamentals', link: 'gnm_1_fundamentals_of_nursing.html' },{ label: 'Sociology', link: 'gnm_1_sociology.html' },{ label: 'Psychology', link: 'gnm_1_psychology.html' },{ label: 'Microbiology', link: 'gnm_1_microbiology.html' },{ label: 'Anatomy', link: 'gnm_1_anatomy_physiology.html' },{ label: 'QP', link: 'gnm1qp.html' }],
-        'Second Year': [{ label: 'MedSurg I', link: 'gnm_2_medical_surgical_nursing.html' },{ label: 'Mental Health', link: 'gnm_2_mental_health_nursing.html' },{ label: 'MedSurg II', link: 'gnm_2_medical_surgical_nursing_two.html' },{ label: 'Child Health', link: 'gnm_2_child_health_nursing.html' },{ label: 'QP', link: 'gnm2qp.html' }],
-        'Third Year': [{ label: 'Community Health II', link: 'gnm_3_community_health_nursing.html' },{ label: 'Midwifery', link: 'gnm_3_midwifery.html' },{ label: 'Gynecology', link: 'gnm_3_gynecology.html' },{ label: 'QP', link: 'gnm3qp.html' }]
-    },
-    '3D': { 'Systems': [{ label: 'Interactive 3D Models', link: '3dmodels.html' }] },
-    'EXAMS': { 'NORCET': [{ label: 'NORCET 8 (English)', link: 'norcetenglish.html' },{ label: 'NORCET (Hindi)', link: 'norcethindi.html' }], 'ESCI': [{ label: 'ESCI Exclusive Q&A', link: 'esci.html' }] },
-    'REQ': { 'Documents': [{ label: 'Nursing Requirements', link: 'nursingrequirements.html' }] },
-    'COMM': { 'Basics': [{ label: 'Communicative English', link: 'communicativeenglish.html' }] }
-};
+function ans(qi,oi,correct){
+  if(answered[qi]!==null)return;
+  answered[qi]=oi;
+  const opts=document.querySelectorAll(`#qi${qi} .qopt`);
+  opts.forEach(b=>b.classList.add('lock'));
+  opts[correct].classList.add('cor');
+  if(oi!==correct)opts[oi].classList.add('wrg');
+  const pip=document.getElementById('pip'+qi);
+  pip.classList.add('ans',oi===correct?'cor':'wrg');
+  if(answered.every(a=>a!==null)){
+    const score=answered.filter((a,i)=>a===QD[curQuiz][i].a).length;
+    const total=QD[curQuiz].length;
+    const pct=Math.round(score/total*100);
+    const msgs=['📚 Keep Studying!','👍 Good Effort!','🎉 Well Done!','🏆 Perfect!'];
+    const mi=pct<50?0:pct<70?1:pct<100?2:3;
+    document.getElementById('qsnum').textContent=score+'/'+total;
+    document.getElementById('qsmsg').textContent=msgs[mi];
+    const sc=document.getElementById('qscore');
+    sc.classList.add('show');
+    sc.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
 
-// ============================================================
-// DEMO_URLS — keyed by the subject's `link` filename
-// Each entry has: video, lecture, detailed
-// Replace 'about:blank' with real URLs when ready
-// ============================================================
-const DEMO_URLS = {
-    // MSc First Year
-    'msc_1_advanced_nursing_practice.html':      { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'msc_1_nursing_education.html':              { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'msc_1_child_health_nursing.html':           { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'msc_1_community_health_nursing.html':       { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'msc_1_medical_surgical_nursing.html':       { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'msc_1_mental_health_nursing.html':          { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'msc_1_nursing_research_and_statistics.html':{ video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'msc_1_obgyn_nursing.html':                  { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'msc1qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    // MSc Second Year
-    'msc_2_child_health_nursing.html':           { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'msc_2_community_health_nursing.html':       { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'msc_2_obgyn_nursing.html':                  { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'msc_2_nursing_management.html':             { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'msc_2_mental_health_nursing.html':          { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'msc_2_medical_surgical_nursing.html':       { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'msc2qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    // BSc Semester 1
-    'bsc_1_applied_sociology.html':              { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc_1_applied_psychology.html':             { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc_1_applied_physiology.html':             { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc_1_applied_anatomy.html':                { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc_1_nursing_foundation.html':             { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc1qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    // BSc Semester 2
-    'bsc_2_applied_nutrition.html':              { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc_2_applied_biochemistry.html':           { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc_2_nursing_foundation.html':             { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc2qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    // BSc Semester 3
-    'bsc_3_pharmacology.html':                   { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc_3_pathology.html':                      { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc_3_applied_microbiology.html':           { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc_3_adult_health_nursing.html':           { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc3qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    // BSc Semester 4
-    'bsc_4_pharmacology.html':                   { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc_4_pathology.html':                      { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc_4_adult_health_nursing.html':           { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc_4_professionalism.html':                { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc_4_genetics.html':                       { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc4qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    // BSc Semester 5
-    'bsc_5_forensic_nursing_indian_law.html':    { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc_5_nursing_education.html':              { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc_5_community_health_nursing.html':       { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc_5_mental_health_nursing.html':          { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc_5_child_health_nursing.html':           { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc5qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    // BSc Semester 6
-    'bsc_6_child_health_nursing.html':           { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc_6_mental_health_nursing.html':          { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc_6_midwifery_obgyn.html':                { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc_6_nursing_management_leadership.html':  { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc6qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    // BSc Semester 7
-    'bsc_7_community_health_nursing.html':       { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc_7_nursing_research_statistics.html':    { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc_7_midwifery_obgyn.html':                { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'bsc7qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    // PBBSc First Year
-    'pbbsc_1_medical_surgical_nursing.html':     { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'pbbsc_1_child_health_nursing.html':         { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'pbbsc_1_microbiology.html':                 { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'pbbsc_1_biochemistry_biophysics.html':      { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'pbbsc_1_nutrition_dietetics.html':          { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'pbbsc_1_nursing_foundation.html':           { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'pbbsc_1_maternal_nursing.html':             { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'pbbsc_1_psychology.html':                   { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'pbbsc1qp.html':                             { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'pbbsc1live.html':                           { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    // PBBSc Second Year
-    'pbbsc_2_nursing_service_administration.html':{ video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'pbbsc_2_mental_health_nursing.html':        { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'pbbsc_2_nursing_education.html':            { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'pbbsc_2_community_health_nursing.html':     { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'pbbsc_2_sociology.html':                    { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'pbbsc2qp.html':                             { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    // GNM First Year
-    'gnm_1_nutrition.html':                      { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'gnm_1_health_education.html':               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'gnm_1_environmental_hygiene.html':          { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'gnm_1_community_health_nursing.html':       { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'gnm_1_first_aid.html':                      { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'gnm_1_fundamentals_of_nursing.html':        { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'gnm_1_sociology.html':                      { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'gnm_1_psychology.html':                     { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'gnm_1_microbiology.html':                   { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'gnm_1_anatomy_physiology.html':             { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'gnm1qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    // GNM Second Year
-    'gnm_2_medical_surgical_nursing.html':       { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'gnm_2_mental_health_nursing.html':          { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'gnm_2_medical_surgical_nursing_two.html':   { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'gnm_2_child_health_nursing.html':           { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'gnm2qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    // GNM Third Year
-    'gnm_3_community_health_nursing.html':       { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'gnm_3_midwifery.html':                      { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'gnm_3_gynecology.html':                     { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'gnm3qp.html':                               { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    // 3D / EXAMS / REQ / COMM
-    '3dmodels.html':                             { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'norcetenglish.html':                        { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'norcethindi.html':                          { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'esci.html':                                 { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'nursingrequirements.html':                  { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' },
-    'communicativeenglish.html':                 { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' }
-};
+function closeQuiz(){
+  document.getElementById('qmodal').classList.remove('open');
+  document.body.style.overflow='';
+  curQuiz=null;
+}
 
-// ============================================================
-// DEMO QUIZ DATA — 2 questions per course section
-// Key format: 'Course_Section' e.g. 'GNM_First Year'
-// ============================================================
-const DEMO_QUIZ = {
-    // MSc First Year
-    'MSc_First Year': [
-        { q: "Which research design is most appropriate for studying cause-and-effect relationships in nursing?", o: ["Descriptive", "Experimental/RCT", "Historical", "Case Study"], a: 1 },
-        { q: "The primary goal of Advanced Nursing Practice is to:", o: ["Replace physicians", "Provide specialized, evidence-based patient care", "Reduce hospital costs only", "Manage hospital administration"], a: 1 }
-    ],
-    // MSc Second Year
-    'MSc_Second Year': [
-        { q: "In nursing management, 'span of control' refers to:", o: ["Budget allocation", "Number of subordinates a manager supervises", "Span of patient care", "Duration of shift"], a: 1 },
-        { q: "Which is a key principle of Mental Health Nursing?", o: ["Restraint first approach", "Therapeutic nurse-patient relationship", "Medication only", "Isolation"], a: 1 }
-    ],
-    // BSc Semesters
-    'BSc_Semester 1': [
-        { q: "The basic structural and functional unit of the human body is the:", o: ["Tissue", "Organ", "Cell", "System"], a: 2 },
-        { q: "According to Maslow's hierarchy, which need must be met first?", o: ["Safety", "Love and Belonging", "Physiological needs", "Self-esteem"], a: 2 }
-    ],
-    'BSc_Semester 2': [
-        { q: "Which vitamin is essential for calcium absorption in the body?", o: ["Vitamin A", "Vitamin C", "Vitamin D", "Vitamin K"], a: 2 },
-        { q: "The pH of normal blood is approximately:", o: ["6.8", "7.0", "7.4", "8.0"], a: 2 }
-    ],
-    'BSc_Semester 3': [
-        { q: "Which microorganism causes Tuberculosis?", o: ["Staphylococcus aureus", "Mycobacterium tuberculosis", "E. coli", "Streptococcus"], a: 1 },
-        { q: "Paracetamol primarily acts as a:", o: ["Antibiotic", "Analgesic and Antipyretic", "Antifungal", "Anticoagulant"], a: 1 }
-    ],
-    'BSc_Semester 4': [
-        { q: "The term 'genetics' was coined by:", o: ["Gregor Mendel", "William Bateson", "Charles Darwin", "Watson"], a: 1 },
-        { q: "Normal Adult Blood Pressure is:", o: ["100/60 mmHg", "120/80 mmHg", "140/90 mmHg", "160/100 mmHg"], a: 1 }
-    ],
-    'BSc_Semester 5': [
-        { q: "Primary Health Care was declared at:", o: ["Ottawa Charter", "Alma-Ata Declaration", "Jakarta Declaration", "Bangkok Charter"], a: 1 },
-        { q: "Which Act governs forensic nursing practice in India?", o: ["Nursing Act 1947", "Indian Penal Code (IPC)", "Mental Health Act", "Drug Act"], a: 1 }
-    ],
-    'BSc_Semester 6': [
-        { q: "The APGAR score assesses a newborn at:", o: ["Birth only", "1 and 5 minutes after birth", "24 hours", "1 week"], a: 1 },
-        { q: "Which phase of labour involves delivery of the placenta?", o: ["First stage", "Second stage", "Third stage", "Fourth stage"], a: 2 }
-    ],
-    'BSc_Semester 7': [
-        { q: "In nursing research, 'hypothesis' is a:", o: ["Proven fact", "Testable prediction/statement", "Research conclusion", "Data analysis"], a: 1 },
-        { q: "The main goal of Community Health Nursing is:", o: ["Treating acute illness", "Promoting health and preventing disease in the community", "Hospital-based care only", "Surgical intervention"], a: 1 }
-    ],
-    // PBBSc
-    'PBBSc_First Year': [
-        { q: "The normal respiratory rate in a healthy adult is:", o: ["8–10/min", "12–20/min", "25–30/min", "35–40/min"], a: 1 },
-        { q: "Apical pulse is best heard at the:", o: ["Radial artery", "5th intercostal space, midclavicular line", "Carotid artery", "Femoral artery"], a: 1 }
-    ],
-    'PBBSc_Second Year': [
-        { q: "The 'nursing process' follows which order?", o: ["Assessment, Diagnosis, Planning, Implementation, Evaluation", "Diagnosis, Assessment, Planning, Evaluation, Implementation", "Planning, Assessment, Implementation, Diagnosis, Evaluation", "Implementation, Planning, Assessment, Evaluation, Diagnosis"], a: 0 },
-        { q: "Which organization regulates nursing education in India?", o: ["WHO", "Indian Nursing Council (INC)", "MCI", "AIIMS"], a: 1 }
-    ],
-    // GNM
-    'GNM_First Year': [
-        { q: "The normal temperature of the human body is:", o: ["35°C", "36°C", "37°C", "38°C"], a: 2 },
-        { q: "Which nutrient provides the most energy per gram?", o: ["Carbohydrates", "Proteins", "Fats", "Vitamins"], a: 2 }
-    ],
-    'GNM_Second Year': [
-        { q: "A patient with a blood glucose of 45 mg/dL is most likely experiencing:", o: ["Hyperglycemia", "Hypoglycemia", "Normal range", "Diabetic ketoacidosis"], a: 1 },
-        { q: "The correct position for a patient in shock is:", o: ["Fowler's position", "Trendelenburg/legs elevated", "Prone", "Left lateral"], a: 1 }
-    ],
-    'GNM_Third Year': [
-        { q: "The first stage of labour begins with:", o: ["Rupture of membranes", "Onset of regular contractions to full cervical dilation", "Delivery of baby", "Delivery of placenta"], a: 1 },
-        { q: "Which contraceptive method has the highest efficacy?", o: ["Condom", "Combined Oral Contraceptive Pill", "Copper-T IUD", "Calendar method"], a: 2 }
-    ],
-    // EXAMS
-    'EXAMS_NORCET': [
-        { q: "NORCET stands for:", o: ["Nursing Officer Recruitment Common Eligibility Test", "National Oral Care Exam Test", "Nursing Officer Regular Certification Exam", "None of the above"], a: 0 },
-        { q: "The conducting authority of NORCET is:", o: ["AIIMS New Delhi", "UPSC", "NMC", "INC"], a: 0 }
-    ],
-    'EXAMS_ESCI': [
-        { q: "ESCI exam primarily tests knowledge in:", o: ["Management only", "Clinical Nursing and Sciences", "Law", "History"], a: 1 },
-        { q: "Normal serum sodium level is:", o: ["100–110 mEq/L", "135–145 mEq/L", "150–160 mEq/L", "120–130 mEq/L"], a: 1 }
-    ],
-    // Fallback default
-    'default': [
-        { q: "The normal adult heart rate is:", o: ["40–60 bpm", "60–100 bpm", "100–120 bpm", "120–140 bpm"], a: 1 },
-        { q: "Florence Nightingale is known as the:", o: ["Mother of Medicine", "Lady with the Lamp / Founder of Modern Nursing", "Pioneer of Surgery", "First Doctor"], a: 1 }
-    ]
-};
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQuiz();});
 </script>
 </body>
 </html>
