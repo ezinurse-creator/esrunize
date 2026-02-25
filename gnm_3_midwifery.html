@@ -1,240 +1,692 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MIDWIFERY</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <style>
-        :root {
-            --brand: #003B82; --accent: #00B9F2; --gray-50: #f9fafb; --gray-200: #e5e7eb; --gray-900: #111827;
-            --danger: #ef4444; --success: #10b981; --warning: #f59e0b;
-        }
-        * { box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: white; color: var(--gray-900); padding: 24px; max-width: 1000px; margin: 0 auto; }
-        .syllabus-btn { display: block; width: 100%; padding: 18px 24px; margin: 12px 0; background: white; color: var(--brand); border: 2px solid var(--brand); font-weight: 700; font-size: 16px; text-align: center; cursor: pointer; border-radius: 12px; transition: all 0.2s ease; text-decoration: none; }
-        .syllabus-btn:hover { background: var(--gray-50); transform: translateY(-1px); }
-        .unit-header { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 18px 24px; margin: 16px 0; background: var(--brand); color: white; font-weight: 600; font-size: 16px; border-radius: 12px; cursor: pointer; transition: 0.2s; }
-        .unit-header:hover { background: #002d63; }
-        .unit-content { padding: 0 12px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; }
-        .unit-content.active { padding: 24px 12px; max-height: none; }
-        .subsection { padding: 20px; background: white; border-radius: 12px; border: 1px solid var(--gray-200); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-        .resource-btn { display: flex; width: 100%; padding: 14px 18px; margin: 6px 0; background: var(--gray-50); border-radius: 8px; font-weight: 500; border: 1px solid var(--gray-200); cursor: pointer; gap: 12px; transition: 0.2s; align-items: center; }
-        
-        /* EXISTING BUTTON STYLES */
-        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
-        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
-        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
-        .resource-btn.model { background: #fdf4ff; border-color: #f0abfc; color: #86198f; }
-
-        /* NEW BUTTON STYLES FOR APP */
-        .resource-btn.imp-discussion { background: #fef2f2; border-color: #fecaca; color: #b91c1c; } /* Light Red Background */
-        .resource-btn.imp-pdf { background: #fff7ed; border-color: #fed7aa; color: #c2410c; } /* Light Orange Background */
-        
-        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
-        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
-        .icon.video-icon { color: #8b5cf6; } .icon.quiz-icon { color: #f59e0b; } .icon.model-icon { color: #d946ef; }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; display: none; flex-direction: column; }
-        .modal-header { height: 60px; background: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; }
-        .btn-close { background: var(--danger); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
-        .modal-body { flex: 1; background: #f3f4f6; position: relative; padding: 20px; display:flex; justify-content:center; overflow-y: auto;}
-        .iframe-res { width: 100%; height: 100%; border: none; background: white; }
-        .quiz-container { background: white; width: 100%; max-width: 800px; padding: 30px; border-radius: 12px; margin-bottom: 50px; }
-        .quiz-option { padding: 12px 15px; border: 2px solid var(--gray-200); border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
-        .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
-        .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; }
-        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
-        .btn-quiz { background: var(--brand); color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 600; font-size: 16px; margin-top: 20px; cursor: pointer;}
-        @media (max-width: 768px) { body { padding: 16px; } .quiz-container { padding: 15px; } }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Midwifery & Obstetrical Nursing</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+--p50:#faf5ff;--p100:#f3e8ff;--p200:#e9d5ff;--p300:#d8b4fe;
+--p400:#c084fc;--p500:#a855f7;--p600:#9333ea;--p700:#7e22ce;
+--p800:#6b21a8;--p900:#581c87;
+--w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;
+--g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;
+--ok:#16a34a;--ok-lt:#dcfce7;--err:#dc2626;--err-lt:#fee2e2;
+--warn:#d97706;--warn-lt:#fef3c7;
+--r:12px;--rs:8px;
+--s1:0 1px 3px rgba(109,40,217,.08);
+--s2:0 4px 12px rgba(109,40,217,.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:90;background:var(--w);border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 16px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-back{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:var(--p100);color:var(--p700);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;margin-right:12px}
+.tb-back:hover{background:var(--p200)}
+.tb-info{flex:1;min-width:0}
+.tb-title{font-size:.88rem;font-weight:700;color:var(--g900);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb-sub{font-size:.65rem;color:var(--g400);font-weight:500;margin-top:1px}
+.tb-chip{background:var(--p100);color:var(--p700);border:1px solid var(--p200);font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
+.hero{background:linear-gradient(145deg,var(--p900),var(--p700) 55%,var(--p500));padding:28px 18px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.08),transparent 50%),radial-gradient(circle at 10% 85%,rgba(255,255,255,.05),transparent 40%)}
+.hero::after{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-dot-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:.65rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border-radius:30px;margin-bottom:12px}
+.hero-eyebrow-dot{width:5px;height:5px;background:#c4b5fd;border-radius:50%}
+.hero h1{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:7px}
+.hero h1 em{color:rgba(255,255,255,.45);font-style:italic;font-weight:300}
+.hero-desc{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:18px}
+.hero-cta{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.28);color:#fff;font-size:.8rem;font-weight:700;padding:9px 16px;border-radius:9px;cursor:pointer;transition:all .2s;backdrop-filter:blur(6px)}
+.hero-cta:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
+.hero-stats{display:flex;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+.hs{flex:1;text-align:center}
+.hs+.hs{border-left:1px solid rgba(255,255,255,.1)}
+.hs-n{font-size:1.35rem;font-weight:800;color:#fff;line-height:1}
+.hs-l{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
+.main{padding:16px 14px 56px}
+.divider{display:flex;align-items:center;gap:8px;margin-bottom:12px;margin-top:2px}
+.divider span{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g400)}
+.divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+.uc{background:var(--w);border:1.5px solid var(--g200);border-radius:var(--r);margin-bottom:9px;overflow:hidden;box-shadow:var(--s1);transition:border-color .2s,box-shadow .2s}
+.uc:hover{border-color:var(--p300);box-shadow:var(--s2)}
+.uc[data-open=true]{border-color:var(--p400);box-shadow:var(--s2)}
+.ubtn{width:100%;display:flex;align-items:center;padding:14px 15px;gap:12px;background:none;border:none;cursor:pointer;text-align:left}
+.upill{min-width:54px;padding:0 8px;height:36px;border-radius:9px;flex-shrink:0;background:var(--p100);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.upill span{font-size:.65rem;font-weight:800;color:var(--p700);letter-spacing:-.01em;white-space:nowrap}
+.uc[data-open=true] .upill{background:var(--p700)}
+.uc[data-open=true] .upill span{color:#fff}
+.uinfo{flex:1;min-width:0}
+.uname{font-size:.85rem;font-weight:700;color:var(--g900);line-height:1.3}
+.umeta{font-size:.66rem;color:var(--g400);margin-top:2px;font-weight:500}
+.uright{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.uchev{width:16px;height:16px;color:var(--g300);transition:transform .3s,color .2s}
+.uc[data-open=true] .uchev{transform:rotate(180deg);color:var(--p500)}
+.ubody{display:none;background:var(--p50);border-top:1.5px solid var(--p200);padding:12px 13px 14px}
+.ubody.open{display:block;animation:bodyIn .2s ease}
+@keyframes bodyIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.rrow{display:flex;gap:9px;margin-bottom:8px}
+.rrow:last-child{margin-bottom:0}
+@media(max-width:380px){.rrow{flex-direction:column}}
+.rbtn{flex:1;display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .17s;background:var(--w);text-decoration:none}
+.rbtn .rico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.rbtn .rtxt{line-height:1.25}
+.rbtn .rtxt small{display:block;font-size:.62rem;font-weight:400;opacity:.5;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;}
+.rbtn .rarr{margin-left:auto;opacity:0;font-size:.7rem;color:var(--g400);transition:opacity .15s}
+.rbtn:hover .rarr{opacity:1}
+.rbtn.notes{border-color:var(--p200);color:var(--p800)}
+.rbtn.notes .rico{background:var(--p100)}
+.rbtn.notes:hover{background:var(--p50);border-color:var(--p500);box-shadow:var(--s2);transform:translateY(-1px)}
+.rbtn.video{border-color:#bae6fd;color:#0369a1}
+.rbtn.video .rico{background:#e0f2fe}
+.rbtn.video:hover{background:#f0f9ff;border-color:#38bdf8;box-shadow:0 3px 10px rgba(56,189,248,.12);transform:translateY(-1px)}
+.rbtn.quiz{border-color:#fde68a;color:#78350f}
+.rbtn.quiz .rico{background:var(--warn-lt)}
+.rbtn.quiz:hover{background:#fffbeb;border-color:var(--warn);box-shadow:0 3px 10px rgba(217,119,6,.12);transform:translateY(-1px)}
+.qoverlay{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end}
+.qoverlay.open{display:flex}
+.qscrim{position:absolute;inset:0;background:rgba(15,10,40,.55);backdrop-filter:blur(3px)}
+.qpanel{position:relative;z-index:1;background:var(--w);width:100%;max-width:580px;margin:0 auto;border-radius:18px 18px 0 0;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 -10px 50px rgba(109,40,217,.2);animation:panelUp .3s cubic-bezier(.32,.72,0,1)}
+@keyframes panelUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.qhead{padding:16px 18px 12px;border-bottom:1px solid var(--g100);flex-shrink:0}
+.qhead-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.qtitle{font-size:1rem;font-weight:800;color:var(--p800)}
+.qclose{width:28px;height:28px;border-radius:50%;background:var(--g100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--g500);transition:all .15s}
+.qclose:hover{background:var(--err-lt);color:var(--err)}
+.qpips{display:flex;gap:3px}
+.pip{flex:1;height:4px;border-radius:4px;background:var(--g100);transition:background .3s}
+.pip.ans{background:var(--p300)}.pip.cor{background:var(--ok)}.pip.wrg{background:var(--err)}
+.qbody{overflow-y:auto;padding:14px 18px 28px;flex:1}
+.qscore{display:none;background:linear-gradient(135deg,var(--p800),var(--p500));color:#fff;border-radius:12px;padding:14px 16px;margin-bottom:16px;align-items:center;gap:14px}
+.qscore.show{display:flex}
+.qs-num{font-size:1.9rem;font-weight:800;line-height:1}
+.qs-sub{font-size:.65rem;opacity:.6;margin-top:2px}
+.qs-msg{font-size:.85rem;font-weight:600}
+.qitem{margin-bottom:24px}
+.qitem:last-child{margin-bottom:0}
+.qlbl{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--p500);margin-bottom:4px}
+.qtext{font-size:.88rem;font-weight:600;color:var(--g900);line-height:1.5;margin-bottom:10px}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1.5px solid var(--g200);border-radius:var(--rs);cursor:pointer;font-size:.83rem;font-weight:500;background:var(--w);color:var(--g700);transition:all .14s}
+.qopt:hover{border-color:var(--p300);background:var(--p50);color:var(--p800)}
+.qltr{width:21px;height:21px;border-radius:50%;background:var(--g100);border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:.63rem;font-weight:800;color:var(--g500);flex-shrink:0;transition:all .14s}
+.qopt.cor{background:var(--ok-lt);border-color:#86efac;color:#14532d}
+.qopt.cor .qltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.qopt.wrg{background:var(--err-lt);border-color:#fca5a5;color:#7f1d1d}
+.qopt.wrg .qltr{background:var(--err);border-color:var(--err);color:#fff}
+.qopt.lock{cursor:default;pointer-events:none}
+.qopt.lock:not(.cor):not(.wrg):hover{border-color:var(--g200);background:var(--w);color:var(--g700)}
+</style>
 </head>
 <body>
-    <a class="syllabus-btn" href="https://drive.google.com/file/d/1ognUcXXsYVTKVam5yRWaf36b3ReN8KGp/view?usp=drive_link" target="_blank">📄 DOWNLOAD SYLLABUS</a>
-    <div id="units">
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 1 -  INTRODUCTION  <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/17y-KfM7BlEIMVEGBQk39dK6PlXOmkAMl/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Si2qdwyfol_Ne1D9hTAQlnAHr9gzktW_/preview', 'Introduction: Definition of Midwery and Obstetrical Nursing')"><span class="icon video-icon">▶️</span><span>Introduction: Definition of Midwery and Obstetrical Nursing</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1eJQRxHV1-XoD8vwCyPrzu7fgLVBQ2nC2/preview', 'Scope and Trends in Midwifery')"><span class="icon video-icon">▶️</span><span>Scope and Trends in Midwifery</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1HW-3pekAsKvIOKsJ0EkFc4aHyxvg_ygQ/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(1)"><span class="icon quiz-icon">✍️</span><span>Take Unit 1 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 2 - REPRODUCTIVE SYSTEM <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1JtC14FLuQug90ppgZt6rCy1vm0RT8XIq/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/11NdKULVhSCweAeDZjcxzALHmsYxYxD7T/preview', 'Review of Anotomy and Physiology of Reproductive System')"><span class="icon video-icon">▶️</span><span>Review of Anotomy and Physiology of Reproductive System</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1lMdWn-XNz9TeaQSdhg9mAkUK_ONizhFM/preview', 'Review of Anotomy and Physiology of Reproductive System')"><span class="icon video-icon">▶️</span><span>Review of Anotomy and Physiology of Reproductive System</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1whDnwizLsWVQOE4guNVddBIlH-fBKeH6/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(2)"><span class="icon quiz-icon">✍️</span><span>Take Unit 2 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 3 -  EMBRYOLOGY AND FOETAL DEVELOPMENT  <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1CsiC5AAhcTN9IuabynIM7Yuijy5Fhf97/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1hZJeRec8k83wgw_Q5wNj3Cz5We-pQ93K/preview', 'Oogenesis, Spermatogenesis, Fertilization and Implantation')"><span class="icon video-icon">▶️</span><span>Oogenesis, Spermatogenesis, Fertilization and Implantation</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1yT8fFmOBB05PYDspTk4e37Cmf3Kt7bsH/preview', 'Fertilization')"><span class="icon video-icon">▶️</span><span>Fertilization</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1XFEz4gchkaTyUnbu3HRTDRrJUY62diMS/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Z48KhtPFWsN8Ffj1DdEKM8sFc_Yaj1Rb/preview', 'Embryonic and Fetal Development')"><span class="icon video-icon">▶️</span><span>Embryonic and Fetal Development</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1S61Mt0sJfB2qVG1_LOyeCKZVBu3dXXee/preview', 'Embryonic and Fetal Development')"><span class="icon video-icon">▶️</span><span>Embryonic and Fetal Development</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1BYBk49m4fch2Hq_OSwNb_8pNk56DcK8G/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Ygs9y5lKUlMwZ6KWHk16-yoHRcKnJbHR/preview', 'Fetal circulation')"><span class="icon video-icon">▶️</span><span>Fetal circulation</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1eGjVUbeK-I2g94Yj-Ldlwg0m--oUJQ12/preview', 'Placenta')"><span class="icon video-icon">▶️</span><span>Placenta</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1GTleP0Q9fEgDPNNevVCaelQ8tkzdQ9-5/preview', 'Placenta')"><span class="icon video-icon">▶️</span><span>Placenta</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Ka7lWambkbOuUWexqBPTVRIqtXFiHnMW/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ya1NnmpBsTwzYaGGty7AAFlt6BLIgrWM/preview', 'Fetal Skull')"><span class="icon video-icon">▶️</span><span>Fetal Skull</span></div><div class="resource-btn quiz" onclick="startQuiz(3)"><span class="icon quiz-icon">✍️</span><span>Take Unit 3 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 4 - NORMAL PREGNANCY AND ITS MANAGEMENT <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1UJki-5lF8tfPb-O4brV5x0eXmgTIIkDJ/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1r6GtJLawOJVm_7FGzN5KXbpgnE3krvRn/preview', 'Normal Pregnency, Preconception Care And Genetic Counselling Part - 1')"><span class="icon video-icon">▶️</span><span>Normal Pregnency, Preconception Care And Genetic Counselling Part - 1</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/16lvblCYDcGQQhp4F63_5aLNhC-l82-3F/preview', 'Normal Pregnency, Preconception Care And Genetic Counselling Part - 2')"><span class="icon video-icon">▶️</span><span>Normal Pregnency, Preconception Care And Genetic Counselling Part - 2</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1HmT1ZuH99m9IiyviRP_aDK-jwIQc8_Xb/preview', 'Lecture Note')"><span class="icon">📝</span><span>Lecture Note</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1I5j11hMMkwfnEYEmXYDuu5UUBbx8damO/preview', 'Genetic Counselling')"><span class="icon video-icon">▶️</span><span>Genetic Counselling</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1eOPJ9454c-7K7ZkDctO-1V8YdZ4bK36g/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1YsifII20JJMJfchgASBbEVoB8uAMg3ki/preview', 'Physiological Changes During Pregnancy Part 1')"><span class="icon video-icon">▶️</span><span>Physiological Changes During Pregnancy Part 1</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Mp_8KjqCkglH6-IDaVQhsDdRqKSeyh8r/preview', 'Physiological Changes During Pregnancy part 2')"><span class="icon video-icon">▶️</span><span>Physiological Changes During Pregnancy part 2</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1cPWhdYU_iwnK_0mHZdbfqdSwpfYAkr45/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/12ABHZx8TOuShNVl2e_GP_ajSAanT7KKp/preview', 'Signs of Pregnancy')"><span class="icon video-icon">▶️</span><span>Signs of Pregnancy</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1SZ-wrSAKXuvz5ky1z461LQUC4jfYJfvn/preview', 'Diagnosis of Pregnancy')"><span class="icon video-icon">▶️</span><span>Diagnosis of Pregnancy</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1_hi1DZ1uHG2_gIborr0lKlgv2gZAtWtj/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1VJ2soLuvB82qJUtxM_C4H9IVVeuHFu1R/preview', 'Antenal Care (1)')"><span class="icon video-icon">▶️</span><span>Antenal Care (1)</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1nvBuM3loXNtg72gMGaTEHsr4eeoqEmcd/preview', 'Antenal Care (2)')"><span class="icon video-icon">▶️</span><span>Antenal Care (2)</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/14t5VivuPnbLQ7WR8ACsWzJqJMmPsDtSs/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/186qruTDNvsbrPJi70eWRcVowsT3tImD7/preview', 'Minor Disorders During Pregnancy')"><span class="icon video-icon">▶️</span><span>Minor Disorders During Pregnancy</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1qPvJo7atkwI2toOqsOhIurondupIiLgI/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(4)"><span class="icon quiz-icon">✍️</span><span>Take Unit 4 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 5 - NORMAL LABOUR AND ITS MANAGEMENT  <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1UyDz4iII5oNDwedpRyUe72Ku9OL7XcwN/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Pns2Gr6zg3_wyLqnrCw5OreZ_w0SZDHC/preview', 'Normal Labour & 1st Stage of Labour')"><span class="icon video-icon">▶️</span><span>Normal Labour & 1st Stage of Labour</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1LyPU4ymiXB3SLp_GkcU1orgZ69p3Cj81/preview', '1st Stage of Labour and its Managements')"><span class="icon video-icon">▶️</span><span>1st Stage of Labour and its Managements</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1R8V9EYs2WR3C5_oiThNnZwMG8x7we6FN/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'Coming Soon', 'Normal Labour and its Management')"><span class="icon video-icon">▶️</span><span>Normal Labour and its Management</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/13eAsYXh4JDWcJD5uNhZTKmDKep_cV6ql/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(5)"><span class="icon quiz-icon">✍️</span><span>Take Unit 5 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 6 -  MANAGEMENT OF NEWBORN <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/19i6ztfkdn6rsM6vbsnY7GlUUeilVQqpp/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1o9EfwfyD-zNkjSuXlAjVN0bwUgZK1jos/preview', 'Management of Newborn')"><span class="icon video-icon">▶️</span><span>Management of Newborn</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1rvAq1kBuQQoCeiSV2aZj4ovsL6G8tsYY/preview', 'Routine Care After Birth')"><span class="icon video-icon">▶️</span><span>Routine Care After Birth</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1QWhdiI3HWkgM-Iob8Ar2ww9a7fLVbCPZ/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(6)"><span class="icon quiz-icon">✍️</span><span>Take Unit 6 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 7 - MANAGEMENT OF NORMAL PUERPERIUM <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1B1yT64ovQIoBEnFiDW4lsuhNl_WkbyaR/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ucG2IQFySftOqrh-VfMH8D165HlUlvWb/preview', 'Assessment and Mangement of Pueriperium')"><span class="icon video-icon">▶️</span><span>Assessment and Mangement of Pueriperium</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1gBewvxNZ2Mfi0ge43zblk3Ve3xEoKsEM/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1muKZpXWMe2tQ1Z4mZzSHWJ-qTtDOeJZZ/preview', 'Breast Feeding, Lactation Mangement and Minor Alignment')"><span class="icon video-icon">▶️</span><span>Breast Feeding, Lactation Mangement and Minor Alignment</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1mSulurOQAKNLZbOla26w9s6zRzuTaGg4/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1_6abjZseGPiwJCaYUVVuDcAl4qYrvC30/preview', 'Family Planning and ts methods')"><span class="icon video-icon">▶️</span><span>Family Planning and ts methods</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1a6gStYiIyMO6B5hfjFmGIlcx1efqvVlB/preview', 'Methods of Family Planning')"><span class="icon video-icon">▶️</span><span>Methods of Family Planning</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1GnXitMsAyyW229XyokhMs2yp6R6QxWb3/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(7)"><span class="icon quiz-icon">✍️</span><span>Take Unit 7 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 8 - MANAGEMENT OF COMPLICATIONS DURING PREGNANCY  <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1pKktmC3sn2NGsCOLxtLcDEYPi2pySbow/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Bb9FkhEZ9JnMy-Xp5RHOmCRe-O5fex5s/preview', 'Ectopic Pregnancy & Hyperemesis Gravidarum')"><span class="icon video-icon">▶️</span><span>Ectopic Pregnancy & Hyperemesis Gravidarum</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/12x1gEGuTgaERV4XnE3Di0p6a-NYg77Q5/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'Coming Soon', 'Polyhydramnios')"><span class="icon video-icon">▶️</span><span>Polyhydramnios</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1yRXr8magYFbbevQ_TkHbksLwSCUin6ut/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/11xODeWf94sKNr_YSqOcxC2am6w8WXbyK/preview', 'Pre eclampsia , Eclampsia & Multiple Pregnancy')"><span class="icon video-icon">▶️</span><span>Pre eclampsia , Eclampsia & Multiple Pregnancy</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Zrh15L_7_-k5WaE4sU6G5YTmcseUVQyo/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1cXfLoWKr8YXnNzy63dLqmJc0w0x2xx8F/preview', 'Abortion & Vesicular mole')"><span class="icon video-icon">▶️</span><span>Abortion & Vesicular mole</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1d8pry8Lf07Mu1c0Y2l4idX_EBywCkbBf/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1QaDHFR9j_-GhlPxLDZ0AgXw7ch8JbdRc/preview', 'Placenta Previa & Placenta Abruption Multipara')"><span class="icon video-icon">▶️</span><span>Placenta Previa & Placenta Abruption Multipara</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1sQGGaOvoSmOg5qsN0mRw4AvIXnMpHKvq/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1lEiLDILPEo5tOGle066VRA0QKPKfHg-S/preview', 'Anemia & IUGR')"><span class="icon video-icon">▶️</span><span>Anemia & IUGR</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1W30_j0Ejwq6PmciEHp_HReKAv9NooL4C/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1aF95TNncQsK-gfuJkxX7_ceXFpNCZ65x/preview', 'RTI , STD & Jaundice')"><span class="icon video-icon">▶️</span><span>RTI , STD & Jaundice</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1dhakvCDqr_XDDyU4mWb-0aBiX10QLMcB/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1nANVx5N3BnFAi1ThW3yLKw4OZ_rXW_tE/preview', 'Osteomalacia, Urinary Tract Infection')"><span class="icon video-icon">▶️</span><span>Osteomalacia, Urinary Tract Infection</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1HGoM2eWkk7gAYTTAz5mG5UxjhzAzaj-3/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ysv8OgQwlGGjbMgVnCYi9zcCWiToZRnB/preview', 'Non stress Test, Ultrasonography in Preganancy')"><span class="icon video-icon">▶️</span><span>Non stress Test, Ultrasonography in Preganancy</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/17u75REULqYF3k7IQMigSpzcRKVhr_hTR/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1VEQ_QhW-knBa-wcV1XJByxlhCWKC8T8R/preview', 'Diabetes During Preganancy, Heart Disease During Preganancy')"><span class="icon video-icon">▶️</span><span>Diabetes During Preganancy, Heart Disease During Preganancy</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1mPcS4d-6PcNIO7_MZm18q2aFuHrDpb9f/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(8)"><span class="icon quiz-icon">✍️</span><span>Take Unit 8 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 9 - MANAGEMENT OF HIGH RISK LABOUR <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1poEYgKCL7R1uj8eBLk42fGJoJzhhaHV9/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1D3pa70n_wSi2dLbcj6lgaJaRJNB4VLX-/preview', 'Rupture of Uterus,Inversion of Uterus , Obstetric Shock & Retained Placenta')"><span class="icon video-icon">▶️</span><span>Rupture of Uterus,Inversion of Uterus , Obstetric Shock & Retained Placenta</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1YF59pYnUNNn-6YCtHzvCE1WKruAPGa1u/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/12x6ikHCtl13FuiVrWXLoh8nbpyWoz3w2/preview', 'Abnormal Uterine Actions, Shoulder Dystocia, Cord Prolapse,Cervical Dystocia ,PROM & prolonged labour,')"><span class="icon video-icon">▶️</span><span>Abnormal Uterine Actions, Shoulder Dystocia, Cord Prolapse,Cervical Dystocia ,PROM & prolonged labour,</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/179DIvncVvy2-LMASARhCuQRaxpSGT_LT/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1W6455k8nci-N0ysLcSkrTxQQQABZfnaL/preview', 'Contracted Pelvis,Induction of Labour')"><span class="icon video-icon">▶️</span><span>Contracted Pelvis,Induction of Labour</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1FvwAbckRKUX7P5gR4E2vOhZwhVWuI0G7/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1VP97H34MsR-COEvndjhUPuv51huofbjf/preview', 'Malposition, malpresentations. PPH & Atonic Uterus')"><span class="icon video-icon">▶️</span><span>Malposition, malpresentations. PPH & Atonic Uterus</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1XtrPjxnahmjb66Gq24mTAmPCnsMGdpq4/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(9)"><span class="icon quiz-icon">✍️</span><span>Take Unit 9 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 10 - MANAGEMENT OF COMPLICATION OF PUERPERIUM  <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1PiDzPyYlyjKjub5XTn7-tp-n6Q6Ygsbf/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1W_KMJG--jVFQ1lwODHxeLKliwpCHRwHs/preview', 'Puerperal pyrexia & Puerperal Sepsis')"><span class="icon video-icon">▶️</span><span>Puerperal pyrexia & Puerperal Sepsis</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1romoTgRgyEvi7qCZ2Cx4WhndyyljBf3_/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1VSyHTjMuBRj6AsRjh3CdmtSIUBKFAc7K/preview', 'Thrombophlebitis & Pulmonary Embolism')"><span class="icon video-icon">▶️</span><span>Thrombophlebitis & Pulmonary Embolism</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1pRz-bQhCJ51wqS94L37v-GKh1qCIPtXc/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1xRAzplJaBixZb41ITG19Qsxaq03XtRHO/preview', 'Breast engorgement & Mastitis')"><span class="icon video-icon">▶️</span><span>Breast engorgement & Mastitis</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1sVRISoAM80pvXqn9qL-tKMrHhytB_xUf/preview', 'Breast abscess & Puerperal Psychosis')"><span class="icon video-icon">▶️</span><span>Breast abscess & Puerperal Psychosis</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1p73nFI4erzyhWf30ZhDEopZW7GOgALCb/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(10)"><span class="icon quiz-icon">✍️</span><span>Take Unit 10 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 11 - HIGH RISK AND SICK NEWBORN  <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1HRjtQ22yYi9hGwVX4fqnLoTelYZIIyxv/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1nY20gTTfmspDDlyN0_p0E2XXGza1Ikqz/preview', 'Newborn Assessment')"><span class="icon video-icon">▶️</span><span>Newborn Assessment</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1cIk07vnOF7vthyigTUgqXlD3in3qeTLL/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1hVDP9ulMY8znyAHgNXG0z1G9hFvXJaYE/preview', 'Immediate Care of Normal Newborn At Birth')"><span class="icon video-icon">▶️</span><span>Immediate Care of Normal Newborn At Birth</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1NzSG0ZI935CRIBFP84BSC2h8ssmsZIM8/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1mVXD_sWGSPwJnfqSeJ0-xKY4mB5QyEvA/preview', 'Head to Toe Examination, Neurological Assessment')"><span class="icon video-icon">▶️</span><span>Head to Toe Examination, Neurological Assessment</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/150wW6xjOqnVHNoq1dnf6MRDly7J4TWyz/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1X1dLjMd1XAZtdBwavIf4FYA0OqfjXLE7/preview', 'Low Birth Weight, Preterm Birth')"><span class="icon video-icon">▶️</span><span>Low Birth Weight, Preterm Birth</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/18FczhHZ1P0TzbLWD8gOjI4_1V32E2UYX/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1qq-ZSjJNNi2K9hM4j99Wt4BAmnlxlu3o/preview', 'Hyperbilirubinemia')"><span class="icon video-icon">▶️</span><span>Hyperbilirubinemia</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1GexWDy6sx44y-kV5k7PqLib7KvUNPLoz/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1IV1u4GbqN2NA8kBPahRzu0oSK0JoD-lv/preview', 'Hypoglycemia, Hypothermia')"><span class="icon video-icon">▶️</span><span>Hypoglycemia, Hypothermia</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1TwGwhfJKEyc6yE7k0Fha9nIbZfTTrOys/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1Up0wIsQJfL7v79seRUqKlT0vh9EbLB4O/preview', 'Neonatal Convulsion, Rh Incompatibility')"><span class="icon video-icon">▶️</span><span>Neonatal Convulsion, Rh Incompatibility</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1R6xD92QejFHkEnQegn8O3zNLwNZEi2qq/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1ElseNGxtjVTFLZuLA719roMg6STGKB4o/preview', 'Small For Dates, Preterm,')"><span class="icon video-icon">▶️</span><span>Small For Dates, Preterm,</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ldaoz0lna75aeWKvKWtKSh9PZPN1c-FA/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1B2y9DpZYDrCBf177RXTXV8Kk5zzcgO20/preview', 'Asphyxia, Respiratory Distress Syndrome,')"><span class="icon video-icon">▶️</span><span>Asphyxia, Respiratory Distress Syndrome,</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1t9-LhpeiVKlAzxzSzp9JI8P2XttsAD9o/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1BV9wJ8gRp7GwgF2bIB7OOIH15GyaJigd/preview', 'Sepsis, Birth Injuries, Torticollis')"><span class="icon video-icon">▶️</span><span>Sepsis, Birth Injuries, Torticollis</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/11237ZPNlp-BCfq1A89mMckTKKdm60Pxg/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1reJ913SxONq54VsuCY-rKSvQSTJqWaSN/preview', 'Hemorrhage, Congenital Anomalies')"><span class="icon video-icon">▶️</span><span>Hemorrhage, Congenital Anomalies</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/113-SNHVuNtj6ZaLOqrIQRyg50LWHRL60/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1HWblW7rE3nnC0c0sh8gyTCy09ht7RNhX/preview', 'Newborn Of HIV Positive Mother')"><span class="icon video-icon">▶️</span><span>Newborn Of HIV Positive Mother</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1nXfhN75bRBTSDmc25Zg92qTaWBIID1aG/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(11)"><span class="icon quiz-icon">✍️</span><span>Take Unit 11 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 12 - OBSTETRIC OPERATIONS  <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1KYStF8uiVsBRsPtMuXmYh1XZVkJSaBP7/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1DmAS7Fav_Wh2zBs1LD2VlrqrNneeaIRO/preview', 'Induction of Labour, Contrainidication, Methods of Induction,')"><span class="icon video-icon">▶️</span><span>Induction of Labour, Contrainidication, Methods of Induction,</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1apw74MTLlJ2_DQ5EqwbFQrioayHwRVLd/preview', 'External Cephalic Version, Procedure, Bipolar Version')"><span class="icon video-icon">▶️</span><span>External Cephalic Version, Procedure, Bipolar Version</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Gofz3U_Nmom5uztG7SSPh3IZce7qXJoR/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1etNSZ1jiNV_o3qdBcVoPp4MA7ZxEWMKV/preview', 'Manual Removal Of Placenta, Sterilizaton')"><span class="icon video-icon">▶️</span><span>Manual Removal Of Placenta, Sterilizaton</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/10HoLFmoiZVAW-JQw6oLJXs_lqeJx0_Lo/preview', 'Types of Sterilization, Vasectomy, Tubectomy')"><span class="icon video-icon">▶️</span><span>Types of Sterilization, Vasectomy, Tubectomy</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1LbbVCkQykLRjTDxaUjUHqQZpThk5Soyt/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1OiICpcINBd8vM1GNKb2EpStw9HpBzSi3/preview', 'Forcep Delivery')"><span class="icon video-icon">▶️</span><span>Forcep Delivery</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/11mx6S5CH8HBImnw8dUU6HutiIYRGCyPm/preview', 'Cesarean Section')"><span class="icon video-icon">▶️</span><span>Cesarean Section</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1HWik6VmQksUux13z_AAJC3MQfVAbMZo0/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1YC6LbjvfaO5DfXwtsgrjKQkXaaCTZtjp/preview', 'Destructive Operation')"><span class="icon video-icon">▶️</span><span>Destructive Operation</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/14LVB1_HU_CqBup3lHCT8svohU52kbQ3S/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1C79qrDZdRHU0mZA_t4Fpr57ryHgCkLBD/preview', 'Dilation and Evacuation, Dilation and Curettage, Manual Vaccum Aspiration')"><span class="icon video-icon">▶️</span><span>Dilation and Evacuation, Dilation and Curettage, Manual Vaccum Aspiration</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1ytOykj6OfO5rp0REa_LPlj4jVrgXdoVP/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(12)"><span class="icon quiz-icon">✍️</span><span>Take Unit 12 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 13 -  DRUGS USED IN OBSTETRICS  <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1H5rjOuOXVSKPCGCB7C7t58F8mnwA0_VL/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1dRoE9H7gO17VgK3qlhDCrl10oS7ga3bQ/preview', 'Drugs, Principles of Antibiotics, Safety Antibiotics During Pregnancy, Drugs During Breastfeeding')"><span class="icon video-icon">▶️</span><span>Drugs, Principles of Antibiotics, Safety Antibiotics During Pregnancy, Drugs During Breastfeeding</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1Zn-IcrwazmCVY8mGD5hTjFXNCF7n1CYS/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1REIubqVx53oJdsd63jXb7pIXUChpjOzH/preview', 'Drugs Used for Newborn Baby')"><span class="icon video-icon">▶️</span><span>Drugs Used for Newborn Baby</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1YkSXuAxiCm35lIFiEXIKkyEN5EE3mYeL/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(13)"><span class="icon quiz-icon">✍️</span><span>Take Unit 13 Quiz</span></div></div></div>
-                </div>
-                <div class="unit-container">
-                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
-                        UNIT 14 -  ETHICAL AND LEGAL ASPECTS RELATED TO MIDWIFERY <span>🔽</span>
-                    </div>
-                    <div class="unit-content"><div class="subsection"><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/1cTuj2tsjN2n3L8_MEo3P-v9hgFXc5Rt2/preview', 'Detailed Notes')"><span class="icon">📚</span><span>Detailed Notes</span></div><div class="resource-btn video" onclick="openResource('video', 'https://drive.google.com/file/d/1vwQAOXFbdFxh43KXWKcFyVlxD6dAMO5v/preview', 'Ethical and Legal Aspect related to Midwifery')"><span class="icon video-icon">▶️</span><span>Ethical and Legal Aspect related to Midwifery</span></div><div class="resource-btn notes" onclick="openResource('notes', 'https://drive.google.com/file/d/119HvcGA_OFABTAC5zlv4azMF9IqTp4CA/preview', 'Lecture Notes')"><span class="icon">📝</span><span>Lecture Notes</span></div><div class="resource-btn quiz" onclick="startQuiz(14)"><span class="icon quiz-icon">✍️</span><span>Take Unit 14 Quiz</span></div></div></div>
-                </div></div>
-    <div id="app-modal" class="modal-overlay">
-        <div class="modal-header">
-            <div id="modal-title" style="font-weight:700; color:var(--brand);">Resource</div>
-            <button class="btn-close" onclick="closeModal()">Close X</button>
-        </div>
-        <div id="modal-body" class="modal-body"></div>
-    </div>
-    <script>
-        const QUIZ_DATA = {"1":[{"q":"Which of the following theories of midwifery emphasizes promoting normal physiological childbirth and advocating for women's choices during the birthing process?","o":["Cross-link theory","Holistic theory","Normal Birth Advocacy","Programmed cellular aging theory"],"a":2},{"q":"What is the primary goal of gynaecological nursing as outlined in the unit?","o":["Managing high-risk pregnancies","Conducting surgeries on reproductive organs","Providing comprehensive care to women throughout their reproductive lives","Managing cardiovascular diseases in women"],"a":2},{"q":"Which aspect of midwifery care involves offering information on family planning and contraceptive methods?","o":["Prenatal care","Postpartum care","Labor support","Menstrual health care"],"a":1},{"q":"In what settings can midwives provide care and support to pregnant women, as described in the unit?","o":["Hospitals and birth centers only","Hospitals and community clinics","Birth centers and homes only","Hospitals, birth centers, and homes"],"a":3},{"q":"What is a vital competency of midwives during the postpartum period as described in the document?","o":["Performing surgical procedures","Providing mental health counseling to children","Offering breastfeeding support and newborn care","Treating infections in newborns"],"a":2},{"q":"Which of the following trends in midwifery nursing in India involves efforts to enhance training and education programs?","o":["Technological advancements","Increased emphasis on midwifery education","Community-based care","Advocacy for women's rights"],"a":1},{"q":"What is the primary focus of obstetrics?","o":["Female reproductive health","Pregnancy, labor, and postpartum care","Menstrual health management","Pediatric care"],"a":1},{"q":"Which healthcare professionals specialize in the diagnosis and treatment of conditions related to the female reproductive system?","o":["Obstetricians","Pediatricians","Gynecologists","Surgeons"],"a":2},{"q":"Which term refers to the number of live births per 1000 people in a given population?","o":["Fertility rate","Death rate","Birth rate","Migration rate"],"a":2},{"q":"Which of the following best describes the primary role of a midwife?","o":["To perform surgical procedures during childbirth","To provide prenatal, labor, and postnatal care to pregnant women and support normal childbirth","To diagnose and treat complex medical conditions unrelated to pregnancy","To administer vaccinations and routine health checks for infants and children"],"a":1}],"2":[{"q":"Which of the following is the most favorable pelvic type for childbirth?","o":["Android Pelvis","Anthropoid Pelvis","Gynecoid Pelvis","Platypelloid Pelvis"],"a":2},{"q":"The transverse diameter of the pelvic inlet measures approximately:","o":["11 cm","12 cm","13 cm","14 cm"],"a":2},{"q":"Which ligament provides structural support to the breast tissue?","o":["Sacrotuberous Ligament","Cooper's Ligaments","Round Ligament","Broad Ligament"],"a":1},{"q":"During which phase of the menstrual cycle does the endometrium thicken to prepare for potential pregnancy?","o":["Menstrual Phase","Follicular Phase","Ovulatory Phase","Luteal Phase"],"a":3},{"q":"The anteroposterior diameter of the pelvic outlet averages about:","o":["10 cm","11 cm","12 cm","13 cm"],"a":1},{"q":"Which component of the female reproductive system produces estrogen and progesterone?","o":["Uterus","Ovaries","Fallopian Tubes","Mammary Glands"],"a":1},{"q":"The external genitalia (vulva) includes all of the following except:","o":["Labia Majora","Clitoris","Cervix","Mons Pubis"],"a":2},{"q":"Which of the following is the site of fertilization in the female reproductive system?","o":["Vagina","Uterus","Ovaries","Fallopian Tubes"],"a":3},{"q":"What is the role of the mammary glands in the female reproductive system?","o":["To produce eggs","To nourish the embryo","To produce milk","To release hormones"],"a":2},{"q":"Which structure serves as the birth canal during childbirth?","o":["Fallopian Tubes","Cervix","Vagina","Uterus"],"a":2}],"3":[{"q":"Which process in females is arrested until puberty and resumes development monthly thereafter?","o":["Spermatogenesis","Oogenesis","Fertilization","Capacitation"],"a":1},{"q":"Which structure allows the exchange of oxygen and nutrients between maternal and fetal blood?","o":["Umbilical Cord","Chorionic Villi","Amniotic Sac","Foramen Ovale"],"a":1},{"q":"During spermatogenesis, which stage directly results in the formation of haploid spermatids?","o":["Mitosis","Meiosis I","Meiosis II","Differentiation"],"a":2},{"q":"Which fetal circulatory structure connects the pulmonary artery to the aorta, bypassing the lungs?","o":["Ductus Venosus","Foramen Ovale","Ductus Arteriosus","Umbilical Vein"],"a":2},{"q":"What is the primary function of the placenta during pregnancy?","o":["Production of sperm and eggs","Gas exchange and nutrient transfer","Initiating ovulation","Protection against external injuries"],"a":1},{"q":"Which term describes the premature separation of the placenta from the uterine wall?","o":["Placenta Previa","Placental Abruption","Placenta Accreta","Chorioamnionitis"],"a":1},{"q":"What marks the beginning of the fetal period in human development?","o":["Fertilization","Formation of the morula","Start of organogenesis","Transition from embryo to fetus around the 9th week"],"a":3},{"q":"What is the process by which male gametes are produced?","o":["Oogenesis","Spermatogenesis","Fertilization","Cleavage"],"a":1},{"q":"Which cell is released from the ovary during ovulation?","o":["Spermatocyte","Secondary oocyte","Zygote","Blastocyst"],"a":1},{"q":"Where does fertilization typically occur in the female reproductive system?","o":["Uterus","Ovary","Fallopian Tube","Cervix"],"a":2}],"4":[{"q":"What is the first stage of fetal development after fertilization?","o":["Gastrulation","Blastocyst formation","Organogenesis","Implantation"],"a":1},{"q":"At what point during pregnancy does the fetal period typically begin?","o":["1st week","3rd week","9th week","12th week"],"a":2},{"q":"Which structure provides nutrients and oxygen to the fetus?","o":["Uterus","Placenta","Amniotic fluid","Umbilical cord"],"a":1},{"q":"What hormone is primarily responsible for maintaining pregnancy during the early stages?","o":["Estrogen","Progesterone","Human Chorionic Gonadotropin (hCG)","Oxytocin"],"a":2},{"q":"During which process does the blastocyst attach to the uterine lining?","o":["Fertilization","Cleavage","Implantation","Gastrulation"],"a":2},{"q":"What is the role of the trophoblast cells during implantation?","o":["Forming the neural tube","Providing nutrients to the fetus","Adhering to and invading the uterine lining","Producing amniotic fluid"],"a":2},{"q":"What marks the transition from the embryonic period to the fetal period?","o":["Completion of organogenesis","Formation of the blastocyst","Beginning of implantation","Development of the placenta"],"a":0},{"q":"Which process involves the fusion of genetic material from both parents to form a zygote?","o":["Gastrulation","Fertilization","Neurulation","Organogenesis"],"a":1},{"q":"The umbilical cord contains:","o":["One artery and two veins","Two arteries and one vein","Three arteries","Two veins and no arteries"],"a":1},{"q":"Which stage is primarily focused on the growth and maturation of the fetus?","o":["Gastrulation","Embryonic period","Fetal period","Neurulation"],"a":2}],"5":[{"q":"Which of the following is the most accurate method to assess the progress of labor?","o":["Maternal pain score","Frequency of uterine contractions","Cervical dilation","Fetal heart rate monitoring"],"a":2},{"q":"Which stage of labor involves the delivery of the placenta?","o":["First stage","Second stage","Third stage","Fourth stage"],"a":2},{"q":"What is the most common cause of postpartum hemorrhage following a normal delivery?","o":["Retained placenta","Uterine atony","Lacerations of the birth canal","Coagulopathy"],"a":1},{"q":"Which maneuver is performed to assist the delivery of the shoulders during childbirth?","o":["McRoberts maneuver","Leopold’s maneuver","Brandt-Andrews maneuver","Ritgen’s maneuver"],"a":0},{"q":"Which of the following indicates the onset of true labor?","o":["Irregular contractions","Increase in Braxton Hicks contractions","Progressive cervical effacement and dilation","Sudden relief from back pain"],"a":2},{"q":"In the active phase of labor, how many centimeters should the cervix typically dilate per hour in a primigravida?","o":["0.5 cm","1.0 cm","1.5 cm","2.0 cm"],"a":1},{"q":"Which fetal position is most favorable for a vaginal delivery?","o":["Occiput posterior","Breech","Occiput anterior","Transverse lie"],"a":2},{"q":"What is the average duration of the first stage of labor for a primigravida?","o":["4–6 hours","6–8 hours","8–12 hours","12–14 hours"],"a":2},{"q":"Which of the following is a sign that a woman is in the second stage of labor?","o":["Regular contractions","Rupture of membranes","Feeling the urge to push","Cervix is 4 cm dilated"],"a":2},{"q":"What is the primary purpose of Leopold's maneuvers?","o":["To assess fetal well-being","To determine the position and presentation of the fetus","To measure the intensity of uterine contractions","To evaluate the progress of cervical dilation"],"a":1}],"6":[{"q":"Which of the following is the most appropriate method to assess the oxygenation status of a newborn?","o":["Apgar Score","Pulse oximetry","Capillary refill time","Blood pressure measurement"],"a":1},{"q":"What is the initial step in the management of a newborn with suspected hypoglycemia?","o":["Administer intravenous glucose","Feed the newborn breast milk","Observe the newborn","Perform a blood glucose test"],"a":3},{"q":"Which condition is characterized by an abnormal accumulation of fluid in two or more fetal compartments?","o":["Neonatal sepsis","Respiratory distress syndrome","Hydrocephalus","Hydrops fetalis"],"a":3},{"q":"Which of the following interventions is most crucial in the first 30 seconds of neonatal resuscitation?","o":["Chest compressions","Intubation","Effective ventilation with bag-mask","Administration of epinephrine"],"a":2},{"q":"A newborn is delivered with meconium-stained amniotic fluid. What is the initial management step?","o":["Immediate endotracheal suctioning","Stimulate the newborn to cry","Dry the newborn and keep warm","Delay cord clamping"],"a":2},{"q":"In the management of a newborn with suspected neonatal sepsis, which of the following is the most appropriate initial step?","o":["Start empirical antibiotic therapy","Obtain blood cultures","Perform a lumbar puncture","Administer antiviral medication"],"a":1},{"q":"What is the most common cause of respiratory distress in a preterm newborn?","o":["Bronchopulmonary dysplasia","Transient tachypnea of the newborn","Respiratory distress syndrome (RDS)","Pneumonia"],"a":2},{"q":"What is the normal range of heart rate for a newborn?","o":["60–100 beats per minute","80–120 beats per minute","100–160 beats per minute","140–180 beats per minute"],"a":2},{"q":"Which of the following is a common cause of jaundice in newborns?","o":["Iron deficiency","Hyperbilirubinemia","Hypoglycemia","Vitamin D deficiency"],"a":1},{"q":"What is the first immunization given to a newborn?","o":["Hepatitis B vaccine","BCG vaccine","DTaP vaccine","Rotavirus vaccine"],"a":0}],"7":[{"q":"Which of the following factors is most important in assessing uterine involution in the postpartum period?","o":["Maternal pulse rate","Uterine consistency and position","Amount of lochia","Breastfeeding frequency"],"a":1},{"q":"What is the most likely cause of postpartum hemorrhage occurring more than 24 hours after delivery?","o":["Uterine atony","Retained placental fragments","Cervical laceration","Coagulation disorders"],"a":1},{"q":"Which hormone is primarily responsible for lactation during the puerperium?","o":["Oxytocin","Progesterone","Prolactin","Estrogen"],"a":2},{"q":"During the normal puerperium, when is the uterus expected to return to its pre-pregnancy size?","o":["1 week postpartum","4–6 weeks postpartum","8–10 weeks postpartum","12–14 weeks postpartum"],"a":1},{"q":"Which of the following is a critical sign of postpartum infection that requires immediate medical attention?","o":["Fever above 38°C (100.4°F) after the first 24 hours postpartum","Mild cramping and bleeding","Moderate swelling of the legs","Mood swings and fatigue"],"a":0},{"q":"What is the primary purpose of administering Rh immunoglobulin to a Rh-negative mother during the puerperium?","o":["To enhance uterine involution","To prevent Rh sensitization in future pregnancies","To decrease postpartum bleeding","To increase milk production"],"a":1},{"q":"Which of the following interventions is most effective in preventing thromboembolic complications during the puerperium?","o":["Encouraging early ambulation","Administering anticoagulants routinely","Applying hot compresses to the legs","Restricting fluid intake"],"a":0},{"q":"When should breastfeeding ideally be initiated after birth?","o":["Within the first hour","After 24 hours","After 6 hours","After the mother has rested"],"a":0},{"q":"Which of the following is the best indicator of adequate milk intake in a newborn?","o":["The frequency of breastfeeding","The number of wet diapers per day","The amount of sleep the newborn gets","The newborn's weight at birth"],"a":1},{"q":"Which type of lochia is expected to be seen first during the postpartum period?","o":["Lochia serosa","Lochia alba","Lochia rubra","Lochia purulent"],"a":2}],"8":[{"q":"What is the most common location for an ectopic pregnancy?","o":["Ovary","Cervix","Ampulla of the fallopian tube","Abdominal cavity"],"a":2},{"q":"Which of the following is NOT a risk factor for ectopic pregnancy?","o":["Pelvic inflammatory disease","Use of intrauterine devices (IUCD)","First pregnancy","Previous ectopic pregnancy"],"a":2},{"q":"What hormone is primarily associated with the cause of Hyperemesis Gravidarum?","o":["Estrogen","Progesterone","Human chorionic gonadotropin (HCG)","Oxytocin"],"a":2},{"q":"What is the main treatment approach for severe Hyperemesis Gravidarum?","o":["Bed rest","Intravenous fluid and electrolyte replacement","Oral rehydration therapy","Dietary changes"],"a":1},{"q":"Pre-eclampsia is primarily characterized by which of the following?","o":["Low blood pressure and proteinuria","High blood pressure and proteinuria","Severe nausea and vomiting","Abdominal pain and jaundice"],"a":1},{"q":"Which of the following is NOT a common risk factor for pre-eclampsia?","o":["First pregnancy","Age over 35","Low body weight","Multiple pregnancies"],"a":2},{"q":"Eclampsia is characterized by which type of convulsions?","o":["Tonic-clonic seizures","Absence seizures","Focal seizures","Myoclonic seizures"],"a":0},{"q":"What is the typical first-line management for eclampsia during a convulsion?","o":["Oral magnesium sulfate","Intravenous diazepam","Immediate caesarean section","Induced labor"],"a":1},{"q":"Polyhydramnios is defined as an amniotic fluid volume exceeding how many milliliters?","o":["500 ml","1000 ml","1500 ml","2000 ml"],"a":2},{"q":"Which of the following conditions is associated with oligohydramnios?","o":["Multiple pregnancies","Esophageal atresia","Fetal renal abnormalities","Maternal diabetes"],"a":2}],"9":[{"q":"What is the normal position of the fetal occiput during labor?","o":["Occiput Anterior (OA)","Occiput Posterior (OP)","Occiput Lateral (OL)","Occiput Transverse (OT)"],"a":0},{"q":"Which type of breech presentation involves the thighs being flexed and the legs extended along the fetal abdomen?","o":["Complete Breech","Frank Breech","Footling Breech","Knee Presentation"],"a":1},{"q":"What is the most common treatment for a retained placenta?","o":["Blood transfusion","Surgical removal","Manual removal of the placenta","Induction of labor"],"a":2},{"q":"Which of the following is a cause of postpartum hemorrhage?","o":["Amniotic fluid embolism","Retained cotyledons","Shoulder dystocia","Vasa Previa"],"a":1},{"q":"What does the term \"shoulder dystocia\" refer to?","o":["Fetal shoulder becomes trapped behind the mother's pubic bone","The umbilical cord is wrapped around the shoulder","The shoulder of the fetus is the presenting part","The shoulders are dislocated during birth"],"a":0},{"q":"Which of the following is NOT a risk factor for umbilical cord prolapse?","o":["Abnormal fetal presentation","Full-term pregnancy","Premature rupture of membranes","Polyhydramnios"],"a":1},{"q":"In which type of pelvis contraction does the fetal head slightly overlap at the edge of the pubis?","o":["Mild contraction","Moderate contraction","Severe contraction","Complete contraction"],"a":1},{"q":"Which of the following is a sign of uterine rupture?","o":["Decreased urine output","Abdominal pain","Increased fetal movement","Decreased heart rate"],"a":1},{"q":"Which maneuver is used to manage shoulder dystocia?","o":["Suprapubic pressure","Manual replacement of the uterus","McRoberts maneuver","Both A and C"],"a":3},{"q":"What is the management for amniotic fluid embolism?","o":["Blood transfusion","Oxygen therapy","Surgical removal of the placenta","Episiotomy"],"a":1}],"10":[{"q":"Which of the following is the most accurate description of the involution process of the uterus during the puerperium?","o":["The uterus returns to its pre-pregnant size and position within 1–2 weeks","The uterus returns to its pre-pregnant size within 6 weeks, with the fundus descending 1 cm per day","The uterus remains enlarged for up to 12 weeks postpartum","Involution of the uterus is typically complete by the end of the first trimester postpartum"],"a":1},{"q":"Which hormone plays the most significant role in the process of lactation during the puerperium?","o":["Estrogen","Progesterone","Prolactin","Oxytocin"],"a":2},{"q":"What is the expected normal range for the duration of lochia rubra following vaginal delivery?","o":["1–2 days","3–4 days","5–7 days","7–14 days"],"a":1},{"q":"Which of the following is a potential complication of the postpartum period that requires immediate medical attention?","o":["Postpartum diaphoresis","Postpartum fatigue","Postpartum hemorrhage","Postpartum hair loss"],"a":2},{"q":"During the puerperium, what is the recommended daily fluid intake for a postpartum woman to support lactation and recovery?","o":["1–1.5 liters","2–2.5 liters","3–3.5 liters","4 liters"],"a":1},{"q":"What is the primary clinical significance of assessing the perineum during the postpartum period?","o":["To monitor for signs of infection or healing","To evaluate the effectiveness of breastfeeding","To measure the level of postpartum depression","To assess the return of menstrual cycles"],"a":0},{"q":"Which condition is characterized by the presence of excessive bleeding and a significant drop in blood pressure postpartum?","o":["Postpartum preeclampsia","Postpartum anemia","Postpartum hemorrhage","Postpartum thrombosis"],"a":2},{"q":"What is the common term used to describe the period immediately after childbirth?","o":["Menstruation","Puerperium","Conception","Ovulation"],"a":1},{"q":"Which type of lochia is characterized by its red color and occurs immediately after delivery?","o":["Lochia serosa","Lochia alba","Lochia rubra","Lochia purulent"],"a":2},{"q":"What is the primary purpose of postpartum visits by healthcare providers?","o":["To assess the baby's development","To ensure the mother's recovery and identify any complications","To schedule the mother's next pregnancy","To initiate new vaccinations"],"a":1}],"11":[{"q":"What is the neonatal period?","o":["First 7 days after birth","First 14 days after birth","First 28 days after birth","First 42 days after birth"],"a":2},{"q":"Which of the following is a characteristic of a term normal newborn?","o":["Born before 37 weeks of gestation","Born between 37 and 42 weeks of gestation","Weighs less than 1500 g","Born after 42 weeks of gestation"],"a":1},{"q":"What is the weight range of a normal newborn?","o":["1.5 – 2.5 kg","2.5 – 3.9 kg","3.9 – 4.5 kg","4.5 – 5.0 kg"],"a":1},{"q":"Which of the following is not part of the APGAR score?","o":["Respiration","Muscle tone","Skin color","Weight"],"a":3},{"q":"At what time does the first period of reactivity occur in a newborn?","o":["First 6–8 hours of life","12 hours after birth","24 hours after birth","36 hours after birth"],"a":0},{"q":"Which reflex is characterized by the infant turning their head towards any object that touches their cheek?","o":["Moro reflex","Rooting reflex","Grasp reflex","Babinski reflex"],"a":1},{"q":"What does a depressed fontanelle in a newborn indicate?","o":["Hydrocephalus","Dehydration","Meningitis","Normal finding"],"a":1},{"q":"Which of the following is a sign of respiratory distress in a newborn?","o":["Nasal flaring","Flexed posture","Pink skin","Vigorous crying"],"a":0},{"q":"Which of the following is a characteristic of physiological jaundice in a newborn?","o":["Appears within 24 hours of birth","Peaks on the 4th day","Caused by hemolysis due to ABO incompatibility","Persists beyond 10 days in term infants"],"a":1},{"q":"Which of the following conditions is indicated by a bilirubin level of more than 15 mg/dL in a newborn?","o":["Physiological jaundice","Pathological jaundice","Hypoglycemia","Hypothermia"],"a":1}],"12":[{"q":"Which of the following conditions is a contraindication to the induction of labor?","o":["Prolonged pregnancy","Gestational diabetes","Fetal distress","Premature rupture of membranes"],"a":2},{"q":"Which hormone is commonly administered to induce uterine contractions during labor induction?","o":["Prostaglandin","Oxytocin","Estrogen","Relaxin"],"a":1},{"q":"What is the main risk associated with the induction of labor using pharmacological methods?","o":["Preterm labor","Placental abruption","Uterine hyperstimulation","Fetal macrosomia"],"a":2},{"q":"Which of the following is NOT a recommended non-pharmacological method for inducing labor?","o":["Nipple stimulation","Membrane stripping","Aromatherapy","High-intensity exercise"],"a":3},{"q":"What is the primary goal of an External Cephalic Version (ECV)?","o":["To ripen the cervix","To stimulate uterine contractions","To manually turn a breech baby to a head-down position","To initiate the rupture of membranes"],"a":2},{"q":"What is the primary concern when the amniotic sac ruptures before the onset of labor (PROM)?","o":["Fetal macrosomia","Increased risk of infection","Maternal hypertension","Uterine rupture"],"a":1},{"q":"Which method involves inserting a balloon catheter into the cervix to encourage dilation?","o":["Amniotomy","Foley catheter","Membrane stripping","Oxytocin infusion"],"a":1},{"q":"Induction of labor is often recommended when pregnancy extends beyond how many weeks?","o":["40 weeks","42 weeks","36 weeks","38 weeks"],"a":1},{"q":"Which of the following is a surgical method of labor induction?","o":["Foley catheter","Oxytocin infusion","Amniotomy","Prostaglandin gel"],"a":2},{"q":"Which condition is commonly associated with gestational diabetes during pregnancy?","o":["Shoulder dystocia","Uterine rupture","Placenta previa","Preeclampsia"],"a":0}],"13":[{"q":"Which of the following drugs is used to enhance fetal lung maturation in cases of preterm labor?","o":["Oxytocin","Betamethasone","Misoprostol","Magnesium sulfate"],"a":1},{"q":"Which class of drugs is commonly used to inhibit uterine contractions and prevent preterm labor?","o":["Oxytocic","Tocolytics","Antibiotics","Analgesics"],"a":1},{"q":"Which of the following antibiotics is generally considered safe for use during pregnancy, especially for treating urinary tract infections?","o":["Ciprofloxacin","Nitrofurantoin","Tetracycline","Doxycycline"],"a":1},{"q":"Which of the following drugs is contraindicated in pregnancy due to its known teratogenic effects, particularly causing severe birth defects?","o":["Labetalol","Penicillin","Isotretinoin","Erythromycin"],"a":2},{"q":"Which anticoagulant is preferred during pregnancy to avoid fetal harm?","o":["Warfarin","Aspirin","Heparin","Clopidogrel"],"a":2},{"q":"Which drug is administered to Rh-negative mothers to prevent Rh incompatibility issues in future pregnancies?","o":["Magnesium sulfate","Methotrexate","Rh Immune Globulin (RhIg)","Terbutaline"],"a":2},{"q":"Which class of antibiotics should be avoided during pregnancy due to the risk of affecting fetal bone development?","o":["Macrolides","Tetracyclines","Penicillins","Cephalosporins"],"a":1},{"q":"Which analgesic method is commonly used for pain relief during labor?","o":["Epidural anesthesia","Ibuprofen","Acetaminophen","Aspirin"],"a":0},{"q":"What is the primary use of Oxytocin (Pitocin) in obstetrics?","o":["To inhibit uterine contractions","To prevent infection","To induce or augment labor","To enhance fetal lung maturation"],"a":2},{"q":"Which antibiotic is commonly administered to women with Group B Streptococcus (GBS) colonization during labor?","o":["Vancomycin","Penicillin","Ciprofloxacin","Amoxicillin"],"a":1}],"14":[{"q":"Which ethical principle in midwifery emphasizes the duty to \"do no harm\"?","o":["Autonomy","Beneficence","Non-Maleficence","Justice"],"a":2},{"q":"What legal obligation must midwives fulfill when a high-risk pregnancy is identified?","o":["Provide immediate medical treatment","Refer to another healthcare professional","Continue monitoring without intervention","Discharge the patient"],"a":1},{"q":"Which of the following is NOT a component of the Mother and Child Tracking System (MCTS)?","o":["Risk Assessment and Referral","Child Growth Monitoring","Patient Confidentiality Breach","Immunization Tracking"],"a":2},{"q":"In the context of midwifery, what does the legal principle of \"Informed Consent\" require from midwives?","o":["Providing medical advice without consent","Keeping patients uninformed to avoid stress","Adequately informing patients before care or intervention","Refusing care if consent is not given"],"a":2},{"q":"What is the primary purpose of the ethical and legal aspects of midwifery?","o":["Ensuring midwives work independently","Enhancing the autonomy of midwives","Protecting patient safety and well-being","Reducing the number of healthcare professionals involved"],"a":2},{"q":"Which principle in midwifery promotes fairness and equality in the distribution of healthcare resources?","o":["Autonomy","Justice","Integrity","Confidentiality"],"a":1},{"q":"What does the Mother and Child Tracking System (MCTS) primarily monitor during pregnancy?","o":["Genetic disorders","Nutritional habits","Prenatal care and immunizations","Family history"],"a":2},{"q":"Which ethical principle involves respecting the pregnant individual's right to make informed decisions about their care?","o":["Autonomy","Beneficence","Non-Maleficence","Justice"],"a":0},{"q":"What is the main purpose of the Mother and Child Tracking System (MCTS)?","o":["Track and improve maternal and child health","Register newborns for citizenship","Monitor healthcare providers' performance","Allocate healthcare resources"],"a":0},{"q":"Which of the following is a legal requirement for midwives?","o":["Ignoring patient preferences","Practicing without certification","Accurate documentation of care","Concealing patient information from other professionals"],"a":2}]};
-        let score = 0;
-        function toggleUnit(header) {
-            const content = header.nextElementSibling;
-            header.setAttribute('aria-expanded', header.getAttribute('aria-expanded') !== 'true');
-            content.classList.toggle('active');
-        }
+<header class="topbar">
+<button class="tb-back" onclick="goBackToApp()" aria-label="Back">&#8592;</button>
+<div class="tb-info">
+<div class="tb-title">Midwifery & Obstetrical Nursing</div>
+<div class="tb-sub">GNM Third Year</div>
+</div>
+<div class="tb-chip">14 Units</div>
+</header>
 
-        // Listener for hardware back button
-        window.onpopstate = function(event) {
-            const modal = document.getElementById('app-modal');
-            if (modal.style.display === 'flex') {
-                modal.style.display = 'none';
-                document.getElementById('modal-body').innerHTML = '';
-            }
-        };
+<section class="hero">
+<div class="hero-dot-grid"></div>
+<div class="hero-inner">
+<div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>GNM Third Year</div>
+<h1>Midwifery<br/><em>Nursing</em></h1>
+<p class="hero-desc">Comprehensive resources, detailed notes, video lectures & internal quizzes for exam prep.</p>
+<button class="hero-cta" onclick="openLink('https://drive.google.com/file/d/1ognUcXXsYVTKVam5yRWaf36b3ReN8KGp/view?usp=drive_link')">
+📄 &nbsp;Download Syllabus
+</button>
+<div class="hero-stats">
+<div class="hs"><div class="hs-n">14</div><div class="hs-l">Units</div></div>
+<div class="hs"><div class="hs-n">140</div><div class="hs-l">Questions</div></div>
+</div>
+</div>
+</section>
 
-        function openResource(type, url, title) {
-            // Push history state for back button navigation
-            history.pushState({ modalOpen: true }, null, '#resource');
+<main class="main">
+<div class="divider"><span>Course Units</span></div>
 
-            const modal = document.getElementById('app-modal');
-            const body = document.getElementById('modal-body');
-            document.getElementById('modal-title').textContent = title;
-            modal.style.display = 'flex';
-            
-            // Clean URL Logic
-            let finalUrl = url;
-            if (url.includes('drive.google.com')) { 
-                finalUrl = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview'); 
-            }
-            else if (url.includes('human.biodigital.com')) { 
-                 if (url.includes('/viewer/')) finalUrl = url.replace('/viewer/', '/widget/');
-                 else finalUrl = url.replace('/view', '/widget'); 
-            }
-            
-            // Updated iframe with security attributes for Google Drive
-            body.innerHTML = `
-                <iframe 
-                    class="iframe-res" 
-                    src="${finalUrl}" 
-                    width="100%" 
-                    height="100%" 
-                    frameborder="0" 
-                    sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-presentation" 
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen">
-                </iframe>`;
-        }
+<div class="uc" id="u1" data-open="false">
+<button class="ubtn" onclick="tog('u1')">
+<div class="upill"><span>Unit 1</span></div>
+<div class="uinfo"><div class="uname">Introduction</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u1">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/17y-KfM7BlEIMVEGBQk39dK6PlXOmkAMl/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Introduction</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1Si2qdwyfol_Ne1D9hTAQlnAHr9gzktW_/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Definition & Concepts</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1eJQRxHV1-XoD8vwCyPrzu7fgLVBQ2nC2/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Scope & Trends</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1HW-3pekAsKvIOKsJ0EkFc4aHyxvg_ygQ/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Trends</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn quiz" onclick="openQuiz(1)"><div class="rico">✍️</div><div class="rtxt">Unit 1 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
 
-        function startQuiz(unitId) {
-            // Push history state for back button navigation
-            history.pushState({ modalOpen: true }, null, '#quiz');
+<div class="uc" id="u2" data-open="false">
+<button class="ubtn" onclick="tog('u2')">
+<div class="upill"><span>Unit 2</span></div>
+<div class="uinfo"><div class="uname">Reproductive System</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u2">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1JtC14FLuQug90ppgZt6rCy1vm0RT8XIq/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Reproductive System</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/11NdKULVhSCweAeDZjcxzALHmsYxYxD7T/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Anatomy & Physiology</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1lMdWn-XNz9TeaQSdhg9mAkUK_ONizhFM/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Anatomy Part 2</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1whDnwizLsWVQOE4guNVddBIlH-fBKeH6/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Anatomy</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn quiz" onclick="openQuiz(2)"><div class="rico">✍️</div><div class="rtxt">Unit 2 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
 
-            score = 0;
-            const questions = QUIZ_DATA[unitId];
-            if(!questions || questions.length === 0) { alert('No questions found.'); return; }
-            let html = '<div class="quiz-container"><h2 style="color:var(--brand); margin-top:0;">Unit ' + unitId + ' Quiz</h2>';
-            html += '<div id="score-display" style="background:var(--brand); color:white; padding:5px 15px; border-radius:20px; display:inline-block; font-weight:700; margin-bottom:20px;">Score: 0 / ' + questions.length + '</div>';
-            questions.forEach((q, index) => {
-                html += '<div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">';
-                html += '<p style="font-weight:600; font-size:1.1rem; margin-bottom:15px;">' + (index + 1) + '. ' + q.q + '</p>';
-                q.o.forEach((opt, optIndex) => {
-                    html += '<div class="quiz-option" onclick="checkAnswer(this, ' + unitId + ', ' + optIndex + ', ' + q.a + ')">' + opt + '</div>';
-                });
-                html += '</div>';
-            });
-            html += '<button class="btn-quiz" onclick="closeModal()">Close Quiz</button></div>';
-            document.getElementById('modal-body').innerHTML = html;
-            document.getElementById('modal-title').textContent = 'Unit ' + unitId + ' Quiz';
-            document.getElementById('app-modal').style.display = 'flex';
-        }
+<div class="uc" id="u3" data-open="false">
+<button class="ubtn" onclick="tog('u3')">
+<div class="upill"><span>Unit 3</span></div>
+<div class="uinfo"><div class="uname">Embryology & Foetal Dev.</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u3">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1CsiC5AAhcTN9IuabynIM7Yuijy5Fhf97/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Embryology</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1hZJeRec8k83wgw_Q5wNj3Cz5We-pQ93K/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Oogenesis & Fertilization</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1yT8fFmOBB05PYDspTk4e37Cmf3Kt7bsH/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Fertilization</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1XFEz4gchkaTyUnbu3HRTDRrJUY62diMS/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Fertilization</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1Z48KhtPFWsN8Ffj1DdEKM8sFc_Yaj1Rb/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Fetal Development (1)</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1S61Mt0sJfB2qVG1_LOyeCKZVBu3dXXee/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Fetal Development (2)</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1BYBk49m4fch2Hq_OSwNb_8pNk56DcK8G/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Development</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1Ygs9y5lKUlMwZ6KWHk16-yoHRcKnJbHR/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Fetal Circulation</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1eGjVUbeK-I2g94Yj-Ldlwg0m--oUJQ12/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Placenta (1)</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1GTleP0Q9fEgDPNNevVCaelQ8tkzdQ9-5/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Placenta (2)</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1Ka7lWambkbOuUWexqBPTVRIqtXFiHnMW/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Placenta</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1ya1NnmpBsTwzYaGGty7AAFlt6BLIgrWM/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Fetal Skull</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn quiz" onclick="openQuiz(3)"><div class="rico">✍️</div><div class="rtxt">Unit 3 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
 
-        function checkAnswer(element, unitId, selectedIndex, correctIndex) {
-            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
-            if (selectedIndex === correctIndex) {
-                element.classList.add('correct'); score++;
-            } else {
-                element.classList.add('wrong'); element.parentElement.children[correctIndex + 1].classList.add('correct');
-            }
-            document.getElementById('score-display').textContent = 'Score: ' + score + ' / ' + QUIZ_DATA[unitId].length;
-        }
+<div class="uc" id="u4" data-open="false">
+<button class="ubtn" onclick="tog('u4')">
+<div class="upill"><span>Unit 4</span></div>
+<div class="uinfo"><div class="uname">Pregnancy & Management</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u4">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1UJki-5lF8tfPb-O4brV5x0eXmgTIIkDJ/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Pregnancy Mgt.</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1r6GtJLawOJVm_7FGzN5KXbpgnE3krvRn/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Preconception (1)</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/16lvblCYDcGQQhp4F63_5aLNhC-l82-3F/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Preconception (2)</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1HmT1ZuH99m9IiyviRP_aDK-jwIQc8_Xb/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Care</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1I5j11hMMkwfnEYEmXYDuu5UUBbx8damO/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Genetic Counselling</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1eOPJ9454c-7K7ZkDctO-1V8YdZ4bK36g/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Genetics</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1YsifII20JJMJfchgASBbEVoB8uAMg3ki/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Physiological Changes (1)</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1Mp_8KjqCkglH6-IDaVQhsDdRqKSeyh8r/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Physiological Changes (2)</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1cPWhdYU_iwnK_0mHZdbfqdSwpfYAkr45/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Changes</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/12ABHZx8TOuShNVl2e_GP_ajSAanT7KKp/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Signs of Pregnancy</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1SZ-wrSAKXuvz5ky1z461LQUC4jfYJfvn/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Diagnosis</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1_hi1DZ1uHG2_gIborr0lKlgv2gZAtWtj/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Diagnosis</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1VJ2soLuvB82qJUtxM_C4H9IVVeuHFu1R/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Antenatal Care (1)</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1nvBuM3loXNtg72gMGaTEHsr4eeoqEmcd/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Antenatal Care (2)</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/14t5VivuPnbLQ7WR8ACsWzJqJMmPsDtSs/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Antenatal</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/186qruTDNvsbrPJi70eWRcVowsT3tImD7/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Minor Disorders</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1qPvJo7atkwI2toOqsOhIurondupIiLgI/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Disorders</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(4)"><div class="rico">✍️</div><div class="rtxt">Unit 4 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
 
-        function closeModal() { 
-            const modal = document.getElementById('app-modal');
-            modal.style.display = 'none'; 
-            document.getElementById('modal-body').innerHTML = ""; 
-            
-            // Remove history state if present to keep navigation clean
-            if ((history.state && history.state.modalOpen) || window.location.hash === '#resource' || window.location.hash === '#quiz') {
-                history.back();
-            }
-        }
-    </script>
+<div class="uc" id="u5" data-open="false">
+<button class="ubtn" onclick="tog('u5')">
+<div class="upill"><span>Unit 5</span></div>
+<div class="uinfo"><div class="uname">Normal Labour</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u5">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1UyDz4iII5oNDwedpRyUe72Ku9OL7XcwN/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Normal Labour</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1Pns2Gr6zg3_wyLqnrCw5OreZ_w0SZDHC/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>1st Stage Labour</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1LyPU4ymiXB3SLp_GkcU1orgZ69p3Cj81/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Management 1st Stage</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1R8V9EYs2WR3C5_oiThNnZwMG8x7we6FN/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>1st Stage</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('Coming Soon')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Normal Labour Mgt.</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/13eAsYXh4JDWcJD5uNhZTKmDKep_cV6ql/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Normal Labour</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn quiz" onclick="openQuiz(5)"><div class="rico">✍️</div><div class="rtxt">Unit 5 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u6" data-open="false">
+<button class="ubtn" onclick="tog('u6')">
+<div class="upill"><span>Unit 6</span></div>
+<div class="uinfo"><div class="uname">Management of Newborn</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u6">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/19i6ztfkdn6rsM6vbsnY7GlUUeilVQqpp/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Newborn Mgt.</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1o9EfwfyD-zNkjSuXlAjVN0bwUgZK1jos/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Newborn Mgt.</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1rvAq1kBuQQoCeiSV2aZj4ovsL6G8tsYY/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Routine Care</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1QWhdiI3HWkgM-Iob8Ar2ww9a7fLVbCPZ/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Care</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn quiz" onclick="openQuiz(6)"><div class="rico">✍️</div><div class="rtxt">Unit 6 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u7" data-open="false">
+<button class="ubtn" onclick="tog('u7')">
+<div class="upill"><span>Unit 7</span></div>
+<div class="uinfo"><div class="uname">Normal Puerperium</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u7">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1B1yT64ovQIoBEnFiDW4lsuhNl_WkbyaR/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Puerperium</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1ucG2IQFySftOqrh-VfMH8D165HlUlvWb/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Assessment</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1gBewvxNZ2Mfi0ge43zblk3Ve3xEoKsEM/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Assessment</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1muKZpXWMe2tQ1Z4mZzSHWJ-qTtDOeJZZ/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Breastfeeding</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1mSulurOQAKNLZbOla26w9s6zRzuTaGg4/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Breastfeeding</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1_6abjZseGPiwJCaYUVVuDcAl4qYrvC30/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Family Planning</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1a6gStYiIyMO6B5hfjFmGIlcx1efqvVlB/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>FP Methods</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1GnXitMsAyyW229XyokhMs2yp6R6QxWb3/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Family Planning</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn quiz" onclick="openQuiz(7)"><div class="rico">✍️</div><div class="rtxt">Unit 7 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u8" data-open="false">
+<button class="ubtn" onclick="tog('u8')">
+<div class="upill"><span>Unit 8</span></div>
+<div class="uinfo"><div class="uname">Pregnancy Complications</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u8">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1pKktmC3sn2NGsCOLxtLcDEYPi2pySbow/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Complications</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1Bb9FkhEZ9JnMy-Xp5RHOmCRe-O5fex5s/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Ectopic Pregnancy</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/12x1gEGuTgaERV4XnE3Di0p6a-NYg77Q5/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Ectopic</small></div></button>
+<button class="rbtn video" onclick="openLink('Coming Soon')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Polyhydramnios</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1yRXr8magYFbbevQ_TkHbksLwSCUin6ut/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Polyhydramnios</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/11xODeWf94sKNr_YSqOcxC2am6w8WXbyK/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pre-eclampsia</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1Zrh15L_7_-k5WaE4sU6G5YTmcseUVQyo/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Pre-eclampsia</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1cXfLoWKr8YXnNzy63dLqmJc0w0x2xx8F/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Abortion</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1d8pry8Lf07Mu1c0Y2l4idX_EBywCkbBf/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Abortion</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1QaDHFR9j_-GhlPxLDZ0AgXw7ch8JbdRc/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Placenta Previa</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1sQGGaOvoSmOg5qsN0mRw4AvIXnMpHKvq/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Placenta Previa</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1lEiLDILPEo5tOGle066VRA0QKPKfHg-S/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Anemia & IUGR</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1W30_j0Ejwq6PmciEHp_HReKAv9NooL4C/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Anemia</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1aF95TNncQsK-gfuJkxX7_ceXFpNCZ65x/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>RTI & STD</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1dhakvCDqr_XDDyU4mWb-0aBiX10QLMcB/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>RTI</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1nANVx5N3BnFAi1ThW3yLKw4OZ_rXW_tE/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>UTI</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1HGoM2eWkk7gAYTTAz5mG5UxjhzAzaj-3/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>UTI</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1ysv8OgQwlGGjbMgVnCYi9zcCWiToZRnB/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>NST & USG</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/17u75REULqYF3k7IQMigSpzcRKVhr_hTR/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>USG</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1VEQ_QhW-knBa-wcV1XJByxlhCWKC8T8R/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Diabetes & Heart</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1mPcS4d-6PcNIO7_MZm18q2aFuHrDpb9f/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Diabetes</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(8)"><div class="rico">✍️</div><div class="rtxt">Unit 8 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u9" data-open="false">
+<button class="ubtn" onclick="tog('u9')">
+<div class="upill"><span>Unit 9</span></div>
+<div class="uinfo"><div class="uname">High Risk Labour</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u9">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1poEYgKCL7R1uj8eBLk42fGJoJzhhaHV9/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>High Risk Labour</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1D3pa70n_wSi2dLbcj6lgaJaRJNB4VLX-/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Uterine Rupture</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1YF59pYnUNNn-6YCtHzvCE1WKruAPGa1u/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Rupture</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/12x6ikHCtl13FuiVrWXLoh8nbpyWoz3w2/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Abnormal Actions</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/179DIvncVvy2-LMASARhCuQRaxpSGT_LT/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Dystocia</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1W6455k8nci-N0ysLcSkrTxQQQABZfnaL/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Contracted Pelvis</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1FvwAbckRKUX7P5gR4E2vOhZwhVWuI0G7/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Pelvis</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1VP97H34MsR-COEvndjhUPuv51huofbjf/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Malposition & PPH</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1XtrPjxnahmjb66Gq24mTAmPCnsMGdpq4/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>PPH</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(9)"><div class="rico">✍️</div><div class="rtxt">Unit 9 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u10" data-open="false">
+<button class="ubtn" onclick="tog('u10')">
+<div class="upill"><span>Unit 10</span></div>
+<div class="uinfo"><div class="uname">Puerperium Complications</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u10">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1PiDzPyYlyjKjub5XTn7-tp-n6Q6Ygsbf/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Complications</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1W_KMJG--jVFQ1lwODHxeLKliwpCHRwHs/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pyrexia & Sepsis</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1romoTgRgyEvi7qCZ2Cx4WhndyyljBf3_/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Sepsis</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1VSyHTjMuBRj6AsRjh3CdmtSIUBKFAc7K/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Thrombophlebitis</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1pRz-bQhCJ51wqS94L37v-GKh1qCIPtXc/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Thrombosis</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1xRAzplJaBixZb41ITG19Qsxaq03XtRHO/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Engorgement</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1sVRISoAM80pvXqn9qL-tKMrHhytB_xUf/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Psychosis</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1p73nFI4erzyhWf30ZhDEopZW7GOgALCb/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Breast/Psych</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn quiz" onclick="openQuiz(10)"><div class="rico">✍️</div><div class="rtxt">Unit 10 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u11" data-open="false">
+<button class="ubtn" onclick="tog('u11')">
+<div class="upill"><span>Unit 11</span></div>
+<div class="uinfo"><div class="uname">High Risk Newborn</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u11">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1HRjtQ22yYi9hGwVX4fqnLoTelYZIIyxv/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>High Risk Newborn</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1nY20gTTfmspDDlyN0_p0E2XXGza1Ikqz/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Assessment</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1cIk07vnOF7vthyigTUgqXlD3in3qeTLL/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Assessment</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1hVDP9ulMY8znyAHgNXG0z1G9hFvXJaYE/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Immediate Care</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1NzSG0ZI935CRIBFP84BSC2h8ssmsZIM8/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Care</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1mVXD_sWGSPwJnfqSeJ0-xKY4mB5QyEvA/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Neurological</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/150wW6xjOqnVHNoq1dnf6MRDly7J4TWyz/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Exam</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1X1dLjMd1XAZtdBwavIf4FYA0OqfjXLE7/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>LBW/Preterm</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/18FczhHZ1P0TzbLWD8gOjI4_1V32E2UYX/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>LBW</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1qq-ZSjJNNi2K9hM4j99Wt4BAmnlxlu3o/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hyperbilirubinemia</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1GexWDy6sx44y-kV5k7PqLib7KvUNPLoz/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Jaundice</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1IV1u4GbqN2NA8kBPahRzu0oSK0JoD-lv/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hypoglycemia</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1TwGwhfJKEyc6yE7k0Fha9nIbZfTTrOys/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Metabolic</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1Up0wIsQJfL7v79seRUqKlT0vh9EbLB4O/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Convulsion/Rh</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1R6xD92QejFHkEnQegn8O3zNLwNZEi2qq/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Rh</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1ElseNGxtjVTFLZuLA719roMg6STGKB4o/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Small For Dates</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1ldaoz0lna75aeWKvKWtKSh9PZPN1c-FA/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>SFD</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1B2y9DpZYDrCBf177RXTXV8Kk5zzcgO20/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Asphyxia/RDS</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1t9-LhpeiVKlAzxzSzp9JI8P2XttsAD9o/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>RDS</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1BV9wJ8gRp7GwgF2bIB7OOIH15GyaJigd/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Sepsis</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/11237ZPNlp-BCfq1A89mMckTKKdm60Pxg/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Sepsis</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1reJ913SxONq54VsuCY-rKSvQSTJqWaSN/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hemorrhage</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/113-SNHVuNtj6ZaLOqrIQRyg50LWHRL60/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Hemorrhage</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1HWblW7rE3nnC0c0sh8gyTCy09ht7RNhX/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>HIV Mother</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1nXfhN75bRBTSDmc25Zg92qTaWBIID1aG/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>HIV</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(11)"><div class="rico">✍️</div><div class="rtxt">Unit 11 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u12" data-open="false">
+<button class="ubtn" onclick="tog('u12')">
+<div class="upill"><span>Unit 12</span></div>
+<div class="uinfo"><div class="uname">Obstetric Operations</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u12">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1KYStF8uiVsBRsPtMuXmYh1XZVkJSaBP7/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Operations</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1DmAS7Fav_Wh2zBs1LD2VlrqrNneeaIRO/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Induction</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1apw74MTLlJ2_DQ5EqwbFQrioayHwRVLd/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cephalic Version</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1Gofz3U_Nmom5uztG7SSPh3IZce7qXJoR/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Version</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1etNSZ1jiNV_o3qdBcVoPp4MA7ZxEWMKV/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Manual Removal</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/10HoLFmoiZVAW-JQw6oLJXs_lqeJx0_Lo/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Sterilization</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1LbbVCkQykLRjTDxaUjUHqQZpThk5Soyt/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Sterilization</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1OiICpcINBd8vM1GNKb2EpStw9HpBzSi3/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Forceps</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/11mx6S5CH8HBImnw8dUU6HutiIYRGCyPm/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>C-Section</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1HWik6VmQksUux13z_AAJC3MQfVAbMZo0/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>C-Section</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1YC6LbjvfaO5DfXwtsgrjKQkXaaCTZtjp/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Destructive Ops</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/14LVB1_HU_CqBup3lHCT8svohU52kbQ3S/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Destructive</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1C79qrDZdRHU0mZA_t4Fpr57ryHgCkLBD/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>D&E / D&C</small></div></button>
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1ytOykj6OfO5rp0REa_LPlj4jVrgXdoVP/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>D&C</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn quiz" onclick="openQuiz(12)"><div class="rico">✍️</div><div class="rtxt">Unit 12 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u13" data-open="false">
+<button class="ubtn" onclick="tog('u13')">
+<div class="upill"><span>Unit 13</span></div>
+<div class="uinfo"><div class="uname">Drugs in Obstetrics</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u13">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1H5rjOuOXVSKPCGCB7C7t58F8mnwA0_VL/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Drugs</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1dRoE9H7gO17VgK3qlhDCrl10oS7ga3bQ/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Antibiotics</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1Zn-IcrwazmCVY8mGD5hTjFXNCF7n1CYS/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Antibiotics</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1REIubqVx53oJdsd63jXb7pIXUChpjOzH/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Newborn Drugs</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1YkSXuAxiCm35lIFiEXIKkyEN5EE3mYeL/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Newborn</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(13)"><div class="rico">✍️</div><div class="rtxt">Unit 13 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+<div class="uc" id="u14" data-open="false">
+<button class="ubtn" onclick="tog('u14')">
+<div class="upill"><span>Unit 14</span></div>
+<div class="uinfo"><div class="uname">Ethical & Legal Aspects</div><div class="umeta">Notes · Videos · Quiz</div></div>
+<div class="uright"><svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+</button>
+<div class="ubody" id="b-u14">
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/1cTuj2tsjN2n3L8_MEo3P-v9hgFXc5Rt2/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Ethics</small></div></button>
+<button class="rbtn video" onclick="openLink('https://drive.google.com/file/d/1vwQAOXFbdFxh43KXWKcFyVlxD6dAMO5v/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Legal Aspects</small></div></button>
+</div>
+<div class="rrow">
+<button class="rbtn notes" onclick="openLink('https://drive.google.com/file/d/119HvcGA_OFABTAC5zlv4azMF9IqTp4CA/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Legal</small></div></button>
+<button class="rbtn quiz" onclick="openQuiz(14)"><div class="rico">✍️</div><div class="rtxt">Unit 14 Quiz<small>10 questions</small></div></button>
+</div>
+</div>
+</div>
+
+</main>
+<div class="qoverlay" id="qmodal">
+<div class="qscrim" onclick="closeQuiz()"></div>
+<div class="qpanel">
+<div class="qhead">
+<div class="qhead-top"><div class="qtitle" id="qtitle">Quiz</div><button class="qclose" onclick="closeQuiz()">✕</button></div>
+<div class="qpips" id="qpips"></div>
+</div>
+<div class="qbody" id="qbody"></div>
+</div>
+</div>
+<script>
+function goBackToApp(){if(window.parent&&window.parent!==window){window.parent.postMessage({action:'goBack'},'*');}else{history.back();}}
+function openLink(url) {
+if(!url || url==='COMING SOON' || url===''){ alert('This resource is coming soon!'); return; }
+let clean = url;
+if(clean.includes('drive.google.com')){
+clean = clean.replace(/\/preview.*$/,'').replace(/\/view.*$/,'')+'/view';
+} else if(clean.includes('human.biodigital.com')) {
+clean = clean.replace(/\/viewer\//, '/widget/').replace(/\/view\?/, '/widget?');
+}
+window.open(clean, '_blank');
+}
+function tog(id){const card=document.getElementById(id);const body=document.getElementById('b-'+id);const open=card.dataset.open==='true';card.dataset.open=String(!open);body.classList.toggle('open',!open);}
+const QD={
+1:[{"q":"Which of the following theories of midwifery emphasizes promoting normal physiological childbirth and advocating for women's choices during the birthing process?","o":["Cross-link theory","Holistic theory","Normal Birth Advocacy","Programmed cellular aging theory"],"a":2},{"q":"What is the primary goal of gynaecological nursing as outlined in the unit?","o":["Managing high-risk pregnancies","Conducting surgeries on reproductive organs","Providing comprehensive care to women throughout their reproductive lives","Managing cardiovascular diseases in women"],"a":2},{"q":"Which aspect of midwifery care involves offering information on family planning and contraceptive methods?","o":["Prenatal care","Postpartum care","Labor support","Menstrual health care"],"a":1},{"q":"In what settings can midwives provide care and support to pregnant women, as described in the unit?","o":["Hospitals and birth centers only","Hospitals and community clinics","Birth centers and homes only","Hospitals, birth centers, and homes"],"a":3},{"q":"What is a vital competency of midwives during the postpartum period as described in the document?","o":["Performing surgical procedures","Providing mental health counseling to children","Offering breastfeeding support and newborn care","Treating infections in newborns"],"a":2},{"q":"Which of the following trends in midwifery nursing in India involves efforts to enhance training and education programs?","o":["Technological advancements","Increased emphasis on midwifery education","Community-based care","Advocacy for women's rights"],"a":1},{"q":"What is the primary focus of obstetrics?","o":["Female reproductive health","Pregnancy, labor, and postpartum care","Menstrual health management","Pediatric care"],"a":1},{"q":"Which healthcare professionals specialize in the diagnosis and treatment of conditions related to the female reproductive system?","o":["Obstetricians","Pediatricians","Gynecologists","Surgeons"],"a":2},{"q":"Which term refers to the number of live births per 1000 people in a given population?","o":["Fertility rate","Death rate","Birth rate","Migration rate"],"a":2},{"q":"Which of the following best describes the primary role of a midwife?","o":["To perform surgical procedures during childbirth","To provide prenatal, labor, and postnatal care to pregnant women and support normal childbirth","To diagnose and treat complex medical conditions unrelated to pregnancy","To administer vaccinations and routine health checks for infants and children"],"a":1}],
+2:[{"q":"Which of the following is the most favorable pelvic type for childbirth?","o":["Android Pelvis","Anthropoid Pelvis","Gynecoid Pelvis","Platypelloid Pelvis"],"a":2},{"q":"The transverse diameter of the pelvic inlet measures approximately:","o":["11 cm","12 cm","13 cm","14 cm"],"a":2},{"q":"Which ligament provides structural support to the breast tissue?","o":["Sacrotuberous Ligament","Cooper's Ligaments","Round Ligament","Broad Ligament"],"a":1},{"q":"During which phase of the menstrual cycle does the endometrium thicken to prepare for potential pregnancy?","o":["Menstrual Phase","Follicular Phase","Ovulatory Phase","Luteal Phase"],"a":3},{"q":"The anteroposterior diameter of the pelvic outlet averages about:","o":["10 cm","11 cm","12 cm","13 cm"],"a":1},{"q":"Which component of the female reproductive system produces estrogen and progesterone?","o":["Uterus","Ovaries","Fallopian Tubes","Mammary Glands"],"a":1},{"q":"The external genitalia (vulva) includes all of the following except:","o":["Labia Majora","Clitoris","Cervix","Mons Pubis"],"a":2},{"q":"Which of the following is the site of fertilization in the female reproductive system?","o":["Vagina","Uterus","Ovaries","Fallopian Tubes"],"a":3},{"q":"What is the role of the mammary glands in the female reproductive system?","o":["To produce eggs","To nourish the embryo","To produce milk","To release hormones"],"a":2},{"q":"Which structure serves as the birth canal during childbirth?","o":["Fallopian Tubes","Cervix","Vagina","Uterus"],"a":2}],
+3:[{"q":"Which process in females is arrested until puberty and resumes development monthly thereafter?","o":["Spermatogenesis","Oogenesis","Fertilization","Capacitation"],"a":1},{"q":"Which structure allows the exchange of oxygen and nutrients between maternal and fetal blood?","o":["Umbilical Cord","Chorionic Villi","Amniotic Sac","Foramen Ovale"],"a":1},{"q":"During spermatogenesis, which stage directly results in the formation of haploid spermatids?","o":["Mitosis","Meiosis I","Meiosis II","Differentiation"],"a":2},{"q":"Which fetal circulatory structure connects the pulmonary artery to the aorta, bypassing the lungs?","o":["Ductus Venosus","Foramen Ovale","Ductus Arteriosus","Umbilical Vein"],"a":2},{"q":"What is the primary function of the placenta during pregnancy?","o":["Production of sperm and eggs","Gas exchange and nutrient transfer","Initiating ovulation","Protection against external injuries"],"a":1},{"q":"Which term describes the premature separation of the placenta from the uterine wall?","o":["Placenta Previa","Placental Abruption","Placenta Accreta","Chorioamnionitis"],"a":1},{"q":"What marks the beginning of the fetal period in human development?","o":["Fertilization","Formation of the morula","Start of organogenesis","Transition from embryo to fetus around the 9th week"],"a":3},{"q":"What is the process by which male gametes are produced?","o":["Oogenesis","Spermatogenesis","Fertilization","Cleavage"],"a":1},{"q":"Which cell is released from the ovary during ovulation?","o":["Spermatocyte","Secondary oocyte","Zygote","Blastocyst"],"a":1},{"q":"Where does fertilization typically occur in the female reproductive system?","o":["Uterus","Ovary","Fallopian Tube","Cervix"],"a":2}],
+4:[{"q":"What is the first stage of fetal development after fertilization?","o":["Gastrulation","Blastocyst formation","Organogenesis","Implantation"],"a":1},{"q":"At what point during pregnancy does the fetal period typically begin?","o":["1st week","3rd week","9th week","12th week"],"a":2},{"q":"Which structure provides nutrients and oxygen to the fetus?","o":["Uterus","Placenta","Amniotic fluid","Umbilical cord"],"a":1},{"q":"What hormone is primarily responsible for maintaining pregnancy during the early stages?","o":["Estrogen","Progesterone","Human Chorionic Gonadotropin (hCG)","Oxytocin"],"a":2},{"q":"During which process does the blastocyst attach to the uterine lining?","o":["Fertilization","Cleavage","Implantation","Gastrulation"],"a":2},{"q":"What is the role of the trophoblast cells during implantation?","o":["Forming the neural tube","Providing nutrients to the fetus","Adhering to and invading the uterine lining","Producing amniotic fluid"],"a":2},{"q":"What marks the transition from the embryonic period to the fetal period?","o":["Completion of organogenesis","Formation of the blastocyst","Beginning of implantation","Development of the placenta"],"a":0},{"q":"Which process involves the fusion of genetic material from both parents to form a zygote?","o":["Gastrulation","Fertilization","Neurulation","Organogenesis"],"a":1},{"q":"The umbilical cord contains:","o":["One artery and two veins","Two arteries and one vein","Three arteries","Two veins and no arteries"],"a":1},{"q":"Which stage is primarily focused on the growth and maturation of the fetus?","o":["Gastrulation","Embryonic period","Fetal period","Neurulation"],"a":2}],
+5:[{"q":"Which of the following is the most accurate method to assess the progress of labor?","o":["Maternal pain score","Frequency of uterine contractions","Cervical dilation","Fetal heart rate monitoring"],"a":2},{"q":"Which stage of labor involves the delivery of the placenta?","o":["First stage","Second stage","Third stage","Fourth stage"],"a":2},{"q":"What is the most common cause of postpartum hemorrhage following a normal delivery?","o":["Retained placenta","Uterine atony","Lacerations of the birth canal","Coagulopathy"],"a":1},{"q":"Which maneuver is performed to assist the delivery of the shoulders during childbirth?","o":["McRoberts maneuver","Leopold’s maneuver","Brandt-Andrews maneuver","Ritgen’s maneuver"],"a":0},{"q":"Which of the following indicates the onset of true labor?","o":["Irregular contractions","Increase in Braxton Hicks contractions","Progressive cervical effacement and dilation","Sudden relief from back pain"],"a":2},{"q":"In the active phase of labor, how many centimeters should the cervix typically dilate per hour in a primigravida?","o":["0.5 cm","1.0 cm","1.5 cm","2.0 cm"],"a":1},{"q":"Which fetal position is most favorable for a vaginal delivery?","o":["Occiput posterior","Breech","Occiput anterior","Transverse lie"],"a":2},{"q":"What is the average duration of the first stage of labor for a primigravida?","o":["4–6 hours","6–8 hours","8–12 hours","12–14 hours"],"a":2},{"q":"Which of the following is a sign that a woman is in the second stage of labor?","o":["Regular contractions","Rupture of membranes","Feeling the urge to push","Cervix is 4 cm dilated"],"a":2},{"q":"What is the primary purpose of Leopold's maneuvers?","o":["To assess fetal well-being","To determine the position and presentation of the fetus","To measure the intensity of uterine contractions","To evaluate the progress of cervical dilation"],"a":1}],
+6:[{"q":"Which of the following is the most appropriate method to assess the oxygenation status of a newborn?","o":["Apgar Score","Pulse oximetry","Capillary refill time","Blood pressure measurement"],"a":1},{"q":"What is the initial step in the management of a newborn with suspected hypoglycemia?","o":["Administer intravenous glucose","Feed the newborn breast milk","Observe the newborn","Perform a blood glucose test"],"a":3},{"q":"Which condition is characterized by an abnormal accumulation of fluid in two or more fetal compartments?","o":["Neonatal sepsis","Respiratory distress syndrome","Hydrocephalus","Hydrops fetalis"],"a":3},{"q":"Which of the following interventions is most crucial in the first 30 seconds of neonatal resuscitation?","o":["Chest compressions","Intubation","Effective ventilation with bag-mask","Administration of epinephrine"],"a":2},{"q":"A newborn is delivered with meconium-stained amniotic fluid. What is the initial management step?","o":["Immediate endotracheal suctioning","Stimulate the newborn to cry","Dry the newborn and keep warm","Delay cord clamping"],"a":2},{"q":"In the management of a newborn with suspected neonatal sepsis, which of the following is the most appropriate initial step?","o":["Start empirical antibiotic therapy","Obtain blood cultures","Perform a lumbar puncture","Administer antiviral medication"],"a":1},{"q":"What is the most common cause of respiratory distress in a preterm newborn?","o":["Bronchopulmonary dysplasia","Transient tachypnea of the newborn","Respiratory distress syndrome (RDS)","Pneumonia"],"a":2},{"q":"What is the normal range of heart rate for a newborn?","o":["60–100 beats per minute","80–120 beats per minute","100–160 beats per minute","140–180 beats per minute"],"a":2},{"q":"Which of the following is a common cause of jaundice in newborns?","o":["Iron deficiency","Hyperbilirubinemia","Hypoglycemia","Vitamin D deficiency"],"a":1},{"q":"What is the first immunization given to a newborn?","o":["Hepatitis B vaccine","BCG vaccine","DTaP vaccine","Rotavirus vaccine"],"a":0}],
+7:[{"q":"Which of the following factors is most important in assessing uterine involution in the postpartum period?","o":["Maternal pulse rate","Uterine consistency and position","Amount of lochia","Breastfeeding frequency"],"a":1},{"q":"What is the most likely cause of postpartum hemorrhage occurring more than 24 hours after delivery?","o":["Uterine atony","Retained placental fragments","Cervical laceration","Coagulation disorders"],"a":1},{"q":"Which hormone is primarily responsible for lactation during the puerperium?","o":["Oxytocin","Progesterone","Prolactin","Estrogen"],"a":2},{"q":"During the normal puerperium, when is the uterus expected to return to its pre-pregnancy size?","o":["1 week postpartum","4–6 weeks postpartum","8–10 weeks postpartum","12–14 weeks postpartum"],"a":1},{"q":"Which of the following is a critical sign of postpartum infection that requires immediate medical attention?","o":["Fever above 38°C (100.4°F) after the first 24 hours postpartum","Mild cramping and bleeding","Moderate swelling of the legs","Mood swings and fatigue"],"a":0},{"q":"What is the primary purpose of administering Rh immunoglobulin to a Rh-negative mother during the puerperium?","o":["To enhance uterine involution","To prevent Rh sensitization in future pregnancies","To decrease postpartum bleeding","To increase milk production"],"a":1},{"q":"Which of the following interventions is most effective in preventing thromboembolic complications during the puerperium?","o":["Encouraging early ambulation","Administering anticoagulants routinely","Applying hot compresses to the legs","Restricting fluid intake"],"a":0},{"q":"When should breastfeeding ideally be initiated after birth?","o":["Within the first hour","After 24 hours","After 6 hours","After the mother has rested"],"a":0},{"q":"Which of the following is the best indicator of adequate milk intake in a newborn?","o":["The frequency of breastfeeding","The number of wet diapers per day","The amount of sleep the newborn gets","The newborn's weight at birth"],"a":1},{"q":"Which type of lochia is expected to be seen first during the postpartum period?","o":["Lochia serosa","Lochia alba","Lochia rubra","Lochia purulent"],"a":2}],
+8:[{"q":"What is the most common location for an ectopic pregnancy?","o":["Ovary","Cervix","Ampulla of the fallopian tube","Abdominal cavity"],"a":2},{"q":"Which of the following is NOT a risk factor for ectopic pregnancy?","o":["Pelvic inflammatory disease","Use of intrauterine devices (IUCD)","First pregnancy","Previous ectopic pregnancy"],"a":2},{"q":"What hormone is primarily associated with the cause of Hyperemesis Gravidarum?","o":["Estrogen","Progesterone","Human chorionic gonadotropin (HCG)","Oxytocin"],"a":2},{"q":"What is the main treatment approach for severe Hyperemesis Gravidarum?","o":["Bed rest","Intravenous fluid and electrolyte replacement","Oral rehydration therapy","Dietary changes"],"a":1},{"q":"Pre-eclampsia is primarily characterized by which of the following?","o":["Low blood pressure and proteinuria","High blood pressure and proteinuria","Severe nausea and vomiting","Abdominal pain and jaundice"],"a":1},{"q":"Which of the following is NOT a common risk factor for pre-eclampsia?","o":["First pregnancy","Age over 35","Low body weight","Multiple pregnancies"],"a":2},{"q":"Eclampsia is characterized by which type of convulsions?","o":["Tonic-clonic seizures","Absence seizures","Focal seizures","Myoclonic seizures"],"a":0},{"q":"What is the typical first-line management for eclampsia during a convulsion?","o":["Oral magnesium sulfate","Intravenous diazepam","Immediate caesarean section","Induced labor"],"a":1},{"q":"Polyhydramnios is defined as an amniotic fluid volume exceeding how many milliliters?","o":["500 ml","1000 ml","1500 ml","2000 ml"],"a":2},{"q":"Which of the following conditions is associated with oligohydramnios?","o":["Multiple pregnancies","Esophageal atresia","Fetal renal abnormalities","Maternal diabetes"],"a":2}],
+9:[{"q":"What is the normal position of the fetal occiput during labor?","o":["Occiput Anterior (OA)","Occiput Posterior (OP)","Occiput Lateral (OL)","Occiput Transverse (OT)"],"a":0},{"q":"Which type of breech presentation involves the thighs being flexed and the legs extended along the fetal abdomen?","o":["Complete Breech","Frank Breech","Footling Breech","Knee Presentation"],"a":1},{"q":"What is the most common treatment for a retained placenta?","o":["Blood transfusion","Surgical removal","Manual removal of the placenta","Induction of labor"],"a":2},{"q":"Which of the following is a cause of postpartum hemorrhage?","o":["Amniotic fluid embolism","Retained cotyledons","Shoulder dystocia","Vasa Previa"],"a":1},{"q":"What does the term \"shoulder dystocia\" refer to?","o":["Fetal shoulder becomes trapped behind the mother's pubic bone","The umbilical cord is wrapped around the shoulder","The shoulder of the fetus is the presenting part","The shoulders are dislocated during birth"],"a":0},{"q":"Which of the following is NOT a risk factor for umbilical cord prolapse?","o":["Abnormal fetal presentation","Full-term pregnancy","Premature rupture of membranes","Polyhydramnios"],"a":1},{"q":"In which type of pelvis contraction does the fetal head slightly overlap at the edge of the pubis?","o":["Mild contraction","Moderate contraction","Severe contraction","Complete contraction"],"a":1},{"q":"Which of the following is a sign of uterine rupture?","o":["Decreased urine output","Abdominal pain","Increased fetal movement","Decreased heart rate"],"a":1},{"q":"Which maneuver is used to manage shoulder dystocia?","o":["Suprapubic pressure","Manual replacement of the uterus","McRoberts maneuver","Both A and C"],"a":3},{"q":"What is the management for amniotic fluid embolism?","o":["Blood transfusion","Oxygen therapy","Surgical removal of the placenta","Episiotomy"],"a":1}],
+10:[{"q":"Which of the following is the most accurate description of the involution process of the uterus during the puerperium?","o":["The uterus returns to its pre-pregnant size and position within 1–2 weeks","The uterus returns to its pre-pregnant size within 6 weeks, with the fundus descending 1 cm per day","The uterus remains enlarged for up to 12 weeks postpartum","Involution of the uterus is typically complete by the end of the first trimester postpartum"],"a":1},{"q":"Which hormone plays the most significant role in the process of lactation during the puerperium?","o":["Estrogen","Progesterone","Prolactin","Oxytocin"],"a":2},{"q":"What is the expected normal range for the duration of lochia rubra following vaginal delivery?","o":["1–2 days","3–4 days","5–7 days","7–14 days"],"a":1},{"q":"Which of the following is a potential complication of the postpartum period that requires immediate medical attention?","o":["Postpartum diaphoresis","Postpartum fatigue","Postpartum hemorrhage","Postpartum hair loss"],"a":2},{"q":"During the puerperium, what is the recommended daily fluid intake for a postpartum woman to support lactation and recovery?","o":["1–1.5 liters","2–2.5 liters","3–3.5 liters","4 liters"],"a":1},{"q":"What is the primary clinical significance of assessing the perineum during the postpartum period?","o":["To monitor for signs of infection or healing","To evaluate the effectiveness of breastfeeding","To measure the level of postpartum depression","To assess the return of menstrual cycles"],"a":0},{"q":"Which condition is characterized by the presence of excessive bleeding and a significant drop in blood pressure postpartum?","o":["Postpartum preeclampsia","Postpartum anemia","Postpartum hemorrhage","Postpartum thrombosis"],"a":2},{"q":"What is the common term used to describe the period immediately after childbirth?","o":["Menstruation","Puerperium","Conception","Ovulation"],"a":1},{"q":"Which type of lochia is characterized by its red color and occurs immediately after delivery?","o":["Lochia serosa","Lochia alba","Lochia rubra","Lochia purulent"],"a":2},{"q":"What is the primary purpose of postpartum visits by healthcare providers?","o":["To assess the baby's development","To ensure the mother's recovery and identify any complications","To schedule the mother's next pregnancy","To initiate new vaccinations"],"a":1}],
+11:[{"q":"What is the neonatal period?","o":["First 7 days after birth","First 14 days after birth","First 28 days after birth","First 42 days after birth"],"a":2},{"q":"Which of the following is a characteristic of a term normal newborn?","o":["Born before 37 weeks of gestation","Born between 37 and 42 weeks of gestation","Weighs less than 1500 g","Born after 42 weeks of gestation"],"a":1},{"q":"What is the weight range of a normal newborn?","o":["1.5 – 2.5 kg","2.5 – 3.9 kg","3.9 – 4.5 kg","4.5 – 5.0 kg"],"a":1},{"q":"Which of the following is not part of the APGAR score?","o":["Respiration","Muscle tone","Skin color","Weight"],"a":3},{"q":"At what time does the first period of reactivity occur in a newborn?","o":["First 6–8 hours of life","12 hours after birth","24 hours after birth","36 hours after birth"],"a":0},{"q":"Which reflex is characterized by the infant turning their head towards any object that touches their cheek?","o":["Moro reflex","Rooting reflex","Grasp reflex","Babinski reflex"],"a":1},{"q":"What does a depressed fontanelle in a newborn indicate?","o":["Hydrocephalus","Dehydration","Meningitis","Normal finding"],"a":1},{"q":"Which of the following is a sign of respiratory distress in a newborn?","o":["Nasal flaring","Flexed posture","Pink skin","Vigorous crying"],"a":0},{"q":"Which of the following is a characteristic of physiological jaundice in a newborn?","o":["Appears within 24 hours of birth","Peaks on the 4th day","Caused by hemolysis due to ABO incompatibility","Persists beyond 10 days in term infants"],"a":1},{"q":"Which of the following conditions is indicated by a bilirubin level of more than 15 mg/dL in a newborn?","o":["Physiological jaundice","Pathological jaundice","Hypoglycemia","Hypothermia"],"a":1}],
+12:[{"q":"Which of the following conditions is a contraindication to the induction of labor?","o":["Prolonged pregnancy","Gestational diabetes","Fetal distress","Premature rupture of membranes"],"a":2},{"q":"Which hormone is commonly administered to induce uterine contractions during labor induction?","o":["Prostaglandin","Oxytocin","Estrogen","Relaxin"],"a":1},{"q":"What is the main risk associated with the induction of labor using pharmacological methods?","o":["Preterm labor","Placental abruption","Uterine hyperstimulation","Fetal macrosomia"],"a":2},{"q":"Which of the following is NOT a recommended non-pharmacological method for inducing labor?","o":["Nipple stimulation","Membrane stripping","Aromatherapy","High-intensity exercise"],"a":3},{"q":"What is the primary goal of an External Cephalic Version (ECV)?","o":["To ripen the cervix","To stimulate uterine contractions","To manually turn a breech baby to a head-down position","To initiate the rupture of membranes"],"a":2},{"q":"What is the primary concern when the amniotic sac ruptures before the onset of labor (PROM)?","o":["Fetal macrosomia","Increased risk of infection","Maternal hypertension","Uterine rupture"],"a":1},{"q":"Which method involves inserting a balloon catheter into the cervix to encourage dilation?","o":["Amniotomy","Foley catheter","Membrane stripping","Oxytocin infusion"],"a":1},{"q":"Induction of labor is often recommended when pregnancy extends beyond how many weeks?","o":["40 weeks","42 weeks","36 weeks","38 weeks"],"a":1},{"q":"Which of the following is a surgical method of labor induction?","o":["Foley catheter","Oxytocin infusion","Amniotomy","Prostaglandin gel"],"a":2},{"q":"Which condition is commonly associated with gestational diabetes during pregnancy?","o":["Shoulder dystocia","Uterine rupture","Placenta previa","Preeclampsia"],"a":0}],
+13:[{"q":"Which of the following drugs is used to enhance fetal lung maturation in cases of preterm labor?","o":["Oxytocin","Betamethasone","Misoprostol","Magnesium sulfate"],"a":1},{"q":"Which class of drugs is commonly used to inhibit uterine contractions and prevent preterm labor?","o":["Oxytocic","Tocolytics","Antibiotics","Analgesics"],"a":1},{"q":"Which of the following antibiotics is generally considered safe for use during pregnancy, especially for treating urinary tract infections?","o":["Ciprofloxacin","Nitrofurantoin","Tetracycline","Doxycycline"],"a":1},{"q":"Which of the following drugs is contraindicated in pregnancy due to its known teratogenic effects, particularly causing severe birth defects?","o":["Labetalol","Penicillin","Isotretinoin","Erythromycin"],"a":2},{"q":"Which anticoagulant is preferred during pregnancy to avoid fetal harm?","o":["Warfarin","Aspirin","Heparin","Clopidogrel"],"a":2},{"q":"Which drug is administered to Rh-negative mothers to prevent Rh incompatibility issues in future pregnancies?","o":["Magnesium sulfate","Methotrexate","Rh Immune Globulin (RhIg)","Terbutaline"],"a":2},{"q":"Which class of antibiotics should be avoided during pregnancy due to the risk of affecting fetal bone development?","o":["Macrolides","Tetracyclines","Penicillins","Cephalosporins"],"a":1},{"q":"Which analgesic method is commonly used for pain relief during labor?","o":["Epidural anesthesia","Ibuprofen","Acetaminophen","Aspirin"],"a":0},{"q":"What is the primary use of Oxytocin (Pitocin) in obstetrics?","o":["To inhibit uterine contractions","To prevent infection","To induce or augment labor","To enhance fetal lung maturation"],"a":2},{"q":"Which antibiotic is commonly administered to women with Group B Streptococcus (GBS) colonization during labor?","o":["Vancomycin","Penicillin","Ciprofloxacin","Amoxicillin"],"a":1}],
+14:[{"q":"Which ethical principle in midwifery emphasizes the duty to \"do no harm\"?","o":["Autonomy","Beneficence","Non-Maleficence","Justice"],"a":2},{"q":"What legal obligation must midwives fulfill when a high-risk pregnancy is identified?","o":["Provide immediate medical treatment","Refer to another healthcare professional","Continue monitoring without intervention","Discharge the patient"],"a":1},{"q":"Which of the following is NOT a component of the Mother and Child Tracking System (MCTS)?","o":["Risk Assessment and Referral","Child Growth Monitoring","Patient Confidentiality Breach","Immunization Tracking"],"a":2},{"q":"In the context of midwifery, what does the legal principle of \"Informed Consent\" require from midwives?","o":["Providing medical advice without consent","Keeping patients uninformed to avoid stress","Adequately informing patients before care or intervention","Refusing care if consent is not given"],"a":2},{"q":"What is the primary purpose of the ethical and legal aspects of midwifery?","o":["Ensuring midwives work independently","Enhancing the autonomy of midwives","Protecting patient safety and well-being","Reducing the number of healthcare professionals involved"],"a":2},{"q":"Which principle in midwifery promotes fairness and equality in the distribution of healthcare resources?","o":["Autonomy","Justice","Integrity","Confidentiality"],"a":1},{"q":"What does the Mother and Child Tracking System (MCTS) primarily monitor during pregnancy?","o":["Genetic disorders","Nutritional habits","Prenatal care and immunizations","Family history"],"a":2},{"q":"Which ethical principle involves respecting the pregnant individual's right to make informed decisions about their care?","o":["Autonomy","Beneficence","Non-Maleficence","Justice"],"a":0},{"q":"What is the main purpose of the Mother and Child Tracking System (MCTS)?","o":["Track and improve maternal and child health","Register newborns for citizenship","Monitor healthcare providers' performance","Allocate healthcare resources"],"a":0},{"q":"Which of the following is a legal requirement for midwives?","o":["Ignoring patient preferences","Practicing without certification","Accurate documentation of care","Concealing patient information from other professionals"],"a":2}]
+};
+let curQuiz=null,answered=[];
+function openQuiz(id){
+curQuiz=id;
+const qs=QD[id]||[];
+answered=new Array(qs.length).fill(null);
+document.getElementById('qtitle').textContent='Unit '+id+' Quiz';
+document.getElementById('qpips').innerHTML=qs.map((_,i)=>`<div class="pip" id="pip${i}"></div>`).join('');
+let html=`<div class="qscore" id="qscore"><div><div class="qs-num" id="qsnum">—</div><div class="qs-sub">Score</div></div><div class="qs-msg" id="qsmsg"></div></div>`;
+qs.forEach((q,qi)=>{
+html+=`<div class="qitem" id="qi${qi}"><div class="qlbl">Question ${qi+1} of ${qs.length}</div><div class="qtext">${q.q}</div><div class="qopts">${q.o.map((opt,oi)=>`<button class="qopt" id="opt${qi}_${oi}" onclick="ans(${qi},${oi},${q.a})"><span class="qltr">${['A','B','C','D'][oi]}</span>${opt}</button>`).join('')}</div></div>`;
+});
+document.getElementById('qbody').innerHTML=html;
+document.getElementById('qmodal').classList.add('open');
+document.body.style.overflow='hidden';
+}
+function ans(qi,oi,correct){
+if(answered[qi]!==null)return;
+answered[qi]=oi;
+const opts=document.querySelectorAll(`#qi${qi} .qopt`);
+opts.forEach(b=>b.classList.add('lock'));
+opts[correct].classList.add('cor');
+if(oi!==correct)opts[oi].classList.add('wrg');
+const pip=document.getElementById('pip'+qi);
+pip.classList.add('ans',oi===correct?'cor':'wrg');
+if(answered.every(a=>a!==null)){
+const score=answered.filter((a,i)=>a===QD[curQuiz][i].a).length;
+const total=QD[curQuiz].length;
+const pct=Math.round(score/total*100);
+const msgs=['📚 Keep Studying!','👍 Good Effort!','🎉 Well Done!','🏆 Perfect!'];
+const mi=pct<50?0:pct<70?1:pct<100?2:3;
+document.getElementById('qsnum').textContent=score+'/'+total;
+document.getElementById('qsmsg').textContent=msgs[mi];
+const sc=document.getElementById('qscore');
+sc.classList.add('show');
+sc.scrollIntoView({behavior:'smooth',block:'start'});
+}
+}
+function closeQuiz(){
+document.getElementById('qmodal').classList.remove('open');
+document.body.style.overflow='';
+curQuiz=null;
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQuiz();});
+</script>
 </body>
 </html>
