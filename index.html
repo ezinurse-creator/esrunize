@@ -363,7 +363,8 @@
     }
     .demo-badge {
         background: rgba(255,255,255,0.2); border-radius: 20px;
-        padding: 2px 10px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.5px;
+        padding: 4px 16px; font-size: 1.4rem; font-weight: 800; letter-spacing: 2px;
+        display: inline-block; margin-bottom: 6px;
     }
 
     .demo-grid {
@@ -722,10 +723,8 @@
         <!-- Hero banner -->
         <div class="demo-hero">
             <div class="demo-badge" id="demo-badge">DEMO</div>
-            <div class="demo-subject-name" id="demo-subject-name">Subject Name</div>
-            <div class="demo-subject-meta" id="demo-subject-meta">
-                <span class="material-icons-round" style="font-size:14px;">school</span>
-                <span id="demo-subject-course">Course</span>
+            <div class="demo-subject-meta" style="margin-top:6px;">
+                <span id="demo-subject-course">Preview before you buy</span>
             </div>
         </div>
 
@@ -1223,7 +1222,6 @@ const _realApp = {
     // Demo screen shown for ALL locked course sections (replaces old paywall view)
     openSectionDemo: function(course, section) {
         this._demoSubject = { label: section, link: null, course, section };
-        document.getElementById('demo-subject-name').textContent = course + ' Nursing — ' + section;
         document.getElementById('demo-subject-course').textContent = 'Preview before you buy';
         document.getElementById('demo-badge').textContent = 'DEMO';
         document.getElementById('header-title').textContent = section;
@@ -1287,25 +1285,29 @@ const _realApp = {
         el.innerHTML = html;
     },
 
+    _openDemoUrl: function(url) {
+        if (!url || url === 'about:blank') { alert('Demo content coming soon!'); return; }
+        // Same as openPDF in subject pages: strip to /view and open in new tab
+        const clean = url.replace(/\/preview.*$/, '').replace(/\/view.*$/, '') + '/view';
+        window.open(clean, '_blank');
+    },
+
     demoOpenVideo: function() {
         if (!this._demoSubject) return;
         const key = this._demoSubject.link;
-        const url = (DEMO_URLS[key] && DEMO_URLS[key].video) || 'about:blank';
-        this.openContent(url, 'Video Demo – ' + this._demoSubject.label.replace(/<[^>]*>?/gm, ''));
+        this._openDemoUrl((DEMO_URLS[key] && DEMO_URLS[key].video) || 'about:blank');
     },
 
     demoOpenLectureNote: function() {
         if (!this._demoSubject) return;
         const key = this._demoSubject.link;
-        const url = (DEMO_URLS[key] && DEMO_URLS[key].lecture) || 'about:blank';
-        this.openContent(url, 'Lecture Note Demo – ' + this._demoSubject.label.replace(/<[^>]*>?/gm, ''));
+        this._openDemoUrl((DEMO_URLS[key] && DEMO_URLS[key].lecture) || 'about:blank');
     },
 
     demoOpenDetailedNotes: function() {
         if (!this._demoSubject) return;
         const key = this._demoSubject.link;
-        const url = (DEMO_URLS[key] && DEMO_URLS[key].detailed) || 'about:blank';
-        this.openContent(url, 'Detailed Notes Demo – ' + this._demoSubject.label.replace(/<[^>]*>?/gm, ''));
+        this._openDemoUrl((DEMO_URLS[key] && DEMO_URLS[key].detailed) || 'about:blank');
     },
 
     // ============================================
