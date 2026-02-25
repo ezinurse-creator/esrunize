@@ -110,30 +110,71 @@
     .btn-outline { background: white; border: 2px solid var(--primary); color: var(--primary); }
     .btn-ghost { background: transparent; color: var(--text-muted); font-size: 0.9rem; margin-top: 10px; }
 
-    /* --- NETFLIX-STYLE SPLASH SCREEN (FIXED) --- */
+    /* --- NETFLIX-STYLE SPLASH SCREEN --- */
     #splash-screen {
         position: fixed; inset: 0; z-index: 9999;
-        background: #000000;
+        background: #ffffff;
         display: flex; align-items: center; justify-content: center;
-        transition: opacity 0.5s ease;
         overflow: hidden;
     }
-    
+
+    /* The flare overlay — mimics Netflix's sweep of light */
+    #splash-screen::before {
+        content: '';
+        position: absolute;
+        top: 50%; left: 50%;
+        width: 8px; height: 120%;
+        background: linear-gradient(to bottom,
+            transparent 0%,
+            rgba(255,255,255,0) 20%,
+            rgba(180,150,255,0.55) 48%,
+            rgba(255,255,255,0.95) 50%,
+            rgba(100,180,255,0.55) 52%,
+            rgba(255,255,255,0) 80%,
+            transparent 100%
+        );
+        transform: translate(-50%, -50%) scaleX(0);
+        transform-origin: center;
+        animation: netflixFlare 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        pointer-events: none;
+        z-index: 2;
+    }
+
+    /* Ambient glow blob behind logo */
+    #splash-screen::after {
+        content: '';
+        position: absolute;
+        top: 50%; left: 50%;
+        width: 260px; height: 260px;
+        border-radius: 50%;
+        background: radial-gradient(circle,
+            rgba(140, 100, 255, 0.18) 0%,
+            rgba(0, 145, 234, 0.10) 50%,
+            transparent 75%
+        );
+        transform: translate(-50%, -50%) scale(0);
+        animation: netflixGlow 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        pointer-events: none;
+        z-index: 1;
+    }
+
     .splash-content {
+        position: relative;
+        z-index: 3;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 15px;
         width: 100%;
-        animation: cinematicPop 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        animation: netflixLogo 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
     .splash-logo {
-        width: 60px;
-        height: 60px;
+        width: 62px; height: 62px;
         border-radius: 50%;
         object-fit: cover;
-        box-shadow: 0 0 20px rgba(94, 53, 177, 0.5);
+        filter: drop-shadow(0 0 0px rgba(94,53,177,0));
+        animation: netflixLogoGlow 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
     .splash-text-container {
@@ -144,28 +185,77 @@
 
     .splash-brand-text {
         font-family: 'Poppins', sans-serif;
-        font-size: 2.5rem;
+        font-size: 2.6rem;
         font-weight: 800;
         line-height: 1;
-        letter-spacing: 1px;
+        letter-spacing: -0.5px;
         white-space: nowrap;
         display: flex;
         gap: 2px;
     }
 
-    .sp-ezi { 
-        color: #d1c4e9; 
-        text-shadow: 0 0 10px rgba(94, 53, 177, 0.8);
+    .sp-ezi {
+        color: #5e35b1;
+        display: inline-block;
+        animation: netflixTextLeft 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
-    .sp-nurse { 
-        color: #40c4ff; 
-        text-shadow: 0 0 10px rgba(0, 145, 234, 0.8);
+    .sp-nurse {
+        color: #0091ea;
+        display: inline-block;
+        animation: netflixTextRight 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
-    @keyframes cinematicPop {
-        0% { opacity: 0; transform: scale(1.8); filter: blur(4px); }
-        30% { opacity: 1; filter: blur(0px); }
-        100% { opacity: 1; transform: scale(1); }
+    /* ── Keyframes ── */
+
+    /* Logo: starts invisible + slightly large, snaps in at ~30%, holds, then fades with screen */
+    @keyframes netflixLogo {
+        0%   { opacity: 0; transform: scale(1.15); }
+        28%  { opacity: 0; transform: scale(1.15); }
+        38%  { opacity: 1; transform: scale(1.02); }
+        55%  { opacity: 1; transform: scale(1); }
+        85%  { opacity: 1; transform: scale(1); }
+        100% { opacity: 0; transform: scale(0.92); }
+    }
+
+    /* Logo gets a purple-blue glow at peak, then fades */
+    @keyframes netflixLogoGlow {
+        0%,28% { filter: drop-shadow(0 0 0px rgba(94,53,177,0)); }
+        50%    { filter: drop-shadow(0 0 18px rgba(94,53,177,0.7)) drop-shadow(0 0 8px rgba(0,145,234,0.5)); }
+        85%    { filter: drop-shadow(0 0 8px rgba(94,53,177,0.3)); }
+        100%   { filter: drop-shadow(0 0 0px rgba(94,53,177,0)); }
+    }
+
+    /* Flare line: thin vertical light sweep expanding sideways */
+    @keyframes netflixFlare {
+        0%,25% { transform: translate(-50%,-50%) scaleX(0); opacity: 0; }
+        35%    { transform: translate(-50%,-50%) scaleX(1); opacity: 1; }
+        50%    { transform: translate(-50%,-50%) scaleX(200); opacity: 0.6; }
+        65%    { transform: translate(-50%,-50%) scaleX(400); opacity: 0; }
+        100%   { transform: translate(-50%,-50%) scaleX(400); opacity: 0; }
+    }
+
+    /* Ambient glow blob grows then fades */
+    @keyframes netflixGlow {
+        0%,25% { transform: translate(-50%,-50%) scale(0); opacity: 0; }
+        42%    { transform: translate(-50%,-50%) scale(1.1); opacity: 1; }
+        70%    { transform: translate(-50%,-50%) scale(1.4); opacity: 0.4; }
+        100%   { transform: translate(-50%,-50%) scale(1.6); opacity: 0; }
+    }
+
+    /* "Ezi" nudges slightly left as it appears, then settles */
+    @keyframes netflixTextLeft {
+        0%,30%  { opacity: 0; letter-spacing: 4px; }
+        42%     { opacity: 1; letter-spacing: -0.5px; }
+        85%     { opacity: 1; }
+        100%    { opacity: 0; }
+    }
+
+    /* "Nurse" nudges slightly right */
+    @keyframes netflixTextRight {
+        0%,32%  { opacity: 0; letter-spacing: 4px; }
+        44%     { opacity: 1; letter-spacing: -0.5px; }
+        85%     { opacity: 1; }
+        100%    { opacity: 0; }
     }
 
     .dashboard-hero { padding: 15px 20px 8px 20px; background: white; }
@@ -788,7 +878,11 @@ var pendingView = null;
 function onSplashDone() {
     if (splashDone) return;
     splashDone = true;
-    document.getElementById('splash-screen').style.display = 'none';
+    // Smooth fade out — the logo is already faded by CSS animation at 3.5s
+    var splash = document.getElementById('splash-screen');
+    splash.style.transition = 'opacity 0.4s ease';
+    splash.style.opacity = '0';
+    setTimeout(function() { splash.style.display = 'none'; }, 400);
     if (authResolved) { showApp(); }
     else { document.getElementById('auth-loading').classList.remove('hidden'); }
 }
@@ -810,7 +904,25 @@ if (sessionStorage.getItem('currentView') === 'view-iframe') {
     document.getElementById('splash-screen').style.display = 'none';
     document.getElementById('auth-loading').classList.remove('hidden');
 } else {
-    setTimeout(onSplashDone, 2000);
+    // Play audio: try immediately, fallback on first user interaction
+    var splashAudio = document.getElementById('splash-sound');
+    function tryPlayAudio() {
+        if (splashAudio) {
+            splashAudio.volume = 1.0;
+            splashAudio.play().catch(function() {
+                // Autoplay blocked — play on first touch/click
+                function playOnInteraction() {
+                    splashAudio.play().catch(function(){});
+                    document.removeEventListener('touchstart', playOnInteraction);
+                    document.removeEventListener('click', playOnInteraction);
+                }
+                document.addEventListener('touchstart', playOnInteraction, { once: true });
+                document.addEventListener('click', playOnInteraction, { once: true });
+            });
+        }
+    }
+    tryPlayAudio();
+    setTimeout(onSplashDone, 3500);
 }
 </script>
 
