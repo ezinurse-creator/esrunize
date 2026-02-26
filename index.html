@@ -135,7 +135,7 @@
         );
         transform: translate(-50%, -50%) scaleX(0);
         transform-origin: center;
-        animation: netflixFlare 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        animation: netflixFlare 3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         pointer-events: none;
         z-index: 2;
     }
@@ -153,7 +153,7 @@
             transparent 75%
         );
         transform: translate(-50%, -50%) scale(0);
-        animation: netflixGlow 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        animation: netflixGlow 3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         pointer-events: none;
         z-index: 1;
     }
@@ -165,17 +165,39 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 0;
         width: 100%;
-        animation: netflixLogo 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        animation: netflixLogo 3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
+    .splash-logo-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .splash-logo-glow {
+        position: absolute;
+        width: 180px; height: 180px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.5) 35%, rgba(255,255,255,0) 70%);
+        animation: splashGlowPulse 3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        z-index: 0;
+    }
+    @keyframes splashGlowPulse {
+        0%   { opacity: 0; transform: scale(0.4); }
+        30%  { opacity: 0; transform: scale(0.4); }
+        45%  { opacity: 1; transform: scale(1); }
+        75%  { opacity: 1; transform: scale(1.05); }
+        100% { opacity: 0; transform: scale(1.1); }
+    }
     .splash-logo {
-        width: 110px; height: 110px;
+        width: 150px; height: 150px;
         border-radius: 50%;
         object-fit: cover;
-        filter: drop-shadow(0 0 0px rgba(94,53,177,0));
-        animation: netflixLogoGlow 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        position: relative;
+        z-index: 1;
+        animation: netflixLogoGlow 3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
     .splash-text-container {
@@ -199,12 +221,12 @@
     .sp-ezi {
         color: #5e35b1;
         display: inline-block;
-        animation: netflixTextLeft 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        animation: netflixTextLeft 3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
     .sp-nurse {
         color: #0091ea;
         display: inline-block;
-        animation: netflixTextRight 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        animation: netflixTextRight 3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
     /* ── Keyframes ── */
@@ -537,7 +559,10 @@
 <!-- SPLASH SCREEN -->
 <div id="splash-screen">
     <div class="splash-content">
-        <img src="splash.png" alt="Logo" class="splash-logo">
+        <div class="splash-logo-wrap">
+            <div class="splash-logo-glow"></div>
+            <img src="splash.png" alt="Logo" class="splash-logo">
+        </div>
         <div class="splash-text-container">
             <div class="splash-brand-text">
                 <span class="sp-ezi">Ezi</span><span class="sp-nurse">Nurse</span>
@@ -545,7 +570,7 @@
         </div>
     </div>
 </div>
-<audio id="splash-sound" src="https://www.myinstants.com/media/sounds/netflix-intro-sound.mp3" preload="auto"></audio>
+
 
 <!-- AUTH LOADING -->
 <div id="auth-loading" class="hidden">
@@ -869,25 +894,8 @@ if (sessionStorage.getItem('currentView') === 'view-iframe') {
     document.getElementById('splash-screen').style.display = 'none';
     document.getElementById('auth-loading').classList.remove('hidden');
 } else {
-    // Play audio: try immediately, fallback on first user interaction
-    var splashAudio = document.getElementById('splash-sound');
-    function tryPlayAudio() {
-        if (splashAudio) {
-            splashAudio.volume = 1.0;
-            splashAudio.play().catch(function() {
-                // Autoplay blocked — play on first touch/click
-                function playOnInteraction() {
-                    splashAudio.play().catch(function(){});
-                    document.removeEventListener('touchstart', playOnInteraction);
-                    document.removeEventListener('click', playOnInteraction);
-                }
-                document.addEventListener('touchstart', playOnInteraction, { once: true });
-                document.addEventListener('click', playOnInteraction, { once: true });
-            });
-        }
-    }
-    tryPlayAudio();
-    setTimeout(onSplashDone, 3500);
+
+    setTimeout(onSplashDone, 3000);
 }
 </script>
 
@@ -950,6 +958,7 @@ const _realApp = {
                         onAuthResolved('view-iframe');
                     } else {
                         history.replaceState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard');
+                        history.pushState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard');
                         onAuthResolved('view-dashboard');
                     }
                 }
