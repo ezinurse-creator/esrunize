@@ -889,7 +889,8 @@ function showApp() {
     if (pendingView && window._realApp) { window._realApp.renderView(pendingView); }
 }
 
-if (sessionStorage.getItem('currentView') === 'view-iframe') {
+const _savedView = sessionStorage.getItem('currentView');
+if (_savedView === 'view-iframe' || _savedView === 'view-demo') {
     splashDone = true;
     document.getElementById('splash-screen').style.display = 'none';
     document.getElementById('auth-loading').classList.remove('hidden');
