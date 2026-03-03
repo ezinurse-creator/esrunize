@@ -952,11 +952,21 @@ const _realApp = {
                     const savedView = sessionStorage.getItem('currentView');
                     const savedUrl = sessionStorage.getItem('currentUrl');
                     const savedTitle = sessionStorage.getItem('currentTitle') || 'Subject View';
+
+                    const demoCourse = sessionStorage.getItem('demoCourse');
+                    const demoSection = sessionStorage.getItem('demoSection');
+
                     if (savedView === 'view-iframe' && savedUrl) {
                         history.replaceState({ viewId: 'view-iframe', sourceUrl: savedUrl, title: savedTitle }, savedTitle, '#content');
                         this.openContent(savedUrl, savedTitle, true);
                         onAuthResolved('view-iframe');
-                    } else {
+                    }
+                    else if (savedView === 'view-demo' && demoCourse && demoSection) {
+                        history.replaceState({ viewId: 'view-demo', course: demoCourse, section: demoSection }, 'Demo', '#demo');
+                        this.openSectionDemo(demoCourse, demoSection, true);
+                        onAuthResolved('view-demo');
+                    }
+                    else {
                         history.replaceState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard');
                         history.pushState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard');
                         onAuthResolved('view-dashboard');
@@ -1002,7 +1012,11 @@ const _realApp = {
                 if (c && s) { this.renderSubjectList(c, s); this.renderView('view-subjects'); }
                 else this.renderView('view-dashboard');
             } else if (state.viewId === 'view-demo') {
-                this.renderView('view-demo');
+                if (state.course && state.section) {
+                    this.openSectionDemo(state.course, state.section, true);
+                } else {
+                    this.renderView('view-dashboard');
+                }
             } else if (state.viewId === 'view-paywall') {
                 this.renderView('view-paywall');
             } else if (state.viewId === 'view-iframe') {
@@ -1255,15 +1269,26 @@ const _realApp = {
     // Courses that have NO video content
     _noVideo: ['MSc'],
 
-    // Demo screen shown for ALL locked course sections (replaces old paywall view)
-    openSectionDemo: function(course, section) {
+    // ── PATCHED: openSectionDemo with fromHistory support ──────────────────
+    openSectionDemo: function(course, section, fromHistory = false) {
+        // Save state so it survives mobile browser hard reloads
+        sessionStorage.setItem('currentView', 'view-demo');
+        sessionStorage.setItem('demoCourse', course);
+        sessionStorage.setItem('demoSection', section);
+
         this._demoSubject = { label: section, link: null, course, section };
         document.getElementById('demo-subject-course').textContent = 'Preview before you buy';
         document.getElementById('demo-badge').textContent = 'DEMO';
         document.getElementById('header-title').textContent = section;
         this.renderDemoPaywallInfo(course, section);
         this.renderDemoTiles(course);
-        this.navTo('view-demo', false, { course, section });
+
+        // Prevent pushing a new history state if the user is just clicking the Back button
+        if (!fromHistory) {
+            this.navTo('view-demo', false, { course, section });
+        } else {
+            this.renderView('view-demo');
+        }
     },
 
     renderDemoTiles: function(course) {
@@ -1313,10 +1338,10 @@ const _realApp = {
         const el = document.getElementById('demo-unlock-price');
         if (!el) return;
         let html = '';
-        if (course === 'BSc') html = `<span class="price-original">₹12,000</span><span class="price-discounted">₹5,999</span>`;
-        else if (course === 'GNM') html = `<span class="price-original">₹14,000</span><span class="price-discounted">₹5,800</span>`;
-        else if (course === 'MSc') html = `<span class="price-original">₹10,000</span><span class="price-discounted">₹4,999</span>`;
-        else if (course === 'PBBSc') html = `<span class="price-original">₹10,000</span><span class="price-discounted">₹4,999</span>`;
+        if (course === 'BSc') html = `<span class="price-original">&#8377;12,000</span><span class="price-discounted">&#8377;5,999</span>`;
+        else if (course === 'GNM') html = `<span class="price-original">&#8377;14,000</span><span class="price-discounted">&#8377;5,800</span>`;
+        else if (course === 'MSc') html = `<span class="price-original">&#8377;10,000</span><span class="price-discounted">&#8377;4,999</span>`;
+        else if (course === 'PBBSc') html = `<span class="price-original">&#8377;10,000</span><span class="price-discounted">&#8377;4,999</span>`;
         else html = `<span class="price-discounted">Buy Now</span>`;
         el.innerHTML = html;
     },
@@ -1326,7 +1351,6 @@ const _realApp = {
             this._showDemoToast('Demo content coming soon!');
             return;
         }
-        // Same as openPDF in subject pages: strip to /view and open in new tab
         const clean = url.replace(/\/preview.*$/, '').replace(/\/view.*$/, '') + '/view';
         window.open(clean, '_blank');
     },
@@ -1350,25 +1374,25 @@ const _realApp = {
     },
 
 demoOpenVideo: function() {
-        if (!this._demoSubject) return;
-        const key = this._demoSubject.course + '_' + this._demoSubject.section;
-        const demoData = DEMO_URLS[key] || DEMO_URLS['default'];
-        this._openDemoUrl(demoData ? demoData.video : 'about:blank');
-    },
+        if (!this._demoSubject) return;
+        const key = this._demoSubject.course + '_' + this._demoSubject.section;
+        const demoData = DEMO_URLS[key] || DEMO_URLS['default'];
+        this._openDemoUrl(demoData ? demoData.video : 'about:blank');
+    },
 
-    demoOpenLectureNote: function() {
-        if (!this._demoSubject) return;
-        const key = this._demoSubject.course + '_' + this._demoSubject.section;
-        const demoData = DEMO_URLS[key] || DEMO_URLS['default'];
-        this._openDemoUrl(demoData ? demoData.lecture : 'about:blank');
-    },
+    demoOpenLectureNote: function() {
+        if (!this._demoSubject) return;
+        const key = this._demoSubject.course + '_' + this._demoSubject.section;
+        const demoData = DEMO_URLS[key] || DEMO_URLS['default'];
+        this._openDemoUrl(demoData ? demoData.lecture : 'about:blank');
+    },
 
-    demoOpenDetailedNotes: function() {
-        if (!this._demoSubject) return;
-        const key = this._demoSubject.course + '_' + this._demoSubject.section;
-        const demoData = DEMO_URLS[key] || DEMO_URLS['default'];
-        this._openDemoUrl(demoData ? demoData.detailed : 'about:blank');
-    },
+    demoOpenDetailedNotes: function() {
+        if (!this._demoSubject) return;
+        const key = this._demoSubject.course + '_' + this._demoSubject.section;
+        const demoData = DEMO_URLS[key] || DEMO_URLS['default'];
+        this._openDemoUrl(demoData ? demoData.detailed : 'about:blank');
+    },
 
     // ============================================
     // QUIZ
@@ -1460,8 +1484,8 @@ demoOpenVideo: function() {
     renderPaywallInfo: function(course, section) {
         const display = document.getElementById('paywall-price-display');
         let html = '';
-        if (course === 'BSc') html = `<div><span class="price-original">₹12,000</span><span class="price-discounted">₹5,999</span></div>`;
-        else if (course === 'GNM') html = `<div><span class="price-original">₹14,000</span><span class="price-discounted">₹5,800</span></div>`;
+        if (course === 'BSc') html = `<div><span class="price-original">&#8377;12,000</span><span class="price-discounted">&#8377;5,999</span></div>`;
+        else if (course === 'GNM') html = `<div><span class="price-original">&#8377;14,000</span><span class="price-discounted">&#8377;5,800</span></div>`;
         display.innerHTML = html;
     },
 
@@ -1482,7 +1506,6 @@ if (window._appQueue && window._appQueue.length) {
 }
 _realApp.init();
 </script>
-
 <script>
 const PAYMENT_LINKS = {
     'GNM_Third Year_D':'https://rzp.io/rzp/tx1GzgB0','GNM_Second Year_D':'https://rzp.io/rzp/7ZEYqAR','GNM_First Year_D':'https://rzp.io/rzp/m7pEmVy5',
@@ -1559,49 +1582,33 @@ const COURSES = {
     'COMM': { 'Basics': [{ label: 'Communicative English', link: 'communicativeenglish.html' }] }
 };
 
-// ============================================================
-// DEMO_URLS — keyed by 'Course_Section' (e.g., 'BSc_Semester 1')
-// Replace 'about:blank' with the real URLs for each section
-// ============================================================
 const DEMO_URLS = {
-    'MSc_First Year': { lecture: 'https://drive.google.com/file/d/1U-nq7q_yZaqFe888Of6oc07dWuGpcSE9/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1BAva7uX63TW_8xHV6W90l_hd6Xf6Lilt/view?usp=drive_link' },
-    'MSc_Second Year': {lecture: 'https://drive.google.com/file/d/1p8UclvLjR4gnAOFZUZKiiq-5kSHsQDOl/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1wGz-0ELqBTmlsVoufrGVcA1gIsAcKiHT/view?usp=drive_link' },
-    
-    'BSc_Semester 1': { video: 'https://drive.google.com/file/d/1cyVJVgiCpKk33fLdYDv-EQ0EdV2eD1By/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1QKFdw1TsUUXYdBzkkC3FjN9ZQxBc2enA/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1QcOyOGL1-9ipMLcwzzLyLJkjxH2EmhcP/view?usp=drive_link' },
-    'BSc_Semester 2': { video: 'https://drive.google.com/file/d/1gl6N5LU8BsYkX6hJmIJhyh6h5ibqxf72/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1QFtxNhSNSqQ_lll0BUmZ-8bujBaXChZd/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1-1hp1OYQU50Gr4zx0Axuh98GZFXfj66p/view?usp=drive_link' },
-    'BSc_Semester 3': { video: 'https://drive.google.com/file/d/1VQjMg12eqSvo8VuBRSJHmkCBqxQKQIPF/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1xWanwUFVnK_T2MdEo3wUWjVB-1KBzTNr/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1sMvClYYuI3EGbsePvJyycqg-gwBTnZ10/view?usp=drive_link' },
-    'BSc_Semester 4': { video: 'https://drive.google.com/file/d/1kvUA5FHceedYeKgcZgM394Bu0yE-DyYD/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1__4UDbIsSWB24ljtCAM6J45CktuFefSc/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1OzI17QKrMVZqOuBLCAhlajkMIuXwjISn/view?usp=drive_link' },
-    'BSc_Semester 5': { video: 'https://drive.google.com/file/d/1E657JCTW5gIU3yaL2AhkWO3fiBk3T2nO/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1yuSvtQWPgSjkRMxOll_JIEr1Entoghh5/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1HftfuKtULfPgaOuUL-3-WaKHzbQqzI3o/view?usp=drive_link' },
-    'BSc_Semester 6': { video: 'https://drive.google.com/file/d/14wMZ0ZEubl7WUP7nGt4C5ndP6qZ49CvF/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1EALTj-j0gwXgWoVZwumkvVugIMfwos72/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1JQIywZbuzOS7XIQPVFBWs7ThmIdDdE_M/view?usp=drive_link' },
-    'BSc_Semester 7': { video: 'https://drive.google.com/file/d/1l2altm6nU_MZlNxDVjGGJorvJ9JPrzM7/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1IT8mXjwwvOtXp2bATEEB_LyMTOpALqiS/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1sMxsWzddmgxn2xQm5HNbrlac195r868b/view?usp=drive_link' },
-    
-    'PBBSc_First Year': { video: 'https://drive.google.com/file/d/1GDIH-NP5-bfSeTvniyk4quqiIKyvXYe3/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1Tu99fKMjB258QlEMOLsGtGWQwFLoFQIM/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1VUvWaB7JdxM1f_q2KFQrHTVUELlwDuK-/view?usp=drive_link' },
-    'PBBSc_Second Year': { video: 'https://drive.google.com/file/d/1M-YVSMlQ3A2oYAFOZawv-g-eIhLku3Rk/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1EDzaX_aYBmtd12GBQPb7RnNsJcfd9iol/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1Kvz7hCDmFd1Pa7BAKI04K-xy1hIn5rmp/view?usp=drive_link' },
-    
-    'GNM_First Year': { video: 'https://drive.google.com/file/d/1-B6nX5vwFqDsc-K7rh5tfMGAsAlqIhEk/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1i2EBqqUbRb4uCLtKcjumBNQlr3fKg1Nf/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1JCl4WpA9rcAhOpHcr8W0Ig-yHG6wRhbd/view?usp=drive_link' },
-    'GNM_Second Year': { video: 'https://drive.google.com/file/d/1LrwScLSBmB670Q9AI_ZCobw_jz9R65yq/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1pnlhXObM6xSs1o-oMl75yp6hs4suuj0V/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1dGEQayWtmJp7Q8W0lARnqQ4glcQlvZO9/view?usp=drive_link' },
-    'GNM_Third Year': { video: 'https://drive.google.com/file/d/1Si2qdwyfol_Ne1D9hTAQlnAHr9gzktW_/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1HW-3pekAsKvIOKsJ0EkFc4aHyxvg_ygQ/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/17y-KfM7BlEIMVEGBQk39dK6PlXOmkAMl/view?usp=drive_link' },
-    
-    // Fallback default if a specific section isn't mapped above
-    'default': { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' }
+    'MSc_First Year': { lecture: 'https://drive.google.com/file/d/1U-nq7q_yZaqFe888Of6oc07dWuGpcSE9/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1BAva7uX63TW_8xHV6W90l_hd6Xf6Lilt/view?usp=drive_link' },
+    'MSc_Second Year': {lecture: 'https://drive.google.com/file/d/1p8UclvLjR4gnAOFZUZKiiq-5kSHsQDOl/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1wGz-0ELqBTmlsVoufrGVcA1gIsAcKiHT/view?usp=drive_link' },
+    'BSc_Semester 1': { video: 'https://drive.google.com/file/d/1cyVJVgiCpKk33fLdYDv-EQ0EdV2eD1By/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1QKFdw1TsUUXYdBzkkC3FjN9ZQxBc2enA/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1QcOyOGL1-9ipMLcwzzLyLJkjxH2EmhcP/view?usp=drive_link' },
+    'BSc_Semester 2': { video: 'https://drive.google.com/file/d/1gl6N5LU8BsYkX6hJmIJhyh6h5ibqxf72/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1QFtxNhSNSqQ_lll0BUmZ-8bujBaXChZd/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1-1hp1OYQU50Gr4zx0Axuh98GZFXfj66p/view?usp=drive_link' },
+    'BSc_Semester 3': { video: 'https://drive.google.com/file/d/1VQjMg12eqSvo8VuBRSJHmkCBqxQKQIPF/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1xWanwUFVnK_T2MdEo3wUWjVB-1KBzTNr/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1sMvClYYuI3EGbsePvJyycqg-gwBTnZ10/view?usp=drive_link' },
+    'BSc_Semester 4': { video: 'https://drive.google.com/file/d/1kvUA5FHceedYeKgcZgM394Bu0yE-DyYD/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1__4UDbIsSWB24ljtCAM6J45CktuFefSc/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1OzI17QKrMVZqOuBLCAhlajkMIuXwjISn/view?usp=drive_link' },
+    'BSc_Semester 5': { video: 'https://drive.google.com/file/d/1E657JCTW5gIU3yaL2AhkWO3fiBk3T2nO/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1yuSvtQWPgSjkRMxOll_JIEr1Entoghh5/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1HftfuKtULfPgaOuUL-3-WaKHzbQqzI3o/view?usp=drive_link' },
+    'BSc_Semester 6': { video: 'https://drive.google.com/file/d/14wMZ0ZEubl7WUP7nGt4C5ndP6qZ49CvF/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1EALTj-j0gwXgWoVZwumkvVugIMfwos72/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1JQIywZbuzOS7XIQPVFBWs7ThmIdDdE_M/view?usp=drive_link' },
+    'BSc_Semester 7': { video: 'https://drive.google.com/file/d/1l2altm6nU_MZlNxDVjGGJorvJ9JPrzM7/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1IT8mXjwwvOtXp2bATEEB_LyMTOpALqiS/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1sMxsWzddmgxn2xQm5HNbrlac195r868b/view?usp=drive_link' },
+    'PBBSc_First Year': { video: 'https://drive.google.com/file/d/1GDIH-NP5-bfSeTvniyk4quqiIKyvXYe3/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1Tu99fKMjB258QlEMOLsGtGWQwFLoFQIM/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1VUvWaB7JdxM1f_q2KFQrHTVUELlwDuK-/view?usp=drive_link' },
+    'PBBSc_Second Year': { video: 'https://drive.google.com/file/d/1M-YVSMlQ3A2oYAFOZawv-g-eIhLku3Rk/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1EDzaX_aYBmtd12GBQPb7RnNsJcfd9iol/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1Kvz7hCDmFd1Pa7BAKI04K-xy1hIn5rmp/view?usp=drive_link' },
+    'GNM_First Year': { video: 'https://drive.google.com/file/d/1-B6nX5vwFqDsc-K7rh5tfMGAsAlqIhEk/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1i2EBqqUbRb4uCLtKcjumBNQlr3fKg1Nf/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1JCl4WpA9rcAhOpHcr8W0Ig-yHG6wRhbd/view?usp=drive_link' },
+    'GNM_Second Year': { video: 'https://drive.google.com/file/d/1LrwScLSBmB670Q9AI_ZCobw_jz9R65yq/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1pnlhXObM6xSs1o-oMl75yp6hs4suuj0V/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/1dGEQayWtmJp7Q8W0lARnqQ4glcQlvZO9/view?usp=drive_link' },
+    'GNM_Third Year': { video: 'https://drive.google.com/file/d/1Si2qdwyfol_Ne1D9hTAQlnAHr9gzktW_/view?usp=drive_link', lecture: 'https://drive.google.com/file/d/1HW-3pekAsKvIOKsJ0EkFc4aHyxvg_ygQ/view?usp=drive_link', detailed: 'https://drive.google.com/file/d/17y-KfM7BlEIMVEGBQk39dK6PlXOmkAMl/view?usp=drive_link' },
+    'default': { video: 'about:blank', lecture: 'about:blank', detailed: 'about:blank' }
 };
 
-// ============================================================
-// DEMO QUIZ DATA — 2 questions per course section
-// Key format: 'Course_Section' e.g. 'GNM_First Year'
-// ============================================================
 const DEMO_QUIZ = {
-    // MSc First Year
     'MSc_First Year': [
         { q: "Which research design is most appropriate for studying cause-and-effect relationships in nursing?", o: ["Descriptive", "Experimental/RCT", "Historical", "Case Study"], a: 1 },
         { q: "The primary goal of Advanced Nursing Practice is to:", o: ["Replace physicians", "Provide specialized, evidence-based patient care", "Reduce hospital costs only", "Manage hospital administration"], a: 1 }
     ],
-    // MSc Second Year
     'MSc_Second Year': [
         { q: "In nursing management, 'span of control' refers to:", o: ["Budget allocation", "Number of subordinates a manager supervises", "Span of patient care", "Duration of shift"], a: 1 },
         { q: "Which is a key principle of Mental Health Nursing?", o: ["Restraint first approach", "Therapeutic nurse-patient relationship", "Medication only", "Isolation"], a: 1 }
     ],
-    // BSc Semesters
     'BSc_Semester 1': [
         { q: "The basic structural and functional unit of the human body is the:", o: ["Tissue", "Organ", "Cell", "System"], a: 2 },
         { q: "According to Maslow's hierarchy, which need must be met first?", o: ["Safety", "Love and Belonging", "Physiological needs", "Self-esteem"], a: 2 }
@@ -1630,18 +1637,16 @@ const DEMO_QUIZ = {
         { q: "In nursing research, 'hypothesis' is a:", o: ["Proven fact", "Testable prediction/statement", "Research conclusion", "Data analysis"], a: 1 },
         { q: "The main goal of Community Health Nursing is:", o: ["Treating acute illness", "Promoting health and preventing disease in the community", "Hospital-based care only", "Surgical intervention"], a: 1 }
     ],
-    // PBBSc
     'PBBSc_First Year': [
-        { q: "The normal respiratory rate in a healthy adult is:", o: ["8–10/min", "12–20/min", "25–30/min", "35–40/min"], a: 1 },
+        { q: "The normal respiratory rate in a healthy adult is:", o: ["8-10/min", "12-20/min", "25-30/min", "35-40/min"], a: 1 },
         { q: "Apical pulse is best heard at the:", o: ["Radial artery", "5th intercostal space, midclavicular line", "Carotid artery", "Femoral artery"], a: 1 }
     ],
     'PBBSc_Second Year': [
         { q: "The 'nursing process' follows which order?", o: ["Assessment, Diagnosis, Planning, Implementation, Evaluation", "Diagnosis, Assessment, Planning, Evaluation, Implementation", "Planning, Assessment, Implementation, Diagnosis, Evaluation", "Implementation, Planning, Assessment, Evaluation, Diagnosis"], a: 0 },
         { q: "Which organization regulates nursing education in India?", o: ["WHO", "Indian Nursing Council (INC)", "MCI", "AIIMS"], a: 1 }
     ],
-    // GNM
     'GNM_First Year': [
-        { q: "The normal temperature of the human body is:", o: ["35°C", "36°C", "37°C", "38°C"], a: 2 },
+        { q: "The normal temperature of the human body is:", o: ["35 C", "36 C", "37 C", "38 C"], a: 2 },
         { q: "Which nutrient provides the most energy per gram?", o: ["Carbohydrates", "Proteins", "Fats", "Vitamins"], a: 2 }
     ],
     'GNM_Second Year': [
@@ -1652,18 +1657,16 @@ const DEMO_QUIZ = {
         { q: "The first stage of labour begins with:", o: ["Rupture of membranes", "Onset of regular contractions to full cervical dilation", "Delivery of baby", "Delivery of placenta"], a: 1 },
         { q: "Which contraceptive method has the highest efficacy?", o: ["Condom", "Combined Oral Contraceptive Pill", "Copper-T IUD", "Calendar method"], a: 2 }
     ],
-    // EXAMS
     'EXAMS_NORCET': [
         { q: "NORCET stands for:", o: ["Nursing Officer Recruitment Common Eligibility Test", "National Oral Care Exam Test", "Nursing Officer Regular Certification Exam", "None of the above"], a: 0 },
         { q: "The conducting authority of NORCET is:", o: ["AIIMS New Delhi", "UPSC", "NMC", "INC"], a: 0 }
     ],
     'EXAMS_ESCI': [
         { q: "ESCI exam primarily tests knowledge in:", o: ["Management only", "Clinical Nursing and Sciences", "Law", "History"], a: 1 },
-        { q: "Normal serum sodium level is:", o: ["100–110 mEq/L", "135–145 mEq/L", "150–160 mEq/L", "120–130 mEq/L"], a: 1 }
+        { q: "Normal serum sodium level is:", o: ["100-110 mEq/L", "135-145 mEq/L", "150-160 mEq/L", "120-130 mEq/L"], a: 1 }
     ],
-    // Fallback default
     'default': [
-        { q: "The normal adult heart rate is:", o: ["40–60 bpm", "60–100 bpm", "100–120 bpm", "120–140 bpm"], a: 1 },
+        { q: "The normal adult heart rate is:", o: ["40-60 bpm", "60-100 bpm", "100-120 bpm", "120-140 bpm"], a: 1 },
         { q: "Florence Nightingale is known as the:", o: ["Mother of Medicine", "Lady with the Lamp / Founder of Modern Nursing", "Pioneer of Surgery", "First Doctor"], a: 1 }
     ]
 };
