@@ -552,6 +552,29 @@
         animation: authSpin 0.75s linear infinite;
     }
     @keyframes authSpin { to { transform: rotate(360deg); } }
+
+    /* ============================================
+       LIVE CLASS CARD STYLES
+       ============================================ */
+    .bg-live { 
+        background: linear-gradient(135deg, #ef4444, #b91c1c); 
+    }
+    .live-pulse {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 10px;
+        height: 10px;
+        background-color: #fff;
+        border-radius: 50%;
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+        animation: pulse-red 1.5s infinite;
+    }
+    @keyframes pulse-red {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+        70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(255, 255, 255, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+    }
 </style>
 </head>
 <body>
@@ -717,7 +740,7 @@
                 <div class="slider-dot" onclick="sliderGoTo(5)"></div>
             </div>
         </div>
-        <div class="section-title">What are you looking for?</div>
+<div class="section-title">What are you looking for?</div>
         <div class="category-grid">
             <div class="cat-card bg-msc" onclick="app.navToCourse('MSc')">
                 <div class="cat-arrow"><span class="material-icons-round" style="font-size:14px;">arrow_forward</span></div>
@@ -744,7 +767,13 @@
                 <h3>Competitive<br>Exams</h3>
                 <span class="material-icons-round icon">quiz</span>
             </div>
-        </div>
+            <div class="cat-card bg-live" onclick="app.openLiveClass()">
+                <div class="cat-arrow"><span class="material-icons-round" style="font-size:14px;">open_in_new</span></div>
+                <h3>Live<br>Class</h3>
+                <span class="material-icons-round icon">sensors</span>
+                <div class="live-pulse"></div>
+            </div>
+        </div>    
     </div>
 
     <!-- SUBMENU VIEW -->
@@ -1497,6 +1526,17 @@ demoOpenVideo: function() {
         const fullKey = `${course}_${section}_F`;
         let url = PAYMENT_LINKS[discountKey] || PAYMENT_LINKS[fullKey] || `https://www.razorpay.com/fallback`;
         window.open(url, '_blank');
+    }, // <-- IMPORTANT: Added comma here
+
+    // ============================================
+    // LIVE CLASS FUNCTION
+    // ============================================
+    openLiveClass: function() {
+        // Replace this URL with the actual YouTube Live or Channel URL
+        const youtubeUrl = "https://www.youtube.com/@EzinurseApp"; 
+        
+        // Opens the YouTube link in a new browser tab/window
+        window.open(youtubeUrl, '_blank');
     }
 };
 
