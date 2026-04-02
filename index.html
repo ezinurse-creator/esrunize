@@ -575,6 +575,40 @@
         70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(255, 255, 255, 0); }
         100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
     }
+
+    /* --- COUPON STYLES --- */
+    .coupon-wrapper {
+        display: flex;
+        gap: 8px;
+        margin: 15px 0;
+        width: 100%;
+    }
+    .coupon-input {
+        flex: 1;
+        padding: 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: var(--radius-md);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+    }
+    .coupon-btn {
+        padding: 0 20px;
+        background: var(--text-main);
+        color: white;
+        border: none;
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        cursor: pointer;
+    }
+    .coupon-msg {
+        font-size: 0.8rem;
+        margin-bottom: 15px;
+        text-align: left;
+        width: 100%;
+        font-weight: 600;
+    }
+    .coupon-msg.success { color: var(--success); }
+    .coupon-msg.error { color: var(--danger); }
 </style>
 </head>
 <body>
@@ -807,6 +841,13 @@
                 <span class="material-icons-round" style="color:var(--accent); font-size:20px;">lock</span>
                 <div id="demo-unlock-price" class="demo-unlock-price"></div>
             </div>
+
+            <div class="coupon-wrapper" id="demo-coupon-area">
+                <input type="text" id="demo-coupon-input" class="coupon-input" placeholder="Enter Coupon Code">
+                <button class="coupon-btn" onclick="app.applyCoupon('demo-coupon-input', 'demo-coupon-msg')">Apply</button>
+            </div>
+            <div id="demo-coupon-msg" class="coupon-msg"></div>
+
             <button class="demo-unlock-btn" onclick="app.purchaseLockedContent()">
                 <span class="material-icons-round">shopping_cart</span>
                 Unlock Full Access
@@ -824,6 +865,11 @@
             <h2 style="font-size:1.5rem; margin-bottom:10px;">Unlock Premium</h2>
             <p style="color:var(--text-muted); margin-bottom:20px;">Get complete access to this course material and boost your preparation.</p>
             <div id="paywall-price-display" class="price-wrapper"></div>
+            <div class="coupon-wrapper" id="paywall-coupon-area">
+                <input type="text" id="paywall-coupon-input" class="coupon-input" placeholder="Enter Coupon Code">
+                <button class="coupon-btn" onclick="app.applyCoupon('paywall-coupon-input', 'paywall-coupon-msg')">Apply</button>
+            </div>
+            <div id="paywall-coupon-msg" class="coupon-msg"></div>
             <button class="btn btn-primary" onclick="app.purchaseLockedContent()">
                 <span>Unlock Now</span>
                 <span class="material-icons-round">shopping_cart</span>
@@ -942,6 +988,21 @@ window.app = new Proxy({}, {
 });
 </script>
 
+<script>
+const COMMON_URLS = {
+    'BSc': { full: 'https://rzp.io/rzp/b3IMXO8', discount: 'https://rzp.io/rzp/7fqKYBgL' },
+    'GNM': { full: 'https://rzp.io/rzp/X8Z8G3Y', discount: 'https://rzp.io/rzp/snI3wvW' },
+    'PBBSc': { full: 'https://rzp.io/rzp/4d3GwdN', discount: 'https://rzp.io/rzp/EfjkLaw' },
+    'MSc': { full: 'https://rzp.io/l/msc-full' }
+};
+
+const VALID_COUPONS = {
+    'BSc': ['EZIBSC1', 'EZIBSC2', 'EZIBSC3', 'EZIBSC4', 'EZIBSC5', 'EZIBSC6', 'EZIBSC7'],
+    'GNM': ['EZIGNM1', 'EZIGNM2', 'EZIGNM3'],
+    'PBBSc': ['EZIPBBSC1', 'EZIPBBSC2']
+};
+</script>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -966,6 +1027,7 @@ const _realApp = {
     lockedCourseSection: null,
     zoomLevel: 1,
     permissions: {},
+    isDiscountApplied: false,
 
     // Demo state
     _demoSubject: null,
@@ -1306,6 +1368,17 @@ const _realApp = {
         sessionStorage.setItem('demoCourse', course);
         sessionStorage.setItem('demoSection', section);
 
+        // Reset coupon state for the new section
+        this.isDiscountApplied = false;
+        const couponInput = document.getElementById('demo-coupon-input');
+        if (couponInput) { couponInput.value = ''; couponInput.disabled = false; }
+        const couponMsg = document.getElementById('demo-coupon-msg');
+        if (couponMsg) { couponMsg.textContent = ''; couponMsg.className = 'coupon-msg'; }
+        const paywallCouponInput = document.getElementById('paywall-coupon-input');
+        if (paywallCouponInput) { paywallCouponInput.value = ''; paywallCouponInput.disabled = false; }
+        const paywallCouponMsg = document.getElementById('paywall-coupon-msg');
+        if (paywallCouponMsg) { paywallCouponMsg.textContent = ''; paywallCouponMsg.className = 'coupon-msg'; }
+
         this._demoSubject = { label: section, link: null, course, section };
         document.getElementById('demo-subject-course').textContent = 'Preview before you buy';
         document.getElementById('demo-badge').textContent = 'DEMO';
@@ -1368,12 +1441,35 @@ const _realApp = {
         const el = document.getElementById('demo-unlock-price');
         if (!el) return;
         let html = '';
-        if (course === 'BSc') html = `<span class="price-original">&#8377;12,000</span><span class="price-discounted">&#8377;5,999</span>`;
-        else if (course === 'GNM') html = `<span class="price-original">&#8377;14,000</span><span class="price-discounted">&#8377;5,800</span>`;
-        else if (course === 'MSc') html = `<span class="price-original">&#8377;10,000</span><span class="price-discounted">&#8377;4,999</span>`;
-        else if (course === 'PBBSc') html = `<span class="price-original">&#8377;10,000</span><span class="price-discounted">&#8377;4,999</span>`;
-        else html = `<span class="price-discounted">Buy Now</span>`;
+        if (course === 'BSc') {
+            if (this.isDiscountApplied) html = `<span class="price-original">&#8377;5,999</span><span class="price-discounted">&#8377;4,499</span>`;
+            else html = `<span class="price-original">&#8377;12,000</span><span class="price-discounted">&#8377;5,999</span>`;
+        }
+        else if (course === 'GNM') {
+            if (this.isDiscountApplied) html = `<span class="price-original">&#8377;5,800</span><span class="price-discounted">&#8377;4,300</span>`;
+            else html = `<span class="price-original">&#8377;14,000</span><span class="price-discounted">&#8377;5,800</span>`;
+        }
+        else if (course === 'PBBSc') {
+            if (this.isDiscountApplied) html = `<span class="price-original">&#8377;4,999</span><span class="price-discounted">&#8377;3,499</span>`;
+            else html = `<span class="price-original">&#8377;10,000</span><span class="price-discounted">&#8377;4,999</span>`;
+        }
+        else if (course === 'MSc') {
+            html = `<span class="price-original">&#8377;10,000</span><span class="price-discounted">&#8377;4,999</span>`;
+        }
+        else {
+            html = `<span class="price-discounted">Buy Now</span>`;
+        }
         el.innerHTML = html;
+
+        // Hide coupon area for MSc (no coupons available)
+        const couponArea = document.getElementById('demo-coupon-area');
+        if (couponArea) {
+            couponArea.style.display = (course === 'MSc') ? 'none' : 'flex';
+        }
+        const paywallCouponArea = document.getElementById('paywall-coupon-area');
+        if (paywallCouponArea) {
+            paywallCouponArea.style.display = (course === 'MSc') ? 'none' : 'flex';
+        }
     },
 
     _openDemoUrl: function(url) {
@@ -1519,14 +1615,63 @@ demoOpenVideo: function() {
         display.innerHTML = html;
     },
 
-    purchaseLockedContent: function() {
+    applyCoupon: function(inputId, msgId) {
+        const inputEl = document.getElementById(inputId);
+        const msgEl = document.getElementById(msgId);
+        const code = inputEl.value.trim().toUpperCase();
         const course = this.lockedCourseKey;
-        const section = this.lockedCourseSection || 'Systems';
-        const discountKey = `${course}_${section}_D`;
-        const fullKey = `${course}_${section}_F`;
-        let url = PAYMENT_LINKS[discountKey] || PAYMENT_LINKS[fullKey] || `https://www.razorpay.com/fallback`;
-        window.open(url, '_blank');
-    }, // <-- IMPORTANT: Added comma here
+
+        msgEl.className = 'coupon-msg';
+
+        if (!code) {
+            msgEl.textContent = "Please enter a coupon code.";
+            msgEl.classList.add('error');
+            return;
+        }
+
+        if (course === 'MSc') {
+            msgEl.textContent = "Coupons are not applicable for MSc courses.";
+            msgEl.classList.add('error');
+            return;
+        }
+
+        if (VALID_COUPONS[course] && VALID_COUPONS[course].includes(code)) {
+            this.isDiscountApplied = true;
+            msgEl.textContent = "Coupon applied successfully! Price updated.";
+            msgEl.classList.add('success');
+            inputEl.disabled = true;
+            this.renderDemoPaywallInfo(course, this.lockedCourseSection);
+        } else {
+            this.isDiscountApplied = false;
+            msgEl.textContent = "Invalid coupon code for this course.";
+            msgEl.classList.add('error');
+        }
+    },
+
+    purchaseLockedContent: function() {
+        const course = this.lockedCourseKey || 'BSc';
+
+        if (COMMON_URLS[course]) {
+            // Use common URL flow for BSc, GNM, PBBSc, MSc
+            let paymentUrl = '';
+            if (course === 'MSc') {
+                paymentUrl = COMMON_URLS[course].full;
+            } else {
+                paymentUrl = this.isDiscountApplied
+                    ? COMMON_URLS[course].discount
+                    : COMMON_URLS[course].full;
+            }
+            this.isDiscountApplied = false;
+            window.open(paymentUrl, '_blank');
+        } else {
+            // Fall back to per-section PAYMENT_LINKS for other courses
+            const section = this.lockedCourseSection || 'Systems';
+            const discountKey = `${course}_${section}_D`;
+            const fullKey = `${course}_${section}_F`;
+            let url = PAYMENT_LINKS[discountKey] || PAYMENT_LINKS[fullKey] || `https://www.razorpay.com/fallback`;
+            window.open(url, '_blank');
+        }
+    },
 
     // ============================================
     // LIVE CLASS FUNCTION
