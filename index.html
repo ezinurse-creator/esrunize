@@ -842,15 +842,9 @@
                 <div id="demo-unlock-price" class="demo-unlock-price"></div>
             </div>
 
-            <div class="coupon-wrapper" id="demo-coupon-area">
-                <input type="text" id="demo-coupon-input" class="coupon-input" placeholder="Enter Coupon Code">
-                <button class="coupon-btn" onclick="app.applyCoupon('demo-coupon-input', 'demo-coupon-msg')">Apply</button>
-            </div>
-            <div id="demo-coupon-msg" class="coupon-msg"></div>
-
-            <button class="demo-unlock-btn" onclick="app.purchaseLockedContent()">
+            <button class="demo-unlock-btn" onclick="app.openCouponModal()">
                 <span class="material-icons-round">shopping_cart</span>
-                Unlock Full Access
+                Buy This Course
             </button>
         </div>
     </div>
@@ -865,12 +859,10 @@
             <h2 style="font-size:1.5rem; margin-bottom:10px;">Unlock Premium</h2>
             <p style="color:var(--text-muted); margin-bottom:20px;">Get complete access to this course material and boost your preparation.</p>
             <div id="paywall-price-display" class="price-wrapper"></div>
-            <div class="coupon-wrapper" id="paywall-coupon-area">
-                <input type="text" id="paywall-coupon-input" class="coupon-input" placeholder="Enter Coupon Code">
-                <button class="coupon-btn" onclick="app.applyCoupon('paywall-coupon-input', 'paywall-coupon-msg')">Apply</button>
-            </div>
-            <div id="paywall-coupon-msg" class="coupon-msg"></div>
-            <button class="btn btn-primary" onclick="app.purchaseLockedContent()">
+            <button class="btn btn-primary" onclick="app.openCouponModal()">
+                <span>Buy This Course</span>
+                <span class="material-icons-round">shopping_cart</span>
+            </button>
                 <span>Unlock Now</span>
                 <span class="material-icons-round">shopping_cart</span>
             </button>
@@ -889,6 +881,19 @@
             <label>Logout</label>
         </button>
     </nav>
+
+    <!-- COUPON MODAL -->
+    <div id="modal-coupon" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h3 style="margin-bottom:8px;">Do you have a coupon code?</h3>
+            <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:18px;">Enter your code for a discounted price, or skip to buy at the full price.</p>
+            <input type="text" id="modal-coupon-input" class="form-input" placeholder="Enter Coupon Code" style="text-transform:uppercase; margin-bottom:10px;">
+            <div id="modal-coupon-msg" style="font-size:0.8rem; font-weight:600; min-height:18px; margin-bottom:12px; text-align:left;"></div>
+            <button class="btn btn-primary" style="margin-bottom:10px;" onclick="app.submitCouponModal()">Apply &amp; Buy</button>
+            <button class="btn btn-outline" onclick="app.skipCouponModal()">No, Buy at Full Price</button>
+            <button class="btn btn-ghost" onclick="app.closeCouponModal()">Cancel</button>
+        </div>
+    </div>
 
     <!-- QUIZ — bottom sheet overlay -->
     <div class="qoverlay" id="qmodal">
@@ -1370,14 +1375,6 @@ const _realApp = {
 
         // Reset coupon state for the new section
         this.isDiscountApplied = false;
-        const couponInput = document.getElementById('demo-coupon-input');
-        if (couponInput) { couponInput.value = ''; couponInput.disabled = false; }
-        const couponMsg = document.getElementById('demo-coupon-msg');
-        if (couponMsg) { couponMsg.textContent = ''; couponMsg.className = 'coupon-msg'; }
-        const paywallCouponInput = document.getElementById('paywall-coupon-input');
-        if (paywallCouponInput) { paywallCouponInput.value = ''; paywallCouponInput.disabled = false; }
-        const paywallCouponMsg = document.getElementById('paywall-coupon-msg');
-        if (paywallCouponMsg) { paywallCouponMsg.textContent = ''; paywallCouponMsg.className = 'coupon-msg'; }
 
         this._demoSubject = { label: section, link: null, course, section };
         document.getElementById('demo-subject-course').textContent = 'Preview before you buy';
@@ -1615,62 +1612,61 @@ demoOpenVideo: function() {
         display.innerHTML = html;
     },
 
-    applyCoupon: function(inputId, msgId) {
-        const inputEl = document.getElementById(inputId);
-        const msgEl = document.getElementById(msgId);
-        const code = inputEl.value.trim().toUpperCase();
+    openCouponModal: function() {
         const course = this.lockedCourseKey;
+        const input = document.getElementById('modal-coupon-input');
+        const msg = document.getElementById('modal-coupon-msg');
+        if (input) { input.value = ''; input.disabled = false; }
+        if (msg) { msg.textContent = ''; msg.style.color = ''; }
+        // Hide coupon input for MSc — no coupons available
+        const hasCoupons = course !== 'MSc' && VALID_COUPONS[course];
+        if (input) input.style.display = hasCoupons ? '' : 'none';
+        document.getElementById('modal-coupon').classList.remove('hidden');
+    },
 
-        msgEl.className = 'coupon-msg';
+    closeCouponModal: function() {
+        document.getElementById('modal-coupon').classList.add('hidden');
+    },
+
+    submitCouponModal: function() {
+        const course = this.lockedCourseKey;
+        const input = document.getElementById('modal-coupon-input');
+        const msg = document.getElementById('modal-coupon-msg');
+        const code = input.value.trim().toUpperCase();
 
         if (!code) {
-            msgEl.textContent = "Please enter a coupon code.";
-            msgEl.classList.add('error');
-            return;
-        }
-
-        if (course === 'MSc') {
-            msgEl.textContent = "Coupons are not applicable for MSc courses.";
-            msgEl.classList.add('error');
+            msg.textContent = 'Please enter a coupon code.';
+            msg.style.color = 'var(--danger)';
             return;
         }
 
         if (VALID_COUPONS[course] && VALID_COUPONS[course].includes(code)) {
-            this.isDiscountApplied = true;
-            msgEl.textContent = "Coupon applied successfully! Price updated.";
-            msgEl.classList.add('success');
-            inputEl.disabled = true;
-            this.renderDemoPaywallInfo(course, this.lockedCourseSection);
+            this.closeCouponModal();
+            window.open(COMMON_URLS[course].discount, '_blank');
         } else {
-            this.isDiscountApplied = false;
-            msgEl.textContent = "Invalid coupon code for this course.";
-            msgEl.classList.add('error');
+            msg.textContent = 'Invalid coupon code. Try again or buy at full price.';
+            msg.style.color = 'var(--danger)';
         }
     },
 
-    purchaseLockedContent: function() {
+    skipCouponModal: function() {
         const course = this.lockedCourseKey || 'BSc';
-
+        this.closeCouponModal();
         if (COMMON_URLS[course]) {
-            // Use common URL flow for BSc, GNM, PBBSc, MSc
-            let paymentUrl = '';
-            if (course === 'MSc') {
-                paymentUrl = COMMON_URLS[course].full;
-            } else {
-                paymentUrl = this.isDiscountApplied
-                    ? COMMON_URLS[course].discount
-                    : COMMON_URLS[course].full;
-            }
-            this.isDiscountApplied = false;
-            window.open(paymentUrl, '_blank');
+            window.open(COMMON_URLS[course].full, '_blank');
         } else {
-            // Fall back to per-section PAYMENT_LINKS for other courses
             const section = this.lockedCourseSection || 'Systems';
-            const discountKey = `${course}_${section}_D`;
-            const fullKey = `${course}_${section}_F`;
-            let url = PAYMENT_LINKS[discountKey] || PAYMENT_LINKS[fullKey] || `https://www.razorpay.com/fallback`;
+            const url = PAYMENT_LINKS[`${course}_${section}_F`] || 'https://www.razorpay.com/fallback';
             window.open(url, '_blank');
         }
+    },
+
+    applyCoupon: function(inputId, msgId) {
+        // legacy stub — now handled by modal
+    },
+
+    purchaseLockedContent: function() {
+        this.openCouponModal();
     },
 
     // ============================================
