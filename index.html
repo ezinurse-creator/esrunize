@@ -796,10 +796,10 @@
                 <h3>GNM<br>Nursing</h3>
                 <span class="material-icons-round icon">healing</span>
             </div>
-            <div class="cat-card bg-dark" onclick="app.navToCourse('EXAMS')">
-                <div class="cat-arrow"><span class="material-icons-round" style="font-size:14px;">star</span></div>
-                <h3>Competitive<br>Exams</h3>
-                <span class="material-icons-round icon">quiz</span>
+            <div class="cat-card bg-dark" onclick="app.navToCourse('REQ')">
+                <div class="cat-arrow"><span class="material-icons-round" style="font-size:14px;">assignment</span></div>
+                <h3>Require<br>ments</h3>
+                <span class="material-icons-round icon">assignment</span>
             </div>
             <div class="cat-card bg-live" onclick="app.openLiveClass()">
                 <div class="cat-arrow"><span class="material-icons-round" style="font-size:14px;">open_in_new</span></div>
@@ -1698,7 +1698,7 @@ const PAYMENT_LINKS = {
     'BSc_Semester 2_F':'https://rzp.io/rzp/xn9Spct','BSc_Semester 1_F':'https://rzp.io/rzp/OepEc2wZ','PBBSc_Second Year_D':'https://rzp.io/rzp/O7QSNXOv',
     'PBBSc_First Year_D':'https://rzp.io/rzp/TdjmSoy','PBBSc_Second Year_F':'https://rzp.io/rzp/SG5tGnXT','PBBSc_First Year_F':'https://rzp.io/rzp/2QOTgbD',
     'MSc_Second Year_F':'https://rzp.io/rzp/Hpr9NDg','MSc_First Year_F':'https://rzp.io/rzp/SGdmSPd','3D_Systems_F':'https://rzp.io/rzp/Xnrnrxe',
-    'EXAMS_NORCET_F':'https://rzp.io/l/dummy-norcet-english','EXAMS_ESCI_F':'https://rzp.io/l/dummy-esci','REQ_Documents_F':'https://rzp.io/l/dummy-nursing-req',
+    'REQ_Documents_F':'https://rzp.io/l/dummy-nursing-req',
     'COMM_Basics_F':'https://rzp.io/l/dummy-comm-eng'
 };
 
@@ -1706,7 +1706,6 @@ function getPermissionKey(course, section) {
     if (course === '3D') return '3d_models';
     if (course === 'REQ') return 'nursing_req';
     if (course === 'COMM') return 'comm_english';
-    if (course === 'EXAMS') { if(section.includes('NORCET')) return 'exams_norcet'; if(section.includes('ESCI')) return 'exams_esci'; }
     const c = course.toLowerCase();
     if (section.includes('Semester')) {
         const num = section.split(' ')[1];
@@ -1726,8 +1725,7 @@ const COURSES = {
             { label: 'Medical Surgical Nursing', link: 'msc_1_medical_surgical_nursing.html' },
             { label: 'Mental Health Nursing', link: 'msc_1_mental_health_nursing.html' },
             { label: 'Nursing Research & Stats', link: 'msc_1_nursing_research_and_statistics.html' },
-            { label: 'OBG Nursing', link: 'msc_1_obgyn_nursing.html' },
-            { label: '<span style="color: #ef4444;"></span>', link: 'msc1qp.html' }
+            { label: 'OBG Nursing', link: 'msc_1_obgyn_nursing.html' }
         ],
         'Second Year': [
             { label: 'Child Health Nursing', link: 'msc_2_child_health_nursing.html' },
@@ -1735,31 +1733,98 @@ const COURSES = {
             { label: 'OBG Nursing', link: 'msc_2_obgyn_nursing.html' },
             { label: 'Nursing Management', link: 'msc_2_nursing_management.html' },
             { label: 'Mental Health Nursing', link: 'msc_2_mental_health_nursing.html' },
-            { label: 'Medical Surgical Nursing', link: 'msc_2_medical_surgical_nursing.html' },
-            { label: '<span style="color: #ef4444;">Previous Year Question Papers</span>', link: 'msc2qp.html' }
+            { label: 'Medical Surgical Nursing', link: 'msc_2_medical_surgical_nursing.html' }
         ]
     },
     'BSc': {
-        'Semester 1': [{ label: 'Applied Sociology', link: 'bsc_1_applied_sociology.html' },{ label: 'Applied Psychology', link: 'bsc_1_applied_psychology.html' },{ label: 'Applied Physiology', link: 'bsc_1_applied_physiology.html' },{ label: 'Applied Anatomy', link: 'bsc_1_applied_anatomy.html' },{ label: 'Nursing Foundation', link: 'bsc_1_nursing_foundation.html' },{ label: 'QP', link: 'bsc1qp.html' }],
-        'Semester 2': [{ label: 'Applied Nutrition', link: 'bsc_2_applied_nutrition.html' },{ label: 'Applied Biochemistry', link: 'bsc_2_applied_biochemistry.html' },{ label: 'Nursing Foundation', link: 'bsc_2_nursing_foundation.html' },{ label: 'QP', link: 'bsc2qp.html' }],
-        'Semester 3': [{ label: 'Pharmacology', link: 'bsc_3_pharmacology.html' },{ label: 'Pathology', link: 'bsc_3_pathology.html' },{ label: 'Microbiology', link: 'bsc_3_applied_microbiology.html' },{ label: 'Adult Health Nursing', link: 'bsc_3_adult_health_nursing.html' },{ label: 'QP', link: 'bsc3qp.html' }],
-        'Semester 4': [{ label: 'Pharmacology II', link: 'bsc_4_pharmacology.html' },{ label: 'Pathology II', link: 'bsc_4_pathology.html' },{ label: 'Adult Health II', link: 'bsc_4_adult_health_nursing.html' },{ label: 'Professionalism', link: 'bsc_4_professionalism.html' },{ label: 'Genetics', link: 'bsc_4_genetics.html' },{ label: 'QP', link: 'bsc4qp.html' }],
-        'Semester 5': [{ label: 'Forensic Nursing', link: 'bsc_5_forensic_nursing_indian_law.html' },{ label: 'Education', link: 'bsc_5_nursing_education.html' },{ label: 'Community Health', link: 'bsc_5_community_health_nursing.html' },{ label: 'Mental Health', link: 'bsc_5_mental_health_nursing.html' },{ label: 'Child Health', link: 'bsc_5_child_health_nursing.html' },{ label: 'QP', link: 'bsc5qp.html' }],
-        'Semester 6': [{ label: 'Child Health II', link: 'bsc_6_child_health_nursing.html' },{ label: 'Mental Health II', link: 'bsc_6_mental_health_nursing.html' },{ label: 'Midwifery', link: 'bsc_6_midwifery_obgyn.html' },{ label: 'Management', link: 'bsc_6_nursing_management_leadership.html' },{ label: 'QP', link: 'bsc6qp.html' }],
-        'Semester 7': [{ label: 'Community Health II', link: 'bsc_7_community_health_nursing.html' },{ label: 'Research', link: 'bsc_7_nursing_research_statistics.html' },{ label: 'Midwifery II', link: 'bsc_7_midwifery_obgyn.html' },{ label: 'QP', link: 'bsc7qp.html' }]
+        'Semester 1': [{ label: 'Applied Sociology', link: 'bsc_1_applied_sociology.html' },{ label: 'Applied Psychology', link: 'bsc_1_applied_psychology.html' },{ label: 'Applied Physiology', link: 'bsc_1_applied_physiology.html' },{ label: 'Applied Anatomy', link: 'bsc_1_applied_anatomy.html' },{ label: 'Nursing Foundation', link: 'bsc_1_nursing_foundation.html' }],
+        'Semester 2': [{ label: 'Applied Nutrition', link: 'bsc_2_applied_nutrition.html' },{ label: 'Applied Biochemistry', link: 'bsc_2_applied_biochemistry.html' },{ label: 'Nursing Foundation', link: 'bsc_2_nursing_foundation.html' }],
+        'Semester 3': [{ label: 'Pharmacology', link: 'bsc_3_pharmacology.html' },{ label: 'Pathology', link: 'bsc_3_pathology.html' },{ label: 'Microbiology', link: 'bsc_3_applied_microbiology.html' },{ label: 'Adult Health Nursing', link: 'bsc_3_adult_health_nursing.html' }],
+        'Semester 4': [{ label: 'Pharmacology II', link: 'bsc_4_pharmacology.html' },{ label: 'Pathology II', link: 'bsc_4_pathology.html' },{ label: 'Adult Health II', link: 'bsc_4_adult_health_nursing.html' },{ label: 'Professionalism', link: 'bsc_4_professionalism.html' },{ label: 'Genetics', link: 'bsc_4_genetics.html' }],
+        'Semester 5': [{ label: 'Forensic Nursing', link: 'bsc_5_forensic_nursing_indian_law.html' },{ label: 'Education', link: 'bsc_5_nursing_education.html' },{ label: 'Community Health', link: 'bsc_5_community_health_nursing.html' },{ label: 'Mental Health', link: 'bsc_5_mental_health_nursing.html' },{ label: 'Child Health', link: 'bsc_5_child_health_nursing.html' }],
+        'Semester 6': [{ label: 'Child Health II', link: 'bsc_6_child_health_nursing.html' },{ label: 'Mental Health II', link: 'bsc_6_mental_health_nursing.html' },{ label: 'Midwifery', link: 'bsc_6_midwifery_obgyn.html' },{ label: 'Management', link: 'bsc_6_nursing_management_leadership.html' }],
+        'Semester 7': [{ label: 'Community Health II', link: 'bsc_7_community_health_nursing.html' },{ label: 'Research', link: 'bsc_7_nursing_research_statistics.html' },{ label: 'Midwifery II', link: 'bsc_7_midwifery_obgyn.html' }]
     },
     'PBBSc': {
-        'First Year': [{ label: 'Medical Surgical', link: 'pbbsc_1_medical_surgical_nursing.html' },{ label: 'Child Health', link: 'pbbsc_1_child_health_nursing.html' },{ label: 'Microbiology', link: 'pbbsc_1_microbiology.html' },{ label: 'Biochem/Biophys', link: 'pbbsc_1_biochemistry_biophysics.html' },{ label: 'Nutrition', link: 'pbbsc_1_nutrition_dietetics.html' },{ label: 'Foundation', link: 'pbbsc_1_nursing_foundation.html' },{ label: 'Maternal', link: 'pbbsc_1_maternal_nursing.html' },{ label: 'Psychology', link: 'pbbsc_1_psychology.html' },{ label: 'QP', link: 'pbbsc1qp.html' },{ label: 'Live class', link: 'pbbsc1live.html' }],
-        'Second Year': [{ label: 'Administration', link: 'pbbsc_2_nursing_service_administration.html' },{ label: 'Mental Health', link: 'pbbsc_2_mental_health_nursing.html' },{ label: 'Education', link: 'pbbsc_2_nursing_education.html' },{ label: 'Community Health', link: 'pbbsc_2_community_health_nursing.html' },{ label: 'Sociology', link: 'pbbsc_2_sociology.html' },{ label: 'Nursing Research & Stats', link: 'pbbsc_2_nursing_research.html' },{ label: 'QP', link: 'pbbsc2qp.html' }]
+        'First Year': [{ label: 'Medical Surgical', link: 'pbbsc_1_medical_surgical_nursing.html' },{ label: 'Child Health', link: 'pbbsc_1_child_health_nursing.html' },{ label: 'Microbiology', link: 'pbbsc_1_microbiology.html' },{ label: 'Biochem/Biophys', link: 'pbbsc_1_biochemistry_biophysics.html' },{ label: 'Nutrition', link: 'pbbsc_1_nutrition_dietetics.html' },{ label: 'Foundation', link: 'pbbsc_1_nursing_foundation.html' },{ label: 'Maternal', link: 'pbbsc_1_maternal_nursing.html' },{ label: 'Psychology', link: 'pbbsc_1_psychology.html' },{ label: 'Live class', link: 'pbbsc1live.html' }],
+        'Second Year': [{ label: 'Administration', link: 'pbbsc_2_nursing_service_administration.html' },{ label: 'Mental Health', link: 'pbbsc_2_mental_health_nursing.html' },{ label: 'Education', link: 'pbbsc_2_nursing_education.html' },{ label: 'Community Health', link: 'pbbsc_2_community_health_nursing.html' },{ label: 'Sociology', link: 'pbbsc_2_sociology.html' },{ label: 'Nursing Research & Stats', link: 'pbbsc_2_nursing_research.html' }]
     },
     'GNM': {
-        'First Year': [{ label: 'Nutrition', link: 'gnm_1_nutrition.html' },{ label: 'Health Ed', link: 'gnm_1_health_education.html' },{ label: 'Env Hygiene', link: 'gnm_1_environmental_hygiene.html' },{ label: 'Community Health', link: 'gnm_1_community_health_nursing.html' },{ label: 'First Aid', link: 'gnm_1_first_aid.html' },{ label: 'Fundamentals', link: 'gnm_1_fundamentals_of_nursing.html' },{ label: 'Sociology', link: 'gnm_1_sociology.html' },{ label: 'Psychology', link: 'gnm_1_psychology.html' },{ label: 'Microbiology', link: 'gnm_1_microbiology.html' },{ label: 'Anatomy', link: 'gnm_1_anatomy_physiology.html' },{ label: 'QP', link: 'gnm1qp.html' }],
-        'Second Year': [{ label: 'MedSurg I', link: 'gnm_2_medical_surgical_nursing.html' },{ label: 'Mental Health', link: 'gnm_2_mental_health_nursing.html' },{ label: 'MedSurg II', link: 'gnm_2_medical_surgical_nursing_two.html' },{ label: 'Child Health', link: 'gnm_2_child_health_nursing.html' },{ label: 'QP', link: 'gnm2qp.html' }],
-        'Third Year': [{ label: 'Community Health II', link: 'gnm_3_community_health_nursing.html' },{ label: 'Midwifery', link: 'gnm_3_midwifery.html' },{ label: 'Gynecology', link: 'gnm_3_gynecology.html' },{ label: 'QP', link: 'gnm3qp.html' }]
+        'First Year': [{ label: 'Nutrition', link: 'gnm_1_nutrition.html' },{ label: 'Health Ed', link: 'gnm_1_health_education.html' },{ label: 'Env Hygiene', link: 'gnm_1_environmental_hygiene.html' },{ label: 'Community Health', link: 'gnm_1_community_health_nursing.html' },{ label: 'First Aid', link: 'gnm_1_first_aid.html' },{ label: 'Fundamentals', link: 'gnm_1_fundamentals_of_nursing.html' },{ label: 'Sociology', link: 'gnm_1_sociology.html' },{ label: 'Psychology', link: 'gnm_1_psychology.html' },{ label: 'Microbiology', link: 'gnm_1_microbiology.html' },{ label: 'Anatomy', link: 'gnm_1_anatomy_physiology.html' }],
+        'Second Year': [{ label: 'MedSurg I', link: 'gnm_2_medical_surgical_nursing.html' },{ label: 'Mental Health', link: 'gnm_2_mental_health_nursing.html' },{ label: 'MedSurg II', link: 'gnm_2_medical_surgical_nursing_two.html' },{ label: 'Child Health', link: 'gnm_2_child_health_nursing.html' }],
+        'Third Year': [{ label: 'Community Health II', link: 'gnm_3_community_health_nursing.html' },{ label: 'Midwifery', link: 'gnm_3_midwifery.html' },{ label: 'Gynecology', link: 'gnm_3_gynecology.html' }]
     },
     '3D': { 'Systems': [{ label: 'Interactive 3D Models', link: '3dmodels.html' }] },
-    'EXAMS': { 'NORCET': [{ label: 'NORCET 8 (English)', link: 'norcetenglish.html' },{ label: 'NORCET (Hindi)', link: 'norcethindi.html' }], 'ESCI': [{ label: 'ESCI Exclusive Q&A', link: 'esci.html' }] },
-    'REQ': { 'Documents': [{ label: 'Nursing Requirements', link: 'nursingrequirements.html' }] },
+    'REQ': {
+        'Care Plan': [
+            { label: 'Obstetrics & Gynecology — Low Birth Weight', link: 'https://drive.google.com/file/d/14LUa8EXTNFJRCTMYHCD4BCKvI6nv5Rzg/view?usp=drivesdk' },
+            { label: 'Obstetrics & Gynecology — Antenatal (Primary Gravida)', link: 'https://drive.google.com/file/d/1EHpLANZm-WHoc44gh4Ct7iZ9lq0PQArD/view?usp=drivesdk' },
+            { label: 'Obstetrics & Gynecology — Antenatal (Pregnancy in Jaundice)', link: 'https://drive.google.com/file/d/1N7Zvx0_oNOQQp_YvsZtEx4tu0lLXhX2_/view?usp=drivesdk' },
+            { label: 'Obstetrics & Gynecology — Antenatal (Hyperemesis Gravidarum)', link: 'https://drive.google.com/file/d/1c1C8xr_gfCqynjfMq-p5qP_dYorWHhPo/view?usp=drivesdk' },
+            { label: 'Obstetrics & Gynecology — Postnatal', link: 'https://drive.google.com/file/d/1nYUSkzeN_xt4nEuh3YWpipOiLMLxtpex/view?usp=drivesdk' },
+            { label: 'Obstetrics & Gynecology — Antenatal (Diabetes Mellitus)', link: 'https://drive.google.com/file/d/1sgpnDW1F_0OIqZ8qEJYGbxCIa8ld-nww/view?usp=drivesdk' },
+            { label: 'Obstetrics & Gynecology — Amenorrhea', link: 'https://drive.google.com/file/d/1tHC48vjwRORcAUhaXwqS8KJtgjFHDzs7/view?usp=drivesdk' },
+            { label: 'Obstetrics & Gynecology — Cord Prolapse', link: 'https://drive.google.com/file/d/1yS7rws3mqfiMRSKPpmwDmwFgL8VrUt5I/view?usp=drivesdk' },
+            { label: 'Mental Health — Depression', link: 'https://drive.google.com/file/d/1CQZqe9RrzqOAi4rv4ybsdQhqoSHX4oxH/view?usp=drivesdk' },
+            { label: 'Mental Health — Obsessive Compulsive Disorder', link: 'https://drive.google.com/file/d/1LnIB0Ymq8cM-UlMmui66BbbCf7f-0-bp/view?usp=drivesdk' },
+            { label: 'Mental Health — Bipolar Affective Disorder', link: 'https://drive.google.com/file/d/1QvbUSW9C9h1KeduEwfzt0UdzItphgJiF/view?usp=drivesdk' },
+            { label: 'Mental Health — Somatization Disorder', link: 'https://drive.google.com/file/d/1QyyCjbgmBA97UfDjv5Uep4UTqB0T1O2-/view?usp=drivesdk' },
+            { label: 'Mental Health — Codeine-Based Cough Syrup Disorder', link: 'https://drive.google.com/file/d/1XFYq-DP05OAntGgNMY6diwU5id5PpQt9/view?usp=drivesdk' },
+            { label: 'Mental Health — Schizophrenia', link: 'https://drive.google.com/file/d/1ptBpxSxraCZoLHneGphl3P0gxMMecFKS/view?usp=drivesdk' },
+            { label: 'Mental Health — Alcohol Dependence Syndrome', link: 'https://drive.google.com/file/d/1z8zGcw2qWJg2o0sybmCk12FBgZiCFLMF/view?usp=drivesdk' },
+            { label: 'Medical Surgical — Esophagectomy (Surgical)', link: 'https://drive.google.com/file/d/16czWNfnZy6xi5bqHqbjN3tb4P6986UFV/view?usp=drivesdk' },
+            { label: 'Medical Surgical — Meningitis (Medical)', link: 'https://drive.google.com/file/d/1Hc-sYEtpKWRNa2AXNZep3XJ0jxBk0ECt/view?usp=drivesdk' },
+            { label: 'Medical Surgical — Dengue Fever', link: 'https://drive.google.com/file/d/1V5vqB1lp6XHe2XZiROdDpTuupc7DHeIC/view?usp=drivesdk' },
+            { label: 'Medical Surgical — Pulmonary Tuberculosis', link: 'https://drive.google.com/file/d/1ZHUCcOhCoWpNOs0nAcbE66SdST4twsgV/view?usp=drivesdk' },
+            { label: 'Medical Surgical — Fever & Thrombocytopenia', link: 'https://drive.google.com/file/d/1ZM8EuYhUPxuAtgn7E75MpEnpij3hvEzW/view?usp=drivesdk' },
+            { label: 'Medical Surgical — Meningitis II', link: 'https://drive.google.com/file/d/1_VNhcWNXV6PLWRgo-RQpTW9_JCxP1YxB/view?usp=drivesdk' },
+            { label: 'Medical Surgical — Salpingo-Oopherectomy', link: 'https://drive.google.com/file/d/1bmP4XXhcJkfQpiriIhNUIMcOl2PCw0FM/view?usp=drivesdk' },
+            { label: 'Medical Surgical — Fever & Thrombocytopenia II', link: 'https://drive.google.com/file/d/1cwkDG2-56Eew5XmnL9ajKxD37GdSvSzI/view?usp=drivesdk' },
+            { label: 'Medical Surgical — Esophagectomy II', link: 'https://drive.google.com/file/d/1ei9NyAbZKEU5gfRVaj4jcIKAT7BvTxAy/view?usp=drivesdk' },
+            { label: 'Medical Surgical — Salpingo-Oopherectomy II', link: 'https://drive.google.com/file/d/1k9f_XKB87q3WpTzzIDeOxijAgpwRDt8f/view?usp=drivesdk' },
+            { label: 'Medical Surgical — Meningitis III', link: 'https://drive.google.com/file/d/1w_-5o27lNXLnrSNHV8UuxbA0rk5UWHnd/view?usp=drivesdk' },
+            { label: 'Fundamentals — Tonsil Cancer', link: 'https://drive.google.com/file/d/1Z3I2e0mV82vsHH2KBKmDeNixj6vGOKLW/view?usp=drivesdk' },
+            { label: 'Fundamentals — Acute Leukemia', link: 'https://drive.google.com/file/d/1g09BCfVQeRmfmDGn1VzkRS_nnxxkRUB8/view?usp=drivesdk' },
+            { label: 'Community Health — Jaundice', link: 'https://drive.google.com/file/d/16X7BFvJFDCahSHBabPgZX8djJm2nHlk9/view?usp=drivesdk' },
+            { label: 'Community Health — General', link: 'https://drive.google.com/file/d/1AYmTIUwHlEnFjWZm-Zwg2Wrbor-QWkvM/view?usp=drivesdk' },
+            { label: 'Community Health — Dengue Fever', link: 'https://drive.google.com/file/d/1RVi6vx0mqiMHmGy23i8ydIYYYi7p6bw5/view?usp=drivesdk' },
+            { label: 'Community Health — Pneumonia', link: 'https://drive.google.com/file/d/1fy1Xth9xoSywThvWw3pzwmrHd5r3qyFg/view?usp=drivesdk' },
+            { label: 'Community Health — Whooping Cough', link: 'https://drive.google.com/file/d/1kEFzQ-AOlBSTvW0ioLB-hynAgzPUtK3M/view?usp=drivesdk' },
+            { label: 'Community Health — Malaria', link: 'https://drive.google.com/file/d/1lhNoVe3Mptz2vqfUxBk_J1Qp8aCI-LRN/view?usp=drivesdk' },
+            { label: 'Community Health — Small Pox', link: 'https://drive.google.com/file/d/1u3HZF7Ff446Ry3UocJEHTNYBK3kfEYc3/view?usp=drivesdk' },
+            { label: 'Community Health — Bronchial Asthma', link: 'https://drive.google.com/file/d/1yWeKD-m1tCqLm9C6ZcHUoe91YymmpJz8/view?usp=drivesdk' },
+            { label: 'Child Health — Asthma', link: 'https://drive.google.com/file/d/14HmUEM2l7j27XGBh10GXTdZEWFyuwvJZ/view?usp=drivesdk' },
+            { label: 'Child Health — Cleft Lip', link: 'https://drive.google.com/file/d/1AUw00sRjrzqHAt-xsw9RN0Fc-U3qdX1d/view?usp=drivesdk' },
+            { label: 'Child Health — Internal Plate Fixation', link: 'https://drive.google.com/file/d/1HWcSTUF1Bziog75ZpYBqSC1nDWCD4g3h/view?usp=drivesdk' },
+            { label: 'Child Health — Hernioplasty (Surgical)', link: 'https://drive.google.com/file/d/1I13_RSW6dbmgYj8JMiG-7JDqH3fZSNTf/view?usp=drivesdk' },
+            { label: 'Child Health — Newborn with Jaundice', link: 'https://drive.google.com/file/d/1MZKkYPv3MfY3YxT3f5_oqFZ6n2Lcb3Rb/view?usp=drivesdk' },
+            { label: 'Child Health — VSD & Tetralogy of Fallot', link: 'https://drive.google.com/file/d/1OKtGtIUS4oznZazc2j5svaxZOY0sFERY/view?usp=drivesdk' },
+            { label: 'Child Health — Seizure', link: 'https://drive.google.com/file/d/1OnBzmQ3e-B58fPjDFQzPyCnePCtpCorN/view?usp=drivesdk' },
+            { label: 'Child Health — Pneumonia', link: 'https://drive.google.com/file/d/1TtrFjgNC4En6oFpBvg3MHd-XBkFIdBuH/view?usp=drivesdk' },
+            { label: 'Child Health — Pulmonary Valvotomy (Surgical)', link: 'https://drive.google.com/file/d/1VwiEtL8w-riETdCZjF4K7iCZuadmdkf2/view?usp=drivesdk' },
+            { label: 'Child Health — Pertussis', link: 'https://drive.google.com/file/d/1bBtj4G5yzhLYTGRs0OxKv_XgNG0Qc21y/view?usp=drivesdk' },
+            { label: 'Child Health — Appendectomy', link: 'https://drive.google.com/file/d/1c_Z1Ggc7WyMF1U_4y1LgWHTkEwzsR1uY/view?usp=drivesdk' },
+            { label: 'Child Health — Meningitis', link: 'https://drive.google.com/file/d/1haEHctPEQM4alvgu6IpJ5tnYoznFRZdZ/view?usp=drivesdk' },
+            { label: 'Child Health — Splenectomy (Surgical)', link: 'https://drive.google.com/file/d/1nQpvlzFQq2txMkwrt68rO53Y6jzV9Pqg/view?usp=drivesdk' },
+            { label: 'Child Health — AIDS', link: 'https://drive.google.com/file/d/1qEeV8u0WWK7cX5aleCzOWBghwqCJp0zs/view?usp=drivesdk' },
+            { label: 'Child Health — Kasai Protoenterostomy', link: 'https://drive.google.com/file/d/1sNesIqKFMhC3k8vwfJwfoKIGVRkdqGb5/view?usp=drivesdk' }
+        ],
+        'Case Presentation': [
+            { label: 'Case Presentations', link: 'case_presentation.html' }
+        ],
+        'Assignments': [
+            { label: 'Assignments', link: 'assignments.html' }
+        ],
+        'Medical Abbreviations': [
+            { label: 'Medical Abbreviations', link: 'medical_abbreviations.html' }
+        ],
+        'Nursing Procedure': [
+            { label: 'Nursing Procedure', link: 'nursing_procedure.html' }
+        ],
+        'Psychiatric Records': [
+            { label: 'Psychiatric Records', link: 'psychiatric_records.html' }
+        ]
+    },
     'COMM': { 'Basics': [{ label: 'Communicative English', link: 'communicativeenglish.html' }] }
 };
 
@@ -1837,14 +1902,6 @@ const DEMO_QUIZ = {
     'GNM_Third Year': [
         { q: "The first stage of labour begins with:", o: ["Rupture of membranes", "Onset of regular contractions to full cervical dilation", "Delivery of baby", "Delivery of placenta"], a: 1 },
         { q: "Which contraceptive method has the highest efficacy?", o: ["Condom", "Combined Oral Contraceptive Pill", "Copper-T IUD", "Calendar method"], a: 2 }
-    ],
-    'EXAMS_NORCET': [
-        { q: "NORCET stands for:", o: ["Nursing Officer Recruitment Common Eligibility Test", "National Oral Care Exam Test", "Nursing Officer Regular Certification Exam", "None of the above"], a: 0 },
-        { q: "The conducting authority of NORCET is:", o: ["AIIMS New Delhi", "UPSC", "NMC", "INC"], a: 0 }
-    ],
-    'EXAMS_ESCI': [
-        { q: "ESCI exam primarily tests knowledge in:", o: ["Management only", "Clinical Nursing and Sciences", "Law", "History"], a: 1 },
-        { q: "Normal serum sodium level is:", o: ["100-110 mEq/L", "135-145 mEq/L", "150-160 mEq/L", "120-130 mEq/L"], a: 1 }
     ],
     'default': [
         { q: "The normal adult heart rate is:", o: ["40-60 bpm", "60-100 bpm", "100-120 bpm", "120-140 bpm"], a: 1 },
