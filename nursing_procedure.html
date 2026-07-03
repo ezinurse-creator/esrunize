@@ -4,55 +4,230 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Nursing Procedure</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
+:root{
+--p50:#faf5ff;--p100:#f3e8ff;--p200:#e9d5ff;--p300:#d8b4fe;
+--p400:#c084fc;--p500:#a855f7;--p600:#9333ea;--p700:#7e22ce;
+--p800:#6b21a8;--p900:#581c87;
+--w:#fff;--g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;
+--g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;
+--r:12px;--rs:8px;
+--s1:0 1px 3px rgba(109,40,217,.08);
+--s2:0 4px 12px rgba(109,40,217,.12);
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:#f8fafc;color:#0f172a;min-height:100vh;-webkit-font-smoothing:antialiased}
-.topbar{position:sticky;top:0;z-index:90;background:#fff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;padding:0 16px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
-.tb-back{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:#f3e8ff;color:#7e22ce;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;margin-right:12px}
-.tb-back:hover{background:#e9d5ff}
-.tb-title{font-size:.88rem;font-weight:700;color:#0f172a;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-.tb-sub{font-size:.65rem;color:#94a3b8;font-weight:500;margin-top:1px}
-.hero{background:linear-gradient(145deg,#581c87,#1d4ed8 55%,#a855f7);padding:36px 18px 32px;position:relative;overflow:hidden;text-align:center}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:90;background:var(--w);border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 16px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-back{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:var(--p100);color:var(--p700);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;margin-right:12px}
+.tb-back:hover{background:var(--p200)}
+.tb-info{flex:1;min-width:0}
+.tb-title{font-size:.88rem;font-weight:700;color:var(--g900);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb-sub{font-size:.65rem;color:var(--g400);font-weight:500;margin-top:1px}
+.tb-chip{background:var(--p100);color:var(--p700);border:1px solid var(--p200);font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
+.hero{background:linear-gradient(145deg,var(--p900),var(--p700) 55%,var(--p500));padding:28px 18px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.08),transparent 50%),radial-gradient(circle at 10% 85%,rgba(255,255,255,.05),transparent 40%)}
 .hero-dot-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
 .hero-inner{position:relative;z-index:1}
-.hero-emoji{font-size:3rem;display:block;margin-bottom:12px}
-.hero h1{font-size:1.7rem;font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:8px}
-.hero-desc{font-size:.82rem;color:rgba(255,255,255,.6);line-height:1.6}
-.coming-soon{margin:48px auto 0;max-width:340px;text-align:center;padding:0 20px}
-.cs-icon{font-size:3.5rem;margin-bottom:16px}
-.cs-title{font-size:1.1rem;font-weight:700;color:#334155;margin-bottom:8px}
-.cs-desc{font-size:.85rem;color:#64748b;line-height:1.6}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:.65rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border-radius:30px;margin-bottom:12px}
+.hero-eyebrow-dot{width:5px;height:5px;background:#c4b5fd;border-radius:50%}
+.hero h1{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:7px}
+.hero h1 em{color:rgba(255,255,255,.45);font-style:italic;font-weight:300}
+.hero-desc{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:0}
+.hero-stats{display:flex;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+.hs{flex:1;text-align:center}
+.hs+.hs{border-left:1px solid rgba(255,255,255,.1)}
+.hs-n{font-size:1.35rem;font-weight:800;color:#fff;line-height:1}
+.hs-l{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
+.main{padding:16px 14px 56px}
+.divider{display:flex;align-items:center;gap:8px;margin-bottom:12px;margin-top:2px}
+.divider span{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g400)}
+.divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+.uc{background:var(--w);border:1.5px solid var(--g200);border-radius:var(--r);margin-bottom:9px;overflow:hidden;box-shadow:var(--s1);transition:border-color .2s,box-shadow .2s}
+.uc:hover{border-color:var(--p300);box-shadow:var(--s2)}
+.uc[data-open=true]{border-color:var(--p400);box-shadow:var(--s2)}
+.ubtn{width:100%;display:flex;align-items:center;padding:14px 15px;gap:12px;background:none;border:none;cursor:pointer;text-align:left}
+.upill{min-width:44px;width:44px;height:36px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+.uinfo{flex:1;min-width:0}
+.uname{font-size:.85rem;font-weight:700;color:var(--g900);line-height:1.3}
+.umeta{font-size:.66rem;color:var(--g400);margin-top:2px;font-weight:500}
+.uright{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.uchev{width:16px;height:16px;color:var(--g300);transition:transform .3s,color .2s}
+.uc[data-open=true] .uchev{transform:rotate(180deg);color:var(--p500)}
+.ubody{display:none;border-top:1.5px solid var(--p200);padding:10px 12px 12px;background:var(--p50)}
+.ubody.open{display:block;animation:bodyIn .2s ease}
+@keyframes bodyIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.cp-btn{display:flex;align-items:center;gap:10px;width:100%;padding:11px 13px;margin-bottom:7px;border-radius:var(--rs);border:1.5px solid var(--g200);background:var(--w);cursor:pointer;text-align:left;text-decoration:none;transition:all .17s;color:var(--g900)}
+.cp-btn:last-child{margin-bottom:0}
+.cp-btn:hover{border-color:var(--p400);background:var(--p50);box-shadow:var(--s2);transform:translateY(-1px)}
+.cp-btn:active{transform:scale(.98)}
+.cp-ico{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.cp-txt{flex:1;min-width:0}
+.cp-label{font-size:.82rem;font-weight:600;color:var(--g900);line-height:1.3;display:block;word-break:break-word}
+.cp-type{font-size:.62rem;color:var(--g400);margin-top:2px;display:block;font-weight:500}
+.cp-arr{font-size:.75rem;color:var(--g300);flex-shrink:0;transition:color .15s}
+.cp-btn:hover .cp-arr{color:var(--p500)}
+.count-badge{background:var(--g100);color:var(--g500);font-size:.6rem;font-weight:700;padding:2px 6px;border-radius:10px;border:1px solid var(--g200)}
+.ico-pdf{background:#fee2e2}.ico-doc{background:#dbeafe}.ico-vid{background:#d1fae5}.ico-ppt{background:#fef3c7}.ico-gen{background:#f3e8ff}
 </style>
 </head>
 <body>
 <header class="topbar">
   <button class="tb-back" onclick="goBackToApp()" aria-label="Back">&#8592;</button>
-  <div>
+  <div class="tb-info">
     <div class="tb-title">Nursing Procedure</div>
     <div class="tb-sub">Requirements</div>
   </div>
-</header>
-<section class="hero">
+  <div class="tb-chip">54 Files</div>
+</header><section class="hero">
   <div class="hero-dot-grid"></div>
   <div class="hero-inner">
-    <span class="hero-emoji">💉</span>
-    <h1>Nursing Procedure</h1>
-    <p class="hero-desc">Requirements Section</p>
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>Requirements</div>
+    <h1>Nursing<br/><em>Procedure</em></h1>
+    <p class="hero-desc">54 procedure documents and videos across 6 clinical categories.</p>
+    <div class="hero-stats"><div class="hs"><div class="hs-n">54</div><div class="hs-l">Files</div></div><div class="hs"><div class="hs-n">7</div><div class="hs-l">Categories</div></div></div>
   </div>
 </section>
-<div class="coming-soon">
-  <div class="cs-icon">🚀</div>
-  <div class="cs-title">Coming Soon</div>
-  <div class="cs-desc">Nursing procedure guides will be available here.</div>
+<main class="main">
+<div class="divider"><span>Browse by Category</span></div>
+<div class="uc" id="s1" data-open="false">
+  <button class="ubtn" onclick="tog('s1')">
+    <div class="upill">🧼</div>
+    <div class="uinfo"><div class="uname">Hygiene &amp; Infection Control</div><div class="umeta">9 Procedures</div></div>
+    <div class="uright">
+      <svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+    </div>
+  </button>
+  <div class="ubody" id="b-s1">
+    <a class="cp-btn" href="https://drive.google.com/file/d/1LCJYhNZuC3hxhtYpGbLbkaBrq0NOXLQW/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Hand Washing</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1L0xCzVt4lkyURuJ22AUGWFAvvqM2rEPc/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Hand Washing Procedure</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1VZ8gsgIY2Z3qyeT_LcgaQFB2uv5P2ZdJ/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Personal Hygiene</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1A3hhO5oeWgYHDkaN-yzBPhcrzY4SNlAi/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Oral Hygiene</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1fheDgD_mshb911fuGh_ywB2U0DY2hOg7/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Care of Eyes, Nose &amp; Ears</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1v2YYueFBGujrD4tDSX14cN8W5KEO3pUI/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Care of Hair — Hygiene</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1j3JnoInaPgcKLrbrnte4K6PnXj23JfzH/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Care of Hands, Feet &amp; Nails</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1-9gjsAP8qF7DvllZ2plK9lSy69OEEewp/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Disinfection of the Patient Unit</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1BUIrSaHgVQ1dBKD5zqbnrnLHLqyHna5h/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Barrier Nursing</span></div><span class="cp-arr">↗</span></a>
+  </div>
+</div><div class="uc" id="s2" data-open="false">
+  <button class="ubtn" onclick="tog('s2')">
+    <div class="upill">📊</div>
+    <div class="uinfo"><div class="uname">Vital Signs &amp; Diagnostics</div><div class="umeta">10 Procedures</div></div>
+    <div class="uright">
+      <svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+    </div>
+  </button>
+  <div class="ubody" id="b-s2">
+    <a class="cp-btn" href="https://drive.google.com/file/d/1UGQ769KEde65T_lVTF1pJHICQWViQbhf/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Vital Signs</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1ktl8Rd6SQov1yaB_MgVkAsT6vWcWKAo2/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">TPR &amp; BP Procedure</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1AK6VXZSUN0drQ40xyP-qCRltzza-A_DH/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Blood Pressure</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1Ofssvm4ChFLQhk8DytlJQWh5sQYKqR86/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Temperature Techniques</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1HzWT3dOD3xHdlirGDJs1BvRBQTMvAHcS/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Oxygen Saturation</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1cdTJcslsqWlCQn-fzIsDjtD9n3fy8miO/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Oxygen Administration</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1FTlNUgmoKGlZVGoKzJQOp-HBr5I6p0ND/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Urine Testing</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1a2mArh-AmPu7sWHsKduNM01ogPqOX7Mx/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Specimen Collection</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1f3jF7luTAWUzZkRV31xhHpYlm24SmDs6/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Preparation of Sputum Smear</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1D6T9y9BmNqKHZhzcQzFCWrVLysQvxTyJ/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Cholecystography</span></div><span class="cp-arr">↗</span></a>
+  </div>
+</div><div class="uc" id="s3" data-open="false">
+  <button class="ubtn" onclick="tog('s3')">
+    <div class="upill">💉</div>
+    <div class="uinfo"><div class="uname">Medication &amp; Fluid Administration</div><div class="umeta">8 Procedures</div></div>
+    <div class="uright">
+      <svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+    </div>
+  </button>
+  <div class="ubody" id="b-s3">
+    <a class="cp-btn" href="https://drive.google.com/file/d/1esxrt61aowho3TVs1ZA65JsrzReYIHVq/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Overview of Nursing Procedure</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1_8TY6W8L2o1wXmBzJRcWzf7AhqXhfSr-/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Drug Administration</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1fkkI_AF9k01aJ064_UOcZdwN1RlGvGox/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Injection Techniques</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1Y3gs_dDjyO41vPYkSjD2nztH9gH6yLld/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Intradermal Injection</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1Ls669fT2aOfNOjf9w4h-yCMjakOyyXBa/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">IM Medication Administration</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1dwhtW_wvDc4SdJJrxl0lNJemMwTc4-xz/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Nebulization Script</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1mhJJYcynulNrxYlDo8xvVMmvHAZoNp2x/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Oral Rehydration Therapy</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1bLGckVonxwjiWDODFwRfq3kE3726Teuh/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Feeding Types</span></div><span class="cp-arr">↗</span></a>
+  </div>
+</div><div class="uc" id="s4" data-open="false">
+  <button class="ubtn" onclick="tog('s4')">
+    <div class="upill">🌡️</div>
+    <div class="uinfo"><div class="uname">Therapeutic Applications</div><div class="umeta">11 Procedures</div></div>
+    <div class="uright">
+      <svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+    </div>
+  </button>
+  <div class="ubody" id="b-s4">
+    <a class="cp-btn" href="https://drive.google.com/file/d/1chIilAbNkkteybimRRgdKewRTcmUxHnq/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Hot Fomentation</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/12lZMzPS9PBTeD76w63qYFUWCHaC_3z81/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Cold Compress</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1AkX2vnwRpRASopuAQt1mwjvVjl_nS1S4/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Cold Application</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/14oNvpsfDf-_s0mJKLm97XkhSw1UK-TIL/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Ice Cap or Ice Collar</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1j8_1VTM70nx7tySSHl5O4xbmy0qVrko_/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Infrared Therapy (Hot Application)</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1V9g5fhnMCV6JyuplMMEwYPIBaYAGYSeW/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Steam Inhalation</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1MedzeWuIS-_y3zpd5N287ENfn4h_v2Gd/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Eye Irrigation</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1q0wAD7BMVKl5S2wqcmhUp25ezWor_REQ/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Bowel Wash</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1rV_gMXDLn1AUAdFl9LGhpTUyFIwijt5E/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Insertion of a Flatus Tube</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1ptwY3e3IZ_kUkHqXbnTyMs3VNhbwpUFG/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Bandaging</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/13qD7jILNgE6eFmLkVYS80k2Oe38KlKo1/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Lateral and Sim's Position</span></div><span class="cp-arr">↗</span></a>
+  </div>
+</div><div class="uc" id="s5" data-open="false">
+  <button class="ubtn" onclick="tog('s5')">
+    <div class="upill">🔪</div>
+    <div class="uinfo"><div class="uname">Surgical &amp; Wound Care</div><div class="umeta">6 Procedures</div></div>
+    <div class="uright">
+      <svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+    </div>
+  </button>
+  <div class="ubody" id="b-s5">
+    <a class="cp-btn" href="https://drive.google.com/file/d/1zCdMt9ysSLYUavcgbK80-INyCKeTlZ6o/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Preoperative Nursing Care</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1cpMhQU4tO44j6XygftJE9s9joyp0iRJI/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Surgical Dressing</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1kIQqMDGd9STS3hDeyPGvnQ9CGupqNsqK/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Surgical Soak</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1e3jARE_U7ZrJuUSPlHsZTLlEH7rr6YSG/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Suture Removal</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1YMQ7oHVz5zilJweZkAeP_uvVf5arDP54/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Wound Care</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1F2nTeSwqccNJaXQCY-hoT0Sh1ayzP1ss/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Discharge Procedure in Hospital</span></div><span class="cp-arr">↗</span></a>
+  </div>
+</div><div class="uc" id="s6" data-open="false">
+  <button class="ubtn" onclick="tog('s6')">
+    <div class="upill">👶</div>
+    <div class="uinfo"><div class="uname">Paediatric Procedures</div><div class="umeta">4 Procedures</div></div>
+    <div class="uright">
+      <svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+    </div>
+  </button>
+  <div class="ubody" id="b-s6">
+    <a class="cp-btn" href="https://drive.google.com/file/d/1uXvAqckLgoKTIJwe-FJ0bR4pXZ4fZA21/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Care of Under Five's</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1IZBzpdSH83StSMzflgPJ79K40q7yiOfF/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Under Five Assessments</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1A29GSrCJIcI7OI-ibRKPkVUabkeQTyeK/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Newborn Anthropometric Measurement</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1j-AFygZLNMnVO7I3Rnt__KG0k0yU93Sb/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-pdf">📄</div><div class="cp-txt"><span class="cp-label">Mummy Restraints</span></div><span class="cp-arr">↗</span></a>
+  </div>
+</div><div class="uc" id="s7" data-open="false">
+  <button class="ubtn" onclick="tog('s7')">
+    <div class="upill">▶️</div>
+    <div class="uinfo"><div class="uname">Video Demonstrations</div><div class="umeta">6 Videos</div></div>
+    <div class="uright">
+      <svg class="uchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+    </div>
+  </button>
+  <div class="ubody" id="b-s7">
+    <a class="cp-btn" href="https://drive.google.com/file/d/1GyGyqLHL1ln2LHByghu-gOI0eI_Kyf5A/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-vid">▶️</div><div class="cp-txt"><span class="cp-label">V01 — IM Medication Administration</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1PufICiPLxGHs1Kf1Thx1ZKNCq0efQl5g/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-vid">▶️</div><div class="cp-txt"><span class="cp-label">V02 — Vital Signs &amp; Input Output Chart</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1T_X7jzSjFjatRf0nYYFKlaMbO7jqqWGp/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-vid">▶️</div><div class="cp-txt"><span class="cp-label">V03 — EziNurse Procedure Demo</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1YGWjMn9HRu5i9tTq4Pv1SsvoZO3L8Y_f/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-vid">▶️</div><div class="cp-txt"><span class="cp-label">V04 — Newborn Anthropometric Measurement</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1Wd8rcaX1rE4eyUMTFVK7w98wG0vHO6lN/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-vid">▶️</div><div class="cp-txt"><span class="cp-label">V07 — Hand Washing</span></div><span class="cp-arr">↗</span></a>
+    <a class="cp-btn" href="https://drive.google.com/file/d/1-fiZfhW-P8Zipk8NfGIQoupzu8PkC7JK/view?usp=drivesdk" target="_blank"><div class="cp-ico ico-vid">▶️</div><div class="cp-txt"><span class="cp-label">V10 — Intradermal Injection</span></div><span class="cp-arr">↗</span></a>
+  </div>
 </div>
+</main>
 <script>
-function goBackToApp() {
-  if (window.parent && window.parent !== window) {
-    window.parent.postMessage({ action: 'goBack' }, '*');
-  } else {
-    history.back();
-  }
+function goBackToApp(){
+  if(window.parent&&window.parent!==window){window.parent.postMessage({action:'goBack'},'*');}
+  else{history.back();}
+}
+function tog(id){
+  const c=document.getElementById(id);
+  const b=document.getElementById('b-'+id);
+  const o=c.dataset.open==='true';
+  c.dataset.open=String(!o);
+  b.classList.toggle('open',!o);
 }
 </script>
 </body>
