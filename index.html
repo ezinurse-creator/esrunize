@@ -1353,6 +1353,11 @@ const _realApp = {
 
     checkAccessAndOpen: function(course, section) {
         this.lockedCourseKey = course; this.lockedCourseSection = section;
+        // REQ (Requirements) sections are always freely accessible — no demo, no paywall
+        if (course === 'REQ') {
+            this.openSubjectList(course, section);
+            return;
+        }
         const pKey = getPermissionKey(course, section);
         if (this.permissions && (this.permissions[pKey] === true || this.permissions['all_access'] === true)) {
             // Has access — go straight to subject list
@@ -1757,57 +1762,7 @@ const COURSES = {
     '3D': { 'Systems': [{ label: 'Interactive 3D Models', link: '3dmodels.html' }] },
     'REQ': {
         'Care Plan': [
-            { label: 'Obstetrics & Gynecology — Low Birth Weight', link: 'https://drive.google.com/file/d/14LUa8EXTNFJRCTMYHCD4BCKvI6nv5Rzg/view?usp=drivesdk' },
-            { label: 'Obstetrics & Gynecology — Antenatal (Primary Gravida)', link: 'https://drive.google.com/file/d/1EHpLANZm-WHoc44gh4Ct7iZ9lq0PQArD/view?usp=drivesdk' },
-            { label: 'Obstetrics & Gynecology — Antenatal (Pregnancy in Jaundice)', link: 'https://drive.google.com/file/d/1N7Zvx0_oNOQQp_YvsZtEx4tu0lLXhX2_/view?usp=drivesdk' },
-            { label: 'Obstetrics & Gynecology — Antenatal (Hyperemesis Gravidarum)', link: 'https://drive.google.com/file/d/1c1C8xr_gfCqynjfMq-p5qP_dYorWHhPo/view?usp=drivesdk' },
-            { label: 'Obstetrics & Gynecology — Postnatal', link: 'https://drive.google.com/file/d/1nYUSkzeN_xt4nEuh3YWpipOiLMLxtpex/view?usp=drivesdk' },
-            { label: 'Obstetrics & Gynecology — Antenatal (Diabetes Mellitus)', link: 'https://drive.google.com/file/d/1sgpnDW1F_0OIqZ8qEJYGbxCIa8ld-nww/view?usp=drivesdk' },
-            { label: 'Obstetrics & Gynecology — Amenorrhea', link: 'https://drive.google.com/file/d/1tHC48vjwRORcAUhaXwqS8KJtgjFHDzs7/view?usp=drivesdk' },
-            { label: 'Obstetrics & Gynecology — Cord Prolapse', link: 'https://drive.google.com/file/d/1yS7rws3mqfiMRSKPpmwDmwFgL8VrUt5I/view?usp=drivesdk' },
-            { label: 'Mental Health — Depression', link: 'https://drive.google.com/file/d/1CQZqe9RrzqOAi4rv4ybsdQhqoSHX4oxH/view?usp=drivesdk' },
-            { label: 'Mental Health — Obsessive Compulsive Disorder', link: 'https://drive.google.com/file/d/1LnIB0Ymq8cM-UlMmui66BbbCf7f-0-bp/view?usp=drivesdk' },
-            { label: 'Mental Health — Bipolar Affective Disorder', link: 'https://drive.google.com/file/d/1QvbUSW9C9h1KeduEwfzt0UdzItphgJiF/view?usp=drivesdk' },
-            { label: 'Mental Health — Somatization Disorder', link: 'https://drive.google.com/file/d/1QyyCjbgmBA97UfDjv5Uep4UTqB0T1O2-/view?usp=drivesdk' },
-            { label: 'Mental Health — Codeine-Based Cough Syrup Disorder', link: 'https://drive.google.com/file/d/1XFYq-DP05OAntGgNMY6diwU5id5PpQt9/view?usp=drivesdk' },
-            { label: 'Mental Health — Schizophrenia', link: 'https://drive.google.com/file/d/1ptBpxSxraCZoLHneGphl3P0gxMMecFKS/view?usp=drivesdk' },
-            { label: 'Mental Health — Alcohol Dependence Syndrome', link: 'https://drive.google.com/file/d/1z8zGcw2qWJg2o0sybmCk12FBgZiCFLMF/view?usp=drivesdk' },
-            { label: 'Medical Surgical — Esophagectomy (Surgical)', link: 'https://drive.google.com/file/d/16czWNfnZy6xi5bqHqbjN3tb4P6986UFV/view?usp=drivesdk' },
-            { label: 'Medical Surgical — Meningitis (Medical)', link: 'https://drive.google.com/file/d/1Hc-sYEtpKWRNa2AXNZep3XJ0jxBk0ECt/view?usp=drivesdk' },
-            { label: 'Medical Surgical — Dengue Fever', link: 'https://drive.google.com/file/d/1V5vqB1lp6XHe2XZiROdDpTuupc7DHeIC/view?usp=drivesdk' },
-            { label: 'Medical Surgical — Pulmonary Tuberculosis', link: 'https://drive.google.com/file/d/1ZHUCcOhCoWpNOs0nAcbE66SdST4twsgV/view?usp=drivesdk' },
-            { label: 'Medical Surgical — Fever & Thrombocytopenia', link: 'https://drive.google.com/file/d/1ZM8EuYhUPxuAtgn7E75MpEnpij3hvEzW/view?usp=drivesdk' },
-            { label: 'Medical Surgical — Meningitis II', link: 'https://drive.google.com/file/d/1_VNhcWNXV6PLWRgo-RQpTW9_JCxP1YxB/view?usp=drivesdk' },
-            { label: 'Medical Surgical — Salpingo-Oopherectomy', link: 'https://drive.google.com/file/d/1bmP4XXhcJkfQpiriIhNUIMcOl2PCw0FM/view?usp=drivesdk' },
-            { label: 'Medical Surgical — Fever & Thrombocytopenia II', link: 'https://drive.google.com/file/d/1cwkDG2-56Eew5XmnL9ajKxD37GdSvSzI/view?usp=drivesdk' },
-            { label: 'Medical Surgical — Esophagectomy II', link: 'https://drive.google.com/file/d/1ei9NyAbZKEU5gfRVaj4jcIKAT7BvTxAy/view?usp=drivesdk' },
-            { label: 'Medical Surgical — Salpingo-Oopherectomy II', link: 'https://drive.google.com/file/d/1k9f_XKB87q3WpTzzIDeOxijAgpwRDt8f/view?usp=drivesdk' },
-            { label: 'Medical Surgical — Meningitis III', link: 'https://drive.google.com/file/d/1w_-5o27lNXLnrSNHV8UuxbA0rk5UWHnd/view?usp=drivesdk' },
-            { label: 'Fundamentals — Tonsil Cancer', link: 'https://drive.google.com/file/d/1Z3I2e0mV82vsHH2KBKmDeNixj6vGOKLW/view?usp=drivesdk' },
-            { label: 'Fundamentals — Acute Leukemia', link: 'https://drive.google.com/file/d/1g09BCfVQeRmfmDGn1VzkRS_nnxxkRUB8/view?usp=drivesdk' },
-            { label: 'Community Health — Jaundice', link: 'https://drive.google.com/file/d/16X7BFvJFDCahSHBabPgZX8djJm2nHlk9/view?usp=drivesdk' },
-            { label: 'Community Health — General', link: 'https://drive.google.com/file/d/1AYmTIUwHlEnFjWZm-Zwg2Wrbor-QWkvM/view?usp=drivesdk' },
-            { label: 'Community Health — Dengue Fever', link: 'https://drive.google.com/file/d/1RVi6vx0mqiMHmGy23i8ydIYYYi7p6bw5/view?usp=drivesdk' },
-            { label: 'Community Health — Pneumonia', link: 'https://drive.google.com/file/d/1fy1Xth9xoSywThvWw3pzwmrHd5r3qyFg/view?usp=drivesdk' },
-            { label: 'Community Health — Whooping Cough', link: 'https://drive.google.com/file/d/1kEFzQ-AOlBSTvW0ioLB-hynAgzPUtK3M/view?usp=drivesdk' },
-            { label: 'Community Health — Malaria', link: 'https://drive.google.com/file/d/1lhNoVe3Mptz2vqfUxBk_J1Qp8aCI-LRN/view?usp=drivesdk' },
-            { label: 'Community Health — Small Pox', link: 'https://drive.google.com/file/d/1u3HZF7Ff446Ry3UocJEHTNYBK3kfEYc3/view?usp=drivesdk' },
-            { label: 'Community Health — Bronchial Asthma', link: 'https://drive.google.com/file/d/1yWeKD-m1tCqLm9C6ZcHUoe91YymmpJz8/view?usp=drivesdk' },
-            { label: 'Child Health — Asthma', link: 'https://drive.google.com/file/d/14HmUEM2l7j27XGBh10GXTdZEWFyuwvJZ/view?usp=drivesdk' },
-            { label: 'Child Health — Cleft Lip', link: 'https://drive.google.com/file/d/1AUw00sRjrzqHAt-xsw9RN0Fc-U3qdX1d/view?usp=drivesdk' },
-            { label: 'Child Health — Internal Plate Fixation', link: 'https://drive.google.com/file/d/1HWcSTUF1Bziog75ZpYBqSC1nDWCD4g3h/view?usp=drivesdk' },
-            { label: 'Child Health — Hernioplasty (Surgical)', link: 'https://drive.google.com/file/d/1I13_RSW6dbmgYj8JMiG-7JDqH3fZSNTf/view?usp=drivesdk' },
-            { label: 'Child Health — Newborn with Jaundice', link: 'https://drive.google.com/file/d/1MZKkYPv3MfY3YxT3f5_oqFZ6n2Lcb3Rb/view?usp=drivesdk' },
-            { label: 'Child Health — VSD & Tetralogy of Fallot', link: 'https://drive.google.com/file/d/1OKtGtIUS4oznZazc2j5svaxZOY0sFERY/view?usp=drivesdk' },
-            { label: 'Child Health — Seizure', link: 'https://drive.google.com/file/d/1OnBzmQ3e-B58fPjDFQzPyCnePCtpCorN/view?usp=drivesdk' },
-            { label: 'Child Health — Pneumonia', link: 'https://drive.google.com/file/d/1TtrFjgNC4En6oFpBvg3MHd-XBkFIdBuH/view?usp=drivesdk' },
-            { label: 'Child Health — Pulmonary Valvotomy (Surgical)', link: 'https://drive.google.com/file/d/1VwiEtL8w-riETdCZjF4K7iCZuadmdkf2/view?usp=drivesdk' },
-            { label: 'Child Health — Pertussis', link: 'https://drive.google.com/file/d/1bBtj4G5yzhLYTGRs0OxKv_XgNG0Qc21y/view?usp=drivesdk' },
-            { label: 'Child Health — Appendectomy', link: 'https://drive.google.com/file/d/1c_Z1Ggc7WyMF1U_4y1LgWHTkEwzsR1uY/view?usp=drivesdk' },
-            { label: 'Child Health — Meningitis', link: 'https://drive.google.com/file/d/1haEHctPEQM4alvgu6IpJ5tnYoznFRZdZ/view?usp=drivesdk' },
-            { label: 'Child Health — Splenectomy (Surgical)', link: 'https://drive.google.com/file/d/1nQpvlzFQq2txMkwrt68rO53Y6jzV9Pqg/view?usp=drivesdk' },
-            { label: 'Child Health — AIDS', link: 'https://drive.google.com/file/d/1qEeV8u0WWK7cX5aleCzOWBghwqCJp0zs/view?usp=drivesdk' },
-            { label: 'Child Health — Kasai Protoenterostomy', link: 'https://drive.google.com/file/d/1sNesIqKFMhC3k8vwfJwfoKIGVRkdqGb5/view?usp=drivesdk' }
+            { label: 'Care Plan Library', link: 'care_plan.html' }
         ],
         'Case Presentation': [
             { label: 'Case Presentations', link: 'case_presentation.html' }
