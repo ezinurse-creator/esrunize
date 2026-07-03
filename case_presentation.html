@@ -1,1 +1,59 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Case Presentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#f8fafc;color:#0f172a;min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:90;background:#fff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;padding:0 16px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tb-back{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:#f3e8ff;color:#7e22ce;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;margin-right:12px}
+.tb-back:hover{background:#e9d5ff}
+.tb-title{font-size:.88rem;font-weight:700;color:#0f172a;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb-sub{font-size:.65rem;color:#94a3b8;font-weight:500;margin-top:1px}
+.hero{background:linear-gradient(145deg,#581c87,#7e22ce 55%,#a855f7);padding:36px 18px 32px;position:relative;overflow:hidden;text-align:center}
+.hero-dot-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-emoji{font-size:3rem;display:block;margin-bottom:12px}
+.hero h1{font-size:1.7rem;font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:8px}
+.hero-desc{font-size:.82rem;color:rgba(255,255,255,.6);line-height:1.6}
+.coming-soon{margin:48px auto 0;max-width:340px;text-align:center;padding:0 20px}
+.cs-icon{font-size:3.5rem;margin-bottom:16px}
+.cs-title{font-size:1.1rem;font-weight:700;color:#334155;margin-bottom:8px}
+.cs-desc{font-size:.85rem;color:#64748b;line-height:1.6}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <button class="tb-back" onclick="goBackToApp()" aria-label="Back">&#8592;</button>
+  <div>
+    <div class="tb-title">Case Presentation</div>
+    <div class="tb-sub">Requirements</div>
+  </div>
+</header>
+<section class="hero">
+  <div class="hero-dot-grid"></div>
+  <div class="hero-inner">
+    <span class="hero-emoji">📋</span>
+    <h1>Case Presentation</h1>
+    <p class="hero-desc">Requirements Section</p>
+  </div>
+</section>
+<div class="coming-soon">
+  <div class="cs-icon">🚀</div>
+  <div class="cs-title">Coming Soon</div>
+  <div class="cs-desc">Case presentations will be available here soon.</div>
+</div>
+<script>
+function goBackToApp() {
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage({ action: 'goBack' }, '*');
+  } else {
+    history.back();
+  }
+}
+</script>
+</body>
+</html>
