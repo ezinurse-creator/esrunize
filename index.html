@@ -662,7 +662,11 @@
             <span class="material-icons-round">arrow_back</span>
         </button>
         <div class="header-title" id="header-title">Ezi<span>Nurse</span></div>
-        <div class="header-actions"></div>
+        <div class="header-actions">
+            <button class="icon-btn" id="btn-logout" onclick="app.logout()" style="gap:4px; font-size:0.85rem; font-weight:600;">
+                <span class="material-icons-round">logout</span>Logout
+            </button>
+        </div>
     </header>
 
     <div id="drawer-overlay" class="drawer-overlay" onclick="app.closeDrawer()"></div>
@@ -908,10 +912,6 @@
         <button class="nav-item active" onclick="app.navTo('view-dashboard')">
             <span class="material-icons-round">home</span>
             <label>Home</label>
-        </button>
-        <button class="nav-item" onclick="app.logout()">
-            <span class="material-icons-round">person</span>
-            <label>Logout</label>
         </button>
     </nav>
 
@@ -1407,6 +1407,8 @@ const _realApp = {
         const hamburgerBtn = document.querySelector('.hamburger-btn');
         if (isDash) { if (backBtn) backBtn.style.display = 'none'; if (hamburgerBtn) hamburgerBtn.style.display = 'flex'; }
         else { if (backBtn) backBtn.style.display = 'flex'; if (hamburgerBtn) hamburgerBtn.style.display = 'none'; }
+        const logoutBtn = document.getElementById('btn-logout');
+        if (logoutBtn) logoutBtn.style.display = isDash ? 'flex' : 'none';
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         const target = document.getElementById(viewId);
         if (target) target.classList.add('active');
