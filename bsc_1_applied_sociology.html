@@ -155,11 +155,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
     <div class="ubody" id="b-u1">
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1BV88-SV64qyZy2AvrAIPGB1ZJD51DAmB/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 1 Overview</small></div></button>
-        <button class="rbtn video" onclick="openVideo('https://drive.google.com/file/d/11lGDkQGqMpgNnIa0RQ40hRcbDSZP6LLa/view','chrome')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Definition, Nature and Scope</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/11lGDkQGqMpgNnIa0RQ40hRcbDSZP6LLa/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Definition, Nature and Scope</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1u8bWIpQ5fC3yktDmg66mN38HY-eKCvMh/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Nature and Scope</small></div></button>
-        <button class="rbtn video" onclick="openVideo('https://drive.google.com/file/d/1iP9p5b5uJpTGDzmJ3rVX6QwBwrZ3LO3Y/view','drive')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Significance in Nursing</small></div></button>
+        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1iP9p5b5uJpTGDzmJ3rVX6QwBwrZ3LO3Y/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Significance in Nursing</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1h-SCRZQdlhuSjx6NuUn8B_cz3c7MRLac/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Significance</small></div></button>
@@ -383,19 +383,6 @@ function openPDF(url){
   if(!url || url==='COMING SOON' || url===''){ alert('This resource is coming soon!'); return; }
   const clean=url.replace(/\/preview.*$/,'').replace(/\/view.*$/,'')+'/view';
   window.open(clean,'_blank');
-}
-// TEST (1.1 and 1.2 only): try to open the Drive video outside the app, where students
-// are signed in to Google. 1.1 tries Chrome, 1.2 tries the Google Drive app.
-// Uses window.open, the same route the other video buttons already use.
-function openVideo(url, how){
-  const m = url && url.match(/\/d\/([^/?#]+)/);
-  if(!m){ openPDF(url); return; }
-  const web = 'https://drive.google.com/file/d/' + m[1] + '/view';
-  if(!/Android/i.test(navigator.userAgent)){ window.open(web,'_blank'); return; }
-  const link = how === 'drive'
-    ? 'intent://drive.google.com/file/d/' + m[1] + '/view#Intent;scheme=https;action=android.intent.action.VIEW;package=com.google.android.apps.docs;S.browser_fallback_url=' + encodeURIComponent(web) + ';end'
-    : 'googlechrome://navigate?url=' + web;
-  window.open(link,'_blank');
 }
 function tog(id){const card=document.getElementById(id);const body=document.getElementById('b-'+id);const open=card.dataset.open==='true';card.dataset.open=String(!open);body.classList.toggle('open',!open);}
 
