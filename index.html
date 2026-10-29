@@ -869,9 +869,6 @@
                 <span>Buy This Course</span>
                 <span class="material-icons-round">shopping_cart</span>
             </button>
-                <span>Unlock Now</span>
-                <span class="material-icons-round">shopping_cart</span>
-            </button>
             <button class="btn btn-ghost" onclick="app.goBack()">Maybe Later</button>
         </div>
     </div>
@@ -940,9 +937,19 @@ function stopSliderAuto() { clearInterval(sliderTimer); }
 })();
 startSliderAuto();
 
+// FIX 2: Safe getDeviceId with fallback for non-HTTPS / WebView environments
+// where crypto.randomUUID() may not be available.
 function getDeviceId() {
     let id = localStorage.getItem('ezinurse_device_id');
-    if (!id) { id = crypto.randomUUID(); localStorage.setItem('ezinurse_device_id', id); }
+    if (!id) {
+        try {
+            id = crypto.randomUUID();
+        } catch (e) {
+            // Fallback for WebView / non-secure contexts
+            id = 'dev-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+        }
+        localStorage.setItem('ezinurse_device_id', id);
+    }
     return id;
 }
 
@@ -1215,6 +1222,7 @@ const _realApp = {
             });
     },
 
+    // FIX 1: signup() now writes deviceId to Firestore on account creation
     signup: function() {
         const name = document.getElementById('signup-name').value.trim();
         const email = document.getElementById('signup-email').value.trim();
@@ -1233,6 +1241,7 @@ const _realApp = {
         createUserWithEmailAndPassword(auth, email, pass)
             .then(async (userCredential) => {
                 const user = userCredential.user;
+                const deviceId = getDeviceId(); // FIX 1: capture current device
                 const defaultPermissions = {
                     msc_first_year: false, msc_second_year: false,
                     bsc_first_semester: false, bsc_second_semester: false, bsc_third_semester: false,
@@ -1244,7 +1253,9 @@ const _realApp = {
                     comm_english: false, all_access: false
                 };
                 await setDoc(doc(db, "users", user.uid), { 
-                    name, email, phone, createdAt: new Date(), permissions: defaultPermissions 
+                    name, email, phone, createdAt: new Date(),
+                    deviceId, // FIX 1: store deviceId at signup time
+                    permissions: defaultPermissions 
                 });
                 alert("Account Created!");
             })
@@ -1480,13 +1491,15 @@ const _realApp = {
         }
     },
 
+    // FIX 3: Use window.location.href instead of window.open() to avoid
+    // WebView pop-up blocking. Google Drive /view links work fine this way.
     _openDemoUrl: function(url) {
         if (!url || url === 'about:blank') {
             this._showDemoToast('Demo content coming soon!');
             return;
         }
         const clean = url.replace(/\/preview.*$/, '').replace(/\/view.*$/, '') + '/view';
-        window.open(clean, '_blank');
+        window.location.href = clean; // FIX 3: navigate in-place, no pop-up blocker
     },
 
     _showDemoToast: function(msg) {
