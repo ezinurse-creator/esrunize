@@ -1230,19 +1230,30 @@ const _realApp = {
         
         btn.textContent = "Creating..."; btn.disabled = true;
         
-        createUserWithEmailAndPassword(auth, email, pass)
-            .then(async (userCredential) => {
-                const user = userCredential.user;
-                const defaultPermissions = {
-                    msc_first_year: false, msc_second_year: false,
-                    bsc_first_semester: false, bsc_second_semester: false, bsc_third_semester: false,
-                    bsc_fourth_semester: false, bsc_fifth_semester: false, bsc_sixth_semester: false,
-                    bsc_seventh_semester: false, pbbsc_first_year: false, pbbsc_second_year: false,
-                    gnm_first_year: false, gnm_second_year: false, gnm_third_year: false,
-                    qp_bsc: false, qp_gnm: false, '3d_models': false,
-                    exams_norcet: false, exams_esci: false, nursing_req: false,
-                    comm_english: false, all_access: false
-                };
+    createUserWithEmailAndPassword(auth, email, pass)
+    .then(async (userCredential) => {
+        const user = userCredential.user;
+        const defaultPermissions = {
+            msc_first_year: false, msc_second_year: false,
+            bsc_first_semester: false, bsc_second_semester: false, bsc_third_semester: false,
+            bsc_fourth_semester: false, bsc_fifth_semester: false, bsc_sixth_semester: false,
+            bsc_seventh_semester: false, pbbsc_first_year: false, pbbsc_second_year: false,
+            gnm_first_year: false, gnm_second_year: false, gnm_third_year: false,
+            qp_bsc: false, qp_gnm: false, '3d_models': false,
+            exams_norcet: false, exams_esci: false, nursing_req: false,
+            comm_english: false, all_access: false
+        };
+        
+        // 1. Fetch the device ID
+        const deviceId = getDeviceId(); 
+
+        // 2. Include deviceId in the database save
+        await setDoc(doc(db, "users", user.uid), { 
+            name, email, phone, createdAt: new Date(), permissions: defaultPermissions, deviceId: deviceId
+        });
+        
+        alert("Account Created!");
+    })
                 await setDoc(doc(db, "users", user.uid), { 
                     name, email, phone, createdAt: new Date(), permissions: defaultPermissions 
                 });
