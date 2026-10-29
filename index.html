@@ -1485,8 +1485,10 @@ const _realApp = {
             this._showDemoToast('Demo content coming soon!');
             return;
         }
-        const clean = url.replace(/\/preview.*$/, '').replace(/\/view.*$/, '') + '/view';
-        window.open(clean, '_blank');
+        const clean = url.replace(/\/preview.*$/, '').replace(/\/view.*$/, '') + '/preview';
+        
+        // Open inside your app's iframe instead of a new tab
+        this.openContent(clean, 'Demo Preview'); 
     },
 
     _showDemoToast: function(msg) {
