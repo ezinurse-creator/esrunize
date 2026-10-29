@@ -869,9 +869,6 @@
                 <span>Buy This Course</span>
                 <span class="material-icons-round">shopping_cart</span>
             </button>
-                <span>Unlock Now</span>
-                <span class="material-icons-round">shopping_cart</span>
-            </button>
             <button class="btn btn-ghost" onclick="app.goBack()">Maybe Later</button>
         </div>
     </div>
@@ -964,6 +961,7 @@ function onSplashDone() {
 }
 
 function onAuthResolved(viewId) {
+    if (authResolved) return; // already resolved — ignore duplicate calls
     authResolved = true;
     pendingView = viewId;
     if (splashDone) showApp();
@@ -1010,7 +1008,7 @@ const COMMON_URLS = {
 const VALID_COUPONS = {
     'BSc': ['EZIBSC1', 'EZIBSC2', 'EZIBSC3', 'EZIBSC4', 'EZIBSC5', 'EZIBSC6', 'EZIBSC7'],
     'GNM': ['EZIGNM1', 'EZIGNM2', 'EZIGNM3'],
-    'PBBSc': ['EZIDEAL', 'EZIPBBSC2']
+    'PBBSc': ['EZIPBBSC1', 'EZIPBBSC2']
 };
 </script>
 
@@ -1045,37 +1043,65 @@ const _realApp = {
     _dq_answered: [],
 
     init: function() {
+        // Safety net: if Firebase never fires onAuthStateChanged (network issue, etc.)
+        // ensure the spinner clears after 8 seconds and shows the login screen.
+        const _authTimeoutId = setTimeout(() => {
+            if (!authResolved) {
+                console.warn('EziNurse: auth timeout — showing login screen');
+                sessionStorage.clear();
+                history.replaceState({ viewId: 'view-auth' }, 'Login', '#login');
+                onAuthResolved('view-auth');
+            }
+        }, 8000);
+
         onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                this.currentUser = user;
-                this.updateWatermark();
-                if (user.displayName) document.getElementById('user-name-display').textContent = user.displayName.split(' ')[0];
-                await this.fetchUserPermissions(user.uid);
-                if (this.currentUser) {
-                    const savedView = sessionStorage.getItem('currentView');
-                    const savedUrl = sessionStorage.getItem('currentUrl');
-                    const savedTitle = sessionStorage.getItem('currentTitle') || 'Subject View';
+            clearTimeout(_authTimeoutId);
+            try {
+                if (user) {
+                    this.currentUser = user;
+                    this.updateWatermark();
+                    if (user.displayName) document.getElementById('user-name-display').textContent = user.displayName.split(' ')[0];
+                    await this.fetchUserPermissions(user.uid);
+                    if (this.currentUser) {
+                        const savedView = sessionStorage.getItem('currentView');
+                        const savedUrl = sessionStorage.getItem('currentUrl');
+                        const savedTitle = sessionStorage.getItem('currentTitle') || 'Subject View';
 
-                    const demoCourse = sessionStorage.getItem('demoCourse');
-                    const demoSection = sessionStorage.getItem('demoSection');
+                        const demoCourse = sessionStorage.getItem('demoCourse');
+                        const demoSection = sessionStorage.getItem('demoSection');
 
-                    if (savedView === 'view-iframe' && savedUrl) {
-                        history.replaceState({ viewId: 'view-iframe', sourceUrl: savedUrl, title: savedTitle }, savedTitle, '#content');
-                        this.openContent(savedUrl, savedTitle, true);
-                        onAuthResolved('view-iframe');
+                        if (savedView === 'view-iframe' && savedUrl) {
+                            history.replaceState({ viewId: 'view-iframe', sourceUrl: savedUrl, title: savedTitle }, savedTitle, '#content');
+                            this.openContent(savedUrl, savedTitle, true);
+                            onAuthResolved('view-iframe');
+                        }
+                        else if (savedView === 'view-demo' && demoCourse && demoSection) {
+                            history.replaceState({ viewId: 'view-demo', course: demoCourse, section: demoSection }, 'Demo', '#demo');
+                            this.openSectionDemo(demoCourse, demoSection, true);
+                            onAuthResolved('view-demo');
+                        }
+                        else {
+                            history.replaceState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard');
+                            history.pushState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard');
+                            onAuthResolved('view-dashboard');
+                        }
+                    } else {
+                        // fetchUserPermissions signed the user out (device mismatch or error)
+                        // — must still resolve so the spinner goes away and login screen shows
+                        sessionStorage.clear();
+                        history.replaceState({ viewId: 'view-auth' }, 'Login', '#login');
+                        onAuthResolved('view-auth');
                     }
-                    else if (savedView === 'view-demo' && demoCourse && demoSection) {
-                        history.replaceState({ viewId: 'view-demo', course: demoCourse, section: demoSection }, 'Demo', '#demo');
-                        this.openSectionDemo(demoCourse, demoSection, true);
-                        onAuthResolved('view-demo');
-                    }
-                    else {
-                        history.replaceState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard');
-                        history.pushState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard');
-                        onAuthResolved('view-dashboard');
-                    }
+                } else {
+                    this.currentUser = null;
+                    this.permissions = {};
+                    sessionStorage.clear();
+                    history.replaceState({ viewId: 'view-auth' }, 'Login', '#login');
+                    onAuthResolved('view-auth');
                 }
-            } else {
+            } catch (e) {
+                // Any uncaught error in auth handling — fall back to login screen
+                console.error('EziNurse: auth callback error', e);
                 this.currentUser = null;
                 this.permissions = {};
                 sessionStorage.clear();
@@ -1134,13 +1160,17 @@ const _realApp = {
         });
     },
 
+    // ── FIX 1: Device ID is now reliably written to Firestore on every login
+    //    by doing it here in fetchUserPermissions, rather than racing against
+    //    onAuthStateChanged in the login() .then() callback.
     fetchUserPermissions: async function(uid) {
         try {
+            const deviceId = getDeviceId();
             const docRef = doc(db, "users", uid);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
                 const data = docSnap.data();
-                const deviceId = getDeviceId();
+                // Block if the stored device ID belongs to a DIFFERENT device
                 if (data.deviceId && data.deviceId !== deviceId) {
                     this.currentUser = null;
                     this.permissions = {};
@@ -1149,13 +1179,16 @@ const _realApp = {
                     if (errEl) errEl.textContent = '⚠️ Your account is active on another device. Log out there first, then try again.';
                     return;
                 }
+                // Write / refresh the device ID so it is always present in Firestore
+                await setDoc(docRef, { deviceId }, { merge: true });
                 this.permissions = data.permissions || {};
                 if (data.name) {
                     document.getElementById('user-name-display').textContent = data.name.split(' ')[0];
                     document.getElementById('drawer-name').textContent = data.name;
                 }
             } else {
-                await setDoc(doc(db, "users", uid), { email: this.currentUser.email, permissions: {} }, { merge: true });
+                // New user document — write device ID immediately
+                await setDoc(docRef, { email: this.currentUser.email, permissions: {}, deviceId }, { merge: true });
             }
         } catch (e) { console.error("Error fetching permissions:", e); }
     },
@@ -1203,6 +1236,7 @@ const _realApp = {
                         return;
                     }
                 }
+                // Device ID is also written here for immediate consistency
                 await setDoc(userRef, { deviceId }, { merge: true });
             })
             .catch((error) => {
@@ -1480,13 +1514,22 @@ const _realApp = {
         }
     },
 
+    // ── FIX 2: Demo videos/docs now open reliably in WebView.
+    //    window.open(_blank) is blocked in most Android WebViews; we use
+    //    window.location.href instead, which always works.
     _openDemoUrl: function(url) {
         if (!url || url === 'about:blank') {
             this._showDemoToast('Demo content coming soon!');
             return;
         }
-        const clean = url.replace(/\/preview.*$/, '').replace(/\/view.*$/, '') + '/view';
-        window.open(clean, '_blank');
+        // Strip any existing /view or /preview suffix, then use /view
+        // which Google Drive handles correctly and plays video inline.
+        const fileId = url.match(/\/d\/([^/]+)/);
+        const openUrl = fileId
+            ? 'https://drive.google.com/file/d/' + fileId[1] + '/view'
+            : url;
+        // Use location.href — works in Android WebView, iOS WKWebView, and browsers.
+        window.location.href = openUrl;
     },
 
     _showDemoToast: function(msg) {
@@ -1654,7 +1697,7 @@ demoOpenVideo: function() {
 
         if (VALID_COUPONS[course] && VALID_COUPONS[course].includes(code)) {
             this.closeCouponModal();
-            window.open(COMMON_URLS[course].discount, '_blank');
+            window.location.href = COMMON_URLS[course].discount;
         } else {
             msg.textContent = 'Invalid coupon code. Try again or buy at full price.';
             msg.style.color = 'var(--danger)';
@@ -1665,11 +1708,11 @@ demoOpenVideo: function() {
         const course = this.lockedCourseKey || 'BSc';
         this.closeCouponModal();
         if (COMMON_URLS[course]) {
-            window.open(COMMON_URLS[course].full, '_blank');
+            window.location.href = COMMON_URLS[course].full;
         } else {
             const section = this.lockedCourseSection || 'Systems';
             const url = PAYMENT_LINKS[`${course}_${section}_F`] || 'https://www.razorpay.com/fallback';
-            window.open(url, '_blank');
+            window.location.href = url;
         }
     },
 
