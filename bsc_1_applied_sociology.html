@@ -117,6 +117,20 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
 .qopt.wrg .qltr{background:var(--err);border-color:var(--err);color:#fff}
 .qopt.lock{cursor:default;pointer-events:none}
 .qopt.lock:not(.cor):not(.wrg):hover{border-color:var(--g200);background:var(--w);color:var(--g700)}
+/* Full-view video player (YouTube links) */
+.vp{position:fixed;inset:0;z-index:700;background:#000;display:none;overflow:hidden}
+.vp.open{display:block}
+.vp-box{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;background:#000}
+.vp-bar{display:flex;align-items:center;gap:10px;padding:8px 10px;background:#0f0a1e;color:#fff;flex-shrink:0}
+.vp-back{width:36px;height:36px;border-radius:50%;border:none;cursor:pointer;background:rgba(255,255,255,.12);color:#fff;font-size:1.05rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.vp-title{flex:1;min-width:0;font-size:.82rem;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.vp-rotate{display:flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:18px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;font:600 .75rem 'Plus Jakarta Sans',sans-serif;cursor:pointer;flex-shrink:0}
+.vp-back:active,.vp-rotate:active{background:rgba(255,255,255,.25)}
+.vp-stage{flex:1;min-height:0;position:relative}
+.vp-stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:#000}
+@media (orientation:portrait){
+  .vp.rot .vp-box{width:100vh;height:100vw;top:50%;left:50%;transform:translate(-50%,-50%) rotate(90deg)}
+}
 </style>
 </head>
 <body>
@@ -155,15 +169,15 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
     <div class="ubody" id="b-u1">
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1BV88-SV64qyZy2AvrAIPGB1ZJD51DAmB/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Unit 1 Overview</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/11lGDkQGqMpgNnIa0RQ40hRcbDSZP6LLa/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Definition, Nature and Scope</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/TmRk7MzWRdQ')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Definition, Nature and Scope</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1u8bWIpQ5fC3yktDmg66mN38HY-eKCvMh/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Nature and Scope</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1iP9p5b5uJpTGDzmJ3rVX6QwBwrZ3LO3Y/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Significance in Nursing</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/hRgEENrFah4')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Significance in Nursing</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1h-SCRZQdlhuSjx6NuUn8B_cz3c7MRLac/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Significance</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1lxVqH1-YNH8hgdFOqgO2C-fEf-ejNiFo/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Branches of Sociology</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/YAewxlERfJo')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Branches of Sociology</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1QKFdw1TsUUXYdBzkkC3FjN9ZQxBc2enA/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Branches</small></div></button>
@@ -181,23 +195,23 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
     <div class="ubody" id="b-u2">
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1xdwGthzzd0zsASOL8d5okW0uIRW5iqpB/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Social Structure</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/13VAUswAlo1N_ysjSAm8a1f0Vt6QYqlKT/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Basic Concept of Society</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/-TRz5Kfu9hA')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Basic Concept of Society</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1oftc5MF7_4-5eFNWNrf1icwYKe27YJr1/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Society Concepts</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1cNDr3y9vaqKXE5NVwutZ8HDvq4u0Pbt1/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Group</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/ke3QBAbNnyg')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Group</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1dqOM4Pn6zfKUstXGGUdeE0yV2MkIDaeQ/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Social Group</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1cyVJVgiCpKk33fLdYDv-EQ0EdV2eD1By/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Processes</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/mr71jbzhjug')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Processes</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1ka8HPemgx4HljgioeWJJHLkitVGvMsJG/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Social Processes</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1RU2-56mlGSLCYQeDb49pqZ8rDSZI2FUW/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Socialization & Change</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/68ksmksNYBg')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Socialization & Change</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1sDQQ4mDZGty2jDR9AAdZPk2_8H5OhqFc/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Socialization</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1TR8gdH7DonaFTlLPbuVwTv409RBzLi2S/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Community & Health</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/o40gyaJForU')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Community & Health</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1itPbS3rQjYCgoVkziu-7SjJfL71l3JUy/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Community Health</small></div></button>
@@ -215,15 +229,15 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
     <div class="ubody" id="b-u3">
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1HSM8DxMZkWVuBoGRg_15bH9bDwFn3Ojy/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Culture</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/186CFUt_H2H-SLuW3hTYxaHv1M1GVu-9D/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Nature & Characteristic</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/O-H_sJCmxLA')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Nature & Characteristic</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1qwBedRBUJYa2E7Wku_LXHqP9rOIcktrI/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Characteristics</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1ngy7TNBunLTmFnm2c656j7PpR0irmRlR/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Evolution of Culture</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/CQzzRA-7xas')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Evolution of Culture</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1OYRgp2EqtquaPeP5GFVxDA98jgP5oUi_/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Evolution</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Ia-NF-yKeO5qhKnDCMSrat58NZ-iwgbB/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Culture & Health</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/oPeGMvL6d5Y')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Culture & Health</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1mY5o6mf26t_bUaWG-SqIBGuG_QjtcwbF/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Impact on Health</small></div></button>
@@ -241,15 +255,15 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
     <div class="ubody" id="b-u4">
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1aGc5QIEpxEoLyKt1S694Sg6olkcq85FQ/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Family & Marriage</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/15ZNr7Nu81WGMUP-kZWf2BSVEIDMSME90/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Family Characteristics</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/AmCxJ4lmp2o')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Family Characteristics</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Hh1nuBy8rjKDmplkhkuvv3oM4tJue1Z7/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Characteristics</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1oUMU2kUUy9odZYV-QnTnopRu9-WnTnkU/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Marriage Forms</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/E3PD6cWxMCs')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Marriage Forms</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1_8g7N7-fL68mUnZKu2lJi1i6nnh2MmnW/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Forms & Customs</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1EbODYmGqKWP-4IPvh4iw96OJxaVx7-Nz/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Legislation on Marriage</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/46wZEh1vtQU')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Legislation on Marriage</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/165EuJU31dD7e9ybvn9uj4srUc-UEZWqk/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Legislation</small></div></button>
@@ -267,15 +281,15 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
     <div class="ubody" id="b-u5">
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/12pMCQS7lUnbHZG1gZFoimUHN6FMiA682/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Stratification</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1b7eoASTOSt7pUCGwAKU6JZksklUCmr5c/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Intro to Stratification</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/XTmMJvaWqcI')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Intro to Stratification</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1cXo__lQiYPUVVmqBylHtls34PV-JmMW6/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Characteristics</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1qtq5nkhEM1nDwUAnhrnW3itRc9GCUa43/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Class & Mobility</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/IVxMXOGKKec')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Class & Mobility</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1MWv6eDj4KX-xCzEyvB-1sISw-lvXW-V2/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Class & Mobility</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1OJaulyAJ4JPKMqlq5Ph8dCs1Jt4V7sIE/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Race & Influence on Health</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/2Y1uxoqwcIM')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Race & Influence on Health</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1NbbJreaRt0lvblFGG7CzdSG_hIyIyd2O/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Influence on Health</small></div></button>
@@ -293,51 +307,51 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
     <div class="ubody" id="b-u6">
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1fL3KpQGT5HaHKUBCPoHFpy3LqBU32Ku4/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Org & Disorganization</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1NvEhjO0Avk0dIX2jFw9svWwsS-xOO31X/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Organization</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/ClTuhlDPfi0')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Organization</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/17w8BCVHA8jhB7svdBHSZ0uBn0QSErZYG/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Organization</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1SlXpxj2WxT-MC1AHFZEaK_IJoTY2QYfD/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social System</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/lIjq3xYYPKU')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social System</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1cl4T75I8T9KppQwfPdJomiK16X6D3gyW/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Social System</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Z7SnnUhvRCxQerZXM3F1NXMEW7K6k2Al/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Control</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/UDmJlhL2Idk')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Control</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1S5Qkfjy1Gysa78IAwmPqsFXtj02Xk9jf/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Social Control</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1IDvi6J0zk-_-vJriqogUUGbRcAmeFFwh/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Control - Part B</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/AiDL82hy__I')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Control - Part B</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1ck7WWfwv2DCwh7EU1rs0FP5qP85n9kx3/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Control Part B</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1PVbe_ulHfSKaW1yrKV3dohfDQcMYGesc/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Disorganization</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/jnk8a5OizBQ')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Disorganization</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1FhfCd7ElY4Pzq0pKSnAiibLIh-Vr4k29/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Disorganization</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1wcs0Wi0Ouqemb3ZUddgSu3XeA0ELMNyx/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Major Social Problems</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/ypLk35-VIVk')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Major Social Problems</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1SiIxvKAiaK938EO1bk9UR_WsGHcZ9jj2/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Social Problems</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1v7kaMB81YADUHMaHz6xBe0NV7NT9paMU/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Major Social Problems - Part B</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/zrz7b1ow7_k')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Major Social Problems - Part B</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/15wS_uZZxAvHUIabtqfK8x7QAj467CooD/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Social Problems Part B</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1QmQTbl6bRIKUsl3HHTc4in3k8VnqrJz9/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Vulnerable Group</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/ifyb0YdMrVY')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Vulnerable Group</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/122_4MA_7JptDPIpsl7aefBRRLiTrVX2v/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Vulnerable Group</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1MvniSi2Yce0OKbDQJuzlEQJ70fJAF5ai/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Welfare Organization</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/sh1mpMhV2nk')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Social Welfare Organization</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1KHHdwKLWseLveRv2t0npcd3DM5_M9oAS/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Welfare Organization</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1sEaWtma4aG2XUilSCBBIvmCyiQ4lM6-y/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Role of Nurse</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/YXbGHjdK6-g')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Role of Nurse</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1TgOSRCoI7G6Ob2bf2E-KN6jJsFt3Vs4U/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Role of Nurse</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1NR9A9Zo9StmBaWxUZaPxtlPbE_kdPDCS/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Rights Of Children</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/TIhi9d0RHb8')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Rights Of Children</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1gFKlQTrT1LeApCIuJ-JfqtyVWGHF0UWI/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Rights Of Children</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1X7SWGCwBVzrMuou-nM8jUVlcd-ar8fvi/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Rights Of Women</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/2425WrIoCb4')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Rights Of Women</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1lut_9izqc_W4dWDS6xR6N-LOm-ocY190/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Rights Of Women</small></div></button>
@@ -355,7 +369,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
     <div class="ubody" id="b-u7">
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1jMPs_Iy3UO1_8W0lBk2ayHmz0jNdXQo1/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Clinical Sociology</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/12YgrcI7HlYZofmZ0pbBf8dbeXXwKEwcR/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Introduction, Strategies</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/aTZurVVBvX8')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Introduction, Strategies</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1hTdNZBZyNXMbfNCNl5taVtxx_b9v1tsz/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Strategies & Use</small></div></button>
@@ -377,6 +391,17 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
   </div>
 </div>
 
+<div class="vp" id="vp" role="dialog" aria-modal="true" aria-label="Video lecture">
+  <div class="vp-box">
+    <div class="vp-bar">
+      <button class="vp-back" onclick="closeVideo()" aria-label="Close video">&#8592;</button>
+      <div class="vp-title" id="vp-title">Video Lecture</div>
+      <button class="vp-rotate" onclick="rotateVideo()" aria-label="Rotate video"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20a8 8 0 1 1 5.66-13.66"/><polyline points="17.7 2 17.7 6.4 13.3 6.4"/></svg>Rotate</button>
+    </div>
+    <div class="vp-stage" id="vp-stage"></div>
+  </div>
+</div>
+
 <script>
 function goBackToApp(){if(window.parent&&window.parent!==window){window.parent.postMessage({action:'goBack'},'*');}else{history.back();}}
 function openPDF(url){
@@ -384,6 +409,53 @@ function openPDF(url){
   const clean=url.replace(/\/preview.*$/,'').replace(/\/view.*$/,'')+'/view';
   window.open(clean,'_blank');
 }
+
+// ── VIDEO PLAYER ──────────────────────────────────────────────
+// To move a lecture to YouTube, paste its YouTube link in place of the Drive link, e.g.
+//   onclick="openVideo(this,'https://youtu.be/VIDEO_ID')"
+// YouTube links play here in a full-view player, and the phone's back button closes it.
+// Drive links still open the old way.
+function ytId(url){
+  const s=String(url||'').trim();
+  if(/^[\w-]{11}$/.test(s)) return s;
+  const m=s.match(/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/|v\/))([\w-]{11})/);
+  return m?m[1]:null;
+}
+function openVideo(btn,url){
+  const id=ytId(url);
+  if(!id){ openPDF(url); return; }
+  const label=btn&&btn.querySelector('small');
+  document.getElementById('vp-title').textContent=label?label.textContent:'Video Lecture';
+  const f=document.createElement('iframe');
+  f.src='https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0&playsinline=1&fs='+(document.fullscreenEnabled?1:0);
+  f.title='Video lecture';
+  f.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen';
+  f.allowFullscreen=true;
+  f.referrerPolicy='strict-origin-when-cross-origin';
+  const stage=document.getElementById('vp-stage');
+  stage.innerHTML='';
+  stage.appendChild(f);
+  const vp=document.getElementById('vp');
+  vp.classList.remove('rot');
+  vp.classList.add('open');
+  document.body.style.overflow='hidden';
+  // Add one history step, so the phone's back button closes the player instead of leaving the page
+  if(!(history.state&&history.state.ezVideo)) history.pushState({ezVideo:id},'');
+}
+function hideVideo(){
+  const vp=document.getElementById('vp');
+  if(!vp.classList.contains('open')) return;
+  vp.classList.remove('open','rot');
+  document.getElementById('vp-stage').innerHTML='';
+  document.body.style.overflow='';
+}
+function closeVideo(){
+  hideVideo();
+  if(history.state&&history.state.ezVideo) history.back();
+}
+function rotateVideo(){ document.getElementById('vp').classList.toggle('rot'); }
+window.addEventListener('popstate',hideVideo);
+
 function tog(id){const card=document.getElementById(id);const body=document.getElementById('b-'+id);const open=card.dataset.open==='true';card.dataset.open=String(!open);body.classList.toggle('open',!open);}
 
 // QUIZ DATA - Each unit has exactly 10 MCQs
@@ -516,7 +588,7 @@ function closeQuiz(){
   document.body.style.overflow='';
   curQuiz=null;
 }
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQuiz();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(document.getElementById('vp').classList.contains('open'))closeVideo();else closeQuiz();}});
 </script>
 </body>
 </html>
