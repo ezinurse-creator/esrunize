@@ -118,6 +118,48 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
 .qopt.lock{cursor:default;pointer-events:none}
 .qopt.lock:not(.cor):not(.wrg):hover{border-color:var(--g200);background:var(--w);color:var(--g700)}
 .subsection-title{font-size:.75rem;font-weight:700;color:var(--p600);margin:12px 0 6px;text-transform:uppercase;letter-spacing:.08em}
+/* Full-screen video player (YouTube links) */
+.vp{position:fixed;inset:0;z-index:700;background:#000;display:none;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none}
+.vp.open{display:block}
+.vp-area{position:absolute;left:0;right:0;bottom:0;top:var(--vp-top,0px)}
+.vp-box{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;background:#000}
+@media (orientation:portrait){
+  .vp.rot .vp-box{width:calc(100vh - var(--vp-top,0px));height:100vw;top:50%;left:50%;transform:translate(-50%,-50%) rotate(90deg)}
+}
+.vp-stage,.vp-stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:#000}
+/* Clear covers that stop taps reaching YouTube's own buttons and links */
+.vp-guard{position:absolute;left:0;right:0;z-index:1}
+.vp-guard.top{top:0;height:30%}
+.vp-guard.bot{bottom:0;height:30%}
+.vp-tap{position:absolute;inset:0;z-index:2;display:none;transition:background .2s}
+.vp.started .vp-tap{display:block}
+.vp.paused .vp-tap{background:rgba(0,0,0,.5)}
+.vp:not(.started) .vp-guard.top{background:linear-gradient(#000 50%,transparent)}
+.vp:not(.started) .vp-guard.bot{background:linear-gradient(transparent,#000 50%)}
+.vp.ended .vp-tap{background:rgba(0,0,0,.9)}
+/* Player controls */
+.vp-ui{position:absolute;inset:0;z-index:3;pointer-events:none;transition:opacity .25s}
+.vp-ui.hide{opacity:0}
+.vp-ui.hide *{pointer-events:none!important}
+.vp-top,.vp-bot{position:absolute;left:0;right:0;display:flex;align-items:center;gap:8px;padding:10px 12px}
+.vp-top{top:0;background:linear-gradient(rgba(0,0,0,.65),transparent)}
+.vp-bot{bottom:0;background:linear-gradient(transparent,rgba(0,0,0,.8));display:none;flex-direction:column;align-items:stretch;gap:2px;padding-top:28px}
+.vp-row{display:flex;align-items:center;gap:8px}
+.vp-gap{flex:1}
+.vp.started .vp-bot{display:flex}
+.vp-ic{pointer-events:auto;min-width:40px;height:40px;padding:0 10px;border-radius:20px;border:none;background:rgba(255,255,255,.16);color:#fff;font:700 .78rem 'Plus Jakarta Sans',sans-serif;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.vp-ic:active{background:rgba(255,255,255,.32)}
+.vp-title{flex:1;min-width:0;color:#fff;font-size:.85rem;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+.vp:not(.started) .vp-title{visibility:hidden}
+.vp-time{color:#fff;font-size:.72rem;font-weight:600;min-width:36px;text-align:center;font-variant-numeric:tabular-nums;flex-shrink:0}
+.vp-seek{pointer-events:auto;flex:1;min-width:60px;height:36px;position:relative;cursor:pointer;touch-action:none}
+.vp-rail{position:absolute;left:0;right:0;top:50%;height:4px;margin-top:-2px;border-radius:2px;background:rgba(255,255,255,.3)}
+.vp-fill{height:100%;width:0;border-radius:2px;background:#c084fc}
+.vp-knob{position:absolute;top:50%;left:0;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(192,132,252,.45)}
+.vp-big{pointer-events:auto;position:absolute;top:50%;left:50%;width:72px;height:72px;margin:-36px 0 0 -36px;border-radius:50%;border:none;background:rgba(0,0,0,.55);color:#fff;display:none;align-items:center;justify-content:center;cursor:pointer}
+.vp.started.paused .vp-big,.vp.started.ended .vp-big{display:flex}
+/* If YouTube's control script can't load, fall back to YouTube's own controls */
+.vp.native .vp-guard,.vp.native .vp-tap,.vp.native .vp-bot,.vp.native .vp-big{display:none!important}
 </style>
 </head>
 <body>
@@ -157,27 +199,27 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
     <div class="ubody" id="b-u1">
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1gEeyPJBwEME_K5-Cg4BZXvxNKKWTifuB/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>General Pathology</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1_wH1_ojQ0PT_vjYn4pi1S7FmMTN06Xf-/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Overview & Cellular Adaptations</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/89VLT9qOVj4')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Overview & Cellular Adaptations</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/15-pkiyYw770x5fLN-iTwMr4i4D2RsWU_/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Cellular Adaptations</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1g4LV7D57JAUoCig7y4HGUhboKNjHCOUw/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cell Injury</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/odYAi8EQoFE')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cell Injury</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1PAsXaTWOkTzawKz5EdFZjVoI3BD3IXQ7/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Cell Injury</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1IMAFbv86KQL2uQNc1yE7vUGJYBphTOfz/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Necrosis & Gangrene</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/vS90rbgQZwY')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Necrosis & Gangrene</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1J2r3y6Im_695NDwVNPn10wZKIIl1_zkh/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Apoptosis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/7wkcvDbqmDY')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Apoptosis</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1BnjqQbz0uHdKnkGvk7R4SSBUVsyejgqo/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Inflammation</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1vNNP_gDsOmHxQUqhNuZYTXU0yiZEZCt_/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Wound Healing</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1wgRyxkB5fwqbqsjt8jl-YjTomqRat0mC/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Fluid & Hemodynamic Disturbances</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/lM7vQXV1bN0')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Wound Healing</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/6-XXulDlV40')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Fluid & Hemodynamic Disturbances</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1esnHhHLZBim1NNver1bEqHIERMFer21u/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Shock</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1DA0jzd8T6jbW2rVTQ_jQa02sEUDZYiIj/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Neoplasia (Tumors)</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/RThY1_XXxSs')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Shock</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/v-TQuT24R7I')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Neoplasia (Tumors)</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn quiz" onclick="openQuiz('U1')"><div class="rico">✍️</div><div class="rtxt">Unit 1 Quiz<small>10 questions</small></div></button>
@@ -196,15 +238,18 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
       <div class="subsection-title">Cardiovascular System</div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1F6HLzqMR2VCZbFJhi3cfg2vaXN90bI4Q/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>CVS Pathology</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1aRTzNpndoYLyIQxzq1Ss1td4yIwAmO5b/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Introduction to CVS Pathology</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/qWvuZi4sWq0')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Introduction to CVS Pathology</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1kZn1Ot2emRsm-sNQ39-lif70at5KuOPu/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Atherosclerosis</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/11UXDTWWfTOAYKg1TsDSXAmG2UHl0ZInI/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Rheumatic Heart Disease</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/H_JxjhveB5I')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Atherosclerosis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/cfUthw_MSXg')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Rheumatic Heart Disease</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1XVYYnQ0AJWXzHOrPQyjci7Pepc97cGnF/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Bacterial Endocarditis</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1zfEVYJ-h7m-TIos4ka70-KbiRGIu5a0-/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Angina & Myocardial Infarction</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/Mx-8B2e_T9Q')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Bacterial Endocarditis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/mMFrn1nN_Z4')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Angina & Myocardial Infarction</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/aL1XPrJdfKQ')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Aneurysm</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn quiz" onclick="openQuiz('U2_CVS')"><div class="rico">✍️</div><div class="rtxt">CVS Quiz<small>10 questions</small></div></button>
@@ -213,33 +258,48 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
       <div class="subsection-title">Respiratory System</div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1qosWXZoEv88IkSHCgF1dqRjclzY2JRri/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Respiratory Pathology</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/14QsjDpWRHbVcjJtSCl-6sseyh-27N6_E/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Tuberculosis Part 1</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/1TOj7vFJ-xM')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Tuberculosis Part 1</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1fNbvff6AMLmE7HIUdOc55htHGaYJegBF/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Tuberculosis Part 2</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/15hqpgmOy3EIAUe8jl0NsTGqWZ8GnUV1O/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pneumonia</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/LfeYblLdHJM')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Tuberculosis Part 2</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/FNveBjMVypw')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pneumonia</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1fmWT95jVoXCEmWmoDGRCFDOd7Dg-mBuP/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>COPD & Emphysema</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1MFFSfQJtWmOJDxJXI0jvIyjv_2t03Hm5/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Bronchiectasis & Asthma</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/EA-OEBMbYIQ')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>COPD & Emphysema</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/WsFgseTLrhg')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Bronchiectasis & Asthma</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Z2cQTm7SqlHKS4KBXAXe-dsRFk7XbWMh/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pleural Effusion</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/TNfjU3JnkjI')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pleural Effusion</small></div></button>
         <button class="rbtn quiz" onclick="openQuiz('U2_RESP')"><div class="rico">✍️</div><div class="rtxt">Respiratory Quiz<small>10 questions</small></div></button>
       </div>
 
       <div class="subsection-title">Gastrointestinal Tract</div>
       <div class="rrow">
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/Nfd2V65Nv48')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pathologies of Stomach</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/K2CS25XrZYA')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Typhoid Fever</small></div></button>
+      </div>
+      <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1CC3ZRcu-ffk1HW3JB_N8lCCrAAqjqeK4/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>GI Tract Pathology</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1lzLnvPsujvx50YoAG3R5-Ll0AziV1kxA/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>H. Pylori Infections</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/15Ps3fK25sw')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>H. Pylori Infections</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1risjGFdAxmQjCeXDdJEtcNYB5QZtpPJq/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Esophageal Cancer</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/17uyWgG82SmaukpaaBLa_jJz4I4tqtEEv/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Gastric Cancer</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/uf48VBhK3lw')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Chronic H. Pylori Infection</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1d5UVD89clI7gewGZqjwWQ70K8o4E2gl4/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Crohn's Disease & Colorectal Cancer</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1_GMxzciP8tvJOtgL2DiptItACqtEuAi-/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Ulcerative Colitis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/64EyUedMR08')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Esophageal Cancer</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/bww0pTHVoj0')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Gastric Cancer</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/gMBE-U5DP9c')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Oral Leukoplakia</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/P4ym2468ImY')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Diagnostic Investigation</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/TBeqHBx_C44')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Crohn's Disease & Colorectal Cancer</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/2mMKwn3rxPY')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Ulcerative Colitis</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn quiz" onclick="openQuiz('U2_GI')"><div class="rico">✍️</div><div class="rtxt">GI Tract Quiz<small>10 questions</small></div></button>
@@ -248,33 +308,36 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
       <div class="subsection-title">Liver, Gallbladder & Pancreas</div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1ZJTsN7SrD8bCAfGkyth1ZrDuj8jOzTmg/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Liver & Pancreas</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1AO1T4r3egvzws1bwhEzu6aQEDFsTU_mk/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Liver Cirrhosis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/Iq6kjp7lms4')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Liver Cirrhosis</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1hPBUP4fRAx4G_8zEnCVzcs3LZ-E_EknU/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pathologies of Liver</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1HiYWfY27BEodvttTY6xRGVmcDwb5kzES/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pancreatitis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/OAgBAWpbcgk')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pathologies of Liver</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/HAuqZTSTmh4')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pancreatitis</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1VhiXPQK5gj_XQSkZyMNyQcSdZWo8pH9Z/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pancreatic Carcinoma</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1L5ST_yMCO4XHE5sgvF8vtUXqzByyj_Tv/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Tumors of Liver</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/c64iMvaDc4c')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pancreatic Carcinoma</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/dQaAEBPuZ7o')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Tumors of Liver</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1MybBxXuWrUWH7E6UqON8tA6yi5yPZlY_/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cholecystitis & Gallbladder Cancer</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/TT8Q8q9DYOc')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Liver Abscess</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/vrBZUub-dus')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cholecystitis & Gallbladder Cancer</small></div></button>
         <button class="rbtn quiz" onclick="openQuiz('U2_LIVER')"><div class="rico">✍️</div><div class="rtxt">Liver & Pancreas Quiz<small>10 questions</small></div></button>
       </div>
 
       <div class="subsection-title">Skeletal System</div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/19XlaASwwnMIs8zKpL2IdO1qwUEhtRoYe/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Skeletal System</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1xMPJExeR5cspJTSXrAp2drilO9I36-Od/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Bone Healing</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/KeS3LIBujhU')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Bone Healing</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1yLo_0KK9TuqM-tVDV52spqBlPj_p6SOz/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Osteomyelitis</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/178X1VLAZN_PUOw5AJHkRvmJb0uQneeCu/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Osteoporosis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/aOX8QDhKIcI')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Osteomyelitis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/gJ_OQ_hwxCg')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Osteoporosis</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1r3ptHkZvq3V0kt8w2sCz1EXmt8kbHRzf/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Bone Tumors</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1SCkDx-GzQPvGbtC_M4-LHcPuFmYiAKWj/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Arthritis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/9TIeLrxMBwQ')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Bone Tumors</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/kq6aEmFYns4')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Arthritis</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn quiz" onclick="openQuiz('U2_SKELETAL')"><div class="rico">✍️</div><div class="rtxt">Skeletal Quiz<small>10 questions</small></div></button>
@@ -283,11 +346,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
       <div class="subsection-title">Endocrine System</div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1vTKbkPYBDWC5NEyPi2VxcSYzfUNqO9x0/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Endocrine System</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1C627u7nXBd6koAy5tMNz_SNNTAYZ1PPD/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Goiter</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/FbUrJWYF_Fc')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Goiter</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/10IZtokHHtPFemncmnIfPCwIMlRTaHY8E/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Carcinoma of Thyroid</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1KlCBhxH3bC0DoZ-pjn5BvNSHyykTTk8T/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Diabetes Mellitus</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/Pf9e8NWqz-M')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Carcinoma of Thyroid</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/zHeV6kGXNlE')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Diabetes Mellitus</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn quiz" onclick="openQuiz('U2_ENDOCRINE')"><div class="rico">✍️</div><div class="rtxt">Endocrine Quiz<small>10 questions</small></div></button>
@@ -305,18 +368,18 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
     <div class="ubody" id="b-u3">
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1X688qPoJBYZKI2DodaRZW8_3RCYEC-7O/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Hematology</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1eo-lVAN_WtMElRZg2qpB1ivNb_KY4o5F/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Bleeding Time, PT, APTT</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/obYmxg0y-eM')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Bleeding Time, PT, APTT</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1EvDrL2TWP00ffqAsoGPqUrZ-C-EwHbZ5/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Blood Grouping & Cross Matching</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/10hLjwNYsUIXjOKWxyXXDhE5A9oGA9yRv/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>PCV & ESR</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/UXt-KEG8hyY')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Blood Grouping & Cross Matching</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/H32NwM2JmJI')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>PCV & ESR</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1YX02gelCHnDCmSDvKK9TxCMX0jPls6hT/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Blood Components</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1E5vM6SOyvXyusqmrubXejD30-202uSxW/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Blood Cell Count</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/0e3_eKPkBQg')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Blood Components</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/_wnoiZS2XIk')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Blood Cell Count</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1orDLo30dkzQerMpTTCRtVZOrI6m2QnvF/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hemoglobin Estimation</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/0fXHcXmfPfc')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hemoglobin Estimation</small></div></button>
         <button class="rbtn quiz" onclick="openQuiz('U3')"><div class="rico">✍️</div><div class="rtxt">Unit 3 Quiz<small>10 questions</small></div></button>
       </div>
     </div>
@@ -336,6 +399,39 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
   </div>
 </div>
 
+<div class="vp" id="vp" role="dialog" aria-modal="true" aria-label="Video lecture">
+  <div class="vp-area">
+    <div class="vp-box">
+      <div class="vp-stage" id="vp-stage"></div>
+      <div class="vp-guard top"></div>
+      <div class="vp-guard bot"></div>
+      <div class="vp-tap" id="vp-tap" onclick="vpTapScreen()"></div>
+      <div class="vp-ui" id="vp-ui">
+        <div class="vp-top">
+          <button class="vp-ic" onclick="closeVideo()" aria-label="Close video">&#8592;</button>
+          <div class="vp-title" id="vp-title">Video Lecture</div>
+          <button class="vp-ic" onclick="rotateVideo()" aria-label="Rotate video"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20a8 8 0 1 1 5.66-13.66"/><polyline points="17.7 2 17.7 6.4 13.3 6.4"/></svg></button>
+        </div>
+        <button class="vp-big" id="vp-big" onclick="vpToggle()" aria-label="Play"></button>
+        <div class="vp-bot">
+          <div class="vp-row">
+            <span class="vp-time" id="vp-cur">0:00</span>
+            <div class="vp-seek" id="vp-seek" aria-label="Timeline"><div class="vp-rail"><div class="vp-fill" id="vp-fill"></div></div><div class="vp-knob" id="vp-knob"></div></div>
+            <span class="vp-time" id="vp-dur">0:00</span>
+          </div>
+          <div class="vp-row">
+            <button class="vp-ic" id="vp-play" onclick="vpToggle()" aria-label="Play or pause"></button>
+            <button class="vp-ic" onclick="vpSkip(-10)" aria-label="Back 10 seconds">&minus;10s</button>
+            <button class="vp-ic" onclick="vpSkip(10)" aria-label="Forward 10 seconds">+10s</button>
+            <span class="vp-gap"></span>
+            <button class="vp-ic" id="vp-speed" onclick="vpSpeed()" aria-label="Playback speed">1&times;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 function goBackToApp(){if(window.parent&&window.parent!==window){window.parent.postMessage({action:'goBack'},'*');}else{history.back();}}
 function openPDF(url){
@@ -343,6 +439,223 @@ function openPDF(url){
   const clean=url.replace(/\/preview.*$/,'').replace(/\/view.*$/,'')+'/view';
   window.open(clean,'_blank');
 }
+
+// ── VIDEO PLAYER ──────────────────────────────────────────────
+// To move a lecture to YouTube, paste its YouTube link in place of the Drive link, e.g.
+//   onclick="openVideo(this,'https://youtu.be/VIDEO_ID')"
+// YouTube videos open full screen in landscape with this page's own controls
+// (play/pause, -10s/+10s, a timeline you can drag, speed). YouTube's own buttons and
+// links are covered so they can't be tapped. The phone's back button closes the player.
+// Drive links still open the old way.
+const VP={player:null,ready:false,started:false,dragging:false,dragT:null,timer:null,hideT:null,apiT:null,speeds:[1,1.25,1.5,2],speed:0,saved:null,queue:[],apiLoading:false};
+const VP_PLAY='<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+const VP_PAUSE='<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+function vpEl(id){ return document.getElementById(id); }
+function ytId(url){
+  const s=String(url||'').trim();
+  if(/^[\w-]{11}$/.test(s)) return s;
+  const m=s.match(/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/|v\/))([\w-]{11})/);
+  return m?m[1]:null;
+}
+function vpFmt(s){
+  s=Math.max(0,Math.floor(s||0));
+  const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=String(s%60).padStart(2,'0');
+  return h ? h+':'+String(m).padStart(2,'0')+':'+x : m+':'+x;
+}
+function vpRotated(){ return vpEl('vp').classList.contains('rot') && window.matchMedia('(orientation: portrait)').matches; }
+function vpSetTimes(t,d){
+  vpEl('vp-cur').textContent=vpFmt(t);
+  vpEl('vp-dur').textContent=vpFmt(d);
+  const r=d?Math.min(1,Math.max(0,t/d)):0;
+  vpEl('vp-fill').style.width=(r*100)+'%';
+  vpEl('vp-knob').style.left=(r*100)+'%';
+}
+function vpPlaying(){ const p=VP.player; return !!(p&&p.getPlayerState&&p.getPlayerState()===1); }
+// Controls fade out after 3 seconds of playing; tapping the video brings them back
+function vpShowUI(){
+  const ui=vpEl('vp-ui');
+  ui.classList.remove('hide');
+  clearTimeout(VP.hideT);
+  if(VP.started&&!VP.dragging&&vpPlaying()) VP.hideT=setTimeout(()=>ui.classList.add('hide'),3000);
+}
+function vpTapScreen(){
+  const ui=vpEl('vp-ui');
+  if(ui.classList.contains('hide')||!vpPlaying()) vpShowUI();
+  else { clearTimeout(VP.hideT); ui.classList.add('hide'); }
+}
+// Hide the app's purple header and zoom button while a video is open (this page sits inside the app's frame)
+function vpAppChrome(hide){
+  try{
+    if(window.parent===window) return;
+    const pd=window.parent.document;
+    if(hide){
+      const header=pd.getElementById('main-header');
+      if(header) vpEl('vp').style.setProperty('--vp-top',window.parent.getComputedStyle(header).paddingTop);
+      VP.saved=[];
+      [header,pd.getElementById('fab-zoom')].forEach(e=>{ if(e){ VP.saved.push([e,'display',e.style.display]); e.style.display='none'; } });
+      const wrap=pd.getElementById('iframe-wrapper');
+      if(wrap){ VP.saved.push([wrap,'width',wrap.style.width]); wrap.style.width='100%'; }
+    } else if(VP.saved){
+      VP.saved.forEach(([e,prop,val])=>{ e.style[prop]=val; });
+      VP.saved=null;
+    }
+  }catch(e){}
+}
+function vpLoadApi(cb){
+  if(window.YT&&window.YT.Player){ cb(); return; }
+  VP.queue.push(cb);
+  if(VP.apiLoading) return;
+  VP.apiLoading=true;
+  const prev=window.onYouTubeIframeAPIReady;
+  window.onYouTubeIframeAPIReady=function(){
+    if(typeof prev==='function'){ try{ prev(); }catch(e){} }
+    const q=VP.queue; VP.queue=[];
+    q.forEach(f=>{ try{ f(); }catch(e){} });
+  };
+  const s=document.createElement('script');
+  s.src='https://www.youtube.com/iframe_api';
+  s.onerror=()=>{ VP.apiLoading=false; };
+  document.head.appendChild(s);
+}
+// YouTube player states: -1 not started, 0 ended, 1 playing, 2 paused, 3 buffering, 5 ready
+function vpState(s){
+  const vp=vpEl('vp');
+  if(s===1&&!VP.started){ VP.started=true; vp.classList.add('started'); }
+  vp.classList.toggle('paused',s===2);
+  vp.classList.toggle('ended',s===0);
+  vpEl('vp-play').innerHTML=(s===1||s===3)?VP_PAUSE:VP_PLAY;
+  vpEl('vp-big').innerHTML=VP_PLAY;
+  vpShowUI();
+}
+function vpTick(){
+  const p=VP.player;
+  if(!p||!p.getCurrentTime||VP.dragging) return;
+  vpSetTimes(p.getCurrentTime()||0,p.getDuration()||0);
+}
+function vpToggle(){
+  const p=VP.player;
+  if(!p||!p.getPlayerState) return;
+  const s=p.getPlayerState();
+  if(s===1||s===3) p.pauseVideo();
+  else { if(s===0) p.seekTo(0,true); p.playVideo(); }
+  vpShowUI();
+}
+function vpSkip(d){
+  const p=VP.player;
+  if(!p||!p.getCurrentTime) return;
+  const dur=p.getDuration()||0;
+  let t=(p.getCurrentTime()||0)+d;
+  t=Math.max(0,dur?Math.min(dur-1,t):t);
+  p.seekTo(t,true);
+  vpSetTimes(t,dur);
+  vpShowUI();
+}
+function vpSpeed(){
+  const p=VP.player;
+  if(!p||!p.setPlaybackRate) return;
+  VP.speed=(VP.speed+1)%VP.speeds.length;
+  const r=VP.speeds[VP.speed];
+  p.setPlaybackRate(r);
+  vpEl('vp-speed').textContent=r+'×';
+  vpShowUI();
+}
+// Timeline: drag (or tap) anywhere on it to jump. Works the same when the video is turned sideways.
+(function(){
+  const bar=vpEl('vp-seek');
+  const ratio=e=>{
+    const r=bar.getBoundingClientRect();
+    const x=vpRotated()?(e.clientY-r.top)/r.height:(e.clientX-r.left)/r.width;
+    return Math.min(1,Math.max(0,x));
+  };
+  const move=e=>{
+    const d=VP.player&&VP.player.getDuration?VP.player.getDuration():0;
+    if(!d) return;
+    VP.dragT=ratio(e)*d;
+    vpSetTimes(VP.dragT,d);
+  };
+  bar.addEventListener('pointerdown',e=>{
+    if(!VP.player||!VP.player.getDuration||!VP.player.getDuration()) return;
+    VP.dragging=true;
+    try{ bar.setPointerCapture(e.pointerId); }catch(_){}
+    clearTimeout(VP.hideT);
+    move(e);
+    e.preventDefault();
+  });
+  bar.addEventListener('pointermove',e=>{ if(VP.dragging) move(e); });
+  const end=()=>{
+    if(!VP.dragging) return;
+    VP.dragging=false;
+    if(VP.player&&VP.dragT!==null) VP.player.seekTo(VP.dragT,true);
+    VP.dragT=null;
+    vpShowUI();
+  };
+  bar.addEventListener('pointerup',end);
+  bar.addEventListener('pointercancel',end);
+})();
+// If YouTube's control script hasn't loaded after 15 seconds, switch to YouTube's own controls so the video can still be watched
+function vpNative(id){
+  const vp=vpEl('vp'), f=vpEl('vp-frame');
+  if(!vp.classList.contains('open')||VP.ready||!f) return;
+  vp.classList.add('native');
+  f.src='https://www.youtube.com/embed/'+id+'?autoplay=1&rel=0&playsinline=1&fs=0';
+}
+function openVideo(btn,url){
+  const id=ytId(url);
+  if(!id){ openPDF(url); return; }
+  const vp=vpEl('vp');
+  const label=btn&&btn.querySelector('small');
+  vpEl('vp-title').textContent=label?label.textContent:'Video Lecture';
+  VP.player=null; VP.ready=false; VP.started=false; VP.dragging=false; VP.dragT=null; VP.speed=0;
+  vpEl('vp-speed').textContent='1×';
+  vpEl('vp-play').innerHTML=VP_PLAY;
+  vpEl('vp-big').innerHTML=VP_PLAY;
+  vpSetTimes(0,0);
+  vp.className='vp open rot';   // opens sideways (landscape)
+  vpAppChrome(true);
+  document.body.style.overflow='hidden';
+  const f=document.createElement('iframe');
+  f.id='vp-frame';
+  const origin=/^https?:$/.test(location.protocol)?'&origin='+encodeURIComponent(location.origin):'';
+  f.src='https://www.youtube.com/embed/'+id+'?autoplay=1&controls=0&rel=0&playsinline=1&fs=0&iv_load_policy=3&disablekb=1&enablejsapi=1'+origin;
+  f.title='Video lecture';
+  f.allow='autoplay; encrypted-media; picture-in-picture';
+  f.referrerPolicy='strict-origin-when-cross-origin';
+  const stage=vpEl('vp-stage');
+  stage.innerHTML='';
+  stage.appendChild(f);
+  vpShowUI();
+  vpLoadApi(()=>{
+    if(vpEl('vp-frame')!==f||vp.classList.contains('native')) return;
+    VP.player=new YT.Player(f,{events:{
+      onReady:()=>{ VP.ready=true; clearTimeout(VP.apiT); vpTick(); },
+      onStateChange:e=>vpState(e.data)
+    }});
+  });
+  clearTimeout(VP.apiT);
+  VP.apiT=setTimeout(()=>vpNative(id),15000);
+  clearInterval(VP.timer);
+  VP.timer=setInterval(vpTick,250);
+  // Add one history step, so the phone's back button closes the player instead of leaving the page
+  if(!(history.state&&history.state.ezVideo)) history.pushState({ezVideo:id},'');
+}
+function hideVideo(){
+  const vp=vpEl('vp');
+  if(!vp.classList.contains('open')) return;
+  clearInterval(VP.timer); clearTimeout(VP.hideT); clearTimeout(VP.apiT);
+  try{ if(VP.player&&VP.player.destroy) VP.player.destroy(); }catch(e){}
+  VP.player=null; VP.ready=false; VP.started=false; VP.dragging=false;
+  vp.className='vp';
+  vpEl('vp-stage').innerHTML='';
+  vpEl('vp-ui').classList.remove('hide');
+  document.body.style.overflow='';
+  vpAppChrome(false);
+}
+function closeVideo(){
+  hideVideo();
+  if(history.state&&history.state.ezVideo) history.back();
+}
+function rotateVideo(){ vpEl('vp').classList.toggle('rot'); vpShowUI(); }
+window.addEventListener('popstate',hideVideo);
 function tog(id){const card=document.getElementById(id);const body=document.getElementById('b-'+id);const open=card.dataset.open==='true';card.dataset.open=String(!open);body.classList.toggle('open',!open);}
 
 // QUIZ DATA - Each unit/section has exactly 10 MCQs
@@ -495,7 +808,7 @@ function closeQuiz(){
   document.body.style.overflow='';
   curQuiz=null;
 }
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQuiz();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(document.getElementById('vp').classList.contains('open'))closeVideo();else closeQuiz();}});
 </script>
 </body>
 </html>
