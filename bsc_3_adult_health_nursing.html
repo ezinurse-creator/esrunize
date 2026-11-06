@@ -118,6 +118,48 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
 .qopt.lock{cursor:default;pointer-events:none}
 .qopt.lock:not(.cor):not(.wrg):hover{border-color:var(--g200);background:var(--w);color:var(--g700)}
 .subsection-title{font-size:.75rem;font-weight:700;color:var(--p600);margin:12px 0 6px;text-transform:uppercase;letter-spacing:.08em}
+/* Full-screen video player (YouTube links) */
+.vp{position:fixed;inset:0;z-index:700;background:#000;display:none;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none}
+.vp.open{display:block}
+.vp-area{position:absolute;left:0;right:0;bottom:0;top:var(--vp-top,0px)}
+.vp-box{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;background:#000}
+@media (orientation:portrait){
+  .vp.rot .vp-box{width:calc(100vh - var(--vp-top,0px));height:100vw;top:50%;left:50%;transform:translate(-50%,-50%) rotate(90deg)}
+}
+.vp-stage,.vp-stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:#000}
+/* Clear covers that stop taps reaching YouTube's own buttons and links */
+.vp-guard{position:absolute;left:0;right:0;z-index:1}
+.vp-guard.top{top:0;height:30%}
+.vp-guard.bot{bottom:0;height:30%}
+.vp-tap{position:absolute;inset:0;z-index:2;display:none;transition:background .2s}
+.vp.started .vp-tap{display:block}
+.vp.paused .vp-tap{background:rgba(0,0,0,.5)}
+.vp:not(.started) .vp-guard.top{background:linear-gradient(#000 50%,transparent)}
+.vp:not(.started) .vp-guard.bot{background:linear-gradient(transparent,#000 50%)}
+.vp.ended .vp-tap{background:rgba(0,0,0,.9)}
+/* Player controls */
+.vp-ui{position:absolute;inset:0;z-index:3;pointer-events:none;transition:opacity .25s}
+.vp-ui.hide{opacity:0}
+.vp-ui.hide *{pointer-events:none!important}
+.vp-top,.vp-bot{position:absolute;left:0;right:0;display:flex;align-items:center;gap:8px;padding:10px 12px}
+.vp-top{top:0;background:linear-gradient(rgba(0,0,0,.65),transparent)}
+.vp-bot{bottom:0;background:linear-gradient(transparent,rgba(0,0,0,.8));display:none;flex-direction:column;align-items:stretch;gap:2px;padding-top:28px}
+.vp-row{display:flex;align-items:center;gap:8px}
+.vp-gap{flex:1}
+.vp.started .vp-bot{display:flex}
+.vp-ic{pointer-events:auto;min-width:40px;height:40px;padding:0 10px;border-radius:20px;border:none;background:rgba(255,255,255,.16);color:#fff;font:700 .78rem 'Plus Jakarta Sans',sans-serif;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.vp-ic:active{background:rgba(255,255,255,.32)}
+.vp-title{flex:1;min-width:0;color:#fff;font-size:.85rem;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+.vp:not(.started) .vp-title{visibility:hidden}
+.vp-time{color:#fff;font-size:.72rem;font-weight:600;min-width:36px;text-align:center;font-variant-numeric:tabular-nums;flex-shrink:0}
+.vp-seek{pointer-events:auto;flex:1;min-width:60px;height:36px;position:relative;cursor:pointer;touch-action:none}
+.vp-rail{position:absolute;left:0;right:0;top:50%;height:4px;margin-top:-2px;border-radius:2px;background:rgba(255,255,255,.3)}
+.vp-fill{height:100%;width:0;border-radius:2px;background:#c084fc}
+.vp-knob{position:absolute;top:50%;left:0;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(192,132,252,.45)}
+.vp-big{pointer-events:auto;position:absolute;top:50%;left:50%;width:72px;height:72px;margin:-36px 0 0 -36px;border-radius:50%;border:none;background:rgba(0,0,0,.55);color:#fff;display:none;align-items:center;justify-content:center;cursor:pointer}
+.vp.started.paused .vp-big,.vp.started.ended .vp-big{display:flex}
+/* If YouTube's control script can't load, fall back to YouTube's own controls */
+.vp.native .vp-guard,.vp.native .vp-tap,.vp.native .vp-bot,.vp.native .vp-big{display:none!important}
 </style>
 </head>
 <body>
@@ -157,15 +199,15 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
     <div class="ubody" id="b-u1">
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1AuVt9rLFlNT4evrVovlqJTYvVWjAGfNR/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Introduction</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1wO4jo3XnNgX8YQrQGZMvqUw2j-zY21rZ/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Definition, History & Early Civilization</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/2B_ZhTglgbc')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Definition, History & Early Civilization</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1aGrMOIHRhVrvm_ggLK4KBFfoLPlqCvM-/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>History of Medicine</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1wDWomFRvwQqrovaL59cAu_0XHfbG2ZGo/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Florence Nightingale & Surgical Nursing</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/NSMqqX9iDxg')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Florence Nightingale & Surgical Nursing</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1jO_wH0cFfLrU7ikqFyf2kKvJlyeRuEQV/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Florence Nightingale</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1N0VIxsRtd15QNbXw4YsYbcZkE1wgIoYc/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Trends & Issues in Medical-Surgical Nursing</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/H5GJFAYTLrM')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Trends & Issues in Medical-Surgical Nursing</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1gvdcRIgsJ76TmiAsn8ZwKy1ZrcvwIqar/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Trends & Issues</small></div></button>
@@ -184,27 +226,27 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
     <div class="ubody" id="b-u2">
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1-2TodQDBInvpeR1Yfng4TSlFh4-ZjVJF/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Intraoperative Care</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/164VBgV1gLeXoHS9Zn5zTMu9JkZtrAQhP/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Operation Theater</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/l--B5MawA4o')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Operation Theater</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1e_56tRVKRakbdE_JuSAekLTyPNYaA1J7/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Surgical Draping & Positioning</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/iftv-PO-4Ds')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Surgical Draping & Positioning</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/11BsjzuMQTMmUWCWnIflOrd8C_nfy5mCb/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Positioning</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1VQdtV-504w1nfZSBKTMIbpTvAyhAHbQL/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Sutures & Suture Materials</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/13GRd3JSHuiWaTX93TScnf6TN2YFMs2JK/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Surgical Scrub, Gowning & Gloving</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/Y5DnNOABiOs')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Sutures & Suture Materials</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/0HuMV0eAryA')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Surgical Scrub, Gowning & Gloving</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Nsy2hgJ8sW5ZxZxM4ySfyd3qYuAf3mjN/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Surgical Prep</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/189VOR6eG_fMi3pdyUYmGe-IrC70IrTq2/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Therapeutic Environment</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/Ldp_CPFPWRY')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Therapeutic Environment</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1fbne1M9wW0OtIZM0c1MKLphbm9jKMrwG/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>OT Instruments & Monitoring</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/kF1Eo1VO8y8')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>OT Instruments & Monitoring</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1JnVJucr0qyNhdo_LXed8q_YuWxKx-a4D/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>OT Monitoring</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1ClKPR4cG3ZqAz-23r6c_zkiibeSJg3v4/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Anesthesia: Definition, Classification & Stages</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1nVEkhoL1g65454_tNO0U7raOu9BKFlGA/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>OT Accidents, Hazards & Sterilization</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/t0F3oQUUQKE')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Anesthesia: Definition, Classification & Stages</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/GZ56KVttrDs')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>OT Accidents, Hazards & Sterilization</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1PqTu3QT2aeby1YomuzBlhghFI_iICB5D/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>OT Safety</small></div></button>
@@ -223,15 +265,15 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
     <div class="ubody" id="b-u3">
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1KPEBe0EnSuOPE0MaaWYcku-ElKZ0bsXX/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Signs & Symptoms</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/17TMxi4yAcUTLjISJCAUGq5s3zWLqgskx/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Shock: Definition, Types & Pathophysiology</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/_ox1E28x4o8')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Shock: Definition, Types & Pathophysiology</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1_PcOrFJrYiVQE__3_jO0uVJY7BAPN4SB/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Shock Management</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1I4MAq8jbXWRUvf8BomRevLB7QN_PMo7i/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pain: Types, Pathway & Management</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/-lKip-n5WD8')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pain: Types, Pathway & Management</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Y3zVuBvvIozBLfO4CPVW4a3xtoEHGSVg/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Pain Assessment</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1wbagw9e9vHHN6dAB2EOKRyYPlA4caP8a/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Body Fluid, Electrolytes & Water Balance</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/kDlzqn9dfQo')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Body Fluid, Electrolytes & Water Balance</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1hBi_CP2YxEJW4OBMnfpchiSD3L3_J9OC/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Fluid Balance</small></div></button>
@@ -250,26 +292,26 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
     <div class="ubody" id="b-u4">
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/143wAF2jxgEXTHRuSLI4OIBnmAjZVDWk3/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Respiratory System</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/11yO6wxl62U-1LQvbO0rFGZwzAdI_xO5y/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Respiratory Anatomy & Assessment</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/2tUyRj4glZs')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Respiratory Anatomy & Assessment</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1cleD3PejOMuxVj5k4LoZMmesHMZ9pg2C/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Upper Respiratory Tract Infection</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/0NhBxlqs11M')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Upper Respiratory Tract Infection</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1QNztuz3eG66p9giCacntxMNCjEArkNNM/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>URTI Management</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Pk9_MDpM6D34cEfHvyuEOT4LuCrLP3Kd/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pleural Effusion, Empyema & Bronchiectasis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/ZTjdxojzG4k')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pleural Effusion, Empyema & Bronchiectasis</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1907IB7mR0TJqR3pyDylV0nKTfkYRJKLW/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Pleural Disorders</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1GcaTGDYmVgk-4VxxteJL7MgeLOGY5rH1/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pneumonia & Lung Abscess</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1eWcsMJfVN7LDBYKDFhUCsKUo6-vzHljk/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Lung Abscess & Respiratory Tumors</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/5mETf1uhWWs')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pneumonia & Lung Abscess</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/ne2mkmgaJDk')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Lung Abscess & Respiratory Tumors</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1HLxj2TZrzrsrXGGrUYdpkwgR0d996G0r/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Respiratory Tumors</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1CYWiTMph7zMNFlJdF8qTv5ZuswjBZUcr/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Respiratory Injuries</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/N6Eogt_Ia08')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Respiratory Injuries</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1ZBIpHiM-bRWfx8v64TI-WCXHyZ4tvEMG/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Chest Injury & Pulmonary Embolism</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/S80De7YAjTk')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Chest Injury & Pulmonary Embolism</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1UdRnDwlh8Eawz46pB26v6aVaxeWF0llQ/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Chest Trauma</small></div></button>
       </div>
       <div class="rrow">
@@ -288,46 +330,46 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
     <div class="ubody" id="b-u5">
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1R3zIsNn_cfMaMk5OhL-FlHTWQrBWlOHO/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Digestive System</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1OfP0BeFCFJUQGXvqds1zK3IbhUy99kjT/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Peptic & Duodenal Ulcer</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/eThDekzUEBE')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Peptic & Duodenal Ulcer</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1vPr942oSC7jTXPUKboL_rujiDqqsFI-5/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Ulcer: Symptoms & Management</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/RD5G4HFK3Nw')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Ulcer: Symptoms & Management</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1o09w7xtt8rKoufo8WaTT9zNyoTDLusuN/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Ulcer Management</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Ia0aPzgHtoY6qbayXDK4JKVorG4Smqv8/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Malabsorption Syndrome</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1pbx358k9jN9aKIJTKUIVRljjuukRLqO9/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Appendicitis & Hernias</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/-nYAE_e5vEQ')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Malabsorption Syndrome</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/xus8ihlXdF0')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Appendicitis & Hernias</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1EqrgzC7JacvDOgp1Fs3MgDxfPNZWr0Vk/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Appendicitis</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1DRSndHHAY5SlBOCYJ7XQnef8I_5NjQr9/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hemorrhoids</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/9jBNeuKAons')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hemorrhoids</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1zEgVmMngJAX58YgTgndQYNHmcGWudyDN/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hemorrhoids, Anal Fissure & Fistula</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/WFtFdH7hPaw')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hemorrhoids, Anal Fissure & Fistula</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1PXY7EmMMC-58RuCO4EEEjQ3kvQgaToXK/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Anorectal Disorders</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1nBZ0788U4DRSbMm4K-vKn1dJ1CwNmEzS/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pancreatitis</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1rjMd0xz0VNpfD4tg98oR9WmOtZNasd9e/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pancreatitis & Pancreatic Cancer</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/hyXs67tMfAA')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pancreatitis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/_qWpJfw0_4g')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pancreatitis & Pancreatic Cancer</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1kMrDZo7kaqPQpfN7XmNFBSkp-Sp4hZTn/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Pancreatic Disorders</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Ce22koHrNHKi3HO0Eiw7DUXZoik2I_5I/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hepatitis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/74rDy0_r1Is')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hepatitis</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1oFvBxUia0L9ftPwttj--8frS7aPHWDOV/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cirrhosis & Hepatic Failure</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/geKXqlYpieg')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cirrhosis & Hepatic Failure</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1HqkPJsk1TbD9yTjChz_59FnMBqeHLa4R/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Liver Disorders</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/14BOBlI3IdHVdSRC5UkoK2cb1m0qZMvvq/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Liver Abscess & Portal Hypertension</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1ZMU9RhgGNIcCgTtNx5NDEGr_YVpGcMoe/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Liver Cancer</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/qgumooOsMgQ')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Liver Abscess & Portal Hypertension</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/ryc2HrYPzRc')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Liver Cancer</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1oKnrUIwOPYa34QeaxWjANzaKJkYFSyBv/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Liver Cancer</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1FrYf2qziX5BSPx4A75YGyN3pqlFzi-Nx/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cholecystitis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/tNIwIxgu1YY')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cholecystitis</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1CGf85-1ttuBEgGQf4dfkEJ4AdP4NDTQf/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cholecystitis & Cholelithiasis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/0cM-YuUBw1c')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cholecystitis & Cholelithiasis</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1eOK-RoxuivcIAbMgD2S25Xy1-8q-bfS0/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Gallbladder Disorders</small></div></button>
       </div>
       <div class="rrow">
@@ -346,87 +388,87 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
     <div class="ubody" id="b-u6">
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1Qq6ISHlnF-59tLp7Lm-YgHAQWU8CSsRR/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Cardiovascular System</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1T0B5A24wXdwXFPfJZcA5JMFfRfWKh4TM/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Anatomy & Physiology of Heart</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/P6f1WfDtHu4')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Anatomy & Physiology of Heart</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1ybV2i3G9HEde4_ApI5_ECv6jfS28yPI5/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Heart Anatomy</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/17yZ-a3n7EXd5MivYfRmVk1cGLExCJvfm/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cardiac Assessment</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/g9xiqSDwg5c')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cardiac Assessment</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1R4FE_iI6VUZ2PRSNF8kYG7pXzpBLk9dr/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Cardiac Assessment</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1mYoWA2nA4BJrEZGgkXBUqn47AMhSv_-a/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cardiac Procedures</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/zzs_fXuYhMA')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cardiac Procedures</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1OnGngeRRx8zaaOiB6vQdTDRH1ugKTpcn/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Cardiac Procedures</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1i6cCWp0fG3mapuXV8tNt_A6v1u_FITPI/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hypertension</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/GrUXmBDAkJE')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hypertension</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/18ck1K1FngkBpMG5i2cyB9KxZw7sPputW/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hypertension: Management & Complications</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/hB4SwTBWxts')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hypertension: Management & Complications</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1XeQLF4vC_cAL8aDaxq_WLE-AxLSt0f-R/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Hypertension</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1BdLwYP7WeFTTUaRaBlm_xy3TaXeynfVH/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Arteriosclerosis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/D34rxkRETH4')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Arteriosclerosis</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1nXLPWMwGdRY2PJn7wMrjk_HzWpLIdx_3/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Arteriosclerosis</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/16rO_ghxmvDfi_EYK6GPcT6aVVonXO8oq/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Raynaud's Disease</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/H1--q9pVjjI')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Raynaud's Disease</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1jM-lBXfLSUwrusr3RDAG1zKLkAph5sCh/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Raynaud's</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/15hJ7KwA87ijhZUZFXo0SJ94YAoqBZMHs/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Aneurysm</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/CchtzBVCOc0')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Aneurysm</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1ODupmNMHuBZyPleRRPG4q2K2YcPlUsDP/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Aneurysm</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Fj3aYP2b7EPn3pTtXNP7nMZl9Dnn5Rvl/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Peripheral Vascular Diseases</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/m13Qe59u2nM')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Peripheral Vascular Diseases</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1kdf1ObP83qaRgvYAMXm4ERVtpbgEpSAU/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>PVD</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/13xhG0V3XAkmZxmsUajMJ5tOf2tA4m_Pk/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Atherosclerosis & Angina Pectoris</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1z0hgprCICrFaT3mffBcoolNxjDzYG1Pm/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Angina & Myocardial Infarction</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/aoM-hAwHw8w')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Atherosclerosis & Angina Pectoris</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/C2h1vM707Mk')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Angina & Myocardial Infarction</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1qU73RBeoF_AwyvePaPnfaRBYmJaxVsdo/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>CAD</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1yiT2_-2tArDdeD3AUCUq3-i_ijw32zpt/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Coronary Artery Disease Management</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/PFqcmP26z-w')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Coronary Artery Disease Management</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/19680rogCPpABBLIc9RzPsDXIoy8OSwzg/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>CAD Management</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1RGKnvp3LzXiseffQb-698KzF86IOsatR/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Mitral Stenosis & Regurgitation</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/DEjW3AFBS38')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Mitral Stenosis & Regurgitation</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1WSkriBr26rHpXBssW627Q_wpsoCcfsrK/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Mitral Valve Prolapse & Aortic Disorders</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/0JaL6NwDmig')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Mitral Valve Prolapse & Aortic Disorders</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/11AHN8H5c8FV7BtmiLq4UlN_ptf71vI35/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Valvular Disorders</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1586Ny-3kQ6sjkOd81TwoQcPUoPjYZos_/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Rheumatic Heart Disease</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/fqGDVRspBP0')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Rheumatic Heart Disease</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1ZFfSemjAEkoosdCfGm6vCC7JkW90PGAG/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>RHD</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1WlSnd9pVRaRgI3ewtDusRfpC9dDfYS4x/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pericarditis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/xIUCeFuRh8A')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pericarditis</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/165MBlkJseBdujKyusOSxUK0MtAUJqsfG/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Pericarditis</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1akNpbfaYqYSXWvP3sBHp5ThBM45C58gg/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Myocarditis & Infective Endocarditis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/8-3jNjeiVjw')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Myocarditis & Infective Endocarditis</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1D3mKSTL_Bj_a3YfWaL-16UWedtawQ4FY/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Myocarditis</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1N29Ro5KbXsxdTN13HKKxHp8lk8OsZd26/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cardiomyopathy</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/HJZDc1pIx6k')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Cardiomyopathy</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1LwSERts9bFEEhjEABiuwYBZmfETkczAK/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Cardiomyopathy</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1QDnWUqhm5pYD6xsQ7-iO6ytjdMiX_pEp/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Arrhythmias: Sinus & Atrial</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1nzkYEu1bwJFA1f00KldNFeAAFKWSKE2U/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Ventricular Arrhythmias & Heart Block</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/htZ0a196s_c')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Arrhythmias: Sinus & Atrial</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/jiGtgohRLls')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Ventricular Arrhythmias & Heart Block</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1gx8x46LuRKftBGmwmzgtrA_nmhzLCEif/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Arrhythmias</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1jwJr5bVdFsw7t7DmImhfiJn2nzATCFaY/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Congestive Heart Failure & Cardiac Arrest</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/sErERpbf20c')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Congestive Heart Failure & Cardiac Arrest</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1qQbN46Esdk8tSEb61_JiBXlKgBOr5ioQ/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>CHF</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1ztoOk8pPoLnBnbZTYepxGA2BbaOM2JzY/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pulmonary Edema & Cardiogenic Shock</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/XvA3zZK-Qsw')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pulmonary Edema & Cardiogenic Shock</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1kCXAikopZvjQBz2jqQYM5iRKmIhOUtIM/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Pulmonary Edema</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1uy8hhequ0_6k7ICYoUSu-OeMS382ittg/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pericardial Effusion & Tamponade</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/wgPjPyqBnA8')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pericardial Effusion & Tamponade</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1TNcbaCbpiGdOSV_1ZkdwgT7TvaH2hEa_/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Cardiac Tamponade</small></div></button>
@@ -445,43 +487,43 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
     <div class="ubody" id="b-u7">
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1tsdtBUyf1FGhHbm1Ba3DtQ_XC3YMsdnq/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Blood Disorders</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/13vEApOc3oHat7vkqilLHRsF0tAnZ-x6O/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Blood Anatomy, Physiology & Assessment</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/38Exri39ILQ')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Blood Anatomy, Physiology & Assessment</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1IyN7YsNNE2KIeEtDvYk0lrT6KD5OX_ne/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Blood Assessment</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1NiIhr1HRr76EsbpCRag2cxJcfrhkU3UG/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Anemia</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/E3Zp6N8rLeI')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Anemia</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1ZWE1lBcbyBRtYdgoNrS_1RBPb_h4Kklg/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Anemia</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1A2ikUK51YCkguygH1t8kD4mXH6R76bnH/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Aplastic Anemia</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/wrrbOO4vdQU')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Aplastic Anemia</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1YEkMFPYCZp8RT31nfJau1-4B8mo4a3QJ/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Iron Deficiency Anemia</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/E6Pq8ZIXJ-Y')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Iron Deficiency Anemia</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1H_bYwPTjkHydCmyt-e6ejCNzabjhJ-Pu/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Iron Deficiency</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/13xUs2W4iIJbNzyGFYtXxmulqhqN5FzU1/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Sickle Cell Anemia</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/rnDq1Onf5p0')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Sickle Cell Anemia</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1-84LgMxa1Nwt5ozFZGx7x3ZywnX_Fwz9/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Sickle Cell</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1F-lSDYx_hnnn3w2TMSL8zz2uTjj1ET_p/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Polycythemia</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1TcJbFfVcJSj5aRkUN7yT0l0Y0q0XnSa8/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Bleeding Disorders</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/HwlviLUrTo4')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Polycythemia</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/kJsqDwsVjxU')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Bleeding Disorders</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1268AlwzbNHRvtQK9gszdu1cXpbNDDh3q/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Bleeding Disorders</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1d5366kr2AA25dbXPTBrUoRsrdk_mauXr/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hemophilia & Thalassemia</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/qcwhsAlRYB8')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hemophilia & Thalassemia</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/152RMdeuFU-r-Ir9VMmUcJtC4I4J2mAT5/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Hemophilia</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/11Ep4pvV5p7pq_Pw9amlNvuziJ17TQ1Ve/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Leukemia</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/X6jc9yVX70k')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Leukemia</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1jibMsgNn931YmikDB-UDw7l5AiGpLriG/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Leukopenia</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/xZWutHMT9uk')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Leukopenia</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1FYXVphoLJKBwIMXEQMTF6Jeosnm6sP67/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Leukemia</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1ep47lb_AWAxShZmKouJLYI0XpFRGbwsy/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Lymphoma</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1tB39LMMHCSob05qNZ29okTka_zo5MyTN/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Myelomas</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/EbTiePaPAyk')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Lymphoma</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/-f6MPpr0OXM')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Myelomas</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1CZZRntbpGbg2O_4R2EfFEuPIUKPmH6DO/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Myelomas</small></div></button>
@@ -500,43 +542,43 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
     <div class="ubody" id="b-u8">
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1aZ1lwO81R1lDb7GJDw2j5P2oYpwNH-X_/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Endocrine System</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1A4UYOOo3VoBRTZNIM_19kcwQvWt98aDs/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Endocrine System Overview</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/WJQJ51co-R4')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Endocrine System Overview</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/18E9bRJ3KOPg8As46Wcs7wkA7da6CeNL7/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Endocrine Glands</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/iEguUITrkx4')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Endocrine Glands</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1y5Zz_FEPpPubRou2VTJRvEK15KVfrz_W/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Endocrine Anatomy</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1eGYdYiQc2JPZXlvrZc4czetVLtildeGM/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hyperthyroidism</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1bb8ULOul0KUerzoS1ongW0c5qx_IeQqU/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hypothyroidism & Goiter</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/V1ZQDp0bUQE')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hyperthyroidism</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/p4VOGk9QrRA')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hypothyroidism & Goiter</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1QB5l9qg4wD7CIum1gyJgsaTwIXYKnh3g/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Thyroid Disorders</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/17yrZGRmRxx6qWrpA7vf92TzMoNSBy3pC/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Parathyroid & Hyperparathyroidism</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/mY6KdcaLN1A')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Parathyroid & Hyperparathyroidism</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1JEo-t63zJofrbQpoiQBbob6sco9BrUrK/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hypoparathyroidism</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/-bJl7PJarGE')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hypoparathyroidism</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1F5rAs6zYdk8Bk_dwtEnKrEjZA1z9jHrS/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Parathyroid Disorders</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1-O4IC_VSGLj2bKDo45KjL0DI-k9QnaAh/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Addison's & Cushing's Syndrome</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1VoCgwHt8inZZI8sQ03-2sVuwqynEEG2X/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Conn's Syndrome & Pheochromocytoma</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/8lkPlmAGQFM')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Addison's & Cushing's Syndrome</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/sezstT_TOL8')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Conn's Syndrome & Pheochromocytoma</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1zjYo-aeQ2pPdNGmCclKKKTFj-ikIl8tI/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Adrenal Disorders</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1681HnVhOoWxluJFt5BuWM3DkfhvbM4Ep/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Anterior Pituitary Disorders</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/hIwpcAejo5k')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Anterior Pituitary Disorders</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/19sIXO5NKTladFgF-QfdKzMSScaxwPvYz/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Pituitary Disorders</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1KzGPqkRNAv03Y-AW7qmWBuCUM9KO89lO/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hypopituitarism</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/qF9vIb_jL9E')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hypopituitarism</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1wwwpjX9IONZfJbwUv4YrF6PU9E2Xz0fl/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>DI, SIADH & Posterior Pituitary</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/lHv0kkVgJAs')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>DI, SIADH & Posterior Pituitary</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1ZoWWGTq3ojD0Wl7cDvVCxamXmXws48WJ/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>DI & SIADH</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/14s3rVaMC37g_mnxVGhNXYLfOxU4asrCi/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Diabetes Mellitus Type 1 & 2</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1yuR1KmK4x-oqlZ7bEisBYAeoR1w-Pyyn/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Gestational Diabetes & Insulin Therapy</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/PeSSiK8zILw')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Diabetes Mellitus Type 1 & 2</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/bIKak9RUPYY')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Gestational Diabetes & Insulin Therapy</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1HzIbEXt3_ZNdLVPixgFUE8p5eNf8_hdP/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Diabetes Management</small></div></button>
@@ -555,38 +597,38 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
     <div class="ubody" id="b-u9">
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1RlZe4ibyKYP_WR29IIpE3PJ5MzNJUUsP/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Integumentary System</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1hRF3RR4CLoXDor3KW98EkynKf-_TbArn/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hair & Nail Structure</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/V2H62uNlLak')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Hair & Nail Structure</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1sPmqI0LVD-kJnHsC885_WtnKHlVv7HYf/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Skin Anatomy</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1lDfM8phPfyTucJJk6KIdOPAjsCrBhhek/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Dermatitis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/AwaE-QEd2Ho')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Dermatitis</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/12boggmJ8PcxN1u8P0PH6qltWpRgL0ajM/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Dermatitis</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1lCSar6ikvhT-lMC-HzFfL9d4yyPphvAF/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Acne: Causes & Pathophysiology</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/HpxMjnhYOww')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Acne: Causes & Pathophysiology</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1uh19tod8UJIjxGedzSuDycT5UaHm24jO/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Acne Management & Herpes Zoster</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/N0-5t0O7G-A')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Acne Management & Herpes Zoster</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1eR53JoExRGfl-RaJHpTdpkLtgFFd_qKV/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Acne & Herpes</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/12ltieIKud6rddi-dPB-rebVNg3mYcSXe/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Herpes Simplex, Skin Allergies & Scabies</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/eEU67slZwxc')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Herpes Simplex, Skin Allergies & Scabies</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1FSLxOJZ7ZFY4kA7ukrAfdnRO83DkOpRb/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Scabies</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1P2rhsa7p5xvq1Nmn5TX4WB-IkH3mgUuL/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pemphigus Vulgaris & Psoriasis</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1TtDDAEdRHtfxz7_yTooUvosU5voPnmx7/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Psoriasis: Pathophysiology & Management</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/kdFrTLpbA0A')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Pemphigus Vulgaris & Psoriasis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/IxttvS1YqfM')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Psoriasis: Pathophysiology & Management</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1zFrVTHf9oDsulXCeqXcNOTZPR_lSvVsV/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Psoriasis</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1fr0VVQxUnheRZqkPGIkVKISugc5zJUo5/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Malignant Melanoma</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/BvK6L1eEefg')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Malignant Melanoma</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1qYB5czXbThp6sk-WxDIV3P8go5s3zGwt/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Melanoma Management & Alopecia</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/ClnKdyl9zSc')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Melanoma Management & Alopecia</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1P8C2KzFIrr-IoL5ZfB-cT8oeuFagvqS8/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Alopecia</small></div></button>
       </div>
       <div class="rrow">
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/18xO4IPIpw__R1dfeRD3bV4XCQ50vmAfo/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Special Therapies & Nursing Management</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/VfOw_erYfHQ')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Special Therapies & Nursing Management</small></div></button>
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1KZAaTTy_jnlwgxTgDFCpZFmwtqvKymcG/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Integumentary Nursing</small></div></button>
       </div>
       <div class="rrow">
@@ -605,43 +647,46 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
     <div class="ubody" id="b-u10">
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/14W8asv086mndxqTCl9eFlcMoc1w_xpZ-/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Musculoskeletal System</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1chdmz5TSLVWowr5z7pWudaqisUyBbg6y/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Musculoskeletal Assessment & Diagnosis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/eELGCHH32bw')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Musculoskeletal Assessment & Diagnosis</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1VLNIQk3IqKc37TKVyLrzrkVKtPJEBjwB/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>MSK Assessment</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1iXjXxJvN0tAwOvxgbw6uQLQMiObDdF9u/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Joint Dislocations</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/2nQV5hdbCDw')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Joint Dislocations</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1sgEtP37e1nyx2eqt5VxiXbfOFBivI6QF/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Dislocations</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1TU5GBUfqiLlQ34F-k0y92QOUkytDaCI-/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Fractures</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/Gkw0inMz_Ew')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Fractures</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1e9AAWeaFQNUYxD6zcLIdkgVEil5H5pgq/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Fractures</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1fz9hI6agS-CNQwKLtQTcLW1-tOvzWQt4/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Amputation</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/5VtKy2ORHh0')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Amputation</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1c2KmtX1RdgbRoxRIAKGL9f1qQZm2Ut8z/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Amputation</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/15wj3jyE6Q7XeTxGr7ZM8Z8wn9wJS_aqW/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Osteomyelitis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/72oUjRrHnsM')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Osteomyelitis</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/KtT5x1BefwA')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Bone Tumor</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1yOinDzf_SwTpdOtDKY-O01EP4cJUh87J/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Osteomyelitis</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1kBsThrbBxVVGRH_HRSpqqSjCBNVxzg6G/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Bursitis & Synovitis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/OqPmWjr4u-Y')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Bursitis & Synovitis</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1yENWqe5bYICUyaRXdK3PQCLZzw9ldsxB/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Bursitis</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1Zh0lpVWku7NxtsFo0S9zXr5g0u9hT8mm/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Arthritis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/XckhQiOw_Ok')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Arthritis</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1OfN3SFdGj-3lmrtZtlrdHZzohWc01k-6/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Arthritis</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1qaCiKRxMggl-Jm3-EpedKFfpWX-fXR9Q/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Osteoporosis, Osteomalacia & Paget's Disease</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/oJGyWXqfo-U')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Osteoporosis, Osteomalacia & Paget's Disease</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1nR3mBnnrcLFEE6Qz7at-PuUPX8n1J0iS/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Bone Density Disorders</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1jbCZ4FetAid8f3Uke9vT6XyHKnmZqzcC/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Prolapsed IV Disk & Pott's Spine</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/TLxyWLqQdeA')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Prolapsed IV Disk & Pott's Spine</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1gdM4izd90QNGYR8865QR36027b98hvTX/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Spinal Disorders</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1ixMQB0clOmLySonHE2IlyTZFR55-FphT/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Orthopedic Modalities & Alternative Therapy</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/CGcxR3gM9BI')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Orthopedic Modalities & Alternative Therapy</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1pOvuGeFRhqJxqtXSRQpRuKbmIkn7NGSC/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Orthopedic Therapy</small></div></button>
@@ -660,35 +705,38 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
     <div class="ubody" id="b-u11">
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1dELyduIqbAKioF43L0MbnVQ-hFgF76_p/view')"><div class="rico">📚</div><div class="rtxt">Detailed Notes<small>Communicable Diseases</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1ZFbD8jQJpAPn4mKeQyI2T9robGvgNa3p/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Tuberculosis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/MqaDmiOsnAo')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Tuberculosis</small></div></button>
+      </div>
+      <div class="rrow">
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/1esnU5Vw9Qo')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Chicken Pox, Small Pox, Measles, Mumps & Rubella</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1aIVVrvwTxvMCpQEa2TQoNoO8DYzYSaM2/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>TB</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/18phJa-mwKuqlL-bIiyveAdk3_MtgRMzp/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Poliomyelitis, Hepatitis & Typhoid</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/pYXQTz9PlJY')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Poliomyelitis, Hepatitis & Typhoid</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/19rTJg0Iu6PhxOeCc846q55UqYsi-abje/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Viral & Bacterial Diseases</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1a03s5ldNxXv0RKEOQexSYN2rzOZcOy4J/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Diphtheria, Pertussis, Tetanus & Meningitis</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/IOEd-Dd4vBM')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Diphtheria, Pertussis, Tetanus & Meningitis</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/10LiMu90-9nGTlkxjsBv00aXNnzyVeSMK/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Bacterial Diseases</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1L4Xv5-wjeEUMhj0Zdhya8Xn1ifUUX-4p/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Vector Borne Diseases</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/La68dNNsMWM')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Vector Borne Diseases</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1X0f52pL8-ZTgkuWf9fgP5JzK_LkAVdjN/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Vector Borne</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1qSh9jxMgRlHFldoh3gk22qWb_g_fmwj-/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Chikungunya, Influenza & Plague</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/uYmXX-MBxf0')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Chikungunya, Influenza & Plague</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1CswD6_PdY28M6me0J8UEtc1kOiNFKJZc/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Respiratory Infections</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1FK0wbq9y1fo_I3896IjTlLB_JfAl5zyl/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>COVID-19</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/FvoiW0tWJlk')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>COVID-19</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1fDWwkQPm4MijD3m6Eeh4B7hQIx_hSoBj/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>COVID-19</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1o0ayMfEpNTwouQCmy8WAvlOf-gY4WUen/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Leprosy & Gas Gangrene</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/j6yZ3tlGc7Y')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Leprosy & Gas Gangrene</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1kUNTjkKy10LyA69HVnt6J8diQXA0PM1z/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>Leprosy</small></div></button>
-        <button class="rbtn video" onclick="openPDF('https://drive.google.com/file/d/1804mCrncOv8XJwDCfNJ666041XILOI0z/view')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>AIDS</small></div></button>
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/If5S1sG8600')"><div class="rico">▶️</div><div class="rtxt">Video Lecture<small>AIDS</small></div></button>
       </div>
       <div class="rrow">
         <button class="rbtn notes" onclick="openPDF('https://drive.google.com/file/d/1DU9eXNk-thx-fr_7Nydwti_wUPDQtEX_/view')"><div class="rico">📝</div><div class="rtxt">Lecture Notes<small>HIV/AIDS</small></div></button>
@@ -711,6 +759,39 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
   </div>
 </div>
 
+<div class="vp" id="vp" role="dialog" aria-modal="true" aria-label="Video lecture">
+  <div class="vp-area">
+    <div class="vp-box">
+      <div class="vp-stage" id="vp-stage"></div>
+      <div class="vp-guard top"></div>
+      <div class="vp-guard bot"></div>
+      <div class="vp-tap" id="vp-tap" onclick="vpTapScreen()"></div>
+      <div class="vp-ui" id="vp-ui">
+        <div class="vp-top">
+          <button class="vp-ic" onclick="closeVideo()" aria-label="Close video">&#8592;</button>
+          <div class="vp-title" id="vp-title">Video Lecture</div>
+          <button class="vp-ic" onclick="rotateVideo()" aria-label="Rotate video"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20a8 8 0 1 1 5.66-13.66"/><polyline points="17.7 2 17.7 6.4 13.3 6.4"/></svg></button>
+        </div>
+        <button class="vp-big" id="vp-big" onclick="vpToggle()" aria-label="Play"></button>
+        <div class="vp-bot">
+          <div class="vp-row">
+            <span class="vp-time" id="vp-cur">0:00</span>
+            <div class="vp-seek" id="vp-seek" aria-label="Timeline"><div class="vp-rail"><div class="vp-fill" id="vp-fill"></div></div><div class="vp-knob" id="vp-knob"></div></div>
+            <span class="vp-time" id="vp-dur">0:00</span>
+          </div>
+          <div class="vp-row">
+            <button class="vp-ic" id="vp-play" onclick="vpToggle()" aria-label="Play or pause"></button>
+            <button class="vp-ic" onclick="vpSkip(-10)" aria-label="Back 10 seconds">&minus;10s</button>
+            <button class="vp-ic" onclick="vpSkip(10)" aria-label="Forward 10 seconds">+10s</button>
+            <span class="vp-gap"></span>
+            <button class="vp-ic" id="vp-speed" onclick="vpSpeed()" aria-label="Playback speed">1&times;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 function goBackToApp(){if(window.parent&&window.parent!==window){window.parent.postMessage({action:'goBack'},'*');}else{history.back();}}
 function openPDF(url){
@@ -718,6 +799,223 @@ function openPDF(url){
   const clean=url.replace(/\/preview.*$/,'').replace(/\/view.*$/,'')+'/view';
   window.open(clean,'_blank');
 }
+
+// ── VIDEO PLAYER ──────────────────────────────────────────────
+// To move a lecture to YouTube, paste its YouTube link in place of the Drive link, e.g.
+//   onclick="openVideo(this,'https://youtu.be/VIDEO_ID')"
+// YouTube videos open full screen in landscape with this page's own controls
+// (play/pause, -10s/+10s, a timeline you can drag, speed). YouTube's own buttons and
+// links are covered so they can't be tapped. The phone's back button closes the player.
+// Drive links still open the old way.
+const VP={player:null,ready:false,started:false,dragging:false,dragT:null,timer:null,hideT:null,apiT:null,speeds:[1,1.25,1.5,2],speed:0,saved:null,queue:[],apiLoading:false};
+const VP_PLAY='<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+const VP_PAUSE='<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+function vpEl(id){ return document.getElementById(id); }
+function ytId(url){
+  const s=String(url||'').trim();
+  if(/^[\w-]{11}$/.test(s)) return s;
+  const m=s.match(/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/|v\/))([\w-]{11})/);
+  return m?m[1]:null;
+}
+function vpFmt(s){
+  s=Math.max(0,Math.floor(s||0));
+  const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=String(s%60).padStart(2,'0');
+  return h ? h+':'+String(m).padStart(2,'0')+':'+x : m+':'+x;
+}
+function vpRotated(){ return vpEl('vp').classList.contains('rot') && window.matchMedia('(orientation: portrait)').matches; }
+function vpSetTimes(t,d){
+  vpEl('vp-cur').textContent=vpFmt(t);
+  vpEl('vp-dur').textContent=vpFmt(d);
+  const r=d?Math.min(1,Math.max(0,t/d)):0;
+  vpEl('vp-fill').style.width=(r*100)+'%';
+  vpEl('vp-knob').style.left=(r*100)+'%';
+}
+function vpPlaying(){ const p=VP.player; return !!(p&&p.getPlayerState&&p.getPlayerState()===1); }
+// Controls fade out after 3 seconds of playing; tapping the video brings them back
+function vpShowUI(){
+  const ui=vpEl('vp-ui');
+  ui.classList.remove('hide');
+  clearTimeout(VP.hideT);
+  if(VP.started&&!VP.dragging&&vpPlaying()) VP.hideT=setTimeout(()=>ui.classList.add('hide'),3000);
+}
+function vpTapScreen(){
+  const ui=vpEl('vp-ui');
+  if(ui.classList.contains('hide')||!vpPlaying()) vpShowUI();
+  else { clearTimeout(VP.hideT); ui.classList.add('hide'); }
+}
+// Hide the app's purple header and zoom button while a video is open (this page sits inside the app's frame)
+function vpAppChrome(hide){
+  try{
+    if(window.parent===window) return;
+    const pd=window.parent.document;
+    if(hide){
+      const header=pd.getElementById('main-header');
+      if(header) vpEl('vp').style.setProperty('--vp-top',window.parent.getComputedStyle(header).paddingTop);
+      VP.saved=[];
+      [header,pd.getElementById('fab-zoom')].forEach(e=>{ if(e){ VP.saved.push([e,'display',e.style.display]); e.style.display='none'; } });
+      const wrap=pd.getElementById('iframe-wrapper');
+      if(wrap){ VP.saved.push([wrap,'width',wrap.style.width]); wrap.style.width='100%'; }
+    } else if(VP.saved){
+      VP.saved.forEach(([e,prop,val])=>{ e.style[prop]=val; });
+      VP.saved=null;
+    }
+  }catch(e){}
+}
+function vpLoadApi(cb){
+  if(window.YT&&window.YT.Player){ cb(); return; }
+  VP.queue.push(cb);
+  if(VP.apiLoading) return;
+  VP.apiLoading=true;
+  const prev=window.onYouTubeIframeAPIReady;
+  window.onYouTubeIframeAPIReady=function(){
+    if(typeof prev==='function'){ try{ prev(); }catch(e){} }
+    const q=VP.queue; VP.queue=[];
+    q.forEach(f=>{ try{ f(); }catch(e){} });
+  };
+  const s=document.createElement('script');
+  s.src='https://www.youtube.com/iframe_api';
+  s.onerror=()=>{ VP.apiLoading=false; };
+  document.head.appendChild(s);
+}
+// YouTube player states: -1 not started, 0 ended, 1 playing, 2 paused, 3 buffering, 5 ready
+function vpState(s){
+  const vp=vpEl('vp');
+  if(s===1&&!VP.started){ VP.started=true; vp.classList.add('started'); }
+  vp.classList.toggle('paused',s===2);
+  vp.classList.toggle('ended',s===0);
+  vpEl('vp-play').innerHTML=(s===1||s===3)?VP_PAUSE:VP_PLAY;
+  vpEl('vp-big').innerHTML=VP_PLAY;
+  vpShowUI();
+}
+function vpTick(){
+  const p=VP.player;
+  if(!p||!p.getCurrentTime||VP.dragging) return;
+  vpSetTimes(p.getCurrentTime()||0,p.getDuration()||0);
+}
+function vpToggle(){
+  const p=VP.player;
+  if(!p||!p.getPlayerState) return;
+  const s=p.getPlayerState();
+  if(s===1||s===3) p.pauseVideo();
+  else { if(s===0) p.seekTo(0,true); p.playVideo(); }
+  vpShowUI();
+}
+function vpSkip(d){
+  const p=VP.player;
+  if(!p||!p.getCurrentTime) return;
+  const dur=p.getDuration()||0;
+  let t=(p.getCurrentTime()||0)+d;
+  t=Math.max(0,dur?Math.min(dur-1,t):t);
+  p.seekTo(t,true);
+  vpSetTimes(t,dur);
+  vpShowUI();
+}
+function vpSpeed(){
+  const p=VP.player;
+  if(!p||!p.setPlaybackRate) return;
+  VP.speed=(VP.speed+1)%VP.speeds.length;
+  const r=VP.speeds[VP.speed];
+  p.setPlaybackRate(r);
+  vpEl('vp-speed').textContent=r+'×';
+  vpShowUI();
+}
+// Timeline: drag (or tap) anywhere on it to jump. Works the same when the video is turned sideways.
+(function(){
+  const bar=vpEl('vp-seek');
+  const ratio=e=>{
+    const r=bar.getBoundingClientRect();
+    const x=vpRotated()?(e.clientY-r.top)/r.height:(e.clientX-r.left)/r.width;
+    return Math.min(1,Math.max(0,x));
+  };
+  const move=e=>{
+    const d=VP.player&&VP.player.getDuration?VP.player.getDuration():0;
+    if(!d) return;
+    VP.dragT=ratio(e)*d;
+    vpSetTimes(VP.dragT,d);
+  };
+  bar.addEventListener('pointerdown',e=>{
+    if(!VP.player||!VP.player.getDuration||!VP.player.getDuration()) return;
+    VP.dragging=true;
+    try{ bar.setPointerCapture(e.pointerId); }catch(_){}
+    clearTimeout(VP.hideT);
+    move(e);
+    e.preventDefault();
+  });
+  bar.addEventListener('pointermove',e=>{ if(VP.dragging) move(e); });
+  const end=()=>{
+    if(!VP.dragging) return;
+    VP.dragging=false;
+    if(VP.player&&VP.dragT!==null) VP.player.seekTo(VP.dragT,true);
+    VP.dragT=null;
+    vpShowUI();
+  };
+  bar.addEventListener('pointerup',end);
+  bar.addEventListener('pointercancel',end);
+})();
+// If YouTube's control script hasn't loaded after 15 seconds, switch to YouTube's own controls so the video can still be watched
+function vpNative(id){
+  const vp=vpEl('vp'), f=vpEl('vp-frame');
+  if(!vp.classList.contains('open')||VP.ready||!f) return;
+  vp.classList.add('native');
+  f.src='https://www.youtube.com/embed/'+id+'?autoplay=1&rel=0&playsinline=1&fs=0';
+}
+function openVideo(btn,url){
+  const id=ytId(url);
+  if(!id){ openPDF(url); return; }
+  const vp=vpEl('vp');
+  const label=btn&&btn.querySelector('small');
+  vpEl('vp-title').textContent=label?label.textContent:'Video Lecture';
+  VP.player=null; VP.ready=false; VP.started=false; VP.dragging=false; VP.dragT=null; VP.speed=0;
+  vpEl('vp-speed').textContent='1×';
+  vpEl('vp-play').innerHTML=VP_PLAY;
+  vpEl('vp-big').innerHTML=VP_PLAY;
+  vpSetTimes(0,0);
+  vp.className='vp open rot';   // opens sideways (landscape)
+  vpAppChrome(true);
+  document.body.style.overflow='hidden';
+  const f=document.createElement('iframe');
+  f.id='vp-frame';
+  const origin=/^https?:$/.test(location.protocol)?'&origin='+encodeURIComponent(location.origin):'';
+  f.src='https://www.youtube.com/embed/'+id+'?autoplay=1&controls=0&rel=0&playsinline=1&fs=0&iv_load_policy=3&disablekb=1&enablejsapi=1'+origin;
+  f.title='Video lecture';
+  f.allow='autoplay; encrypted-media; picture-in-picture';
+  f.referrerPolicy='strict-origin-when-cross-origin';
+  const stage=vpEl('vp-stage');
+  stage.innerHTML='';
+  stage.appendChild(f);
+  vpShowUI();
+  vpLoadApi(()=>{
+    if(vpEl('vp-frame')!==f||vp.classList.contains('native')) return;
+    VP.player=new YT.Player(f,{events:{
+      onReady:()=>{ VP.ready=true; clearTimeout(VP.apiT); vpTick(); },
+      onStateChange:e=>vpState(e.data)
+    }});
+  });
+  clearTimeout(VP.apiT);
+  VP.apiT=setTimeout(()=>vpNative(id),15000);
+  clearInterval(VP.timer);
+  VP.timer=setInterval(vpTick,250);
+  // Add one history step, so the phone's back button closes the player instead of leaving the page
+  if(!(history.state&&history.state.ezVideo)) history.pushState({ezVideo:id},'');
+}
+function hideVideo(){
+  const vp=vpEl('vp');
+  if(!vp.classList.contains('open')) return;
+  clearInterval(VP.timer); clearTimeout(VP.hideT); clearTimeout(VP.apiT);
+  try{ if(VP.player&&VP.player.destroy) VP.player.destroy(); }catch(e){}
+  VP.player=null; VP.ready=false; VP.started=false; VP.dragging=false;
+  vp.className='vp';
+  vpEl('vp-stage').innerHTML='';
+  vpEl('vp-ui').classList.remove('hide');
+  document.body.style.overflow='';
+  vpAppChrome(false);
+}
+function closeVideo(){
+  hideVideo();
+  if(history.state&&history.state.ezVideo) history.back();
+}
+function rotateVideo(){ vpEl('vp').classList.toggle('rot'); vpShowUI(); }
+window.addEventListener('popstate',hideVideo);
 function tog(id){const card=document.getElementById(id);const body=document.getElementById('b-'+id);const open=card.dataset.open==='true';card.dataset.open=String(!open);body.classList.toggle('open',!open);}
 
 // QUIZ DATA - Each unit has exactly 10 MCQs
@@ -898,7 +1196,7 @@ function closeQuiz(){
   document.body.style.overflow='';
   curQuiz=null;
 }
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQuiz();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(document.getElementById('vp').classList.contains('open'))closeVideo();else closeQuiz();}});
 </script>
 </body>
 </html>
