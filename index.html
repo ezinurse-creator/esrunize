@@ -686,15 +686,6 @@
         </div>
     </div>
 
-    <div id="modal-delete" class="modal-overlay hidden">
-        <div class="modal-card">
-            <span class="material-icons-round" style="font-size:48px; color:var(--danger); margin-bottom:12px;">delete_forever</span>
-            <h3 style="margin-bottom:10px;">Delete Account</h3>
-            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px; line-height:1.5;">Deletion request successful. You will get a confirmation email when your account is deleted.</p>
-            <button class="btn btn-primary" onclick="app.closeDeleteModal()">OK</button>
-        </div>
-    </div>
-
     <div id="fab-zoom" onclick="app.toggleZoom()"><span class="material-icons-round">zoom_in</span></div>
 
     <!-- AUTH VIEW -->
@@ -1365,13 +1356,12 @@ const _realApp = {
         document.getElementById('drawer-overlay').classList.remove('open');
     },
 
+    // Opens the real deletion page. It asks for the password again, then removes the
+    // student's record (details, course access, phone lock) and their login.
+    // The same page is the public "delete your account" link given to Google Play.
     deleteAccount: function() {
         this.closeDrawer();
-        document.getElementById('modal-delete').classList.remove('hidden');
-    },
-
-    closeDeleteModal: function() {
-        document.getElementById('modal-delete').classList.add('hidden');
+        window.location.href = 'delete-account.html';
     },
 
     navTo: function(viewId, isRoot = false, stateData = {}) {
