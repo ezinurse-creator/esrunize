@@ -1299,17 +1299,9 @@ const _realApp = {
         createUserWithEmailAndPassword(auth, email, pass)
             .then(async (userCredential) => {
                 const user = userCredential.user;
-                const defaultPermissions = {
-                    msc_first_year: false, msc_second_year: false,
-                    bsc_first_semester: false, bsc_second_semester: false, bsc_third_semester: false,
-                    bsc_fourth_semester: false, bsc_fifth_semester: false, bsc_sixth_semester: false,
-                    bsc_seventh_semester: false, pbbsc_first_year: false, pbbsc_second_year: false,
-                    gnm_first_year: false, gnm_second_year: false, gnm_third_year: false,
-                    qp_bsc: false, qp_gnm: false, '3d_models': false,
-                    exams_norcet: false, exams_esci: false, nursing_req: false,
-                    comm_english: false, all_access: false
-                };
-                const profile = { name, email, phone, createdAt: new Date(), permissions: defaultPermissions };
+                // No course access is written here. A new student has none until it is granted
+                // from the admin side; the app treats a missing list as "no access".
+                const profile = { name, email, phone, createdAt: new Date() };
                 const deviceId = getDeviceId();
                 if (deviceId) profile.deviceId = deviceId;
                 // merge so this can't wipe a deviceId that fetchUserPermissions has just saved
