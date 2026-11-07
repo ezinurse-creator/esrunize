@@ -1198,8 +1198,13 @@ const _realApp = {
             return;
         }
 
+        // Accounts the admin marks as exempt (Google Play's reviewer account, which Google
+        // signs in to on many test phones) skip the one-phone lock. The flag sits inside
+        // `permissions`, which only the admin tool can write, so a student can't set it.
+        const lockExempt = !!(data && data.permissions && data.permissions.device_lock_exempt === true);
+
         // Another phone holds this account: sign out here
-        if (deviceId && data && data.deviceId && data.deviceId !== deviceId) {
+        if (!lockExempt && deviceId && data && data.deviceId && data.deviceId !== deviceId) {
             this.currentUser = null;
             this.permissions = {};
             try { await signOut(auth); } catch (e) { console.error(e); }
@@ -1219,7 +1224,7 @@ const _realApp = {
         // Claim a free account for this phone (and create the record if it is missing).
         // Permissions are never written from the app.
         const update = {};
-        if (deviceId && !(data && data.deviceId)) update.deviceId = deviceId;
+        if (!lockExempt && deviceId && !(data && data.deviceId)) update.deviceId = deviceId;
         if (!data && this.currentUser) update.email = this.currentUser.email;
         if (Object.keys(update).length) {
             try {
