@@ -175,8 +175,8 @@ btnDelete.addEventListener('click', async () => {
         await deleteUser(user);
         signedIn = false;
 
-        // The random ID this browser or phone used for the one-phone lock.
-        try { localStorage.removeItem('ezinurse_device_id'); } catch (e) { /* storage unavailable */ }
+        // The phone's own random ID ('ezinurse_device_id') stays on purpose: other
+        // accounts used on this same phone are locked to it and must keep working.
 
         $('form-card').classList.add('hidden');
         $('done-card').classList.remove('hidden');
