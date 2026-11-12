@@ -1075,9 +1075,9 @@ function isValidCoupon(course, code) {
 }
 
 // If the payment server can't be reached, a code opens its course's discounted Razorpay page.
-// The PBBSc discounted page is the Sneha College price (EZIDEAL, ₹1,800), so the other PBBSc codes
+// The PBBSc discounted page is the Sneha College price (₹1,800), so the other PBBSc codes
 // (₹3,499) have no backup page: the student is asked to try again rather than pay the wrong price.
-var NO_BACKUP_PAGE = ['a638649b567d26e4', 'a738662e69f61e7d'];   // EZIPBBSC1, EZIPBBSC2
+var NO_BACKUP_PAGE = ['a638649b567d26e4', 'a738662e69f61e7d'];   // the two ₹3,499 PBBSc codes
 function backupPageFor(course, code) {
     if (NO_BACKUP_PAGE.indexOf(couponFingerprint(code)) !== -1) return null;
     return COMMON_URLS[course] ? COMMON_URLS[course].discount : null;
