@@ -1827,11 +1827,15 @@ const _realApp = {
         const inAndroidApp = / wv\)/.test(navigator.userAgent);
         const win = inAndroidApp ? null : this._openBlankWindow();
         this._showDemoToast('Opening secure payment…');
-        this._requestPayLink(user, key, code).then((res) => {
+        this._requestPayLink(user, key, code, inAndroidApp ? 'android-app' : 'web').then((res) => {
             if (res.url) {
                 this._awaitingPayment = { course: course, section: section, at: Date.now() };
                 this._watchForPayment();
-                this._sendTo(win, res.url);
+                // Android app: Razorpay hides UPI on pages opened inside the app. When the server says so
+                // (its UPI_HANDOFF switch), go through its /go page, which opens the payment in the phone's
+                // browser (UPI apps appear) and brings the student back to the course once paid.
+                const target = (inAndroidApp && res.link && res.handoff) ? PAY_SERVER + '/go?link=' + encodeURIComponent(res.link) : res.url;
+                this._sendTo(win, target);
             } else if (res.error === 'already_has_access') {
                 if (win) { try { win.close(); } catch (e) {} }
                 this._showDemoToast('You already have this course.');
@@ -1852,7 +1856,7 @@ const _realApp = {
         });
     },
 
-    _requestPayLink: async function(user, key, code) {
+    _requestPayLink: async function(user, key, code, from) {
         try {
             const token = await user.getIdToken();
             const ctrl = (typeof AbortController === 'function') ? new AbortController() : null;
@@ -1860,13 +1864,13 @@ const _realApp = {
             const r = await fetch(PAY_SERVER + '/link', {
                 method: 'POST',
                 headers: { 'content-type': 'application/json', 'authorization': 'Bearer ' + token },
-                body: JSON.stringify({ course: key, code: code || '' }),
+                body: JSON.stringify({ course: key, code: code || '', from: from || 'web' }),
                 signal: ctrl ? ctrl.signal : undefined
             });
             if (timer) clearTimeout(timer);
             let data = {};
             try { data = await r.json(); } catch (e) {}
-            if (r.ok && data && data.url) return { url: data.url };
+            if (r.ok && data && data.url) return { url: data.url, link: data.link || null, handoff: data.handoff === true };
             return { error: (data && data.error) || ('http_' + r.status) };
         } catch (e) {
             return { error: 'network' };
