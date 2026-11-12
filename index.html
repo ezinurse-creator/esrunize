@@ -1073,6 +1073,15 @@ function isValidCoupon(course, code) {
     var list = COUPON_FINGERPRINTS[course];
     return !!(list && code && list.indexOf(couponFingerprint(code)) !== -1);
 }
+
+// If the payment server can't be reached, a code opens its course's discounted Razorpay page.
+// The PBBSc discounted page is the Sneha College price (EZIDEAL, ₹1,800), so the other PBBSc codes
+// (₹3,499) have no backup page: the student is asked to try again rather than pay the wrong price.
+var NO_BACKUP_PAGE = ['a638649b567d26e4', 'a738662e69f61e7d'];   // EZIPBBSC1, EZIPBBSC2
+function backupPageFor(course, code) {
+    if (NO_BACKUP_PAGE.indexOf(couponFingerprint(code)) !== -1) return null;
+    return COMMON_URLS[course] ? COMMON_URLS[course].discount : null;
+}
 </script>
 
 <script type="module">
@@ -1782,7 +1791,7 @@ const _realApp = {
 
         if (isValidCoupon(course, code)) {
             this.closeCouponModal();
-            this._buy(course, code, COMMON_URLS[course].discount);
+            this._buy(course, code, backupPageFor(course, code));
         } else {
             msg.textContent = 'Invalid coupon code. Try again or buy at full price.';
             msg.style.color = 'var(--danger)';
@@ -1809,7 +1818,8 @@ const _realApp = {
         const key = getPermissionKey(course, section);
         const user = this.currentUser;
         if (!PAY_SERVER_ON || !PAY_SERVER || !user || typeof user.getIdToken !== 'function') {
-            window.open(fallbackUrl, '_blank');
+            if (fallbackUrl) window.open(fallbackUrl, '_blank');
+            else this._showDemoToast('This code can’t be used right now. Please try again later.');
             return;
         }
         // The Android app opens new windows by itself, even after a wait. Browsers only allow a
@@ -1832,9 +1842,12 @@ const _realApp = {
                 this.openCouponModal();
                 const msg = document.getElementById('modal-coupon-msg');
                 if (msg) { msg.textContent = 'Invalid coupon code. Try again or buy at full price.'; msg.style.color = 'var(--danger)'; }
-            } else {
+            } else if (fallbackUrl) {
                 // Server unreachable or not ready: the old Razorpay page, exactly as before
                 this._sendTo(win, fallbackUrl);
+            } else {
+                if (win) { try { win.close(); } catch (e) {} }
+                this._showDemoToast('Couldn’t open the payment page. Please try again in a minute.');
             }
         });
     },
