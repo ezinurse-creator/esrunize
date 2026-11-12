@@ -1034,6 +1034,13 @@ window.app = new Proxy({}, {
 </script>
 
 <script>
+// ── Buying a course ──────────────────────────────────────────────────────────
+// Buy asks the payment server for a personal Razorpay link made for this account and this
+// course, so the course unlocks by itself after payment. If the server can't be reached,
+// the Razorpay pages below open exactly as before (access is then given by hand).
+const PAY_SERVER = 'https://ezinurse-pay.noreply-3bd.workers.dev';
+const PAY_SERVER_ON = true;   // false = always use the Razorpay pages below (the old way)
+
 const COMMON_URLS = {
     'BSc': { full: 'https://rzp.io/rzp/b3IMXO8', discount: 'https://rzp.io/rzp/7fqKYBgL' },
     'GNM': { full: 'https://rzp.io/rzp/X8Z8G3Y', discount: 'https://rzp.io/rzp/snI3wvW' },
@@ -1041,11 +1048,31 @@ const COMMON_URLS = {
     'MSc': { full: 'https://rzp.io/rzp/lkX98lh' }
 };
 
-const VALID_COUPONS = {
-    'BSc': ['EZIBSC1', 'EZIBSC2', 'EZIBSC3', 'EZIBSC4', 'EZIBSC5', 'EZIBSC6', 'EZIBSC7'],
-    'GNM': ['EZIGNM1', 'EZIGNM2', 'EZIGNM3'],
-    'PBBSc': ['EZIDEAL', 'EZIPBBSC2']
+// Coupon codes are kept as fingerprints, so they can't be read from this page. The payment
+// server checks codes and prices itself; this list only lets the app say "invalid code"
+// straight away, and pick the discounted Razorpay page if the server is down.
+const COUPON_FINGERPRINTS = {
+    'BSc': ['77645d0df8fbc1c2', '746458549d2ef5dd', '756459e7415a3839', '7264552ec413b6a7', '736456c16840ee6b', '706452080c71a16f', '7164539bb09a5db2'],
+    'GNM': ['25737ad19c33c4a1', '22737618afa99cb0', '237377ab53d86695'],
+    'PBBSc': ['3cde5260967c2fdc', 'a638649b567d26e4', 'a738662e69f61e7d']
 };
+
+function couponFingerprint(code) {
+    var s = 'ezinurse:' + String(code || '').replace(/\s+/g, '').toUpperCase();
+    var h1 = 0x811c9dc5, h2 = 0x5bd1e995;
+    for (var i = 0; i < s.length; i++) {
+        var c = s.charCodeAt(i);
+        h1 = Math.imul(h1 ^ c, 0x01000193) >>> 0;
+        h2 = Math.imul(h2 ^ c, 0x5bd1e995) >>> 0;
+        h2 = (h2 ^ (h2 >>> 13)) >>> 0;
+    }
+    return ('0000000' + h1.toString(16)).slice(-8) + ('0000000' + h2.toString(16)).slice(-8);
+}
+
+function isValidCoupon(course, code) {
+    var list = COUPON_FINGERPRINTS[course];
+    return !!(list && code && list.indexOf(couponFingerprint(code)) !== -1);
+}
 </script>
 
 <script type="module">
@@ -1097,6 +1124,15 @@ const _realApp = {
                         history.replaceState({ viewId: 'view-iframe', sourceUrl: savedUrl, title: savedTitle }, savedTitle, '#content');
                         this.openContent(savedUrl, savedTitle, true);
                         onAuthResolved('view-iframe');
+                    }
+                    else if (savedView === 'view-demo' && demoCourse && demoSection && this._hasAccess(demoCourse, demoSection)) {
+                        // They now own this course (e.g. just paid): open it instead of its demo
+                        sessionStorage.removeItem('currentView');
+                        history.replaceState({ viewId: 'view-dashboard' }, 'Dashboard', '#dashboard');
+                        this.renderSubjectList(demoCourse, demoSection);
+                        history.pushState({ viewId: 'view-subjects', course: demoCourse, section: demoSection }, null, '#subjects');
+                        onAuthResolved('view-subjects');
+                        this._showDemoToast('Course unlocked — welcome!');
                     }
                     else if (savedView === 'view-demo' && demoCourse && demoSection) {
                         history.replaceState({ viewId: 'view-demo', course: demoCourse, section: demoSection }, 'Demo', '#demo');
@@ -1723,7 +1759,7 @@ const _realApp = {
         if (input) { input.value = ''; input.disabled = false; }
         if (msg) { msg.textContent = ''; msg.style.color = ''; }
         // Hide coupon input for MSc — no coupons available
-        const hasCoupons = course !== 'MSc' && VALID_COUPONS[course];
+        const hasCoupons = course !== 'MSc' && COUPON_FINGERPRINTS[course];
         if (input) input.style.display = hasCoupons ? '' : 'none';
         document.getElementById('modal-coupon').classList.remove('hidden');
     },
@@ -1744,9 +1780,9 @@ const _realApp = {
             return;
         }
 
-        if (VALID_COUPONS[course] && VALID_COUPONS[course].includes(code)) {
+        if (isValidCoupon(course, code)) {
             this.closeCouponModal();
-            window.open(COMMON_URLS[course].discount, '_blank');
+            this._buy(course, code, COMMON_URLS[course].discount);
         } else {
             msg.textContent = 'Invalid coupon code. Try again or buy at full price.';
             msg.style.color = 'var(--danger)';
@@ -1757,12 +1793,127 @@ const _realApp = {
         const course = this.lockedCourseKey || 'BSc';
         this.closeCouponModal();
         if (COMMON_URLS[course]) {
-            window.open(COMMON_URLS[course].full, '_blank');
+            this._buy(course, '', COMMON_URLS[course].full);
         } else {
             const section = this.lockedCourseSection || 'Systems';
             const url = PAYMENT_LINKS[`${course}_${section}_F`] || 'https://www.razorpay.com/fallback';
             window.open(url, '_blank');
         }
+    },
+
+    // ── Automatic access after payment ────────────────────────────────────
+    // Asks the payment server for a link made for this account + this course, then opens it.
+    // Falls back to the old Razorpay page (fallbackUrl) if the server can't help.
+    _buy: function(course, code, fallbackUrl) {
+        const section = this.lockedCourseSection;
+        const key = getPermissionKey(course, section);
+        const user = this.currentUser;
+        if (!PAY_SERVER_ON || !PAY_SERVER || !user || typeof user.getIdToken !== 'function') {
+            window.open(fallbackUrl, '_blank');
+            return;
+        }
+        // The Android app opens new windows by itself, even after a wait. Browsers only allow a
+        // new tab straight after the tap, so open it now and point it at the payment in a moment.
+        const inAndroidApp = / wv\)/.test(navigator.userAgent);
+        const win = inAndroidApp ? null : this._openBlankWindow();
+        this._showDemoToast('Opening secure payment…');
+        this._requestPayLink(user, key, code).then((res) => {
+            if (res.url) {
+                this._awaitingPayment = { course: course, section: section, at: Date.now() };
+                this._watchForPayment();
+                this._sendTo(win, res.url);
+            } else if (res.error === 'already_has_access') {
+                if (win) { try { win.close(); } catch (e) {} }
+                this._showDemoToast('You already have this course.');
+                this._awaitingPayment = { course: course, section: section, at: Date.now() };
+                this.refreshAccess();
+            } else if (res.error === 'invalid_code') {
+                if (win) { try { win.close(); } catch (e) {} }
+                this.openCouponModal();
+                const msg = document.getElementById('modal-coupon-msg');
+                if (msg) { msg.textContent = 'Invalid coupon code. Try again or buy at full price.'; msg.style.color = 'var(--danger)'; }
+            } else {
+                // Server unreachable or not ready: the old Razorpay page, exactly as before
+                this._sendTo(win, fallbackUrl);
+            }
+        });
+    },
+
+    _requestPayLink: async function(user, key, code) {
+        try {
+            const token = await user.getIdToken();
+            const ctrl = (typeof AbortController === 'function') ? new AbortController() : null;
+            const timer = ctrl ? setTimeout(() => ctrl.abort(), 12000) : null;
+            const r = await fetch(PAY_SERVER + '/link', {
+                method: 'POST',
+                headers: { 'content-type': 'application/json', 'authorization': 'Bearer ' + token },
+                body: JSON.stringify({ course: key, code: code || '' }),
+                signal: ctrl ? ctrl.signal : undefined
+            });
+            if (timer) clearTimeout(timer);
+            let data = {};
+            try { data = await r.json(); } catch (e) {}
+            if (r.ok && data && data.url) return { url: data.url };
+            return { error: (data && data.error) || ('http_' + r.status) };
+        } catch (e) {
+            return { error: 'network' };
+        }
+    },
+
+    _openBlankWindow: function() {
+        let w = null;
+        try { w = window.open('', '_blank'); } catch (e) { w = null; }
+        try {
+            if (w && w.document && w.document.body) {
+                w.document.title = 'Ezi Nurse payment';
+                w.document.body.innerHTML = '<p style="font-family:sans-serif;padding:24px;color:#334155">Opening secure payment…</p>';
+            }
+        } catch (e) {}
+        return w;
+    },
+
+    _sendTo: function(win, url) {
+        if (win && !win.closed) {
+            try { win.location.href = url; return; } catch (e) {}
+        }
+        window.open(url, '_blank');
+    },
+
+    _hasAccess: function(course, section) {
+        const p = this.permissions || {};
+        return p[getPermissionKey(course, section)] === true || p['all_access'] === true;
+    },
+
+    // Re-reads this student's courses (no device-lock steps). Used when they come back from paying.
+    refreshAccess: async function() {
+        const user = this.currentUser;
+        if (!user) return false;
+        try {
+            const snap = await getDoc(doc(db, 'users', user.uid));
+            if (snap.exists()) this.permissions = snap.data().permissions || {};
+        } catch (e) { return false; }
+        const a = this._awaitingPayment;
+        if (a && this._hasAccess(a.course, a.section)) {
+            this._awaitingPayment = null;
+            this._showDemoToast('Course unlocked — welcome!');
+            const demo = document.getElementById('view-demo');
+            if (demo && demo.classList.contains('active')) this.openSubjectList(a.course, a.section);
+            return true;
+        }
+        return false;
+    },
+
+    // When the student returns to this tab, check a few times for the course to unlock.
+    _watchForPayment: function() {
+        if (this._payWatchOn) return;
+        this._payWatchOn = true;
+        const check = () => {
+            const a = this._awaitingPayment;
+            if (!a || Date.now() - a.at > 30 * 60 * 1000) return;
+            [0, 3000, 8000, 15000, 30000].forEach((ms) => setTimeout(() => { if (this._awaitingPayment) this.refreshAccess(); }, ms));
+        };
+        document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') check(); });
+        window.addEventListener('focus', check);
     },
 
     applyCoupon: function(inputId, msgId) {
