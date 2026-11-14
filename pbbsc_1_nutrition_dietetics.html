@@ -77,6 +77,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
 .rbtn.notes{border-color:var(--p200);color:var(--p800)}
 .rbtn.notes .rico{background:var(--p100)}
 .rbtn.notes:hover{background:var(--p50);border-color:var(--p500);box-shadow:var(--s2);transform:translateY(-1px)}
+.rbtn.video{border-color:#bae6fd;color:#0369a1}
+.rbtn.video .rico{background:#e0f2fe}
+.rbtn.video:hover{background:#f0f9ff;border-color:#38bdf8;box-shadow:0 3px 10px rgba(56,189,248,.12);transform:translateY(-1px)}
 .rbtn.quiz{border-color:#fde68a;color:#78350f}
 .rbtn.quiz .rico{background:var(--warn-lt)}
 .rbtn.quiz:hover{background:#fffbeb;border-color:var(--warn);box-shadow:0 3px 10px rgba(217,119,6,.12);transform:translateY(-1px)}
@@ -208,10 +211,10 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
         </button>
       </div>
       <div class="rrow" style="margin-bottom:9px">
-        <button class="rbtn notes" onclick="openVideo(this,'https://youtu.be/w69JVlYhzTs')">
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/w69JVlYhzTs')">
           <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Introduction to Nutrition</small></div><span class="rarr">↗</span>
         </button>
-        <button class="rbtn notes" onclick="openVideo(this,'https://youtu.be/92hsffGmrYc')">
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/92hsffGmrYc')">
           <div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Introduction to Nutrition</small></div><span class="rarr">↗</span>
         </button>
       </div>
@@ -240,10 +243,10 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
         </button>
       </div>
       <div class="rrow" style="margin-bottom:9px">
-        <button class="rbtn notes" onclick="openVideo(this,'https://youtu.be/uQHjFyNX_a8')">
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/uQHjFyNX_a8')">
           <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Diet Therapy</small></div><span class="rarr">↗</span>
         </button>
-        <button class="rbtn notes" onclick="openVideo(this,'https://youtu.be/0jhoKHsceWo')">
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/0jhoKHsceWo')">
           <div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Diet Therapy</small></div><span class="rarr">↗</span>
         </button>
       </div>
@@ -272,10 +275,10 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
         </button>
       </div>
       <div class="rrow" style="margin-bottom:9px">
-        <button class="rbtn notes" onclick="openVideo(this,'https://youtu.be/9xV7wQoo7X0')">
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/9xV7wQoo7X0')">
           <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Infant and Child Nutrition</small></div><span class="rarr">↗</span>
         </button>
-        <button class="rbtn notes" onclick="openVideo(this,'https://youtu.be/lHtjMbHTTkI')">
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/lHtjMbHTTkI')">
           <div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Infant and Child Nutrition</small></div><span class="rarr">↗</span>
         </button>
       </div>
@@ -304,10 +307,10 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(
         </button>
       </div>
       <div class="rrow" style="margin-bottom:9px">
-        <button class="rbtn notes" onclick="openVideo(this,'https://youtu.be/xTzKPOVQ3bo')">
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/xTzKPOVQ3bo')">
           <div class="rico">▶️</div><div class="rtxt">Intro Video<small>Community Nutrition</small></div><span class="rarr">↗</span>
         </button>
-        <button class="rbtn notes" onclick="openVideo(this,'https://youtu.be/1AGz87DqBZU')">
+        <button class="rbtn video" onclick="openVideo(this,'https://youtu.be/1AGz87DqBZU')">
           <div class="rico">▶️</div><div class="rtxt">Video Lecture<small>Community Nutrition</small></div><span class="rarr">↗</span>
         </button>
       </div>
@@ -392,6 +395,7 @@ function goBackToApp() {
 }
 
 function openPDF(url) {
+  if(!url || url==='COMING SOON' || url===''){ alert('This resource is coming soon!'); return; }
   const clean = url.replace(/\/preview.*$/,'').replace(/\/view.*$/,'') + '/view';
   window.open(clean, '_blank');
 }
